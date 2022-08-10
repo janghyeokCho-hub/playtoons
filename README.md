@@ -4,7 +4,7 @@
     - 최초 개정
 
 ## 개발 환경
-1. Language : PHP 7.3
+1. Language : React 18.2.0
 2. DataBase : mariadb-10.0.x
 3. Charset  : UTF-8
 
