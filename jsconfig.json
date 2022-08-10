@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./src",
+      "experimentalDecorators": true,
+      "jsx": "preserve"
+    },
+    "exclude": [
+      "node_modules"
+    ]
+  }
