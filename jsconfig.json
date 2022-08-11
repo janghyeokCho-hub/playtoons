@@ -1,10 +1,16 @@
 {
-    "compilerOptions": {
-      "baseUrl": "./src",
-      "experimentalDecorators": true,
-      "jsx": "preserve"
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@IMAGES/*": ["src/assets/images/*"],
+      "@ICONS/*": ["src/assets/images/icons/*"],
+      "@LINES/*": ["src/assets/images/lines/*"],
+      "@CONTAINERS/*": ["src/containers/*"],
+      "@COMPONENTS/*": ["src/components/*"]
     },
-    "exclude": [
-      "node_modules"
-    ]
-  }
+    "experimentalDecorators": true,
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules"]
+}
