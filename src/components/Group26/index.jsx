@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Body6 } from "../../styledMixins";
+import { Body6 } from "@/styledMixins";
 
 function Group26(props) {
   const { line, className } = props;

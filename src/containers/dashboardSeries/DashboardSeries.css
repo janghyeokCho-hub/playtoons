@@ -1,0 +1,13 @@
+.dashboardseries {
+  align-items: flex-start;
+  background-color: var(--white);
+  display: flex;
+  height: 1512px;
+  overflow: hidden;
+  width: 1920px;
+}
+
+.dashboardseries_nav_support {
+  top : 362px;
+}
+
