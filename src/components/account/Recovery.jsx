@@ -97,7 +97,7 @@ const CheckRecovery = ({ setIsShowType, email }) => {
  * @param {*} param0
  * @returns
  */
-const RecoveryConfirm = ({ setIsShowType }) => {
+const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
   // パスワードを再設定
   return (
     <>
@@ -114,7 +114,12 @@ const RecoveryConfirm = ({ setIsShowType }) => {
         <Input inputType="password" label="パスワード" />
         <Input inputType="password" label="パスワード確認" />
       </RecoveryInputDiv>
-      <Button text=">パスワード変更" color="--white" bgColor="--violet-blue" />
+      <Button
+        text=">パスワード変更"
+        color="--white"
+        bgColor="--violet-blue"
+        callback={() => handleAccountType("LOGIN")}
+      />
       <Button
         text="戻る"
         color="--violet-blue"
@@ -155,7 +160,10 @@ const Recovery = ({ handleAccountType }) => {
         <CheckRecovery setIsShowType={setIsShowType} email={email} />
       )}
       {isShowType === "CONFIRM" && (
-        <RecoveryConfirm setIsShowType={setIsShowType} />
+        <RecoveryConfirm
+          setIsShowType={setIsShowType}
+          handleAccountType={handleAccountType}
+        />
       )}
     </AccountBoxDiv>
   );
