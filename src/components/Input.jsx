@@ -69,7 +69,7 @@ const IcoDisabled = styled.img`
   position: absolute;
   width: 24px;
   height: 19px;
-  top: 222px;
+  top: 224px;
   right: 50px;
   cursor: pointer;
 `;

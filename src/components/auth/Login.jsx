@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
 import imgLogo from "@IMAGES/logo.png";
@@ -9,9 +9,11 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 
 const Login = ({ handleAccountType }) => {
+  const [errorShow, setErrorShow] = useState(false);
   return (
     <AccountBoxDiv>
       <ImgLogo src={imgLogo} />
+      {errorShow && <ErrorBoxDiv />}
       <Input inputType="text" label="メールアドレス" />
       <Input inputType="password" label="パスワード" />
 
@@ -67,6 +69,14 @@ const Login = ({ handleAccountType }) => {
     </AccountBoxDiv>
   );
 };
+
+const ErrorBoxDiv = styled.div`
+  width: 100%;
+  height: 100px;
+  border: 1px solid red;
+  border-radius: 8px;
+  margin-bottom: 10px;
+`;
 
 const RecoveryDiv = styled.div`
   cursor: pointer;
