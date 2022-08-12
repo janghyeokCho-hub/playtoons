@@ -7,7 +7,8 @@
       "@ICONS/*": ["src/assets/images/icons/*"],
       "@LINES/*": ["src/assets/images/lines/*"],
       "@CONTAINERS/*": ["src/containers/*"],
-      "@COMPONENTS/*": ["src/components/*"]
+      "@COMPONENTS/*": ["src/components/*"],
+      "@FONTS/*": ["src/assets/fonts/*"]
     },
     "experimentalDecorators": true,
     "jsx": "preserve"
