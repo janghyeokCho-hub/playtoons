@@ -4,7 +4,7 @@ import { Body5, Border1pxTiara } from "@/styledMixins";
 // undisable 필요
 import accIcoDisabled from "@ICONS/accountregister-ico-disabled.png";
 
-const Input = ({ inputType, label }) => {
+const Input = ({ inputType, label, callback }) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
 
@@ -24,7 +24,7 @@ const Input = ({ inputType, label }) => {
     <InputDiv className={`login_form_text_withicon login_form_text_withicon-9`}>
       <InputLabel className="login-txt-form-label">{label}</InputLabel>
       <InputWithIconDiv>
-        <TextInput className="overlap-group-3" type={type} />
+        <TextInput className="overlap-group-3" type={type} onInput={callback} />
         {inputType === "password" && (
           <IcoDisabled
             src={accIcoDisabled}

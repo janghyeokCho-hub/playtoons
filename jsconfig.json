@@ -8,7 +8,8 @@
       "@LINES/*": ["src/assets/images/lines/*"],
       "@CONTAINERS/*": ["src/containers/*"],
       "@COMPONENTS/*": ["src/components/*"],
-      "@FONTS/*": ["src/assets/fonts/*"]
+      "@FONTS/*": ["src/assets/fonts/*"],
+      "@COMMON/*": ["src/common/*"]
     },
     "experimentalDecorators": true,
     "jsx": "preserve"
