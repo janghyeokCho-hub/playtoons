@@ -4,10 +4,9 @@ import { Body5, Border1pxTiara } from "@/styledMixins";
 // undisable 필요
 import accIcoDisabled from "@ICONS/accountregister-ico-disabled.png";
 
-const LoginInput = ({ inputType }) => {
+const Input = ({ inputType, label }) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
-  const labelText = inputType === "password" ? "パスワード" : "メールアドレス";
 
   useEffect(() => {
     if (inputType === "password" && isPwdDisabled) {
@@ -26,7 +25,7 @@ const LoginInput = ({ inputType }) => {
       className={`login_form_text_withicon login_form_text_withicon-9`}
     >
       <LoginTxtFormLabel className="login-txt-form-label">
-        {labelText}
+        {label}
       </LoginTxtFormLabel>
       <OverlapGroup className="overlap-group-3" type={type} />
       {inputType === "password" && (
@@ -75,4 +74,4 @@ const IcoDisabled = styled.img`
   cursor: pointer;
 `;
 
-export default LoginInput;
+export default Input;

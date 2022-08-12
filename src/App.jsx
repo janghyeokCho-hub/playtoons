@@ -4,8 +4,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import configureStore, { sagaMiddleware } from "./modules/redux/store";
 import globalSaga from "./modules/redux/saga/globalSaga";
-import Login from "@/containers/auth/Login";
 import DashboardSeries from "@/containers/dashboardSeries/DashboardSeries";
+import Account from "@CONTAINERS/account/Account";
 
 export const store = configureStore();
 sagaMiddleware.run(globalSaga);
@@ -15,8 +15,8 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/auth_login" element={<Login />} />
           <Route path="/dashboard-series" element={<DashboardSeries />} />
+          <Route path="/auth-login" element={<Account />} />
         </Routes>
       </BrowserRouter>
     </Provider>

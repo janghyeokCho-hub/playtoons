@@ -26,32 +26,37 @@ const BtnStyle = styled.div`
   background-repeat: no-repeat;
   background-size: 24px 24px;
   background-position: 30px center;
+
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(${(props) => props.bdColor});
 `;
 
-const LoginBtn = ({ snsType, snsText }) => {
-  let color, bgColor, bgImage;
+const LoginBtn = ({ text, snsType, color, bgColor, bdColor, callback }) => {
+  let bgImage;
 
-  if (snsType === "google") {
-    color = "--vlucan";
-    bgColor = "--white";
-    bgImage = require("@ICONS/authlogin-ico-google.png");
-  } else if (snsType === "twitter") {
-    color = "--vlucan";
-    bgColor = "--white";
-    bgImage = require("@ICONS/authlogin-ico-twitter.png");
-  } else if (snsType === "apple") {
-    color = "--white";
-    bgColor = "--black";
-    bgImage = require("@ICONS/authlogin-ico-apple.png");
-  } else {
-    color = "--white";
-    bgColor = "--violet-blue";
+  switch (snsType) {
+    case "GOOGLE":
+      bgImage = require("@ICONS/authlogin-ico-google.png");
+      break;
+    case "TWITTER":
+      bgImage = require("@ICONS/authlogin-ico-twitter.png");
+      break;
+    case "APPLE":
+      bgImage = require("@ICONS/authlogin-ico-apple.png");
+      break;
+    default:
   }
 
   return (
-    <BtnStyle bgImage={bgImage} bgColor={bgColor}>
+    <BtnStyle
+      bgImage={bgImage}
+      bgColor={bgColor}
+      bdColor={bdColor}
+      onClick={callback}
+    >
       <LoginTxtSns className="login-txt-sns" color={color}>
-        {snsText}
+        {text}
       </LoginTxtSns>
     </BtnStyle>
   );
