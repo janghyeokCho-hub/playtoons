@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { Body6 } from "../../styledMixins";
 
-
 function Group26(props) {
   const { line, className } = props;
 
   return (
     <Group2 className={`group-2-21 ${className || ""}`}>
-      <TextLabel className="text_label-220">パスワードをお忘れですか?</TextLabel>
+      <TextLabel className="text_label-220">
+        パスワードをお忘れですか?
+      </TextLabel>
       <Line className="line-8" src={line} />
     </Group2>
   );

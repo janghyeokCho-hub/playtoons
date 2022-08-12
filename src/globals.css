@@ -3,15 +3,13 @@
 /* The following line is used to measure usage of this code in production. For more info see our usage billing page */
 @import url("https://px.animaapp.com/62ec83c8acee322567e1a5ea.5ea6ba5433c33a7ced6fb7fb.h7pgWnY.rcp.png");
 
-
-
 .screen a {
   display: contents;
   text-decoration: none;
 }
 
 .container-center-horizontal {
-  display: flex;
+  display: inline-block;
   flex-direction: row;
   justify-content: center;
   pointer-events: none;

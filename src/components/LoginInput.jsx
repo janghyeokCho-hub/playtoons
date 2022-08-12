@@ -2,34 +2,42 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Body5, Border1pxTiara } from "@/styledMixins";
 // undisable 필요
-import accIcoDisabled from '@ICONS/accountregister-ico-disabled.png'
+import accIcoDisabled from "@ICONS/accountregister-ico-disabled.png";
 
-const LoginInput = ({inputType}) => {
-  const [isPwdDisabled, setIsPwdDisabled] = useState(true)
-  const [type, setType] = useState(null)
-  const labelText = inputType === 'password' ? 'パスワード' : 'メールアドレス';
+const LoginInput = ({ inputType }) => {
+  const [isPwdDisabled, setIsPwdDisabled] = useState(true);
+  const [type, setType] = useState(null);
+  const labelText = inputType === "password" ? "パスワード" : "メールアドレス";
 
   useEffect(() => {
-    if (inputType === 'password' && isPwdDisabled) {
-        setType('password')
+    if (inputType === "password" && isPwdDisabled) {
+      setType("password");
     } else {
-        setType('text')
+      setType("text");
     }
 
     return () => {
-        setType(null)
-    }
-
-  }, [isPwdDisabled])
+      setType(null);
+    };
+  }, [isPwdDisabled]);
 
   return (
-    <LoginFormDiv className={`login_form_text_withicon login_form_text_withicon-9`}>
-      <LoginTxtFormLabel className="login-txt-form-label">{labelText}</LoginTxtFormLabel>
-      <OverlapGroup className="overlap-group-3" type={type}/>
-      {inputType === 'password' && <IcoDisabled src={accIcoDisabled} onClick={() => setIsPwdDisabled(!isPwdDisabled)} /> }
+    <LoginFormDiv
+      className={`login_form_text_withicon login_form_text_withicon-9`}
+    >
+      <LoginTxtFormLabel className="login-txt-form-label">
+        {labelText}
+      </LoginTxtFormLabel>
+      <OverlapGroup className="overlap-group-3" type={type} />
+      {inputType === "password" && (
+        <IcoDisabled
+          src={accIcoDisabled}
+          onClick={() => setIsPwdDisabled(!isPwdDisabled)}
+        />
+      )}
     </LoginFormDiv>
   );
-}
+};
 
 const LoginFormDiv = styled.div`
   width: 400px;

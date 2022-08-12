@@ -1,25 +1,21 @@
 import React from "react";
 import styled from "styled-components";
-import accountrecoverconfirm from '@IMAGES/accountrecoverconfirm.jpg'
-
+import accountrecoverconfirm from "@IMAGES/accountrecoverconfirm.jpg";
 
 function Group2() {
   return (
-    <Group21 backgroundImage={accountrecoverconfirm} >
+    <Group21 backgroundImage={accountrecoverconfirm}>
       <Rectangle></Rectangle>
     </Group21>
   );
 }
 
 const Group21 = styled.div`
-  position: absolute;
-  min-width: 1920px;
-  height: 1080px;
-  top: 0;
-  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: flex-start;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -37,7 +33,7 @@ const Group22 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -55,7 +51,7 @@ const Group23 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -73,7 +69,7 @@ const Group24 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -91,7 +87,7 @@ const Group25 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -109,7 +105,7 @@ const Group26 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -127,7 +123,7 @@ const Group27 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -145,7 +141,7 @@ const Group28 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -163,7 +159,7 @@ const Group29 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -181,7 +177,7 @@ const Group210 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -199,7 +195,7 @@ const Group211 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 
@@ -217,7 +213,7 @@ const Group3 = styled.div`
   display: flex;
   align-items: flex-start;
   min-width: 1920px;
-  background-image: ${props => `url(${props.backgroundImage})` || ''};
+  background-image: ${(props) => `url(${props.backgroundImage})` || ""};
   background-size: 100% 100%;
 `;
 

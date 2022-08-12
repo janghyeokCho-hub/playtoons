@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
-import imgLogo from '@IMAGES/logo.png';
-import line from '@IMAGES/lines/authlogin-line-txt.png'
-import autoLoginLineRight from '@IMAGES/authlogin-line-right.png';
+import imgLogo from "@IMAGES/logo.png";
+import line from "@IMAGES/lines/authlogin-line-txt.png";
+import autoLoginLineRight from "@IMAGES/authlogin-line-right.png";
 
 import Group2 from "@COMPONENTS/Group2";
 import Group26 from "@COMPONENTS/Group26";
-import LoginBtn from '@COMPONENTS/LoginBtn';
-import LoginInput from '@COMPONENTS/LoginInput'
+import LoginBtn from "@COMPONENTS/LoginBtn";
+import LoginInput from "@COMPONENTS/LoginInput";
 
 const Login = () => {
   return (
@@ -20,17 +20,29 @@ const Login = () => {
             <ImgLogo src={imgLogo} />
             <LoginInput inputType="text" />
             <LoginInput inputType="password" />
-            <Group26 line={line} className='group-2-22' />
+            <Group26 line={line} className="group-2-22" />
             <LoginBtn snsText="確認する" className="login_btn_default" />
             <Group4>
               <LineLeft src={autoLoginLineRight} />
               <Txt>または</Txt>
               <LineRight src={autoLoginLineRight} />
             </Group4>
-            <LoginBtn snsType="google" snsText="Googleで続行" className="login_btn_google" />
-            <LoginBtn snsType="twitter" snsText="Tiwtterで続行" className="login_btn_twitter" />
-            <LoginBtn snsType="apple" snsText="Appleで続行" className="login_btn_apple" />
-            
+            <LoginBtn
+              snsType="google"
+              snsText="Googleで続行"
+              className="login_btn_google"
+            />
+            <LoginBtn
+              snsType="twitter"
+              snsText="Tiwtterで続行"
+              className="login_btn_twitter"
+            />
+            <LoginBtn
+              snsType="apple"
+              snsText="Appleで続行"
+              className="login_btn_apple"
+            />
+
             <Group6>
               <TextLabel>アカウントをお持ちでないですか</TextLabel>
               <TextLabel1>登録する</TextLabel1>
@@ -41,11 +53,11 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
 
 const GroupContainer = styled.div`
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
   position: relative;
 `;
 
@@ -53,8 +65,6 @@ const Group = styled.div`
   ${Border1pxGhost}
   position: absolute;
   width: 480px;
-  top: 160px;
-  left: 720px;
   display: flex;
   flex-direction: column;
   padding: 39px;
@@ -62,6 +72,9 @@ const Group = styled.div`
   min-height: 760px;
   background-color: var(--white);
   border-radius: 8px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ImgLogo = styled.img`
@@ -73,7 +86,7 @@ const ImgLogo = styled.img`
 
 const Group4 = styled.div`
   height: 16px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   display: flex;
   justify-content: center;
@@ -142,6 +155,5 @@ const TextLabel2 = styled.div`
   line-height: 20px;
   white-space: nowrap;
 `;
-
 
 export default Login;
