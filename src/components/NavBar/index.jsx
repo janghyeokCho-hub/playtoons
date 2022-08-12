@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Body2 } from "@/styledMixins";
+import iconDashboard from '@ICONS/dashboardseries-shape-dashboard.png';
 
 
 function NavBar() {
@@ -22,11 +23,11 @@ const NavBar1 = styled.div`
 `;
 
 const IcoTableColumnsLight = styled.div`
-  margin-top: 14px;
+  /* margin-top: 14px; */
   width: 24px;
   height: 21px;
   margin-left: 30px;
-  background-image: url(@IMAGES/dashboardseries-shape.png);
+  background-image: url('${iconDashboard}');
   background-size: 100% 100%;
 `;
 
@@ -38,6 +39,7 @@ const TxtNavDashboardOff = styled.div`
   color: var(--vulcan);
   line-height: 20px;
   white-space: nowrap;
+  margin-left: 35px;
 `;
 
 export default NavBar;

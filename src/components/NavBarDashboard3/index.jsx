@@ -10,13 +10,14 @@ import iconSquarePen from '@ICONS/dashboardreactionlist-path-square-pen.png';
 import iconPencil from '@ICONS/mauthorpost-shape-pencil.png';
 import iconDoubeRect from '@ICONS/dashboard-shape-double-rect.png';
 import iconRhombus from '@ICONS/dashboard-shape-rhombus.png';
+import iconDashboard from '@ICONS/dashboardseries-shape-dashboard.png';
 
 function NavBarDashboard3(props) {
   return (
     <NavBarDashboard>
       <OverlapGroup>
         <Rectangle></Rectangle>
-        <NavBarDashboardPostOff
+        <NavBarSupport
           icoSquarePenLight={iconSquarePen}
           txtNavDashboardOn="支援管理"
           className="dashboardseries_nav_support"
@@ -41,6 +42,10 @@ function NavBarDashboard3(props) {
     </NavBarDashboard>
   );
 }
+
+const NavBarSupport = styled(NavBarDashboardPostOff)`
+  top : 400px;
+`;
 
 const NavBarDashboard = styled.div`
   position: absolute;
