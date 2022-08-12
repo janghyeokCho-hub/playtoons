@@ -21,31 +21,34 @@ const Input = ({ inputType, label }) => {
   }, [isPwdDisabled]);
 
   return (
-    <LoginFormDiv
-      className={`login_form_text_withicon login_form_text_withicon-9`}
-    >
-      <LoginTxtFormLabel className="login-txt-form-label">
-        {label}
-      </LoginTxtFormLabel>
-      <OverlapGroup className="overlap-group-3" type={type} />
-      {inputType === "password" && (
-        <IcoDisabled
-          src={accIcoDisabled}
-          onClick={() => setIsPwdDisabled(!isPwdDisabled)}
-        />
-      )}
-    </LoginFormDiv>
+    <InputDiv className={`login_form_text_withicon login_form_text_withicon-9`}>
+      <InputLabel className="login-txt-form-label">{label}</InputLabel>
+      <InputWithIconDiv>
+        <TextInput className="overlap-group-3" type={type} />
+        {inputType === "password" && (
+          <IcoDisabled
+            src={accIcoDisabled}
+            onClick={() => setIsPwdDisabled(!isPwdDisabled)}
+          />
+        )}
+      </InputWithIconDiv>
+    </InputDiv>
   );
 };
 
-const LoginFormDiv = styled.div`
+const InputDiv = styled.div`
   width: 400px;
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
 `;
 
-const LoginTxtFormLabel = styled.span`
+const InputWithIconDiv = styled.div`
+  flex-direction: row;
+  position: relative;
+`;
+
+const InputLabel = styled.span`
   ${Body5}
   min-height: 16px;
   color: var(--vulcan);
@@ -53,7 +56,7 @@ const LoginTxtFormLabel = styled.span`
   white-space: nowrap;
 `;
 
-const OverlapGroup = styled.input`
+const TextInput = styled.input`
   ${Border1pxTiara}
   height: 40px;
   margin-top: 8px;
@@ -69,8 +72,8 @@ const IcoDisabled = styled.img`
   position: absolute;
   width: 24px;
   height: 19px;
-  top: 224px;
-  right: 50px;
+  top: 19px;
+  right: 15px;
   cursor: pointer;
 `;
 

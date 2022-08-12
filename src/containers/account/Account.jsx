@@ -1,20 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
-
 import { useLocation } from "react-router-dom";
-import Login from "@/components/auth/Login";
-import Recovery from "@/components/account/Recovery";
-
 import accountrecoverconfirm from "@IMAGES/accountrecoverconfirm.jpg";
-
-const AccountBgImage = styled.div`
-  height: 100vh;
-
-  background: ${(props) => `url(${props.backgroundImage})` || ""} no-repeat
-    center;
-  background-repeat: no-repeat;
-  background-size: cover;
-`;
+import Login from "@COMPONENTS/auth/Login";
+import Recovery from "@COMPONENTS/account/Recovery";
+import Register from "@COMPONENTS/account/Register";
 
 const AccountLayout = () => {
   const location = useLocation();
@@ -43,6 +33,9 @@ const AccountLayout = () => {
           )}
           {accountType === "RECOVERY" && (
             <Recovery handleAccountType={handleAccountType} />
+          )}
+          {accountType === "REGISTER" && (
+            <Register handleAccountType={handleAccountType} />
           )}
         </Container>
       </div>

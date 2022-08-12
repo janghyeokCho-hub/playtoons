@@ -63,7 +63,13 @@ const Login = ({ handleAccountType }) => {
 
       <Group6>
         <TextLabel color="--vulcan">アカウントをお持ちでないですか</TextLabel>
-        <TextLabel1>登録する</TextLabel1>
+        <TextLabel1
+          onClick={() => {
+            handleAccountType("REGISTER");
+          }}
+        >
+          登録する
+        </TextLabel1>
       </Group6>
       <TextLabel2>プライバシーポリシー</TextLabel2>
     </AccountBoxDiv>
