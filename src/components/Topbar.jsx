@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useWindowSize } from "@/hook/useWindowSize";
+
 import Group from "./Group";
 import styled from "styled-components";
 import { Body3 } from "@/styledMixins";
@@ -51,6 +52,7 @@ const NonLoginMenu = ({ isMobile }) => {
         width={100}
         height={40}
         marginLeft={20}
+        callback={() => (window.location.href = "/auth-login")}
       />
     </>
   );

@@ -6,8 +6,8 @@ import configureStore, { sagaMiddleware } from "./modules/redux/store";
 import globalSaga from "./modules/redux/saga/globalSaga";
 import DashboardSeries from "@CONTAINERS/dashboardSeries/DashboardSeries";
 import Account from "@CONTAINERS/account/Account";
-import LangingPage from "@CONTAINERS/landing/LangingPage";
-import LangingPageMobile from "@CONTAINERS/landing/LangingPageMobile";
+import LandingPage from "@/containers/landing/LandingPage";
+import LandingPageMobile from "@/containers/landing/LandingPageMobile";
 
 import { BrowserView, MobileView } from "react-device-detect";
 
@@ -20,7 +20,7 @@ function App() {
       <BrowserView>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LangingPage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard-series" element={<DashboardSeries />} />
             <Route path="/auth-login" element={<Account />} />
           </Routes>
@@ -29,7 +29,9 @@ function App() {
       <MobileView>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LangingPageMobile />} />
+            <Route path="/" element={<LandingPageMobile />} />
+            <Route path="/dashboard-series" element={<DashboardSeries />} />
+            <Route path="/auth-login" element={<Account />} />
           </Routes>
         </BrowserRouter>
       </MobileView>
