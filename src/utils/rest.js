@@ -179,7 +179,11 @@ export const requestPromise = (type, params, isForm = false) => {
     let options = {};
     options.headers = {};
 
-    if (accessToken) options.headers.Authorization = "Bearer " + accessToken;
+    if (accessToken) {
+      options.headers.Authorization = "Bearer " + accessToken;
+    } else {
+      options.headers.Authorization = undefined;
+    }
 
     const { method, path } = getPath(type);
     params = query(params);

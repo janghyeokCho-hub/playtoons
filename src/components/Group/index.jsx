@@ -2,11 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { Border1pxTiara, Body3 } from "@/styledMixins";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 function Group() {
   return (
     <Group1>
-      <MagnifyingGlassLight></MagnifyingGlassLight>
+      <FontAwesomeIcon icon={faMagnifyingGlass} color="#909DAB" />
       <TxtFormSearch>検索キーワードを入力</TxtFormSearch>
     </Group1>
   );
@@ -14,22 +16,13 @@ function Group() {
 
 const Group1 = styled.div`
   ${Border1pxTiara}
-  height: 44px;
+  height: 40px;
   display: flex;
   padding: 11px 23px;
   align-items: flex-start;
-  min-width: 400px;
+  min-width: 250px;
   background-color: var(--desert-storm);
   border-radius: 21.5px;
-`;
-
-const MagnifyingGlassLight = styled.div`
-  width: 16px;
-  height: 16px;
-  align-self: center;
-  margin-bottom: 2px;
-  background-image: url(@IMAGES/dashboard-ico-search-gnb.png);
-  background-size: 100% 100%;
 `;
 
 const TxtFormSearch = styled.div`
@@ -39,6 +32,7 @@ const TxtFormSearch = styled.div`
   color: var(--manatee);
   line-height: 20px;
   white-space: nowrap;
+  align-self: center;
 `;
 
 export default Group;

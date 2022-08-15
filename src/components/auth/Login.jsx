@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
 import imgLogo from "@IMAGES/logo.png";
 import autoLoginLineRight from "@IMAGES/authlogin-line-right.png";
 import recoveryLine from "@IMAGES/lines/authlogin-line-txt.png";
 
-import Button from "@/components/Button";
-import Input from "@/components/Input";
+import Button from "@COMPONENTS/Button";
+import Input from "@COMPONENTS/Input";
+import { login } from "@/services/userService";
 
 const Login = ({ handleAccountType }) => {
   const [errorShow, setErrorShow] = useState(false);
+
+  const handleLogin = useCallback(() => {
+    const params = {
+      email: "jh.cho@raonworks.co.kr",
+      password: "1234",
+    };
+    login(params);
+  }, []);
   return (
     <AccountBoxDiv>
       <ImgLogo src={imgLogo} />
@@ -33,6 +42,10 @@ const Login = ({ handleAccountType }) => {
         className="login_btn_default"
         color="--white"
         bgColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
+        callback={() => handleLogin()}
       />
       <Group4>
         <LineLeft src={autoLoginLineRight} />
@@ -45,6 +58,9 @@ const Login = ({ handleAccountType }) => {
         className="login_btn_google"
         color="--vlucan"
         bgColor="--white"
+        width={400}
+        height={40}
+        marginBottom={15}
       />
       <Button
         text="Tiwtterで続行"
@@ -52,6 +68,9 @@ const Login = ({ handleAccountType }) => {
         className="login_btn_twitter"
         color="--vlucan"
         bgColor="--white"
+        width={400}
+        height={40}
+        marginBottom={15}
       />
       <Button
         text="Appleで続行"
@@ -59,6 +78,9 @@ const Login = ({ handleAccountType }) => {
         className="login_btn_apple"
         color="--white"
         bgColor="--black"
+        width={400}
+        height={40}
+        marginBottom={15}
       />
 
       <Group6>

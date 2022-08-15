@@ -4,10 +4,9 @@
   display: flex;
   height: 1512px;
   overflow: hidden;
-  width: 1920px;
+  width: 100%;
 }
 
 .dashboardseries_nav_support {
-  top : 362px;
+  top: 362px;
 }
-

@@ -44,6 +44,9 @@ const PreRecovery = ({
         text="次へ"
         color="--white"
         bgColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={handleSendEmail}
       />
       <Button
@@ -51,6 +54,9 @@ const PreRecovery = ({
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
       />
     </>
@@ -79,6 +85,9 @@ const CheckRecovery = ({ setIsShowType, email }) => {
         text="確認する"
         color="--white"
         bgColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => setIsShowType("CONFIRM")}
       />
       <Button
@@ -86,6 +95,9 @@ const CheckRecovery = ({ setIsShowType, email }) => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => setIsShowType("INPUT")}
       />
     </>
@@ -118,6 +130,9 @@ const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
         text=">パスワード変更"
         color="--white"
         bgColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
       />
       <Button
@@ -125,6 +140,9 @@ const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => setIsShowType("INPUT")}
       />
     </>

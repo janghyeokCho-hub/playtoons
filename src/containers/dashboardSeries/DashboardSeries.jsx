@@ -9,60 +9,69 @@ import {
   Border1pxVioletBlue,
 } from "@/styledMixins";
 import "./DashboardSeries.css";
-import line1 from '@LINES/authorplan-line.png';
-import line2 from '@LINES/dashboardeditseries-line-2.png';
-import rectCopy from '@IMAGES/dashboardseries-rectangle-copy.png';
-import iconPathRight from '@ICONS/dashboardseries-path-right.png';
-import rect from '@IMAGES/mdashboardseries-rectangle.jpg';
-import iconPathPlus from '@ICONS/dashboardseries-path-plus.png';
+import line1 from "@LINES/authorplan-line.png";
+import line2 from "@LINES/dashboardeditseries-line-2.png";
+import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
+import iconPathRight from "@ICONS/dashboardseries-path-right.png";
+import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
+import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
 
-import GnbLoginOn from "@COMPONENTS/GnbLoginOn";
+import Topbar from "@COMPONENTS/Topbar";
 import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
 
-
-
 function DashboardSeries(props) {
-
   return (
     <div className="container-center-horizontal">
       <div className="dashboardseries screen">
         <OverlapGroup1>
           <Line src={line1} />
-          <NavBarDashboard3/>
+          <NavBarDashboard3 />
           <Line2 src={line2} />
           <Rectangle></Rectangle>
-          <TextLabel>{'阿修羅ゲート'}</TextLabel>
-          <TextLabel1>{'シェルターアーク'}</TextLabel1>
-          <Date>{'2022/06/11'}</Date>
-          <Copy>{'アクション'}</Copy>
-          <Number>{'1'}</Number>
-          <TextLabel2>{'ウェブトゥーン'}</TextLabel2>
-          <X20220610><React.Fragment>休載中<br />(2022/06/10~)</React.Fragment></X20220610>
+          <TextLabel>{"阿修羅ゲート"}</TextLabel>
+          <TextLabel1>{"シェルターアーク"}</TextLabel1>
+          <Date>{"2022/06/11"}</Date>
+          <Copy>{"アクション"}</Copy>
+          <Number>{"1"}</Number>
+          <TextLabel2>{"ウェブトゥーン"}</TextLabel2>
+          <X20220610>
+            <React.Fragment>
+              休載中
+              <br />
+              (2022/06/10~)
+            </React.Fragment>
+          </X20220610>
           <RectangleCopy167></RectangleCopy167>
           <RectangleCopy src={rectCopy} />
-          <AngleRightSolidCopy style={{ backgroundImage: `url(${iconPathRight})` }}></AngleRightSolidCopy>
-          <Date1>{'2022/06/11'}</Date1>
-          <TextLabel3>{'アクション'}</TextLabel3>
+          <AngleRightSolidCopy
+            style={{ backgroundImage: `url(${iconPathRight})` }}
+          ></AngleRightSolidCopy>
+          <Date1>{"2022/06/11"}</Date1>
+          <TextLabel3>{"アクション"}</TextLabel3>
           <Rectangle1></Rectangle1>
-          <TextLabel4>{'番号'}</TextLabel4>
-          <TextLabel5>{'表紙'}</TextLabel5>
-          <TextLabel6>{'タイトル'}</TextLabel6>
-          <TextLabel7>{'タイプ'}</TextLabel7>
-          <TextLabel8>{'掲載日'}</TextLabel8>
-          <TextLabel9>{'カテゴリ'}</TextLabel9>
-          <TextLabel10>{'状態'}</TextLabel10>
-          <Number1>{'1'}</Number1>
-          <TextLabel11>{'ウェブトゥーン'}</TextLabel11>
-          <TextLabel12>{'連載中'}</TextLabel12>
+          <TextLabel4>{"番号"}</TextLabel4>
+          <TextLabel5>{"表紙"}</TextLabel5>
+          <TextLabel6>{"タイトル"}</TextLabel6>
+          <TextLabel7>{"タイプ"}</TextLabel7>
+          <TextLabel8>{"掲載日"}</TextLabel8>
+          <TextLabel9>{"カテゴリ"}</TextLabel9>
+          <TextLabel10>{"状態"}</TextLabel10>
+          <Number1>{"1"}</Number1>
+          <TextLabel11>{"ウェブトゥーン"}</TextLabel11>
+          <TextLabel12>{"連載中"}</TextLabel12>
           <RectangleCopy166></RectangleCopy166>
           <Rectangle2 src={rect} />
-          <TextLabel13>{'シリーズリスト'}</TextLabel13>
-          <AngleRightSolid style={{ backgroundImage: `url(${iconPathRight})` }}></AngleRightSolid>
+          <TextLabel13>{"シリーズリスト"}</TextLabel13>
+          <AngleRightSolid
+            style={{ backgroundImage: `url(${iconPathRight})` }}
+          ></AngleRightSolid>
           <PaddingGroup3>
-            <PlusSolid style={{ backgroundImage: `url(${iconPathPlus})` }}></PlusSolid>
-            <TextLabel14>{'シリーズを追加'}</TextLabel14>
+            <PlusSolid
+              style={{ backgroundImage: `url(${iconPathPlus})` }}
+            ></PlusSolid>
+            <TextLabel14>{"シリーズを追加"}</TextLabel14>
           </PaddingGroup3>
-          <GnbLoginOn />
+          <Topbar />
         </OverlapGroup1>
       </div>
     </div>

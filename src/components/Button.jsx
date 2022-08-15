@@ -14,10 +14,13 @@ const LoginTxtSns = styled.span`
 
 const BtnStyle = styled.div`
   ${Border05pxTiara}
-  width: 400px;
-  height: 40px;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   display: flex;
-  margin-bottom: 15px;
+  margin-top: ${(props) => props.marginTop}px;
+  margin-bottom: ${(props) => props.marginBottom}px;
+  margin-left: ${(props) => props.marginLeft}px;
+  margin-right: ${(props) => props.marginRight}px;
   border-radius: 20px;
   text-align: center;
   cursor: pointer;
@@ -26,13 +29,25 @@ const BtnStyle = styled.div`
   background-repeat: no-repeat;
   background-size: 24px 24px;
   background-position: 30px center;
-
   border-width: 1px;
   border-style: solid;
   border-color: var(${(props) => props.bdColor});
 `;
 
-const LoginBtn = ({ text, snsType, color, bgColor, bdColor, callback }) => {
+const Button = ({
+  text,
+  snsType,
+  color,
+  bgColor,
+  bdColor,
+  width = 400,
+  height = 40,
+  marginTop,
+  marginBottom,
+  marginLeft,
+  marginRight,
+  callback,
+}) => {
   let bgImage;
 
   switch (snsType) {
@@ -54,6 +69,12 @@ const LoginBtn = ({ text, snsType, color, bgColor, bdColor, callback }) => {
       bgColor={bgColor}
       bdColor={bdColor}
       onClick={callback}
+      width={width}
+      height={height}
+      marginTop={marginTop}
+      marginBottom={marginBottom}
+      marginLeft={marginLeft}
+      marginRight={marginRight}
     >
       <LoginTxtSns className="login-txt-sns" color={color}>
         {text}
@@ -62,4 +83,4 @@ const LoginBtn = ({ text, snsType, color, bgColor, bdColor, callback }) => {
   );
 };
 
-export default LoginBtn;
+export default Button;

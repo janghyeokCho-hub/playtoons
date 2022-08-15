@@ -66,6 +66,9 @@ const Register = ({ handleAccountType }) => {
         text="次へ"
         color="--white"
         bgColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => handleRegister()}
       />
       <Button
@@ -73,6 +76,9 @@ const Register = ({ handleAccountType }) => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
+        width={400}
+        height={40}
+        marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
       />
     </AccountBoxDiv>
