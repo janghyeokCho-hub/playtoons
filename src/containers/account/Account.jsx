@@ -5,6 +5,7 @@ import accountrecoverconfirm from "@IMAGES/accountrecoverconfirm.jpg";
 import Login from "@COMPONENTS/auth/Login";
 import Recovery from "@COMPONENTS/account/Recovery";
 import Register from "@COMPONENTS/account/Register";
+import Agreement from "@COMPONENTS/account/Agreement";
 
 const AccountLayout = () => {
   const location = useLocation();
@@ -36,6 +37,9 @@ const AccountLayout = () => {
           )}
           {accountType === "REGISTER" && (
             <Register handleAccountType={handleAccountType} />
+          )}
+          {accountType === "AGREEMENT" && (
+            <Agreement handleAccountType={handleAccountType} />
           )}
         </Container>
       </div>

@@ -4,6 +4,9 @@ import { Body5, Border1pxTiara } from "@/styledMixins";
 // undisable 필요
 import accIcoDisabled from "@ICONS/accountregister-ico-disabled.png";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
+
 const Input = ({ inputType, label, callback }) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
@@ -18,7 +21,7 @@ const Input = ({ inputType, label, callback }) => {
     return () => {
       setType(null);
     };
-  }, [isPwdDisabled]);
+  }, [inputType, isPwdDisabled]);
 
   return (
     <InputDiv className={`login_form_text_withicon login_form_text_withicon-9`}>
@@ -26,10 +29,13 @@ const Input = ({ inputType, label, callback }) => {
       <InputWithIconDiv>
         <TextInput className="overlap-group-3" type={type} onInput={callback} />
         {inputType === "password" && (
-          <IcoDisabled
-            src={accIcoDisabled}
-            onClick={() => setIsPwdDisabled(!isPwdDisabled)}
-          />
+          <EyeIconDiv onClick={() => setIsPwdDisabled(!isPwdDisabled)}>
+            <FontAwesomeIcon
+              icon={isPwdDisabled ? faEye : faEyeSlash}
+              color="#909DAB"
+              style={{ width: "100%", height: "100%" }}
+            />
+          </EyeIconDiv>
         )}
       </InputWithIconDiv>
     </InputDiv>
@@ -68,7 +74,7 @@ const TextInput = styled.input`
   border-radius: 4px;
 `;
 
-const IcoDisabled = styled.img`
+const EyeIconDiv = styled.div`
   position: absolute;
   width: 24px;
   height: 19px;

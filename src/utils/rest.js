@@ -24,7 +24,7 @@ export function buildUrl(url, parameters) {
  * @param {*} query
  */
 export function query(query) {
-  var newQuery = query;
+  let newQuery = query;
   for (var k in newQuery) {
     if (newQuery[k] === undefined || newQuery.k === "") delete newQuery[k];
   }
@@ -40,16 +40,16 @@ export function query(query) {
         path : string
     }
  */
-export const getPath = type => {
+export const getPath = (type) => {
   if (!type) {
     return;
   }
 
   const reg2 = /[^_]+/gm;
-  var str = type;
-  var m;
+  const str = type;
+  let m;
 
-  var arr = [];
+  let arr = [];
   while ((m = reg2.exec(str)) !== null) {
     // This is necessary to avoid infinite loops with zero-width matches
     if (m.index === reg2.lastIndex) {
@@ -62,9 +62,9 @@ export const getPath = type => {
     });
   }
 
-  var method = arr.shift();
+  let method = arr.shift();
   // . 이 있는 경우에는 Camel 형태로 변경해 준다.
-  arr = arr.map(function(item) {
+  arr = arr.map(function (item) {
     if (item.indexOf("$") > -1) {
       var itemList = item.toLowerCase().split("$");
 
@@ -110,7 +110,7 @@ export function load(type, params = {}, cb) {
   return {
     type,
     params,
-    cb
+    cb,
   };
 }
 
@@ -120,13 +120,13 @@ export function loadResult(err, values) {
     return {
       type: type + "_ERROR",
       params,
-      err
+      err,
     };
   } else {
     return {
       type: type + "_COMPLETED",
       params,
-      result
+      result,
     };
   }
 }
@@ -134,20 +134,21 @@ export function loadResult(err, values) {
 function loading(type, value) {
   return {
     type: type + "_LOADING",
-    value
+    value,
   };
 }
 
 export function* loadSaga(action) {
-  var { type, params } = action;
+  const { type } = action;
+  let { params } = action;
 
-  var accessToken = getAccessToken();
+  const accessToken = getAccessToken();
 
   let url = Config.apiUrl;
 
   let options = { headers: {} };
   if (accessToken) options.headers.Authorization = "Bearer " + accessToken;
-  var { method, path } = getPath(type);
+  const { method, path } = getPath(type);
   params = query(params);
 
   options.method = method;
@@ -171,8 +172,8 @@ export function* loadSaga(action) {
 }
 
 export const requestPromise = (type, params, isForm = false) => {
-  return new Promise(async function(resolve, reject) {
-    var accessToken = getAccessToken();
+  return new Promise(async function (resolve, reject) {
+    const accessToken = getAccessToken();
 
     let url = Config.apiUrl;
     let options = {};
@@ -180,7 +181,7 @@ export const requestPromise = (type, params, isForm = false) => {
 
     if (accessToken) options.headers.Authorization = "Bearer " + accessToken;
 
-    var { method, path } = getPath(type);
+    const { method, path } = getPath(type);
     params = query(params);
     options.method = method;
     if (method === "GET") options.url = buildUrl(url + path, params);
@@ -189,24 +190,30 @@ export const requestPromise = (type, params, isForm = false) => {
       options.data = params;
     }
     request(options)
-      .then(res => {
+      .then((res) => {
         resolve(res);
       })
-      .catch(err => {
+      .catch((err) => {
         resolve(err.response);
       });
   });
 };
 
 const getAccessToken = () => {
-  var accessToken = undefined;
-  var state = store.getState();
+  let accessToken = undefined;
+  try {
+    const state = store?.getState();
 
-  accessToken = authSelector(state);
+    if (state) {
+      accessToken = authSelector(state);
+    }
+  } catch (err) {
+    console.error(err);
+  }
   return accessToken;
 };
 
-const authSelector = state => {
+const authSelector = (state) => {
   try {
     return state.data.sign.author.access_token;
   } catch (err) {

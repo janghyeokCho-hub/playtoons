@@ -1,5 +1,5 @@
 const Config = {
-    apiUrl : 'https://auth.dev.playtoons.jp/api'
-}
+  apiUrl: "https://auth.dev.playtoons.jp",
+};
 
 export default Config;
