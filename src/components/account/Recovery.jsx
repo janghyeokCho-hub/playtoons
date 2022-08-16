@@ -48,6 +48,7 @@ const PreRecovery = ({
         height={40}
         marginBottom={15}
         callback={handleSendEmail}
+        borderRadius={20}
       />
       <Button
         text="戻る"
@@ -58,6 +59,7 @@ const PreRecovery = ({
         height={40}
         marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
+        borderRadius={20}
       />
     </>
   );
@@ -89,6 +91,7 @@ const CheckRecovery = ({ setIsShowType, email }) => {
         height={40}
         marginBottom={15}
         callback={() => setIsShowType("CONFIRM")}
+        borderRadius={20}
       />
       <Button
         text="戻る"
@@ -134,6 +137,7 @@ const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
         height={40}
         marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
+        borderRadius={20}
       />
       <Button
         text="戻る"
@@ -144,6 +148,7 @@ const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
         height={40}
         marginBottom={15}
         callback={() => setIsShowType("INPUT")}
+        borderRadius={20}
       />
     </>
   );

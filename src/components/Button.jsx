@@ -21,7 +21,7 @@ const BtnStyle = styled.div`
   margin-bottom: ${(props) => props.marginBottom}px;
   margin-left: ${(props) => props.marginLeft}px;
   margin-right: ${(props) => props.marginRight}px;
-  border-radius: 20px;
+  border-radius: ${(props) => props.borderRadius}px;
   text-align: center;
   cursor: pointer;
   background-color: var(${(props) => props.bgColor});
@@ -47,6 +47,7 @@ const Button = ({
   marginLeft,
   marginRight,
   callback,
+  borderRadius = 20,
 }) => {
   let bgImage;
 
@@ -75,6 +76,7 @@ const Button = ({
       marginBottom={marginBottom}
       marginLeft={marginLeft}
       marginRight={marginRight}
+      borderRadius={borderRadius}
     >
       <LoginTxtSns className="login-txt-sns" color={color}>
         {text}

@@ -46,6 +46,7 @@ const Login = ({ handleAccountType }) => {
         height={40}
         marginBottom={15}
         callback={() => handleLogin()}
+        borderRadius={20}
       />
       <Group4>
         <LineLeft src={autoLoginLineRight} />
@@ -61,6 +62,7 @@ const Login = ({ handleAccountType }) => {
         width={400}
         height={40}
         marginBottom={15}
+        borderRadius={20}
       />
       <Button
         text="Tiwtterで続行"
@@ -71,6 +73,7 @@ const Login = ({ handleAccountType }) => {
         width={400}
         height={40}
         marginBottom={15}
+        borderRadius={20}
       />
       <Button
         text="Appleで続行"
@@ -81,6 +84,7 @@ const Login = ({ handleAccountType }) => {
         width={400}
         height={40}
         marginBottom={15}
+        borderRadius={20}
       />
 
       <Group6>

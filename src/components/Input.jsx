@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Body5, Border1pxTiara } from "@/styledMixins";
-// undisable 필요
-import accIcoDisabled from "@ICONS/accountregister-ico-disabled.png";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 

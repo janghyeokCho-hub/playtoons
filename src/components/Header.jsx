@@ -53,12 +53,13 @@ const NonLoginMenu = ({ isMobile }) => {
         height={40}
         marginLeft={20}
         callback={() => (window.location.href = "/auth-login")}
+        borderRadius={20}
       />
     </>
   );
 };
 
-const Topbar = () => {
+const Header = () => {
   // login 구현 후 redux store에서 값 받아와야함
   const isLogin = false;
 
@@ -72,7 +73,7 @@ const Topbar = () => {
     }
   }, [size]);
   return (
-    <TopbarDiv>
+    <HeaderDiv>
       <LeftMenu>
         <IcoBars></IcoBars>
         <ImgLogoGnb src={logoGnb} />
@@ -80,11 +81,11 @@ const Topbar = () => {
       <RightMenu>
         {(isLogin && <LoginMenu />) || <NonLoginMenu isMobile={isMobile} />}
       </RightMenu>
-    </TopbarDiv>
+    </HeaderDiv>
   );
 };
 
-const TopbarDiv = styled.div`
+const HeaderDiv = styled.div`
   width: 100%;
   height: 80px;
   background-color: var(--white);
@@ -156,4 +157,4 @@ const BtnAuthorGnb = styled.img`
   margin-left: 32px;
 `;
 
-export default Topbar;
+export default Header;

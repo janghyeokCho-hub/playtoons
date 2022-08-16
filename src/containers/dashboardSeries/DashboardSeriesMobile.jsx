@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Body8, Body5, Body7 } from "../../styledMixins";
 
 import Group411 from "@COMPONENTS/Group411";
-import Topbar from "@/components/Topbar";
 
 // import {requestPromise} from '../../utils';
 
@@ -12,13 +11,17 @@ import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
 import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 
 const data = {
-  barsLight1: "/img/mdashboardreactionlist-shape-9D9900B8-B5B9-4BC7-808B-EE0ADFC96C58@2x.png",
+  barsLight1:
+    "/img/mdashboardreactionlist-shape-9D9900B8-B5B9-4BC7-808B-EE0ADFC96C58@2x.png",
   group19: "/img/mwebtoon-image-1-66D56EC8-5C41-493B-94B2-0CD30EE806ED@2x.png",
-  magnifyingGlassLight1: "/img/mregisterauthor-shape-65A9CAC0-DFF6-47B9-ABB3-0702BE83D6CE@2x.png",
-  squarePenLight: "/img/mauthorpost-shape-943C049B-C045-4279-8169-EF71E55D6790@2x.png",
+  magnifyingGlassLight1:
+    "/img/mregisterauthor-shape-65A9CAC0-DFF6-47B9-ABB3-0702BE83D6CE@2x.png",
+  squarePenLight:
+    "/img/mauthorpost-shape-943C049B-C045-4279-8169-EF71E55D6790@2x.png",
   text_Label1: "シリーズリスト",
 
-  rectangle1: "/img/mdashboardseries-rectangle-C81FC714-6BCF-4E31-A0B0-3854433EEF8A.jpg",
+  rectangle1:
+    "/img/mdashboardseries-rectangle-C81FC714-6BCF-4E31-A0B0-3854433EEF8A.jpg",
   text_Label2: "大学のリンゴ一個の重さで10メートル…",
   x202206011: "掲載日：2022/06/01",
   text_Label3: "カテゴリ：アクション",
@@ -26,7 +29,8 @@ const data = {
   text_Label5: "状態",
   text_Label6: "連載中",
 
-  rectangle2: "/img/mdashboardseries-rectangle-1233195B-5FA1-451B-8732-1104A315AF0D@2x.png",
+  rectangle2:
+    "/img/mdashboardseries-rectangle-1233195B-5FA1-451B-8732-1104A315AF0D@2x.png",
   text_Label7: "大学のリンゴ一個の重さで10メートル…",
   x202206012: "掲載日：2022/06/01",
   text_Label8: "カテゴリ：アクション",
@@ -36,7 +40,6 @@ const data = {
 };
 
 function DashboardSeriesMobile(props) {
-
   useEffect(() => {
     console.log("useEffect");
     // get dashboard list
@@ -75,7 +78,6 @@ function DashboardSeriesMobile(props) {
   return (
     <div className="container-center-horizontal">
       <DashboardseriesMobile className="screen">
-        <Topbar />
         <Rectangle></Rectangle>
         <TextLabel>{data.text_Label1}</TextLabel>
         <Rectangle1></Rectangle1>
@@ -140,7 +142,6 @@ const DashboardseriesMobile = styled.div`
   overflow-x: hidden;
   width: 375px;
 `;
-
 
 const OverlapGroup2 = styled.div`
   height: 50px;

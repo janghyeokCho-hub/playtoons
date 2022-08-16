@@ -16,7 +16,6 @@ import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
 import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
 import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 
-import Topbar from "@COMPONENTS/Topbar";
 import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
 
 function DashboardSeries(props) {
@@ -72,7 +71,6 @@ function DashboardSeries(props) {
             ></PlusSolid>
             <TextLabel14>{"シリーズを追加"}</TextLabel14>
           </PaddingGroup3>
-          <Topbar />
         </OverlapGroup1>
       </Dashboardseries>
     </div>
@@ -87,7 +85,6 @@ const Dashboardseries = styled.div`
   overflow: hidden;
   width: 100%;
 `;
-
 
 const OverlapGroup1 = styled.div`
   width: 1922px;

@@ -70,6 +70,7 @@ const Register = ({ handleAccountType }) => {
         height={40}
         marginBottom={15}
         callback={() => handleRegister()}
+        borderRadius={20}
       />
       <Button
         text="戻る"
@@ -80,6 +81,7 @@ const Register = ({ handleAccountType }) => {
         height={40}
         marginBottom={15}
         callback={() => handleAccountType("LOGIN")}
+        borderRadius={20}
       />
     </AccountBoxDiv>
   );
