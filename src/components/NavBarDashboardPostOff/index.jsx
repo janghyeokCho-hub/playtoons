@@ -4,10 +4,10 @@ import { Body2 } from "@/styledMixins";
 
 
 function NavBarDashboardPostOff(props) {
-  const { icoSquarePenLight, txtNavDashboardOn, className } = props;
+  const { icoSquarePenLight, txtNavDashboardOn, className, onClick } = props;
 
   return (
-    <NavBarDashboardPlanOff className={`nav_bar_dashboard_plan_off ${className || ""}`}>
+    <NavBarDashboardPlanOff className={`nav_bar_dashboard_plan_off ${className || ""}`} onClick={props.onClick} >
       <IcoSealLight className="ico-seal-light" style={{ backgroundImage: `url(${icoSquarePenLight})` }}></IcoSealLight>
       <TxtNavDashboardOn className="txt-nav-dashboard-on">{txtNavDashboardOn}</TxtNavDashboardOn>
     </NavBarDashboardPlanOff>

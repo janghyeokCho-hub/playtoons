@@ -10,10 +10,11 @@ import {
 } from "@/styledMixins";
 import line1 from "@LINES/authorplan-line.png";
 import line2 from "@LINES/dashboardeditseries-line-2.png";
-import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
 import iconPathRight from "@ICONS/dashboardseries-path-right.png";
-import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
+//temp data
+import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
+import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 
 import Topbar from "@COMPONENTS/Topbar";
 import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
@@ -22,6 +23,7 @@ function DashboardSeries(props) {
   return (
     <div className="container-center-horizontal">
       <Dashboardseries className="screen">
+        {/* contents area */}
         <OverlapGroup1>
           <Line src={line1} />
           <NavBarDashboard3 />

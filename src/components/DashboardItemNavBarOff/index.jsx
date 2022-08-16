@@ -4,10 +4,11 @@ import { Body2 } from "@/styledMixins";
 
 
 function DashboardItemNavBarOff(props) {
-  const { icoDiamondLight, txtNavDashboardOn } = props;
+  const { icoDiamondLight, txtNavDashboardOn, onClick } = props;
 
   return (
-    <DashboardItemNavBarOff1>
+    <DashboardItemNavBarOff1
+      onClick={props.onClick}>
       <IcoDiamondLight style={{ backgroundImage: `url(${icoDiamondLight})` }}></IcoDiamondLight>
       <TxtNavDashboardOn>{txtNavDashboardOn}</TxtNavDashboardOn>
     </DashboardItemNavBarOff1>

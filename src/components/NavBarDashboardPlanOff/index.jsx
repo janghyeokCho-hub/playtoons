@@ -4,10 +4,11 @@ import { Body1 } from "@/styledMixins";
 
 
 function NavBarDashboardPlanOff(props) {
-  const { icoSealSolid, txtNavDashboardOn } = props;
+  const { icoSealSolid, txtNavDashboardOn, onClick } = props;
 
   return (
-    <NavBarDashboardSeriesOff>
+    <NavBarDashboardSeriesOff
+      onClick={props.onClick}>
       <IcoObjectUnionSolid style={{ backgroundImage: `url(${icoSealSolid})` }}></IcoObjectUnionSolid>
       <TxtNavDashboardOn>{txtNavDashboardOn}</TxtNavDashboardOn>
     </NavBarDashboardSeriesOff>
