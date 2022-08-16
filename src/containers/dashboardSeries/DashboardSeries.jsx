@@ -8,7 +8,6 @@ import {
   Body1,
   Border1pxVioletBlue,
 } from "@/styledMixins";
-import "./DashboardSeries.css";
 import line1 from "@LINES/authorplan-line.png";
 import line2 from "@LINES/dashboardeditseries-line-2.png";
 import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
@@ -22,7 +21,7 @@ import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
 function DashboardSeries(props) {
   return (
     <div className="container-center-horizontal">
-      <div className="dashboardseries screen">
+      <Dashboardseries className="screen">
         <OverlapGroup1>
           <Line src={line1} />
           <NavBarDashboard3 />
@@ -73,10 +72,20 @@ function DashboardSeries(props) {
           </PaddingGroup3>
           <Topbar />
         </OverlapGroup1>
-      </div>
+      </Dashboardseries>
     </div>
   );
 }
+
+const Dashboardseries = styled.div`
+  align-items: flex-start;
+  background-color: var(--white);
+  display: flex;
+  height: 1512px;
+  overflow: hidden;
+  width: 100%;
+`;
+
 
 const OverlapGroup1 = styled.div`
   width: 1922px;
