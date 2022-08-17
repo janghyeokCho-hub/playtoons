@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import {useParams} from 'react-router-dom';
 import styled from "styled-components";
 import {
   Title3,
@@ -12,9 +13,6 @@ import {
 } from "@/styledMixins";
 
 import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
-import TopbarTitle from "@COMPONENTS/Group63";
-import Header from "@/components/Header";
-
 import lineHorizontal from '@LINES/authorplan-line.png';
 import lineVertical from '@LINES/dashboardeditseries-line-2.png';
 
@@ -33,6 +31,9 @@ const textData = {
 
 function DashboardSeriesDetail(props) {
 
+  let params = useParams();
+
+  //init state
   const [data, setData] = useState({
     list_thumb: [],
     list_tag: [],
@@ -62,6 +63,7 @@ function DashboardSeriesDetail(props) {
     });
   }
 
+  //put data to elements
   useEffect(() => {
 
     setData({
@@ -124,8 +126,7 @@ function DashboardSeriesDetail(props) {
           </Group3>
           <Rectangle4 src={data.main_image} />
           <TextLabel8>{textData.label_series_detail}</TextLabel8>
-          <Header />
-          <TopbarTitle text_Label={textData.label_series_detail_on_topbar} />
+          {/* <TopbarTitle text_Label={textData.label_series_detail_on_topbar} /> */}
         </OverlapGroup1>
       </Dashboardseriesdetail>
     </div>
@@ -147,7 +148,7 @@ const OverlapGroup1 = styled.div`
   ${Title3}
   width: 1922px;
   height: 3512px;
-  position: relative;
+  /* position: relative; */
 `;
 
 const Line = styled.img`

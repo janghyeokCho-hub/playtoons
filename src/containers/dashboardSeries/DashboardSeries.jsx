@@ -89,7 +89,7 @@ const Dashboardseries = styled.div`
 const OverlapGroup1 = styled.div`
   width: 1922px;
   height: 3180px;
-  position: relative;
+  /* position: relative; */
 `;
 
 const Line = styled.img`

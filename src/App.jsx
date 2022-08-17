@@ -28,7 +28,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard-series" element={<DashboardSeries />} />
-            <Route path="/dashboard-series-detail" element={<DashboardSeriesDetail />} />
+            <Route path="/dashboard-series-detail/:id" element={<DashboardSeriesDetail />} > </Route>
             <Route path="/auth-login" element={<Account />} />
           </Routes>
         </BrowserRouter>
@@ -38,7 +38,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
             <Route path="/dashboard-series"element={<DashboardSeriesMobile />} />
-            <Route path="/dashboard-series-detail" element={<DashboardSeriesDetail />} />
+            <Route path="/dashboard-series-detail/:id" element={<DashboardSeriesDetail />} />
             <Route path="/auth-login" element={<Account />} />
           </Routes>
         </BrowserRouter>
