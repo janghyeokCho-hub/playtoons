@@ -9,7 +9,7 @@ import roundRetangle from '@IMAGES/mdashboardseriesdetail-round-rectangle.png';
 import Group37 from "@COMPONENTS/dashboard/Group37";
 import PaddingGroup14Copy3 from "@COMPONENTS/dashboard/PaddingGroup14Copy3";
 import PaddingGroup14Copy72 from "@COMPONENTS/dashboard/PaddingGroup14Copy72";
-import TagePaddingGroup from "@COMPONENTS/dashboard/PaddingGroup14Copy4";
+import TagePaddingGroup from "@/components/dashboard/DetailMobileTagContainer";
 
 const textData = {
   label_title: "シリーズ詳細",
@@ -50,7 +50,8 @@ function DashboardSeriesDetailMobile(props) {
     return list_data.map( (data, index) => {
       let leftPosition = (102 * index) + 32;
       leftPosition = leftPosition + "px";
-      return "" === data ? <ImgThumbEmpty leftPosition={leftPosition}></ImgThumbEmpty> : <ImgThumb src={data} leftPosition={leftPosition}  />;
+      return "" === data ? <ImgThumbEmpty key={index} leftPosition={leftPosition}></ImgThumbEmpty> : 
+        <ImgThumb src={data} key={index} leftPosition={leftPosition}  />;
     } );
   }
 
@@ -58,7 +59,7 @@ function DashboardSeriesDetailMobile(props) {
     const list_data = ["#初公開", "#SF", "#アクション"];
 
     return list_data.map( (data, index) => {
-      return <TagePaddingGroup>{data}</TagePaddingGroup>;
+      return <TagePaddingGroup key={index}>{data}</TagePaddingGroup>;
     });
   }
 
@@ -113,7 +114,8 @@ function DashboardSeriesDetailMobile(props) {
           <TextLabelGrade>{textData.label_grade}</TextLabelGrade>
           <TextLabelStatus>{textData.label_status}</TextLabelStatus>
           <MainImage src={data.main_image} />
-          {getThumbList()}
+          {/* 가로 스크로 컨테이너 필요  */}
+          {getThumbList()}    
           <BackgroudRoundRect src={roundRetangle} />
         </OverlapGroup3>
       </MDashboardseriesdetail>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Border1pxTiara, NotosansjpBoldManatee12px } from "@/styledMixins";
 
 
-function PaddingGroup14Copy4(props) {
+function DetailMobileTagContainer(props) {
   const { children, className } = props;
 
   return (
@@ -383,4 +383,4 @@ const Tag = styled.div`
   white-space: nowrap;
 `;
 
-export default PaddingGroup14Copy4;
+export default DetailMobileTagContainer;

@@ -31,7 +31,7 @@ const textData = {
 
 function DashboardSeriesDetail(props) {
 
-  let params = useParams();
+  let params = useParams('id');
 
   //init state
   const [data, setData] = useState({
@@ -49,8 +49,8 @@ function DashboardSeriesDetail(props) {
   let getThumbList = () => {
     const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", "", "", "", ""];
 
-    return list_data.map( (data) => {
-      return "" === data ? <RectangleCopy></RectangleCopy> : <Rectangle3 src={data} />;
+    return list_data.map( (data, index) => {
+      return "" === data ? <ImgThumbEmpty key={index}></ImgThumbEmpty> : <TmgThumb key={index} src={data} />;
     } );
   }
 
@@ -58,8 +58,8 @@ function DashboardSeriesDetail(props) {
     const list_data = ["#アクション", "#異世界"];
 
     return list_data.map( (data, index) => {
-      return index === 0 ? <TagPaddingGroup><TagBox>{data}</TagBox></TagPaddingGroup> : 
-        <TagPaddingGroupMargin><TagBox>{data}</TagBox></TagPaddingGroupMargin>;
+      return index === 0 ? <TagPaddingGroup key={index}><TagBox>{data}</TagBox></TagPaddingGroup> : 
+        <TagPaddingGroupMargin key={index}><TagBox>{data}</TagBox></TagPaddingGroupMargin>;
     });
   }
 
@@ -223,7 +223,7 @@ const FlexRow = styled.div`
   min-width: 640px;
 `;
 
-const Rectangle3 = styled.img`
+const TmgThumb = styled.img`
   ${Border2pxVioletBlue}
   width: 90px;
   height: 143px;
@@ -231,7 +231,7 @@ const Rectangle3 = styled.img`
   object-fit: cover;
 `;
 
-const RectangleCopy = styled.div`
+const ImgThumbEmpty = styled.div`
   width: 90px;
   height: 143px;
   margin-left: 20px;
