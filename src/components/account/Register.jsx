@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Border1pxGhost } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
-import { createRegisterUser } from "@/services/accountService";
+import { useNavigate } from "react-router-dom";
 
 const Register = ({ handleAccountType }) => {
   const [email, setEmail] = useState(null);
@@ -29,6 +29,8 @@ const Register = ({ handleAccountType }) => {
     };
     console.log(params);
     // createRegisterUser(params)
+    // 회원 가입 성공시 register completed 페이지로 이동
+    window.location.href = "/register-completed";
   }, [email, password, referralCode, eulaVersion, privacyVersion]);
 
   return (

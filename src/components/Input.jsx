@@ -21,7 +21,7 @@ const Input = ({ inputType, label, callback }) => {
   }, [inputType, isPwdDisabled]);
 
   return (
-    <InputDiv className={`login_form_text_withicon login_form_text_withicon-9`}>
+    <InputDiv>
       <InputLabel className="login-txt-form-label">{label}</InputLabel>
       <InputWithIconDiv>
         <TextInput className="overlap-group-3" type={type} onInput={callback} />
@@ -67,8 +67,8 @@ const TextInput = styled.input`
   padding: 10px 13px;
   justify-content: flex-end;
   align-items: flex-start;
-  min-width: 400px;
   border-radius: 4px;
+  width: 100%;
 `;
 
 const EyeIconDiv = styled.div`
