@@ -13,7 +13,7 @@ import {
 
 import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
 import TopbarTitle from "@COMPONENTS/Group63";
-import Topbar from "@/components/Topbar";
+import Header from "@/components/Header";
 
 import lineHorizontal from '@LINES/authorplan-line.png';
 import lineVertical from '@LINES/dashboardeditseries-line-2.png';
@@ -124,7 +124,7 @@ function DashboardSeriesDetail(props) {
           </Group3>
           <Rectangle4 src={data.main_image} />
           <TextLabel8>{textData.label_series_detail}</TextLabel8>
-          <Topbar />
+          <Header />
           <TopbarTitle text_Label={textData.label_series_detail_on_topbar} />
         </OverlapGroup1>
       </Dashboardseriesdetail>
