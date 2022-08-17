@@ -16,7 +16,7 @@ import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
 import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
 import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 
-import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
+import NavBarDashboard3 from "@/components/dashboard/NavBarDashboard3";
 
 function DashboardSeries(props) {
   return (

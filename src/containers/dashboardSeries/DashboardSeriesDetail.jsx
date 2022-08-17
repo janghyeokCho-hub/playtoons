@@ -12,7 +12,7 @@ import {
   NotosansjpBoldDeepSpaceSparkle18px,
 } from "@/styledMixins";
 
-import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
+import NavBarDashboard3 from "@/components/dashboard/NavBarDashboard3";
 import lineHorizontal from '@LINES/authorplan-line.png';
 import lineVertical from '@LINES/dashboardeditseries-line-2.png';
 

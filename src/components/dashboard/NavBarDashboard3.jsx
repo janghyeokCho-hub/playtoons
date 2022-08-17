@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Body5, Body2 } from "@/styledMixins";
 
-import NavBarDashboardPostOff from "../NavBarDashboardPostOff";
-import NavBarDashboardPlanOff from "../NavBarDashboardPlanOff";
-import DashboardItemNavBarOff from "../DashboardItemNavBarOff";
+import NavBarDashboardPostOff from "@COMPONENTS/dashboard/NavBarDashboardPostOff";
+import NavBarDashboardPlanOff from "@COMPONENTS/dashboard/NavBarDashboardPlanOff";
+import DashboardItemNavBarOff from "@COMPONENTS/dashboard/DashboardItemNavBarOff";
 
 import iconSquarePen from '@ICONS/dashboardreactionlist-path-square-pen.png';
 import iconPencil from '@ICONS/mauthorpost-shape-pencil.png';
