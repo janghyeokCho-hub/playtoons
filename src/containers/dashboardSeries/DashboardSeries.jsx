@@ -16,7 +16,7 @@ import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
 import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
 import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
 
-import NavBarDashboard3 from "@COMPONENTS/NavBarDashboard3";
+import NavBarDashboard3 from "@/components/dashboard/NavBarDashboard3";
 
 function DashboardSeries(props) {
   return (
@@ -89,7 +89,7 @@ const Dashboardseries = styled.div`
 const OverlapGroup1 = styled.div`
   width: 1922px;
   height: 3180px;
-  position: relative;
+  /* position: relative; */
 `;
 
 const Line = styled.img`

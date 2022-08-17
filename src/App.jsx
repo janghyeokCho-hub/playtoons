@@ -6,6 +6,8 @@ import configureStore, { sagaMiddleware } from "./modules/redux/store";
 import globalSaga from "./modules/redux/saga/globalSaga";
 import DashboardSeries from "@CONTAINERS/dashboardSeries/DashboardSeries";
 import DashboardSeriesMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesMobile";
+import DashboardSeriesDetail from "@CONTAINERS/dashboardSeries/DashboardSeriesDetail";
+import DashboardSeriesDetailMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesDetailMobile";
 import Account from "@CONTAINERS/account/Account";
 import AccountMobile from "@CONTAINERS/account/AccountMobile";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
@@ -38,8 +40,14 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/auth-login" element={<Account />} />
             <Route path="/dashboard-series" element={<DashboardSeries />} />
+            <Route
+              path="/dashboard-series-detail/:id"
+              element={<DashboardSeriesDetail />}
+            >
+              {" "}
+            </Route>
+            <Route path="/auth-login" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
         </BrowserRouter>
@@ -49,11 +57,16 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
             <Route path="/auth-login" element={<AccountMobile />} />
+            <Route path="/register-completed" element={<RegisterCompleted />} />
             <Route
               path="/dashboard-series"
               element={<DashboardSeriesMobile />}
             />
-            <Route path="/register-completed" element={<RegisterCompleted />} />
+            <Route
+              path="/dashboard-series-detail/:id"
+              element={<DashboardSeriesDetailMobile />}
+            />
+            <Route path="/auth-login" element={<Account />} />
           </Routes>
         </BrowserRouter>
       </MobileView>
