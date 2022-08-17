@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Body8, Body5, Body7 } from "../../styledMixins";
+import { Body8, Body5, Body7 } from "@/styledMixins";
 
 import Group411 from "@COMPONENTS/Group411";
 
