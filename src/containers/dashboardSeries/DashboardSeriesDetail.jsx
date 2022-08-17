@@ -46,7 +46,7 @@ function DashboardSeriesDetail(props) {
     main_image: "",
   });
 
-  const getThumbList = () => {
+  let getThumbList = () => {
     const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", "", "", "", ""];
 
     return list_data.map( (data) => {
@@ -54,7 +54,7 @@ function DashboardSeriesDetail(props) {
     } );
   }
 
-  const getTagList = () => {
+  let getTagList = () => {
     const list_data = ["#アクション", "#異世界"];
 
     return list_data.map( (data, index) => {

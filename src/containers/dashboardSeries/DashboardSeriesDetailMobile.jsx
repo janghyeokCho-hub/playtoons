@@ -1,70 +1,120 @@
-import React from "react";
-import Group37 from "../Group37";
-import PaddingGroup14Copy3 from "../PaddingGroup14Copy3";
-import PaddingGroup14Copy72 from "../PaddingGroup14Copy72";
-import PaddingGroup14Copy4 from "../PaddingGroup14Copy4";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Body8, Border1pxTiara, Body7 } from "../../styledMixins";
-import "./MDashboardSeriesDetail.css";
+import { Body8, Border1pxTiara, Body7 } from "@/styledMixins";
 
-function MDashboardSeriesDetail(props) {
-  const {
-    text_Label1,
-    rectangleCopy1681,
-    rectangleCopy1682,
-    rectangleCopy1683,
-    text_Label2,
-    text_Label3,
-    text_Label4,
-    price,
-    text_Label5,
-    text_Label6,
-    text_Label7,
-    text_Label8,
-    text_Label9,
-    text_Label10,
-    text_Label11,
-    text_Label12,
-    rectangle1,
-    rectangle2,
-    rectangleCopy3,
-    group37Props,
-    paddingGroup14Copy3Props,
-    paddingGroup14Copy4Props,
-  } = props;
+import line from '@LINES/mdashboardseriesdetail-rectangle.png';
+import roundRetangle from '@IMAGES/mdashboardseriesdetail-round-rectangle.png';
+
+import Group37 from "@COMPONENTS/dashboard/Group37";
+import PaddingGroup14Copy3 from "@COMPONENTS/dashboard/PaddingGroup14Copy3";
+import PaddingGroup14Copy72 from "@COMPONENTS/dashboard/PaddingGroup14Copy72";
+import TagePaddingGroup from "@COMPONENTS/dashboard/PaddingGroup14Copy4";
+
+const textData = {
+  label_title: "シリーズ詳細",
+  label_category: "カテゴリ",
+  label_grade: "指定",
+  label_status: "状態",
+  label_type: "タイプ",
+  label_summary: "説明",
+  label_tag: "タグ",
+  label_timeline_thumb: "タイムラインのサムネイル",
+};
+
+function DashboardSeriesDetailMobile(props) {
+
+  const parmas = useParams();
+
+  const [data, setData] = useState({
+    rectangleCopy1681: "",
+    rectangleCopy1682: "",
+    rectangleCopy1683: "",
+    text_title: <React.Fragment></React.Fragment>,
+    text_type: "",
+    text_category: "",
+    text_grade: "",
+    text_status: "",
+    text_summary: <React.Fragment></React.Fragment>,
+    main_image: "",
+    rectangle2: "",
+    rectangleCopy3: "",
+    paddingGroup14Copy4Props_tag: "",
+    classNamePaddingGroup14: "",
+    classNamePaddingGroup14Copy: "",
+  });
+
+  let getThumbList = () => {
+    const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", "", "", "", ""];
+
+    return list_data.map( (data, index) => {
+      let leftPosition = (102 * index) + 32;
+      leftPosition = leftPosition + "px";
+      return "" === data ? <ImgThumbEmpty leftPosition={leftPosition}></ImgThumbEmpty> : <ImgThumb src={data} leftPosition={leftPosition}  />;
+    } );
+  }
+
+  let getTagList = () => {
+    const list_data = ["#初公開", "#SF", "#アクション"];
+
+    return list_data.map( (data, index) => {
+      return <TagePaddingGroup>{data}</TagePaddingGroup>;
+    });
+  }
+
+  useEffect(() => {
+    
+    setData({
+      rectangleCopy1681: "/img/mdashboardseriesdetail-rectangle-copy-168-24155562-1ED1-4030-A05F-F4C087A2186A.png",
+      rectangleCopy1682: "/img/mdashboardseriesdetail-rectangle-copy-168-24155562-1ED1-4030-A05F-F4C087A2186A.png",
+      rectangleCopy1683: "/img/mdashboardseriesdetail-rectangle-copy-168-24155562-1ED1-4030-A05F-F4C087A2186A.png",
+      text_title: <React.Fragment>シェルターアーク・世界を滅ぼすも<br />のたち世界を滅ぼすものたち</React.Fragment>,
+      text_type: "マンガ",
+      text_category: "アクション",
+      text_grade: "R18",
+      text_status: "連載中",
+      text_summary: <React.Fragment>No.13の災害後、人類はシェルターにバラバラに散っ<br />た。そして、奇妙なロボット”クモ”の出現により<br />シェルター周辺に防壁が張り巡らされた。クモと戦<br />う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。そこで、レンジャーた<br />ちは人間と機械を融合するアダマ手術を施し、クモ<br />に挑むが…果たしてレンジャーたちの行く末は..? <br />クモの正体、そして突如現れた謎の組織カンパニー<br />ヌルの正体とは…?!</React.Fragment>,
+      main_image: "/img/mdashboardseriesdetail-rectangle-828EA7C7-90D1-4C5E-86E4-1D097EC41C7D@2x.png",  //메인이미지
+      rectangle2: "/img/mdashboardseriesdetail-rectangle-BF6A0071-A8D7-4934-8F59-62907027D07B@2x.png",  //타임라인 썸네일
+      rectangleCopy3: "/img/mdashboardseriesdetail-round-rectangle.png", //배경라운드 이미지
+      paddingGroup14Copy4Props_tag: "#初公開",
+      classNamePaddingGroup14: "padding-group-14-copy-3-2",
+      classNamePaddingGroup14Copy: "padding-group-14-copy-6-59",
+    });
+  
+    return () => {
+    }
+  }, []);
+  
 
   return (
     <div className="container-center-horizontal">
       <MDashboardseriesdetail className="screen">
-        <Group37 text_Label={group37Props.text_Label} />
+        {/* <Group37 text_Label={textData.label_title.text_Label} /> */}
         <OverlapGroup3>
           <Rectangle></Rectangle>
-          <PaddingGroup14Copy3 className={paddingGroup14Copy3Props.className} />
-          <PaddingGroup14Copy72 />
-          <PaddingGroup14Copy4 className={paddingGroup14Copy4Props.className}>
-            {paddingGroup14Copy4Props.children}
-          </PaddingGroup14Copy4>
-          <TextLabel>{text_Label1}</TextLabel>
-          <RectangleCopy168 src={rectangleCopy1681} />
-          <RectangleCopy1681 src={rectangleCopy1682} />
-          <RectangleCopy1682 src={rectangleCopy1683} />
-          <TextLabel1>{text_Label2}</TextLabel1>
-          <TextLabel2>{text_Label3}</TextLabel2>
-          <TextLabel3>{text_Label4}</TextLabel3>
-          <Price>{price}</Price>
-          <TextLabel4>{text_Label5}</TextLabel4>
-          <TextLabel5>{text_Label6}</TextLabel5>
-          <TextLabel6>{text_Label7}</TextLabel6>
-          <TextLabel7>{text_Label8}</TextLabel7>
-          <TextLabel8>{text_Label9}</TextLabel8>
-          <TextLabel9>{text_Label10}</TextLabel9>
-          <TextLabel10>{text_Label11}</TextLabel10>
-          <TextLabel11>{text_Label12}</TextLabel11>
-          <Rectangle1 src={rectangle1} />
-          <Rectangle2 src={rectangle2} />
-          <RectangleCopy></RectangleCopy>
-          <RectangleCopy2></RectangleCopy2>
-          <RectangleCopy3 src={rectangleCopy3} />
+          <TagListContainer>
+            {getTagList()}
+          </TagListContainer>
+          <TextLabelSummary>{textData.label_summary}</TextLabelSummary>
+          <Line1 src={line} />
+          <Line2 src={line} />
+          <Line3 src={line} />
+          <Title>{data.text_title}</Title>
+          <Type>{data.text_type}</Type>
+          <Category>{data.text_category}</Category>
+          <Grade>{data.text_grade}</Grade>
+          <Status>{data.text_status}</Status>
+          <TextLabelType>{textData.label_type}</TextLabelType>
+          <TextLabelTag>{textData.label_tag}</TextLabelTag>
+          <TextLabelTimeLine>{textData.label_timeline_thumb}</TextLabelTimeLine>
+          <TextLabelCategory>{textData.label_category}</TextLabelCategory>
+          <Summary>{data.text_summary}</Summary>
+          <TextLabelGrade>{textData.label_grade}</TextLabelGrade>
+          <TextLabelStatus>{textData.label_status}</TextLabelStatus>
+          <MainImage src={data.main_image} />
+          {getThumbList()}
+          <BackgroudRoundRect src={roundRetangle} />
         </OverlapGroup3>
       </MDashboardseriesdetail>
     </div>
@@ -100,7 +150,20 @@ const Rectangle = styled.div`
   border-radius: 4px;
 `;
 
-const TextLabel = styled.div`
+const TagListContainer = styled.div `
+  height: 27px;
+  display: flex;
+  padding: 4px 7.9px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  min-width: 68px;
+  border-radius: 4px;
+  position: absolute;
+  top : 600px;
+  left: 20px;
+`;
+
+const TextLabelSummary = styled.div`
   ${Body7}
   position: absolute;
   top: 344px;
@@ -111,7 +174,7 @@ const TextLabel = styled.div`
   white-space: nowrap;
 `;
 
-const RectangleCopy168 = styled.img`
+const Line1 = styled.img`
   position: absolute;
   width: 311px;
   height: 1px;
@@ -119,7 +182,7 @@ const RectangleCopy168 = styled.img`
   left: 32px;
 `;
 
-const RectangleCopy1681 = styled.img`
+const Line2 = styled.img`
   position: absolute;
   width: 311px;
   height: 1px;
@@ -127,7 +190,7 @@ const RectangleCopy1681 = styled.img`
   left: 32px;
 `;
 
-const RectangleCopy1682 = styled.img`
+const Line3 = styled.img`
   position: absolute;
   width: 311px;
   height: 1px;
@@ -135,7 +198,7 @@ const RectangleCopy1682 = styled.img`
   left: 32px;
 `;
 
-const TextLabel1 = styled.div`
+const Title = styled.div`
   ${Body7}
   position: absolute;
   top: 48px;
@@ -145,7 +208,7 @@ const TextLabel1 = styled.div`
   line-height: 14px;
 `;
 
-const TextLabel2 = styled.div`
+const Type = styled.div`
   ${Body7}
   position: absolute;
   top: 297px;
@@ -156,7 +219,7 @@ const TextLabel2 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel3 = styled.div`
+const Category = styled.div`
   ${Body7}
   position: absolute;
   top: 207px;
@@ -167,7 +230,7 @@ const TextLabel3 = styled.div`
   white-space: nowrap;
 `;
 
-const Price = styled.div`
+const Grade = styled.div`
   ${Body7}
   position: absolute;
   top: 237px;
@@ -178,7 +241,7 @@ const Price = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel4 = styled.div`
+const Status = styled.div`
   ${Body7}
   position: absolute;
   top: 267px;
@@ -189,7 +252,7 @@ const TextLabel4 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel5 = styled.div`
+const TextLabelType = styled.div`
   ${Body7}
   position: absolute;
   top: 297px;
@@ -200,7 +263,7 @@ const TextLabel5 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel6 = styled.div`
+const TextLabelTag = styled.div`
   ${Body7}
   position: absolute;
   top: 569px;
@@ -211,7 +274,7 @@ const TextLabel6 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel7 = styled.div`
+const TextLabelTimeLine = styled.div`
   ${Body7}
   position: absolute;
   top: 655px;
@@ -222,7 +285,7 @@ const TextLabel7 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel8 = styled.div`
+const Summary = styled.div`
   ${Body8}
   position: absolute;
   width: 312px;
@@ -232,7 +295,7 @@ const TextLabel8 = styled.div`
   line-height: 14px;
 `;
 
-const TextLabel9 = styled.div`
+const TextLabelCategory = styled.div`
   ${Body7}
   position: absolute;
   top: 207px;
@@ -243,7 +306,7 @@ const TextLabel9 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel10 = styled.div`
+const TextLabelGrade = styled.div`
   ${Body7}
   position: absolute;
   top: 237px;
@@ -254,7 +317,7 @@ const TextLabel10 = styled.div`
   white-space: nowrap;
 `;
 
-const TextLabel11 = styled.div`
+const TextLabelStatus = styled.div`
   ${Body7}
   position: absolute;
   top: 267px;
@@ -265,7 +328,7 @@ const TextLabel11 = styled.div`
   white-space: nowrap;
 `;
 
-const Rectangle1 = styled.img`
+const MainImage = styled.img`
   position: absolute;
   width: 88px;
   height: 134px;
@@ -273,20 +336,20 @@ const Rectangle1 = styled.img`
   left: 32px;
 `;
 
-const Rectangle2 = styled.img`
+const ImgThumb = styled.img`
   position: absolute;
   width: 90px;
   height: 143px;
   top: 681px;
-  left: 32px;
+  left: ${(props) => props.leftPosition};
 `;
 
-const RectangleCopy = styled.div`
+const ImgThumbEmpty = styled.div`
   position: absolute;
   width: 90px;
   height: 143px;
   top: 681px;
-  left: 134px;
+  left: ${(props) => props.leftPosition};
   background-color: var(--desert-storm);
   border-radius: 4px;
 `;
@@ -301,7 +364,7 @@ const RectangleCopy2 = styled.div`
   border-radius: 4px;
 `;
 
-const RectangleCopy3 = styled.img`
+const BackgroudRoundRect = styled.img`
   position: absolute;
   width: 20px;
   height: 143px;
@@ -309,4 +372,4 @@ const RectangleCopy3 = styled.img`
   left: 338px;
 `;
 
-export default MDashboardSeriesDetail;
+export default DashboardSeriesDetailMobile;

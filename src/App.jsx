@@ -7,6 +7,7 @@ import globalSaga from "./modules/redux/saga/globalSaga";
 import DashboardSeries from "@CONTAINERS/dashboardSeries/DashboardSeries";
 import DashboardSeriesMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesMobile";
 import DashboardSeriesDetail from "@CONTAINERS/dashboardSeries/DashboardSeriesDetail";
+import DashboardSeriesDetailMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesDetailMobile";
 import Account from "@CONTAINERS/account/Account";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
 import LandingPageMobile from "@CONTAINERS/landing/LandingPageMobile";
@@ -38,7 +39,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
             <Route path="/dashboard-series"element={<DashboardSeriesMobile />} />
-            <Route path="/dashboard-series-detail/:id" element={<DashboardSeriesDetail />} />
+            <Route path="/dashboard-series-detail/:id" element={<DashboardSeriesDetailMobile />} />
             <Route path="/auth-login" element={<Account />} />
           </Routes>
         </BrowserRouter>
