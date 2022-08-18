@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
 import imgLogo from "@IMAGES/logo.png";
 import autoLoginLineRight from "@IMAGES/authlogin-line-right.png";
-import recoveryLine from "@IMAGES/lines/authlogin-line-txt.png";
+import verifyLine from "@IMAGES/lines/authlogin-line-txt.png";
 
 import Button from "@COMPONENTS/Button";
 import Input from "@COMPONENTS/Input";
 import { login } from "@/services/userService";
 
 const Login = ({ handleAccountType }) => {
+  const navigate = useNavigate();
   const [errorShow, setErrorShow] = useState(false);
 
   const handleLogin = useCallback(() => {
@@ -26,17 +28,17 @@ const Login = ({ handleAccountType }) => {
       <Input inputType="text" label="メールアドレス" />
       <Input inputType="password" label="パスワード" />
 
-      <RecoveryDiv
+      <VerifyDiv
         className="group-2-21 group-2-22"
         onClick={() => {
-          handleAccountType("RECOVERY");
+          navigate("verify");
         }}
       >
         <RecoverLabel className="text_label-220" color="--violet-blue">
           パスワードをお忘れですか?
         </RecoverLabel>
-        <Line className="line-8" src={recoveryLine} />
-      </RecoveryDiv>
+        <Line className="line-8" src={verifyLine} />
+      </VerifyDiv>
       <Button
         text="確認する"
         className="login_btn_default"
@@ -91,7 +93,7 @@ const Login = ({ handleAccountType }) => {
         <TextLabel color="--vulcan">アカウントをお持ちでないですか</TextLabel>
         <TextLabel1
           onClick={() => {
-            handleAccountType("REGISTER");
+            navigate("/account/register");
           }}
         >
           登録する
@@ -110,7 +112,7 @@ const ErrorBoxDiv = styled.div`
   margin-bottom: 10px;
 `;
 
-const RecoveryDiv = styled.div`
+const VerifyDiv = styled.div`
   cursor: pointer;
   align-self: flex-end;
   margin-top: 10px;

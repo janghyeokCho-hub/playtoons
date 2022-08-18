@@ -28,7 +28,7 @@ function App() {
 
   useEffect(() => {
     const path = window.location.href;
-    if (path.includes("auth-login")) {
+    if (path.includes("account")) {
       setIsNavbar(false);
     } else {
       setIsNavbar(true);
@@ -48,8 +48,11 @@ function App() {
             >
               {" "}
             </Route>
-            <Route path="/dashboard-upload-series" element={<DashboardUploadSeries />} />
-            <Route path="/auth-login" element={<Account />} />
+            <Route
+              path="/dashboard-upload-series"
+              element={<DashboardUploadSeries />}
+            />
+            <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
         </BrowserRouter>
@@ -58,7 +61,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
-            <Route path="/auth-login" element={<AccountMobile />} />
+            <Route path="/account" element={<AccountMobile />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
             <Route
               path="/dashboard-series"
@@ -68,8 +71,10 @@ function App() {
               path="/dashboard-series-detail/:id"
               element={<DashboardSeriesDetailMobile />}
             />
-            <Route path="/dashboard-upload-series" element={<DashboardUploadSeries />} />
-            <Route path="/auth-login" element={<Account />} />
+            <Route
+              path="/dashboard-upload-series"
+              element={<DashboardUploadSeries />}
+            />
           </Routes>
         </BrowserRouter>
       </MobileView>

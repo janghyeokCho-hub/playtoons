@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Border1pxGhost } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
-import { useNavigate } from "react-router-dom";
+import { createRegisterUser } from "@/services/accountService";
 
 const Register = ({ handleAccountType }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [passwordConfirm, setPasswordConfirm] = useState(null);
@@ -19,7 +21,7 @@ const Register = ({ handleAccountType }) => {
     }
   }, [password, passwordConfirm]);
 
-  const handleRegister = useCallback(() => {
+  const handleRegister = useCallback(async () => {
     const params = {
       email,
       password,
@@ -28,9 +30,14 @@ const Register = ({ handleAccountType }) => {
       privacyVersion,
     };
     console.log(params);
-    // createRegisterUser(params)
-    // 회원 가입 성공시 register completed 페이지로 이동
-    window.location.href = "/register-completed";
+    const { status, data } = await createRegisterUser(params);
+    if (status === 201) {
+      // Create Success
+      navigate("/account/verify-check");
+    }
+
+    // 회원 가입 입력 폼 조건 충족시 이메일 인증으로 이동
+    // window.location.href = "/register-completed";
   }, [email, password, referralCode, eulaVersion, privacyVersion]);
 
   return (

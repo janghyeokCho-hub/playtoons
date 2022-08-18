@@ -11,7 +11,7 @@ import Timer from "@COMPONENTS/Timer";
  * @param {*} param0
  * @returns
  */
-const PreRecovery = ({
+const PreVerify = ({
   handleAccountType,
   setIsShowType,
   email,
@@ -30,16 +30,16 @@ const PreRecovery = ({
 
   return (
     <>
-      <RecoveryTitle>パスワードを再設定</RecoveryTitle>
-      <RecoveryContent color="--bright-gray">
+      <VerifyTitle>パスワードを再設定</VerifyTitle>
+      <VerifyContent color="--bright-gray">
         ログインIDとして使用中の
-      </RecoveryContent>
-      <RecoveryContent color="--bright-gray">
+      </VerifyContent>
+      <VerifyContent color="--bright-gray">
         メールアドレスを入力してください。
-      </RecoveryContent>
-      <RecoveryInputDiv marginBottom="40px" marginTop="40px">
+      </VerifyContent>
+      <VerifyInputDiv marginBottom="40px" marginTop="40px">
         <Input inputType="text" label="メールアドレス" callback={handleEmail} />
-      </RecoveryInputDiv>
+      </VerifyInputDiv>
       <Button
         text="次へ"
         color="--white"
@@ -70,19 +70,19 @@ const PreRecovery = ({
  * @param {*} param0
  * @returns
  */
-const CheckRecovery = ({ setIsShowType, email }) => {
+const CheckVerify = ({ setIsShowType, email }) => {
   return (
     <>
-      <RecoveryTitle>パスワードを再設定</RecoveryTitle>
-      <RecoveryContent color="--violet-blue">{email}</RecoveryContent>
-      <RecoveryContent color="--bright-gray">
+      <VerifyTitle>パスワードを再設定</VerifyTitle>
+      <VerifyContent color="--violet-blue">{email}</VerifyContent>
+      <VerifyContent color="--bright-gray">
         宛に認証用メールを送信しました。
-      </RecoveryContent>
+      </VerifyContent>
 
-      <RecoveryInputDiv marginBottom="10px" marginTop="40px">
+      <VerifyInputDiv marginBottom="10px" marginTop="40px">
         <Input inputType="text" label="認証コード" />
         <Timer />
-      </RecoveryInputDiv>
+      </VerifyInputDiv>
       <Button
         text="確認する"
         color="--white"
@@ -112,23 +112,23 @@ const CheckRecovery = ({ setIsShowType, email }) => {
  * @param {*} param0
  * @returns
  */
-const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
+const VerifyConfirm = ({ setIsShowType, handleAccountType }) => {
   // パスワードを再設定
   return (
     <>
-      <RecoveryTitle>パスワードを再設定</RecoveryTitle>
+      <VerifyTitle>パスワードを再設定</VerifyTitle>
 
-      <RecoveryContent color="--bright-gray">
+      <VerifyContent color="--bright-gray">
         ログインIDとして使用中の
-      </RecoveryContent>
-      <RecoveryContent color="--bright-gray">
+      </VerifyContent>
+      <VerifyContent color="--bright-gray">
         メールアドレスを入力してください。
-      </RecoveryContent>
+      </VerifyContent>
 
-      <RecoveryInputDiv marginBottom="10px" marginTop="40px">
+      <VerifyInputDiv marginBottom="10px" marginTop="40px">
         <Input inputType="password" label="パスワード" />
         <Input inputType="password" label="パスワード確認" />
-      </RecoveryInputDiv>
+      </VerifyInputDiv>
       <Button
         text=">パスワード変更"
         color="--white"
@@ -154,7 +154,7 @@ const RecoveryConfirm = ({ setIsShowType, handleAccountType }) => {
   );
 };
 
-const Recovery = ({ handleAccountType }) => {
+const Verify = ({ handleAccountType }) => {
   /**
    * 이메일 인증 창 표시 Type
    * INPUT = 이메일 입력 폼
@@ -172,7 +172,7 @@ const Recovery = ({ handleAccountType }) => {
   return (
     <AccountBoxDiv>
       {isShowType === "INPUT" && (
-        <PreRecovery
+        <PreVerify
           handleAccountType={handleAccountType}
           setIsShowType={setIsShowType}
           email={email}
@@ -180,10 +180,10 @@ const Recovery = ({ handleAccountType }) => {
         />
       )}
       {isShowType === "CHECK" && (
-        <CheckRecovery setIsShowType={setIsShowType} email={email} />
+        <CheckVerify setIsShowType={setIsShowType} email={email} />
       )}
       {isShowType === "CONFIRM" && (
-        <RecoveryConfirm
+        <VerifyConfirm
           setIsShowType={setIsShowType}
           handleAccountType={handleAccountType}
         />
@@ -207,7 +207,7 @@ const AccountBoxDiv = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const RecoveryTitle = styled.h1`
+const VerifyTitle = styled.h1`
   align-self: center;
   color: var(--vulcan);
   font-weight: 500;
@@ -219,7 +219,7 @@ const RecoveryTitle = styled.h1`
   margin-bottom: 50px;
 `;
 
-const RecoveryContent = styled.div`
+const VerifyContent = styled.div`
   align-self: center;
   color: var(${(props) => props.color});
   font-weight: 500;
@@ -232,10 +232,10 @@ const RecoveryContent = styled.div`
   margin-bottom: 10px;
 `;
 
-const RecoveryInputDiv = styled.div`
+const VerifyInputDiv = styled.div`
   align-self: center;
   margin-top: ${(props) => props.marginTop};
   margin-bottom: ${(props) => props.marginBottom};
 `;
 
-export default Recovery;
+export default Verify;
