@@ -92,7 +92,7 @@ const HeaderDiv = styled.div`
   box-shadow: 0px 2px 20px -10px #00000080;
   padding-left: 30px;
   padding-right: 30px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: space-between;
 `;
