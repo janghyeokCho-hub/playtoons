@@ -7,9 +7,8 @@ import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
 import TagGroup from "@/components/dashboard/SetTagGroup";
-import RegisterButtonGroup from "@/components/dashboard/RegisterButtonGroup";
-import PreviewButtonGroup from "@/components/dashboard/PreviewButtonGroup";
-import Group63 from "@/components/dashboard/Group63";
+import RegisterButton from "@/components/dashboard/ButtonDefault";
+import PreviewButton from "@/components/dashboard/ButtonOutline";
 import ImageUploadBox from '@COMPONENTS/dashboard/ImageUploadBox'
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 
@@ -31,7 +30,8 @@ const textData = {
   label_register: "登録する",
   label_summary: "説明",
   label_adult: "年齢設定",
-  label_r_19: "R-19"
+  label_r_19: "R-19",
+  label_preview: "プレビュー",
 };
 
 const typeDataList = [
@@ -43,6 +43,11 @@ function DashboardUploadSeries(props) {
   const refToggle = useRef();
 
   const handleRegister = () => {
+    console.log("refToggle", refToggle);
+
+  }
+
+  const handlePreview = () => {
     console.log("refToggle", refToggle);
 
   }
@@ -81,7 +86,7 @@ function DashboardUploadSeries(props) {
           <TextLabel>{textData.label_series_register}</TextLabel>
           <FormDefault className={"group-7-24"}>{textData.label_title}</FormDefault>
           <DropDownGroup text_Label={textData.label_type} className={"group-8-1"} dropdownClassName={"group-3-30"} dataList={typeDataList} />
-          <DropDownGroup text_Label={textData.label_category} dropdownClassName={"group-3-31"} />
+          <DropDownGroup text_Label={textData.label_category} dropdownClassName={"group-3-31"}  dataList={typeDataList} />
           <AbultGroup className={`group-10-1`}>
             <TextLabelAdult className="text_label-174">{textData.label_adult}</TextLabelAdult>
             <FlexRow className="flex-row-30">
@@ -100,8 +105,8 @@ function DashboardUploadSeries(props) {
           <ImageUploadBox className={"dashboard_upload_timeline"} textDragNDrop={textData.label_drag_drop} handleFile={handleTimelineImageFile}></ImageUploadBox>
           <IconAddTimeline style={{ backgroundImage: `url(${iconAdd})` }}></IconAddTimeline>
           <IconInfoTimeline style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoTimeline>
-          <RegisterButtonGroup className={"padding-group-3-16"} handleClick={handleRegister}>{textData.label_register}</RegisterButtonGroup>
-          <PreviewButtonGroup className={"padding-group-3-copy-10"} />
+          <RegisterButton text={textData.label_register} className={"padding-group-3-16"} handleClick={handleRegister} />
+          <PreviewButton className={"padding-group-3-copy-10"} text={textData.label_preview} handleClick={handlePreview} />
           {/* <Group63 text_Label={data.group63Props.label_title} /> */}
           <ImageUploadBox textDragNDrop={textData.label_drag_drop} handleFile={handlePostImageFile}></ImageUploadBox>
         </OverlapGroup2>

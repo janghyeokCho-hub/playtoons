@@ -10,7 +10,9 @@ function Group9(props) {
   return (
     <Group91 className={`group-9-2 ${className || ""}`}>
       <TextLabel >{text_Label}</TextLabel>
-      <Dropdown dataList={dataList} dropdownClassName={dropdownClassName} />
+      {
+        dataList !== undefined && <Dropdown dataList={dataList} className={dropdownClassName} />
+      }
     </Group91>
   );
 }
