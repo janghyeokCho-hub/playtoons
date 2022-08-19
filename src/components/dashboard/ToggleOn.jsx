@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useImperativeHandle, useState, forwardRef } from "react";
 import styled from "styled-components";
 
-
-function ToggleOn(props) {
+function ToggleOn(props, ref) {
   const { className } = props;
   const [isSelected, setSelected] = useState(false);
+  
+  const handleClick = () => {
+    setSelected(!isSelected);
+  }
+
+  useImperativeHandle(ref, () => {
+    return isSelected;
+  });
 
   return (
-    <Container className={`group-6-16 ${className || ""} ${isSelected && ('select')}`}>
-      <Oval className={isSelected === true ? 'oval-11' :  'oval-11 select'} onClick={() => setSelected(!isSelected)}></Oval>
+    <Container className={`group-6-16 ${className || ""} ${isSelected && ('select')}`} onClick={handleClick}>
+      <Oval className={isSelected === true ? 'oval-11' :  'oval-11 select'} ></Oval>
     </Container>
   );
 }
@@ -60,4 +67,4 @@ const Oval = styled.div`
   }
 `;
 
-export default ToggleOn;
+export default forwardRef(ToggleOn);

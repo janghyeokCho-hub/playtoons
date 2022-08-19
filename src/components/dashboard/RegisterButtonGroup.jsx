@@ -4,10 +4,10 @@ import { NotosansjpBoldWhite14px } from "@/styledMixins";
 
 
 function PaddingGroup32(props) {
-  const { children, className } = props;
+  const { children, className, handleClick } = props;
 
   return (
-    <PaddingGroup3 className={`padding-group-3-9 ${className || ""}`}>
+    <PaddingGroup3 className={`padding-group-3-9 ${className || ""}`} onClick={handleClick}>
       <TextLabel className="text_label-129">{children}</TextLabel>
     </PaddingGroup3>
   );

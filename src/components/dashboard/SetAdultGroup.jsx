@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 import styled from "styled-components";
 import { Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
@@ -7,11 +7,21 @@ import { Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 function Group10(props) {
   const { className, toggleOnClassName } = props;
 
+  const refToggle = useRef();
+
+  useEffect(() => {
+    console.log("refToggle", refToggle);
+    return () => {
+    }
+  }, []);
+  
+
+
   return (
     <Group101 className={`group-10-1 ${className || ""}`}>
       <TextLabel className="text_label-174">年齢設定</TextLabel>
       <FlexRow className="flex-row-30">
-        <Toggle className={toggleOnClassName} />
+        <Toggle ref={refToggle} className={toggleOnClassName} />
         <R19 className="r-19-1">R-19</R19>
       </FlexRow>
     </Group101>

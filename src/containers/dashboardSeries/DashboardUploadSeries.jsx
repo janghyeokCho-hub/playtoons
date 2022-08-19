@@ -1,16 +1,17 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import styled from "styled-components";
-import { Title3, Border1pxTiara, Body3, Body1 } from "@/styledMixins";
+import { Title3, Border1pxTiara, Body3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 
 import NavBarDashboard from "@COMPONENTS/dashboard/NavBarDashboard3";
 import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
-import SetAdultGroup from "@/components/dashboard/SetAdultGroup";
-import SetTagGroup from "@/components/dashboard/SetTagGroup";
+import TagGroup from "@/components/dashboard/SetTagGroup";
 import RegisterButtonGroup from "@/components/dashboard/RegisterButtonGroup";
 import PreviewButtonGroup from "@/components/dashboard/PreviewButtonGroup";
 import Group63 from "@/components/dashboard/Group63";
+import ImageUploadBox from '@COMPONENTS/dashboard/ImageUploadBox'
+import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 
 import lineHorizontal from '@IMAGES/lines/authorplan-line.png';
 import lineVertical from '@IMAGES/lines/dashboardeditseries-line-2.png';
@@ -29,6 +30,8 @@ const textData = {
   label_tag_setting: "タグ設定",
   label_register: "登録する",
   label_summary: "説明",
+  label_adult: "年齢設定",
+  label_r_19: "R-19"
 };
 
 const typeDataList = [
@@ -37,6 +40,34 @@ const typeDataList = [
 
 
 function DashboardUploadSeries(props) {
+  const refToggle = useRef();
+
+  const handleRegister = () => {
+    console.log("refToggle", refToggle);
+
+  }
+
+  const handlePostImageFile = (file) => {
+      // 폼데이터 구성
+      const formData = new FormData();
+      const config = {
+        header: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      formData.append("file", file);
+      console.log("postImage file", file);
+    }
+    
+    const handleTimelineImageFile = (file) => {
+      
+      console.log("handleTimelineImageFile", file);
+  }
+
+  useEffect(() => {
+    return () => {
+    }
+  }, []);
 
   return (
     <div className="container-center-horizontal">
@@ -51,29 +82,34 @@ function DashboardUploadSeries(props) {
           <FormDefault className={"group-7-24"}>{textData.label_title}</FormDefault>
           <DropDownGroup text_Label={textData.label_type} className={"group-8-1"} dropdownClassName={"group-3-30"} dataList={typeDataList} />
           <DropDownGroup text_Label={textData.label_category} dropdownClassName={"group-3-31"} />
-          <SetAdultGroup toggleOnProps={"group-3-22"} />
-          <SetTagGroup text_Label1={textData.label_tag_setting} className={"group-13-4"} />
+          <AbultGroup className={`group-10-1`}>
+            <TextLabelAdult className="text_label-174">{textData.label_adult}</TextLabelAdult>
+            <FlexRow className="flex-row-30">
+              <Toggle ref={refToggle} className={"group-3-22"} />
+              <R19 className="r-19-1">{textData.label_r_19}</R19>
+            </FlexRow>
+          </AbultGroup>
+          <TagGroup text_Label1={textData.label_tag_setting} className={"group-13-4"} />
           <FormDefault className={"group-11-2"} inputClassName={"summary-big"}>{textData.label_summary}</FormDefault>
           <TextLabel1>{textData.label_post_image}</TextLabel1>
-          <RectangleCopy></RectangleCopy>
-          <RectangleCopy3></RectangleCopy3>
-          <CirclePlusSolid style={{ backgroundImage: `url(${iconAdd})` }}></CirclePlusSolid>
-          <CircleInfoSolid style={{ backgroundImage: `url(${iconInfo})` }}></CircleInfoSolid>
+          <RectInnerPostImage></RectInnerPostImage>
+          <IconAddPostimage style={{ backgroundImage: `url(${iconAdd})` }}></IconAddPostimage>
+          <IconInfoPostimage style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoPostimage>
           <TextLabel2>{textData.label_timeline}</TextLabel2>
-          <RectangleCopy1></RectangleCopy1>
-          <RectTimeline>{textData.label_drag_drop}</RectTimeline>
-          <RectangleCopy31></RectangleCopy31>
-          <CirclePlusSolid1 style={{ backgroundImage: `url(${iconAdd})` }}></CirclePlusSolid1>
-          <CircleInfoSolid1 style={{ backgroundImage: `url(${iconInfo})` }}></CircleInfoSolid1>
-          <RegisterButtonGroup className={"padding-group-3-16"}>{textData.label_register}</RegisterButtonGroup>
+          <RectInnerTimeline></RectInnerTimeline>
+          <ImageUploadBox className={"dashboard_upload_timeline"} textDragNDrop={textData.label_drag_drop} handleFile={handleTimelineImageFile}></ImageUploadBox>
+          <IconAddTimeline style={{ backgroundImage: `url(${iconAdd})` }}></IconAddTimeline>
+          <IconInfoTimeline style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoTimeline>
+          <RegisterButtonGroup className={"padding-group-3-16"} handleClick={handleRegister}>{textData.label_register}</RegisterButtonGroup>
           <PreviewButtonGroup className={"padding-group-3-copy-10"} />
           {/* <Group63 text_Label={data.group63Props.label_title} /> */}
-          <RectPostImage>{textData.label_drag_drop}</RectPostImage>
+          <ImageUploadBox textDragNDrop={textData.label_drag_drop} handleFile={handlePostImageFile}></ImageUploadBox>
         </OverlapGroup2>
       </Dashboarduploadseries>
     </div>
   );
 }
+
 
 const Dashboarduploadseries = styled.div `
   align-items: flex-start;
@@ -150,7 +186,7 @@ const TextLabel1 = styled.div`
   white-space: nowrap;
 `;
 
-const RectangleCopy = styled.div`
+const RectInnerPostImage = styled.div`
   position: absolute;
   width: 220px;
   height: 300px;
@@ -170,7 +206,7 @@ const RectangleCopy3 = styled.div`
   border-radius: 4px;
 `;
 
-const CirclePlusSolid = styled.div`
+const IconAddPostimage = styled.div`
   position: absolute;
   width: 24px;
   height: 24px;
@@ -179,7 +215,7 @@ const CirclePlusSolid = styled.div`
   background-size: 100% 100%;
 `;
 
-const CircleInfoSolid = styled.div`
+const IconInfoPostimage = styled.div`
   position: absolute;
   width: 16px;
   height: 16px;
@@ -199,7 +235,7 @@ const TextLabel2 = styled.div`
   white-space: nowrap;
 `;
 
-const RectangleCopy1 = styled.div`
+const RectInnerTimeline = styled.div`
   position: absolute;
   width: 700px;
   height: 300px;
@@ -209,28 +245,7 @@ const RectangleCopy1 = styled.div`
   border-radius: 4px;
 `;
 
-const RectTimeline = styled.div`
-  ${Body3}
-  position: absolute;
-  top: 1637px;
-  left: 1018px;
-  color: var(--deep-space-sparkle);
-  text-align: center;
-  line-height: 24px;
-  white-space: nowrap;
-`;
-
-const RectangleCopy31 = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  width: 699px;
-  height: 300px;
-  top: 1463px;
-  left: 746px;
-  border-radius: 4px;
-`;
-
-const CirclePlusSolid1 = styled.div`
+const IconAddTimeline = styled.div`
   position: absolute;
   width: 24px;
   height: 24px;
@@ -239,7 +254,7 @@ const CirclePlusSolid1 = styled.div`
   background-size: 100% 100%;
 `;
 
-const CircleInfoSolid1 = styled.div`
+const IconInfoTimeline = styled.div`
   position: absolute;
   width: 16px;
   height: 16px;
@@ -248,15 +263,56 @@ const CircleInfoSolid1 = styled.div`
   background-size: 100% 100%;
 `;
 
-const RectPostImage = styled.div`
-  ${Body3}
+
+
+const Toggle = styled(ToggleOn)`
+  position: static;
+`;
+
+const AbultGroup = styled.div`
   position: absolute;
-  top: 1271px;
-  left: 778px;
-  color: var(--deep-space-sparkle);
-  text-align: center;
-  line-height: 24px;
+  width: 100px;
+  top: 589px;
+  left: 746px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 71px;
+
+  &.group-10-1.group-6-20 {
+    top: 1579px;
+    left: 762px;
+  }
+`;
+
+const TextLabelAdult = styled.div`
+  ${Body1}
+  min-height: 20px;
+  font-weight: 700;
+  color: var(--nevada);
+  line-height: 20px;
   white-space: nowrap;
 `;
+
+const FlexRow = styled.div`
+  height: 31px;
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  min-width: 103px;
+`;
+
+const R19 = styled.div`
+  ${NotosansjpNormalDeepSpaceSparkle14p}
+  min-height: 20px;
+  margin-left: 10px;
+  margin-bottom: 1px;
+  min-width: 37px;
+  letter-spacing: 1.27px;
+  line-height: 20px;
+  white-space: nowrap;
+`;
+
 
 export default DashboardUploadSeries;
