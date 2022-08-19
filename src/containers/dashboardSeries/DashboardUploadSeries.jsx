@@ -6,7 +6,7 @@ import NavBarDashboard from "@COMPONENTS/dashboard/NavBarDashboard3";
 import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
-import TagGroup from "@/components/dashboard/SetTagGroup";
+import TagGroup from "@/components/dashboard/TagGroup";
 import RegisterButton from "@/components/dashboard/ButtonDefault";
 import PreviewButton from "@/components/dashboard/ButtonOutline";
 import ImageUploadBox from '@COMPONENTS/dashboard/ImageUploadBox'
