@@ -10,23 +10,58 @@ import Button from "@COMPONENTS/Button";
 import Input from "@COMPONENTS/Input";
 import { login } from "@/services/userService";
 
-const Login = ({ handleAccountType }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [errorShow, setErrorShow] = useState(false);
+  const [emailValue, setEmailValue] = useState(null);
+  const [passwordValue, setPasswordValue] = useState(null);
 
-  const handleLogin = useCallback(() => {
+  // Email state function
+  const handleEmailChange = (e) => {
+    setEmailValue(e.target.value);
+  };
+
+  // Password state function
+  const handlePasswordChage = (e) => {
+    setPasswordValue(e.target.value);
+  };
+
+  // Login action
+  const handleLogin = useCallback(async () => {
     const params = {
-      email: "jh.cho@raonworks.co.kr",
-      password: "1234",
+      email: emailValue,
+      password: passwordValue,
     };
-    login(params);
-  }, []);
+    const { status, data } = await login(params);
+
+    if (status === 200) {
+      // 성공
+      // accessToke 은 redux 에서 관리하니, next 값을 통해 페이지로 이동만
+      // next 값이 없을 경우 홈으로
+      navigate(data?.next || "/");
+    } else if (status === 400) {
+      // 파라미터 검증 실패
+    } else if (status === 403) {
+      // 인증 실패 / 권한 없음
+    } else if (status === 503) {
+      // 코드 참조
+    }
+  }, [emailValue, passwordValue, navigate]);
+
   return (
     <AccountBoxDiv>
       <ImgLogo src={imgLogo} />
       {errorShow && <ErrorBoxDiv />}
-      <Input inputType="text" label="メールアドレス" />
-      <Input inputType="password" label="パスワード" />
+      <Input
+        inputType="text"
+        label="メールアドレス"
+        callback={handleEmailChange}
+      />
+      <Input
+        inputType="password"
+        label="パスワード"
+        callback={handlePasswordChage}
+      />
 
       <VerifyDiv
         className="group-2-21 group-2-22"

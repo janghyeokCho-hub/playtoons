@@ -50,6 +50,7 @@ const CheckVerify = ({ setIsShowType, email }) => {
 };
 
 const VerifyCheck = ({ email, expireOn }) => {
+  console.log(email, expireOn);
   return (
     <AccountBoxDiv>
       <CheckVerify email={email} />

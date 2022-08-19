@@ -7,6 +7,7 @@ import Verify from "@COMPONENTS/account/Verify";
 import VerifyCheck from "@COMPONENTS/account/VerifyCheck";
 import Register from "@COMPONENTS/account/Register";
 import Agreement from "@COMPONENTS/account/Agreement";
+import Close from "@COMPONENTS/account/Close";
 
 const Account = () => {
   return (
@@ -19,6 +20,7 @@ const Account = () => {
             <Route path={"verify"} element={<Verify />} />
             <Route path={"verify-check"} element={<VerifyCheck />} />
             <Route path={"agreement"} element={<Agreement />} />
+            <Route path={"close"} element={<Close />} />
           </Routes>
         </Container>
       </div>

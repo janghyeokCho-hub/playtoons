@@ -21,6 +21,7 @@ const Register = ({ handleAccountType }) => {
     }
   }, [password, passwordConfirm]);
 
+  // Register action
   const handleRegister = useCallback(async () => {
     const params = {
       email,
@@ -33,7 +34,15 @@ const Register = ({ handleAccountType }) => {
     const { status, data } = await createRegisterUser(params);
     if (status === 201) {
       // Create Success
-      navigate("/account/verify-check");
+      navigate("/account/verify-check", { email, expireOn: data.expireOn });
+    } else if (status === 400) {
+      // 파라미터 검증 실패
+    } else if (status === 403) {
+      // 사용이 제한된 이메일 주소
+    } else if (status === 409) {
+      // 중복된 메일일 경우
+    } else if (status === 503) {
+      // 코드 참조
     }
 
     // 회원 가입 입력 폼 조건 충족시 이메일 인증으로 이동
