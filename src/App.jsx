@@ -9,6 +9,7 @@ import DashboardSeriesMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesMo
 import DashboardSeriesDetail from "@CONTAINERS/dashboardSeries/DashboardSeriesDetail";
 import DashboardSeriesDetailMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesDetailMobile";
 import DashboardUploadSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
+import DashboardEditSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
 import Account from "@CONTAINERS/account/Account";
 import AccountMobile from "@CONTAINERS/account/AccountMobile";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
@@ -52,6 +53,10 @@ function App() {
               path="/dashboard-upload-series"
               element={<DashboardUploadSeries />}
             />
+            <Route
+              path="/dashboard-edit-series/:id"
+              element={<DashboardEditSeries />}
+            />
             <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
@@ -74,6 +79,10 @@ function App() {
             <Route
               path="/dashboard-upload-series"
               element={<DashboardUploadSeries />}
+            />
+            <Route
+              path="/dashboard-edit-series/:id"
+              element={<DashboardEditSeries />}
             />
           </Routes>
         </BrowserRouter>

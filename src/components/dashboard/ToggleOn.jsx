@@ -1,8 +1,8 @@
-import React, { useImperativeHandle, useState, forwardRef } from "react";
+import React, { useImperativeHandle, useState, forwardRef, useEffect } from "react";
 import styled from "styled-components";
 
 function ToggleOn(props, ref) {
-  const { className } = props;
+  const { className, selected } = props;
   const [isSelected, setSelected] = useState(false);
   
   const handleClick = () => {
@@ -12,6 +12,16 @@ function ToggleOn(props, ref) {
   useImperativeHandle(ref, () => {
     return isSelected;
   });
+
+  useEffect(() => {
+    if( selected !== undefined ){
+      setSelected(selected);
+    }
+  
+    return () => {
+    }
+  }, []);
+  
 
   return (
     <Container className={`group-6-16 ${className || ""} ${isSelected && ('select')}`} onClick={handleClick}>
@@ -35,18 +45,6 @@ const Container = styled.div`
   
   &.select{
     background-color: var(--violet-blue);
-  }
-
-  &.group-6-16.group-3-21 {
-    position: unset;
-    top: unset;
-    left: unset;
-  }
-
-  &.group-6-16.toggle_on {
-    position: unset;
-    top: unset;
-    left: unset;
   }
 
   &.group-6-16.group-3-22 {

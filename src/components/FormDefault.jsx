@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { Body1, Border1pxTiara } from "../styledMixins";
+import { Body1, Border1pxTiara } from "@/styledMixins";
 
 
 function FormDefault(props) {
-  const { children, className, inputClassName } = props;
+  const { children, className, inputClassName, label } = props;
 
   return (
     <Group7 className={`group-7-23 ${className || ""}`}>
-      <TextLabel className="text_label-172">{children}</TextLabel>
+      <TextLabel className="text_label-172">{label}</TextLabel>
       {
-        inputClassName === undefined ? <Input type="text"  /> 
-          :  <TextArea className={`${inputClassName || ""}`}/>
+        inputClassName === undefined ? <Input type="text" value={children} /> 
+          :  <TextArea className={`${inputClassName || ""}`} value={children} />
       }
     </Group7>
   );
@@ -60,36 +60,6 @@ const Group7 = styled.div`
   flex-direction: column;
   align-items: flex-start;
   min-height: 85px;
-
-  &.group-7-23.group-11-1 {
-    top: 684px;
-    min-height: 240px;
-  }
-
-  &.group-7-23.form_upload {
-    top: 674px;
-    left: 762px;
-  }
-
-  &.group-7-23.form_description {
-    top: 783px;
-    left: 762px;
-    min-height: 240px;
-  }
-
-  &.group-7-23.group-6-18 {
-    margin-top: 24px;
-    position: unset;
-    top: unset;
-    left: unset;
-  }
-
-  &.group-7-23.group-6-19 {
-    margin-top: 24px;
-    position: unset;
-    top: unset;
-    left: unset;
-  }
 
   &.group-7-23.group-11-2 {
     top: 684px;

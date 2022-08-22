@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Border1pxTiara } from "@/styledMixins";
 import iconDown from '@ICONS/icon_down.png'
 
 function Dropdown(props) {
-  const { dataList, className} = props;
-  const [isOpen, setOpen] = useState(false);
+  const { dataList, className, selected} = props;
+  const [isShowDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleToggle = () => setOpen(!isOpen);
+  const handleToggle = () => setShowDropdown(!isShowDropdown);
 
   const handleOptionClicked = value => () => {
     setSelectedOption(value);
-    setOpen(false);
-    console.log(selectedOption);
+    setShowDropdown(false);
   };
 
   const getLiElements = () => {
@@ -22,12 +21,26 @@ function Dropdown(props) {
     });
   }
 
+  useEffect(() => {
+    if( selected !== undefined ){
+
+      const selectedItem = dataList.map((data, index) => {
+        return selected === data && data;
+      });
+
+      setSelectedOption(selectedItem);
+    }
+  
+    return () => {
+    }
+  }, []);
+  
   return (
-      <DropDownContainer onClick={handleToggle} className={`group-3-24 ${className || "" }`}>
+      <DropDownContainer onClick={selected === undefined ? handleToggle : null} className={`dropdown ${className || "" }`}>
         <Path className="path-9" src={iconDown} />
-        <DropDownHeader>{selectedOption}</DropDownHeader>
+        <DropDownHeader className={`${className || "" }`}>{selectedOption}</DropDownHeader>
         {
-          isOpen === true && (
+          isShowDropdown === true && (
             <DropDownListContainer>
               <DropDownList>
                 {
@@ -53,37 +66,18 @@ const DropDownContainer = styled.div`
   align-items: flex-start;
   background-color: var(--white);
   border-radius: 5px;
+  
+  &.dropdown.type {
+    border-radius: 4px;
+  }
+  
+  &.dropdown.category {
+    border-radius: 4px;
+  }
 
-    &.group-3-24.group-3-25 {
-      position: absolute;
-      top: 244px;
-      left: 350px;
-      margin-top: unset;
-    }
-
-    &.group-3-24.group-3-26 {
-      border-radius: 4px;
-    }
-
-    &.group-3-24.group-3-27 {
-      border-radius: 4px;
-    }
-
-    &.group-3-24.group-3-28 {
-      border-radius: 4px;
-    }
-
-    &.group-3-24.group-3-29 {
-      border-radius: 4px;
-    }
-
-    &.group-3-24.group-3-30 {
-      border-radius: 4px;
-    }
-
-    &.group-3-24.group-3-31 {
-      border-radius: 4px;
-    }
+  &.disabled{
+    background-color: var(--tiara);
+  }
 `;
 
 const DropDownHeader = styled.div`
@@ -96,6 +90,10 @@ const DropDownHeader = styled.div`
   color: #3faffa;
   text-align: center;
   position: absolute;
+
+  &.disabled{
+    color: var(--manatee);
+  }
 `;
 
 const DropDownListContainer = styled.div`

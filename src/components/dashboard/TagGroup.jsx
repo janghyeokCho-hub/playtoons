@@ -6,13 +6,13 @@ import iconSearch from '@ICONS/icon_search.png'
 
 
 
-function Group13(props) {
-  const { text_Label1, className } = props;
+function TagGroup(props) {
+  const { label, childern, className } = props;
   const [isFocusInput, setFocusInput] = useState(false);
 
   return (
-    <Group131 className={`group-13-3 ${className || ""}`}>
-      <TextLabel className="text_label-175">{text_Label1}</TextLabel>
+    <Container className={`group-13-3 ${className || ""}`}>
+      <TextLabel className="text_label-175">{label}</TextLabel>
       <OverlapGroup1 className="overlap-group1-8">
         <Input type="text" onFocus={() => setFocusInput(true)} onBlur={() => setFocusInput(false)}/>
         <MagnifyingGlassLight ></MagnifyingGlassLight>
@@ -20,7 +20,7 @@ function Group13(props) {
           isFocusInput === false && (<TextLabel1 className="text_label-176">タグ名</TextLabel1>)
         }
       </OverlapGroup1>
-    </Group131>
+    </Container>
   );
 }
 
@@ -38,7 +38,7 @@ const Input = styled.input `
   border-radius: 5px;
 `;
 
-const Group131 = styled.div`
+const Container = styled.div`
   position: absolute;
   width: 700px;
   top: 948px;
@@ -48,19 +48,6 @@ const Group131 = styled.div`
   align-items: flex-start;
   min-height: 85px;
 
-  &.group-13-3.group-8-2 {
-    margin-top: 24px;
-    position: unset;
-    top: unset;
-    left: unset;
-  }
-
-  &.group-13-3.group-8-3 {
-    margin-top: 24px;
-    position: unset;
-    top: unset;
-    left: unset;
-  }
 `;
 
 const TextLabel = styled.div`
@@ -77,20 +64,6 @@ const OverlapGroup1 = styled.div`
   height: 45px;
   position: relative;
   margin-top: 20px;
-  border-radius: 5px;
-`;
-
-const Group4 = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  height: 45px;
-  top: 0;
-  left: 0;
-  display: flex;
-  padding: 12px 15px;
-  align-items: flex-start;
-  min-width: 700px;
-  background-color: var(--white);
   border-radius: 5px;
 `;
 
@@ -114,4 +87,4 @@ const TextLabel1 = styled.div`
   white-space: nowrap;
 `;
 
-export default Group13;
+export default TagGroup;
