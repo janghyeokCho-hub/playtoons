@@ -1,10 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { Body5, Body2 } from "@/styledMixins";
+import { Body5 } from "@/styledMixins";
 
-import NavBarDashboardPostOff from "@COMPONENTS/dashboard/NavBarDashboardPostOff";
-import NavBarDashboardPlanOff from "@COMPONENTS/dashboard/NavBarDashboardPlanOff";
-import DashboardItemNavBarOff from "@COMPONENTS/dashboard/DashboardItemNavBarOff";
+import NavBarItem from '@COMPONENTS/dashboard/NavBarItem';
 
 import iconSquarePen from '@ICONS/dashboardreactionlist-path-square-pen.png';
 import iconPencil from '@ICONS/mauthorpost-shape-pencil.png';
@@ -38,51 +36,24 @@ const onClickDashboard = () => {
 }
 
 function NavBarDashboard3(props) {
+
+  let top = 50;
+
   return (
     <NavBarDashboard>
       <OverlapGroup>
         <Rectangle></Rectangle>
-        <NavBarSupport
-          icoSquarePenLight={iconSquarePen}
-          txtNavDashboardOn="支援管理"
-          className="dashboardseries_nav_support"
-          onClick={onClickSupport}
-          />
-        <NavBarDashboardPostOff
-          icoSquarePenLight={iconPencil}
-          txtNavDashboardOn="投稿管理"
-          className="nav_bar_dashboard_post_off-5"
-          onClick={onClickPost}
-          />
-        <DashboardProfileNavBarOff1
-          onClick={onClickProfile}>
-          <IcoUserLight></IcoUserLight>
-          <TxtNavDashboardOn>プロフィル管理</TxtNavDashboardOn>
-        </DashboardProfileNavBarOff1>
-        <NavBarDashboardPlanOff
-          icoSealSolid={iconDoubeRect}
-          txtNavDashboardOn="シリーズ管理"
-          onClick={onClickSerise}
-          />
-        <NavBar1
-          onClick={onClickDashboard}>
-          <IcoTableColumnsLight></IcoTableColumnsLight>
-          <TxtNavDashboardOff>ダッシュボード</TxtNavDashboardOff>
-        </NavBar1>
-        <DashboardItemNavBarOff
-          icoDiamondLight={iconRhombus}
-          txtNavDashboardOn="商品"
-          onClick={onClickProduct}
-        />
+        <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSquarePen} selectedIcon={iconSquarePen} text={"支援管理"} />
+        <NavBarItem top={top*5} onClick={onClickPost} icon={iconPencil} selectedIcon={iconPencil}  text={"投稿管理"} />
+        <NavBarItem top={top*4} onClick={onClickSerise} icon={iconDoubeRect} selectedIcon={iconDoubeRect}  text={"シリーズ管理"} />
+        <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={"プロフィル管理"} />
+        <NavBarItem top={top*2} onClick={onClickProduct} icon={iconRhombus} selectedIcon={iconRhombus}  text={"商品"} />
+        <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={"ダッシュボード"} />
         <TxtNavTit>ダッシュボード</TxtNavTit>
       </OverlapGroup>
     </NavBarDashboard>
   );
 }
-
-const NavBarSupport = styled(NavBarDashboardPostOff)`
-  top : 400px;
-`;
 
 const NavBarDashboard = styled.div`
   position: absolute;
@@ -118,66 +89,6 @@ const TxtNavTit = styled.div`
   color: var(--nevada);
   line-height: 16px;
   white-space: nowrap;
-`;
-
-const DashboardProfileNavBarOff1 = styled.div`
-  position: absolute;
-  height: 24px;
-  top: 180px;
-  left: 31px;
-  display: flex;
-  padding: 0 31px;
-  align-items: flex-end;
-  min-width: 229px;
-`;
-
-const IcoUserLight = styled.div`
-  width: 21px;
-  height: 24px;
-  margin-bottom: -12px;
-  background-image: url('${iconPorfile}');
-  background-size: 100% 100%;
-`;
-
-const TxtNavDashboardOn = styled.div`
-  ${Body2}
-  width: 106px;
-  min-height: 20px;
-  margin-left: 32px;
-  margin-bottom: -10px;
-  font-weight: 500;
-  color: var(--vulcan);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const NavBar1 = styled.div`
-  position: absolute;
-  width: 230px;
-  height: 21px;
-  top: 70px;
-  left: 30px;
-  display: flex;
-`;
-
-const IcoTableColumnsLight = styled.div`
-  /* margin-top: 14px; */
-  width: 24px;
-  height: 21px;
-  margin-left: 30px;
-  background-image: url('${iconDashboard}');
-  background-size: 100% 100%;
-`;
-
-const TxtNavDashboardOff = styled.div`
-  ${Body2}
-  width: 177px;
-  height: 20px;
-  font-weight: 500;
-  color: var(--vulcan);
-  line-height: 20px;
-  white-space: nowrap;
-  margin-left: 35px;
 `;
 
 export default NavBarDashboard3;

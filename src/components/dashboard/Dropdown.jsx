@@ -119,7 +119,7 @@ const DropDownList = styled.ul`
 `;
 
 const ListItem = styled.li`
-  margin-bottom: 0.8em;
+  height: 45px;
   text-align: center;
   list-style: none;
   background: #ffffff;

@@ -1,6 +1,6 @@
 import React, {useRef, useEffect} from "react";
 import styled from "styled-components";
-import { Title3, Border1pxTiara, Body3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
+import { Title3, Border1pxTiara, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 
 import NavBarDashboard from "@COMPONENTS/dashboard/NavBarDashboard3";
 import FormDefault from "@COMPONENTS/FormDefault";
@@ -198,16 +198,6 @@ const RectInnerPostImage = styled.div`
   top: 1097px;
   left: 746px;
   background-color: var(--desert-storm);
-  border-radius: 4px;
-`;
-
-const RectangleCopy3 = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  width: 220px;
-  height: 300px;
-  top: 1099px;
-  left: 746px;
   border-radius: 4px;
 `;
 

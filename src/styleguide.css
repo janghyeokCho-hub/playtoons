@@ -16,25 +16,37 @@
   --governor-bay: #3333cc;
   --gray: #919191;
   --gunsmoke: #858585;
-  --indigo: #4859ca;
-  --indigo-2: #5a6acf;
+  --indigo: #4859ca;    /*primary-c10*/
+  --indigo-2: #5a6acf;  /*primary-c09*/
   --iron: #d7d7d7;
   --jumbo: #7b7b7f;
   --licorice: #111111;
-  --link-water: #dadef4;
+  --link-water: #dadef4;  /*primary-c02*/
   --manatee: #909dab;
   --mercury: #dde1e5;
   --moody-blue: #6c7ad4;
   --mountain-mist: #969696;
   --nevada: #617080;
   --quill-gray: #d4d4d4;
-  --selago: #edeefa;
+  --selago: #edeefa;          /*primary-c01*/
   --shadow-blue: #768798;
   --tiara: #c3cad2;
-  --violet-blue: #394bc2;
+  --violet-blue: #394bc2;     /*primary-c11*/
   --vulcan: #13161a;
   --white: #ffffff;
-  --wild-blue-yonder: #a3ace4;
+  --wild-blue-yonder: #a3ace4;  /*primary-c05*/
+
+  --primary-c01: #edeefa;
+  --primary-c02: #dadef4;
+  --primary-c03: #c8cdef;
+  --primary-c04: #b6bdea;
+  --primary-c05: #a3ace4;
+  --primary-c06: #919bdf;
+  --primary-c07: #7f8bda;
+  --primary-c08: #6c7ad4;
+  --primary-c09: #5a6acf;
+  --primary-c10: #4859ca;
+  --primary-c11: #394bc2;
  
   --font-size-28px: 28px;
   --font-size-32px: 32px;
