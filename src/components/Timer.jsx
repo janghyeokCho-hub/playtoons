@@ -10,8 +10,13 @@ const ResetComponent = () => {
   );
 };
 
-const Timer = () => {
-  const [sec, setSec] = useState(180);
+/**
+ *
+ * @param {number} countSec 타이머 설정할 제한시간 초
+ * @returns
+ */
+const Timer = ({ countSec }) => {
+  const [sec, setSec] = useState(countSec);
 
   useEffect(() => {
     const countdown = setInterval(() => {

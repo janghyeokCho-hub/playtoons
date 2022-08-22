@@ -14,6 +14,10 @@ import registerGroupImg1 from "@IMAGES/registerGroupImg1.png";
 import registerGroupImg2 from "@IMAGES/registerGroupImg2.png";
 import registerGroupImg3 from "@IMAGES/registerGroupImg3.png";
 
+import registerFourthSrc from "@IMAGES/register-fourth.png";
+
+import Button from "@COMPONENTS/Button";
+
 const RegisterCompleted = () => {
   return (
     <Container>
@@ -101,10 +105,67 @@ const RegisterCompleted = () => {
           </ThirdContextDiv>
         </ThirdContentDiv>
       </ThirdDiv>
+      <FourthDiv>
+        <FourthRowBoxDiv>
+          <FourthBoxDiv bgColor="--indigo">
+            <FourthBoxLabel color="--selago">
+              ユーザーが作成したコメントに
+              <br />
+              返信してコミュニケーションを！
+            </FourthBoxLabel>
+          </FourthBoxDiv>
+          <FourthBoxDiv bgColor="--moody-blue">
+            <FourthBoxLabel color="--selago">
+              投稿したコンテンツで
+              <br />
+              ユーザーさんの色々な反応が！
+            </FourthBoxLabel>
+          </FourthBoxDiv>
+        </FourthRowBoxDiv>
+        <FourthBoxCenterDiv>
+          <RectangleImage src={registerFourthSrc} />
+          <Rectangle></Rectangle>
+          <RectangleCopy9></RectangleCopy9>
+        </FourthBoxCenterDiv>
+        <FourthRowBoxDiv>
+          <FourthBoxDiv bgColor="--indigo-2">
+            <FourthBoxLabel color="--selago">
+              フォロー数を増やして
+              <br />
+              インフルエンサーになれる！
+            </FourthBoxLabel>
+          </FourthBoxDiv>
+          <FourthBoxDiv bgColor="--indigo">
+            <FourthBoxLabel color="--selago">
+              ユーザーがファンになり、
+              <br />
+              安定なクリエイター活動ができる！
+            </FourthBoxLabel>
+          </FourthBoxDiv>
+        </FourthRowBoxDiv>
+      </FourthDiv>
+      <FifthDiv imgSrc={require("@IMAGES/fifth-image.jpg")}>
+        <FifthContentDiv>
+          <FifthTitle>みつけてもらおう、自分の活かし方。</FifthTitle>
+          <FifthContext>
+            今すぐ、クリエイターになって
+            <br />
+            創作活動をしましょう！
+          </FifthContext>
+          <Button
+            text="クリエイターになる"
+            color="--white"
+            bgColor="--violet-blue"
+            borderRadius={30}
+            width={350}
+            height={60}
+          />
+        </FifthContentDiv>
+      </FifthDiv>
     </Container>
   );
 };
-
+// fifth-image.jpg
 // rectangle
 const Container = styled.div`
   width: 100%;
@@ -284,6 +345,128 @@ const GroupContextDiv = styled.div`
   color: var(--nevada);
   text-align: center;
   line-height: 20px;
+`;
+
+const FourthDiv = styled.div`
+  width: 100%;
+  height: 800px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: var(--violet-blue);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+`;
+
+const FourthRowBoxDiv = styled.div`
+  flex-direction: row;
+  text-align: center;
+  justify-content: space-evenly;
+  align-self: normal;
+  display: flex;
+`;
+// 좌상단 --indigo
+const FourthBoxDiv = styled.div`
+  height: 125px;
+  display: flex;
+  min-width: 482px;
+  background-color: var(${(props) => props.bgColor});
+  border-radius: 8px;
+  box-shadow: 0px 6px 10px #00000029;
+  align-items: center;
+  justify-content: center;
+`;
+
+// 좌상단 --selago
+const FourthBoxLabel = styled.h1`
+  ${Title3}
+  font-weight: 500;
+  color: var(${(props) => props.color});
+`;
+
+const RectangleCopy9 = styled.div`
+  position: absolute;
+  width: 742px;
+  height: 165px;
+  background-color: var(--indigo-2);
+  border-radius: 8px;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-58%, -20%);
+`;
+
+const Rectangle = styled.div`
+  position: absolute;
+  width: 742px;
+  height: 165px;
+  background-color: var(--wild-blue-yonder);
+  border-radius: 8px;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const RectangleImage = styled.img`
+  position: absolute;
+  width: 800px;
+  height: 200px;
+  border-radius: 8px;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -80%);
+`;
+
+const FourthBoxCenterDiv = styled.div`
+  width: 100%;
+  height: 200px;
+  position: relative;
+`;
+
+const FifthDiv = styled.div`
+  width: 100%;
+  height: 800px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-image: url(${(props) => props.imgSrc});
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: right;
+  background-size: auto 150%;
+`;
+
+const FifthContentDiv = styled.div`
+  flex-direction: column;
+  text-align: -webkit-center;
+  margin-left: -30%;
+`;
+
+const FifthTitle = styled.h1`
+  ${Title2}
+  min-height: 32px;
+  color: var(--vulcan);
+  line-height: 32px;
+  white-space: nowrap;
+`;
+
+const FifthContext = styled.h1`
+  ${Title3}
+  min-height: 66px;
+  min-width: 351px;
+  font-weight: 500;
+  color: var(--nevada);
+  text-align: center;
+  line-height: 28px;
+  margin-top: 30px;
+  margin-bottom: 50px;
 `;
 
 export default RegisterCompleted;

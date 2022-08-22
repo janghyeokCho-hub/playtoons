@@ -12,3 +12,21 @@ import { store, load, requestPromise, type } from "./index";
 export const createRegisterUser = (params) => {
   return requestPromise("INSERT_ACCOUNT_REGISTER", params);
 };
+
+/**
+ * 회원 가입시 이메일 인증코드 확인
+ *  @param {string} params.code 이메일
+ * @returns
+ */
+export const verifyCheck = (params) => {
+  return requestPromise("INSERT_ACCOUNT_VERIFY", params);
+};
+
+/**
+ * 회원 가입시 이용약관
+ *  @param {string} code 이용약관 계약 코드
+ * @returns
+ */
+export const agreementEula = (code) => {
+  return load(`LOAD_AGREEMENT_EULA_${code}`);
+};

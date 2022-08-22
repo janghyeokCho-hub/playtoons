@@ -1,18 +1,44 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Border1pxGhost } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
 import Timer from "@COMPONENTS/Timer";
+import moment from "moment";
+
+import { verifyCheck } from "@/services/accountService";
 
 /**
  * 인증 번호 입력 폼
  * @param {*} param0
  * @returns
  */
-const CheckVerify = ({ setIsShowType, email }) => {
+const CheckVerify = ({ email, expireOn }) => {
   const navigate = useNavigate();
+  const countTime = moment(expireOn).diff(moment(), "seconds");
+  const [code, setCode] = useState(null);
+
+  const handleVerifyCheck = useCallback(async () => {
+    // navigate("/account/agreement")
+    console.log("code : ", code);
+    const { status, data } = await verifyCheck({ code: code });
+
+    console.log(status, data);
+    if (status === 200) {
+      // Success
+      navigate("/account/agreement", { state: { code: "user" } });
+    } else if (status === 400) {
+      // 코드 참조
+      alert("코드 참조");
+    } else if (status === 404) {
+      // 코드 참조
+      alert("코드 참조");
+    } else if (status === 503) {
+      // 코드 참조
+      alert("코드 참조");
+    }
+  }, [code, navigate]);
   return (
     <>
       <VerifyTitle>パスワードを再設定</VerifyTitle>
@@ -22,8 +48,12 @@ const CheckVerify = ({ setIsShowType, email }) => {
       </VerifyContent>
 
       <VerifyInputDiv marginBottom="10px" marginTop="40px">
-        <Input inputType="text" label="認証コード" />
-        <Timer />
+        <Input
+          inputType="text"
+          label="認証コード"
+          callback={({ nativeEvent }) => setCode(nativeEvent?.target?.value)}
+        />
+        <Timer countSec={countTime} />
       </VerifyInputDiv>
       <Button
         text="確認する"
@@ -32,7 +62,7 @@ const CheckVerify = ({ setIsShowType, email }) => {
         width={400}
         height={40}
         marginBottom={15}
-        callback={() => navigate("/account/agreement")}
+        callback={() => handleVerifyCheck()}
         borderRadius={20}
       />
       <Button
@@ -49,11 +79,13 @@ const CheckVerify = ({ setIsShowType, email }) => {
   );
 };
 
-const VerifyCheck = ({ email, expireOn }) => {
+const VerifyCheck = () => {
+  const { state } = useLocation();
+  const { email, expireOn } = state;
   console.log(email, expireOn);
   return (
     <AccountBoxDiv>
-      <CheckVerify email={email} />
+      <CheckVerify email={email} expireOn={expireOn} />
     </AccountBoxDiv>
   );
 };

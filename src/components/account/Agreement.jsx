@@ -1,12 +1,29 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { Border1pxGhost } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
 import { emailValidation } from "@COMMON/common";
 import Timer from "@COMPONENTS/Timer";
+import { agreementEula } from "@/services/accountService";
 
-const Agreement = ({ handleAccountType }) => {
+const Agreement = () => {
+  const { state } = useLocation();
+  const code = state?.code || "user";
+
+  const [eulaContent, setEulaContent] = useState(null);
+
+  useEffect(() => {
+    const getEulaContent = async () => {
+      const response = await agreementEula(code);
+      console.log(response);
+    };
+
+    if (!eulaContent) {
+      getEulaContent();
+    }
+  }, [code, eulaContent]);
   return (
     <AccountBoxDiv>
       <AgreementTitle>利用規約</AgreementTitle>
