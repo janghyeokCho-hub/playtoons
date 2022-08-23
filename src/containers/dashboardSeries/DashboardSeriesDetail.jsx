@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import styled from "styled-components";
 import {
-  Title3,
   Border1pxTiara,
   Border2pxVioletBlue,
   Body1,
@@ -12,9 +11,8 @@ import {
   NotosansjpBoldDeepSpaceSparkle18px,
 } from "@/styledMixins";
 
-import NavBarDashboard3 from "@/components/dashboard/NavBarDashboard";
-import lineHorizontal from '@LINES/authorplan-line.png';
-import lineVertical from '@LINES/dashboardeditseries-line-2.png';
+
+import SeriesContainer from "@/components/dashboard/DashboardSeriesContainer";
 
 const textData = {
   label_timeline_thumb: "タイムラインのサムネイル",
@@ -84,88 +82,46 @@ function DashboardSeriesDetail(props) {
   
 
   return (
-    <div className="container-center-horizontal">
-      <Dashboardseriesdetail className="screen">
-        <OverlapGroup1>
-          <Line src={lineHorizontal} />
-          <NavBarDashboard3 />
-          <Line2 src={lineVertical} />
-          <Rectangle></Rectangle>
-          <Rectangle1></Rectangle1>
-          <Rectangle2></Rectangle2>
-          <Group4>
-            <TextLabel>{textData.label_timeline_thumb}</TextLabel>
-            <FlexRow>
-              {data.list_thumb}
-            </FlexRow>
-          </Group4>
-          <Group7>
-            <TextLabel>{textData.label_tag}</TextLabel>
-            <TagContainer>
-              {data.list_tag}
-            </TagContainer>
-          </Group7>
-          <Group8>
-            <TextLabel>{textData.label_summary}</TextLabel>
-            <TextLabel1>{data.summary}</TextLabel1>
-          </Group8>
-          <TextLabel2>{data.title}</TextLabel2>
-          <Group3>
-            <TextLabelContainer>
-              <TextLabel3>{textData.label_category}</TextLabel3>
-              <TextLabel4>{textData.label_grade}</TextLabel4>
-              <TextLabel5>{textData.label_status}</TextLabel5>
-              <TextLabel5>{textData.label_type}</TextLabel5>
-            </TextLabelContainer>
-            <FlexCol>
-              <TextLabel6>{data.category}</TextLabel6>
-              <Price>{data.grade}</Price>
-              <TextLabel7>{data.status}</TextLabel7>
-              <TextLabel7>{data.type}</TextLabel7>
-            </FlexCol>
-          </Group3>
-          <Rectangle4 src={data.main_image} />
-          <TextLabel8>{textData.label_series_detail}</TextLabel8>
-          {/* <TopbarTitle text_Label={textData.label_series_detail_on_topbar} /> */}
-        </OverlapGroup1>
-      </Dashboardseriesdetail>
-    </div>
+    <SeriesContainer>
+      <Rectangle></Rectangle>
+      <Rectangle1></Rectangle1>
+      <Rectangle2></Rectangle2>
+      <Group4>
+        <TextLabel>{textData.label_timeline_thumb}</TextLabel>
+        <FlexRow>
+          {data.list_thumb}
+        </FlexRow>
+      </Group4>
+      <Group7>
+        <TextLabel>{textData.label_tag}</TextLabel>
+        <TagContainer>
+          {data.list_tag}
+        </TagContainer>
+      </Group7>
+      <Group8>
+        <TextLabel>{textData.label_summary}</TextLabel>
+        <TextLabel1>{data.summary}</TextLabel1>
+      </Group8>
+      <TextLabel2>{data.title}</TextLabel2>
+      <Group3>
+        <TextLabelContainer>
+          <TextLabel3>{textData.label_category}</TextLabel3>
+          <TextLabel4>{textData.label_grade}</TextLabel4>
+          <TextLabel5>{textData.label_status}</TextLabel5>
+          <TextLabel5>{textData.label_type}</TextLabel5>
+        </TextLabelContainer>
+        <FlexCol>
+          <TextLabel6>{data.category}</TextLabel6>
+          <Price>{data.grade}</Price>
+          <TextLabel7>{data.status}</TextLabel7>
+          <TextLabel7>{data.type}</TextLabel7>
+        </FlexCol>
+      </Group3>
+      <Rectangle4 src={data.main_image} />
+      <Title>{textData.label_series_detail}</Title>
+    </SeriesContainer>
   );
 }
-
-const Dashboardseriesdetail = styled.div `
-  align-items: flex-start;
-  background-color: var(--white);
-  display: flex;
-  height: 1311px;
-  min-width: 1920px;
-  overflow-x: hidden;
-`;
-
-
-
-const OverlapGroup1 = styled.div`
-  ${Title3}
-  width: 1922px;
-  height: 3512px;
-  /* position: relative; */
-`;
-
-const Line = styled.img`
-  position: absolute;
-  width: 1922px;
-  height: 2px;
-  top: 88px;
-  left: 0;
-`;
-
-const Line2 = styled.img`
-  position: absolute;
-  width: 2px;
-  height: 3080px;
-  top: 90px;
-  left: 300px;
-`;
 
 const Rectangle = styled.div`
   position: absolute;
@@ -409,7 +365,7 @@ const Rectangle4 = styled.img`
   left: 746px;
 `;
 
-const TextLabel8 = styled.div`
+const Title = styled.div`
   position: absolute;
   top: 192px;
   left: 746px;

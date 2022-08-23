@@ -6,9 +6,6 @@ import { Body8, Border1pxTiara, Body7 } from "@/styledMixins";
 import line from '@LINES/mdashboardseriesdetail-rectangle.png';
 import roundRetangle from '@IMAGES/mdashboardseriesdetail-round-rectangle.png';
 
-import Group37 from "@COMPONENTS/dashboard/Group37";
-import PaddingGroup14Copy3 from "@COMPONENTS/dashboard/PaddingGroup14Copy3";
-import PaddingGroup14Copy72 from "@COMPONENTS/dashboard/PaddingGroup14Copy72";
 import TagePaddingGroup from "@/components/dashboard/DetailMobileTagContainer";
 
 const textData = {

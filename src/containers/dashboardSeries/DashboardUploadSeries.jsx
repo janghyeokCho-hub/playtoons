@@ -1,4 +1,4 @@
-import React, {useRef, useEffect, useState} from "react";
+import React, {useRef, useEffect, useState, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Title3, Border1pxTiara, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
@@ -15,7 +15,6 @@ import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 
 import lineHorizontal from '@IMAGES/lines/authorplan-line.png';
 import lineVertical from '@IMAGES/lines/dashboardeditseries-line-2.png';
-import iconAdd from '@IMAGES/icons/icon_add.png';
 import iconInfo from '@IMAGES/icons/icon_info.png';
 
 import tempImage from '@IMAGES/dashboardseries-rectangle-copy.png';
@@ -62,30 +61,30 @@ function DashboardUploadSeries(props) {
     
   }
   
-  const handlePostImageFile = (file) => {
-    // 폼데이터 구성
-    const formData = new FormData();
-    const config = {
-      header: {
-        "content-type": "multipart/form-data",
-      },
-    };
-      formData.append("file", file);
-      console.log("postImage file", file);
-    }
+  const handlePostImageFile = useCallback((file) => {
+  // 폼데이터 구성
+  const formData = new FormData();
+  const config = {
+    header: {
+      "content-type": "multipart/form-data",
+    },
+  };
+    formData.append("file", file);
+    console.log("postImage file", file);
+  },[]);
+  
+  const handleTimelineImageFile = (file) => {
     
-    const handleTimelineImageFile = (file) => {
-      
-      console.log("handleTimelineImageFile", file);
-    }
-    
-    useEffect(() => {
-      //분기 upload or edit
-      setMode( params.id === undefined );
+    console.log("handleTimelineImageFile", file);
+  }
+  
+  useEffect(() => {
+    //분기 upload or edit
+    setMode( params.id === undefined );
 
-      return () => {
-      }
-    }, [isModeUpload]);
+    return () => {
+    }
+  }, [isModeUpload]);
 
   return (
     <div className="container-center-horizontal">
@@ -204,24 +203,6 @@ const TextLabel1 = styled.div`
   white-space: nowrap;
 `;
 
-const RectInnerPostImage = styled.div`
-  position: absolute;
-  width: 220px;
-  height: 300px;
-  top: 1097px;
-  left: 746px;
-  background-color: var(--desert-storm);
-  border-radius: 4px;
-`;
-
-const IconAddPostimage = styled.div`
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  top: 1235px;
-  left: 844px;
-  background-size: 100% 100%;
-`;
 
 const IconInfoPostimage = styled.div`
   position: absolute;
@@ -251,15 +232,6 @@ const RectInnerTimeline = styled.div`
   left: 746px;
   background-color: var(--desert-storm);
   border-radius: 4px;
-`;
-
-const IconAddTimeline = styled.div`
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  top: 1601px;
-  left: 1084px;
-  background-size: 100% 100%;
 `;
 
 const IconInfoTimeline = styled.div`

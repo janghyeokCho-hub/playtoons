@@ -7,7 +7,7 @@ import iconAdd from '@IMAGES/icons/icon_add.png';
 
 import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
-export default function MyDropzone(props) {
+export default function ImageUploadContainer(props) {
   const { children : data, className, textDragNDrop, handleFile } = props;
   const [file, setFile] = useState(null);
 

@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { Body8, Body5, Body7 } from "@/styledMixins";
-
-import Group411 from "@/components/dashboard/Group411";
-
-// import {requestPromise} from '../../utils';
+import { Body8, Body5, Body7, Border1pxVioletBlue } from "@/styledMixins";
 
 //temp data
-import rectCopy from "@IMAGES/dashboardseries-rectangle-copy.png";
-import rect from "@IMAGES/mdashboardseries-rectangle.jpg";
+import tempRect1 from "@IMAGES/dashboardseries-rectangle-copy.png";
+import tempRect2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 
 const data = {
   barsLight1:
@@ -86,7 +82,7 @@ function DashboardSeriesMobile(props) {
         <div id="m_dashboard_list">
           <Group>
             <FlexRow>
-              <Rectangle2 src={rectCopy} />
+              <Rectangle2 src={tempRect1} />
               <FlexCol>
                 <TextLabel1>{data.text_Label2}</TextLabel1>
                 <X20220601>{data.x202206011}</X20220601>
@@ -102,13 +98,16 @@ function DashboardSeriesMobile(props) {
               <TextLabel5>{data.text_Label6}</TextLabel5>
             </TextLabelContainer>
             <Rectangle4></Rectangle4>
-            <Group411 />
+            <Group4>
+              <GroupTextLabel>詳細</GroupTextLabel>
+              <GroupTextLabel1>お問合せ</GroupTextLabel1>
+            </Group4>
             <RectangleCopy></RectangleCopy>
           </Group>
 
           <Group>
             <FlexRow>
-              <Rectangle5 src={rect} />
+              <Rectangle5 src={tempRect2} />
               <FlexCol>
                 <TextLabel1>{data.text_Label7}</TextLabel1>
                 <X20220601>{data.x202206012}</X20220601>
@@ -124,7 +123,10 @@ function DashboardSeriesMobile(props) {
               <X20220610>{data.x20220610}</X20220610>
             </FlexRow1>
             <Rectangle4></Rectangle4>
-            <Group411 />
+            <Group4>
+              <GroupTextLabel>詳細</GroupTextLabel>
+              <GroupTextLabel1>お問合せ</GroupTextLabel1>
+            </Group4>
             <RectangleCopy></RectangleCopy>
           </Group>
         </div>
@@ -366,6 +368,37 @@ const X20220610 = styled.div`
   font-weight: 500;
   color: var(--bright-gray);
   line-height: 16px;
+  white-space: nowrap;
+`;
+
+const Group4 = styled.div`
+  ${Body7}
+  ${Border1pxVioletBlue}
+            height: 32px;
+  margin-top: 16px;
+  display: flex;
+  padding: 8px 54px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  min-width: 343px;
+  border-radius: 4px;
+`;
+
+const GroupTextLabel = styled.div`
+  min-height: 14px;
+  min-width: 29px;
+  font-weight: 700;
+  color: var(--violet-blue);
+  line-height: 14px;
+  white-space: nowrap;
+`;
+
+const GroupTextLabel1 = styled.div`
+  min-height: 14px;
+  margin-left: 47px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 14px;
   white-space: nowrap;
 `;
 

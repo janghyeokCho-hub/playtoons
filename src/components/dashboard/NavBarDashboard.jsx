@@ -41,43 +41,23 @@ function NavBarDashboard3(props) {
 
   return (
     <NavBarDashboard>
-      <OverlapGroup>
-        <Rectangle></Rectangle>
-        <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSquarePen} selectedIcon={iconSquarePen} text={"支援管理"} />
-        <NavBarItem top={top*5} onClick={onClickPost} icon={iconPencil} selectedIcon={iconPencil}  text={"投稿管理"} />
-        <NavBarItem top={top*4} onClick={onClickSerise} icon={iconDoubeRect} selectedIcon={iconDoubeRect}  text={"シリーズ管理"} />
-        <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={"プロフィル管理"} />
-        <NavBarItem top={top*2} onClick={onClickProduct} icon={iconRhombus} selectedIcon={iconRhombus}  text={"商品"} />
-        <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={"ダッシュボード"} />
-        <TxtNavTit>ダッシュボード</TxtNavTit>
-      </OverlapGroup>
+      <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSquarePen} selectedIcon={iconSquarePen} text={"支援管理"} />
+      <NavBarItem top={top*5} onClick={onClickPost} icon={iconPencil} selectedIcon={iconPencil}  text={"投稿管理"} />
+      <NavBarItem top={top*4} onClick={onClickSerise} icon={iconDoubeRect} selectedIcon={iconDoubeRect}  text={"シリーズ管理"} />
+      <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={"プロフィル管理"} />
+      <NavBarItem top={top*2} onClick={onClickProduct} icon={iconRhombus} selectedIcon={iconRhombus}  text={"商品"} />
+      <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={"ダッシュボード"} />
+      <TxtNavTit>ダッシュボード</TxtNavTit>
     </NavBarDashboard>
   );
 }
 
 const NavBarDashboard = styled.div`
-  position: absolute;
-  height: 1000px;
-  top: 100px;
-  left: 0;
-  display: flex;
-  align-items: flex-start;
-  min-width: 301px;
-`;
-
-const OverlapGroup = styled.div`
-  width: 301px;
-  height: 1000px;
-  position: relative;
-`;
-
-const Rectangle = styled.div`
-  position: absolute;
   width: 300px;
-  height: 1000px;
-  top: 0;
-  left: 1px;
-  background-color: var(--white);
+  height: auto;
+  max-width: 300px;
+  position: relative;
+  flex: 1;
 `;
 
 const TxtNavTit = styled.div`

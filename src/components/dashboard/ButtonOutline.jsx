@@ -11,7 +11,7 @@ const TYPE = {
 ;
 
 function ButtonOutline(props, ref) {
-  const {text, buttonType = TYPE.DEFAULT, className, handleClick, icon} = props;
+  const {text, width, buttonType = TYPE.DEFAULT, className, handleClick, icon} = props;
   const [type, setType] = useState(buttonType);
   const refContainer = useRef();
   const refTextLabel = useRef();
@@ -53,9 +53,9 @@ function ButtonOutline(props, ref) {
     
 
   return (
-    <Container className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
+    <Container width={width} className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
       {
-        icon !== undefined && (<Icon></Icon>)
+        icon !== undefined && (<Icon icon={icon}></Icon>)
       }
       {
         // type === TYPE.LOADING ? <Loading /> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
@@ -68,18 +68,14 @@ function ButtonOutline(props, ref) {
 
 const Container = styled.div`
   ${Border1pxVioletBlue}
-  position: absolute;
+  width : ${(props) => props.width}px;
   height: 40px;
-  top: 1811px;
-  left: 1210px;
-  display: flex;
-  padding: 9px 17.7px;
-  justify-content: flex-end;
-  align-items: flex-start;
+  padding: 9px 0;
   min-width: 117px;
   border-radius: 5px;
   cursor: pointer;
-
+  display: inline-block;
+  text-align: center;
 `;
 
 const TextLabel = styled.div`
@@ -87,17 +83,19 @@ const TextLabel = styled.div`
   min-height: 20px;
   font-weight: 700;
   letter-spacing: 1.27px;
-  line-height: 20px;
   white-space: nowrap;
-  
-  z-index: 10;
-`;
+  `;
 
 const Loading = styled.div`
   background-image: url(${(props) => props.icon})
 `;
 
 const Icon = styled.div`
+  width : 15px;
+  height: 15px;
+  margin-left: 20px;
+  float: left;
+  background-size: 100% 100%;
   background-image: url(${(props) => props.icon})
 `;
 
