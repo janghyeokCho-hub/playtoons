@@ -66,7 +66,7 @@ const Login = () => {
       <VerifyDiv
         className="group-2-21 group-2-22"
         onClick={() => {
-          navigate("verify");
+          navigate("recover");
         }}
       >
         <RecoverLabel className="text_label-220" color="--violet-blue">

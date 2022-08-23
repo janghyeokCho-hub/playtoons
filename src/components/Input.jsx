@@ -4,7 +4,7 @@ import { Body5, Border1pxTiara } from "@/styledMixins";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 
-const Input = ({ inputType, label, callback }) => {
+const Input = ({ inputType, label, callback, fontWeight }) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
 
@@ -24,7 +24,12 @@ const Input = ({ inputType, label, callback }) => {
     <InputDiv>
       <InputLabel className="login-txt-form-label">{label}</InputLabel>
       <InputWithIconDiv>
-        <TextInput className="overlap-group-3" type={type} onInput={callback} />
+        <TextInput
+          className="overlap-group-3"
+          type={type}
+          onInput={callback}
+          fontWeight={fontWeight}
+        />
         {inputType === "password" && (
           <EyeIconDiv onClick={() => setIsPwdDisabled(!isPwdDisabled)}>
             <FontAwesomeIcon
@@ -54,6 +59,7 @@ const InputWithIconDiv = styled.div`
 const InputLabel = styled.span`
   ${Body5}
   min-height: 16px;
+  font-weight: ${(props) => props.fontWeight};
   color: var(--vulcan);
   line-height: 16px;
   white-space: nowrap;
