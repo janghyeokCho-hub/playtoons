@@ -1,4 +1,4 @@
-import React, {useCallback, useState, useEffect} from 'react';
+import React, {useCallback, useState, useEffect, useLayoutEffect} from 'react';
 import styled from "styled-components";
 import {  Body3, Border1pxTiara } from "@/styledMixins";
 import {useDropzone} from 'react-dropzone'
@@ -8,7 +8,7 @@ import iconAdd from '@IMAGES/icons/icon_add.png';
 import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
 export default function MyDropzone(props) {
-  const { childern : data, className, textDragNDrop, handleFile } = props;
+  const { children : data, className, textDragNDrop, handleFile } = props;
   const [file, setFile] = useState(null);
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -22,7 +22,8 @@ export default function MyDropzone(props) {
   const InputProps = {
     ...getInputProps(),
     multiple: false,
-    accept: "image/gif, image/jpg, image/jpeg",
+    accept: "image/gif, image/jpg, image/jpeg, image/png",
+    type: "file"
   };
 
   const RootProps = {
@@ -30,38 +31,52 @@ export default function MyDropzone(props) {
   };
 
   const handlePreviewClose = () => {
-    setFile(null);
+    setFile(undefined);
+    console.log("handlePreviewClose "+className, file)
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setFile(data);
+    console.log("useLayoutEffect "+className, file)
+  
+    return () => {
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("useEffect "+className, file)
   
     return () => {
     }
   }, []);
 
   return (
-    <Container {...RootProps} maxSize={100} multiple={false} className={`${className || ""} `}>
-      <input {...InputProps} value={data}/>
-      {
-        file === undefined ? (
-          isDragActive ? (
-            <TextContainer>
-              <TextlabelDragNDrop>{"이미지를 놓아주세요."}</TextlabelDragNDrop>
-            </TextContainer>
+    <>
+        <input {...InputProps}/>
+        {
+          file === undefined ? (
+            <Container {...RootProps} maxSize={100} multiple={false} className={`${className || ""} `}>
+              {  isDragActive ? (
+                <TextContainer>
+                  <TextlabelDragNDrop>{"이미지를 놓아주세요."}</TextlabelDragNDrop>
+                </TextContainer>
+                ) : (
+                  <TextContainer>
+                    <TextAlignContainer>
+                      <IconAddPostimage />
+                      <TextlabelDragNDrop className={`${className || ""}`}>{textDragNDrop}</TextlabelDragNDrop>
+                    </TextAlignContainer>
+                  </TextContainer>
+                )
+              }
+            </Container>
           ) : (
-            <TextContainer>
-              <TextAlignContainer>
-                <IconAddPostimage />
-                <TextlabelDragNDrop className={`${className || ""}`}>{textDragNDrop}</TextlabelDragNDrop>
-              </TextAlignContainer>
-            </TextContainer>
+            <Container className={`${className || ""} preview`}>
+              <ImagePreviewContainer handleClick={handlePreviewClose}>{file}</ImagePreviewContainer>
+            </Container>
           )
-        ) : (
-          <ImagePreviewContainer handleClick={handlePreviewClose}>{data}</ImagePreviewContainer>
-        )
-      }
-    </Container>
+        }
+    </>
   );
 }
 
@@ -72,6 +87,7 @@ const Container = styled.div`
   height: 300px;
   top: 1099px;
   left: 746px;
+  background-color: var(--desert-storm);
   border-radius: 4px;
 
   &.dashboard_upload_timeline{
@@ -79,6 +95,11 @@ const Container = styled.div`
     top: 1463px;
     left: 746px;
     }
+  &.preview{
+    background-color: transparent;
+    border-radius: 0px;
+    border: 0px;
+  }
 `;
 
 const TextContainer = styled.div `

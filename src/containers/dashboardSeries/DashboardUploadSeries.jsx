@@ -104,14 +104,14 @@ function DashboardUploadSeries(props) {
             <AbultGroup >
               <TextLabelAdult >{textData.label_adult}</TextLabelAdult>
               <FlexRow >
-                <Toggle ref={refIsAdult} className={"group-3-22"} selected={true} />
+                <Toggle ref={refIsAdult} className={"group-3-22"} selected={false} />
                 <R19 >{textData.label_r_19}</R19>
               </FlexRow>
             </AbultGroup>
             <TagGroup label={textData.label_tag_setting}  ></TagGroup>
             <FormDefault className={"group-11-2"} inputClassName={"summary-big"} label={textData.label_summary}></FormDefault>
             <TextLabel1>{textData.label_post_image}</TextLabel1>
-            <RectInnerPostImage></RectInnerPostImage>
+            
             <IconInfoPostimage style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoPostimage>
             <TextLabel2>{textData.label_timeline}</TextLabel2>
             <RectInnerTimeline></RectInnerTimeline>

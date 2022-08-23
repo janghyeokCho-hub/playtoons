@@ -5,7 +5,7 @@ import { Body3, Border1pxTiara } from "@/styledMixins";
 import iconClose from '@ICONS/icon_circle_close.png';
 
 export default function ImagePreviewContainer(props) {
-  const { childer : src, handleClick } = props;
+  const { children : src, handleClick } = props;
   const refContainer = useRef();
 
   const handleIconCloseClick = () => {
