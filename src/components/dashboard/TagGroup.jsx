@@ -39,10 +39,8 @@ const Input = styled.input `
 `;
 
 const Container = styled.div`
-  position: absolute;
   width: 700px;
-  top: 948px;
-  left: 746px;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

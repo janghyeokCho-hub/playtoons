@@ -27,6 +27,7 @@ function ButtonDefault(props, ref) {
     if(handleClick !== undefined) {handleClick()}
   }
   
+  //useRef
   useImperativeHandle(ref,() => ({
     setButtonType : (type) => {
       setType(type);
@@ -67,13 +68,10 @@ function ButtonDefault(props, ref) {
 }
 
 const Container = styled.div`
-  position: absolute;
+  width: 117px;
   height: 40px;
-  top: 1151px;
-  left: 1360px;
   display: flex;
-  padding: 0 16.7px;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   min-width: 102px;
   border-radius: 5px;

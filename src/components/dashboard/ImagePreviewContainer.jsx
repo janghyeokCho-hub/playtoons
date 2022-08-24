@@ -25,23 +25,23 @@ export default function ImagePreviewContainer(props) {
 
 const Container = styled.div`
   width: 235px;
-  height: 312px;
+  height: 100%;
+  position: relative;
 `;
 
 const Img = styled.img`
   width: 220px;
   height: 284px;
   position: absolute;
-  left : 0px;
-  top : 16px;
+  bottom: 0;
 `;
 
 const IconClose = styled.div`
   position: absolute;
+  top: 0;
+  right: 0;
   width: 32px;
   height: 32px;
-  top: 0;
-  left: 203px;
   background-color: var(--white);
   border-radius: 32px;
   background-size: 100% 100%;

@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import styled from "styled-components";
 import {
-  Border1pxTiara,
   Border2pxVioletBlue,
-  Body1,
   Border1pxMercury,
   Body2,
   NotosansjpBoldManatee14px,
@@ -82,89 +80,100 @@ function DashboardSeriesDetail(props) {
   
 
   return (
-    <SeriesContainer>
-      <Rectangle></Rectangle>
-      <Rectangle1></Rectangle1>
-      <Rectangle2></Rectangle2>
-      <Group4>
-        <TextLabel>{textData.label_timeline_thumb}</TextLabel>
-        <FlexRow>
-          {data.list_thumb}
-        </FlexRow>
-      </Group4>
-      <Group7>
-        <TextLabel>{textData.label_tag}</TextLabel>
+    <SeriesContainer backgroundColor={"var(--desert-storm)"} isBorder={true}>
+      <Container>
+        <Title>{textData.label_series_detail}</Title>
+        <ContentTitle>{data.title}</ContentTitle>
+
+        <MainContainer>
+          <MainImageContainer>
+            <MainImage src={data.main_image} />
+          </MainImageContainer>
+          <MainTextContainer>
+            <MainTextRowContainer>
+              <MainTextLabel  extLabel3>{textData.label_category}</MainTextLabel>
+              <MainDataLabel>{data.category}</MainDataLabel>
+            </MainTextRowContainer>
+            <MainTextRowContainer>
+              <MainTextLabel  extLabel3>{textData.label_grade}</MainTextLabel>
+              <MainDataLabel>{data.grade}</MainDataLabel>
+            </MainTextRowContainer>
+            <MainTextRowContainer>
+              <MainTextLabel  extLabel3>{textData.label_status}</MainTextLabel>
+              <MainDataLabel>{data.status}</MainDataLabel>
+            </MainTextRowContainer>
+            <MainTextRowContainer>
+              <MainTextLabel  extLabel3>{textData.label_type}</MainTextLabel>
+              <MainDataLabel>{data.type}</MainDataLabel>
+            </MainTextRowContainer>
+          </MainTextContainer>
+        </MainContainer>
+
+        <BoldTextLabel>{textData.label_summary}</BoldTextLabel>
+        <TextLabel1>{data.summary}</TextLabel1>
+
+        <BoldTextLabel>{textData.label_tag}</BoldTextLabel>
         <TagContainer>
           {data.list_tag}
         </TagContainer>
-      </Group7>
-      <Group8>
-        <TextLabel>{textData.label_summary}</TextLabel>
-        <TextLabel1>{data.summary}</TextLabel1>
-      </Group8>
-      <TextLabel2>{data.title}</TextLabel2>
-      <Group3>
-        <TextLabelContainer>
-          <TextLabel3>{textData.label_category}</TextLabel3>
-          <TextLabel4>{textData.label_grade}</TextLabel4>
-          <TextLabel5>{textData.label_status}</TextLabel5>
-          <TextLabel5>{textData.label_type}</TextLabel5>
-        </TextLabelContainer>
-        <FlexCol>
-          <TextLabel6>{data.category}</TextLabel6>
-          <Price>{data.grade}</Price>
-          <TextLabel7>{data.status}</TextLabel7>
-          <TextLabel7>{data.type}</TextLabel7>
-        </FlexCol>
-      </Group3>
-      <Rectangle4 src={data.main_image} />
-      <Title>{textData.label_series_detail}</Title>
+
+        <BoldTextLabel>{textData.label_timeline_thumb}</BoldTextLabel>
+        <FlexRow>
+          {data.list_thumb}
+        </FlexRow>
+      </Container>
     </SeriesContainer>
   );
 }
 
-const Rectangle = styled.div`
-  position: absolute;
-  width: 1619px;
-  height: 2093px;
-  top: 90px;
-  left: 302px;
-  background-color: var(--white);
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 6% 25%;
 `;
 
-const Rectangle1 = styled.div`
-  position: absolute;
-  width: 1619px;
-  height: 3422px;
-  top: 90px;
-  left: 302px;
-  background-color: var(--desert-storm);
+const Title = styled.div`
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: var(--nevada);
+  line-height: 28px;
+  white-space: nowrap;
 `;
 
-const Rectangle2 = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  width: 1523px;
-  height: 1125px;
-  top: 138px;
-  left: 350px;
-  background-color: var(--white);
-  border-radius: 8px;
+const ContentTitle = styled.div`
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: var(--vulcan);
+  line-height: 28px;
+  white-space: nowrap;
 `;
 
-const Group4 = styled.div`
-  position: absolute;
-  width: 640px;
-  top: 1026px;
-  left: 746px;
+const MainContainer = styled.div`
+  width: 100%;
+  margin-bottom: 3vh;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 189px;
+  flex-direction: row;
 `;
 
-const TextLabel = styled.div`
+const MainImageContainer = styled.div`
+  margin-right: 5vh;
+  flex: 1;
+`;
+
+const MainTextContainer = styled.div`
+  flex: 3;
+`;
+
+const MainTextRowContainer = styled.div`
+  margin-bottom: 2vh;
+  display: flex;
+  flex-direction: row;
+`;
+
+
+const BoldTextLabel = styled.div`
   ${NotosansjpBoldDeepSpaceSparkle18px}
+  margin-bottom: 1vh;
   min-height: 26px;
   font-weight: 700;
   letter-spacing: 1.64px;
@@ -195,19 +204,8 @@ const ImgThumbEmpty = styled.div`
   border-radius: 5px;
 `;
 
-const Group7 = styled.div`
-  position: absolute;
-  width: 238px;
-  top: 916px;
-  left: 746px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 86px;
-`;
-
 const TagContainer = styled.div`
-  margin-top: 20px;
+  margin-bottom: 2vh;
   display: flex;
   align-items: flex-start;
   min-width: 238px;
@@ -247,132 +245,37 @@ const TagPaddingGroupMargin = styled.div`
   border-radius: 5px;
 `;
 
-const Group8 = styled.div`
-  position: absolute;
-  width: 609px;
-  top: 676px;
-  left: 746px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 216px;
-`;
 
 const TextLabel1 = styled.div`
   ${Body2}
   min-height: 170px;
-  margin-top: 20px;
   font-weight: 500;
   color: var(--nevada);
   line-height: 20px;
 `;
 
-const TextLabel2 = styled.div`
-  position: absolute;
-  top: 268px;
-  left: 746px;
-  font-weight: 500;
-  color: var(--vulcan);
-  line-height: 28px;
-  white-space: nowrap;
-`;
-
-const Group3 = styled.div`
-  ${Body1}
-  position: absolute;
-  height: 187px;
-  top: 328px;
-  left: 994px;
-  display: flex;
-  align-items: flex-start;
-  min-width: 174px;
-`;
-
-const TextLabelContainer = styled.div`
-  width: 76px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 187px;
-`;
-
-const TextLabel3 = styled.div`
+const MainTextLabel = styled.div`
   min-height: 20px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 20px;
   white-space: nowrap;
+  flex: 1;
 `;
 
-const TextLabel4 = styled.div`
-  min-height: 20px;
-  margin-top: 35px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const TextLabel5 = styled.div`
-  min-height: 20px;
-  margin-top: 36px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const FlexCol = styled.div`
-  width: 88px;
-  margin-left: 13px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 187px;
-`;
-
-const TextLabel6 = styled.div`
+const MainDataLabel = styled.div`
   min-height: 20px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 20px;
   white-space: nowrap;
+  flex: 1;
 `;
 
-const Price = styled.div`
-  min-height: 20px;
-  margin-top: 35px;
-  font-weight: 700;
-  color: var(--vulcan);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const TextLabel7 = styled.div`
-  min-height: 20px;
-  margin-top: 36px;
-  font-weight: 700;
-  color: var(--vulcan);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const Rectangle4 = styled.img`
-  position: absolute;
+const MainImage = styled.img`
   width: 200px;
   height: 300px;
-  top: 328px;
-  left: 746px;
 `;
 
-const Title = styled.div`
-  position: absolute;
-  top: 192px;
-  left: 746px;
-  font-weight: 500;
-  color: var(--nevada);
-  line-height: 28px;
-  white-space: nowrap;
-`;
 
 export default DashboardSeriesDetail;

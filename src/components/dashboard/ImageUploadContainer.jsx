@@ -51,7 +51,7 @@ export default function ImageUploadContainer(props) {
   }, []);
 
   return (
-    <>
+    <RootContainer>
         <input {...InputProps}/>
         {
           file === undefined ? (
@@ -76,17 +76,18 @@ export default function ImageUploadContainer(props) {
             </Container>
           )
         }
-    </>
+    </RootContainer>
   );
 }
 
+const RootContainer = styled.div`
+
+`;
+
 const Container = styled.div`
   ${Border1pxTiara}
-  position: absolute;
   width: 220px;
   height: 300px;
-  top: 1099px;
-  left: 746px;
   background-color: var(--desert-storm);
   border-radius: 4px;
 

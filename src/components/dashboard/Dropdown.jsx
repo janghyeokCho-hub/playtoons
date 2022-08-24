@@ -127,7 +127,6 @@ const ListItem = styled.li`
 const Path = styled.img`
   width: 12px;
   height: 7px;
-  position: absolute;
   margin: 18px;
 `;
 

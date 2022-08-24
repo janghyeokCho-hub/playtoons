@@ -18,10 +18,8 @@ function DropdownGroup(props) {
 }
 
 const Container = styled.div`
-  position: absolute;
   width: 215px;
-  top: 480px;
-  left: 746px;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

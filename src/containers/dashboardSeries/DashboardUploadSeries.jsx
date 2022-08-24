@@ -1,9 +1,9 @@
 import React, {useRef, useEffect, useState, useCallback} from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Title3, Border1pxTiara, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
+import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 
-import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
+import SeriesContainer from "@/components/dashboard/DashboardSeriesContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
@@ -13,8 +13,6 @@ import PreviewButton from "@/components/dashboard/ButtonOutline";
 import ImageUploadBox from '@/components/dashboard/ImageUploadContainer'
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 
-import lineHorizontal from '@IMAGES/lines/authorplan-line.png';
-import lineVertical from '@IMAGES/lines/dashboardeditseries-line-2.png';
 import iconInfo from '@IMAGES/icons/icon_info.png';
 
 import tempImage from '@IMAGES/dashboardseries-rectangle-copy.png';
@@ -87,173 +85,102 @@ function DashboardUploadSeries(props) {
   }, [isModeUpload]);
 
   return (
-    <div className="container-center-horizontal">
-      <Dashboarduploadseries className="screen">
-        <OverlapGroup2>
-          <Line src={lineHorizontal} />
-          <NavBarDashboard/>
-          <Line2 src={lineVertical} />
-          <form>
-            <Rectangle></Rectangle>
-            <Rectangle1></Rectangle1>
-            <TextLabel>{isModeUpload ? textData.label_series_register : textData.label_series_edit}</TextLabel>
-            <FormDefault className={""} label={textData.label_title}>{seriesData.title}</FormDefault>
-            <DropDownGroup label={textData.label_type} className={`type ${isModeUpload ? '' : 'disabled'}`} dataList={typeDataList} >{"1"}</DropDownGroup>
-            <DropDownGroup label={textData.label_category} className={"category"}  dataList={typeDataList} ></DropDownGroup>
-            <AbultGroup >
-              <TextLabelAdult >{textData.label_adult}</TextLabelAdult>
-              <FlexRow >
-                <Toggle ref={refIsAdult} className={"group-3-22"} selected={false} />
-                <R19 >{textData.label_r_19}</R19>
-              </FlexRow>
-            </AbultGroup>
-            <TagGroup label={textData.label_tag_setting}  ></TagGroup>
-            <FormDefault className={"group-11-2"} inputClassName={"summary-big"} label={textData.label_summary}></FormDefault>
-            <TextLabel1>{textData.label_post_image}</TextLabel1>
-            
-            <IconInfoPostimage style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoPostimage>
-            <TextLabel2>{textData.label_timeline}</TextLabel2>
-            <RectInnerTimeline></RectInnerTimeline>
-            <ImageUploadBox className={"dashboard_upload_timeline"} textDragNDrop={textData.label_drag_drop} handleFile={handleTimelineImageFile}></ImageUploadBox>
-            <IconInfoTimeline style={{ backgroundImage: `url(${iconInfo})` }}></IconInfoTimeline>
+    <SeriesContainer backgroundColor={"var(--desert-storm)"} isBorder={true}>
+      <Container>
+        <form method="post" enctype="multipart/form-data">
+          <TextLabel>{isModeUpload ? textData.label_series_register : textData.label_series_edit}</TextLabel>
+          <FormDefault className={""} label={textData.label_title}>{seriesData.title}</FormDefault>
+          <DropDownGroup label={textData.label_type} className={`type ${isModeUpload ? '' : 'disabled'}`} dataList={typeDataList} ></DropDownGroup>
+          <DropDownGroup label={textData.label_category} className={"category"}  dataList={typeDataList} ></DropDownGroup>
+          <AbultGroup >
+            <TextLabelAdult >{textData.label_adult}</TextLabelAdult>
+            <FlexRow >
+              <ToggleOn ref={refIsAdult} className={"group-3-22"} selected={false} />
+              <R19 >{textData.label_r_19}</R19>
+            </FlexRow>
+          </AbultGroup>
+          <FormDefault className={"group-11-2"} inputClassName={"summary-big"} label={textData.label_summary}></FormDefault>
+          <TagGroup label={textData.label_tag_setting}  ></TagGroup>
+          <TextInfoContainer>
+            <IconTextLabel>{textData.label_post_image}</IconTextLabel>
+            <IconInfoPostimage />
+          </TextInfoContainer>
+          <ImageUploadBox textDragNDrop={textData.label_drag_drop} handleFile={handlePostImageFile}>{tempImage}</ImageUploadBox>
+          <Space/>
+
+          <TextInfoContainer>
+            <IconTextLabel>{textData.label_timeline}</IconTextLabel>
+            <IconInfoPostimage />
+          </TextInfoContainer>
+          <ImageUploadBox className={"dashboard_upload_timeline"} textDragNDrop={textData.label_drag_drop} handleFile={handleTimelineImageFile}></ImageUploadBox>
+          <Space/>
+
+          <ButtonContainer>
+            <PreviewButton className={"margin-right"} text={textData.label_preview} handleClick={handlePreview} />
             <RegisterButton text={textData.label_register} className={"padding-group-3-16"} handleClick={handleRegister} />
-            <PreviewButton className={"padding-group-3-copy-10"} text={textData.label_preview} handleClick={handlePreview} />
-            {/* <Group63 text_Label={data.group63Props.label_title} /> */}
-            <ImageUploadBox textDragNDrop={textData.label_drag_drop} handleFile={handlePostImageFile}>{tempImage}</ImageUploadBox>
-          </form>
-        </OverlapGroup2>
-      </Dashboarduploadseries>
-    </div>
+          </ButtonContainer>
+        </form>
+      </Container>
+    </SeriesContainer>
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  padding: 6% 16%;
+`;
 
-const Dashboarduploadseries = styled.div `
-  align-items: flex-start;
-  background-color: var(--white);
+const Space = styled.div`
+  width: 100%;
+  height: 1vh;
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  position: relative;
   display: flex;
-  height: 1947px;
-  min-width: 1920px;
-  overflow-x: hidden;
-`;
-
-
-
-const OverlapGroup2 = styled.div`
-  width: 1922px;
-  height: 3512px;
-  /* position: relative; */
-`;
-
-const Line = styled.img`
-  position: absolute;
-  width: 1922px;
-  height: 2px;
-  top: 88px;
-  left: 0;
-`;
-
-const Line2 = styled.img`
-  position: absolute;
-  width: 2px;
-  height: 3080px;
-  top: 90px;
-  left: 300px;
-`;
-
-const Rectangle = styled.div`
-  position: absolute;
-  width: 1619px;
-  height: 3422px;
-  top: 90px;
-  left: 302px;
-  background-color: var(--desert-storm);
-`;
-
-const Rectangle1 = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  width: 1523px;
-  height: 1761px;
-  top: 138px;
-  left: 350px;
-  background-color: var(--white);
-  border-radius: 8px;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const TextLabel = styled.div`
   ${Title3}
-  position: absolute;
-  top: 186px;
-  left: 746px;
+  margin-bottom: 3vh;
   font-weight: 500;
   color: var(--nevada);
   line-height: 28px;
   white-space: nowrap;
 `;
 
-const TextLabel1 = styled.div`
+const IconTextLabel = styled.div`
   ${Body1}
-  position: absolute;
-  top: 1057px;
-  left: 746px;
+  margin-right: 10px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 20px;
   white-space: nowrap;
+`;
+
+const TextInfoContainer = styled.div`
+  width: 100%;
+  margin-bottom: 1vh;
+  display: flex ;
+  flex-direction: row;
+  align-items: center;
 `;
 
 
 const IconInfoPostimage = styled.div`
-  position: absolute;
   width: 16px;
   height: 16px;
-  top: 1059px;
-  left: 788px;
   background-size: 100% 100%;
-`;
-
-const TextLabel2 = styled.div`
-  ${Body1}
-  position: absolute;
-  top: 1423px;
-  left: 746px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-const RectInnerTimeline = styled.div`
-  position: absolute;
-  width: 700px;
-  height: 300px;
-  top: 1463px;
-  left: 746px;
-  background-color: var(--desert-storm);
-  border-radius: 4px;
-`;
-
-const IconInfoTimeline = styled.div`
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  top: 1425px;
-  left: 956px;
-  background-size: 100% 100%;
-`;
-
-
-
-const Toggle = styled(ToggleOn)`
-  position: static;
+  background-image: url(${iconInfo});
 `;
 
 const AbultGroup = styled.div`
-  position: absolute;
   width: 100px;
-  top: 589px;
-  left: 746px;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

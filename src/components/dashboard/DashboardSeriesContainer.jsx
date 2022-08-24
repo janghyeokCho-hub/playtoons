@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Border1pxTiara } from "@/styledMixins";
 import horizontalLine from "@LINES/authorplan-line.png";
 import verticalLine from "@LINES/dashboardeditseries-line-2.png";
 import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
@@ -14,10 +15,12 @@ function SeriesContainer(props) {
       <Container>
         <NavBarDashboard />
         <VerticalLine src={verticalLine} />
-        <ContentContainer>
+        <ContentContainer backgroundColor={props.backgroundColor}>
           <Space />
           <ContentWrapContainer>
-            {props.children}
+            <ContentWhiteBorderContainer isBorder={props.isBorder}>
+              {props.children}
+            </ContentWhiteBorderContainer>
           </ContentWrapContainer>
           <Space/>
         </ContentContainer>
@@ -28,13 +31,13 @@ function SeriesContainer(props) {
 
 const DashboardSeriesContainer = styled.div`
   width: 100%;
-  height: 1512px;
+  height: 100%;
   background-color: var(--white);
 `;
 
 const Container = styled.div`
   width: 100%;
-  height: 1512px;
+  height: 100%;
   display: flex;
 `;
 
@@ -47,20 +50,31 @@ const HorizontalLine = styled.img`
 
 const VerticalLine = styled.img`
   width: 2px;
-  height: auto;
+  height: 100%;
 `;
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: auto;
+  height: 100%;
   flex: 2;
   display: flex;
+  background-color: ${(props) => props.backgroundColor};
 `;
 
 const ContentWrapContainer = styled.div`
   min-width: 500px;
-  padding-top: 2%;
+  padding: 4% 0;
   flex: 15;
+  
+`;
+
+const ContentWhiteBorderContainer = styled.div`
+  ${(props) => props.isBorder ? Border1pxTiara : ''}
+  width: 100%;
+  height: 100%;
+  background-color: var(--white);
+  border-radius: ${(props) => props.isBorder ? 8 : 0}px;
+  
 `;
 
 const Space = styled.div` 

@@ -70,12 +70,14 @@ const Container = styled.div`
   ${Border1pxVioletBlue}
   width : ${(props) => props.width}px;
   height: 40px;
-  padding: 9px 0;
+  padding: 2%;
   min-width: 117px;
   border-radius: 5px;
   cursor: pointer;
-  display: inline-block;
-  text-align: center;
+  
+  &.margin-right{
+    margin-right: 15px;
+  }
 `;
 
 const TextLabel = styled.div`

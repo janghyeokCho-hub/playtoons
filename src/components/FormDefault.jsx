@@ -52,10 +52,7 @@ const Input = styled.input `
 `;
 
 const Group7 = styled.div`
-  position: absolute;
-  width: 700px;
-  top: 262px;
-  left: 746px;
+  margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
