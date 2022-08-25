@@ -14,7 +14,7 @@ function SeriesContainer(props) {
       {/* <HorizontalLine src={horizontalLine} /> */}
       <Container>
         <NavBarDashboard />
-        <VerticalLine src={verticalLine} />
+        <Line src={verticalLine} />
         <ContentContainer backgroundColor={backgroundColor}>
           <Space />
           <ContentWrapContainer>
@@ -42,6 +42,12 @@ const Container = styled.div`
 const VerticalLine = styled.img`
   width: 1px;
   height: 92vh;
+`;
+
+const Line = styled.div`
+  width: 1px;
+  height: auto;
+  background-color: var(--licorice);
 `;
 
 const ContentContainer = styled.div`

@@ -42,7 +42,7 @@ function DashboardSeriesDetailMobile(props) {
   });
 
   let getThumbList = () => {
-    const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", "", "", "", ""];
+    const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", ""];
 
     return list_data.map( (data, index) => {
       let leftPosition = (102 * index) + 32;

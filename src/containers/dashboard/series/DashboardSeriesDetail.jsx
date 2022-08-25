@@ -2,6 +2,8 @@ import React, {useEffect, useState} from "react";
 import {useParams} from 'react-router-dom';
 import styled from "styled-components";
 import {
+  Title3,
+  Body1,
   Border2pxVioletBlue,
   Border1pxMercury,
   Body2,
@@ -118,9 +120,9 @@ function DashboardSeriesDetail(props) {
         </TagContainer>
 
         <BoldTextLabel>{textData.label_timeline_thumb}</BoldTextLabel>
-        <FlexRow>
+        <TimeLineContainer>
           {data.list_thumb}
-        </FlexRow>
+        </TimeLineContainer>
       </Container>
     </SeriesContainer>
   );
@@ -129,19 +131,22 @@ function DashboardSeriesDetail(props) {
 const Container = styled.div`
   width: 100%;
   height: 100%;
-  padding: 6% 25%;
+  padding: 5.296610169491525vh 20%; /** 50px 400px */
 `;
 
 const Title = styled.div`
-  margin-bottom: 20px;
+  ${Title3}
+  font-size: 2.4em;
+  margin-bottom: 50px;
   font-weight: 500;
   color: var(--nevada);
-  line-height: 28px;
   white-space: nowrap;
-`;
+  `;
 
 const ContentTitle = styled.div`
-  margin-bottom: 15px;
+  ${Title3}
+  font-size: 2.4em;
+  margin-bottom: 30px;
   font-weight: 500;
   color: var(--vulcan);
   line-height: 28px;
@@ -150,7 +155,7 @@ const ContentTitle = styled.div`
 
 const MainContainer = styled.div`
   width: 100%;
-  margin-bottom: 3vh;
+  margin-bottom: 50px;
   display: flex;
   flex-direction: row;
 `;
@@ -173,7 +178,8 @@ const MainTextRowContainer = styled.div`
 
 const BoldTextLabel = styled.div`
   ${NotosansjpBoldDeepSpaceSparkle18px}
-  margin-bottom: 1vh;
+  font-size: 1.8em;
+  margin-bottom: 20px;
   min-height: 26px;
   font-weight: 700;
   letter-spacing: 1.64px;
@@ -181,7 +187,7 @@ const BoldTextLabel = styled.div`
   white-space: nowrap;
 `;
 
-const FlexRow = styled.div`
+const TimeLineContainer = styled.div`
   margin-top: 20px;
   display: flex;
   align-items: flex-start;
@@ -190,14 +196,14 @@ const FlexRow = styled.div`
 
 const TmgThumb = styled.img`
   ${Border2pxVioletBlue}
-  width: 90px;
+  width: 6.756756756756757vw;
   height: 143px;
   border-radius: 5px;
   object-fit: cover;
 `;
 
 const ImgThumbEmpty = styled.div`
-  width: 90px;
+  width: 6.756756756756757vw;
   height: 143px;
   margin-left: 20px;
   background-color: var(--desert-storm);
@@ -205,7 +211,7 @@ const ImgThumbEmpty = styled.div`
 `;
 
 const TagContainer = styled.div`
-  margin-bottom: 2vh;
+  margin-bottom: 30px;
   display: flex;
   align-items: flex-start;
   min-width: 238px;
@@ -248,6 +254,7 @@ const TagPaddingGroupMargin = styled.div`
 
 const TextLabel1 = styled.div`
   ${Body2}
+  font-size: 1.6em;
   min-height: 170px;
   font-weight: 500;
   color: var(--nevada);
@@ -255,6 +262,8 @@ const TextLabel1 = styled.div`
 `;
 
 const MainTextLabel = styled.div`
+  ${Body1}
+  font-size: 1.6em;
   min-height: 20px;
   font-weight: 700;
   color: var(--nevada);
@@ -264,10 +273,12 @@ const MainTextLabel = styled.div`
 `;
 
 const MainDataLabel = styled.div`
+  ${Body1}
+  font-size: 1.6em;
   min-height: 20px;
   font-weight: 700;
-  color: var(--vulcan);
   line-height: 20px;
+  color: var(--vulcan);
   white-space: nowrap;
   flex: 1;
 `;
