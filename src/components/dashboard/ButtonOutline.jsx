@@ -11,12 +11,12 @@ const TYPE = {
 ;
 
 function ButtonOutline(props, ref) {
-  const {text, width, buttonType = TYPE.DEFAULT, className, handleClick, icon} = props;
+  const {text, width, height = 40, buttonType = TYPE.DEFAULT, dataId, className, handleClick, icon} = props;
   const [type, setType] = useState(buttonType);
   const refContainer = useRef();
   const refTextLabel = useRef();
 
-  const handleMyClick = () => {
+  const handleMyClick = (e) => {
     setType(TYPE.HOVER);
     
     setTimeout(async () => {
@@ -24,12 +24,16 @@ function ButtonOutline(props, ref) {
     }, 1000);
     
     
-    if(handleClick !== undefined) {handleClick()}
+    if(handleClick !== undefined) {handleClick(e)}
   }
   
   useImperativeHandle(ref,() => ({
+    //page에서 로딩상태 변화를 위해
     setButtonType : (type) => {
       setType(type);
+    },
+    getValue : () => {
+      return refContainer.current.value;
     }
   }));
   
@@ -53,12 +57,13 @@ function ButtonOutline(props, ref) {
     
 
   return (
-    <Container width={width} className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
+    <Container width={width} height={height} data-id={dataId} className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
       {
         icon !== undefined && (<Icon icon={icon}></Icon>)
       }
       {
-        // type === TYPE.LOADING ? <Loading /> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
+        // 로딩중이라면 로딩 아이콘을 보여준다.
+        // type === TYPE.LOADING ? <Loading icon={icon} /> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
         type === TYPE.LOADING ? <TextLabel className="text_label-129">Loading...</TextLabel> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
       }
       
@@ -69,11 +74,14 @@ function ButtonOutline(props, ref) {
 const Container = styled.div`
   ${Border1pxVioletBlue}
   width : ${(props) => props.width}px;
-  height: 40px;
+  height: ${(props) => props.height}px;
   padding: 2%;
   min-width: 117px;
   border-radius: 5px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   &.margin-right{
     margin-right: 15px;
@@ -86,6 +94,8 @@ const TextLabel = styled.div`
   font-weight: 700;
   letter-spacing: 1.27px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
   `;
 
 const Loading = styled.div`
@@ -95,8 +105,7 @@ const Loading = styled.div`
 const Icon = styled.div`
   width : 15px;
   height: 15px;
-  margin-left: 20px;
-  float: left;
+  margin-right: 10px;
   background-size: 100% 100%;
   background-image: url(${(props) => props.icon})
 `;

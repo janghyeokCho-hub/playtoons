@@ -10,7 +10,7 @@ import {
 } from "@/styledMixins";
 
 
-import SeriesContainer from "@/components/dashboard/DashboardSeriesContainer";
+import SeriesContainer from "@/components/dashboard/BrowserContainer";
 
 const textData = {
   label_timeline_thumb: "タイムラインのサムネイル",

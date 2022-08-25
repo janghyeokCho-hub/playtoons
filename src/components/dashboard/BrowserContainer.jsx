@@ -1,25 +1,25 @@
 import React from "react";
 import styled from "styled-components";
 import { Border1pxTiara } from "@/styledMixins";
-import horizontalLine from "@LINES/authorplan-line.png";
 import verticalLine from "@LINES/dashboardeditseries-line-2.png";
 import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
 
 
 function SeriesContainer(props) {
+  const {children, backgroundColor = "transparent", isBorder} = props;
   
 
   return (
     <DashboardSeriesContainer className="screen">
-      <HorizontalLine src={horizontalLine} />
+      {/* <HorizontalLine src={horizontalLine} /> */}
       <Container>
         <NavBarDashboard />
         <VerticalLine src={verticalLine} />
-        <ContentContainer backgroundColor={props.backgroundColor}>
+        <ContentContainer backgroundColor={backgroundColor}>
           <Space />
           <ContentWrapContainer>
-            <ContentWhiteBorderContainer isBorder={props.isBorder}>
-              {props.children}
+            <ContentWhiteBorderContainer isBorder={isBorder}>
+              {children}
             </ContentWhiteBorderContainer>
           </ContentWrapContainer>
           <Space/>
@@ -31,31 +31,20 @@ function SeriesContainer(props) {
 
 const DashboardSeriesContainer = styled.div`
   width: 100%;
-  height: 100%;
   background-color: var(--white);
 `;
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
 `;
 
-const HorizontalLine = styled.img`
-  width: 100%;
-  height: 2px;
-  position: absolute;
-  top: 80px;
-`;
-
 const VerticalLine = styled.img`
-  width: 2px;
-  height: 100%;
+  width: 1px;
 `;
 
 const ContentContainer = styled.div`
   width: 100%;
-  height: 100%;
   flex: 2;
   display: flex;
   background-color: ${(props) => props.backgroundColor};

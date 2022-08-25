@@ -44,17 +44,17 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard-series" element={<DashboardSeries />} />
             <Route
-              path="/dashboard-series-detail/:id"
+              path="/dashboard-series/detail/:id"
               element={<DashboardSeriesDetail />}
             >
               {" "}
             </Route>
             <Route
-              path="/dashboard-upload-series"
+              path="/dashboard-series/upload"
               element={<DashboardUploadSeries />}
             />
             <Route
-              path="/dashboard-edit-series/:id"
+              path="/dashboard-series/edit/:id"
               element={<DashboardEditSeries />}
             />
             <Route path="/account/*" element={<Account />} />
@@ -73,15 +73,15 @@ function App() {
               element={<DashboardSeriesMobile />}
             />
             <Route
-              path="/dashboard-series-detail/:id"
+              path="/dashboard-series/detail/:id"
               element={<DashboardSeriesDetailMobile />}
             />
             <Route
-              path="/dashboard-upload-series"
+              path="/dashboard-series/upload"
               element={<DashboardUploadSeries />}
             />
             <Route
-              path="/dashboard-edit-series/:id"
+              path="/dashboard-series/edit/:id"
               element={<DashboardEditSeries />}
             />
           </Routes>

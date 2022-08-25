@@ -54,7 +54,6 @@ function NavBarDashboard3(props) {
 
 const NavBarDashboard = styled.div`
   width: 300px;
-  height: 100%;
   max-width: 300px;
   position: relative;
   flex: 1;

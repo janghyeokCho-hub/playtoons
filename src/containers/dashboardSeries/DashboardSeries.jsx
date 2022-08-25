@@ -14,7 +14,7 @@ import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
 import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 
-import SeriesContainer from "@/components/dashboard/DashboardSeriesContainer";
+import SeriesContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
 
 

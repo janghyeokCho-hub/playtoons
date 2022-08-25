@@ -92,6 +92,9 @@ const TextLabel = styled.div`
   letter-spacing: 1.27px;
   line-height: 20px;
   white-space: nowrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Loading = styled.div`

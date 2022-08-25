@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 
-import SeriesContainer from "@/components/dashboard/DashboardSeriesContainer";
+import SeriesContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
