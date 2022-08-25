@@ -10,8 +10,8 @@ import AccountMobile from "@CONTAINERS/account/AccountMobile";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
 import LandingPageMobile from "@CONTAINERS/landing/LandingPageMobile";
 import RegisterCompleted from "@CONTAINERS/account/RegisterCompleted";
-import Dashboard from "@CONTAINERS/dashboardSeries/Dashboard";
-import DashboardMobile from "@CONTAINERS/dashboardSeries/DashboardMobile";
+import Dashboard from "@CONTAINERS/dashboard/Dashboard";
+import DashboardMobile from "@CONTAINERS/dashboard/DashboardMobile";
 
 import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";

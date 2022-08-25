@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
-import DashboardSeries from "@CONTAINERS/dashboardSeries/DashboardSeries";
-import DashboardSeriesDetail from "@CONTAINERS/dashboardSeries/DashboardSeriesDetail";
-import DashboardUploadSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
-import DashboardEditSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
+import DashboardSeries from "@/containers/dashboard/series/DashboardSeries";
+import DashboardSeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
+import DashboardUploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
+import DashboardEditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 
 /**
 * Dashboard url 분기 처리

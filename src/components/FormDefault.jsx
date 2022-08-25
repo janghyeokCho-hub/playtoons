@@ -7,13 +7,13 @@ function FormDefault(props) {
   const { children, className, inputClassName, label } = props;
 
   return (
-    <Group7 className={`group-7-23 ${className || ""}`}>
+    <Container className={`group-7-23 ${className || ""}`}>
       <TextLabel className="text_label-172">{label}</TextLabel>
       {
         inputClassName === undefined ? <Input type="text" value={children} /> 
           :  <TextArea className={`${inputClassName || ""}`} value={children} />
       }
-    </Group7>
+    </Container>
   );
 }
 
@@ -51,7 +51,7 @@ const Input = styled.input `
   }
 `;
 
-const Group7 = styled.div`
+const Container = styled.div`
   margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
