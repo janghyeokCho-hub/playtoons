@@ -4,17 +4,14 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import configureStore, { sagaMiddleware } from "./modules/redux/store";
 import globalSaga from "./modules/redux/saga/globalSaga";
-import DashboardSeries from "@CONTAINERS/dashboardSeries/DashboardSeries";
-import DashboardSeriesMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesMobile";
-import DashboardSeriesDetail from "@CONTAINERS/dashboardSeries/DashboardSeriesDetail";
-import DashboardSeriesDetailMobile from "@CONTAINERS/dashboardSeries/DashboardSeriesDetailMobile";
-import DashboardUploadSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
-import DashboardEditSeries from "@CONTAINERS/dashboardSeries/DashboardUploadSeries";
+
 import Account from "@CONTAINERS/account/Account";
 import AccountMobile from "@CONTAINERS/account/AccountMobile";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
 import LandingPageMobile from "@CONTAINERS/landing/LandingPageMobile";
 import RegisterCompleted from "@CONTAINERS/account/RegisterCompleted";
+import Dashboard from "@CONTAINERS/dashboardSeries/Dashboard";
+import DashboardMobile from "@CONTAINERS/dashboardSeries/DashboardMobile";
 
 import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";
@@ -42,21 +39,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/dashboard-series" element={<DashboardSeries />} />
-            <Route
-              path="/dashboard-series/detail/:id"
-              element={<DashboardSeriesDetail />}
-            >
-              {" "}
-            </Route>
-            <Route
-              path="/dashboard-series/upload"
-              element={<DashboardUploadSeries />}
-            />
-            <Route
-              path="/dashboard-series/edit/:id"
-              element={<DashboardEditSeries />}
-            />
+            <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
@@ -68,22 +51,7 @@ function App() {
             <Route path="/" element={<LandingPageMobile />} />
             <Route path="/account" element={<AccountMobile />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
-            <Route
-              path="/dashboard-series"
-              element={<DashboardSeriesMobile />}
-            />
-            <Route
-              path="/dashboard-series/detail/:id"
-              element={<DashboardSeriesDetailMobile />}
-            />
-            <Route
-              path="/dashboard-series/upload"
-              element={<DashboardUploadSeries />}
-            />
-            <Route
-              path="/dashboard-series/edit/:id"
-              element={<DashboardEditSeries />}
-            />
+            <Route path="/dashboard/*" element={<DashboardMobile />} />
           </Routes>
         </BrowserRouter>
       </MobileView>

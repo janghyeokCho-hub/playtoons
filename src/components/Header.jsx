@@ -52,7 +52,7 @@ const NonLoginMenu = ({ isMobile }) => {
         width={100}
         height={40}
         marginLeft={20}
-        callback={() => (window.location.href = "/auth-login")}
+        callback={() => (window.location.href = "/account")}
         borderRadius={20}
       />
     </>

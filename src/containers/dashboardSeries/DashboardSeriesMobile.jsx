@@ -58,6 +58,15 @@ function DashboardSeriesMobile(props) {
         item_type: "ウェブトゥーン",
         item_status: "休載中(2022/06/10~)",
       },
+      {
+        id: "3",
+        item_image: tempRect2,
+        item_title: "大学のリンゴ一個の重さで10メートル…",
+        item_date: "掲載日：2022/06/01",
+        item_category: "カテゴリ：アクション",
+        item_type: "ウェブトゥーン",
+        item_status: "休載中(2022/06/10~)",
+      },
     ];
 
     return tempData.map( (item, index) => {
