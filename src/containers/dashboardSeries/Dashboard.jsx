@@ -19,7 +19,6 @@ export default function Dashboard() {
         path="/series/detail/:id"
         element={<DashboardSeriesDetail />}
       >
-        {" "}
       </Route>
       <Route
         path="/series/upload"

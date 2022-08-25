@@ -41,6 +41,7 @@ const Container = styled.div`
 
 const VerticalLine = styled.img`
   width: 1px;
+  height: 92vh;
 `;
 
 const ContentContainer = styled.div`
@@ -48,12 +49,25 @@ const ContentContainer = styled.div`
   flex: 2;
   display: flex;
   background-color: ${(props) => props.backgroundColor};
-`;
+  font-size: 10px;
+  
+    @media only screen and (max-width: 1025px) {
+      font-size: 8px;
+    }
+  
+    @media only screen and (max-width: 768px) {
+      font-size: 6px;
+    }
+  `;
 
 const ContentWrapContainer = styled.div`
   min-width: 500px;
-  padding: 4% 0;
+  padding: 7.454739084132055vh 0;
   flex: 15;
+  
+    @media only screen and (max-width: 1025px) {
+      flex: 25;
+    }
   
 `;
 
@@ -67,8 +81,7 @@ const ContentWhiteBorderContainer = styled.div`
 `;
 
 const Space = styled.div` 
-  max-width: 200px;
-  flex: 1;
+  width: 2.027027027027027vw;
 `;
 
 export default SeriesContainer;

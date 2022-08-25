@@ -34,11 +34,11 @@ function DashboardSeriesMobile(props) {
     //   setList(handleGetSeriesStoryList(data));
     // }
 
-    setList(handleResultData(null));
+    setList(processResultData(null));
       
   };
 
-  const handleResultData = (result) => {
+  const processResultData = (result) => {
     const tempData = [
       {
         id: "1",
@@ -107,7 +107,7 @@ function DashboardSeriesMobile(props) {
   }
   
   useEffect(() => {
-    setList(handleResultData(null));
+    setList(processResultData(null));
 
   }, []);
 

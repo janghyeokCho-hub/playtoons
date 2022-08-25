@@ -17,6 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
+  font-size: 10px;
 `;
 
 

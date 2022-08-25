@@ -82,6 +82,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media only screen and (max-width: 1025px) {
+      width: ${(props) => props.width - ((props.width / 10) * 2)}px;
+    }
   
   &.margin-right{
     margin-right: 15px;
@@ -90,8 +94,8 @@ const Container = styled.div`
 
 const TextLabel = styled.div`
   ${NotosansjpBoldVioletBlue14px}
-  min-height: 20px;
   font-weight: 700;
+  font-size: 1.4em;
   letter-spacing: 1.27px;
   white-space: nowrap;
   display: flex;

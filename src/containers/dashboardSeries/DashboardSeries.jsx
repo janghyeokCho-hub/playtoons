@@ -19,14 +19,14 @@ import ButtonOutline from "@/components/dashboard/ButtonOutline";
 
 
 const size = {
-  no : 100,
-  image : 180,
-  title : 220,
-  type : 200,
-  category : 180,
-  date : 180,
-  status : 180,
-  arrow : 100
+  no : 5,
+  image : 8,
+  title : 22,
+  type : 10,
+  category : 10,
+  date : 8,
+  status : 8,
+  arrow : 5
 };
 
 function DashboardSeries(props) {
@@ -38,17 +38,23 @@ function DashboardSeries(props) {
       email: "emailValue",
       password: "passwordValue",
     };
-
+    
     const {status, data} = await getSeriesStoryList(params);
 
     // if( status === 200 ){
     //   setList(handleGetSeriesStoryList(data));
     // }
 
-    setData(handleGetSeriesStoryList(data));
+    setData(processRsultData(data));
   };
 
-  const handleGetSeriesStoryList = (result) => {
+  const handleItemClick = (e) => {
+    let no = e.target.getAttribute("no");
+
+    console.log("no : ", no);
+  }
+
+  const processRsultData = (result) => {
     const tempData = [
       {
         no : 1,
@@ -79,7 +85,7 @@ function DashboardSeries(props) {
         <Td width={size.category}>{value.category}</Td>
         <Td width={size.date}>{value.date}</Td>
         <Td width={size.status}>{value.status}</Td>
-        <Td ><AngleRight /></Td>
+        <Td width={size.arrow} no={value.no} onClick={handleItemClick}><AngleRight /></Td>
       </Tr>
     });
   }
@@ -87,12 +93,7 @@ function DashboardSeries(props) {
   
   useEffect(() => {
     //리스트 불러오기
-    setData( handleGetSeriesStoryList() );
-    
-    
-  
-    return () => {
-    }
+    setData( processRsultData() );
   }, []);
   
 
@@ -107,14 +108,14 @@ function DashboardSeries(props) {
       <Table>
         <Header>
           <tr>
-            <HeaderCell>{"番号"}</HeaderCell>
-            <HeaderCell width={150}>{"表紙"}</HeaderCell>
-            <HeaderCell width={180}>{"タイトル"}</HeaderCell>
-            <HeaderCell width={180}>{"タイプ"}</HeaderCell>
-            <HeaderCell width={150}>{"カテゴリ"}</HeaderCell>
-            <HeaderCell width={150}>{"掲載日"}</HeaderCell>
-            <HeaderCell width={150}>{"状態"}</HeaderCell>
-            <HeaderCell ></HeaderCell>
+            <HeaderCell width={size.no}>{"番号"}</HeaderCell>
+            <HeaderCell width={size.image}>{"表紙"}</HeaderCell>
+            <HeaderCell width={size.title}>{"タイトル"}</HeaderCell>
+            <HeaderCell width={size.type}>{"タイプ"}</HeaderCell>
+            <HeaderCell width={size.category}>{"カテゴリ"}</HeaderCell>
+            <HeaderCell width={size.date}>{"掲載日"}</HeaderCell>
+            <HeaderCell width={size.status}>{"状態"}</HeaderCell>
+            <HeaderCell width={size.arrow}></HeaderCell>
           </tr>
         </Header>
         <Tbody>
@@ -137,21 +138,22 @@ const Table = styled.table `
 const Header = styled.thead`
   ${Border1pxMercury}
   width: 100%;
-  height: 60px;
+  height: 6.389776357827476vh;
   background-color: var(--desert-storm);
   
 `;
 
 const HeaderCell = styled.th`
   ${Body1}
-  width : ${(props) => props.width}px;
-  min-width: 100px;
+  width : ${(props) => props.width}%;
+  min-width: ${(props) =>  props.minWidth }%;
   font-weight: 700;
+  font-size: 1.6em;
   color: var(--vulcan);
-  line-height: 20px;
   white-space: nowrap;
   text-align: center;
-  padding: 20px;
+  padding: 1.5vh;
+  vertical-align: middle;
 `;
 
 const Tbody = styled.tbody`
@@ -161,25 +163,23 @@ const Tbody = styled.tbody`
 
 const Tr = styled.tr`
   width: 100%;
-  height: 180px;
+  height: 21.299254526091588vh; /* 200px */
   border-bottom: 1px solid var(--mercury);
 `;
 
 const Td = styled.td`
   ${Body3}
-  width : ${(props) =>  props.width}px;
-  min-width: 100px;
-  font-weight: 700;
+  width : ${(props) =>  props.width}%;
+  min-width: ${(props) =>  props.minWidth }%;
+  font-size: 1.6em;
   color: var(--vulcan);
-  line-height: 20px;
   text-align: center;
   vertical-align: middle;
 `;
 
 const Image = styled.img`
-  width: 88px;
-  height: 134px;
-  min-width: 100px;
+  width: 5.945945945945946vw;
+  /* height: 130px; */
   border-radius: 5px;
   object-fit: cover;
 `;
@@ -205,6 +205,7 @@ const Title = styled.h1`
   color: var(--vulcan);
   line-height: 36px;
   white-space: nowrap;
+  font-size: 3.2em;
 `;
 
 const SeriesAddButtonContainer = styled.div`

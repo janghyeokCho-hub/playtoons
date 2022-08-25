@@ -40,7 +40,7 @@ function NavBarDashboard3(props) {
   let top = 50;
 
   return (
-    <NavBarDashboard>
+    <NavBarDashboard width={300}>
       <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSquarePen} selectedIcon={iconSquarePen} text={"支援管理"} />
       <NavBarItem top={top*5} onClick={onClickPost} icon={iconPencil} selectedIcon={iconPencil}  text={"投稿管理"} />
       <NavBarItem top={top*4} onClick={onClickSerise} icon={iconDoubeRect} selectedIcon={iconDoubeRect}  text={"シリーズ管理"} />
@@ -53,10 +53,18 @@ function NavBarDashboard3(props) {
 }
 
 const NavBarDashboard = styled.div`
-  width: 300px;
-  max-width: 300px;
+  width: ${(props) => props.width}px;
+  
   position: relative;
-  flex: 1;
+  
+
+  @media only screen and (max-width: 1025px) {
+      width: ${(props) => props.width - ((props.width / 10) * 2)}px;
+    }
+
+  @media only screen and (max-width: 768px) {
+      display: none;
+    }
 `;
 
 const TxtNavTit = styled.div`
