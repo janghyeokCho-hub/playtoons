@@ -18,13 +18,13 @@ function Group10(props) {
 
 
   return (
-    <Group101 className={`group-10-1 ${className || ""}`}>
+    <Container className={`group-10-1 ${className || ""}`}>
       <TextLabel className="text_label-174">年齢設定</TextLabel>
-      <FlexRow className="flex-row-30">
+      <ToggleContainer className="flex-row-30">
         <Toggle ref={refToggle} className={toggleOnClassName} />
         <R19 className="r-19-1">R-19</R19>
-      </FlexRow>
-    </Group101>
+      </ToggleContainer>
+    </Container>
   );
 }
 
@@ -32,7 +32,7 @@ const Toggle = styled(ToggleOn)`
   position: static;
 `;
 
-const Group101 = styled.div`
+const Container = styled.div`
   position: absolute;
   width: 100px;
   top: 589px;
@@ -57,7 +57,7 @@ const TextLabel = styled.div`
   white-space: nowrap;
 `;
 
-const FlexRow = styled.div`
+const ToggleContainer = styled.div`
   height: 31px;
   position: relative;
   margin-top: 20px;
