@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { Body8, Body5, Body7, Border1pxVioletBlue } from "@/styledMixins";
 
@@ -20,6 +21,7 @@ const textData = {
 function DashboardSeriesMobile(props) {
   const [list, setList] = useState(null);
   const refItem = useRef();
+  const navigate = useNavigate();
 
   const getList = async () => {
     //request
@@ -103,7 +105,7 @@ function DashboardSeriesMobile(props) {
     console.log("first", event.target.getAttribute("data-id"));
     
     let id = event.target.getAttribute("data-id");
-    window.location.href = "/dashboard-series/detail/" + id;
+    navigate( "/dashboard/series/detail/" + id );
   }
   
   useEffect(() => {

@@ -69,6 +69,8 @@ function DashboardSeriesDetailMobile(props) {
     });
   }
 
+  
+
   useEffect(() => {
     
     setData({
@@ -95,7 +97,7 @@ function DashboardSeriesDetailMobile(props) {
   
 
   return (
-    <MobileContainer isBorder={true} pageTitle={textData.label_page_title}>
+    <MobileContainer isBorder={true} pageTitle={textData.label_page_title} >
         <ImageTitleContainer>
           <MainImage src={data.main_image} />
           <Title>{data.text_title}</Title>
