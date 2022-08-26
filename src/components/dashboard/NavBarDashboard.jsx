@@ -4,12 +4,12 @@ import { Body5 } from "@/styledMixins";
 
 import NavBarItem from '@COMPONENTS/dashboard/NavBarItem';
 
-import iconSquarePen from '@ICONS/dashboardreactionlist-path-square-pen.png';
-import iconPencil from '@ICONS/mauthorpost-shape-pencil.png';
-import iconDoubeRect from '@ICONS/dashboard-shape-double-rect.png';
-import iconRhombus from '@ICONS/dashboard-shape-rhombus.png';
-import iconDashboard from '@ICONS/dashboardseries-shape-dashboard.png';
-import iconPorfile from '@ICONS/dashboardeditplan-shape.png';
+import iconSupport from '@ICONS/icon_support.png';
+import iconContribution from '@ICONS/icon_contribution.png';
+import iconSeriesManagement from '@ICONS/icon_series_management.png';
+import iconProduct from '@ICONS/icon_product.png';
+import iconDashboard from '@ICONS/icon_dashboard.png';
+import iconPorfile from '@ICONS/icon_profile.png';
 
 const onClickSupport = () => {
   console.log("move to support management page");
@@ -41,11 +41,11 @@ function NavBarDashboard3(props) {
 
   return (
     <NavBarDashboard width={300}>
-      <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSquarePen} selectedIcon={iconSquarePen} text={"支援管理"} />
-      <NavBarItem top={top*5} onClick={onClickPost} icon={iconPencil} selectedIcon={iconPencil}  text={"投稿管理"} />
-      <NavBarItem top={top*4} onClick={onClickSerise} icon={iconDoubeRect} selectedIcon={iconDoubeRect}  text={"シリーズ管理"} />
+      <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSupport} selectedIcon={iconSupport} text={"支援管理"} />
+      <NavBarItem top={top*5} onClick={onClickPost} icon={iconContribution} selectedIcon={iconContribution}  text={"投稿管理"} />
+      <NavBarItem top={top*4} onClick={onClickSerise} icon={iconSeriesManagement} selectedIcon={iconSeriesManagement}  text={"シリーズ管理"} />
       <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={"プロフィル管理"} />
-      <NavBarItem top={top*2} onClick={onClickProduct} icon={iconRhombus} selectedIcon={iconRhombus}  text={"商品"} />
+      <NavBarItem top={top*2} onClick={onClickProduct} icon={iconProduct} selectedIcon={iconProduct}  text={"商品"} />
       <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={"ダッシュボード"} />
       <TxtNavTit>ダッシュボード</TxtNavTit>
     </NavBarDashboard>

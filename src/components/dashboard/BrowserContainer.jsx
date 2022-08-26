@@ -47,7 +47,7 @@ const VerticalLine = styled.img`
 const Line = styled.div`
   width: 1px;
   height: auto;
-  background-color: var(--licorice);
+  background-color: var(--mercury);
 `;
 
 const ContentContainer = styled.div`

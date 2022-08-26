@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Body3 } from "@/styledMixins";
 import logoGnb from "@IMAGES/dashboardeditplan-imglogognb.png";
 import btnAuthorGnb from "@IMAGES/authorseries-btnauthorgnb.png";
-import iconBar from "@ICONS/dashboardseries-shape-bar.png";
+import iconBar from "@ICONS/icon_menu_without_space.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";

@@ -8,8 +8,8 @@ import {
   Body1,
 } from "@/styledMixins";
 
-import iconPathRight from "@ICONS/dashboardseries-path-right.png";
-import iconPathPlus from "@ICONS/dashboardseries-path-plus.png";
+import iconPathRight from "@ICONS/icon_arrow_right_gray.png";
+import iconPathPlus from "@ICONS/icon_plus_blue.png";
 //temp data
 import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";

@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Body5, Body8, Border1pxTiara, Body7 } from "@/styledMixins";
+import {  Body8, Border1pxTiara, Body7 } from "@/styledMixins";
 
 import line from '@LINES/mdashboardseriesdetail-rectangle.png';
-import iconArrowLeft from '@ICONS/icon_arrow_left_black.png';
-import roundRetangle from '@IMAGES/mdashboardseriesdetail-round-rectangle.png';
 
 import TagePaddingGroup from "@/components/dashboard/DetailMobileTagContainer";
 import MobileContainer from "@/components/dashboard/MobileContainer";
@@ -161,34 +159,6 @@ const TextWrapContainer = styled.div`
   width: 50%;
 `;
 
-const MDashboardseriesdetail = styled.div `
-  align-items: flex-start;
-  background-color: var(--white);
-  display: flex;
-  flex-direction: column;
-  min-height: 964px;
-  position: relative;
-  width: 375px;
-`;
-
-
-const OverlapGroup3 = styled.div`
-  width: 375px;
-  height: 3177px;
-  position: relative;
-  background-color: var(--desert-storm);
-`;
-
-const Rectangle = styled.div`
-  ${Border1pxTiara}
-  position: absolute;
-  width: 343px;
-  height: 808px;
-  top: 32px;
-  left: 16px;
-  background-color: var(--white);
-  border-radius: 4px;
-`;
 
 const TagListContainer = styled.div `
   margin-bottom: ${size.textMarginBottom}px;
@@ -196,13 +166,6 @@ const TagListContainer = styled.div `
   justify-content: flex-start;
   `;
 
-const TextLabelSummary = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
 
 const HorizontalLine = styled.img`
   width: 100%;
@@ -210,15 +173,6 @@ const HorizontalLine = styled.img`
   margin-bottom: ${size.textMarginBottom}px;
 `;
 
-const Line2 = styled.img`
-  width: 100%;
-  height: 1px;
-`;
-
-const Line3 = styled.img`
-  width: 100%;
-  height: 1px;
-`;
 
 const Title = styled.div`
   ${Body7}
@@ -227,13 +181,6 @@ const Title = styled.div`
   line-height: 14px;
 `;
 
-const Type = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--vulcan);
-  line-height: 14px;
-  white-space: nowrap;
-`;
 
 const TextData = styled.div`
   ${Body7}
@@ -245,45 +192,6 @@ const TextData = styled.div`
   text-align: right;
 `;
 
-const Grade = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--vulcan);
-  line-height: 14px;
-  white-space: nowrap;
-`;
-
-const Status = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--vulcan);
-  line-height: 14px;
-  white-space: nowrap;
-`;
-
-const TextLabelType = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
-
-const TextLabelTag = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
-
-const TextLabelTimeLine = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
 
 const Summary = styled.div`
   ${Body8}
@@ -303,21 +211,6 @@ const TextLabel = styled.div`
   margin-bottom: ${size.textMarginBottom}px;
 `;
 
-const TextLabelGrade = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
-
-const TextLabelStatus = styled.div`
-  ${Body7}
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 14px;
-  white-space: nowrap;
-`;
 
 const MainImage = styled.img`
   width: 88px;
@@ -339,19 +232,5 @@ const ImgThumbEmpty = styled.div`
   border-radius: 4px;
 `;
 
-const RectangleCopy2 = styled.div`
-  position: absolute;
-  width: 90px;
-  height: 143px;
-  top: 681px;
-  left: 236px;
-  background-color: var(--desert-storm);
-  border-radius: 4px;
-`;
-
-const BackgroudRoundRect = styled.img`
-  width: 20px;
-  height: 143px;
-`;
 
 export default DashboardSeriesDetailMobile;
