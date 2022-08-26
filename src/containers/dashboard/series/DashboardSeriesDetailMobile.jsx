@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Body8, Border1pxTiara, Body7 } from "@/styledMixins";
+import { Body5, Body8, Border1pxTiara, Body7 } from "@/styledMixins";
 
 import line from '@LINES/mdashboardseriesdetail-rectangle.png';
+import iconArrowLeft from '@ICONS/icon_arrow_left_black.png';
 import roundRetangle from '@IMAGES/mdashboardseriesdetail-round-rectangle.png';
 
 import TagePaddingGroup from "@/components/dashboard/DetailMobileTagContainer";
+import MobileContainer from "@/components/dashboard/MobileContainer";
+
+//temp
+import tempImage from '@IMAGES/mdashboardseries-rectangle.jpg';
 
 const textData = {
-  label_title: "シリーズ詳細",
+  label_page_title: "シリーズ詳細",
   label_category: "カテゴリ",
   label_grade: "指定",
   label_status: "状態",
@@ -17,6 +22,12 @@ const textData = {
   label_summary: "説明",
   label_tag: "タグ",
   label_timeline_thumb: "タイムラインのサムネイル",
+};
+
+const size = {
+  textMarginBottom : 18,
+  imageHeight : 90,
+  imageMarginRight: 10
 };
 
 function DashboardSeriesDetailMobile(props) {
@@ -42,13 +53,11 @@ function DashboardSeriesDetailMobile(props) {
   });
 
   let getThumbList = () => {
-    const list_data = ["/img/dashboardeditseries-rectangle-A6ABA42F-608D-4767-8DC4-E043B4D54714.png", "", ""];
+    const list_data = [tempImage, "", ""];
 
     return list_data.map( (data, index) => {
-      let leftPosition = (102 * index) + 32;
-      leftPosition = leftPosition + "px";
-      return "" === data ? <ImgThumbEmpty key={index} leftPosition={leftPosition}></ImgThumbEmpty> : 
-        <ImgThumb src={data} key={index} leftPosition={leftPosition}  />;
+      return "" === data ? <ImgThumbEmpty key={index} ></ImgThumbEmpty> : 
+        <ImgThumb src={data} key={index} />;
     } );
   }
 
@@ -72,7 +81,7 @@ function DashboardSeriesDetailMobile(props) {
       text_grade: "R18",
       text_status: "連載中",
       text_summary: <React.Fragment>No.13の災害後、人類はシェルターにバラバラに散っ<br />た。そして、奇妙なロボット”クモ”の出現により<br />シェルター周辺に防壁が張り巡らされた。クモと戦<br />う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。そこで、レンジャーた<br />ちは人間と機械を融合するアダマ手術を施し、クモ<br />に挑むが…果たしてレンジャーたちの行く末は..? <br />クモの正体、そして突如現れた謎の組織カンパニー<br />ヌルの正体とは…?!</React.Fragment>,
-      main_image: "/img/mdashboardseriesdetail-rectangle-828EA7C7-90D1-4C5E-86E4-1D097EC41C7D@2x.png",  //메인이미지
+      main_image: tempImage,  //메인이미지
       rectangle2: "/img/mdashboardseriesdetail-rectangle-BF6A0071-A8D7-4934-8F59-62907027D07B@2x.png",  //타임라인 썸네일
       rectangleCopy3: "/img/mdashboardseriesdetail-round-rectangle.png", //배경라운드 이미지
       paddingGroup14Copy4Props_tag: "#初公開",
@@ -86,39 +95,69 @@ function DashboardSeriesDetailMobile(props) {
   
 
   return (
-    <div className="container-center-horizontal">
-      <MDashboardseriesdetail className="screen">
-        {/* <Group37 text_Label={textData.label_title.text_Label} /> */}
-        <OverlapGroup3>
-          <Rectangle></Rectangle>
-          <TagListContainer>
-            {getTagList()}
-          </TagListContainer>
-          <TextLabelSummary>{textData.label_summary}</TextLabelSummary>
-          <Line1 src={line} />
-          <Line2 src={line} />
-          <Line3 src={line} />
-          <Title>{data.text_title}</Title>
-          <Type>{data.text_type}</Type>
-          <Category>{data.text_category}</Category>
-          <Grade>{data.text_grade}</Grade>
-          <Status>{data.text_status}</Status>
-          <TextLabelType>{textData.label_type}</TextLabelType>
-          <TextLabelTag>{textData.label_tag}</TextLabelTag>
-          <TextLabelTimeLine>{textData.label_timeline_thumb}</TextLabelTimeLine>
-          <TextLabelCategory>{textData.label_category}</TextLabelCategory>
-          <Summary>{data.text_summary}</Summary>
-          <TextLabelGrade>{textData.label_grade}</TextLabelGrade>
-          <TextLabelStatus>{textData.label_status}</TextLabelStatus>
+    <MobileContainer isBorder={true} pageTitle={textData.label_page_title}>
+        <ImageTitleContainer>
           <MainImage src={data.main_image} />
-          {/* 가로 스크로 컨테이너 필요  */}
+          <Title>{data.text_title}</Title>
+        </ImageTitleContainer>
+
+        <TextContainer>
+          <TextWrapContainer>
+            <TextLabel>{textData.label_category}</TextLabel>
+            <TextLabel>{textData.label_grade}</TextLabel>
+            <TextLabel>{textData.label_status}</TextLabel>
+            <TextLabel>{textData.label_type}</TextLabel>
+          </TextWrapContainer>
+          <TextWrapContainer>
+            <TextData>{data.text_category}</TextData>
+            <TextData>{data.text_grade}</TextData>
+            <TextData>{data.text_status}</TextData>
+            <TextData>{data.text_type}</TextData>
+          </TextWrapContainer>
+        </TextContainer>
+        <HorizontalLine src={line} />
+        
+
+        <TextLabel>{textData.label_summary}</TextLabel>
+        <Summary>{data.text_summary}</Summary>
+        <HorizontalLine src={line} />
+
+        <TextLabel>{textData.label_tag}</TextLabel>
+        <TagListContainer>
+          {getTagList()}
+        </TagListContainer>
+        <HorizontalLine src={line} />
+        
+        <TextLabel>{textData.label_timeline_thumb}</TextLabel>
+        <TimelineContainer>
           {getThumbList()}    
-          <BackgroudRoundRect src={roundRetangle} />
-        </OverlapGroup3>
-      </MDashboardseriesdetail>
-    </div>
+        </TimelineContainer>
+    </MobileContainer>
   );
 }
+
+
+
+const TimelineContainer = styled.div`
+  width: 100%;
+  display: inline-flex;
+`;
+
+const ImageTitleContainer = styled.div`
+  width: 100%;
+  margin-bottom: 30px;
+  display: flex;
+`;
+
+const TextContainer = styled.div`
+  width: 100%;
+  margin-bottom: ${size.textMarginBottom}px;
+  display: flex;
+`;
+
+const TextWrapContainer = styled.div`
+  width: 50%;
+`;
 
 const MDashboardseriesdetail = styled.div `
   align-items: flex-start;
@@ -150,58 +189,37 @@ const Rectangle = styled.div`
 `;
 
 const TagListContainer = styled.div `
-  height: 27px;
+  margin-bottom: ${size.textMarginBottom}px;
   display: flex;
-  padding: 4px 7.9px;
-  justify-content: flex-end;
-  align-items: flex-start;
-  min-width: 68px;
-  border-radius: 4px;
-  position: absolute;
-  top : 600px;
-  left: 20px;
-`;
+  justify-content: flex-start;
+  `;
 
 const TextLabelSummary = styled.div`
   ${Body7}
-  position: absolute;
-  top: 344px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
   white-space: nowrap;
 `;
 
-const Line1 = styled.img`
-  position: absolute;
-  width: 311px;
+const HorizontalLine = styled.img`
+  width: 100%;
   height: 1px;
-  top: 327px;
-  left: 32px;
+  margin-bottom: ${size.textMarginBottom}px;
 `;
 
 const Line2 = styled.img`
-  position: absolute;
-  width: 311px;
+  width: 100%;
   height: 1px;
-  top: 552px;
-  left: 32px;
 `;
 
 const Line3 = styled.img`
-  position: absolute;
-  width: 311px;
+  width: 100%;
   height: 1px;
-  top: 638px;
-  left: 32px;
 `;
 
 const Title = styled.div`
   ${Body7}
-  position: absolute;
-  top: 48px;
-  left: 136px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 14px;
@@ -209,31 +227,24 @@ const Title = styled.div`
 
 const Type = styled.div`
   ${Body7}
-  position: absolute;
-  top: 297px;
-  left: 304px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 14px;
   white-space: nowrap;
 `;
 
-const Category = styled.div`
+const TextData = styled.div`
   ${Body7}
-  position: absolute;
-  top: 207px;
-  left: 278px;
+  margin-bottom: 18px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 14px;
   white-space: nowrap;
+  text-align: right;
 `;
 
 const Grade = styled.div`
   ${Body7}
-  position: absolute;
-  top: 237px;
-  left: 317px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 14px;
@@ -242,9 +253,6 @@ const Grade = styled.div`
 
 const Status = styled.div`
   ${Body7}
-  position: absolute;
-  top: 267px;
-  left: 304px;
   font-weight: 700;
   color: var(--vulcan);
   line-height: 14px;
@@ -253,9 +261,6 @@ const Status = styled.div`
 
 const TextLabelType = styled.div`
   ${Body7}
-  position: absolute;
-  top: 297px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
@@ -264,9 +269,6 @@ const TextLabelType = styled.div`
 
 const TextLabelTag = styled.div`
   ${Body7}
-  position: absolute;
-  top: 569px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
@@ -275,9 +277,6 @@ const TextLabelTag = styled.div`
 
 const TextLabelTimeLine = styled.div`
   ${Body7}
-  position: absolute;
-  top: 655px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
@@ -286,30 +285,24 @@ const TextLabelTimeLine = styled.div`
 
 const Summary = styled.div`
   ${Body8}
-  position: absolute;
-  width: 312px;
-  top: 370px;
-  left: 32px;
+  width: 100%;
+  min-height: 166px;
   color: var(--nevada);
   line-height: 14px;
+  margin-bottom: ${size.textMarginBottom}px;
 `;
 
-const TextLabelCategory = styled.div`
+const TextLabel = styled.div`
   ${Body7}
-  position: absolute;
-  top: 207px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
   white-space: nowrap;
+  margin-bottom: ${size.textMarginBottom}px;
 `;
 
 const TextLabelGrade = styled.div`
   ${Body7}
-  position: absolute;
-  top: 237px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
@@ -318,9 +311,6 @@ const TextLabelGrade = styled.div`
 
 const TextLabelStatus = styled.div`
   ${Body7}
-  position: absolute;
-  top: 267px;
-  left: 32px;
   font-weight: 700;
   color: var(--nevada);
   line-height: 14px;
@@ -328,27 +318,21 @@ const TextLabelStatus = styled.div`
 `;
 
 const MainImage = styled.img`
-  position: absolute;
   width: 88px;
   height: 134px;
-  top: 48px;
-  left: 32px;
+  margin-right: 18px;
 `;
 
 const ImgThumb = styled.img`
-  position: absolute;
-  width: 90px;
+  width: ${size.imageHeight}px;
   height: 143px;
-  top: 681px;
-  left: ${(props) => props.leftPosition};
+  margin-right: ${size.imageMarginRight}px;
 `;
 
 const ImgThumbEmpty = styled.div`
-  position: absolute;
-  width: 90px;
+  width: ${size.imageHeight}px;
   height: 143px;
-  top: 681px;
-  left: ${(props) => props.leftPosition};
+  margin-right: ${size.imageMarginRight}px;
   background-color: var(--desert-storm);
   border-radius: 4px;
 `;
@@ -364,11 +348,8 @@ const RectangleCopy2 = styled.div`
 `;
 
 const BackgroudRoundRect = styled.img`
-  position: absolute;
   width: 20px;
   height: 143px;
-  top: 681px;
-  left: 338px;
 `;
 
 export default DashboardSeriesDetailMobile;

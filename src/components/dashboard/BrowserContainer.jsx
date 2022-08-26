@@ -12,7 +12,7 @@ function SeriesContainer(props) {
   return (
     <DashboardSeriesContainer className="screen">
       {/* <HorizontalLine src={horizontalLine} /> */}
-      <Container>
+      <Container >
         <NavBarDashboard />
         <Line src={verticalLine} />
         <ContentContainer backgroundColor={backgroundColor}>
@@ -83,7 +83,6 @@ const ContentWhiteBorderContainer = styled.div`
   height: 100%;
   background-color: var(--white);
   border-radius: ${(props) => props.isBorder ? 8 : 0}px;
-  
 `;
 
 const Space = styled.div` 
