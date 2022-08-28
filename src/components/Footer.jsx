@@ -49,7 +49,7 @@ const Footer = () => {
 export default Footer;
 
 const FooterDiv = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 80px;
   justify-content: space-around;
   position: relative;

@@ -51,7 +51,6 @@ const NonLoginMenu = ({ isMobile }) => {
         bgColor="--violet-blue"
         width={100}
         height={40}
-        marginLeft={20}
         callback={() => (window.location.href = "/account")}
         borderRadius={20}
       />
@@ -86,12 +85,12 @@ const Header = () => {
 };
 
 const HeaderDiv = styled.div`
-  width: 100%;
-  height: 80px;
+  width: 100vw;
+  height: 60px;
   background-color: var(--white);
   box-shadow: 0px 2px 20px -10px #00000080;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 1.5em;
+  padding-right: 1.5em;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -120,6 +119,8 @@ const RightMenu = styled.div`
 `;
 
 const SearchIconDiv = styled.div`
+  margin-left: 1em;
+  margin-right: 1em;
   width: 24px;
   height: 24px;
 `;
