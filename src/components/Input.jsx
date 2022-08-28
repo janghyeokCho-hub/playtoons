@@ -4,7 +4,14 @@ import { Body5, Border1pxTiara } from "@/styledMixins";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 
-const Input = ({ inputType, label, callback, fontWeight }) => {
+const Input = ({
+  inputType,
+  label,
+  callback,
+  fontWeight,
+  width = "400px",
+  height = "40px",
+}) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
 
@@ -21,7 +28,7 @@ const Input = ({ inputType, label, callback, fontWeight }) => {
   }, [inputType, isPwdDisabled]);
 
   return (
-    <InputDiv>
+    <InputDiv width={width}>
       <InputLabel className="login-txt-form-label">{label}</InputLabel>
       <InputWithIconDiv>
         <TextInput
@@ -29,6 +36,7 @@ const Input = ({ inputType, label, callback, fontWeight }) => {
           type={type}
           onInput={callback}
           fontWeight={fontWeight}
+          height={height}
         />
         {inputType === "password" && (
           <EyeIconDiv onClick={() => setIsPwdDisabled(!isPwdDisabled)}>
@@ -45,7 +53,7 @@ const Input = ({ inputType, label, callback, fontWeight }) => {
 };
 
 const InputDiv = styled.div`
-  width: 400px;
+  width: ${(props) => props.width};
   display: flex;
   flex-direction: column;
   margin-bottom: 10px;
@@ -67,7 +75,7 @@ const InputLabel = styled.span`
 
 const TextInput = styled.input`
   ${Border1pxTiara}
-  height: 40px;
+  height: ${(props) => props.height};
   margin-top: 8px;
   display: flex;
   padding: 10px 13px;

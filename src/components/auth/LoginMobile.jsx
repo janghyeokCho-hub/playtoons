@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import autoLoginLineRight from "@IMAGES/authlogin-line-right.png";
 import recoveryLine from "@IMAGES/lines/authlogin-line-txt.png";
@@ -11,29 +12,61 @@ import Input from "@COMPONENTS/Input";
 import { login } from "@/services/userService";
 
 const LoginMobile = ({ handleAccountType }) => {
+  const navigate = useNavigate();
   const [errorShow, setErrorShow] = useState(false);
-  const handleLogin = useCallback(() => {
-    const params = {
-      email: "jh.cho@raonworks.co.kr",
-      password: "1234",
-    };
-    login(params);
-  }, []);
+  const [emailValue, setEmailValue] = useState(null);
+  const [passwordValue, setPasswordValue] = useState(null);
 
+  // Email state function
+  const handleEmailChange = (e) => {
+    setEmailValue(e.target.value);
+  };
+
+  // Password state function
+  const handlePasswordChage = (e) => {
+    setPasswordValue(e.target.value);
+  };
+
+  // Login action
+  const handleLogin = useCallback(async () => {
+    const params = {
+      email: emailValue,
+      password: passwordValue,
+    };
+    const { status, data } = await login(params);
+
+    if (status === 200) {
+      // 성공
+      // accessToke 은 redux 에서 관리하니, next 값을 통해 페이지로 이동만
+      // next 값이 없을 경우 홈으로
+      navigate(data?.next || "/");
+    } else if (status === 400) {
+      // 파라미터 검증 실패
+    } else if (status === 403) {
+      // 인증 실패 / 권한 없음
+    } else if (status === 503) {
+      // 코드 참조
+    }
+  }, [emailValue, passwordValue, navigate]);
   return (
     <Container>
       <ImgLogo src={imgLogo} />
       {errorShow && <ErrorBoxDiv />}
       <InputDiv>
-        <Input inputType="text" label="メールアドレス" />
-        <Input inputType="password" label="パスワード" />
+        <Input
+          inputType="text"
+          label="メールアドレス"
+          width="100%"
+          callback={handleEmailChange}
+        />
+        <Input
+          inputType="password"
+          label="パスワード"
+          width="100%"
+          callback={handlePasswordChage}
+        />
 
-        <RecoveryDiv
-          className="group-2-21 group-2-22"
-          onClick={() => {
-            handleAccountType("RECOVERY");
-          }}
-        >
+        <RecoveryDiv className="group-2-21 group-2-22">
           <RecoverLabel className="text_label-220" color="--violet-blue">
             パスワードをお忘れですか?
           </RecoverLabel>
@@ -45,11 +78,9 @@ const LoginMobile = ({ handleAccountType }) => {
         className="login_btn_default"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        width="100%"
+        marginBottom="15px"
         callback={() => handleLogin()}
-        borderRadius={20}
       />
       <Group4>
         <LineLeft src={autoLoginLineRight} />
@@ -62,10 +93,8 @@ const LoginMobile = ({ handleAccountType }) => {
         className="login_btn_google"
         color="--vlucan"
         bgColor="--white"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        width="100%"
+        marginBottom="15px"
       />
       <Button
         text="Tiwtterで続行"
@@ -73,10 +102,8 @@ const LoginMobile = ({ handleAccountType }) => {
         className="login_btn_twitter"
         color="--vlucan"
         bgColor="--white"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        width="100%"
+        marginBottom="15px"
       />
       <Button
         text="Appleで続行"
@@ -84,17 +111,15 @@ const LoginMobile = ({ handleAccountType }) => {
         className="login_btn_apple"
         color="--white"
         bgColor="--black"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        width="100%"
+        marginBottom="15px"
       />
 
       <Group6>
         <TextLabel color="--vulcan">アカウントをお持ちでないですか</TextLabel>
         <TextLabel1
           onClick={() => {
-            handleAccountType("REGISTER");
+            navigate("/account/register");
           }}
         >
           登録する
@@ -106,8 +131,7 @@ const LoginMobile = ({ handleAccountType }) => {
 };
 
 const Container = styled.div`
-  margin-top: 30px;
-  margin-bottom: 30px;
+  margin: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,9 +145,9 @@ const ErrorBoxDiv = styled.div`
   margin-bottom: 10px;
 `;
 const InputDiv = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  width: auto;
 `;
 const RecoveryDiv = styled.div`
   cursor: pointer;

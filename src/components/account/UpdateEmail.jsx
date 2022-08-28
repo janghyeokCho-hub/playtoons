@@ -110,8 +110,7 @@ const UpdateEmail = () => {
         text={(verifyIsShow && "確認する") || "次へ"}
         color="--white"
         bgColor="--violet-blue"
-        borderRadius={20}
-        marginTop={30}
+        marginTop="30px"
         callback={() =>
           verifyIsShow ? handleVerifyCheck() : handleVerifySend()
         }
@@ -120,8 +119,7 @@ const UpdateEmail = () => {
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
-        borderRadius={20}
-        marginTop={15}
+        marginTop="15px"
         callback={() => navigate(-1)}
       />
     </AccountBoxDiv>

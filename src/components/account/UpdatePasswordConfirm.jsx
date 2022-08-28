@@ -54,11 +54,8 @@ const UpdatePasswordConfirm = () => {
         text=">パスワード変更"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginTop={10}
-        marginBottom={15}
-        borderRadius={20}
+        marginTop="10px"
+        marginBottom="10px"
         callback={() => handlePwdConfirm()}
       />
       <Button
@@ -66,10 +63,7 @@ const UpdatePasswordConfirm = () => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="10px"
       />
     </AccountBoxDiv>
   );

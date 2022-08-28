@@ -79,11 +79,8 @@ const Login = () => {
         className="login_btn_default"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => handleLogin()}
-        borderRadius={20}
       />
       <Group4>
         <LineLeft src={autoLoginLineRight} />
@@ -96,10 +93,7 @@ const Login = () => {
         className="login_btn_google"
         color="--vlucan"
         bgColor="--white"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
       />
       <Button
         text="Tiwtterで続行"
@@ -107,10 +101,7 @@ const Login = () => {
         className="login_btn_twitter"
         color="--vlucan"
         bgColor="--white"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
       />
       <Button
         text="Appleで続行"
@@ -118,10 +109,7 @@ const Login = () => {
         className="login_btn_apple"
         color="--white"
         bgColor="--black"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
       />
 
       <Group6>

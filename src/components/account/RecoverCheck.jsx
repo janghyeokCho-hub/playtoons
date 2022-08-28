@@ -61,10 +61,7 @@ const RecoverCheck = () => {
         text="確認する"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
         callback={() => handleRecoverCheck()}
       />
       <Button
@@ -72,9 +69,7 @@ const RecoverCheck = () => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => navigate(-1)}
       />
     </AccountBoxDiv>

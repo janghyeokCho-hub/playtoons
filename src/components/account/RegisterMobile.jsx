@@ -65,11 +65,13 @@ const Register = () => {
         <Input
           inputType="text"
           label="メールアドレス"
+          width="100%"
           callback={({ nativeEvent }) => setEmail(nativeEvent?.target?.value)}
         />
         <Input
           inputType="password"
           label="パスワード"
+          width="100%"
           callback={({ nativeEvent }) =>
             setPassword(nativeEvent?.target?.value)
           }
@@ -77,6 +79,7 @@ const Register = () => {
         <Input
           inputType="password"
           label="パスワード確認"
+          width="100%"
           callback={({ nativeEvent }) =>
             setPasswordConfirm(nativeEvent?.target?.value)
           }
@@ -84,6 +87,7 @@ const Register = () => {
         <Input
           inputType="text"
           label="紹介コード"
+          width="100%"
           callback={({ nativeEvent }) =>
             setReferralCode(nativeEvent?.target?.value)
           }
@@ -93,7 +97,8 @@ const Register = () => {
         text="次へ"
         color="--white"
         bgColor="--violet-blue"
-        marginBottom="15px"
+        width="100%"
+        marginBottom="1em"
         callback={() => handleRegister()}
       />
       <Button
@@ -101,7 +106,7 @@ const Register = () => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        marginBottom="15px"
+        width="100%"
         callback={() => navigate(-1)}
       />
     </AccountBoxDiv>
@@ -109,18 +114,11 @@ const Register = () => {
 };
 
 const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 1em;
+  align-items: center;
 `;
 
 const RegisterTitle = styled.h1`
@@ -137,6 +135,7 @@ const RegisterTitle = styled.h1`
 
 const RegisterInputDiv = styled.div`
   align-self: center;
+  width: 100%;
   margin-top: 40px;
   margin-bottom: 40px;
 `;

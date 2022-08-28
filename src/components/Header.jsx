@@ -49,10 +49,10 @@ const NonLoginMenu = ({ isMobile }) => {
         text="ログイン"
         color="--white"
         bgColor="--violet-blue"
-        width={100}
-        height={40}
+        width="100px"
+        height="40px"
         callback={() => (window.location.href = "/account")}
-        borderRadius={20}
+        borderRadius="20px"
       />
     </>
   );

@@ -57,10 +57,7 @@ const RecoverConfirm = () => {
         text=">パスワード変更"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
         callback={() => handlePwdConfirm()}
       />
       <Button
@@ -68,10 +65,7 @@ const RecoverConfirm = () => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
-        borderRadius={20}
+        marginBottom="15px"
       />
     </AccountBoxDiv>
   );

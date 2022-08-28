@@ -59,20 +59,15 @@ const CheckVerify = ({ email, expireOn }) => {
         text="確認する"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => handleVerifyCheck()}
-        borderRadius={20}
       />
       <Button
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => navigate(-1)}
       />
     </>

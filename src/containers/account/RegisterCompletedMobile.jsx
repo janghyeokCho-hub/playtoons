@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  Headline1Style,
+  Body3,
   Title1,
   Title3,
   NotosansjpBoldCharade42px,
   Border1pxTiara,
-  Body3,
   Title2,
 } from "@/styledMixins";
 import secondImgSrc from "@IMAGES/register2.png";
@@ -168,17 +167,18 @@ const RegisterCompleted = () => {
 // fifth-image.jpg
 // rectangle
 const Container = styled.div`
-  width: 100%;
+  flex-direction: column;
+  width: 100vw;
   height: 100%;
 `;
 
 const FirstDiv = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 100vw;
   background-image: url(${(props) => props.imgSrc});
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
 `;
 
 const FirstContentDiv = styled.div`
@@ -190,7 +190,7 @@ const FirstContentDiv = styled.div`
 `;
 
 const FirstTitleH1 = styled.h1`
-  ${Headline1Style}
+  ${Body3}
   color: var(--vulcan);
   line-height: 56px;
   white-space: nowrap;

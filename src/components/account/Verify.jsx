@@ -44,22 +44,16 @@ const PreVerify = ({
         text="次へ"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={handleSendEmail}
-        borderRadius={20}
       />
       <Button
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => handleAccountType("LOGIN")}
-        borderRadius={20}
       />
     </>
   );
@@ -87,20 +81,15 @@ const CheckVerify = ({ setIsShowType, email }) => {
         text="確認する"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => setIsShowType("CONFIRM")}
-        borderRadius={20}
       />
       <Button
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => setIsShowType("INPUT")}
       />
     </>
@@ -133,22 +122,16 @@ const VerifyConfirm = ({ setIsShowType, handleAccountType }) => {
         text=">パスワード変更"
         color="--white"
         bgColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => handleAccountType("LOGIN")}
-        borderRadius={20}
       />
       <Button
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
-        width={400}
-        height={40}
-        marginBottom={15}
+        marginBottom="15px"
         callback={() => setIsShowType("INPUT")}
-        borderRadius={20}
       />
     </>
   );

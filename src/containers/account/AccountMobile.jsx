@@ -1,16 +1,20 @@
 import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/pro-light-svg-icons";
 import LoginMobile from "@COMPONENTS/auth/LoginMobile";
+import RegisterMobile from "@COMPONENTS/account/RegisterMobile";
 
 //angle-right-light
 
 const AccountMobile = () => {
+  const navigate = useNavigate();
   return (
     <Container className="container-center-horizontal">
       <Header>
-        <BackIconDiv>
+        <BackIconDiv onClick={() => navigate(-1)}>
           <FontAwesomeIcon
             icon={faAngleLeft}
             width={12}
@@ -19,7 +23,11 @@ const AccountMobile = () => {
           />
         </BackIconDiv>
       </Header>
-      <LoginMobile />
+
+      <Routes>
+        <Route path={"*"} element={<LoginMobile />} />
+        <Route path={"register"} element={<RegisterMobile />} />
+      </Routes>
     </Container>
   );
 };
@@ -35,6 +43,7 @@ const Header = styled.div`
 `;
 
 const BackIconDiv = styled.div`
+  cursor: pointer;
   margin-left: 15px;
   align-self: center;
   height: 24px;

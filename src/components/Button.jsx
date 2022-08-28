@@ -14,14 +14,14 @@ const LoginTxtSns = styled.span`
 
 const BtnStyle = styled.div`
   ${Border05pxTiara}
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
   display: flex;
-  margin-top: ${(props) => props.marginTop}px;
-  margin-bottom: ${(props) => props.marginBottom}px;
-  margin-left: ${(props) => props.marginLeft}px;
-  margin-right: ${(props) => props.marginRight}px;
-  border-radius: ${(props) => props.borderRadius}px;
+  margin-top: ${(props) => props.marginTop};
+  margin-bottom: ${(props) => props.marginBottom};
+  margin-left: ${(props) => props.marginLeft};
+  margin-right: ${(props) => props.marginRight};
+  border-radius: ${(props) => props.borderRadius};
   text-align: center;
   cursor: pointer;
   background-color: var(${(props) => props.bgColor});
@@ -40,14 +40,14 @@ const Button = ({
   color,
   bgColor,
   bdColor,
-  width = 400,
-  height = 40,
+  width = "400px",
+  height = "40px",
+  borderRadius = "20px",
   marginTop,
   marginBottom,
   marginLeft,
   marginRight,
   callback,
-  borderRadius = 20,
 }) => {
   let bgImage;
 

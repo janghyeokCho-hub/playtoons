@@ -10,6 +10,7 @@ import AccountMobile from "@CONTAINERS/account/AccountMobile";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
 import LandingPageMobile from "@CONTAINERS/landing/LandingPageMobile";
 import RegisterCompleted from "@CONTAINERS/account/RegisterCompleted";
+import RegisterCompletedMobile from "@CONTAINERS/account/RegisterCompletedMobile";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import DashboardMobile from "@CONTAINERS/dashboard/DashboardMobile";
 
@@ -49,8 +50,11 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
-            <Route path="/account" element={<AccountMobile />} />
-            <Route path="/register-completed" element={<RegisterCompleted />} />
+            <Route path="/account/*" element={<AccountMobile />} />
+            <Route
+              path="/register-completed"
+              element={<RegisterCompletedMobile />}
+            />
             <Route path="/dashboard/*" element={<DashboardMobile />} />
           </Routes>
         </BrowserRouter>
