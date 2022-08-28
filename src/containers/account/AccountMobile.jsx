@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/pro-light-svg-icons";
 import LoginMobile from "@COMPONENTS/auth/LoginMobile";
 import RegisterMobile from "@COMPONENTS/account/RegisterMobile";
+import VerifyCheckMobile from "@/components/account/VerifyCheckMobile";
 
 //angle-right-light
 
@@ -27,6 +28,7 @@ const AccountMobile = () => {
       <Routes>
         <Route path={"*"} element={<LoginMobile />} />
         <Route path={"register"} element={<RegisterMobile />} />
+        <Route path={"verify-check"} element={<VerifyCheckMobile />} />
       </Routes>
     </Container>
   );

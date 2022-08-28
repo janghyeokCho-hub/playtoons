@@ -6,7 +6,7 @@ import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
 import { createRegisterUser } from "@/services/accountService";
 
-const Register = () => {
+const RegisterMobile = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -140,4 +140,4 @@ const RegisterInputDiv = styled.div`
   margin-bottom: 40px;
 `;
 
-export default Register;
+export default RegisterMobile;
