@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useImperativeHandle, useRef, forwardRef } from "react";
 import styled from "styled-components";
-import { NotosansjpBoldWhite14px, Border1pxVioletBlue } from "@/styledMixins";
+import { NotosansjpBoldWhite14px, Body9, Body7 } from "@/styledMixins";
+import {getValueOrDefault} from '@COMMON/common.js';
 
 const TYPE = {
   DEFAULT: "default",
@@ -54,13 +55,12 @@ function ButtonDefault(props, ref) {
     
 
   return (
-    <Container className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
+    <Container {...props} className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
       {
         icon !== undefined && (<Icon></Icon>)
       }
       {
-        // type === TYPE.LOADING ? <Loading /> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
-        type === TYPE.LOADING ? <TextLabel className="text_label-129">Loading...</TextLabel> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
+        type === TYPE.LOADING ? <Loading /> : <TextLabel className={`${className || ""}`} ref={refTextLabel}>{text}</TextLabel>
       }
       
     </Container>
@@ -68,26 +68,31 @@ function ButtonDefault(props, ref) {
 }
 
 const Container = styled.div`
-  width: 117px;
-  height: 40px;
+  /* width: ${(props) => getValueOrDefault(props.width, 0)}px; */
+  height: ${(props) => getValueOrDefault(props.height, 40)}px;
+  margin-left: ${(props) => getValueOrDefault(props.marginLeft, "")};
+  margin-right: ${(props) => getValueOrDefault(props.marginRight, "15px")};
+  margin-bottom: ${(props) => getValueOrDefault(props.marginBottom, "")};
+  padding: ${(props) => getValueOrDefault(props.padding, "2%")};
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 102px;
   border-radius: 5px;
   background-color: var(--violet-blue);
   cursor: pointer;
 
-  &.padding-group-3-16 {
-    top: 1811px;
-    left: 1344px;
+  &.mobile{
+    /* padding:  */
+  }
+  &.mobile12{
+    height: 20px;
+    padding: 5px 8px;
   }
 `;
 
 const TextLabel = styled.div`
   ${NotosansjpBoldWhite14px}
   min-height: 20px;
-  min-width: 65px;
   font-weight: 700;
   letter-spacing: 1.27px;
   line-height: 20px;
@@ -95,6 +100,18 @@ const TextLabel = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.mobile{
+    ${Body7}
+    min-height: 14px;
+    line-height: 14px;
+  }
+  &.mobile12{
+    ${Body9}
+    min-height: 12px;
+    font-weight: 500;
+    line-height: 12px;
+  }
 `;
 
 const Loading = styled.div`

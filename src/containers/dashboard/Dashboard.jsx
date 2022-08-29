@@ -1,9 +1,10 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
-import DashboardSeries from "@/containers/dashboard/series/DashboardSeries";
-import DashboardSeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
-import DashboardUploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
-import DashboardEditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
+import Series from "@/containers/dashboard/series/DashboardSeries";
+import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
+import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
+import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
+import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 
 /**
 * Dashboard url 분기 처리
@@ -14,19 +15,23 @@ import DashboardEditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSer
 export default function Dashboard() {
   return (
     <Routes>
-      <Route path="/series" element={<DashboardSeries />} />
+      <Route path="/series" element={<Series />} />
       <Route
         path="/series/detail/:id"
-        element={<DashboardSeriesDetail />}
+        element={<SeriesDetail />}
       >
       </Route>
       <Route
         path="/series/upload"
-        element={<DashboardUploadSeries />}
+        element={<UploadSeries />}
       />
       <Route
         path="/series/edit/:id"
-        element={<DashboardEditSeries />}
+        element={<EditSeries />}
+      />
+      <Route
+        path="/post/detail/:id"
+        element={<PostDetail />}
       />
     </Routes>
   )

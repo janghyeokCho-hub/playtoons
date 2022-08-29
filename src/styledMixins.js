@@ -481,3 +481,11 @@ export const Border1pxWhite = css`
 export const Border1pxMountainMist = css`
   border: 1px solid var(--mountain-mist);
 `;
+
+export const NotosansjpNormalGunsmoke17px = css`
+  color: var(--gunsmoke);
+  font-family: var(--font-family-noto_sans_jp);
+  font-size: var(--font-size-m);
+  font-weight: 400;
+  font-style: normal;
+`;

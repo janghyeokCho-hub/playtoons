@@ -1,72 +1,117 @@
-import React, { useState, useEffect, useImperativeHandle, useRef, forwardRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  forwardRef,
+} from "react";
 import styled from "styled-components";
-import { NotosansjpBoldVioletBlue14px, Border1pxVioletBlue } from "@/styledMixins";
+import {
+  NotosansjpBoldVioletBlue14px,
+  Border1pxVioletBlue,
+  Body5,
+  Border1pxTiara,
+  Body7,
+  Body9,
+} from "@/styledMixins";
+import {getValueOrDefault} from '@COMMON/common.js';
+
 
 const TYPE = {
   DEFAULT: "default",
   HOVER: "hover",
   LOADING: "loading",
-  DISABLED : "disabled"
-}
-;
+  DISABLED: "disabled",
+};
+
+const STYLE = {
+  BLUE: "blue",
+  GRAY: "gray"
+};
 
 function ButtonOutline(props, ref) {
-  const {text, width, height = 40, buttonType = TYPE.DEFAULT, dataId, className, handleClick, icon} = props;
+  const {
+    text,
+    buttonType = TYPE.DEFAULT,
+    className = STYLE.BLUE,
+    dataId,
+    handleClick,
+    icon,
+  } = props;
   const [type, setType] = useState(buttonType);
   const refContainer = useRef();
   const refTextLabel = useRef();
 
   const handleMyClick = (e) => {
     setType(TYPE.HOVER);
-    
+
     setTimeout(async () => {
       setType(TYPE.DEFAULT);
     }, 1000);
-    
-    
-    if(handleClick !== undefined) {handleClick(e)}
-  }
-  
-  useImperativeHandle(ref,() => ({
+
+    if (handleClick !== undefined) {
+      handleClick(e);
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
     //page에서 로딩상태 변화를 위해
-    setButtonType : (type) => {
+    setButtonType: (type) => {
       setType(type);
     },
-    getValue : () => {
+    getValue: () => {
       return refContainer.current.value;
-    }
+    },
   }));
-  
+
+  const getHoverColor = () => {
+    let color;
+    switch(className){
+      default:
+        color = "#edeefa";
+      break;
+      case STYLE.GRAY:
+        color = "#c5c5d0";
+      break;
+    }
+
+    return color;
+  }
+
   useEffect(() => {
-    switch(type){
-      default: 
-        refContainer.current.style.backgroundColor = '#ffffff';
+    switch (type) {
+      default:
+        refContainer.current.style.backgroundColor = "#ffffff";
         break;
-        case TYPE.HOVER : 
-        refContainer.current.style.backgroundColor = '#edeefa';
+      case TYPE.HOVER:
+        refContainer.current.style.backgroundColor = getHoverColor();
         break;
-      case TYPE.LOADING : 
-        
+      case TYPE.LOADING:
         break;
-      case TYPE.DISABLED : 
-        
+      case TYPE.DISABLED:
         break;
-    }//switch
-    
+    } //switch
   }, [type]);
-    
 
   return (
-    <Container width={width} height={height} data-id={dataId} className={`${className || ""}`} onClick={handleMyClick} ref={refContainer}>
-      {
-        icon !== undefined && (<Icon icon={icon}></Icon>)
-      }
+    <Container
+      {...props}
+      data-id={dataId}
+      className={`${className || ""}`}
+      onClick={handleMyClick}
+      ref={refContainer}
+    >
+      {icon !== undefined && <Icon icon={icon}></Icon>}
       {
         // 로딩중이라면 로딩 아이콘을 보여준다.
-        // type === TYPE.LOADING ? <Loading icon={icon} /> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
-        type === TYPE.LOADING ? <TextLabel className="text_label-129">Loading...</TextLabel> : <TextLabel className="text_label-129" ref={refTextLabel}>{text}</TextLabel>
+        type === TYPE.LOADING ? (
+          <Loading icon={icon} />
+        ) : (
+          <TextLabel className={`${className || ""}`} ref={refTextLabel}>
+            {text}
+          </TextLabel>
+        )
       }
-      
     </Container>
   );
 }
@@ -74,9 +119,11 @@ function ButtonOutline(props, ref) {
 const Container = styled.div`
   ${Border1pxVioletBlue}
   width : ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
-  padding: 2%;
-  min-width: 117px;
+  height: ${(props) => getValueOrDefault(props.height, 40)}px;
+  margin-left: ${(props) => getValueOrDefault(props.marginLeft, "")};
+  margin-right: ${(props) => getValueOrDefault(props.marginRight, "15px")};
+  margin-bottom: ${(props) => getValueOrDefault(props.marginBottom, "")};
+  padding: ${(props) => getValueOrDefault(props.padding, "2%")};
   border-radius: 5px;
   cursor: pointer;
   display: flex;
@@ -84,34 +131,63 @@ const Container = styled.div`
   justify-content: center;
 
   @media only screen and (max-width: 1025px) {
-      width: ${(props) => props.width - ((props.width / 10) * 2)}px;
-    }
-  
-  &.margin-right{
-    margin-right: 15px;
+    width: ${(props) => props.width - (props.width / 10) * 2}px;
+  }
+
+  &.gray {
+    ${Border1pxTiara}
+  }
+
+  &.mobile{
+    
+  }
+  &.mobile12{
+    height: 20px;
+    padding: 5px 8px;
   }
 `;
 
 const TextLabel = styled.div`
   ${NotosansjpBoldVioletBlue14px}
+  pointer-events: none;
   font-weight: 700;
-  font-size: 1.4em;
   letter-spacing: 1.27px;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  `;
+  color: var(--violet-blue);
+  
+  &.gray{
+    ${Body5}
+    color: var(--manatee);
+  }
+  
+  &.mobile{
+    ${Body7}
+    min-height: 14px;
+    line-height: 14px;
+  }
+  &.mobile12{
+    ${Body9}
+    min-height: 12px;
+    font-weight: 500;
+    line-height: 12px;
+  }
+`;
 
 const Loading = styled.div`
-  background-image: url(${(props) => props.icon})
+  width: 15px;
+  height: 15px;
+  background-size: 100% 100%;
+  background-image: url(${(props) => props.icon});
 `;
 
 const Icon = styled.div`
-  width : 15px;
+  width: 15px;
   height: 15px;
   margin-right: 10px;
   background-size: 100% 100%;
-  background-image: url(${(props) => props.icon})
+  background-image: url(${(props) => props.icon});
 `;
 
 export default forwardRef(ButtonOutline);
