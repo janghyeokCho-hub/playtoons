@@ -34,6 +34,7 @@ const LoginMobile = ({ handleAccountType }) => {
       password: passwordValue,
     };
     const { status, data } = await login(params);
+    console.log(status, data);
 
     if (status === 200) {
       // 성공
@@ -66,7 +67,12 @@ const LoginMobile = ({ handleAccountType }) => {
           callback={handlePasswordChage}
         />
 
-        <RecoveryDiv className="group-2-21 group-2-22">
+        <RecoveryDiv
+          className="group-2-21 group-2-22"
+          onClick={() => {
+            navigate("recover");
+          }}
+        >
           <RecoverLabel className="text_label-220" color="--violet-blue">
             パスワードをお忘れですか?
           </RecoverLabel>

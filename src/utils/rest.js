@@ -173,19 +173,18 @@ export function* loadSaga(action) {
 
 export const requestPromise = (type, params, isForm = false) => {
   return new Promise(async function (resolve, reject) {
-    // const accessToken = getAccessToken();
-
     let url = Config.apiUrl;
     let options = {};
     options.headers = {};
 
-    /*
-    if (accessToken) {
-      options.headers.Authorization = "Bearer " + accessToken;
-    } else {
-      options.headers.Authorization = undefined;
-    }
-    */
+    try {
+      const accessToken = getAccessToken();
+      if (accessToken) {
+        options.headers.Authorization = "Bearer " + accessToken;
+      } else {
+        options.headers.Authorization = undefined;
+      }
+    } catch (e) {}
 
     const { method, path } = getPath(type);
     params = query(params);

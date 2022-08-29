@@ -6,7 +6,7 @@ import { agreementEula } from "@/services/accountService";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import Button from "@COMPONENTS/Button";
 
-const Agreement = () => {
+const AgreementMobile = () => {
   const { state } = useLocation();
   const code = state?.code || "user";
 
@@ -65,18 +65,11 @@ const Agreement = () => {
 };
 
 const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 1em;
+  align-items: center;
 `;
 
 const AgreementTitle = styled.h1`
@@ -130,4 +123,4 @@ const CheckboxLabel = styled.div`
   margin-left: 1em;
 `;
 
-export default Agreement;
+export default AgreementMobile;

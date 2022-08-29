@@ -69,18 +69,11 @@ const Close = () => {
 };
 
 const CloseBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 2em;
+  align-items: center;
 `;
 const CloseHeaderDiv = styled.div`
   display: flex;
@@ -106,7 +99,7 @@ const CloseXmarkDiv = styled.div`
 
 const CloseContextDiv = styled.div`
   ${Body6}
-  width: 385px;
+  width: 100%;
   height: 480px;
   overflow-y: auto;
   &::-webkit-scrollbar {

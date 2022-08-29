@@ -82,26 +82,29 @@ export default function auth(state = initialAuthState, action) {
         fetching: true,
       };
     case authTypes.LOGIN_COMPLETED:
-      let userId = undefined;
+      console.log("authTypes.LOGIN_COMPLETED!!");
+      let accessToken = undefined;
       let err = undefined;
 
       try {
         if (typeof action.result.data === "string") {
-          if (action.result.data.indexOf("아이디") != -1) {
+          if (action.result.data.indexOf("accessToken") != -1) {
             err = action.result.data;
           }
         }
-        if (action.result.data.userId) userId = action.result.data.userId;
+        if (action.result.data.accessToken) {
+          accessToken = action.result.data.accessToken;
+        }
       } catch (err) {}
 
       return {
         ...state,
         fetching: false,
         loading: false,
-        isLoggedIn: userId ? true : false,
+        isLoggedIn: accessToken ? true : false,
         user: {
           ...state.user,
-          userId,
+          accessToken,
         },
         err: err,
       };

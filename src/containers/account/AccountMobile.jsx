@@ -7,8 +7,11 @@ import { faAngleLeft } from "@fortawesome/pro-light-svg-icons";
 import LoginMobile from "@COMPONENTS/auth/LoginMobile";
 import RegisterMobile from "@COMPONENTS/account/RegisterMobile";
 import VerifyCheckMobile from "@/components/account/VerifyCheckMobile";
-
-//angle-right-light
+import AgreementMobile from "@COMPONENTS/account/AgreementMobile";
+import RecoverMobile from "@COMPONENTS/account/RecoverMobile";
+import CloseMobile from "@COMPONENTS/account/CloseMobile";
+import RecoverCheckMobile from "@COMPONENTS/account/RecoverCheckMobile";
+import RecoverConfirmMobile from "@COMPONENTS/account/RecoverConfirmMobile";
 
 const AccountMobile = () => {
   const navigate = useNavigate();
@@ -29,6 +32,11 @@ const AccountMobile = () => {
         <Route path={"*"} element={<LoginMobile />} />
         <Route path={"register"} element={<RegisterMobile />} />
         <Route path={"verify-check"} element={<VerifyCheckMobile />} />
+        <Route path={"agreement"} element={<AgreementMobile />} />
+        <Route path={"close"} element={<CloseMobile />} />
+        <Route path={"recover"} element={<RecoverMobile />} />
+        <Route path={"recover-check"} element={<RecoverCheckMobile />} />
+        <Route path={"recover-confirm"} element={<RecoverConfirmMobile />} />
       </Routes>
     </Container>
   );
