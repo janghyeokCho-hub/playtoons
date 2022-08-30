@@ -5,6 +5,7 @@ import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
 import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
+import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 
 /**
 * Dashboard url 분기 처리
@@ -15,7 +16,10 @@ import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 export default function Dashboard() {
   return (
     <Routes>
-      <Route path="/series" element={<Series />} />
+      <Route 
+        path="/series" 
+        element={<Series />} 
+      />
       <Route
         path="/series/detail/:id"
         element={<SeriesDetail />}
@@ -28,6 +32,10 @@ export default function Dashboard() {
       <Route
         path="/series/edit/:id"
         element={<EditSeries />}
+      />
+      <Route 
+        path="/post" 
+        element={<PostList />} 
       />
       <Route
         path="/post/detail/:id"

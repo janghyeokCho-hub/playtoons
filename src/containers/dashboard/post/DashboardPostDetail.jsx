@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import { Body1, NotosansjpNormalGunsmoke17px, NotosansjpBoldBlack16px } from "@/styledMixins";
+import React, { useEffect, useState } from "react";
+import {
+  Body1,
+  NotosansjpNormalGunsmoke17px,
+  NotosansjpBoldBlack16px,
+} from "@/styledMixins";
 import styled from "styled-components";
 
 import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
-import ButtonOutline from '@COMPONENTS/dashboard/ButtonOutline';
-import ButtonDefault from '@COMPONENTS/dashboard/ButtonDefault';
+import ButtonOutline from "@COMPONENTS/dashboard/ButtonOutline";
+import ButtonDefault from "@COMPONENTS/dashboard/ButtonDefault";
 
-import iconView from '@ICONS/icon_view_gray01.png';
-import iconHeart from '@ICONS/icon_heart_gray02.png';
-import iconComent from '@ICONS/icon_coment_gray01.png';
+import iconView from "@ICONS/icon_view_gray01.png";
+import iconHeart from "@ICONS/icon_heart_gray02.png";
+import iconComent from "@ICONS/icon_coment_gray01.png";
 
 const text = {
   page_title: "投稿詳細",
@@ -29,9 +33,6 @@ const text = {
   icon: "アイコン",
 };
 
-
-
-
 const tempData = {
   name: "シェルターアーク",
   title: "終わらない話",
@@ -42,126 +43,160 @@ const tempData = {
   view_count: "1.2k",
   good_count: "1.2k",
   coment_count: "966",
-
   content_title: "シェルターアーク 2話",
   content_date: "2022.06.10",
-  content_summary: <React.Fragment>モと戦う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。</React.Fragment>,
-  content_image: "/img/dashboardpostdetail-rectangle-3F15B08E-F381-4DB5-9F3D-63F6E781FDA3.jpg",
-  content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
-  
-  my_icon_image: "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
-  
+  content_summary: (
+    <React.Fragment>
+      モと戦う為、特殊チームレンジャーを創設したが、
+      <br />
+      クモの圧倒的な力には勝てず。
+    </React.Fragment>
+  ),
+  content_image:
+    "/img/dashboardpostdetail-rectangle-3F15B08E-F381-4DB5-9F3D-63F6E781FDA3.jpg",
+  content_next_summary:
+    "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
+
+  my_icon_image:
+    "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
 };
 
-const tempReactions= [
+const tempReactions = [
   {
     id: "12",
-    profile: "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
+    profile:
+      "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
     name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-    coment: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
+    coment:
+      "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
     good_count: "123",
   },
   {
     id: "15",
-    profile: "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
+    profile:
+      "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
     name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-    coment: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
+    coment:
+      "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
     good_count: "123",
   },
 ];
 
-
-
-
 export default function DashboardPostDetail() {
   const [reactionList, setReactionList] = useState([]);
   const [data, setData] = useState({
-    name: "シェルターアーク",
-    title: "終わらない話",
-    episode_count: "541話",
-    public_date: "2022/06/07",
-    end_date: "2022/06/07",
-    status: "公開中",
-    view_count: "1.2k",
-    good_count: "1.2k",
-    coment_count: "966",
-  
-    content_title: "シェルターアーク 2話",
-    content_date: "2022.06.10",
-    content_summary: <React.Fragment>モと戦う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。</React.Fragment>,
-    content_image: "/img/dashboardpostdetail-rectangle-3F15B08E-F381-4DB5-9F3D-63F6E781FDA3.jpg",
-    content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
-    
-    my_icon_image: "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
+    name: "",
+    title: "",
+    episode_count: "",
+    public_date: "",
+    end_date: "",
+    status: "",
+    view_count: "",
+    good_count: "",
+    coment_count: "",
+    content_title: "",
+    content_date: "",
+    content_summary: "",
+    content_image:"",
+    content_next_summary:"",
+    my_icon_image:"",
   });
 
   const handleReactionClick = (e) => {
     let type = e.target.innerText;
     let id = e.target.getAttribute("data-id");
 
-    if( text.fix === type ){
-
+    if (text.fix === type) {
       console.log("type Click", type, id);
-    }
-    else if( text.good === type ){
-
+    } else if (text.good === type) {
       console.log("good Click", type, id);
-    }
-    else if( text.coment === type ){
-
+    } else if (text.coment === type) {
       console.log("coment Click", type, id);
-    }
-    else if( text.report === type ){
-
+    } else if (text.report === type) {
       console.log("report Click", type, id);
-    }
-    else if( text.delete === type ){
-
+    } else if (text.delete === type) {
       console.log("delete Click", type, id);
     }
-
   };
 
   const getReactionList = (resultList) => {
     return resultList.map((item, index) => {
-      return <RactionFlexContainer key={index}>
-              <ReactionListProfile src={item.profile} />
-              <VerticalContainer>
-                <FlexContainer>
-                  <ReactionListName>{item.name}</ReactionListName>
-                  <IconReactionHeart />
-                  <ReactionGoodCountr>{item.good_count}</ReactionGoodCountr>
-                </FlexContainer>
-                <ReactionListComent>{item.coment}</ReactionListComent>
-                <FlexContainer>
-                  <ButtonOutline text={text.fix} dataId={item.id} marginLeft={"auto"} handleClick={handleReactionClick}/>
-                  <ButtonOutline text={text.good} dataId={item.id} handleClick={handleReactionClick}/>
-                  <ButtonOutline text={text.coment} dataId={item.id} handleClick={handleReactionClick}/>
-                  <ButtonOutline text={text.report} dataId={item.id} handleClick={handleReactionClick}/>
-                  <ButtonOutline text={text.delete} dataId={item.id} handleClick={handleReactionClick}/>
-                </FlexContainer>
-              </VerticalContainer>
-            </RactionFlexContainer>;
+      return (
+        <RactionFlexContainer key={index}>
+          <ReactionListProfile src={item.profile} />
+          <VerticalContainer>
+            <FlexContainer>
+              <ReactionListName>{item.name}</ReactionListName>
+              <IconReactionHeart />
+              <ReactionGoodCountr>{item.good_count}</ReactionGoodCountr>
+            </FlexContainer>
+            <ReactionListComent>{item.coment}</ReactionListComent>
+            <FlexContainer>
+              <ButtonOutline
+                height={"40px"}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"71px"}
+                text={text.fix}
+                dataId={item.id}
+                marginLeft={"auto"}
+                handleClick={handleReactionClick}
+              />
+              <ButtonOutline
+                height={"40px"}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"86px"}
+                text={text.good}
+                dataId={item.id}
+                handleClick={handleReactionClick}
+              />
+              <ButtonOutline
+                height={"40px"}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"102px"}
+                text={text.coment}
+                dataId={item.id}
+                handleClick={handleReactionClick}
+              />
+              <ButtonOutline
+                height={"40px"}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"71px"}
+                text={text.report}
+                dataId={item.id}
+                handleClick={handleReactionClick}
+              />
+              <ButtonOutline
+                height={"40px"}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"71px"}
+                text={text.delete}
+                dataId={item.id}
+                handleClick={handleReactionClick}
+              />
+            </FlexContainer>
+          </VerticalContainer>
+        </RactionFlexContainer>
+      );
     });
-  }
+  };
 
-  
   useEffect(() => {
-    
     setData(tempData);
-    setReactionList( getReactionList(tempReactions) );
+    setReactionList(getReactionList(tempReactions));
   }, []);
-  
-
 
   return (
     <BrowserContainer
       backgroundColor={"var(--desert-storm)"}
-      isAnalysis={true}
+      type={"post_detail"}
       spaceWidth={"7.024024024024023vw"}
-      // padding={"50px 40px"} 
-      >
-
+      // padding={"50px 40px"}
+    >
       <WhiteBoardContainer marginBottm={"40px"}>
         <LabelDataContainer>
           <LabelContainer>
@@ -179,7 +214,7 @@ export default function DashboardPostDetail() {
             <Data>{data.public_date}</Data>
             <Data>{data.end_date}</Data>
             <Data>{data.status}</Data>
-          </VerticalContainer>        
+          </VerticalContainer>
         </LabelDataContainer>
 
         <FlexContainer>
@@ -191,8 +226,19 @@ export default function DashboardPostDetail() {
           <CountText>{data.coment_count}</CountText>
 
           <FloatRightContainer>
-            <ButtonOutline text={text.reaction_management} padding={"10px 18px"} />
-            <ButtonDefault text={text.modify} padding={"10px 18px"}  />
+            <ButtonOutline
+              height={"40px"}
+              marginRight={"16px"}
+              borderRadius={"5px"}
+              width={"162px"}
+              text={text.reaction_management}
+              padding={"10px 18px"}
+              />
+            <ButtonDefault 
+              width={"86px"}
+              height={"40px"} 
+              borderRadius={"5px"}
+              text={text.modify} padding={"10px 18px"} />
           </FloatRightContainer>
         </FlexContainer>
       </WhiteBoardContainer>
@@ -207,29 +253,37 @@ export default function DashboardPostDetail() {
         <RactionFlexContainer>
           <ReactionListProfile src={data.my_icon_image} />
           <VerticalContainer>
-            <InputComentContainer>
-            
-            </InputComentContainer>
+            <InputComentContainer></InputComentContainer>
             <FlexContainer>
-              <ButtonOutline text={text.icon} className={"gray"}  height={32} padding={"7px 21px"} marginLeft={"0px"}/>
-              <ButtonDefault text={text.register} height={32} marginLeft={"auto"}/>
+              <ButtonOutline
+                text={text.icon}
+                marginRight={"16px"}
+                borderRadius={"5px"}
+                width={"106px"}
+                height={"32px"}
+                className={"gray"}
+              />
+              <ButtonDefault
+                width={"86px"}
+                height={"33px"} 
+                borderRadius={"5px"}
+                text={text.register}
+                marginLeft={"auto"}
+              />
             </FlexContainer>
           </VerticalContainer>
         </RactionFlexContainer>
 
         {reactionList}
-
       </WhiteBoardContainer>
-
     </BrowserContainer>
   );
 }
 
-
 const FloatRightContainer = styled.div`
   display: flex;
   margin-left: auto;
-  `;
+`;
 
 const ReactionGoodCountr = styled.div`
   min-height: 17px;
@@ -240,7 +294,7 @@ const ReactionGoodCountr = styled.div`
   letter-spacing: 0.8px;
   line-height: 17px;
   white-space: nowrap;
-  `;
+`;
 
 const FlexContainer = styled.div`
   width: 100%;
@@ -252,9 +306,7 @@ const RactionFlexContainer = styled(FlexContainer)`
   align-items: flex-start;
 `;
 
-const VerticalContainer = styled.div`
-`;
-
+const VerticalContainer = styled.div``;
 
 const InputComentContainer = styled.textarea`
   width: 590px;
@@ -355,7 +407,6 @@ const CountText = styled.div`
   white-space: nowrap;
 `;
 
-
 const Icon = styled.div`
   width: 16px;
   height: 12px;
@@ -390,7 +441,6 @@ const LabelContainer = styled.div`
   width: 110px;
 `;
 
-
 const TextLabel = styled.div`
   ${Body1}
   min-height: 20px;
@@ -406,10 +456,13 @@ const Label = styled(TextLabel)`
 
 const WhiteBoardContainer = styled.div`
   width: 100%;
-  padding: ${(props) => props.padding ? props.padding : "50px"};
+  padding: ${(props) => (props.padding ? props.padding : "50px")};
   margin-bottom: ${(props) => props.marginBottm};
   background-color: var(--white);
   border-radius: 4px;
+  @media only screen and (max-width: 1200px) {
+    padding: 50px;
+  }
 `;
 
 const Data = styled(TextLabel)`

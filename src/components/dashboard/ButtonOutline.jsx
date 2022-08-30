@@ -118,32 +118,20 @@ function ButtonOutline(props, ref) {
 
 const Container = styled.div`
   ${Border1pxVioletBlue}
-  width : ${(props) => props.width}px;
-  height: ${(props) => getValueOrDefault(props.height, 40)}px;
-  margin-left: ${(props) => getValueOrDefault(props.marginLeft, "")};
-  margin-right: ${(props) => getValueOrDefault(props.marginRight, "15px")};
-  margin-bottom: ${(props) => getValueOrDefault(props.marginBottom, "")};
-  padding: ${(props) => getValueOrDefault(props.padding, "2%")};
-  border-radius: 5px;
+  width : ${(props) => props.width};
+  height: ${(props) => props.height};    
+  margin-left: ${(props) => props.marginLeft};
+  margin-right: ${(props) => props.marginRight};
+  margin-bottom: ${(props) => props.marginBottom};
+  padding: ${(props) => props.padding};    
+  border-radius: ${(props) => props.borderRadius};
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  @media only screen and (max-width: 1025px) {
-    width: ${(props) => props.width - (props.width / 10) * 2}px;
-  }
-
   &.gray {
     ${Border1pxTiara}
-  }
-
-  &.mobile{
-    
-  }
-  &.mobile12{
-    height: 20px;
-    padding: 5px 8px;
   }
 `;
 
@@ -164,14 +152,10 @@ const TextLabel = styled.div`
   
   &.mobile{
     ${Body7}
-    min-height: 14px;
-    line-height: 14px;
   }
   &.mobile12{
     ${Body9}
-    min-height: 12px;
     font-weight: 500;
-    line-height: 12px;
   }
 `;
 
@@ -188,6 +172,11 @@ const Icon = styled.div`
   margin-right: 10px;
   background-size: 100% 100%;
   background-image: url(${(props) => props.icon});
+  @media only screen and (max-width: 1025px) {
+    width: 12px;
+    height: 12px;
+    margin-right: 4px;
+  }
 `;
 
 export default forwardRef(ButtonOutline);

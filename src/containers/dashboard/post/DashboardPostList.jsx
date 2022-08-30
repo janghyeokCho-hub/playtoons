@@ -12,19 +12,22 @@ import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 
 import SeriesContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
+import Dropdown from "@/components/dashboard/Dropdown";
 
 const size = {
   no: 5,
   image: 8,
   title: 22,
-  type: 10,
-  category: 10,
+  access: 10,
+  good: 10,
   date: 8,
   status: 8,
   arrow: 5,
 };
 
-function DashboardSeries(props) {
+const dataList = ["シリーズすべて", "シリーズすべて1", "シリーズすべて3"];
+
+function DashboardPostList(props) {
   const [data, setData] = useState();
   const navigate = useNavigate();
 
@@ -51,31 +54,30 @@ function DashboardSeries(props) {
     navigate("/dashboard/series/detail/" + no);
   };
 
+  const handleClickPost = () => {
+    console.log("handleClickPost: ");
+    navigate("/dashboard/post/upload/");
+  };
+
   const processRsultData = (result) => {
     const tempData = [
       {
         no: 1,
         image: tempImg1,
         title: "阿修羅ゲート",
-        type: "ウェブトゥーン",
-        category: "アクション",
+        access_count: "1,344,211回",
+        good_count: "アクション",
         date: "2022/06/11",
         status: <React.Fragment>連載中</React.Fragment>,
       },
       {
         no: 2,
         image: tempImg2,
-        title: "シェルターアーク",
-        type: "ウェブトゥーン",
-        category: "アクション",
+        title: "阿修羅ゲート",
+        access_count: "1,344,211回",
+        good_count: "アクション",
         date: "2022/06/11",
-        status: (
-          <React.Fragment>
-            休載中
-            <br />
-            (2022/06/10~)
-          </React.Fragment>
-        ),
+        status: <React.Fragment>連載中</React.Fragment>,
       },
     ];
 
@@ -87,8 +89,8 @@ function DashboardSeries(props) {
             <Image src={value.image} />
           </Td>
           <Td width={size.title}>{value.title}</Td>
-          <Td width={size.type}>{value.type}</Td>
-          <Td width={size.category}>{value.category}</Td>
+          <Td width={size.access}>{value.access_count}</Td>
+          <Td width={size.good}>{value.good_count}</Td>
           <Td width={size.date}>{value.date}</Td>
           <Td width={size.status}>{value.status}</Td>
           <Td width={size.arrow} data-id={value.no} onClick={handleItemClick}>
@@ -106,27 +108,39 @@ function DashboardSeries(props) {
 
   return (
     <SeriesContainer>
-      <TitleContainer>
-        <Title>{"シリーズリスト"}</Title>
-        <SeriesAddButtonContainer>
-          <ButtonOutline
-            width={"180px"}
-            height={"40px"}
-            marginRight={"16px"}
-            borderRadius={"5px"}
-            text={"シリーズを追加"}
-            icon={iconPathPlus}
-          />
-        </SeriesAddButtonContainer>
-      </TitleContainer>
+      <VerticalContainer>
+        <TitleContainer>
+          <Title>{"投稿リスト"}</Title>
+          <SeriesAddButtonContainer>
+            <ButtonOutline
+              height={"40px"}
+              marginRight={"16px"}
+              borderRadius={"5px"}
+              text={"投稿する"}
+              icon={iconPathPlus}
+              padding={"7px 10px"}
+              handleClick={handleClickPost}
+            />
+          </SeriesAddButtonContainer>
+        </TitleContainer>
+
+        <Dropdown
+          dataList={dataList}
+          width={"215px"}
+          height={"42px"}
+          borderRadius={"5px"}
+          className={"post_detail"}
+          selected={"シリーズすべて"}
+        />
+      </VerticalContainer>
       <Table>
         <Header>
           <tr>
             <HeaderCell width={size.no}>{"番号"}</HeaderCell>
             <HeaderCell width={size.image}>{"表紙"}</HeaderCell>
             <HeaderCell width={size.title}>{"タイトル"}</HeaderCell>
-            <HeaderCell width={size.type}>{"タイプ"}</HeaderCell>
-            <HeaderCell width={size.category}>{"カテゴリ"}</HeaderCell>
+            <HeaderCell width={size.access}>{"アクセス数"}</HeaderCell>
+            <HeaderCell width={size.good}>{"いいね"}</HeaderCell>
             <HeaderCell width={size.date}>{"掲載日"}</HeaderCell>
             <HeaderCell width={size.status}>{"状態"}</HeaderCell>
             <HeaderCell width={size.arrow}></HeaderCell>
@@ -206,8 +220,12 @@ const AngleRight = styled.div`
 
 const TitleContainer = styled.div`
   width: 100%;
-  height: 110px;
   padding: 30px 0;
+  margin-bottom: 35px;
+`;
+
+const VerticalContainer = styled.div`
+  margin-bottom: 30px;
 `;
 
 const Title = styled.h1`
@@ -223,4 +241,4 @@ const SeriesAddButtonContainer = styled.div`
   float: right;
 `;
 
-export default DashboardSeries;
+export default DashboardPostList;

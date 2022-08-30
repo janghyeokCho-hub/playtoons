@@ -12,6 +12,8 @@ import iconDashboard from '@ICONS/icon_dashboard.png';
 import iconPorfile from '@ICONS/icon_profile.png';
 import iconAnalysis from '@ICONS/icon_analysis.png';
 
+//Nav메뉴 높이
+const top = 50;
 
 const onClickSupport = () => {
   console.log("move to support management page");
@@ -39,16 +41,26 @@ const onClickDashboard = () => {
 
 const onClickAnalysis = () => {
   console.log("move to onClickAnalysis ");
+
+}
+
+const getExtraNav = ( props ) => {
+  switch(props.type){
+    default : 
+      break;
+    case "post_detail" : 
+      return ( <NavBarItem top={top*7} onClick={onClickAnalysis} icon={iconAnalysis} selectedIcon={iconAnalysis} text={"分析"} /> );
+  }
+
 }
 
 function NavBarDashboard3(props) {
-
-  let top = 50;
+ 
 
   return (
     <NavBarDashboard width={300}>
       {
-        props.isAnalysis && ( <NavBarItem top={top*7} onClick={onClickAnalysis} icon={iconAnalysis} selectedIcon={iconAnalysis} text={"分析"} /> )
+        getExtraNav(props)
       }
       <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSupport} selectedIcon={iconSupport} text={"支援管理"} />
       <NavBarItem top={top*5} onClick={onClickPost} icon={iconContribution} selectedIcon={iconContribution}  text={"投稿管理"} />
@@ -71,7 +83,7 @@ const NavBarDashboard = styled.div`
       width: ${(props) => props.width - ((props.width / 10) * 2)}px;
     }
 
-  @media only screen and (max-width: 768px) {
+  @media only screen and (max-width: 1000px) {
       display: none;
     }
 `;

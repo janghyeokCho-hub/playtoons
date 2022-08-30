@@ -5,13 +5,19 @@ import { Body1 } from "@/styledMixins";
 
 
 function DropdownGroup(props) {
-  const { children, label, className, dataList } = props;
+  const { label, dataList } = props;
 
   return (
-    <Container className={`dropdown-group ${className || ""}`}>
-      <TextLabel>{label}</TextLabel>
+    <Container {...props}>
+      <TextLabel {...props}>{label}</TextLabel>
       {
-        dataList !== undefined && <Dropdown dataList={dataList} className={className} selected={children} />
+        dataList !== undefined && <Dropdown 
+                                    {...props}
+                                    width={"215px"}
+                                    height={"45px"}
+                                    marginTop={"20px"}
+                                    borderRadius={"5px"}
+                                    backgroundColor={"var(--white)"} />
       }
     </Container>
   );
@@ -19,14 +25,14 @@ function DropdownGroup(props) {
 
 const Container = styled.div`
   width: 215px;
+  min-height: 85px;
   margin-bottom: 2vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 85px;
-
-  &.dropdown-group.type {
-    top: 371px;
+  
+  &.upload_series {
+    
   }
 `;
 

@@ -1,22 +1,26 @@
-import React, {useRef, useEffect, useState, useCallback} from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
+import {
+  Title3,
+  Body1,
+  NotosansjpNormalDeepSpaceSparkle14p,
+} from "@/styledMixins";
 
 import SeriesContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
 import DropDownGroup from "@/components/dashboard/DropDownGroup";
+import Dropdown from "@/components/dashboard/Dropdown";
 import TagGroup from "@/components/dashboard/TagGroup";
 import RegisterButton from "@/components/dashboard/ButtonDefault";
 import PreviewButton from "@/components/dashboard/ButtonOutline";
-import ImageUploadBox from '@/components/dashboard/ImageUploadContainer'
+import ImageUploadBox from "@/components/dashboard/ImageUploadContainer";
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 
-import iconInfo from '@IMAGES/icons/icon_info.png';
+import iconInfo from "@IMAGES/icons/icon_info.png";
 
-import tempImage from '@IMAGES/dashboardseries-rectangle-copy.png';
-
+import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 
 const textData = {
   label_series_register: "シリーズ登録",
@@ -36,10 +40,7 @@ const textData = {
   label_can_not_edit: "編集不可",
 };
 
-const typeDataList = [
-  "1", "2", "3"
-];
-
+const typeDataList = ["1", "2", "3"];
 
 function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
@@ -48,76 +49,123 @@ function DashboardUploadSeries(props) {
 
   let seriesData = {};
 
-  
   const handleRegister = () => {
     console.log("refToggle", refIsAdult);
-    
-  }
-  
+  };
+
   const handlePreview = () => {
     console.log("refToggle", refIsAdult);
-    
-  }
-  
-  const handlePostImageFile = useCallback((file) => {
-  // 폼데이터 구성
-  const formData = new FormData();
-  const config = {
-    header: {
-      "content-type": "multipart/form-data",
-    },
   };
+
+  const handlePostImageFile = useCallback((file) => {
+    // 폼데이터 구성
+    const formData = new FormData();
+    const config = {
+      header: {
+        "content-type": "multipart/form-data",
+      },
+    };
     formData.append("file", file);
     console.log("postImage file", file);
-  },[]);
-  
+  }, []);
+
   const handleTimelineImageFile = (file) => {
-    
     console.log("handleTimelineImageFile", file);
-  }
-  
+  };
+
   useEffect(() => {
     //분기 upload or edit
-    setMode( params.id === undefined );
+    setMode(params.id === undefined);
 
-    return () => {
-    }
+    return () => {};
   }, [isModeUpload]);
 
   return (
     <SeriesContainer backgroundColor={"var(--desert-storm)"} isBorder={true}>
       <Container>
         <form method="post" enctype="multipart/form-data">
-          <TextLabel>{isModeUpload ? textData.label_series_register : textData.label_series_edit}</TextLabel>
-          <FormDefault className={""} label={textData.label_title}>{seriesData.title}</FormDefault>
-          <DropDownGroup label={textData.label_type} className={`type ${isModeUpload ? '' : 'disabled'}`} dataList={typeDataList} ></DropDownGroup>
-          <DropDownGroup label={textData.label_category} className={"category"}  dataList={typeDataList} ></DropDownGroup>
-          <AbultGroup >
-            <TextLabelAdult >{textData.label_adult}</TextLabelAdult>
-            <FlexRow >
-              <ToggleOn ref={refIsAdult} className={"group-3-22"} selected={false} />
-              <R19 >{textData.label_r_19}</R19>
+          <TextLabel>
+            {isModeUpload
+              ? textData.label_series_register
+              : textData.label_series_edit}
+          </TextLabel>
+          <FormDefault className={""} label={textData.label_title}>
+            {seriesData.title}
+          </FormDefault>
+          <DropdownTextLabel>{textData.label_type}</DropdownTextLabel>
+          <Dropdown 
+            {...props}
+            width={"215px"}
+            height={"45px"}
+            marginTop={"20px"}
+            marginBottom={"2vh"}
+            borderRadius={"5px"}
+            backgroundColor={"var(--white)"} 
+            className={`${isModeUpload ? "" : "disabled"}`}
+            dataList={typeDataList}
+            />
+          <DropdownTextLabel>{textData.label_category}</DropdownTextLabel>
+          <Dropdown 
+            {...props}
+            width={"215px"}
+            height={"45px"}
+            marginTop={"20px"}
+            marginBottom={"2vh"}
+            borderRadius={"5px"}
+            backgroundColor={"var(--white)"} 
+            dataList={typeDataList}
+            />
+          <AbultGroup>
+            <TextLabelAdult>{textData.label_adult}</TextLabelAdult>
+            <FlexRow>
+              <ToggleOn
+                ref={refIsAdult}
+                className={"group-3-22"}
+                selected={false}
+              />
+              <R19>{textData.label_r_19}</R19>
             </FlexRow>
           </AbultGroup>
-          <FormDefault className={"group-11-2"} inputClassName={"summary-big"} label={textData.label_summary}></FormDefault>
-          <TagGroup label={textData.label_tag_setting}  ></TagGroup>
+          <FormDefault
+            className={"group-11-2"}
+            inputClassName={"summary-big"}
+            label={textData.label_summary}
+          ></FormDefault>
+          <TagGroup label={textData.label_tag_setting}></TagGroup>
           <TextInfoContainer>
             <IconTextLabel>{textData.label_post_image}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
-          <ImageUploadBox textDragNDrop={textData.label_drag_drop} handleFile={handlePostImageFile}>{tempImage}</ImageUploadBox>
-          <Space/>
+          <ImageUploadBox
+            textDragNDrop={textData.label_drag_drop}
+            handleFile={handlePostImageFile}
+          >
+            {tempImage}
+          </ImageUploadBox>
+          <Space />
 
           <TextInfoContainer>
             <IconTextLabel>{textData.label_timeline}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
-          <ImageUploadBox className={"dashboard_upload_timeline"} textDragNDrop={textData.label_drag_drop} handleFile={handleTimelineImageFile}></ImageUploadBox>
-          <Space/>
+          <ImageUploadBox
+            className={"dashboard_upload_timeline"}
+            textDragNDrop={textData.label_drag_drop}
+            handleFile={handleTimelineImageFile}
+          ></ImageUploadBox>
+          <Space />
 
           <ButtonContainer>
-            <PreviewButton className={"margin-right"} text={textData.label_preview} handleClick={handlePreview} />
-            <RegisterButton text={textData.label_register} className={"padding-group-3-16"} handleClick={handleRegister} />
+            <PreviewButton
+              className={"margin-right"}
+              text={textData.label_preview}
+              handleClick={handlePreview}
+            />
+            <RegisterButton
+              text={textData.label_register}
+              className={"padding-group-3-16"}
+              handleClick={handleRegister}
+            />
           </ButtonContainer>
         </form>
       </Container>
@@ -165,11 +213,10 @@ const IconTextLabel = styled.div`
 const TextInfoContainer = styled.div`
   width: 100%;
   margin-bottom: 1vh;
-  display: flex ;
+  display: flex;
   flex-direction: row;
   align-items: center;
 `;
-
 
 const IconInfoPostimage = styled.div`
   width: 16px;
@@ -216,5 +263,13 @@ const R19 = styled.div`
   white-space: nowrap;
 `;
 
+const DropdownTextLabel = styled.div`
+  ${Body1}
+  min-height: 20px;
+  font-weight: 700;
+  color: var(--nevada);
+  line-height: 20px;
+  white-space: nowrap;
+`;
 
 export default DashboardUploadSeries;

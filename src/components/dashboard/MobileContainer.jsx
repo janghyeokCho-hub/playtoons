@@ -23,7 +23,9 @@ function MobileContainer(props) {
           </ContentContainer>
         ) : 
         (
-          props.children
+          <ContentContainer {...props}>
+            {props.children}
+          </ContentContainer>
         )
       }
     </Container>
@@ -32,11 +34,11 @@ function MobileContainer(props) {
 
 const ContentContainer = styled.div`
   width: 100%;
+  padding: ${(props) => props.padding ? props.padding : ""};
 `;
 
 const Container = styled.div`
   width: 100%;
-  padding: ${(props) => props.padding ? props.padding : ""};
   background-color: var(--white);
   overflow-x: hidden;
   font-size: 10px;

@@ -5,6 +5,7 @@ import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetailMobi
 import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetailMobile";
+import PostList from "@CONTAINERS/dashboard/post/DashboardPostListMobile";
 
 /**
 * Dashboard mobile url 분기 처리
@@ -34,6 +35,10 @@ export default function DashboardMobile() {
       <Route
         path="/post/detail/:id"
         element={<PostDetail />}
+      />
+      <Route 
+        path="/post" 
+        element={<PostList />} 
       />
     </Routes>
   )

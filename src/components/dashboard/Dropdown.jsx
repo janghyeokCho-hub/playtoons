@@ -1,29 +1,46 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Border1pxTiara } from "@/styledMixins";
+import { Border1pxTiara, Body4, Body7 } from "@/styledMixins";
 import iconDown from '@ICONS/icon_down.png'
 
+/**
+* Dropdown 리스트를 만든다
+* ex) 
+      const dataList = [
+        "1", "2", "3"
+      ];
+      <Dropdown dataList={dataList} className={"disabled"} selected={"1"} />
+* @version 1.0.0
+* @author 이현국
+* @param dataList 아이템 리스트
+* @param className 스타일
+* @param selected 선택된 아이템
+*/
 function Dropdown(props) {
-  const { dataList, className, selected} = props;
+  const { dataList, selected} = props;
   const [isShowDropdown, setShowDropdown] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleToggle = () => setShowDropdown(!isShowDropdown);
+  const handleToggle = () => {
+    if( dataList !== undefined ){
+      setShowDropdown(!isShowDropdown);
+    }
+  };
 
   const handleOptionClicked = value => () => {
     setSelectedOption(value);
     setShowDropdown(false);
   };
 
-  const getLiElements = () => {
+  const getLiElements = (props) => {
     return dataList.map((data, index) => {
-      return <ListItem key={index} onClick={handleOptionClicked(data)}>{data}</ListItem>;
+      return <ListItem key={index} {...props} onClick={handleOptionClicked(data)}>{data}</ListItem>;
     });
   }
 
   useEffect(() => {
+    //초기값 셋팅
     if( selected !== undefined ){
-
       const selectedItem = dataList.map((data, index) => {
         return selected === data && data;
       });
@@ -36,15 +53,15 @@ function Dropdown(props) {
   }, []);
   
   return (
-      <DropDownContainer onClick={selected === undefined ? handleToggle : null} className={`dropdown ${className || "" }`}>
-        <Path className="path-9" src={iconDown} />
-        <DropDownHeader className={`${className || "" }`}>{selectedOption}</DropDownHeader>
+      <DropDownContainer onClick={handleToggle} {...props}>
+        <Path {...props} src={iconDown} />
+        <DropDownHeader {...props}>{selectedOption}</DropDownHeader>
         {
           isShowDropdown === true && (
-            <DropDownListContainer>
-              <DropDownList>
+            <DropDownListContainer {...props}>
+              <DropDownList {...props}>
                 {
-                  dataList !== undefined && ( getLiElements() )
+                  dataList !== undefined && ( getLiElements(props) )
                 }
               </DropDownList>
             </DropDownListContainer>
@@ -57,21 +74,22 @@ function Dropdown(props) {
 
 const DropDownContainer = styled.div`
   ${Border1pxTiara}
-  width: 215px;
-  height: 45px;
-  padding-left: 18px;
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 5px;
+  width: ${(props) =>  props.width};  //215
+  height: ${(props) =>  props.height};    //45
+  padding-left: ${(props) =>  props.paddingLeft};
+  margin-top: ${(props) =>  props.marginTop};
+  margin-bottom: ${(props) =>  props.marginBottom};
+  margin-right: ${(props) =>  props.marginRight};
+  background-color: ${(props) =>  props.backgroundColor};  //var(--white)
+  border-radius: ${(props) =>  props.borderRadius};    //5
+  align-items: flex-start; 
+  position: relative;
   
-  &.dropdown.type {
+  &.type {
     border-radius: 4px;
   }
   
-  &.dropdown.category {
+  &.category {
     border-radius: 4px;
   }
 
@@ -81,53 +99,89 @@ const DropDownContainer = styled.div`
 `;
 
 const DropDownHeader = styled.div`
-  width: 215px;
-  height: 45px;
-  padding: 13px;
-  margin-bottom: 0.8em;
+  width: ${(props) =>  props.width };
   font-weight: 500;
-  font-size: 1.3rem;
-  color: #3faffa;
-  text-align: center;
+  font-size: 1.4em;
+  color: var(--vulcan);
+  white-space: nowrap;
   position: absolute;
+  left: 18px;
+  //세로정렬
+  top: 50%;
+  transform: translate(0, -50%);
 
   &.disabled{
     color: var(--manatee);
   }
+  &.post_detail{
+    ${Body4}
+    font-weight: 700;
+  }
+  &.post_detail_mobile{
+    ${Body7}
+    left: 8px;
+  }
 `;
 
 const DropDownListContainer = styled.div`
-  margin-top: 45px;
+  margin-top: ${(props) =>  props.height };
   z-index: 50;
+  position: absolute;
 `;
 
 const DropDownList = styled.ul`
-  width: 215px;
-  height: 45px;
+  width: ${(props) =>  props.width };
+  height: ${(props) =>  props.height };
   padding: 0;
   margin: 0;
   background: #ffffff;
   box-sizing: border-box;
-  color: #3faffa;
-  font-size: 1.3rem;
+  color: var(--vulcan);
+  font-size: 1.4em;
   font-weight: 500;
   &:first-child {
     padding-top: 0.8em;
   }
+  &.post_detail{
+    ${Body4}
+    font-weight: 700;
+    white-space: nowrap;
+  }
 `;
 
 const ListItem = styled.li`
-  height: 45px;
+  height: ${(props) =>  props.height };
   text-align: center;
   list-style: none;
   background: #ffffff;
+  color: var(--vulcan);
+  white-space: nowrap;
+  &.post_detail{
+    ${Body4}
+    font-weight: 700;
+  }
+  &.post_detail_mobile{
+    ${Body7}
+    ;
+  }
 `;
 
 
 const Path = styled.img`
   width: 12px;
   height: 7px;
-  margin: 18px;
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translate(0, -50%);
+  &.post_detail{
+    right: 18px;
+  }
+  &.post_detail_mobile{
+    width: 10px;
+    height: 5.83px;
+    right: 8px;
+  }
 `;
 
 export default Dropdown;

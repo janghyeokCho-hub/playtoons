@@ -65,7 +65,7 @@ const ContentContainer = styled.div`
   font-size: 10px;
   box-shadow: inset 0 2px 9px -7px #00000080;
   
-    @media only screen and (max-width: 1025px) {
+    @media only screen and (max-width: 1200px) {
       font-size: 8px;
     }
   
@@ -79,7 +79,7 @@ const ContentWrapContainer = styled.div`
   padding: ${(props) => props.padding === undefined ? '7.454739084132055vh 0' : props.padding};
   flex: 15;
   
-    @media only screen and (max-width: 1025px) {
+    @media only screen and (max-width: 1200px) {
       flex: 25;
     }
   
@@ -95,6 +95,10 @@ const ContentWhiteBorderContainer = styled.div`
 
 const Space = styled.div` 
   width: ${(props) => props.width === undefined ? '2.027027027027027vw' : props.width};
+
+  @media only screen and (max-width: 1200px) {
+      width: 20px;
+    }
 `;
 
 export default SeriesContainer;
