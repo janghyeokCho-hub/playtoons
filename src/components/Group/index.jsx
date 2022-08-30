@@ -27,6 +27,7 @@ const Group1 = styled.div`
 
 const TxtFormSearch = styled.div`
   ${Body3}
+  min-width: 400px;
   min-height: 20px;
   margin-left: 8px;
   color: var(--manatee);

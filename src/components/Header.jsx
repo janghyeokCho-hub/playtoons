@@ -51,6 +51,8 @@ const NonLoginMenu = ({ isMobile }) => {
         bgColor="--violet-blue"
         width="100px"
         height="40px"
+        marginLeft="1em"
+        marginRight="1em"
         callback={() => (window.location.href = "/account")}
         borderRadius="20px"
       />
@@ -86,7 +88,7 @@ const Header = () => {
 
 const HeaderDiv = styled.div`
   width: 100vw;
-  height: 60px;
+  height: 100px;
   background-color: var(--white);
   box-shadow: 0px 2px 20px -10px #00000080;
   padding-left: 1.5em;
