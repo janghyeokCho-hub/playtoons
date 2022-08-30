@@ -11,6 +11,7 @@ const Input = ({
   fontWeight,
   width = "400px",
   height = "40px",
+  disabled,
 }) => {
   const [isPwdDisabled, setIsPwdDisabled] = useState(true);
   const [type, setType] = useState(null);
@@ -37,6 +38,7 @@ const Input = ({
           onInput={callback}
           fontWeight={fontWeight}
           height={height}
+          disabled={disabled}
         />
         {inputType === "password" && (
           <EyeIconDiv onClick={() => setIsPwdDisabled(!isPwdDisabled)}>

@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useCallback, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-
-import { Border1pxGhost } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
 import { recoverConfirm } from "@/services/accountService";
 
-const UpdatePasswordConfirm = () => {
+const UpdatePasswordConfirmMobile = () => {
   const { state } = useLocation();
   const code = state?.code;
   const [newPwd, setNewPwd] = useState(null);
@@ -42,11 +40,13 @@ const UpdatePasswordConfirm = () => {
         <Input
           inputType="password"
           label="パスワード"
+          width="100%"
           callback={handleNewPwdChage}
         />
         <Input
           inputType="password"
           label="パスワード確認"
+          width="100%"
           callback={handleNewPwdCheckChage}
         />
       </UpdatePasswordConfirmInputDiv>
@@ -54,6 +54,7 @@ const UpdatePasswordConfirm = () => {
         text=">パスワード変更"
         color="--white"
         bgColor="--violet-blue"
+        width="100%"
         marginTop="10px"
         marginBottom="10px"
         callback={() => handlePwdConfirm()}
@@ -63,6 +64,7 @@ const UpdatePasswordConfirm = () => {
         color="--violet-blue"
         bgColor="--white"
         bdColor="--violet-blue"
+        width="100%"
         marginBottom="10px"
       />
     </AccountBoxDiv>
@@ -70,18 +72,11 @@ const UpdatePasswordConfirm = () => {
 };
 
 const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 2em;
+  align-items: center;
 `;
 
 const UpdatePasswordConfirmTitle = styled.h1`
@@ -110,9 +105,10 @@ const UpdatePasswordConfirmContent = styled.div`
 `;
 
 const UpdatePasswordConfirmInputDiv = styled.div`
+  width: 100%;
   align-self: center;
   margin-top: ${(props) => props.marginTop};
   margin-bottom: ${(props) => props.marginBottom};
 `;
 
-export default UpdatePasswordConfirm;
+export default UpdatePasswordConfirmMobile;

@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,9 @@ import RecoverMobile from "@COMPONENTS/account/RecoverMobile";
 import CloseMobile from "@COMPONENTS/account/CloseMobile";
 import RecoverCheckMobile from "@COMPONENTS/account/RecoverCheckMobile";
 import RecoverConfirmMobile from "@COMPONENTS/account/RecoverConfirmMobile";
+import UpdateEmailMobile from "@COMPONENTS/account/UpdateEmailMobile";
+import UpdatePasswordCheckMobile from "@COMPONENTS/account/UpdatePasswordCheckMobile";
+import UpdatePasswordConfirmMobile from "@COMPONENTS/account/UpdatePasswordConfirmMobile";
 
 const AccountMobile = () => {
   const navigate = useNavigate();
@@ -37,6 +40,15 @@ const AccountMobile = () => {
         <Route path={"recover"} element={<RecoverMobile />} />
         <Route path={"recover-check"} element={<RecoverCheckMobile />} />
         <Route path={"recover-confirm"} element={<RecoverConfirmMobile />} />
+        <Route path={"update-email"} element={<UpdateEmailMobile />} />
+        <Route
+          path={"update-password-check"}
+          element={<UpdatePasswordCheckMobile />}
+        />
+        <Route
+          path={"update-password-confirm"}
+          element={<UpdatePasswordConfirmMobile />}
+        />
       </Routes>
     </Container>
   );

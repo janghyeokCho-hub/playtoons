@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Title3, Border1pxGhost } from "@/styledMixins";
+import { Title3 } from "@/styledMixins";
 import Input from "@COMPONENTS/Input";
 import Button from "@COMPONENTS/Button";
 import { verifyCheckResend, verifyCheck } from "@/services/accountService";
@@ -11,7 +11,7 @@ import Timer from "@COMPONENTS/Timer";
 /**
  * 이메일 변경을 위해 새 이메일 입력 받는 폼
  */
-const UpdateEmail = () => {
+const UpdateEmailMobile = () => {
   const navigate = useNavigate();
   const [newEmail, setNewEmail] = useState(null);
   const [code, setCode] = useState(null);
@@ -28,7 +28,7 @@ const UpdateEmail = () => {
   };
 
   /**
-   * 인증 코드 이메일 발송
+   * 이메일 인증 코드 발송
    */
   const handleVerifySend = useCallback(async () => {
     const { status, data } = await verifyCheckResend({ email: newEmail });
@@ -94,7 +94,8 @@ const UpdateEmail = () => {
         <Input
           inputType="text"
           label="新しいメールアドレス"
-          fontWeight={500}
+          width="100%"
+          fontWeight="500px"
           callback={handleNewEmailChange}
           disabled={verifyIsShow}
         />
@@ -103,7 +104,8 @@ const UpdateEmail = () => {
           <Input
             inputType="text"
             label="認証コード"
-            fontWeight={500}
+            width="100%"
+            fontWeight="500px"
             callback={handleCodeChange}
           />
         )}
@@ -114,6 +116,7 @@ const UpdateEmail = () => {
         text={(verifyIsShow && "確認する") || "次へ"}
         color="--white"
         bgColor="--violet-blue"
+        width="100%"
         marginTop="30px"
         callback={() =>
           verifyIsShow ? handleVerifyCheck() : handleVerifySend()
@@ -123,6 +126,7 @@ const UpdateEmail = () => {
         text="戻る"
         color="--violet-blue"
         bgColor="--white"
+        width="100%"
         marginTop="15px"
         callback={() => navigate(-1)}
       />
@@ -131,18 +135,11 @@ const UpdateEmail = () => {
 };
 
 const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 2em;
+  align-items: center;
 `;
 
 const UpdateEmailTitle = styled.h1`
@@ -172,9 +169,10 @@ const UpdateEmailContent = styled.div`
 `;
 
 const UpdateEmailInputDiv = styled.div`
+  width: 100%;
   align-self: center;
   margin-top: ${(props) => props.marginTop};
   margin-bottom: ${(props) => props.marginBottom};
 `;
 
-export default UpdateEmail;
+export default UpdateEmailMobile;
