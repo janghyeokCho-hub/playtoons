@@ -13,6 +13,8 @@ import RegisterCompleted from "@CONTAINERS/account/RegisterCompleted";
 import RegisterCompletedMobile from "@CONTAINERS/account/RegisterCompletedMobile";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import DashboardMobile from "@CONTAINERS/dashboard/DashboardMobile";
+import Upload from "@CONTAINERS/upload/Upload";
+import UploadMobile from "@CONTAINERS/upload/UploadMobile";
 
 import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";
@@ -41,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
+            <Route path="/upload/*" element={<Upload />} />
             <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
@@ -56,6 +59,7 @@ function App() {
               element={<RegisterCompletedMobile />}
             />
             <Route path="/dashboard/*" element={<DashboardMobile />} />
+            <Route path="/upload/*" element={<UploadMobile />} />
           </Routes>
         </BrowserRouter>
       </MobileView>
