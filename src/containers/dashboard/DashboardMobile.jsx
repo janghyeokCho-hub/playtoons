@@ -6,7 +6,7 @@ import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetailMobile";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostListMobile";
-import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
+import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionListMobile";
 
 /**
 * Dashboard mobile url 분기 처리

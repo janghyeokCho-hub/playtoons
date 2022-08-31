@@ -154,8 +154,8 @@ const Container = styled.div`
   }
 
   @media only screen and (max-width: 1025px) {
-    width: ${(props) => getResizedNumber(props.width, 0.8)};
-    height: ${(props) => getResizedNumber(props.height, 0.8)};
+    /* width: ${(props) => getResizedNumber(props.width, 0.8)};
+    height: ${(props) => getResizedNumber(props.height, 0.8)}; */
   }
 `;
 

@@ -48,7 +48,7 @@ const Title = styled.div`
 const IconArrowLeft = styled.img`
   width: 9px;
   height: 16px;
-  margin-right: 10px;
+  margin-right: 8px;
 `;
 
 const PageTitleContainer = styled.div`

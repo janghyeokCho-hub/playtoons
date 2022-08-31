@@ -7,7 +7,7 @@ import {getResizedNumber} from '@/common/common';
 
 import iconPathPlus from "@ICONS/icon_plus_blue.png";
 
-import SeriesContainer from "@/components/dashboard/BrowserContainer";
+import BrowerContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
 import Dropdown from "@/components/dashboard/Dropdown";
 
@@ -35,7 +35,6 @@ let textData = {
   report : "通報",
   delete : "削除",
 };
-//그라데이션 - 10cm, 사랑인가봐 - 멜로망스
 
 const dataList = ["シリーズすべて", "シリーズすべて1", "シリーズすべて3"];
 
@@ -104,9 +103,9 @@ export default function DashboardReactionList(props) {
       },
       {
         no: 2,
-        title: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
-        access_count: "500CP",
-        good_count: "お祭り楽しい！",
+        content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
+        money: "500CP",
+        good: "お祭り楽しい！",
         date: "2022/06/11",
       },
     ];
@@ -208,7 +207,7 @@ export default function DashboardReactionList(props) {
   }, []);
 
   return (
-    <SeriesContainer
+    <BrowerContainer
       spaceWidth={"49px"}
       >
       <VerticalContainer>
@@ -251,7 +250,7 @@ export default function DashboardReactionList(props) {
         </Header>
         <Tbody>{data}</Tbody>
       </Table>
-    </SeriesContainer>
+    </BrowerContainer>
   );
 }
 
