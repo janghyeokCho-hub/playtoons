@@ -14,7 +14,7 @@ import {
   Body7,
   Body9,
 } from "@/styledMixins";
-import {getValueOrDefault} from '@COMMON/common.js';
+import {getResizedNumber} from '@COMMON/common.js';
 
 
 const TYPE = {
@@ -28,6 +28,25 @@ const STYLE = {
   BLUE: "blue",
   GRAY: "gray"
 };
+
+/**
+ * ex) 
+    <ButtonOutline
+      width={"71px"}
+      height={"40px"}
+      marginRight={"16px"}
+      marginBottom={"12px"}
+      borderRadius={"5px"}
+      text={text.fix}
+      dataId={item.id}
+      marginLeft={"auto"}
+      handleClick={handleReactionClick}
+      />
+ * 
+ * @param {*} props 
+ * @param {*} ref 
+ * @returns 
+ */
 
 function ButtonOutline(props, ref) {
   const {
@@ -133,6 +152,11 @@ const Container = styled.div`
   &.gray {
     ${Border1pxTiara}
   }
+
+  @media only screen and (max-width: 1025px) {
+    width: ${(props) => getResizedNumber(props.width, 0.8)};
+    height: ${(props) => getResizedNumber(props.height, 0.8)};
+  }
 `;
 
 const TextLabel = styled.div`
@@ -145,11 +169,17 @@ const TextLabel = styled.div`
   align-items: center;
   color: var(--violet-blue);
   
+  
   &.gray{
     ${Body5}
     color: var(--manatee);
   }
-  
+  &.reaction_list{
+    ${Body5}
+    font-weight: 500;
+    text-align: center;
+    line-height: 16px;
+  }  
   &.mobile{
     ${Body7}
   }

@@ -13,7 +13,18 @@ import iconPorfile from '@ICONS/icon_profile.png';
 import iconAnalysis from '@ICONS/icon_analysis.png';
 
 //Nav메뉴 높이
-const top = 50;
+const top = 48;
+
+let textData = {
+  dashboard : "ダッシュボード",
+  support_management : "支援管理",
+  post_management : "投稿管理",
+  series_management : "シリーズ管理",
+  profile_management : "プロフィル管理",
+  product : "商品",
+  analysis : "分析",
+
+};
 
 const onClickSupport = () => {
   console.log("move to support management page");
@@ -49,7 +60,7 @@ const getExtraNav = ( props ) => {
     default : 
       break;
     case "post_detail" : 
-      return ( <NavBarItem top={top*7} onClick={onClickAnalysis} icon={iconAnalysis} selectedIcon={iconAnalysis} text={"分析"} /> );
+      return ( <NavBarItem top={top*7} onClick={onClickAnalysis} icon={iconAnalysis} selectedIcon={iconAnalysis} text={textData.analysis} /> );
   }
 
 }
@@ -62,13 +73,13 @@ function NavBarDashboard3(props) {
       {
         getExtraNav(props)
       }
-      <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSupport} selectedIcon={iconSupport} text={"支援管理"} />
-      <NavBarItem top={top*5} onClick={onClickPost} icon={iconContribution} selectedIcon={iconContribution}  text={"投稿管理"} />
-      <NavBarItem top={top*4} onClick={onClickSerise} icon={iconSeriesManagement} selectedIcon={iconSeriesManagement}  text={"シリーズ管理"} />
-      <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={"プロフィル管理"} />
-      <NavBarItem top={top*2} onClick={onClickProduct} icon={iconProduct} selectedIcon={iconProduct}  text={"商品"} />
-      <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={"ダッシュボード"} />
-      <TxtNavTit>ダッシュボード</TxtNavTit>
+      <NavBarItem top={top*6} onClick={onClickSupport} icon={iconSupport} selectedIcon={iconSupport} text={textData.support_management} />
+      <NavBarItem top={top*5} onClick={onClickPost} icon={iconContribution} selectedIcon={iconContribution}  text={textData.post_management} />
+      <NavBarItem top={top*4} onClick={onClickSerise} icon={iconSeriesManagement} selectedIcon={iconSeriesManagement}  text={textData.series_management} />
+      <NavBarItem top={top*3} onClick={onClickProfile} icon={iconPorfile} selectedIcon={iconPorfile}  text={textData.profile_management} />
+      <NavBarItem top={top*2} onClick={onClickProduct} icon={iconProduct} selectedIcon={iconProduct}  text={textData.product} />
+      <NavBarItem top={top} onClick={onClickDashboard} icon={iconDashboard} selectedIcon={iconDashboard}  text={textData.dashboard} />
+      <TxtNavTit>{textData.dashboard}</TxtNavTit>
     </NavBarDashboard>
   );
 }

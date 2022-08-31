@@ -51,7 +51,7 @@ function DashboardPostList(props) {
     let no = e.target.getAttribute("data-id");
 
     console.log("data-id : ", no);
-    navigate("/dashboard/series/detail/" + no);
+    navigate("/dashboard/post/detail/" + no);
   };
 
   const handleClickPost = () => {

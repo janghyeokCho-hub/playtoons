@@ -30,6 +30,8 @@ function Dropdown(props) {
   const handleOptionClicked = value => () => {
     setSelectedOption(value);
     setShowDropdown(false);
+
+    if( props.handleItemClick !== null && props.handleItemClick !== undefined ){ props.handleItemClick(value) }
   };
 
   const getLiElements = (props) => {

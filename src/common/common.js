@@ -21,3 +21,24 @@ export const emailValidation = (text) => {
 export const getValueOrDefault = ( value, d ) => {
   return value === undefined ? d : value;
 };
+
+/**
+* 현재 사이즈를 resize 시켜 return
+  getResizedNumber("128px", 0.6)
+    => 76.8px
+* @version 1.0.0
+* @author 이현국
+* @param strSize  문자형 size data
+* @param resize   리사이즈
+* @return 리사이즈된 문자형 size data
+*/
+export const getResizedNumber = (strSize, resize) => {
+  if( strSize === undefined || strSize === null ){
+    return strSize
+  }
+  else{
+    let number = strSize.replace(/[^0-9]/g, "");
+    let strUnit = strSize.replace(/[0-9]/g, "");
+    return (number * resize) + strUnit;
+  }
+}
