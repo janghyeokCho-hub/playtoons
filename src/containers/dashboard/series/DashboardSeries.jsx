@@ -51,6 +51,10 @@ function DashboardSeries(props) {
     navigate("/dashboard/series/detail/" + no);
   };
 
+  const handleClickUpload = (e) => {
+    navigate('/dashboard/series/upload');
+  }
+
   const processRsultData = (result) => {
     const tempData = [
       {
@@ -118,6 +122,7 @@ function DashboardSeries(props) {
             borderRadius={"5px"}
             text={"シリーズを追加"}
             icon={iconPathPlus}
+            handleClick={handleClickUpload}
           />
         </SeriesAddButtonContainer>
       </TitleContainer>

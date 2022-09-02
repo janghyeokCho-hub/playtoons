@@ -1,26 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Body2 } from "@/styledMixins";
+import { useLocation } from "react-router-dom";
 
+export default function NavBarItem(props) {
+const { icon, selectedIcon, text, top, left = 30, onClick, name } = props;
+const [isSelected, setSelected] = useState(false);
+const location = useLocation();
 
-function NavBarItem(props) {
-  const { icon, selectedIcon, text, top, left = 30, onClick } = props;
-  const [isSelected, setSelected] = useState(false);
-
-  const handleClick = () => {
+  const handleClick = (e) => {
     setSelected(!isSelected);
 
-    if( onClick !== undefined ){  onClick();  }
-  }
+    if (onClick !== undefined) {
+      onClick(e);
+    }
+  };
+
+  useEffect(() => {
+    const path = location.pathname;
+    if( path.indexOf(name) !== -1  ){
+      setSelected(true);
+    }
+    
+  }, []);
+  
 
   return (
-    <Container top={top} left={left} onClick={handleClick} className={`${isSelected ? ('selected') : ''}`}>
-      <Icon  className={`${isSelected ? ('selected') : ''}`} icon={icon} selectedIcon={selectedIcon}></Icon>
-      <TextLabel className={`${isSelected ? ('selected') : ''}`}>{text}</TextLabel>
+    <Container
+      top={top}
+      left={left}
+      onClick={handleClick}
+      className={`${isSelected ? "selected" : ""}`}
+      >
+      <Icon
+        className={`${isSelected ? "selected" : ""}`}
+        icon={icon}
+        selectedIcon={selectedIcon}
+        ></Icon>
+      <TextLabel 
+        className={`${isSelected ? "selected" : ""}`}
+        >
+        {text}
+      </TextLabel>
     </Container>
   );
 }
-
 
 const Container = styled.div`
   position: absolute;
@@ -31,10 +55,10 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   background-color: transparent;
-  
-  &.selected{
-      background-color: var(--primary-c01);
-    }
+
+  &.selected {
+    background-color: var(--primary-c01);
+  }
 `;
 
 const Icon = styled.div`
@@ -44,9 +68,8 @@ const Icon = styled.div`
   background-size: 100% 100%;
   background-image: url(${(props) => props.icon});
 
-  &.selected{
+  &.selected {
     background-image: url(${(props) => props.selectedIcon});
-    
   }
 `;
 
@@ -59,11 +82,9 @@ const TextLabel = styled.div`
   color: var(--vulcan);
   line-height: 20px;
   white-space: nowrap;
-  
-  &.selected{
+
+  &.selected {
     color: var(--primary-c11);
   }
 `;
 
-
-export default NavBarItem;

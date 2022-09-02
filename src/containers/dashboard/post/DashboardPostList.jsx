@@ -50,13 +50,11 @@ function DashboardPostList(props) {
   const handleItemClick = (e) => {
     let no = e.target.getAttribute("data-id");
 
-    console.log("data-id : ", no);
     navigate("/dashboard/post/detail/" + no);
   };
 
   const handleClickPost = () => {
-    console.log("handleClickPost: ");
-    navigate("/dashboard/post/upload/");
+    navigate("/upload/post");
   };
 
   const processRsultData = (result) => {
