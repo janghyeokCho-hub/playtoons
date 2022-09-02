@@ -32,46 +32,37 @@ export default function ImageUploadContainer(props) {
 
   const handlePreviewClose = () => {
     setFile(undefined);
-    console.log("handlePreviewClose "+className, file)
   }
 
   useLayoutEffect(() => {
     setFile(data);
-    console.log("useLayoutEffect "+className, file)
   
-    return () => {
-    };
   }, []);
 
   useEffect(() => {
-    console.log("useEffect "+className, file)
   
-    return () => {
-    }
   }, []);
 
   return (
-    <RootContainer>
+    <RootContainer {...props}>
         <input {...InputProps}/>
         {
           file === undefined ? (
-            <Container {...RootProps} maxSize={100} multiple={false} className={`${className || ""} `}>
+            <Container {...RootProps} maxSize={100} multiple={false} {...props}>
               {  isDragActive ? (
                 <TextContainer>
-                  <TextlabelDragNDrop>{"이미지를 놓아주세요."}</TextlabelDragNDrop>
+                  <TextlabelDragNDrop>{props.textInputMessage}</TextlabelDragNDrop>
                 </TextContainer>
                 ) : (
                   <TextContainer>
-                    <TextAlignContainer>
-                      <IconAddPostimage />
-                      <TextlabelDragNDrop className={`${className || ""}`}>{textDragNDrop}</TextlabelDragNDrop>
-                    </TextAlignContainer>
+                    <IconAddPostimage />
+                    <TextlabelDragNDrop className={`${className || ""}`}>{textDragNDrop}</TextlabelDragNDrop>
                   </TextContainer>
                 )
               }
             </Container>
           ) : (
-            <Container className={`${className || ""} preview`}>
+            <Container {...props}>
               <ImagePreviewContainer handleClick={handlePreviewClose}>{file}</ImagePreviewContainer>
             </Container>
           )
@@ -81,21 +72,19 @@ export default function ImageUploadContainer(props) {
 }
 
 const RootContainer = styled.div`
-
+  position: relative;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  margin-bottom: ${(props) => props.marginBottom};
 `;
 
 const Container = styled.div`
   ${Border1pxTiara}
-  width: 220px;
-  height: 300px;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
   background-color: var(--desert-storm);
   border-radius: 4px;
 
-  &.dashboard_upload_timeline{
-    width: 699px;
-    top: 1463px;
-    left: 746px;
-    }
   &.preview{
     background-color: transparent;
     border-radius: 0px;
@@ -104,18 +93,17 @@ const Container = styled.div`
 `;
 
 const TextContainer = styled.div `
-  width: 100%;
-  height: 300px;
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
 `;
 
 const TextlabelDragNDrop = styled.div `
   ${Body3}
-  position: relative;
   width: 100%;
   height: auto;
-  margin-top: 10px;
-  overflow: hidden;
   color: var(--deep-space-sparkle);
   white-space: nowrap;
   text-align: center;
@@ -125,18 +113,13 @@ const TextlabelDragNDrop = styled.div `
   }
 `;
 
-const TextAlignContainer = styled.div`
-  width: 100%;
-  height: 300px;
-  position: absolute;
-  top: 40%;
-`;
 
 const IconAddPostimage = styled.div`
-  position: static;
   width: 24px;
   height: 24px;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1.111111111vh;
   background-size: 100% 100%;
   background-image: url(${iconAdd});
 `;

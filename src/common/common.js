@@ -22,6 +22,7 @@ export const getValueOrDefault = ( value, d ) => {
   return value === undefined ? d : value;
 };
 
+
 /**
 * 현재 사이즈를 resize 시켜 return
   getResizedNumber("128px", 0.6)

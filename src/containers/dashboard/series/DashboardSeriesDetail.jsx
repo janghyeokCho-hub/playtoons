@@ -12,7 +12,7 @@ import {
 } from "@/styledMixins";
 
 
-import SeriesContainer from "@/components/dashboard/BrowserContainer";
+import BrowserContainer from "@/components/dashboard/BrowserContainer";
 
 const textData = {
   label_timeline_thumb: "タイムラインのサムネイル",
@@ -82,7 +82,10 @@ function DashboardSeriesDetail(props) {
   
 
   return (
-    <SeriesContainer backgroundColor={"var(--desert-storm)"} isBorder={true}>
+    <BrowserContainer 
+      backgroundColor={"var(--desert-storm)"}
+      type={"dashboard-white-box"}
+      >
       <Container>
         <Title>{textData.label_series_detail}</Title>
         <ContentTitle>{data.title}</ContentTitle>
@@ -124,7 +127,7 @@ function DashboardSeriesDetail(props) {
           {data.list_thumb}
         </TimeLineContainer>
       </Container>
-    </SeriesContainer>
+    </BrowserContainer>
   );
 }
 

@@ -10,7 +10,7 @@ import iconPathPlus from "@ICONS/icon_plus_blue.png";
 import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 
-import SeriesContainer from "@/components/dashboard/BrowserContainer";
+import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
 import Dropdown from "@/components/dashboard/Dropdown";
 
@@ -107,7 +107,9 @@ function DashboardPostList(props) {
   }, []);
 
   return (
-    <SeriesContainer>
+    <BrowserContainer
+      type={"dashboard"}
+      >
       <VerticalContainer>
         <TitleContainer>
           <Title>{"投稿リスト"}</Title>
@@ -148,7 +150,7 @@ function DashboardPostList(props) {
         </Header>
         <Tbody>{data}</Tbody>
       </Table>
-    </SeriesContainer>
+    </BrowserContainer>
   );
 }
 
@@ -189,6 +191,11 @@ const Tr = styled.tr`
   width: 100%;
   height: 21.299254526091588vh; /* 200px */
   border-bottom: 1px solid var(--mercury);
+  background-color: var(--white);
+
+  :hover{
+    background-color: var(--desert-storm);
+  }
 `;
 
 const Td = styled.td`

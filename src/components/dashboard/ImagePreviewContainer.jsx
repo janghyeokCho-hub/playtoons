@@ -1,6 +1,5 @@
 import React, {useRef} from 'react';
 import styled from "styled-components";
-import { Body3, Border1pxTiara } from "@/styledMixins";
 
 import iconClose from '@ICONS/icon_circle_close.png';
 
@@ -24,14 +23,14 @@ export default function ImagePreviewContainer(props) {
 }
 
 const Container = styled.div`
-  width: 235px;
+  width: ${(props) => props.width};
   height: 100%;
   position: relative;
 `;
 
 const Img = styled.img`
-  width: 220px;
-  height: 284px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   bottom: 0;
 `;
@@ -40,6 +39,7 @@ const IconClose = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+  transform: translate(50%, -50%);
   width: 32px;
   height: 32px;
   background-color: var(--white);

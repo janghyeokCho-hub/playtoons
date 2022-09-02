@@ -11,21 +11,22 @@ function TagGroup(props) {
   const [isFocusInput, setFocusInput] = useState(false);
 
   return (
-    <Container className={`group-13-3 ${className || ""}`}>
-      <TextLabel className="text_label-175">{label}</TextLabel>
-      <OverlapGroup1 className="overlap-group1-8">
+    <Container className={`${className || ""}`}>
+      <TextLabel className="">{label}</TextLabel>
+      <InpuContainer >
         <Input type="text" onFocus={() => setFocusInput(true)} onBlur={() => setFocusInput(false)}/>
-        <MagnifyingGlassLight ></MagnifyingGlassLight>
+        <IconSearch />
         {
-          isFocusInput === false && (<TextLabel1 className="text_label-176">タグ名</TextLabel1>)
+          isFocusInput === false && (<TextLabel1 >{props.text}</TextLabel1>)
         }
-      </OverlapGroup1>
+      </InpuContainer>
     </Container>
   );
 }
 
 const Input = styled.input `
   ${Border1pxTiara}
+  width: 100%;
   position: absolute;
   height: 45px;
   top: 0;
@@ -33,23 +34,21 @@ const Input = styled.input `
   display: flex;
   padding: 12px 15px 12px 50px;
   align-items: flex-start;
-  min-width: 700px;
   background-color: var(--white);
   border-radius: 5px;
 `;
 
 const Container = styled.div`
-  width: 700px;
-  margin-bottom: 2vh;
+  width: 100%;
+  margin-bottom: 2.222222222vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-height: 85px;
-
 `;
 
 const TextLabel = styled.div`
   ${Body1}
+  margin-bottom : 1.851851852vh;
   min-height: 20px;
   font-weight: 700;
   color: var(--nevada);
@@ -57,29 +56,30 @@ const TextLabel = styled.div`
   white-space: nowrap;
 `;
 
-const OverlapGroup1 = styled.div`
-  width: 700px;
+const InpuContainer = styled.div`
+  width: 100%;
   height: 45px;
   position: relative;
-  margin-top: 20px;
   border-radius: 5px;
 `;
 
-const MagnifyingGlassLight = styled.div`
+const IconSearch = styled.div`
   width: 20px;
   height: 20px;
   background-image: url(${iconSearch});
   background-size: 100% 100%;
   position: relative;
-  top: 15px;
+  top: 50%;
   left: 12px;
+  transform: translate(0, -50%);
 `;
 
 const TextLabel1 = styled.div`
   ${Body6}
   position: absolute;
-  top: 15px;
+  top: 50%;
   left: 52px;
+  transform: translate(0, -50%);
   color: var(--manatee);
   line-height: 16px;
   white-space: nowrap;

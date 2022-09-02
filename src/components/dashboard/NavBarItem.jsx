@@ -46,6 +46,7 @@ const Icon = styled.div`
 
   &.selected{
     background-image: url(${(props) => props.selectedIcon});
+    
   }
 `;
 

@@ -7,8 +7,8 @@ function FormDefault(props) {
   const { children, className, inputClassName, label } = props;
 
   return (
-    <Container className={`group-7-23 ${className || ""}`}>
-      <TextLabel className="text_label-172">{label}</TextLabel>
+    <Container className={`${className || ""}`}>
+      <TextLabel >{label}</TextLabel>
       {
         inputClassName === undefined ? <Input type="text" value={children} /> 
           :  <TextArea className={`${inputClassName || ""}`} value={children} />
@@ -20,9 +20,9 @@ function FormDefault(props) {
 const TextArea = styled.textarea `
   ${Border1pxTiara}
   width: 100%;
-  height: 45px;
-  margin-top: 20px;
-  padding: 10px 13px;
+  height: 4.166666667vh;
+  /* height: 45px; */
+  padding: 14px 16px 15px 16px;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
@@ -37,9 +37,8 @@ const TextArea = styled.textarea `
 const Input = styled.input `
   ${Border1pxTiara}
   width: 100%;
-  height: 45px;
-  margin-top: 20px;
-  padding: 10px 13px;
+  height: 4.166666667vh;
+  padding: 14px 16px 15px 16px;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
@@ -52,7 +51,8 @@ const Input = styled.input `
 `;
 
 const Container = styled.div`
-  margin-bottom: 2vh;
+  margin-bottom: 2.222222222vh;
+  /* margin-bottom: 24px; */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -67,6 +67,8 @@ const Container = styled.div`
 const TextLabel = styled.div`
   ${Body1}
   min-height: 20px;
+  margin-bottom: 1.851851852vh;
+  /* margin-bottom: 20px; */
   font-weight: 700;
   color: var(--nevada);
   line-height: 20px;

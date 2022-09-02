@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useState, forwardRef, useEffect } from "rea
 import styled from "styled-components";
 
 function ToggleOn(props, ref) {
-  const { className, selected } = props;
+  const { selected } = props;
   const [isSelected, setSelected] = useState(false);
   
   const handleClick = () => {
@@ -18,23 +18,19 @@ function ToggleOn(props, ref) {
       setSelected(selected);
     }
   
-    return () => {
-    }
   }, []);
   
 
   return (
-    <Container className={`group-6-16 ${className || ""} ${isSelected && ('select')}`} onClick={handleClick}>
-      <Oval className={isSelected === true ? 'oval-11' :  'oval-11 select'} ></Oval>
+    <Container className={`${isSelected && ('select')}`} onClick={handleClick}>
+      <Oval className={isSelected !== true && 'margin-right'} ></Oval>
     </Container>
   );
 }
 
 const Container = styled.div`
-  position: absolute;
+  position: unset;
   height: 31px;
-  top: 957px;
-  left: 762px;
   display: flex;
   padding: 0 3px;
   justify-content: flex-end;
@@ -47,11 +43,6 @@ const Container = styled.div`
     background-color: var(--violet-blue);
   }
 
-  &.group-6-16.group-3-22 {
-    position: unset;
-    top: unset;
-    left: unset;
-  }
 `;
 
 const Oval = styled.div`
@@ -60,8 +51,8 @@ const Oval = styled.div`
   background-color: var(--white);
   border-radius: 25px;
 
-  &.select {
-    margin-right: 25px;
+  &.margin-right {
+    margin-right: auto;
   }
 `;
 

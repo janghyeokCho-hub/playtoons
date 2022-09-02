@@ -13,6 +13,7 @@ import {
   Border1pxTiara,
   Body7,
   Body9,
+  Body1,
 } from "@/styledMixins";
 import {getResizedNumber} from '@COMMON/common.js';
 
@@ -149,7 +150,10 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 
-  &.gray {
+  &.gray{
+    ${Border1pxTiara}
+  }
+  &.bold-gray{
     ${Border1pxTiara}
   }
 
@@ -168,10 +172,16 @@ const TextLabel = styled.div`
   display: flex;
   align-items: center;
   color: var(--violet-blue);
+  pointer-events: none;
   
   
   &.gray{
     ${Body5}
+    color: var(--manatee);
+  }
+  &.bold-gray{
+    ${Body1}
+    font-weight: 700;
     color: var(--manatee);
   }
   &.reaction_list{

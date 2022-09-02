@@ -45,6 +45,10 @@ export default function DashboardMobile() {
         path="/reaction" 
         element={<ReactionList />} 
       />
+      <Route
+        path="/*"
+        element={<Series />}
+      />
     </Routes>
   )
 }

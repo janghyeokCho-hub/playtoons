@@ -267,7 +267,7 @@ export default function DashboardPostDetail() {
             />
             <ButtonDefault
               className={"mobile"}
-              height={32}
+              height={"32px"}
               text={text.modify}
               padding={"5px 8px"}
             />

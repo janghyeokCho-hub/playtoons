@@ -193,7 +193,7 @@ export default function DashboardPostDetail() {
   return (
     <BrowserContainer
       backgroundColor={"var(--desert-storm)"}
-      type={"post_detail"}
+      type={"dashboard"}
       spaceWidth={"7.024024024024023vw"}
       // padding={"50px 40px"}
     >
@@ -238,7 +238,9 @@ export default function DashboardPostDetail() {
               width={"86px"}
               height={"40px"} 
               borderRadius={"5px"}
-              text={text.modify} padding={"10px 18px"} />
+              text={text.modify} 
+              padding={"10px 18px"} 
+              />
           </FloatRightContainer>
         </FlexContainer>
       </WhiteBoardContainer>

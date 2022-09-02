@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import { NotosansjpBoldWhite14px, Body9, Body7 } from "@/styledMixins";
-import { getValueOrDefault } from "@COMMON/common.js";
 
 const TYPE = {
   DEFAULT: "default",
@@ -15,6 +14,21 @@ const TYPE = {
   LOADING: "loading",
   DISABLED: "disabled",
 };
+
+/**
+* violet blue button
+* ex)
+    <ButtonDefault
+        width={"86px"}
+        height={"33px"} 
+        borderRadius={"5px"}
+        text={text.register}
+        handleClick={onClickListener}
+        marginLeft={"auto"}
+        />
+* @version 1.0.0
+* @author 이현국
+*/
 function ButtonDefault(props, ref) {
   const {
     text,
@@ -27,7 +41,7 @@ function ButtonDefault(props, ref) {
   const refContainer = useRef();
   const refTextLabel = useRef();
 
-  const handleMyClick = () => {
+  const handleMyClick = (e) => {
     setType(TYPE.HOVER);
 
     setTimeout(async () => {
@@ -35,7 +49,7 @@ function ButtonDefault(props, ref) {
     }, 1000);
 
     if (handleClick !== undefined) {
-      handleClick();
+      handleClick(e);
     }
   };
 
@@ -62,7 +76,11 @@ function ButtonDefault(props, ref) {
   }, [type]);
 
   return (
-    <Container {...props} onClick={handleMyClick} ref={refContainer}>
+    <Container 
+      {...props} 
+      data-id={props.dataId}
+      onClick={handleMyClick} 
+      ref={refContainer}>
       {type === TYPE.LOADING ? (
         <Loading {...props} />
       ) : (
@@ -110,6 +128,7 @@ const TextLabel = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  pointer-events: none;
 
   &.mobile {
     ${Body7}

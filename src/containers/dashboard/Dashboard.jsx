@@ -46,6 +46,10 @@ export default function Dashboard() {
         path="/reaction" 
         element={<ReactionList />} 
       />
+      <Route 
+        path="/*" 
+        element={<Series />} 
+      />
     </Routes>
   )
 }

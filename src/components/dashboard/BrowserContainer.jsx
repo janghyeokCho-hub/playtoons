@@ -11,36 +11,70 @@ import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
 * @author 이현국
 * @props 적재할 제품이며, null 값은 안됨.
 */
-function SeriesContainer(props) {
-  const {children, backgroundColor = "transparent", isBorder} = props;
-  
+export default  function BrowserContainer(props) {
+  const {children, backgroundColor = "transparent", isBorder, type} = props;
+  const getContainer = () => {
+    switch(type){
+      default:
+        return ( 
+          <BackgroundContainer className="screen">
+            <FlexContainer >
+              <Space width={props.spaceWidth}/>
+                {children}
+              <Space width={props.spaceWidth}/>
+            </FlexContainer>
+          </BackgroundContainer>
+        )
+      case "dashboard":
+        return (
+          <BackgroundContainer className="screen">
+            <FlexContainer >
+              <NavBarDashboard {...props}/>
+              <Line src={verticalLine} />
+              <ContentContainer backgroundColor={backgroundColor}>
+                <Space width={props.spaceWidth}/>
+                <ContentWrapContainer padding={props.padding}>
+                    {children}
+                </ContentWrapContainer>
+                <Space width={props.spaceWidth}/>
+              </ContentContainer>
+            </FlexContainer>
+          </BackgroundContainer>
+        )
+      case "dashboard-white-box":
+        return (
+          <BackgroundContainer className="screen">
+            {/* <HorizontalLine src={horizontalLine} /> */}
+            <FlexContainer >
+              <NavBarDashboard {...props}/>
+              <Line src={verticalLine} />
+              <ContentContainer backgroundColor={backgroundColor}>
+                <Space width={props.spaceWidth}/>
+                <ContentWrapContainer padding={props.padding}>
+                  <ContentWhiteBorderContainer>
+                    {children}
+                  </ContentWhiteBorderContainer>
+                </ContentWrapContainer>
+                <Space width={props.spaceWidth}/>
+              </ContentContainer>
+            </FlexContainer>
+          </BackgroundContainer>
+        )
+
+    }
+  }
 
   return (
-    <DashboardSeriesContainer className="screen">
-      {/* <HorizontalLine src={horizontalLine} /> */}
-      <Container >
-        <NavBarDashboard {...props}/>
-        <Line src={verticalLine} />
-        <ContentContainer backgroundColor={backgroundColor}>
-          <Space width={props.spaceWidth}/>
-          <ContentWrapContainer padding={props.padding}>
-            <ContentWhiteBorderContainer isBorder={isBorder}>
-              {children}
-            </ContentWhiteBorderContainer>
-          </ContentWrapContainer>
-          <Space width={props.spaceWidth}/>
-        </ContentContainer>
-      </Container>
-    </DashboardSeriesContainer>
+    getContainer()
   );
 }
 
-const DashboardSeriesContainer = styled.div`
+const BackgroundContainer = styled.div`
   width: 100%;
   background-color: var(--white);
 `;
 
-const Container = styled.div`
+const FlexContainer = styled.div`
   width: 100%;
   display: flex;
 `;
@@ -69,13 +103,9 @@ const ContentContainer = styled.div`
       font-size: 8px;
     }
   
-    @media only screen and (max-width: 768px) {
-      font-size: 6px;
-    }
   `;
 
 const ContentWrapContainer = styled.div`
-  min-width: 500px;
   padding: ${(props) => props.padding === undefined ? '7.454739084132055vh 0' : props.padding};
   flex: 15;
   
@@ -86,11 +116,11 @@ const ContentWrapContainer = styled.div`
 `;
 
 const ContentWhiteBorderContainer = styled.div`
-  ${(props) => props.isBorder ? Border1pxTiara : ''}
+  ${Border1pxTiara}
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.isBorder ? 'var(--white)' : 'transparent'};;
-  border-radius: ${(props) => props.isBorder ? 8 : 0}px;
+  background-color: var(--white);
+  border-radius: 8px;
 `;
 
 const Space = styled.div` 
@@ -101,4 +131,4 @@ const Space = styled.div`
     }
 `;
 
-export default SeriesContainer;
+

@@ -7,37 +7,63 @@ import {
   NotosansjpNormalDeepSpaceSparkle14p,
 } from "@/styledMixins";
 
-import BrowserContainer from "@/components/dashboard/BrowserContainer";
+import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
-import Dropdown from "@/components/dashboard/Dropdown";
-import TagGroup from "@/components/dashboard/TagGroup";
-import RegisterButton from "@/components/dashboard/ButtonDefault";
-import PreviewButton from "@/components/dashboard/ButtonOutline";
-import ImageUploadBox from "@/components/dashboard/ImageUploadContainer";
-import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
+import Dropdown from "@COMPONENTS/dashboard/Dropdown";
+import TagGroup from "@COMPONENTS/dashboard/TagGroup";
+import RegisterButton from "@COMPONENTS/dashboard/ButtonDefault";
+import PreviewButton from "@COMPONENTS/dashboard/ButtonOutline";
+import ImageUploadBox from "@COMPONENTS/dashboard/ImageUploadContainer";
+import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
+import Tpye from "@/components/post/Radio";
 
 import iconInfo from "@IMAGES/icons/icon_info.png";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
+import ToggleButton from "@/components/post/RadioButton";
 
 const textData = {
-  label_series_register: "シリーズ登録",
-  label_series_edit: "シリーズ修正",
-  label_post_image: "表紙",
-  label_timeline: "タイムラインのサムネイル",
-  label_drag_drop: "ドラッグ＆ドロップ",
-  label_title: "タイトル",
+  label_post_upload: "投稿する",
+  label_post_edit: "シリーズ修正",
+  label_series: "シリーズ",
   label_type: "タイプ",
-  label_category: "カテゴリ",
-  label_tag_setting: "タグ設定",
-  label_register: "登録する",
-  label_summary: "説明",
-  label_adult: "年齢設定",
-  label_r_19: "R-19",
+  label_title: "タイトル",
+  label_episode: "話",
+  label_content: "コンテンツ",  //icon
+  label_tag: "タグ",
+  label_support_user: "閲覧範囲（支援者）",   //dropdown
+  label_timeline: "タイムラインのサムネイル",
+
+  label_drag_drop: "ドラッグ＆ドロップ",
   label_preview: "プレビュー",
+  label_register: "登録する",
+
+  tag_name: "タグ名",
+  type_webtoon: "ウェブトゥーン",
+  type_article: "アーティクル",
+  type_movie: "映像",
   label_can_not_edit: "編集不可",
+  input_image: "置いてください。",
 };
+
+const typeList = [
+  {
+    name : textData.type_webtoon,
+    code : "1",
+    isSelected : true,
+  },
+  {
+    name : textData.type_article,
+    code : "2",
+    isSelected : false,
+  },
+  {
+    name : textData.type_movie,
+    code : "3",
+    isSelected : false,
+  }
+];
 
 const typeDataList = ["1", "2", "3"];
 
@@ -76,93 +102,107 @@ export default function UploadPost(props) {
     //분기 upload or edit
     setMode(params.id === undefined);
 
-    return () => {};
   }, [isModeUpload]);
 
   return (
-    <BrowserContainer backgroundColor={"var(--desert-storm)"} isBorder={true}>
-      <Container>
-        <form method="post" enctype="multipart/form-data">
-          <TextLabel>
+    <BrowserContainer 
+      backgroundColor={"var(--desert-storm)"}       
+      >
+      <Container      
+        // width={"100%"}
+        // height={"100%"}
+        paddingTop={"48px"}
+        paddingBottom={"48px"}
+        paddingLeft={"610px"}
+        paddingRight={"610px"}
+        >
+        <form method="post" encType="multipart/form-data">
+          <PageTitle>
             {isModeUpload
-              ? textData.label_series_register
-              : textData.label_series_edit}
-          </TextLabel>
-          <FormDefault className={""} label={textData.label_title}>
+              ? textData.label_post_upload
+              : textData.label_post_edit}
+          </PageTitle>
+
+          <FormDefault 
+            label={textData.label_series}>
             {seriesData.title}
           </FormDefault>
-          <DropdownTextLabel>{textData.label_type}</DropdownTextLabel>
-          <Dropdown 
-            {...props}
-            width={"215px"}
-            height={"45px"}
-            marginTop={"20px"}
-            marginBottom={"2vh"}
-            borderRadius={"5px"}
-            backgroundColor={"var(--white)"} 
-            className={`${isModeUpload ? "" : "disabled"}`}
-            dataList={typeDataList}
+
+          <TextLabel>{textData.label_type}</TextLabel>
+          <Tpye 
+            height={"44px"}
+            itemMarginRight={"16px"}
+            itemBorderRadius={"4px"}
+            marginBottom={"2.222222222vh"}
+            list={typeList}
             />
-          <DropdownTextLabel>{textData.label_category}</DropdownTextLabel>
-          <Dropdown 
-            {...props}
-            width={"215px"}
-            height={"45px"}
-            marginTop={"20px"}
-            marginBottom={"2vh"}
-            borderRadius={"5px"}
-            backgroundColor={"var(--white)"} 
-            dataList={typeDataList}
-            />
-          <AbultGroup>
-            <TextLabelAdult>{textData.label_adult}</TextLabelAdult>
-            <FlexRow>
-              <ToggleOn
-                ref={refIsAdult}
-                className={"group-3-22"}
-                selected={false}
-              />
-              <R19>{textData.label_r_19}</R19>
-            </FlexRow>
-          </AbultGroup>
-          <FormDefault
-            className={"group-11-2"}
-            inputClassName={"summary-big"}
-            label={textData.label_summary}
-          ></FormDefault>
-          <TagGroup label={textData.label_tag_setting}></TagGroup>
+
+          <FormDefault label={textData.label_title}>
+            {seriesData.title}
+          </FormDefault>
+
+          <FormDefault label={textData.label_episode}>
+            {seriesData.episode}
+          </FormDefault>
+
           <TextInfoContainer>
-            <IconTextLabel>{textData.label_post_image}</IconTextLabel>
+            <IconTextLabel>{textData.label_content}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
           <ImageUploadBox
+            width={"700px"}
+            height={"300px"}
+            marginBottom={"2.222222222vh"}
             textDragNDrop={textData.label_drag_drop}
+            textInputMessage={textData.input_image}
             handleFile={handlePostImageFile}
-          >
-            {tempImage}
+            >
+            {/* {tempImage} */}
           </ImageUploadBox>
-          <Space />
+          
+          <TagGroup label={textData.label_tag} text={textData.tag_name} />
+
+          <TextLabel>{textData.label_support_user}</TextLabel>
+          <Dropdown 
+            {...props}
+            width={"215px"}
+            height={"45px"}
+            marginBottom={"2.222222222vh"}
+            borderRadius={"5px"}
+            backgroundColor={"var(--white)"} 
+            dataList={typeDataList}
+            />
 
           <TextInfoContainer>
             <IconTextLabel>{textData.label_timeline}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
           <ImageUploadBox
+            width={"700px"}
+            height={"300px"}
+            marginBottom={"4.444444444vh"}
             className={"dashboard_upload_timeline"}
             textDragNDrop={textData.label_drag_drop}
+            textInputMessage={textData.input_image}
             handleFile={handleTimelineImageFile}
-          ></ImageUploadBox>
-          <Space />
+            >
+          </ImageUploadBox>
+          
 
           <ButtonContainer>
             <PreviewButton
-              className={"margin-right"}
+              width={"117px"}
+              height={"40px"}
+              marginRight={"16px"}
+              borderRadius={"5px"}
               text={textData.label_preview}
               handleClick={handlePreview}
             />
             <RegisterButton
+              width={"102px"}
+              height={"40px"}
+              borderRadius={"5px"}
               text={textData.label_register}
-              className={"padding-group-3-16"}
               handleClick={handleRegister}
             />
           </ButtonContainer>
@@ -172,15 +212,23 @@ export default function UploadPost(props) {
   );
 }
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  padding: 6% 16%;
+const TextLabel = styled.div`
+  ${Body1}
+  min-height: 20px;
+  margin-bottom: 1.851851852vh;
+  font-weight: 700;
+  color: var(--nevada);
+  line-height: 20px;
+  white-space: nowrap;
+`;
+
+
+const Container = styled(ResponsiveDiv)`
 `;
 
 const Space = styled.div`
   width: 100%;
-  height: 1vh;
+  height: ${(props) => props.height};
 `;
 
 const ButtonContainer = styled.div`
@@ -191,27 +239,24 @@ const ButtonContainer = styled.div`
   justify-content: flex-end;
 `;
 
-const TextLabel = styled.div`
+const PageTitle = styled.div`
   ${Title3}
-  margin-bottom: 3vh;
+  margin-bottom: 4.444444444vh;  
+  /* margin-bottom: 48px;  */
   font-weight: 500;
   color: var(--nevada);
   line-height: 28px;
   white-space: nowrap;
 `;
 
-const IconTextLabel = styled.div`
-  ${Body1}
-  margin-right: 10px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
+const IconTextLabel = styled(TextLabel)`
+  margin-right: 8px;
+  margin-bottom : 0;
 `;
 
 const TextInfoContainer = styled.div`
   width: 100%;
-  margin-bottom: 1vh;
+  margin-bottom: 2.037037037vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -226,26 +271,17 @@ const IconInfoPostimage = styled.div`
 
 const AbultGroup = styled.div`
   width: 100px;
-  margin-bottom: 2vh;
+  margin-bottom: 2.222222222vh;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   min-height: 71px;
 `;
 
-const TextLabelAdult = styled.div`
-  ${Body1}
-  min-height: 20px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
 
 const FlexRow = styled.div`
   height: 31px;
   position: relative;
-  margin-top: 20px;
   display: flex;
   align-items: center;
   min-width: 103px;
@@ -262,12 +298,5 @@ const R19 = styled.div`
   white-space: nowrap;
 `;
 
-const DropdownTextLabel = styled.div`
-  ${Body1}
-  min-height: 20px;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
+
 

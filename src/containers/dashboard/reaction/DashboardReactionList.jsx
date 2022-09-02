@@ -201,9 +201,6 @@ export default function DashboardReactionList(props) {
   useEffect(() => {
     //리스트 불러오기
     setData(processRsultData());
-
-    console.log("first" + getResizedNumber("128px", 0.6));
-    getResizedNumber("128px", 0.8)
   }, []);
 
   return (
