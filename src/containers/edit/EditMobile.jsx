@@ -8,11 +8,11 @@ import Post from "@/containers/upload/UploadPost";
 * @version 1.0.0
 * @author 이현국
 */
-export default function UploadMobile() {
+export default function EditMobile() {
   return (
     <Routes>
       <Route
-        path="/post"
+        path="/post/:id"
         element={<Post />}
       />
     </Routes>

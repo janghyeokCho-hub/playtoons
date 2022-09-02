@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import Series from "@/containers/dashboard/series/DashboardSeries";
 import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
 import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
-import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
@@ -32,7 +31,7 @@ export default function Dashboard() {
       />
       <Route
         path="/series/edit/:id"
-        element={<EditSeries />}
+        element={<UploadSeries />}
       />
       <Route 
         path="/post" 

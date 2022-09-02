@@ -25,7 +25,7 @@ import ToggleButton from "@/components/post/RadioButton";
 
 const textData = {
   label_post_upload: "投稿する",
-  label_post_edit: "シリーズ修正",
+  label_post_edit: "投稿を修正",
   label_series: "シリーズ",
   label_type: "タイプ",
   label_title: "タイトル",

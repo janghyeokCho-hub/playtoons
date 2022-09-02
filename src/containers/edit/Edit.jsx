@@ -3,17 +3,17 @@ import { Route, Routes } from "react-router-dom";
 import Post from "@/containers/upload/UploadPost";
 
 /**
-* Upload mobile url 분기 처리
+* Edit url 분기 처리
 *
 * @version 1.0.0
 * @author 이현국
 */
-export default function UploadMobile() {
+export default function Edit() {
   return (
     <Routes>
-      <Route
-        path="/post"
-        element={<Post />}
+      <Route 
+        path="/post/:id" 
+        element={<Post />} 
       />
     </Routes>
   )

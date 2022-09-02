@@ -15,6 +15,8 @@ import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import DashboardMobile from "@CONTAINERS/dashboard/DashboardMobile";
 import Upload from "@CONTAINERS/upload/Upload";
 import UploadMobile from "@CONTAINERS/upload/UploadMobile";
+import Edit from "@CONTAINERS/edit/Edit";
+import EditMobile from "@CONTAINERS/edit/EditMobile";
 
 import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";
@@ -44,6 +46,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/dashboard/*" element={<Dashboard />} />
             <Route path="/upload/*" element={<Upload />} />
+            <Route path="/edit/*" element={<Edit />} />
             <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
           </Routes>
@@ -60,6 +63,7 @@ function App() {
             />
             <Route path="/dashboard/*" element={<DashboardMobile />} />
             <Route path="/upload/*" element={<UploadMobile />} />
+            <Route path="/edit/*" element={<EditMobile />} />
           </Routes>
         </BrowserRouter>
       </MobileView>
