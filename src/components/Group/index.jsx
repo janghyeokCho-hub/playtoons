@@ -20,7 +20,7 @@ const Group1 = styled.div`
   display: flex;
   padding: 11px 23px;
   align-items: flex-start;
-  min-width: 250px;
+  max-width: 400px;
   background-color: var(--desert-storm);
   border-radius: 21.5px;
 `;

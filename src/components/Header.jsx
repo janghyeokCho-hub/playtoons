@@ -125,6 +125,7 @@ const SearchIconDiv = styled.div`
   margin-right: 1em;
   width: 24px;
   height: 24px;
+  min-width: 400px;
 `;
 
 const BtnContainer = styled.div`
