@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Body5 } from "@/styledMixins";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getResizedNumber } from "@COMMON/common";
 
 import NavBarItem from "@COMPONENTS/dashboard/NavBarItem";
@@ -21,6 +21,9 @@ import iconSupportBlue from "@ICONS/icon_support_blue.png";
 import iconSeriesManagementBlue from "@ICONS/icon_series_management_blue.png";
 import iconDashboardBlue from "@ICONS/icon_dashboard_blue.png";
 import iconPorfileBlue from "@ICONS/icon_profile_blue.png";
+
+import { useDispatch } from "react-redux";
+import {showModal} from '@/modules/redux/ducks/modal';
 
 //Nav메뉴 높이
 const top = 48;
@@ -46,15 +49,17 @@ const DASHBOARD_PATH = {
 };
 
 export default function NavBarDashboard3(props) {
-  // const []
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onClickSupport = () => {
-    navigate(DASHBOARD_PATH.SUPPORT);
+    dispatch(showModal(<>支援管理 準備しています。</>));
+    // navigate(DASHBOARD_PATH.SUPPORT);
   };
-
+  
   const onClickProduct = () => {
-    navigate(DASHBOARD_PATH.PRODUCT);
+    dispatch(showModal(<>商品 準備しています。</>));
+    // navigate(DASHBOARD_PATH.PRODUCT);
   };
 
   const onClickSerise = () => {
@@ -66,15 +71,18 @@ export default function NavBarDashboard3(props) {
   };
 
   const onClickProfile = () => {
-    navigate(DASHBOARD_PATH.PROFILE);
+    dispatch(showModal(<>プロフィル管理 準備しています。</>));
+    // navigate(DASHBOARD_PATH.PROFILE);
   };
 
   const onClickDashboard = () => {
-    navigate(DASHBOARD_PATH.DASHBOARD);
+    dispatch(showModal(<>ダッシュボード 準備しています。</>));
+    // navigate(DASHBOARD_PATH.DASHBOARD);
   };
 
   const onClickAnalysis = () => {
-    navigate(DASHBOARD_PATH.ANALYSIS);
+    dispatch(showModal(<>準備しています。</>));
+    // navigate(DASHBOARD_PATH.ANALYSIS);
   };
 
   const getExtraNav = (props) => {

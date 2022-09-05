@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import root, { rootTypes, rootAction } from './root';
 import auth, { authTypes, authAction } from './auth';
+import alertModal from './modal';
 
 import loading from './loading';
 
@@ -18,4 +19,5 @@ export default combineReducers({
 	root,
 	loading,
 	auth,
+	alertModal,
 });

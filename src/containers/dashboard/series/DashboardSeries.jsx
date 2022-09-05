@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSeriesStoryList } from "@/services/dashboardService";
 import styled from "styled-components";
@@ -24,7 +24,7 @@ const size = {
   arrow: 5,
 };
 
-function DashboardSeries(props) {
+export default function DashboardSeries(props) {
   const [data, setData] = useState();
   const navigate = useNavigate();
 
@@ -47,7 +47,6 @@ function DashboardSeries(props) {
   const handleItemClick = (e) => {
     let no = e.target.getAttribute("data-id");
 
-    console.log("data-id : ", no);
     navigate("/dashboard/series/detail/" + no);
   };
 
@@ -234,5 +233,3 @@ const Title = styled.h1`
 const SeriesAddButtonContainer = styled.div`
   float: right;
 `;
-
-export default DashboardSeries;

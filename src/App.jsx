@@ -33,6 +33,7 @@ import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";
 
 import { BrowserView, MobileView } from "react-device-detect";
+import ModalContainer from "./components/ModalContainer";
 
 export const store = configureStore();
 sagaMiddleware.run(globalSaga);
@@ -90,6 +91,7 @@ function App() {
         </BrowserRouter>
       </MobileView>
       {isNavbar && <Footer />}
+      <ModalContainer />
     </Provider>
   );
 }

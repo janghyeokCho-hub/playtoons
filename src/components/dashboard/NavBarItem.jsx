@@ -9,7 +9,7 @@ const [isSelected, setSelected] = useState(false);
 const location = useLocation();
 
   const handleClick = (e) => {
-    setSelected(!isSelected);
+    // setSelected(!isSelected);
 
     if (onClick !== undefined) {
       onClick(e);
@@ -82,6 +82,7 @@ const TextLabel = styled.div`
   color: var(--vulcan);
   line-height: 20px;
   white-space: nowrap;
+  cursor: default;
 
   &.selected {
     color: var(--primary-c11);
