@@ -1,6 +1,6 @@
 import React, { useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
-import {hideModal} from '../modules/redux/ducks/modal'
+import {hideModal, MODAL_DESIGN_TYPE} from '../modules/redux/ducks/modal'
 import styled from 'styled-components';
 import Button from '@COMPONENTS/dashboard/ButtonDefault';
 import CloseButton from '@COMPONENTS/dashboard/ButtonOutline';
@@ -8,18 +8,12 @@ import CloseButton from '@COMPONENTS/dashboard/ButtonOutline';
 import iconClose from '@ICONS/icon_close_black.png'
 import useOutSideClick from '@/common/useOutSideClick';
 
-export const MODAL_TYPE = {
-  DEFAULT: 0,
-  CLOSE_BUTTON: 1,
-  CONFIRM_BUTTON: 2,
-  TWO_BUTTON: 3,
-};
 
 /**
 * Common Modal 
   ex)
     import { useDispatch } from "react-redux";
-    import {showModal} from '@/modules/redux/ducks/modal';
+    import {showModal, MODAL_DESIGN_TYPE} from '@/modules/redux/ducks/modal';
     
     const dispatch = useDispatch();
     dispatch(showModal(<>支援管理 準備しています。</>));
@@ -27,13 +21,13 @@ export const MODAL_TYPE = {
 * @version 1.0.0
 * @author 이현국
 */
-export default function Modal({show, contents, callback, type }) {
+export default function Modal({show, contents, callback, type }) {    //TODO design type 작업
   const refModal = useRef();
   const dispatch = useDispatch();
   
 
   const handleClose = () => {
-    if( type === MODAL_TYPE.DEFAULT || type === MODAL_TYPE.CLOSE_BUTTON ){
+    if( type === MODAL_DESIGN_TYPE.DEFAULT || type === MODAL_DESIGN_TYPE.CLOSE_BUTTON ){
       callback?.();
     }
     dispatch(hideModal());

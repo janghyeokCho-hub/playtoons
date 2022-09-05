@@ -3,13 +3,22 @@ export const modalTypes = {
   HIDE_MODAL : 'HIDE_MODAL'
 }
 
-export const showModal = (contents, callback) => {
+export const MODAL_DESIGN_TYPE = {
+  DEFAULT: 0,
+  CLOSE_BUTTON: 1,
+  CONFIRM_BUTTON: 2,
+  TWO_BUTTON: 3,
+};
+
+
+export const showModal = (contents, callback, type) => {
   return {
     type: modalTypes.SHOW_MODAL,
     payload: {
       show: true,
       contents,
-      callback
+      callback,
+      type
     }
     
   };
@@ -29,7 +38,8 @@ export const modalAction = {
 const initialState = {
   show : false,
   contents : <></>,
-  callback : null
+  callback : null,
+  type: MODAL_DESIGN_TYPE.DEFAULT,
 }
 const alertModal = (state = initialState, action) => {
   const {type, payload} = action;
@@ -38,14 +48,16 @@ const alertModal = (state = initialState, action) => {
       return {
         show : true,
         contents: payload.contents,
-        callback: payload.callback
+        callback: payload.callback,
+        type: payload.type,
       };
       
     case modalTypes.HIDE_MODAL:
       return {
         show : false,
         contents: <></>,
-        callback: null
+        callback: null,
+        type: MODAL_DESIGN_TYPE.DEFAULT,
       };
       
       default :
