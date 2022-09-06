@@ -44,7 +44,7 @@ const DASHBOARD_PATH = {
   SERIES: "/dashboard/series",
   POST: "/dashboard/post",
   PROFILE: "/dashboard/profile",
-  DASHBOARD: "/dashboard/dashboard",
+  DASHBOARD: "/dashboard/main",
   ANALYSIS: "/dashboard/analysis",
 };
 
@@ -76,8 +76,8 @@ export default function NavBarDashboard3(props) {
   };
 
   const onClickDashboard = () => {
-    dispatch(showModal(<>ダッシュボード 準備しています。</>));
-    // navigate(DASHBOARD_PATH.DASHBOARD);
+    // dispatch(showModal(<>ダッシュボード 準備しています。</>));
+    navigate(DASHBOARD_PATH.DASHBOARD);
   };
 
   const onClickAnalysis = () => {

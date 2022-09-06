@@ -4,6 +4,13 @@ import { Border1pxTiara } from "@/styledMixins";
 import verticalLine from "@LINES/dashboardeditseries-line-2.png";
 import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
 
+export const CONTENTS_AREA_TYPE = {
+  DEFAULT : "default",                                //just input side margin
+  DASHBOARD : "dashboard",                            // with dashboard nav side bar
+  DASHBOARD_WITH_WHITE_BOX : "dashboard-white-box",   //  with dashboard nav side bar and white contents box
+
+}
+
 /**
 * 대시보드 pc 용 공통 백그라운드
 *
@@ -12,7 +19,7 @@ import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
 * @props 적재할 제품이며, null 값은 안됨.
 */
 export default  function BrowserContainer(props) {
-  const {children, backgroundColor = "transparent", isBorder, type} = props;
+  const {children, backgroundColor = "transparent", type} = props;
   const getContainer = () => {
     switch(type){
       default:
@@ -25,7 +32,7 @@ export default  function BrowserContainer(props) {
             </FlexContainer>
           </BackgroundContainer>
         )
-      case "dashboard":
+      case CONTENTS_AREA_TYPE.DASHBOARD:
         return (
           <BackgroundContainer className="screen">
             <FlexContainer >
@@ -41,7 +48,7 @@ export default  function BrowserContainer(props) {
             </FlexContainer>
           </BackgroundContainer>
         )
-      case "dashboard-white-box":
+      case CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX:
         return (
           <BackgroundContainer className="screen">
             {/* <HorizontalLine src={horizontalLine} /> */}
@@ -71,12 +78,14 @@ export default  function BrowserContainer(props) {
 
 const BackgroundContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
+  min-height: calc(100vh - 180px);  //topbar 100px, footer 80px
   background-color: var(--white);
 `;
 
 const FlexContainer = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
 `;
 

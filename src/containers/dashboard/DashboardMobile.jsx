@@ -7,6 +7,7 @@ import EditSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetailMobile";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostListMobile";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionListMobile";
+import Main from "@CONTAINERS/dashboard/DashboardMain";
 
 /**
 * Dashboard mobile url 분기 처리
@@ -17,6 +18,10 @@ import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionListMo
 export default function DashboardMobile() {
   return (
     <Routes>
+      <Route 
+        path="/main" 
+        element={<Main />} 
+      />
       <Route
         path="/series"
         element={<Series />}

@@ -6,6 +6,7 @@ import UploadSeries from "@CONTAINERS/dashboard/series/DashboardUploadSeries";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
+import Main from "@CONTAINERS/dashboard/DashboardMain";
 
 /**
 * Dashboard url 분기 처리
@@ -16,6 +17,10 @@ import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 export default function Dashboard() {
   return (
     <Routes>
+      <Route 
+        path="/main" 
+        element={<Main />} 
+      />
       <Route 
         path="/series" 
         element={<Series />} 
