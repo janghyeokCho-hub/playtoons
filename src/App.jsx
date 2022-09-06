@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -31,6 +31,7 @@ import Inquiry from "@CONTAINERS/inquiry";
 
 import Header from "@COMPONENTS/Header";
 import Footer from "@COMPONENTS/Footer";
+import LeftSideMenu from "@COMPONENTS/LeftSideMenu";
 
 import { BrowserView, MobileView } from "react-device-detect";
 import ModalContainer from "./components/ModalContainer";
@@ -40,8 +41,13 @@ sagaMiddleware.run(globalSaga);
 
 function App() {
   const [isNavbar, setIsNavbar] = useState(false);
+  const [isMenuShow, setIsMenuShow] = useState(false);
+  const handleLeftMenu = useCallback(() => {
+    setIsMenuShow(!isMenuShow);
+  }, [isMenuShow]);
 
   const path = window.location.href;
+
   useEffect(() => {
     if (path.includes("account")) {
       setIsNavbar(false);
@@ -49,9 +55,11 @@ function App() {
       setIsNavbar(true);
     }
   }, [path]);
+
   return (
     <Provider store={store}>
-      {isNavbar && <Header />}
+      {isNavbar && <Header handleLeftMenu={handleLeftMenu} />}
+      {isMenuShow && <LeftSideMenu />}
       <BrowserView>
         <BrowserRouter>
           <Routes>
@@ -61,8 +69,8 @@ function App() {
             <Route path="/edit/*" element={<Edit />} />
             <Route path="/account/*" element={<Account />} />
             <Route path="/register-completed" element={<RegisterCompleted />} />
-            <Route path="/webtoon" element={<Webtoon />} />
-            <Route path="/novel" element={<Novel />} />
+            <Route path="/webtoon/*" element={<Webtoon />} />
+            <Route path="/novel/*" element={<Novel />} />
             <Route path="/series/*" element={<Series />} />
             <Route path="/post/*" element={<Post />} />
             <Route path="/author/*" element={<Author />} />
@@ -79,14 +87,25 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPageMobile />} />
+            <Route path="/dashboard/*" element={<DashboardMobile />} />
+            <Route path="/upload/*" element={<UploadMobile />} />
+            <Route path="/edit/*" element={<EditMobile />} />
             <Route path="/account/*" element={<AccountMobile />} />
             <Route
               path="/register-completed"
               element={<RegisterCompletedMobile />}
             />
-            <Route path="/dashboard/*" element={<DashboardMobile />} />
-            <Route path="/upload/*" element={<UploadMobile />} />
-            <Route path="/edit/*" element={<EditMobile />} />
+            <Route path="/webtoon/*" element={<Webtoon />} />
+            <Route path="/novel/*" element={<Novel />} />
+            <Route path="/series/*" element={<Series />} />
+            <Route path="/post/*" element={<Post />} />
+            <Route path="/author/*" element={<Author />} />
+            <Route path="/payment/*" element={<Payment />} />
+            <Route path="/product/*" element={<Product />} />
+            <Route path="/purchase/*" element={<Purchase />} />
+            <Route path="/review/*" element={<Review />} />
+            <Route path="/search/*" element={<Search />} />
+            <Route path="/inquiry/*" element={<Inquiry />} />
           </Routes>
         </BrowserRouter>
       </MobileView>

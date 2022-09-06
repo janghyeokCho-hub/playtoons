@@ -1,15 +1,26 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import Novel from "./Novel";
+import NovelMobile from "./NovelMobile";
 
-const Novel = () => {
-  const navigate = useNavigate();
-  useEffect(() => {
-    alert("준비중입니다.");
-    navigate("/");
-  }, []);
+import { BrowserView, MobileView } from "react-device-detect";
 
-  return <></>;
+const App = () => {
+  return (
+    <>
+      <BrowserView>
+        <Routes>
+          <Route path="*" element={<Novel />} />
+        </Routes>
+      </BrowserView>
+      <MobileView>
+        <Routes>
+          <Route path="*" element={<NovelMobile />} />
+        </Routes>
+      </MobileView>
+    </>
+  );
 };
 
-export default Novel;
+export default App;

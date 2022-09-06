@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useWindowSize } from "@/hook/useWindowSize";
 
 import Group from "./Group";
@@ -60,7 +60,7 @@ const NonLoginMenu = ({ isMobile }) => {
   );
 };
 
-const Header = () => {
+const Header = ({ handleLeftMenu }) => {
   // login 구현 후 redux store에서 값 받아와야함
   const isLogin = false;
 
@@ -73,10 +73,11 @@ const Header = () => {
       setIsMobile(true);
     }
   }, [size]);
+
   return (
     <HeaderDiv>
       <LeftMenu>
-        <IcoBars></IcoBars>
+        <IcoBars onClick={handleLeftMenu}></IcoBars>
         <ImgLogoGnb src={logoGnb} />
       </LeftMenu>
       <RightMenu>
@@ -103,6 +104,7 @@ const LeftMenu = styled.div`
 `;
 
 const IcoBars = styled.div`
+  cursor: pointer;
   width: 21px;
   height: 18px;
   background-image: url("${iconBar}");
