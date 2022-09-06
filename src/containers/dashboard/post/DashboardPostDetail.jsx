@@ -6,6 +6,7 @@ import {
 } from "@/styledMixins";
 import styled from "styled-components";
 
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
 import ButtonOutline from "@COMPONENTS/dashboard/ButtonOutline";
 import ButtonDefault from "@COMPONENTS/dashboard/ButtonDefault";
@@ -193,7 +194,7 @@ export default function DashboardPostDetail() {
   return (
     <BrowserContainer
       backgroundColor={"var(--desert-storm)"}
-      type={"dashboard"}
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD}
       spaceWidth={"7.024024024024023vw"}
       // padding={"50px 40px"}
     >

@@ -8,6 +8,7 @@ import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetailMobile";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostListMobile";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionListMobile";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
+import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 
 /**
 * Dashboard mobile url 분기 처리
@@ -21,6 +22,10 @@ export default function DashboardMobile() {
       <Route 
         path="/main" 
         element={<Main />} 
+      />
+      <Route 
+        path="/product/list" 
+        element={<ProductList />} 
       />
       <Route
         path="/series"

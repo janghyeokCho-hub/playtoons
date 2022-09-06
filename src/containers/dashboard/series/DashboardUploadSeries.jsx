@@ -7,6 +7,7 @@ import {
   NotosansjpNormalDeepSpaceSparkle14p,
 } from "@/styledMixins";
 
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
@@ -86,7 +87,7 @@ export default function DashboardUploadSeries(props) {
       padding={"48px 0"}
       spaceWidth={"48px"}
       backgroundColor={"var(--desert-storm)"} 
-      type={"dashboard-white-box"}
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX}
       >
       <Container      
         // width={"100%"}

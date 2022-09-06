@@ -13,6 +13,7 @@ import {
 
 
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 
 const textData = {
   label_timeline_thumb: "タイムラインのサムネイル",
@@ -84,7 +85,7 @@ function DashboardSeriesDetail(props) {
   return (
     <BrowserContainer 
       backgroundColor={"var(--desert-storm)"}
-      type={"dashboard-white-box"}
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX}
       >
       <Container>
         <Title>{textData.label_series_detail}</Title>
