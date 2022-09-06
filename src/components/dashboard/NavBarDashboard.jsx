@@ -6,22 +6,23 @@ import { getResizedNumber } from "@COMMON/common";
 
 import NavBarItem from "@COMPONENTS/dashboard/NavBarItem";
 
-import iconSupport from "@ICONS/icon_support.png";
-import iconContribution from "@ICONS/icon_contribution.png";
-import iconSeriesManagement from "@ICONS/icon_series_management.png";
-import iconProduct from "@ICONS/icon_product.png";
-import iconDashboard from "@ICONS/icon_dashboard.png";
-import iconPorfile from "@ICONS/icon_profile.png";
-import iconAnalysis from "@ICONS/icon_analysis.png";
-
-import iconAnalysisBlue from "@ICONS/icon_analysis.png";
-import iconProductBlue from "@ICONS/icon_product.png";
-import iconContributionBlue from "@ICONS/icon_contribution.png";
-import iconSupportBlue from "@ICONS/icon_support_blue.png";
-import iconSeriesManagementBlue from "@ICONS/icon_series_management_blue.png";
-import iconDashboardBlue from "@ICONS/icon_dashboard_blue.png";
-import iconPorfileBlue from "@ICONS/icon_profile_blue.png";
-
+import { 
+  faTableColumns as iconDashboard,
+  faDiamond as iconProduct,
+  faUser as iconProfile,
+  faObjectUnion as iconSeries,
+  faSquarePen as iconPost,
+  faSeal as iconSupport,
+  faChartLine as iconAnalysis } from "@fortawesome/pro-light-svg-icons";
+import { faTableColumns as iconDashboardBlue } from "@fortawesome/pro-regular-svg-icons";
+import { 
+  faDiamond as iconProductBlue, 
+  faUser as iconProfileBlue, 
+  faObjectUnion as iconSeriesBlue, 
+  faSquarePen as iconPostBlue, 
+  faSeal as iconSupportBlue, 
+  faChartLine as iconAnalysisBlue } from "@fortawesome/pro-solid-svg-icons";
+  
 import { useDispatch } from "react-redux";
 import {showModal} from '@/modules/redux/ducks/modal';
 
@@ -117,24 +118,24 @@ export default function NavBarDashboard3(props) {
       <NavBarItem
         top={top * 5}
         onClick={onClickPost}
-        icon={iconContribution}
-        selectedIcon={iconContributionBlue}
+        icon={iconPost}
+        selectedIcon={iconPostBlue}
         text={textData.post_management}
         name={DASHBOARD_PATH.POST}
       />
       <NavBarItem
         top={top * 4}
         onClick={onClickSerise}
-        icon={iconSeriesManagement}
-        selectedIcon={iconSeriesManagementBlue}
+        icon={iconSeries}
+        selectedIcon={iconSeriesBlue}
         text={textData.series_management}
         name={DASHBOARD_PATH.SERIES}
       />
       <NavBarItem
         top={top * 3}
         onClick={onClickProfile}
-        icon={iconPorfile}
-        selectedIcon={iconPorfileBlue}
+        icon={iconProfile}
+        selectedIcon={iconProfileBlue}
         text={textData.profile_management}
         name={DASHBOARD_PATH.PROFILE}
       />

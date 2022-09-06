@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Body2 } from "@/styledMixins";
 import { useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function NavBarItem(props) {
-const { icon, selectedIcon, text, top, left = 30, onClick, name } = props;
-const [isSelected, setSelected] = useState(false);
-const location = useLocation();
+  const { icon, selectedIcon, text, top, left = 30, onClick, name } = props;
+  const [isSelected, setSelected] = useState(false);
+  const location = useLocation();
+  
 
   const handleClick = (e) => {
     // setSelected(!isSelected);
@@ -21,7 +23,6 @@ const location = useLocation();
     if( path.indexOf(name) !== -1  ){
       setSelected(true);
     }
-    
   }, []);
   
 
@@ -32,11 +33,10 @@ const location = useLocation();
       onClick={handleClick}
       className={`${isSelected ? "selected" : ""}`}
       >
-      <Icon
-        className={`${isSelected ? "selected" : ""}`}
-        icon={icon}
-        selectedIcon={selectedIcon}
-        ></Icon>
+      <FontAwesomeIcon 
+            icon={isSelected ? selectedIcon : icon}
+            style={{ width: "24px", height: "24px", marginRight: "20px", color: `${isSelected ? "var(--violet-blue)" : "var(--black)"}` }}
+            />
       <TextLabel 
         className={`${isSelected ? "selected" : ""}`}
         >
@@ -61,17 +61,6 @@ const Container = styled.div`
   }
 `;
 
-const Icon = styled.div`
-  width: 24px;
-  height: 24px;
-  margin-right: 20px;
-  background-size: 100% 100%;
-  background-image: url(${(props) => props.icon});
-
-  &.selected {
-    background-image: url(${(props) => props.selectedIcon});
-  }
-`;
 
 const TextLabel = styled.div`
   ${Body2}

@@ -101,10 +101,10 @@ function ButtonOutline(props, ref) {
   useEffect(() => {
     switch (type) {
       default:
-        refContainer.current.style.backgroundColor = "#ffffff";
+        
         break;
       case TYPE.HOVER:
-        refContainer.current.style.backgroundColor = getHoverColor();
+        
         break;
       case TYPE.LOADING:
         break;
@@ -149,12 +149,17 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent;
 
   &.gray{
     ${Border1pxTiara}
   }
   &.bold-gray{
     ${Border1pxTiara}
+  }
+
+  :hover{
+    background-color: var(--selago);
   }
 
   @media only screen and (max-width: 1025px) {
@@ -197,6 +202,7 @@ const TextLabel = styled.div`
     ${Body9}
     font-weight: 500;
   }
+  
 `;
 
 const Loading = styled.div`

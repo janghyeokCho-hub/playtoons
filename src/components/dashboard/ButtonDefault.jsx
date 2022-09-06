@@ -63,10 +63,10 @@ function ButtonDefault(props, ref) {
   useEffect(() => {
     switch (type) {
       default:
-        refContainer.current.style.backgroundColor = "#394bc2";
+        
         break;
       case TYPE.HOVER:
-        refContainer.current.style.backgroundColor = "#5a6acf";
+        
         break;
       case TYPE.LOADING:
         break;
@@ -110,11 +110,15 @@ const Container = styled.div`
   align-items: center;
   background-color: var(--violet-blue);
   cursor: pointer;
-
+  
   &.mobile {
   }
   &.mobile12 {
     height: 20px;
+  }
+  
+  :hover{
+    background-color: var(--indigo-2);
   }
 `;
 
