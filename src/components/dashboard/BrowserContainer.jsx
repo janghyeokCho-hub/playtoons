@@ -3,13 +3,7 @@ import styled from "styled-components";
 import { Border1pxTiara } from "@/styledMixins";
 import verticalLine from "@LINES/dashboardeditseries-line-2.png";
 import NavBarDashboard from "@/components/dashboard/NavBarDashboard";
-
-export const CONTENTS_AREA_TYPE = {
-  DEFAULT : "default",                                //just input side margin
-  DASHBOARD : "dashboard",                            // with dashboard nav side bar
-  DASHBOARD_WITH_WHITE_BOX : "dashboard-white-box",   //  with dashboard nav side bar and white contents box
-
-}
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 
 /**
 * 대시보드 pc 용 공통 백그라운드
@@ -32,7 +26,7 @@ export default  function BrowserContainer(props) {
             </FlexContainer>
           </BackgroundContainer>
         )
-      case CONTENTS_AREA_TYPE.DASHBOARD:
+      case BROWSER_CONTENTS_AREA_TYPE.DASHBOARD:
         return (
           <BackgroundContainer className="screen">
             <FlexContainer >
@@ -48,7 +42,7 @@ export default  function BrowserContainer(props) {
             </FlexContainer>
           </BackgroundContainer>
         )
-      case CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX:
+      case BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX:
         return (
           <BackgroundContainer className="screen">
             {/* <HorizontalLine src={horizontalLine} /> */}
@@ -67,7 +61,21 @@ export default  function BrowserContainer(props) {
             </FlexContainer>
           </BackgroundContainer>
         )
-
+      
+      case BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITHOUT_PADDING:
+        return (
+          <BackgroundContainer className="screen">
+            {/* <HorizontalLine src={horizontalLine} /> */}
+            <FlexContainer >
+              <NavBarDashboard {...props}/>
+              <Line src={verticalLine} />
+              <ContentContainer display={props.display} backgroundColor={backgroundColor}>
+                    {children}
+              </ContentContainer>
+            </FlexContainer>
+          </BackgroundContainer>
+        )
+      
     }
   }
 
@@ -104,7 +112,7 @@ const Line = styled.div`
 const ContentContainer = styled.div`
   width: 100%;
   flex: 2;
-  display: flex;
+  display: ${(props) => props.display ? props.display : "flex"};
   background-color: ${(props) => props.backgroundColor};
   font-size: 10px;
   box-shadow: inset 0 2px 9px -7px #00000080;

@@ -41,7 +41,7 @@ let textData = {
 
 const DASHBOARD_PATH = {
   SUPPORT: "/dashboard/support",
-  PRODUCT: "/dashboard/product",
+  PRODUCT: "/dashboard/product/list",
   SERIES: "/dashboard/series",
   POST: "/dashboard/post",
   PROFILE: "/dashboard/profile",
@@ -59,8 +59,8 @@ export default function NavBarDashboard3(props) {
   };
   
   const onClickProduct = () => {
-    dispatch(showModal(<>商品 準備しています。</>));
-    // navigate(DASHBOARD_PATH.PRODUCT);
+    // dispatch(showModal(<>商品 準備しています。</>));
+    navigate(DASHBOARD_PATH.PRODUCT);
   };
 
   const onClickSerise = () => {

@@ -16,7 +16,8 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faChevronRight, faStar } from "@fortawesome/pro-solid-svg-icons";
 
-import BrowserContainer, {CONTENTS_AREA_TYPE} from "@COMPONENTS/dashboard/BrowserContainer";
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
+import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
 import ButtonOutline from "@COMPONENTS/dashboard/ButtonOutline";
 import ButtonDefault from "@COMPONENTS/dashboard/ButtonDefault";
 
@@ -407,7 +408,7 @@ export default function DashboardMain() {
   return (
     <BrowserContainer
       backgroundColor={"var(--desert-storm)"}
-      type={CONTENTS_AREA_TYPE.DASHBOARD}
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD}
       spaceWidth={"0"}
       padding={"48px 48px"}
       >

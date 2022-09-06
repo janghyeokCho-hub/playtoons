@@ -10,6 +10,7 @@ import iconPathPlus from "@ICONS/icon_plus_blue.png";
 import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
 import Dropdown from "@/components/dashboard/Dropdown";
@@ -106,7 +107,7 @@ function DashboardPostList(props) {
 
   return (
     <BrowserContainer
-      type={"dashboard"}
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD}
       >
       <VerticalContainer>
         <TitleContainer>
