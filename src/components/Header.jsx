@@ -94,6 +94,7 @@ const HeaderDiv = styled.div`
   box-shadow: 0px 2px 20px -10px #00000080;
   padding-left: 1.5em;
   padding-right: 1.5em;
+  margin-bottom: 0.7em;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;

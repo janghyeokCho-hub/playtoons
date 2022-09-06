@@ -59,8 +59,8 @@ function App() {
   return (
     <Provider store={store}>
       {isNavbar && <Header handleLeftMenu={handleLeftMenu} />}
-      {isMenuShow && <LeftSideMenu />}
       <BrowserView>
+        {isMenuShow && <LeftSideMenu />}
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
