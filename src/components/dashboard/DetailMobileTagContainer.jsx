@@ -7,7 +7,7 @@ function DetailMobileTagContainer(props) {
   const { children, className } = props;
 
   return (
-    <TagContainer className={`padding-group-14-copy-4 ${className || ""}`}>
+    <TagContainer className={`${className || ""}`}>
       <Tag className="x-4">{children}</Tag>
     </TagContainer>
   );

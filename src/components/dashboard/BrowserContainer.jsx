@@ -31,7 +31,6 @@ export default  function BrowserContainer(props) {
           <BackgroundContainer className="screen">
             <FlexContainer >
               <NavBarDashboard {...props}/>
-              <Line src={verticalLine} />
               <ContentContainer backgroundColor={backgroundColor}>
                 <Space width={props.spaceWidth}/>
                 <ContentWrapContainer padding={props.padding}>
@@ -48,7 +47,6 @@ export default  function BrowserContainer(props) {
             {/* <HorizontalLine src={horizontalLine} /> */}
             <FlexContainer >
               <NavBarDashboard {...props}/>
-              <Line src={verticalLine} />
               <ContentContainer backgroundColor={backgroundColor}>
                 <Space width={props.spaceWidth}/>
                 <ContentWrapContainer padding={props.padding}>
@@ -68,7 +66,6 @@ export default  function BrowserContainer(props) {
             {/* <HorizontalLine src={horizontalLine} /> */}
             <FlexContainer >
               <NavBarDashboard {...props}/>
-              <Line src={verticalLine} />
               <ContentContainer display={props.display} backgroundColor={backgroundColor}>
                     {children}
               </ContentContainer>
@@ -105,7 +102,7 @@ const VerticalLine = styled.img`
 const Line = styled.div`
   width: 1px;
   height: auto;
-  background-color: var(--mercury);
+  background-color: var(--line-gray);
 `;
 
 //inset 0px 2px 20px -10px #00000080
@@ -115,7 +112,7 @@ const ContentContainer = styled.div`
   display: ${(props) => props.display ? props.display : "flex"};
   background-color: ${(props) => props.backgroundColor};
   font-size: 10px;
-  box-shadow: inset 0 2px 9px -7px #00000080;
+  /* box-shadow: inset 0 2px 9px -7px #00000080; */
   
     @media only screen and (max-width: 1200px) {
       font-size: 8px;

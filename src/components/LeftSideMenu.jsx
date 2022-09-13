@@ -80,6 +80,7 @@ const LeftSideMenuDiv = styled.div`
   align-items: center;
   background-color: var(--white);
   border-right: 1.2px solid #00000080;
+  z-index: 9999;
 `;
 
 const ClassDiv = styled.div`

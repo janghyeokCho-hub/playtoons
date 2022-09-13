@@ -1,7 +1,10 @@
 import React, {useRef} from 'react';
 import styled from "styled-components";
 
-import iconClose from '@ICONS/icon_circle_close.png';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from "@fortawesome/pro-light-svg-icons";
+
+        
 
 export default function ImagePreviewContainer(props) {
   const { children : src, handleClick } = props;
@@ -10,14 +13,28 @@ export default function ImagePreviewContainer(props) {
   const handleIconCloseClick = () => {
     //클릭 이벤트 구현
     if( handleClick !== undefined ){ handleClick(); }
-    
-    // refContainer.current.parentNode.removeChild(refContainer.current);
   }
 
   return (
     <Container ref={refContainer}>
-      <Img src={src} />
-      <IconClose onClick={handleIconCloseClick}></IconClose>
+      <Img 
+        borderRadius={props.borderRadius}
+        src={src} />
+        <FontAwesomeIcon 
+            icon={faCircleXmark}
+            onClick={handleIconCloseClick}
+            style={{ 
+              width: "32px", 
+              height:"32px", 
+              color: "var(--deep-space-sparkle)",
+              backgroundColor: "var(--white)",
+              borderRadius: "32px",
+              position : "absolute",
+              top: "0",
+              right: "0",
+              transform: "translate(50%, -50%)"
+            }}
+            />
     </Container>
   )
 }
@@ -33,17 +50,6 @@ const Img = styled.img`
   height: 100%;
   position: absolute;
   bottom: 0;
+  border-radius: ${(props) => props.borderRadius};
 `;
 
-const IconClose = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  transform: translate(50%, -50%);
-  width: 32px;
-  height: 32px;
-  background-color: var(--white);
-  border-radius: 32px;
-  background-size: 100% 100%;
-  background-image: url(${iconClose});
-`;

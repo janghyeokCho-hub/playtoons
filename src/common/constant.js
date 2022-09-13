@@ -5,6 +5,9 @@ export const BROWSER_CONTENTS_AREA_TYPE = {
   DASHBOARD_WITHOUT_PADDING : "dashboard_without_padding",   //  with dashboard nav side bar and no padding contents area
 };
 
+/**
+ * TextInput.jsx or TextInputSearch.jsx status
+ */
 export const INPUT_STATUS = {
   DEFAULT : 1,
   FOCUSED : 2,
@@ -12,3 +15,11 @@ export const INPUT_STATUS = {
   DISABLED: 4,
 };
 
+/**
+ * Toast.jsx type
+ */
+export const TOAST_TYPE = {
+  info : 1,
+  success: 2,
+  error : 3,
+}

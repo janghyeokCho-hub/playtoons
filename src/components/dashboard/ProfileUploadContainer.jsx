@@ -1,7 +1,7 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import {useDropzone} from 'react-dropzone';
 import styled from "styled-components";
-import {  Body3, Border1pxTiara } from "@/styledMixins";
-import { useDropzone } from 'react-dropzone';
+import {  Body3 } from "@/styledMixins";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/pro-solid-svg-icons";
 
@@ -9,11 +9,9 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
 /**
  * 
-  <ImageUploadBox
+  <ProfileUploadContainer
     width={"699px"}
     height={"300px"}
-    border={"1px dashed rgba(195,202,210, 1)"}
-    textDragNDrop={text.label_drag_drop}
     textInputMessage={text.input_image}
     handleFile={handleTimelineImageFile}
     />
@@ -21,8 +19,8 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
  * @param {*} props 
  * @returns 
  */
-export default function ImageUploadContainer(props) {
-  const { children, textDragNDrop, handleFile } = props;
+export default function ProfileUploadContainer(props) {
+  const { children , handleFile } = props;
   const [file, setFile] = useState(null);
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -44,10 +42,11 @@ export default function ImageUploadContainer(props) {
     ...getRootProps(),
   };
 
+
   const handlePreviewClose = () => {
     setFile(undefined);
   }
-
+  
   useEffect(() => {
     setFile(children);
   }, []);
@@ -58,50 +57,57 @@ export default function ImageUploadContainer(props) {
       height={props.height}
       marginBottom={props.marginBottom}
       >
-      <input {...InputProps}/>
+      <Input {...InputProps}/>
       {
         file === undefined ? (
+          // upload
           <Container 
             {...RootProps} 
+            {...props}
             maxSize={100} 
             multiple={false} 
-            width={props.width}
-            height={props.height}
-            border={props.border}
-            backgroundColor={props.backgroundColor}
             >
               {  isDragActive ? (
-                <TextContainer>
-                  <TextlabelDragNDrop>{props.textInputMessage}</TextlabelDragNDrop>
-                </TextContainer>
+                    <TextContainer>
+                      <TextlabelDragNDrop>{props.textInputMessage}</TextlabelDragNDrop>
+                    </TextContainer>
                 ) : (
-                  <TextContainer>
-                    <FontAwesomeIcon 
-                      icon={faCirclePlus}
-                      style={{ 
-                        width: "24px", 
-                        height: "24px", 
-                        marginBottom: `${props.textDragNDrop ? "12px" : ""}`,
-                        color: "var(--deep-space-sparkle)" 
-                      }}
-                      />
-                    <TextlabelDragNDrop >{textDragNDrop}</TextlabelDragNDrop>
-                  </TextContainer>
+                    <TextContainer>
+                      <FontAwesomeIcon 
+                        icon={faCirclePlus}
+                        style={{ 
+                          width: "24px", 
+                          height: "24px", 
+                          color: "var(--deep-space-sparkle)" 
+                        }}
+                        />
+                    </TextContainer>
                 )
               }
           </Container>
         ) : (
+          // preview
           <PreviewContainer 
             width={props.width}
             height={props.height}
+            borderRadius={props.borderRadius}
             >
-            <ImagePreviewContainer handleClick={handlePreviewClose}>{file}</ImagePreviewContainer>
+            <ImagePreviewContainer 
+              borderRadius={props.borderRadius}
+              handleClick={handlePreviewClose}
+              >
+              {file}
+            </ImagePreviewContainer>
           </PreviewContainer>
         )
       }
     </RootContainer>
   );
 }
+
+const Input = styled.input`
+  display: none;
+`;
 
 const RootContainer = styled.div`
   position: relative;
@@ -110,26 +116,27 @@ const RootContainer = styled.div`
   margin-bottom: ${(props) => props.marginBottom};
 `;
 
+
 const PreviewContainer = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  border-radius: 5px;
-  border: 2px solid rgba(57,75,194, 1);
-  opacity: 1;
+  border-radius: ${(props) => props.borderRadius};
   background-color: rgba(247,248,249, 1);
   background-size: 100%;
+  border: 2px solid rgba(57,75,194, 1);
+  opacity: 1;
 `;
 
+
 const Container = styled.div`
-  ${Border1pxTiara}
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  background-color: ${(props) => props.backgroundColor};      //var(--desert-storm)
-  border-radius: 4px;
-  border: ${(props) => props.border};                         //1px dashed rgba(195,202,210, 1)
+  border-radius: ${(props) => props.borderRadius};
+  border: ${(props) => props.border};
+  background-color: var(--tiara);
   opacity: 1;
   
-Rectangle
+
   &.preview{
     background-color: transparent;
     border-radius: 0px;

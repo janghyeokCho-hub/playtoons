@@ -25,6 +25,18 @@ const size = {
   arrow: 5,
 };
 
+const text = {
+  page_title :"シリーズリスト",
+  add_series : "シリーズを追加",
+  number : "番号",
+  post_image : "表紙",
+  title : "タイトル",
+  type : "タイプ",
+  category: "カテゴリ",
+  date: "掲載日",
+  status: "状態"
+};
+
 export default function DashboardSeries(props) {
   const [data, setData] = useState();
   const navigate = useNavigate();
@@ -113,14 +125,14 @@ export default function DashboardSeries(props) {
       type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD}
       >
       <TitleContainer>
-        <Title>{"シリーズリスト"}</Title>
+        <Title>{text.page_title}</Title>
         <SeriesAddButtonContainer>
           <ButtonOutline
             width={"180px"}
             height={"40px"}
             marginRight={"16px"}
             borderRadius={"5px"}
-            text={"シリーズを追加"}
+            text={text.add_series}
             icon={iconPathPlus}
             handleClick={handleClickUpload}
           />
@@ -129,13 +141,13 @@ export default function DashboardSeries(props) {
       <Table>
         <Header>
           <tr>
-            <HeaderCell width={size.no}>{"番号"}</HeaderCell>
-            <HeaderCell width={size.image}>{"表紙"}</HeaderCell>
-            <HeaderCell width={size.title}>{"タイトル"}</HeaderCell>
-            <HeaderCell width={size.type}>{"タイプ"}</HeaderCell>
-            <HeaderCell width={size.category}>{"カテゴリ"}</HeaderCell>
-            <HeaderCell width={size.date}>{"掲載日"}</HeaderCell>
-            <HeaderCell width={size.status}>{"状態"}</HeaderCell>
+            <HeaderCell width={size.no}>{text.number}</HeaderCell>
+            <HeaderCell width={size.image}>{text.post_image}</HeaderCell>
+            <HeaderCell width={size.title}>{text.title}</HeaderCell>
+            <HeaderCell width={size.type}>{text.type}</HeaderCell>
+            <HeaderCell width={size.category}>{text.category}</HeaderCell>
+            <HeaderCell width={size.date}>{text.date}</HeaderCell>
+            <HeaderCell width={size.status}>{text.status}</HeaderCell>
             <HeaderCell width={size.arrow}></HeaderCell>
           </tr>
         </Header>

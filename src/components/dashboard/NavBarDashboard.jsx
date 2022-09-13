@@ -162,11 +162,13 @@ export default function NavBarDashboard3(props) {
 
 const NavBarDashboard = styled.div`
   width: ${(props) => props.width};
-  min-width: 200px;
+  min-width: 300px;
   position: relative;
+  border-right: 1px solid var(--line-gray);
 
   @media only screen and (max-width: 1025px) {
     width: ${(props) => getResizedNumber(props.width, 0.8)};
+    min-width: 200px;
   }
 
   @media only screen and (max-width: 700px) {

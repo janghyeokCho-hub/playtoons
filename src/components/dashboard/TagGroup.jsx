@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Body6, Body1, Border1pxTiara } from "@/styledMixins";
 
-import iconSearch from '@ICONS/icon_search.png'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/pro-light-svg-icons";
 
 
 
 function TagGroup(props) {
-  const { label, childern, className } = props;
+  const { label,  className } = props;
   const [isFocusInput, setFocusInput] = useState(false);
 
   return (
@@ -15,7 +16,17 @@ function TagGroup(props) {
       <TextLabel className="">{label}</TextLabel>
       <InpuContainer >
         <Input type="text" onFocus={() => setFocusInput(true)} onBlur={() => setFocusInput(false)}/>
-        <IconSearch />
+        <FontAwesomeIcon 
+            icon={faMagnifyingGlass}
+            style={{ 
+              width: "20px", 
+              height:"20px", 
+              position: "absolute",
+              top: "50%",
+              left: "12px",
+              transform: "translate(0, -50%)",
+              color: "var(--bright-gray)" }}
+            />
         {
           isFocusInput === false && (<TextLabel1 >{props.text}</TextLabel1>)
         }
@@ -61,17 +72,6 @@ const InpuContainer = styled.div`
   height: 45px;
   position: relative;
   border-radius: 5px;
-`;
-
-const IconSearch = styled.div`
-  width: 20px;
-  height: 20px;
-  background-image: url(${iconSearch});
-  background-size: 100% 100%;
-  position: relative;
-  top: 50%;
-  left: 12px;
-  transform: translate(0, -50%);
 `;
 
 const TextLabel1 = styled.div`

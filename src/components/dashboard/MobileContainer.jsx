@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Border1pxTiara, Body5 } from "@/styledMixins";
+import { Border1pxTiara, } from "@/styledMixins";
 
 import PageTitle from '@/components/dashboard/PageTitleMobile';
 

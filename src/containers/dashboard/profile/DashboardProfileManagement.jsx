@@ -7,67 +7,47 @@ import {
   NotosansjpNormalDeepSpaceSparkle14p,
 } from "@/styledMixins";
 
-import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
+import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
+import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
-import Dropdown from "@COMPONENTS/dashboard/Dropdown";
-import TagGroup from "@COMPONENTS/dashboard/TagGroup";
-import RegisterButton from "@COMPONENTS/dashboard/ButtonDefault";
-import PreviewButton from "@COMPONENTS/dashboard/ButtonOutline";
-import ImageUploadContainer from "@COMPONENTS/dashboard/ImageUploadContainer";
+import Dropdown from "@/components/dashboard/Dropdown";
+import TagGroup from "@/components/dashboard/TagGroup";
+import RegisterButton from "@/components/dashboard/ButtonDefault";
+import PreviewButton from "@/components/dashboard/ButtonOutline";
+import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
+import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
-import Tpye from "@/components/post/Radio";
+import ProfileUploadContainer from '@COMPONENTS/dashboard/ProfileUploadContainer';
 
 import iconInfo from "@IMAGES/icons/icon_info.png";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
-import ToggleButton from "@/components/post/RadioButton";
+import tempImageBg from "@IMAGES/landingpage-profile-bgImg2.png";
+import ToolTip from "@/components/dashboard/ToolTip";
 
-const textData = {
-  label_post_upload: "投稿する",
-  label_post_edit: "投稿を修正",
-  label_series: "シリーズ",
-  label_type: "タイプ",
-  label_title: "タイトル",
-  label_episode: "話",
-  label_content: "コンテンツ",  //icon
-  label_tag: "タグ",
-  label_support_user: "閲覧範囲（支援者）",   //dropdown
+const text = {
+  profile_management: "プロフィル管理",
+  label_post_image: "表紙",
   label_timeline: "タイムラインのサムネイル",
-
   label_drag_drop: "ドラッグ＆ドロップ",
-  label_preview: "プレビュー",
+  label_title: "タイトル",
+  label_type: "タイプ",
+  label_category: "カテゴリ",
+  label_tag_setting: "タグ設定",
   label_register: "登録する",
-
-  tag_name: "タグ名",
-  type_webtoon: "ウェブトゥーン",
-  type_article: "アーティクル",
-  type_movie: "映像",
+  label_summary: "説明",
+  label_adult: "年齢設定",
+  label_r_19: "R-19",
+  label_preview: "プレビュー",
   label_can_not_edit: "編集不可",
+  tag_name: "タグ名",
   input_image: "置いてください。",
 };
 
-const typeList = [
-  {
-    name : textData.type_webtoon,
-    code : "1",
-    isSelected : true,
-  },
-  {
-    name : textData.type_article,
-    code : "2",
-    isSelected : false,
-  },
-  {
-    name : textData.type_movie,
-    code : "3",
-    isSelected : false,
-  }
-];
-
 const typeDataList = ["1", "2", "3"];
 
-export default function UploadPost(props) {
+export default function DashboardProfileManagement(props) {
   const refIsAdult = useRef();
   const [isModeUpload, setMode] = useState();
   const params = useParams();
@@ -106,65 +86,55 @@ export default function UploadPost(props) {
 
   return (
     <BrowserContainer 
-      backgroundColor={"var(--desert-storm)"}       
+      padding={"48px 0"}
+      spaceWidth={"48px"}
+      backgroundColor={"var(--desert-storm)"} 
+      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX}
       >
       <Container      
-        // width={"100%"}
-        // height={"100%"}
-        paddingTop={"48px"}
-        paddingBottom={"48px"}
-        paddingLeft={"610px"}
-        paddingRight={"610px"}
+        paddingTop={"32px"}
+        paddingBottom={"32px"}
         >
         <form method="post" encType="multipart/form-data">
-          <PageTitle>
-            {isModeUpload
-              ? textData.label_post_upload
-              : textData.label_post_edit}
-          </PageTitle>
+          <PageTitle>{text.profile_management}</PageTitle>
 
-          <FormDefault 
-            label={textData.label_series}>
+          {/* ====== profile upload ===== */}
+          <ProfileContainer>
+            <ImageUploadContainer
+              width={"100%"}
+              height={"300px"}
+              backgroundColor={"var(--tiara)"}
+              borderRadius={"4px"}
+              handleFile={handleTimelineImageFile}
+            >{tempImageBg}</ImageUploadContainer>
+            <RoundProfileContainer>
+              <ProfileUploadContainer
+                width={"100px"}
+                height={"100px"}
+                border={"1px solid var(--white)"}
+                borderRadius={"100px"}
+                handleFile={handleTimelineImageFile}
+              ></ProfileUploadContainer>
+            </RoundProfileContainer>
+          </ProfileContainer>
+
+          <ToolTip title={"Title"} text={"text something123142"} />
+
+          <FormDefault className={""} label={text.label_title}>
             {seriesData.title}
           </FormDefault>
-
-          <TextLabel>{textData.label_type}</TextLabel>
-          <Tpye 
-            height={"44px"}
-            itemMarginRight={"16px"}
-            itemBorderRadius={"4px"}
+          <TextLabel>{text.label_type}</TextLabel>
+          <Dropdown 
+            {...props}
+            width={"215px"}
+            height={"45px"}
             marginBottom={"2.222222222vh"}
-            list={typeList}
+            borderRadius={"5px"}
+            backgroundColor={"var(--white)"} 
+            className={`${isModeUpload ? "" : "disabled"}`}
+            dataList={typeDataList}
             />
-
-          <FormDefault label={textData.label_title}>
-            {seriesData.title}
-          </FormDefault>
-
-          <FormDefault label={textData.label_episode}>
-            {seriesData.episode}
-          </FormDefault>
-
-          <TextInfoContainer>
-            <IconTextLabel>{textData.label_content}</IconTextLabel>
-            <IconInfoPostimage />
-          </TextInfoContainer>
-          <ImageUploadContainer
-            width={"700px"}
-            height={"300px"}
-            marginBottom={"2.222222222vh"}
-            border={"1px dashed rgba(195,202,210, 1)"}
-            backgroundColor={"var(--desert-storm)"}
-            textDragNDrop={textData.label_drag_drop}
-            textInputMessage={textData.input_image}
-            handleFile={handlePostImageFile}
-            >
-            {/* {tempImage} */}
-          </ImageUploadContainer>
-          
-          <TagGroup label={textData.label_tag} text={textData.tag_name} />
-
-          <TextLabel>{textData.label_support_user}</TextLabel>
+          <TextLabel>{text.label_category}</TextLabel>
           <Dropdown 
             {...props}
             width={"215px"}
@@ -174,23 +144,53 @@ export default function UploadPost(props) {
             backgroundColor={"var(--white)"} 
             dataList={typeDataList}
             />
-
+          <AbultGroup>
+            <TextLabel>{text.label_adult}</TextLabel>
+            <FlexRow>
+              <ToggleOn
+                ref={refIsAdult}
+                selected={false}
+              />
+              <R19>{text.label_r_19}</R19>
+            </FlexRow>
+          </AbultGroup>
+          <FormDefault
+            className={"group-11-2"}
+            inputClassName={"summary-big"}
+            label={text.label_summary}
+          ></FormDefault>
+          <TagGroup label={text.label_tag_setting} text={text.tag_name} />
           <TextInfoContainer>
-            <IconTextLabel>{textData.label_timeline}</IconTextLabel>
+            <IconTextLabel>{text.label_post_image}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
           <ImageUploadContainer
-            width={"700px"}
+            width={"200px"}
             height={"300px"}
-            marginBottom={"4.444444444vh"}
             border={"1px dashed rgba(195,202,210, 1)"}
             backgroundColor={"var(--desert-storm)"}
-            textDragNDrop={textData.label_drag_drop}
-            textInputMessage={textData.input_image}
-            handleFile={handleTimelineImageFile}
+            textDragNDrop={text.label_drag_drop}
+            textInputMessage={text.input_image}
+            handleFile={handlePostImageFile}
             >
+            {tempImage}
           </ImageUploadContainer>
-          
+          <Space height={"2.222222222vh"} />
+
+          <TextInfoContainer>
+            <IconTextLabel>{text.label_timeline}</IconTextLabel>
+            <IconInfoPostimage />
+          </TextInfoContainer>
+          <ImageUploadContainer
+            width={"699px"}
+            height={"300px"}
+            border={"1px dashed rgba(195,202,210, 1)"}
+            backgroundColor={"var(--desert-storm)"}
+            textDragNDrop={text.label_drag_drop}
+            textInputMessage={text.input_image}
+            handleFile={handleTimelineImageFile}
+            />
+          <Space height={"4.444444444vh"} />
 
           <ButtonContainer>
             <PreviewButton
@@ -198,14 +198,14 @@ export default function UploadPost(props) {
               height={"40px"}
               marginRight={"16px"}
               borderRadius={"5px"}
-              text={textData.label_preview}
+              text={text.label_preview}
               handleClick={handlePreview}
             />
             <RegisterButton
               width={"102px"}
               height={"40px"}
               borderRadius={"5px"}
-              text={textData.label_register}
+              text={text.label_register}
               handleClick={handleRegister}
             />
           </ButtonContainer>
@@ -225,8 +225,20 @@ const TextLabel = styled.div`
   white-space: nowrap;
 `;
 
+const ProfileContainer = styled.div`
+  position: relative;
+  margin-bottom: 144px;
+`;
+
+const RoundProfileContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+`;
 
 const Container = styled(ResponsiveDiv)`
+  
 `;
 
 const Space = styled.div`
@@ -244,7 +256,8 @@ const ButtonContainer = styled.div`
 
 const PageTitle = styled.div`
   ${Title3}
-  margin-bottom: 4.444444444vh;  
+  margin-left: 32px;
+  margin-bottom: 32px;  
   /* margin-bottom: 48px;  */
   font-weight: 500;
   color: var(--nevada);

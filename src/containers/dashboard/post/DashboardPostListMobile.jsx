@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { Body8, Body5, Body7, Border1pxVioletBlue } from "@/styledMixins";
+import { Body8, Body5, Body7,  } from "@/styledMixins";
 
 import MobileContainer from "@COMPONENTS/dashboard/MobileContainer";
 import ButtonOutline from "@COMPONENTS/dashboard/ButtonOutline";

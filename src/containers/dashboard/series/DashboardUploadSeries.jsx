@@ -15,7 +15,7 @@ import Dropdown from "@/components/dashboard/Dropdown";
 import TagGroup from "@/components/dashboard/TagGroup";
 import RegisterButton from "@/components/dashboard/ButtonDefault";
 import PreviewButton from "@/components/dashboard/ButtonOutline";
-import ImageUploadBox from "@/components/dashboard/ImageUploadContainer";
+import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
 
@@ -147,29 +147,32 @@ export default function DashboardUploadSeries(props) {
             <IconTextLabel>{textData.label_post_image}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
-          <ImageUploadBox
+          <ImageUploadContainer
             width={"200px"}
             height={"300px"}
+            border={"1px dashed rgba(195,202,210, 1)"}
+            backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
             handleFile={handlePostImageFile}
             >
             {tempImage}
-          </ImageUploadBox>
+          </ImageUploadContainer>
           <Space height={"2.222222222vh"} />
 
           <TextInfoContainer>
             <IconTextLabel>{textData.label_timeline}</IconTextLabel>
             <IconInfoPostimage />
           </TextInfoContainer>
-          <ImageUploadBox
+          <ImageUploadContainer
             width={"699px"}
             height={"300px"}
-            className={"dashboard_upload_timeline"}
+            border={"1px dashed rgba(195,202,210, 1)"}
+            backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
             handleFile={handleTimelineImageFile}
-          ></ImageUploadBox>
+          ></ImageUploadContainer>
           <Space height={"4.444444444vh"} />
 
           <ButtonContainer>
