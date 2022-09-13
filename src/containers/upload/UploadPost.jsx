@@ -153,7 +153,7 @@ export default function UploadPost(props) {
             width={"700px"}
             height={"300px"}
             marginBottom={"2.222222222vh"}
-            border={"1px dashed rgba(195,202,210, 1)"}
+            border={"1px dashed var(--tiara)"}
             backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
@@ -183,7 +183,7 @@ export default function UploadPost(props) {
             width={"700px"}
             height={"300px"}
             marginBottom={"4.444444444vh"}
-            border={"1px dashed rgba(195,202,210, 1)"}
+            border={"1px dashed var(--tiara)"}
             backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}

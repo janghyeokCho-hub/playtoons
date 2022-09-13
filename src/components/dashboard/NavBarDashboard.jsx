@@ -40,11 +40,11 @@ let textData = {
 };
 
 const DASHBOARD_PATH = {
-  SUPPORT: "/dashboard/support",
+  PLAN: "/dashboard/plan",
   PRODUCT: "/dashboard/product/list",
   SERIES: "/dashboard/series",
   POST: "/dashboard/post",
-  PROFILE: "/dashboard/profile",
+  PROFILE: "/dashboard/profile/upload",
   DASHBOARD: "/dashboard/main",
   ANALYSIS: "/dashboard/analysis",
 };
@@ -53,9 +53,9 @@ export default function NavBarDashboard3(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onClickSupport = () => {
-    dispatch(showModal(<>支援管理 準備しています。</>));
-    // navigate(DASHBOARD_PATH.SUPPORT);
+  const onClickPlan = () => {
+    // dispatch(showModal(<>支援管理 準備しています。</>));
+    navigate(DASHBOARD_PATH.PLAN);
   };
   
   const onClickProduct = () => {
@@ -72,8 +72,8 @@ export default function NavBarDashboard3(props) {
   };
 
   const onClickProfile = () => {
-    dispatch(showModal(<>プロフィル管理 準備しています。</>));
-    // navigate(DASHBOARD_PATH.PROFILE);
+    // dispatch(showModal(<>プロフィル管理 準備しています。</>));
+    navigate(DASHBOARD_PATH.PROFILE);
   };
 
   const onClickDashboard = () => {
@@ -109,11 +109,11 @@ export default function NavBarDashboard3(props) {
       {getExtraNav(props)}
       <NavBarItem
         top={top * 6}
-        onClick={onClickSupport}
+        onClick={onClickPlan}
         icon={iconSupport}
         selectedIcon={iconSupportBlue}
         text={textData.support_management}
-        name={DASHBOARD_PATH.SUPPORT}
+        name={DASHBOARD_PATH.PLAN}
       />
       <NavBarItem
         top={top * 5}

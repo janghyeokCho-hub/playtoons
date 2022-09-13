@@ -8,7 +8,8 @@ import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
-import ProfileManagement from "@CONTAINERS/dashboard/profile/DashboardProfileManagement";
+import UploadProfile from "@/containers/dashboard/profile/DashboardUploadProfile";
+import Plan from "@/containers/dashboard/plan/DashboardPlan";
 
 /**
 * Dashboard url 분기 처리
@@ -29,7 +30,7 @@ export default function Dashboard() {
       />
       <Route 
         path="/profile/upload" 
-        element={<ProfileManagement />} 
+        element={<UploadProfile />} 
       />
       <Route 
         path="/series" 
@@ -61,8 +62,12 @@ export default function Dashboard() {
         element={<ReactionList />} 
       />
       <Route 
+        path="/plan" 
+        element={<Plan />} 
+      />
+      <Route 
         path="/*" 
-        element={<Series />} 
+        element={<Series />}    //404
       />
     </Routes>
   )

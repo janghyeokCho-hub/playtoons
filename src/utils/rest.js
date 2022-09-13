@@ -144,7 +144,7 @@ export function* loadSaga(action) {
 
   const accessToken = getAccessToken();
 
-  let url = Config.apiUrl;
+  let url = Config.apiAuthUrl;
 
   let options = { headers: {} };
   if (accessToken) options.headers.Authorization = "Bearer " + accessToken;
@@ -171,9 +171,9 @@ export function* loadSaga(action) {
   yield put(loading(type, false));
 }
 
-export const requestPromise = (type, params, isForm = false) => {
+export const requestPromise = (type, params, isForm = false, isApi) => {
   return new Promise(async function (resolve, reject) {
-    let url = Config.apiUrl;
+    let url = isApi ? Config.apiUrl : Config.apiAuthUrl;
     let options = {};
     options.headers = {};
 

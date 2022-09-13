@@ -12,7 +12,7 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
   <ImageUploadBox
     width={"699px"}
     height={"300px"}
-    border={"1px dashed rgba(195,202,210, 1)"}
+    border={"1px dashed var(--tiara)"}
     textDragNDrop={text.label_drag_drop}
     textInputMessage={text.input_image}
     handleFile={handleTimelineImageFile}
@@ -126,7 +126,7 @@ const Container = styled.div`
   height: ${(props) => props.height};
   background-color: ${(props) => props.backgroundColor};      //var(--desert-storm)
   border-radius: 4px;
-  border: ${(props) => props.border};                         //1px dashed rgba(195,202,210, 1)
+  border: ${(props) => props.border};                         //1px dashed var(--tiara)
   opacity: 1;
   
 Rectangle

@@ -6,8 +6,19 @@ import { Body2 } from '@/styledMixins';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-        
 
+/**
+*
+  <ToolTip 
+    title={"Title"} 
+    text={"text something123142"}
+    handleClick={handleClickEvent} />
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param {*} props
+* @return
+*/
 export default function ToolTip(props) {
   const {title, text, handleClick} = props;
   const [isShow, setShow] = useState(false);
@@ -48,7 +59,7 @@ const Container = styled.div`
 
 const PopupContainer = styled.div`
   width: 282px;
-  height: 78px;
+  min-height: 78px;
   margin-bottom: 8px;
   padding: 16px 16px 14px 16px;
   border-radius: 4px;

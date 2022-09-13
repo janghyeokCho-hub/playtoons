@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Body8, Border1pxTiara } from "@/styledMixins";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/pro-solid-svg-icons";
-import {faEye} from "@fortawesome/pro-light-svg-icons";
 
 import {INPUT_STATUS} from '@COMMON/constant';
 
@@ -12,6 +11,7 @@ import {INPUT_STATUS} from '@COMMON/constant';
   refInput.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
 
   <TextInput 
+    inputType={"input"}
     width={"300px"}
     height={"45px"}
     marginLeft={"49px"}
@@ -57,8 +57,23 @@ function Input(props, ref) {
     return status.type === INPUT_STATUS.DISABLED ? "var(--tiara)" : "var(--vulcan)";
   };
 
-  const getDisabledColorOnEye = () => {
-    return status.type === INPUT_STATUS.DISABLED ? "var(--tiara)" : "var(--black)";
+  const getTextInput = (inputType) => {
+    return inputType === "textarea" ?
+            <InputTextArea 
+              color={getDisabledColorOnInput()}
+              borderColor={getDisabledBorderColorOnInput()}
+              backgroundColor={getDisabledBackgroundColorOnInput()}
+              disabled={status.type === INPUT_STATUS.DISABLED}
+              {...props}
+              /> :
+            <InputText 
+              type={"text"}
+              color={getDisabledColorOnInput()}
+              borderColor={getDisabledBorderColorOnInput()}
+              backgroundColor={getDisabledBackgroundColorOnInput()}
+              disabled={status.type === INPUT_STATUS.DISABLED}
+              {...props}
+              />;
   };
 
   useImperativeHandle(ref, () => ({
@@ -74,14 +89,9 @@ function Input(props, ref) {
       marginBottom={props.marginBottom}
       >
       <RelativeContainer>
-        <InputText 
-          type={"text"}
-          color={getDisabledColorOnInput()}
-          borderColor={getDisabledBorderColorOnInput()}
-          backgroundColor={getDisabledBackgroundColorOnInput()}
-          disabled={status.type === INPUT_STATUS.DISABLED}
-          {...props}
-          />
+        {
+          getTextInput(props.inputType)
+        }
       </RelativeContainer>
      { 
       status.type === INPUT_STATUS.ERROR &&
@@ -126,6 +136,24 @@ const InputText = styled.input`
   ${Border1pxTiara}
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+  min-height: ${(props) => props.minHeight};
+  border-radius: ${(props) => props.borderRadius};
+  border-color: ${(props) => props.borderColor};
+  color: ${(props) => props.color};
+  background-color: ${(props) => props.backgroundColor};
+  padding: 14px 16px;
+  
+  :focus{
+    border-color: var(--violet-blue);
+    color: var(--vulcan);
+  }
+`;
+
+const InputTextArea = styled.textarea`
+  ${Border1pxTiara}
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  min-height: ${(props) => props.minHeight};
   border-radius: ${(props) => props.borderRadius};
   border-color: ${(props) => props.borderColor};
   color: ${(props) => props.color};
