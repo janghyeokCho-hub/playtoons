@@ -1,13 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
-
-import { Border1pxGhost } from "@/styledMixins";
-import Input from "@COMPONENTS/Input";
-import Button from "@COMPONENTS/Button";
-import { recoverConfirm } from "@/services/accountService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 
 const UpdatePasswordConfirm = () => {
+  /*
   const { state } = useLocation();
   const code = state?.code;
   const [newPwd, setNewPwd] = useState(null);
@@ -29,90 +25,65 @@ const UpdatePasswordConfirm = () => {
       console.log(response);
     }
   }, [newPwd, newPwdCheck, code]);
+  */
 
   return (
-    <AccountBoxDiv>
-      <UpdatePasswordConfirmTitle>パスワードの変更</UpdatePasswordConfirmTitle>
+    <>
+      <h1 class="logo">パスワードの変更</h1>
+      <div class="txt">
+        <p>新しいパスワードを入力してください。</p>
+      </div>
 
-      <UpdatePasswordConfirmContent color="--bright-gray">
-        新しいパスワードを入力してください。
-      </UpdatePasswordConfirmContent>
-
-      <UpdatePasswordConfirmInputDiv marginBottom="10px" marginTop="40px">
-        <Input
-          inputType="password"
-          label="パスワード"
-          callback={handleNewPwdChage}
-        />
-        <Input
-          inputType="password"
-          label="パスワード確認"
-          callback={handleNewPwdCheckChage}
-        />
-      </UpdatePasswordConfirmInputDiv>
-      <Button
-        text=">パスワード変更"
-        color="--white"
-        bgColor="--violet-blue"
-        marginTop="10px"
-        marginBottom="10px"
-        callback={() => handlePwdConfirm()}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="10px"
-      />
-    </AccountBoxDiv>
+      <div class="area_member">
+        <div class="inbox ty3">
+          <div class="col">
+            <label for="pwd" class="h">
+              パスワード
+            </label>
+            <input type="password" id="pwd" class="inp_txt w100p" />
+            <button
+              type="button"
+              class="btn_eyes"
+              onclick="$(this).toggleClass('active');"
+            >
+              <span class="show">
+                <FontAwesomeIcon icon={faEye} />
+              </span>
+              <span class="hide">
+                <FontAwesomeIcon icon={faEyeSlash} />
+              </span>
+            </button>
+          </div>
+          <div class="col">
+            <label for="pwd" class="h">
+              パスワード確認
+            </label>
+            <input type="password" id="pwd" class="inp_txt w100p" />
+            <button
+              type="button"
+              class="btn_eyes"
+              onclick="$(this).toggleClass('active');"
+            >
+              <span class="show">
+                <FontAwesomeIcon icon={faEye} />
+              </span>
+              <span class="hide">
+                <FontAwesomeIcon icon={faEyeSlash} />
+              </span>
+            </button>
+          </div>
+        </div>
+        <div class="btns">
+          <button type="submit" class="btn-pk mem blue">
+            <span>パスワード変更</span>
+          </button>
+          <button type="submit" class="btn-pk mem blue2">
+            <span>戻る</span>
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const UpdatePasswordConfirmTitle = styled.h1`
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 50px;
-`;
-
-const UpdatePasswordConfirmContent = styled.div`
-  align-self: center;
-  color: var(${(props) => props.color});
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-m);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 10px;
-`;
-
-const UpdatePasswordConfirmInputDiv = styled.div`
-  align-self: center;
-  margin-top: ${(props) => props.marginTop};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
 
 export default UpdatePasswordConfirm;

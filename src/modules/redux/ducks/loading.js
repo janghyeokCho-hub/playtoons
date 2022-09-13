@@ -1,39 +1,34 @@
-const REQUESTS = ['LOAD', 'LOADX', 'VIEW', 'UPDATE', 'DELETE', 'INSERT'];
+import { createAction, handleActions } from "redux-actions";
 
-const loadingReducer = (state = {}, action) => {
-	const { type } = action;
+// Loding 상태 공통 Component
+// 특정 Redux Action type에 따라 Loading 여부 관리
+// type = action type
 
-	//const typeMatches = /(_*)\/(_*)\/(_*)/.exec(type);
-	const typeMatches = /(.*)/.exec(type);
+const START_LOADING = "loading/START_LOADING";
+const FINISH_LOADING = "loading/FINISH_LOADING";
+const INIT = "loading/INIT";
 
-	if (!typeMatches) return state;
+export const startLoading = createAction(START_LOADING, (reqType) => reqType);
+export const finishLoading = createAction(FINISH_LOADING, (reqType) => reqType);
+export const init = createAction(INIT);
 
-	//const [, , , realType] = typeMatches;
-	const [realType] = typeMatches;
+const initialState = {};
 
-	var requestState, requestName;
+const loading = handleActions(
+  {
+    [INIT]: (state, action) => ({
+      ...initialState,
+    }),
+    [START_LOADING]: (state, { payload: type }) => ({
+      ...state,
+      [type]: true,
+    }),
+    [FINISH_LOADING]: (state, { payload: type }) => ({
+      ...state,
+      [type]: false,
+    }),
+  },
+  initialState
+);
 
-	const resultMatches = /(.*)_(COMPLETED|ERROR)/.exec(realType);
-
-	if (resultMatches) {
-		var [, requestName, requestState] = resultMatches;
-	} else {
-		const matches = /(LOAD|LOADX|VIEW|UPDATE|DELETE|INSERT|COMPLETED|ERROR)_(.*)/.exec(realType);
-		if (!matches) return state;
-		var [, requestState, requestName] = matches;
-		requestName = requestState + '_' + requestName;
-	}
-
-	var real = false;
-
-	if (REQUESTS.includes(requestState)) {
-		real = true;
-	}
-
-	return {
-		...state,
-		[requestName]: real,
-	};
-};
-
-export default loadingReducer;
+export default loading;

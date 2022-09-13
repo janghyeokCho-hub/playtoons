@@ -1,23 +1,21 @@
-import { combineReducers } from 'redux';
-import root, { rootTypes, rootAction } from './root';
-import auth, { authTypes, authAction } from './auth';
-import alertModal from './modal';
+import { combineReducers } from "redux";
+import alertModal from "./modal";
 
-import loading from './loading';
+import login from "./login";
+import loading from "./loading";
 
-export const type = {
-	root: rootTypes,
-	auth: authTypes,
-};
-
-export const action = {
-	root: rootAction,
-	auth: authAction,
-};
-
-export default combineReducers({
-	root,
-	loading,
-	auth,
-	alertModal,
+const appReducer = combineReducers({
+  login,
+  loading,
+  alertModal,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === "login/LOGOUT") {
+    // Clear User Data
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+export default rootReducer;

@@ -18,6 +18,8 @@ module.exports = {
       "@CONTAINERS": path.resolve(__dirname, "src/containers"),
       "@COMPONENTS": path.resolve(__dirname, "src/components"),
       "@COMMON": path.resolve(__dirname, "src/common"),
+      "@API": path.resolve(__dirname, "src/services"),
+      "@REDUX": path.resolve(__dirname, "src/modules/redux"),
     }),
     addWebpackPlugin(new Dotenv({ path: `./config/${NODE_ENV}.env` }))
   ),

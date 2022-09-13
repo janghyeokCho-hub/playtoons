@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import { Border1pxGhost, Body6, Body3, Border1pxTiara } from "@/styledMixins";
-import { agreementEula } from "@/services/accountService";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import Button from "@COMPONENTS/Button";
 
 const Agreement = () => {
   const { state } = useLocation();
@@ -34,10 +32,7 @@ const Agreement = () => {
   `;
 
   useEffect(() => {
-    const getEulaContent = async () => {
-      const response = await agreementEula(code);
-      console.log(response);
-    };
+    const getEulaContent = async () => {};
 
     if (!eulaContent) {
       getEulaContent();
@@ -45,89 +40,37 @@ const Agreement = () => {
   }, [code, eulaContent]);
 
   return (
-    <AccountBoxDiv>
-      <AgreementTitle>利用規約</AgreementTitle>
-      <AgreementContextDiv>
-        <MarkdownPreview source={markdownTxt} />
-      </AgreementContextDiv>
-      <CheckboxGroupDiv>
-        <CheckboxInput type="checkbox" />
-        <CheckboxLabel>利用規約に同意します。</CheckboxLabel>
-      </CheckboxGroupDiv>
-      <Button
-        text="同意する"
-        color="--white"
-        bgColor="--violet-blue"
-        width="100%"
-      ></Button>
-    </AccountBoxDiv>
+    <>
+      <h1 className="logo">利用規約</h1>
+      <button className="btn_close">
+        <FontAwesomeIcon icon={faXmark} />
+      </button>
+
+      <div className="area_terms">
+        <div className="in">
+          <MarkdownPreview source={markdownTxt} />
+        </div>
+      </div>
+
+      <div className="inps error">
+        {/* <!-- 에러일때 추가 --> */}
+        <label className="inp_checkbox">
+          <input type="checkbox" />
+          <span>利用規約に同意します。</span>
+        </label>
+
+        <p className="t_error">
+          <span className="ico_error">必須項目をチェックしてください。</span>
+        </p>
+        {/* <!-- 에러일때 추가 --> */}
+      </div>
+
+      <div className="botm">
+        <button type="submit" className="btn-pk mem blue">
+          <span>同意する</span>
+        </button>
+      </div>
+    </>
   );
 };
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const AgreementTitle = styled.h1`
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 50px;
-`;
-
-const AgreementContextDiv = styled.div`
-  ${Body6}
-  padding: 1em;
-  width: 100%;
-  height: 480px;
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-    padding-left: 30px;
-    background-color: var(--mercury);
-    width: 7px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--manatee);
-    border-radius: 10px;
-  }
-`;
-
-const CheckboxGroupDiv = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 2em;
-  margin-bottom: 2em;
-`;
-
-const CheckboxInput = styled.input`
-  ${Border1pxTiara}
-  width: 24px;
-  height: 24px;
-  border-radius: 2px;
-`;
-
-const CheckboxLabel = styled.div`
-  ${Body3}
-  color: var(--vulcan);
-  white-space: nowrap;
-  margin-left: 1em;
-`;
-
 export default Agreement;

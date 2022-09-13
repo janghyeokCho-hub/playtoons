@@ -1,263 +1,181 @@
-import React, { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Body6, Border1pxGhost, Body3 } from "@/styledMixins";
-import imgLogo from "@IMAGES/logo.png";
-import autoLoginLineRight from "@IMAGES/authlogin-line-right.png";
-import verifyLine from "@IMAGES/lines/authlogin-line-txt.png";
-
-import Button from "@COMPONENTS/Button";
-import Input from "@COMPONENTS/Input";
-import { login } from "@/services/userService";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
+import useActions from "@/hook/useActions";
+import { loginRequest } from "@REDUX/ducks/login";
+import { useCallback } from "react";
+import { useEffect } from "react";
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [errorShow, setErrorShow] = useState(false);
-  const [emailValue, setEmailValue] = useState(null);
-  const [passwordValue, setPasswordValue] = useState(null);
+  /*
+authFail
+email
+errMessage
+errStatus
+password
+token
+   */
+  const dispatch = useDispatch();
+  const token = useSelector(({ login }) => login.token);
+  const isLogined = useSelector(({ login }) => login.isLogined);
+  const errStatus = useSelector(({ login }) => login.errStatus);
+  const errMessage = useSelector(({ login }) => login.errMessage);
+  const loading = useSelector(({ loading }) => loading["login/REQUEST"]);
+  const sync = useSelector(({ loading }) => loading["login/SYNC"]);
 
-  // Email state function
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [onLogin] = useActions([loginRequest], []);
+
+  /**
+   * email State 변경 함수
+   * @param {Event} e
+   */
   const handleEmailChange = (e) => {
-    setEmailValue(e.target.value);
+    setEmail(e.target.value);
   };
 
-  // Password state function
-  const handlePasswordChage = (e) => {
-    setPasswordValue(e.target.value);
+  /**
+   * password State 변경 함수
+   * @param {Event} e
+   */
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
-  // Login action
-  const handleLogin = useCallback(async () => {
-    const params = {
-      email: emailValue,
-      password: passwordValue,
+  /**
+   * Password 보기 / 가림 함수
+   */
+  const handleShowPasswordChange = useCallback(() => {
+    setShowPassword(!showPassword);
+  }, [showPassword]);
+
+  /**
+   * 일반 로그인 시도
+   */
+  const handleLogin = useCallback(() => {
+    console.log("handleLogin");
+    const data = {
+      email,
+      password,
     };
-    const { status, data } = await login(params);
+    onLogin(data);
+  }, [email, password, onLogin]);
 
-    if (status === 200) {
-      // 성공
-      // accessToke 은 redux 에서 관리하니, next 값을 통해 페이지로 이동만
-      // next 값이 없을 경우 홈으로
-      navigate(data?.next || "/");
-    } else if (status === 400) {
-      // 파라미터 검증 실패
-    } else if (status === 403) {
-      // 인증 실패 / 권한 없음
-    } else if (status === 503) {
-      // 코드 참조
+  useEffect(() => {
+    if (isLogined) {
+      // 로그인 성공으로 라우터 변경
+      console.log(isLogined);
     }
-  }, [emailValue, passwordValue, navigate]);
+  }, [isLogined]);
 
   return (
-    <AccountBoxDiv>
-      <ImgLogo src={imgLogo} />
-      {errorShow && <ErrorBoxDiv />}
-      <Input
-        inputType="text"
-        label="メールアドレス"
-        callback={handleEmailChange}
-      />
-      <Input
-        inputType="password"
-        label="パスワード"
-        callback={handlePasswordChage}
-      />
+    <>
+      <h1 className="logo">
+        <span className="icon">PlayToons</span>
+      </h1>
 
-      <VerifyDiv
-        className="group-2-21 group-2-22"
-        onClick={() => {
-          navigate("recover");
-        }}
-      >
-        <RecoverLabel className="text_label-220" color="--violet-blue">
-          パスワードをお忘れですか?
-        </RecoverLabel>
-        <Line className="line-8" src={verifyLine} />
-      </VerifyDiv>
-      <Button
-        text="確認する"
-        className="login_btn_default"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => handleLogin()}
-      />
-      <Group4>
-        <LineLeft src={autoLoginLineRight} />
-        <Txt>または</Txt>
-        <LineRight src={autoLoginLineRight} />
-      </Group4>
-      <Button
-        text="Googleで続行"
-        snsType="GOOGLE"
-        className="login_btn_google"
-        color="--vlucan"
-        bgColor="--white"
-        marginBottom="15px"
-      />
-      <Button
-        text="Tiwtterで続行"
-        snsType="TWITTER"
-        className="login_btn_twitter"
-        color="--vlucan"
-        bgColor="--white"
-        marginBottom="15px"
-      />
-      <Button
-        text="Appleで続行"
-        snsType="APPLE"
-        className="login_btn_apple"
-        color="--white"
-        bgColor="--black"
-        marginBottom="15px"
-      />
+      {errStatus && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">
+            辺ようむる海視リずンぼ周場スネ心7場情サムマ事果ずられ情高びぴら急必のにわ陸強ゅょ
+          </p>
+        </div>
+      )}
 
-      <Group6>
-        <TextLabel color="--vulcan">アカウントをお持ちでないですか</TextLabel>
-        <TextLabel1
-          onClick={() => {
-            navigate("/account/register");
-          }}
+      <div className="area_member">
+        <div className="col">
+          <label htmlFor="id" className="h">
+            メールアドレス
+          </label>
+          <input
+            type="text"
+            id="id"
+            className="inp_txt w100p"
+            onChange={handleEmailChange}
+            value={email}
+          />
+        </div>
+        <div className={`${errStatus ? "error" : ""} col`}>
+          {/* <!-- 에러일때 error 추가 --> */}
+          <label htmlFor="pwd" className="h">
+            パスワード
+          </label>
+          <input
+            type={showPassword ? "text" : "password"}
+            id="pwd"
+            className="inp_txt w100p"
+            onChange={handlePasswordChange}
+            value={password}
+          />
+          <button
+            type="button"
+            className={`${showPassword ? "active" : ""} btn_eyes`}
+            onClick={() => handleShowPasswordChange()}
+          >
+            <span className="show">
+              <FontAwesomeIcon icon={faEye} />
+            </span>
+            <span className="hide">
+              <FontAwesomeIcon icon={faEyeSlash} />
+            </span>
+          </button>
+
+          {errStatus && (
+            <p className="t_error">
+              <span className="ico_error">Error message</span>
+            </p>
+          )}
+          {/* <!-- 에러일때 error 추가 --> */}
+        </div>
+        <div className="col_link">
+          <a className="a_link">パスワードをお忘れですか?</a>
+        </div>
+        <button
+          type="submit"
+          className="btn-pk mem blue"
+          onClick={() => handleLogin()}
         >
-          登録する
-        </TextLabel1>
-      </Group6>
-      <TextLabel2>プライバシーポリシー</TextLabel2>
-    </AccountBoxDiv>
+          <span>ログイン</span>
+        </button>
+      </div>
+
+      <div className="area_sns">
+        <h2 className="tit">
+          <span>または</span>
+        </h2>
+
+        <a href="#" className="btn-pk mem white mt0">
+          <span className="ico i_log_animate">Animateで続行</span>
+        </a>
+        <a href="#" className="btn-pk mem white">
+          <span className="ico i_log_google">Googleで続行</span>
+        </a>
+        <a href="#" className="btn-pk mem white">
+          <span className="ico i_log_twitter">Twitterで続行</span>
+        </a>
+        <a href="#" className="btn-pk mem black">
+          <span className="ico i_log_apple">Appleで続行</span>
+        </a>
+      </div>
+
+      <div className="botm">
+        <p className="t1">
+          アカウントをお持ちでないですか? <a href="#" className="c-blue"></a>
+        </p>
+        <a href="#" className="t2">
+          プライバシーポリシー
+        </a>
+      </div>
+    </>
   );
 };
-
-const ErrorBoxDiv = styled.div`
-  width: 100%;
-  height: 100px;
-  border: 1px solid red;
-  border-radius: 8px;
-  margin-bottom: 10px;
-`;
-
-const VerifyDiv = styled.div`
-  cursor: pointer;
-  align-self: flex-end;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 18px;
-
-  &.group-2-21.group-2-22 {
-    margin-right: 2px;
-    min-height: 19px;
-  }
-
-  &.group-2-21.group-2-23 {
-    margin-right: 16px;
-  }
-`;
-
-const Line = styled.img`
-  width: 190px;
-  height: 3px;
-  margin-left: -0.5px;
-`;
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const ImgLogo = styled.img`
-  width: 230px;
-  height: 37px;
-  align-self: center;
-  margin-bottom: 39px;
-`;
-
-const Group4 = styled.div`
-  height: 16px;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 399px;
-`;
-
-const LineLeft = styled.img`
-  width: 170px;
-  height: 2px;
-  margin-top: 4px;
-`;
-
-const Txt = styled.div`
-  ${Body6}
-  width: 48px;
-  min-height: 16px;
-  margin-left: 7px;
-  color: var(--vulcan);
-  line-height: 16px;
-  white-space: nowrap;
-`;
-
-const LineRight = styled.img`
-  width: 170px;
-  height: 2px;
-  margin-left: 6px;
-  margin-top: 4px;
-`;
-
-const Group6 = styled.div`
-  ${Body6}
-  height: 16px;
-  align-self: center;
-  margin-top: 32px;
-  margin-right: 1px;
-  display: flex;
-  align-items: flex-start;
-  min-width: 301px;
-`;
-
-const TextLabel = styled.div`
-  min-height: 16px;
-  color: var(${(props) => props.color});
-  line-height: 16px;
-  white-space: nowrap;
-`;
-
-const RecoverLabel = styled(TextLabel)`
-  ${Body6}
-`;
-
-const TextLabel1 = styled.div`
-  cursor: pointer;
-  min-height: 16px;
-  margin-left: 3px;
-  color: var(--violet-blue);
-  line-height: 16px;
-  white-space: nowrap;
-`;
-
-const TextLabel2 = styled.div`
-  ${Body3}
-  cursor: pointer;
-  width: 173px;
-  min-height: 20px;
-  align-self: center;
-  margin-top: 32px;
-  margin-right: 1px;
-  color: var(--manatee);
-  line-height: 20px;
-  white-space: nowrap;
-`;
 
 export default Login;

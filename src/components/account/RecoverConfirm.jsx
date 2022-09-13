@@ -1,13 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
 
-import { Border1pxGhost } from "@/styledMixins";
-import Input from "@COMPONENTS/Input";
-import Button from "@COMPONENTS/Button";
-import { recoverConfirm } from "@/services/accountService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 
 const RecoverConfirm = () => {
+  /*
   const { state } = useLocation();
   const code = state?.code;
   const [newPwd, setNewPwd] = useState(null);
@@ -29,92 +26,66 @@ const RecoverConfirm = () => {
       console.log(response);
     }
   }, [newPwd, newPwdCheck, code]);
+  */
 
   return (
-    <AccountBoxDiv>
-      <RecoverTitle>パスワードを再設定</RecoverTitle>
+    <>
+      <h1 className="logo">パスワードを再設定</h1>
+      <div className="txt">
+        <p>ログインIDとして使用中の</p>
+        <p>メールアドレスを入力してください。</p>
+      </div>
 
-      <RecoverContent color="--bright-gray">
-        ログインIDとして使用中の
-      </RecoverContent>
-      <RecoverContent color="--bright-gray">
-        メールアドレスを入力してください。
-      </RecoverContent>
-
-      <RecoverInputDiv marginBottom="10px" marginTop="40px">
-        <Input
-          inputType="password"
-          label="パスワード"
-          callback={handleNewPwdChage}
-        />
-        <Input
-          inputType="password"
-          label="パスワード確認"
-          callback={handleNewPwdCheckChage}
-        />
-      </RecoverInputDiv>
-      <Button
-        text=">パスワード変更"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => handlePwdConfirm()}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="15px"
-      />
-    </AccountBoxDiv>
+      <div className="area_member">
+        <div className="inbox ty1">
+          <div className="col">
+            <label for="pwd" className="h">
+              パスワード
+            </label>
+            <input type="password" id="pwd" className="inp_txt w100p" />
+            <button
+              type="button"
+              className="btn_eyes"
+              onclick="$(this).toggleClass('active');"
+            >
+              <span className="show">
+                <FontAwesomeIcon icon={faEye} />
+              </span>
+              <span className="hide">
+                <FontAwesomeIcon icon={faEyeSlash} />
+              </span>
+            </button>
+          </div>
+          <div className="col">
+            <label for="pwd" className="h">
+              パスワード確認
+            </label>
+            <input type="password" id="pwd" className="inp_txt w100p" />
+            <button
+              type="button"
+              className="btn_eyes"
+              onclick="$(this).toggleClass('active');"
+            >
+              <span className="show">
+                <FontAwesomeIcon icon={faEye} />
+              </span>
+              <span className="hide">
+                <FontAwesomeIcon icon={faEyeSlash} />
+              </span>
+            </button>
+          </div>
+        </div>
+        <div className="btns ty1">
+          <button type="submit" className="btn-pk mem blue">
+            <span>パスワード変更</span>
+          </button>
+          <button type="submit" className="btn-pk mem blue2">
+            <span>戻る</span>
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const RecoverTitle = styled.h1`
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 50px;
-`;
-
-const RecoverContent = styled.div`
-  align-self: center;
-  color: var(${(props) => props.color});
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-m);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 10px;
-`;
-
-const RecoverInputDiv = styled.div`
-  align-self: center;
-  margin-top: ${(props) => props.marginTop};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
 
 export default RecoverConfirm;

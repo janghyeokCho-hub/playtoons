@@ -1,224 +1,41 @@
 import React, { useCallback, useState } from "react";
-import styled from "styled-components";
-import { Border1pxGhost } from "@/styledMixins";
-import Input from "@COMPONENTS/Input";
-import Button from "@COMPONENTS/Button";
-import { emailValidation } from "@COMMON/common";
-import Timer from "@COMPONENTS/Timer";
 
-/**
- * 이메일 입력 폼
- * @param {*} param0
- * @returns
- */
-const PreVerify = ({
-  handleAccountType,
-  setIsShowType,
-  email,
-  handleEmail,
-}) => {
-  const handleSendEmail = useCallback(() => {
-    const result = emailValidation(email);
-
-    if (result) {
-      // 이곳에서 이메일 번송
-      setIsShowType("CHECK");
-    } else {
-      // Email 형식 X
-    }
-  }, [email]);
-
+const Verify = ({}) => {
   return (
     <>
-      <VerifyTitle>パスワードを再設定</VerifyTitle>
-      <VerifyContent color="--bright-gray">
-        ログインIDとして使用中の
-      </VerifyContent>
-      <VerifyContent color="--bright-gray">
-        メールアドレスを入力してください。
-      </VerifyContent>
-      <VerifyInputDiv marginBottom="40px" marginTop="40px">
-        <Input inputType="text" label="メールアドレス" callback={handleEmail} />
-      </VerifyInputDiv>
-      <Button
-        text="次へ"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={handleSendEmail}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => handleAccountType("LOGIN")}
-      />
+      <h1 className="logo">メールアドレス確認</h1>
+      <div className="txt">
+        <p className="c-blue">jin@rocketstaff.com</p>
+        <p>宛に認証用メールを送信しました。</p>
+      </div>
+
+      <div className="area_member">
+        <div className="inbox ty3">
+          <div className="col">
+            <label for="id" className="h">
+              認証コード
+            </label>
+            <input type="text" id="id" className="inp_txt w100p" />
+          </div>
+          <div className="col_link">
+            <span className="t c-gray">残り59秒</span>
+            {/* <!-- 인증코드 남은시간 --> */}
+            <button type="button" className="btn-pk s blue bdrs" disabled>
+              <span>再転送</span>
+            </button>
+          </div>
+        </div>
+        <div className="btns pt0">
+          <button type="submit" className="btn-pk mem blue">
+            <span>確認する</span>
+          </button>
+          <button type="submit" className="btn-pk mem blue2">
+            <span>戻る</span>
+          </button>
+        </div>
+      </div>
     </>
   );
 };
-
-/**
- * 인증 번호 입력 폼
- * @param {*} param0
- * @returns
- */
-const CheckVerify = ({ setIsShowType, email }) => {
-  return (
-    <>
-      <VerifyTitle>パスワードを再設定</VerifyTitle>
-      <VerifyContent color="--violet-blue">{email}</VerifyContent>
-      <VerifyContent color="--bright-gray">
-        宛に認証用メールを送信しました。
-      </VerifyContent>
-
-      <VerifyInputDiv marginBottom="10px" marginTop="40px">
-        <Input inputType="text" label="認証コード" />
-        <Timer />
-      </VerifyInputDiv>
-      <Button
-        text="確認する"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => setIsShowType("CONFIRM")}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => setIsShowType("INPUT")}
-      />
-    </>
-  );
-};
-
-/**
- * 패스워드 변경
- * @param {*} param0
- * @returns
- */
-const VerifyConfirm = ({ setIsShowType, handleAccountType }) => {
-  // パスワードを再設定
-  return (
-    <>
-      <VerifyTitle>パスワードを再設定</VerifyTitle>
-
-      <VerifyContent color="--bright-gray">
-        ログインIDとして使用中の
-      </VerifyContent>
-      <VerifyContent color="--bright-gray">
-        メールアドレスを入力してください。
-      </VerifyContent>
-
-      <VerifyInputDiv marginBottom="10px" marginTop="40px">
-        <Input inputType="password" label="パスワード" />
-        <Input inputType="password" label="パスワード確認" />
-      </VerifyInputDiv>
-      <Button
-        text=">パスワード変更"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => handleAccountType("LOGIN")}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => setIsShowType("INPUT")}
-      />
-    </>
-  );
-};
-
-const Verify = ({ handleAccountType }) => {
-  /**
-   * 이메일 인증 창 표시 Type
-   * INPUT = 이메일 입력 폼
-   * CHECK = 인증 코드 체크
-   * CONFIRM = 비밀번호 입력 폼
-   */
-  const [isShowType, setIsShowType] = useState("INPUT");
-
-  const [email, setEmail] = useState(null);
-  const handleEmail = useCallback(({ nativeEvent }) => {
-    const { target } = nativeEvent;
-    setEmail(target?.value);
-  }, []);
-
-  return (
-    <AccountBoxDiv>
-      {isShowType === "INPUT" && (
-        <PreVerify
-          handleAccountType={handleAccountType}
-          setIsShowType={setIsShowType}
-          email={email}
-          handleEmail={handleEmail}
-        />
-      )}
-      {isShowType === "CHECK" && (
-        <CheckVerify setIsShowType={setIsShowType} email={email} />
-      )}
-      {isShowType === "CONFIRM" && (
-        <VerifyConfirm
-          setIsShowType={setIsShowType}
-          handleAccountType={handleAccountType}
-        />
-      )}
-    </AccountBoxDiv>
-  );
-};
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const VerifyTitle = styled.h1`
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 50px;
-`;
-
-const VerifyContent = styled.div`
-  align-self: center;
-  color: var(${(props) => props.color});
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-m);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 10px;
-`;
-
-const VerifyInputDiv = styled.div`
-  align-self: center;
-  margin-top: ${(props) => props.marginTop};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
 
 export default Verify;

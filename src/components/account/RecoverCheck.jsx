@@ -1,125 +1,42 @@
 import React, { useState, useCallback } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-
-import styled from "styled-components";
-import { Border1pxGhost } from "@/styledMixins";
-import Input from "@COMPONENTS/Input";
-import Button from "@COMPONENTS/Button";
-import Timer from "@COMPONENTS/Timer";
-
-import { recoverCheck } from "@/services/accountService";
-import moment from "moment";
 
 const RecoverCheck = () => {
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { email, expireOn } = state;
-  const [code, setCode] = useState(null);
-  const countTime = moment(expireOn).diff(moment(), "seconds");
-
-  const handleCodeChange = (e) => {
-    setCode(e.target.value);
-  };
-
-  const handleRecoverCheck = useCallback(async () => {
-    const { status } = await recoverCheck({ email: email });
-    console.log("status : ", status);
-    if (status === 200) {
-      // Success
-      navigate("/account/recover-confirm", {
-        state: { code: code },
-      });
-    } else if (status === 400) {
-      // 코드 참조
-      alert("코드 참조");
-    } else if (status === 404) {
-      // 코드 참조
-      alert("코드 참조");
-    } else if (status === 503) {
-      // 코드 참조
-      alert("코드 참조");
-    }
-  }, [email, code, navigate]);
-
   return (
-    <AccountBoxDiv>
-      <RecoverTitle>パスワードを再設定</RecoverTitle>
-      <RecoverContent color="--violet-blue">{email}</RecoverContent>
-      <RecoverContent color="--bright-gray">
-        宛に認証用メールを送信しました。
-      </RecoverContent>
+    <>
+      <h1 className="logo">パスワードを再設定</h1>
+      <div className="txt">
+        <p className="c-blue">jin@rocketstaff.com</p>
+        <p>宛に認証用メールを送信しました。</p>
+      </div>
 
-      <RecoverInputDiv marginBottom="10px" marginTop="40px">
-        <Input
-          inputType="text"
-          label="認証コード"
-          callback={handleCodeChange}
-        />
-        <Timer countSec={countTime || 180} />
-      </RecoverInputDiv>
-      <Button
-        text="確認する"
-        color="--white"
-        bgColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => handleRecoverCheck()}
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        bdColor="--violet-blue"
-        marginBottom="15px"
-        callback={() => navigate(-1)}
-      />
-    </AccountBoxDiv>
+      <div className="area_member">
+        <div className="inbox ty1">
+          <div className="col">
+            <label for="id" className="h">
+              認証コード
+            </label>
+            <input type="text" id="id" className="inp_txt w100p" />
+          </div>
+          <div className="col_link">
+            <span className="t c-gray">残り59秒</span>
+            {/*<!-- 인증코드 남은시간 -->*/}
+            <button type="button" className="btn-pk s blue bdrs" disabled>
+              <span>再転送</span>
+            </button>
+            {/*<!-- 재전송 버튼 활성화 시 disabled 제거 -->*/}
+          </div>
+        </div>
+        <div className="btns ty1">
+          <button type="submit" className="btn-pk mem blue">
+            <span>確認する</span>
+          </button>
+          <button type="submit" className="btn-pk mem blue2">
+            <span>戻る</span>
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const RecoverTitle = styled.h1`
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 50px;
-`;
-
-const RecoverContent = styled.div`
-  align-self: center;
-  color: var(${(props) => props.color});
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-m);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-bottom: 10px;
-`;
-
-const RecoverInputDiv = styled.div`
-  align-self: center;
-  margin-top: ${(props) => props.marginTop};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
 
 export default RecoverCheck;

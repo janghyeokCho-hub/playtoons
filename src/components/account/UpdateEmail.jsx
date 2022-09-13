@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Title3, Border1pxGhost } from "@/styledMixins";
-import Input from "@COMPONENTS/Input";
-import Button from "@COMPONENTS/Button";
-import { verifyCheckResend, verifyCheck } from "@/services/accountService";
-import moment from "moment";
-import Timer from "@COMPONENTS/Timer";
 
 /**
  * 이메일 변경을 위해 새 이메일 입력 받는 폼
  */
 const UpdateEmail = () => {
+  /*
   const navigate = useNavigate();
   const [newEmail, setNewEmail] = useState(null);
   const [code, setCode] = useState(null);
@@ -27,9 +20,6 @@ const UpdateEmail = () => {
     setCode(e.target.value);
   };
 
-  /**
-   * 인증 코드 이메일 발송
-   */
   const handleVerifySend = useCallback(async () => {
     const { status, data } = await verifyCheckResend({ email: newEmail });
     if (status === 200) {
@@ -50,10 +40,6 @@ const UpdateEmail = () => {
     }
   }, [newEmail]);
 
-  /**
-   * 인증 코드 입력 후 확인
-   * @todo 성공시 이전 페이지로 가야함
-   */
   const handleVerifyCheck = useCallback(async () => {
     const { status } = await verifyCheck({ code: code });
     if (status === 200) {
@@ -82,99 +68,35 @@ const UpdateEmail = () => {
       setVerifyIsShow(false);
     };
   }, [expireOn]);
+  */
 
   return (
-    <AccountBoxDiv>
-      <UpdateEmailTitle>メールアドレスの変更</UpdateEmailTitle>
-      <UpdateEmailContent>
-        {(verifyIsShow && "宛に認証用メールを送信しました。") ||
-          "新しいメールアドレスを入力してください。"}
-      </UpdateEmailContent>
-      <UpdateEmailInputDiv>
-        <Input
-          inputType="text"
-          label="新しいメールアドレス"
-          fontWeight={500}
-          callback={handleNewEmailChange}
-          disabled={verifyIsShow}
-        />
+    <>
+      <h1 className="logo">メールアドレスの変更</h1>
+      <div className="txt">
+        <p>新しいメールアドレスを入力してください。</p>
+      </div>
 
-        {verifyIsShow && (
-          <Input
-            inputType="text"
-            label="認証コード"
-            fontWeight={500}
-            callback={handleCodeChange}
-          />
-        )}
-
-        {verifyIsShow && <Timer countSec={countTime} />}
-      </UpdateEmailInputDiv>
-      <Button
-        text={(verifyIsShow && "確認する") || "次へ"}
-        color="--white"
-        bgColor="--violet-blue"
-        marginTop="30px"
-        callback={() =>
-          verifyIsShow ? handleVerifyCheck() : handleVerifySend()
-        }
-      />
-      <Button
-        text="戻る"
-        color="--violet-blue"
-        bgColor="--white"
-        marginTop="15px"
-        callback={() => navigate(-1)}
-      />
-    </AccountBoxDiv>
+      <div className="area_member">
+        <div className="inbox ty2">
+          <div className="col">
+            <label for="id" className="h">
+              新しいメールアドレス
+            </label>
+            <input type="text" id="id" className="inp_txt w100p" />
+          </div>
+        </div>
+        <div className="btns">
+          <button type="submit" className="btn-pk mem blue">
+            <span>次へ</span>
+          </button>
+          <button type="submit" className="btn-pk mem blue2">
+            <span>戻る</span>
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
-
-const AccountBoxDiv = styled.div`
-  ${Border1pxGhost}
-  position: absolute;
-  width: 480px;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-  align-items: flex-start;
-  background-color: var(--white);
-  border-radius: 8px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const UpdateEmailTitle = styled.h1`
-  ${Title3}
-  align-self: center;
-  color: var(--vulcan);
-  font-weight: 500;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-xxl);
-  letter-spacing: 1px;
-  font-style: normal;
-`;
-
-const UpdateEmailContent = styled.div`
-  align-self: center;
-  color: var(${(props) => props.color});
-  font-weight: 500;
-  text-align: center;
-  white-space: nowrap;
-  font-family: var(--font-family-noto_sans_jp);
-  font-size: var(--font-size-m);
-  letter-spacing: 1px;
-  font-style: normal;
-  margin-top: 50px;
-  margin-bottom: 50px;
-`;
-
-const UpdateEmailInputDiv = styled.div`
-  align-self: center;
-  margin-top: ${(props) => props.marginTop};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
 
 export default UpdateEmail;

@@ -9,7 +9,9 @@
       "@CONTAINERS/*": ["src/containers/*"],
       "@COMPONENTS/*": ["src/components/*"],
       "@FONTS/*": ["src/assets/fonts/*"],
-      "@COMMON/*": ["src/common/*"]
+      "@COMMON/*": ["src/common/*"],
+      "@API/*": ["src/services/*"],
+      "@REDUX/*": ["src/modules/redux/*"]
     },
     "experimentalDecorators": true,
     "jsx": "preserve"
