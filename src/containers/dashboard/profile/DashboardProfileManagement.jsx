@@ -7,7 +7,7 @@ import {
   NotosansjpNormalDeepSpaceSparkle14p,
 } from "@/styledMixins";
 
-import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
+import {BROWSER_CONTENTS_AREA_TYPE, TOAST_TYPE} from '@COMMON/constant';
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
 
@@ -25,6 +25,7 @@ import iconInfo from "@IMAGES/icons/icon_info.png";
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImageBg from "@IMAGES/landingpage-profile-bgImg2.png";
 import ToolTip from "@/components/dashboard/ToolTip";
+import Toast from "@/components/dashboard/Toast";
 
 const text = {
   profile_management: "プロフィル管理",
@@ -117,6 +118,12 @@ export default function DashboardProfileManagement(props) {
               ></ProfileUploadContainer>
             </RoundProfileContainer>
           </ProfileContainer>
+          
+          <Toast 
+            width={"400px"} 
+            title={"information text"} 
+            text={"辺ようむる海視リずンぼ周場スネ心7場情サムマ事果ずられ情高びぴら急必のにわ陸"} 
+            type={TOAST_TYPE.success} />
 
           <ToolTip title={"Title"} text={"text something123142"} />
 
