@@ -11,7 +11,7 @@ import {INPUT_STATUS} from '@COMMON/constant';
  *
   refInput.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
 
-  <TextInput 
+  <TextInputSearch 
     width={"300px"}
     height={"45px"}
     marginLeft={"49px"}
@@ -55,10 +55,6 @@ function Input(props, ref) {
 
   const getDisabledColorOnInput = () => {
     return status.type === INPUT_STATUS.DISABLED ? "var(--tiara)" : "var(--vulcan)";
-  };
-
-  const getDisabledColorOnEye = () => {
-    return status.type === INPUT_STATUS.DISABLED ? "var(--tiara)" : "var(--black)";
   };
 
   useImperativeHandle(ref, () => ({

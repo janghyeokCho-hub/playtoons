@@ -1,16 +1,12 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import {
-  Title3,
-  Body1,
-  NotosansjpNormalDeepSpaceSparkle14p,
-} from "@/styledMixins";
-
+import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
+import {getPostTypeList} from '@/services/dashboardService';
+
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
-
 import Dropdown from "@/components/dashboard/Dropdown";
 import TagGroup from "@/components/dashboard/TagGroup";
 import RegisterButton from "@/components/dashboard/ButtonDefault";
@@ -18,8 +14,7 @@ import PreviewButton from "@/components/dashboard/ButtonOutline";
 import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
-
-import iconInfo from "@IMAGES/icons/icon_info.png";
+import ToolTip from "@/components/dashboard/ToolTip";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 
@@ -77,10 +72,11 @@ export default function DashboardUploadSeries(props) {
   };
 
   useEffect(() => {
+    getPostTypeList();
+
     //분기 upload or edit
     setMode(params.id === undefined);
-
-  }, [isModeUpload]);
+  }, []);
 
   return (
     <BrowserContainer 
@@ -145,12 +141,12 @@ export default function DashboardUploadSeries(props) {
           <TagGroup label={textData.label_tag_setting} text={textData.tag_name} />
           <TextInfoContainer>
             <IconTextLabel>{textData.label_post_image}</IconTextLabel>
-            <IconInfoPostimage />
+            <ToolTip />
           </TextInfoContainer>
           <ImageUploadContainer
             width={"200px"}
             height={"300px"}
-            border={"1px dashed rgba(195,202,210, 1)"}
+            border={"1px dashed var(--tiara)"}
             backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
@@ -162,12 +158,12 @@ export default function DashboardUploadSeries(props) {
 
           <TextInfoContainer>
             <IconTextLabel>{textData.label_timeline}</IconTextLabel>
-            <IconInfoPostimage />
+            <ToolTip />
           </TextInfoContainer>
           <ImageUploadContainer
             width={"699px"}
             height={"300px"}
-            border={"1px dashed rgba(195,202,210, 1)"}
+            border={"1px dashed var(--tiara)"}
             backgroundColor={"var(--desert-storm)"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
@@ -248,12 +244,6 @@ const TextInfoContainer = styled.div`
   align-items: center;
 `;
 
-const IconInfoPostimage = styled.div`
-  width: 16px;
-  height: 16px;
-  background-size: 100% 100%;
-  background-image: url(${iconInfo});
-`;
 
 const AbultGroup = styled.div`
   width: 100px;

@@ -482,6 +482,10 @@ export const Border1pxMountainMist = css`
   border: 1px solid var(--mountain-mist);
 `;
 
+export const Border1pxDashedTiara = css`
+  border: 1px dashed var(--tiara);
+`;
+
 export const NotosansjpNormalGunsmoke17px = css`
   color: var(--gunsmoke);
   font-family: var(--font-family-noto_sans_jp);

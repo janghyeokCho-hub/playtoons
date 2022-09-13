@@ -16,6 +16,10 @@ import {
   Body1,
 } from "@/styledMixins";
 import {getResizedNumber} from '@COMMON/common.js';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+
+        
 
 
 const TYPE = {
@@ -41,6 +45,7 @@ const STYLE = {
       text={text.fix}
       dataId={item.id}
       marginLeft={"auto"}
+      icon={"faPlus"}
       handleClick={handleReactionClick}
       />
  * 
@@ -121,7 +126,17 @@ function ButtonOutline(props, ref) {
       onClick={handleMyClick}
       ref={refContainer}
     >
-      {icon !== undefined && <Icon icon={icon}></Icon>}
+      {
+        icon !== undefined && 
+          <FontAwesomeIcon 
+            icon={faPlus}
+            style={{ 
+                width: "15px", 
+                height: "15px", 
+                marginRight: "10px", 
+                color: "var(--violet-blue)" }}
+            />
+      }
       {
         // 로딩중이라면 로딩 아이콘을 보여준다.
         type === TYPE.LOADING ? (
