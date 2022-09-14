@@ -2,13 +2,18 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
+import { useLocation } from "react-router-dom";
+import { recoverConfirmPassword } from "@API/accountService";
+import { navigate } from "@storybook/addon-links";
 
 const RecoverConfirm = () => {
-  /*
   const { state } = useLocation();
   const code = state?.code;
   const [newPwd, setNewPwd] = useState(null);
   const [newPwdCheck, setNewPwdCheck] = useState(null);
+
+  const [isPwdShow, setIsPwdShow] = useState(false);
+  const [isRePwdShow, setIsRePwdShow] = useState(false);
 
   const handleNewPwdChage = (e) => {
     setNewPwd(e.target.value);
@@ -19,14 +24,21 @@ const RecoverConfirm = () => {
 
   const handlePwdConfirm = useCallback(async () => {
     if (newPwd === newPwdCheck) {
-      const response = await recoverConfirm({
+      const response = await recoverConfirmPassword({
         password: newPwd,
-        code: "wd9ebilugu",
+        code: code,
       });
-      console.log(response);
+
+      const { status } = response;
+      if (status === 200) {
+        navigate("/account");
+      } else if (status === 404) {
+        alert("코드 참조");
+      } else if (status === 503) {
+        alert("코드 참조");
+      }
     }
   }, [newPwd, newPwdCheck, code]);
-  */
 
   return (
     <>
@@ -42,11 +54,16 @@ const RecoverConfirm = () => {
             <label for="pwd" className="h">
               パスワード
             </label>
-            <input type="password" id="pwd" className="inp_txt w100p" />
+            <input
+              type={`${isPwdShow ? "text" : "password"}`}
+              id="pwd"
+              className="inp_txt w100p"
+              onChange={handleNewPwdChage}
+            />
             <button
               type="button"
-              className="btn_eyes"
-              onclick="$(this).toggleClass('active');"
+              className={`${isPwdShow ? "active" : ""} btn_eyes`}
+              onclick={() => setIsPwdShow(!isPwdShow)}
             >
               <span className="show">
                 <FontAwesomeIcon icon={faEye} />
@@ -60,11 +77,16 @@ const RecoverConfirm = () => {
             <label for="pwd" className="h">
               パスワード確認
             </label>
-            <input type="password" id="pwd" className="inp_txt w100p" />
+            <input
+              type={`${isRePwdShow ? "text" : "password"}`}
+              id="pwd"
+              className="inp_txt w100p"
+              onChange={handleNewPwdCheckChage}
+            />
             <button
               type="button"
-              className="btn_eyes"
-              onclick="$(this).toggleClass('active');"
+              className={`${isRePwdShow ? "active" : ""} btn_eyes`}
+              onclick={() => setIsRePwdShow(!isRePwdShow)}
             >
               <span className="show">
                 <FontAwesomeIcon icon={faEye} />
@@ -76,10 +98,18 @@ const RecoverConfirm = () => {
           </div>
         </div>
         <div className="btns ty1">
-          <button type="submit" className="btn-pk mem blue">
+          <button
+            type="submit"
+            className="btn-pk mem blue"
+            onClick={handlePwdConfirm}
+          >
             <span>パスワード変更</span>
           </button>
-          <button type="submit" className="btn-pk mem blue2">
+          <button
+            type="submit"
+            className="btn-pk mem blue2"
+            onClick={() => navigate("../recover")}
+          >
             <span>戻る</span>
           </button>
         </div>

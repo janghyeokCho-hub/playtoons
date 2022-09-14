@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import useActions from "@/hook/useActions";
+
 import { loginRequest } from "@REDUX/ducks/login";
-import { useCallback } from "react";
-import { useEffect } from "react";
+import { loginSnsRequest, loginSnsCallback } from "@API/loginService";
 
 const Login = () => {
   /*
@@ -17,12 +18,14 @@ password
 token
    */
   const dispatch = useDispatch();
-  const token = useSelector(({ login }) => login.token);
+
+  const navigate = useNavigate();
+
   const isLogined = useSelector(({ login }) => login.isLogined);
   const errStatus = useSelector(({ login }) => login.errStatus);
   const errMessage = useSelector(({ login }) => login.errMessage);
-  const loading = useSelector(({ loading }) => loading["login/REQUEST"]);
-  const sync = useSelector(({ loading }) => loading["login/SYNC"]);
+  // const loading = useSelector(({ loading }) => loading["login/REQUEST"]);
+  // const sync = useSelector(({ loading }) => loading["login/SYNC"]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,6 +33,10 @@ token
   const [showPassword, setShowPassword] = useState(false);
 
   const [onLogin] = useActions([loginRequest], []);
+
+  const GOOGLE = "google";
+  const TWITTER = "twitter";
+  const APPLE = "apple";
 
   /**
    * email State 변경 함수
@@ -66,10 +73,18 @@ token
     onLogin(data);
   }, [email, password, onLogin]);
 
+  /**
+   * SNS 로그인 시도
+   */
+  const handleSnsLogin = useCallback(async (type) => {
+    const response = await loginSnsRequest(type);
+    console.log("response : ", response);
+  }, []);
+
   useEffect(() => {
     if (isLogined) {
       // 로그인 성공으로 라우터 변경
-      console.log(isLogined);
+      navigate(-1);
     }
   }, [isLogined]);
 
@@ -84,9 +99,7 @@ token
           <p className="t1">
             <span className="ico_error">Error Message</span>
           </p>
-          <p className="t2">
-            辺ようむる海視リずンぼ周場スネ心7場情サムマ事果ずられ情高びぴら急必のにわ陸強ゅょ
-          </p>
+          <p className="t2">{errMessage}</p>
         </div>
       )}
 
@@ -130,13 +143,15 @@ token
 
           {errStatus && (
             <p className="t_error">
-              <span className="ico_error">Error message</span>
+              <span className="ico_error">{errMessage}</span>
             </p>
           )}
           {/* <!-- 에러일때 error 추가 --> */}
         </div>
         <div className="col_link">
-          <a className="a_link">パスワードをお忘れですか?</a>
+          <a className="a_link" onClick={() => navigate("recover")}>
+            パスワードをお忘れですか?
+          </a>
         </div>
         <button
           type="submit"
@@ -151,28 +166,30 @@ token
         <h2 className="tit">
           <span>または</span>
         </h2>
-
+        {/*
         <a href="#" className="btn-pk mem white mt0">
           <span className="ico i_log_animate">Animateで続行</span>
         </a>
-        <a href="#" className="btn-pk mem white">
+        */}
+        <a onClick={() => handleSnsLogin(GOOGLE)} className="btn-pk mem white">
           <span className="ico i_log_google">Googleで続行</span>
         </a>
-        <a href="#" className="btn-pk mem white">
+        <a onClick={() => handleSnsLogin(TWITTER)} className="btn-pk mem white">
           <span className="ico i_log_twitter">Twitterで続行</span>
         </a>
-        <a href="#" className="btn-pk mem black">
+        <a onClick={() => handleSnsLogin(APPLE)} className="btn-pk mem black">
           <span className="ico i_log_apple">Appleで続行</span>
         </a>
       </div>
 
       <div className="botm">
         <p className="t1">
-          アカウントをお持ちでないですか? <a href="#" className="c-blue"></a>
+          アカウントをお持ちでないですか?{" "}
+          <a className="c-blue" onClick={() => navigate("register")}>
+            登録する
+          </a>
         </p>
-        <a href="#" className="t2">
-          プライバシーポリシー
-        </a>
+        <a className="t2">プライバシーポリシー</a>
       </div>
     </>
   );

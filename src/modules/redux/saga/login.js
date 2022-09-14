@@ -19,16 +19,25 @@ function createLoginRequestSaga(loginType, syncType) {
           const { accessToken } = response.data;
           localStorage.setItem("token", accessToken);
           yield put({ type: SUCCESS, payload: action.payload });
+        } else {
+          console.log("response : ", response);
+          yield put({
+            type: FAILURE,
+            payload: action.payload,
+            error: true,
+          });
         }
         yield put(finishLoading(loginType));
       } catch (e) {
-        console.dir(e);
+        console.dir(e.response?.status);
         yield call(exceptionHandler, { e: e, redirectError: true });
 
         yield put({
           type: FAILURE,
           payload: action.payload,
           error: true,
+          errStatus: e.response.status,
+          errMessage: e.response.data.message,
         });
       } finally {
         // loading state가 해제되지 않는 현상 수정
