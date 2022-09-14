@@ -21,6 +21,7 @@ import Purchase from "@CONTAINERS/purchase";
 import Review from "@CONTAINERS/review";
 import Search from "@CONTAINERS/search";
 import Inquiry from "@CONTAINERS/inquiry";
+import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 
 export const store = configureStore();
 sagaMiddleware.run(rootSaga);
@@ -46,6 +47,7 @@ function App() {
           <Route path="/review/*" element={<Review />} />
           <Route path="/search/*" element={<Search />} />
           <Route path="/inquiry/*" element={<Inquiry />} />
+          <Route path="/dashboard/*" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </Provider>
