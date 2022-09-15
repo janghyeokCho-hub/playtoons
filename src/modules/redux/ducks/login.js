@@ -22,6 +22,8 @@ const initialState = {
   errMessage: null,
   errStatus: null,
   isLogined: false,
+  isSns: false,
+  snsType: null,
 };
 
 const login = handleActions(
@@ -35,13 +37,14 @@ const login = handleActions(
       });
     },
     [LOGIN_REQUEST_FAILURE]: (state, action) => {
+      console.log(action);
       return {
         ...state,
         authFail: true,
         password: "",
-        ...(action.errMessage && { errMessage: action.errMessage }),
-        ...(action.errStatus && { errStatus: action.errStatus }),
         token: initialState.token,
+        ...(action.errStatus && { errStatus: action.errStatus }),
+        ...(action.errMessage && { errMessage: action.errMessage }),
       };
     },
     [LOGIN_INIT]: (state, action) => ({
