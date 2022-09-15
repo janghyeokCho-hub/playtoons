@@ -1,0 +1,48 @@
+.timelins_slick_box{
+  width: 90px;
+  height: 143px;
+  margin-left: 10px;
+  border-radius: 4px;
+  background-color: #F7F8F9;
+  text-align: center;
+}
+
+.timeline_slick_container{
+  width: 500px;
+}
+
+.slick_arrow_container{
+  width: 24x;
+  height: 24px;
+  border-radius: 24px;
+  box-shadow: 0px 1px 5px rgba(0,0,0, 0.5);
+  opacity: 1;
+  background-color: rgba(255,255,255, 1);
+  z-index: 10;
+  cursor: pointer;
+  position: absolute;
+}
+
+.slick_arrow_next{
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.slick_arrow_prev{
+  top: 50%;
+  transform: translate(100%, -50%);
+}
+
+.slick_arrow_icon{
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: black;
+}
+
+.slick-prev:before, .slick-next:before  {
+  content: '' !important;
+}

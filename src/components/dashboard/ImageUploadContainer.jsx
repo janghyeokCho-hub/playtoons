@@ -26,7 +26,7 @@ export default function ImageUploadContainer(props) {
   const [file, setFile] = useState(null);
 
   const onDrop = useCallback(async (acceptedFiles) => {
-    setFile(acceptedFiles[0]);
+    // setFile(acceptedFiles[0]);
 
     if( handleFile !== undefined ){ handleFile(acceptedFiles[0]); }
   }, []);
@@ -50,7 +50,7 @@ export default function ImageUploadContainer(props) {
 
   useEffect(() => {
     setFile(children);
-  }, []);
+  }, [children]);
 
   return (
     <RootContainer 

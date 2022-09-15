@@ -1,8 +1,9 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
+
 
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
@@ -17,6 +18,7 @@ import ToolTip from "@/components/dashboard/ToolTip";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 import { getFileFromServer, setFileToServer } from "@/services/dashboardService";
+import Slick from "@/components/dashboard/Slick";
 
 const textData = {
   label_series_register: "シリーズ登録",
@@ -36,9 +38,31 @@ const textData = {
   label_can_not_edit: "編集不可",
   tag_name: "タグ名",
   input_image: "置いてください。",
+  select_timeline: "サムネイル選択",
 };
 
 const typeDataList = ["1", "2", "3"];
+
+const tempTimeline = [
+  {
+    image: "1"
+  },
+  {
+    image: "2"
+  },
+  {
+    image: "3"
+  },
+  {
+    image: "4"
+  },
+  {
+    image: "5"
+  },
+  {
+    image: "6"
+  },
+];
 
 export default function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
@@ -46,16 +70,27 @@ export default function DashboardUploadSeries(props) {
   const [coverImage, setCoverImage] = useState(undefined);
   const params = useParams();
 
+ 
+
   let seriesData = {};
 
   const getImageUrl = async (result) => {
     const params = {
-      hash : result.hash
+      hash : result.hash,
+      // redirect: true     // redirect 버전 
     };
 
     const {status, data: resultData} = await getFileFromServer(result.hash, params);
 
     console.log("getFileAndSetStatus", status, resultData);
+    if( status === 200 ){
+      setCoverImage(resultData.url);
+    }
+    else{
+      //error
+    }
+    //TODO 타임라인이라면 하단 slick에 추가
+    
   };
 
   const handleRegister = (e) => {
@@ -103,7 +138,7 @@ export default function DashboardUploadSeries(props) {
     const isEdit = params.id === undefined;
     setMode(isEdit);
     if( isEdit === true ){
-      //TODO 게시글 정보 가져오기
+      //TODO 게시글 정보 가져오기, 심플하게 나누자
     }
   }, []);
 
@@ -198,7 +233,11 @@ export default function DashboardUploadSeries(props) {
             textInputMessage={textData.input_image}
             handleFile={handleTimelineImageFile}
           ></ImageUploadContainer>
-          <Space height={"4.444444444vh"} />
+          <Space height={"24px"} />
+          
+          <TextLabel>{textData.select_timeline}</TextLabel>
+          {/* //TODO test용 slick css 적용 필요 */}
+          <Slick list={tempTimeline} />
 
           <ButtonContainer>
             <PreviewButton
