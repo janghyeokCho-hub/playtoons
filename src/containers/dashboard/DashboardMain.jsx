@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Title3,
-  Body6,
-  Title2,
-  Body2,
-  Headline2Style,
-  Body1,
-  Body5,
-  Body4,
-  Border1pxTiara,
-  Body8,
-} from "@/styledMixins";
+import { Title3,Body6,Title2,Body2,Headline2Style,Body1,Body5,Body4,Border1pxTiara,Body8 } from "@/styledMixins";
 import styled from "styled-components";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,6 +17,7 @@ import tempImageSeries03 from '@IMAGES/temp_series_03.png';
 import tempImageSeries04 from '@IMAGES/temp_series_04.png';
 import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
+import { getPostTypeList } from "@/services/dashboardService";
 
 const text = {
   today_sales: "当日の売上",
@@ -237,10 +227,14 @@ const tempData = {
   ],
 };
 
+
 export default function DashboardMain() {
   const [data, setData] = useState({});
 
   const handleClickDetail = (e) => {
+
+    // console.log("first", getPostTypeList());
+
     
   };
 

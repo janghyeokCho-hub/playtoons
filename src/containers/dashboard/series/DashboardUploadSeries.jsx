@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
 import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
-import {getPostTypeList} from '@/services/dashboardService';
 
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import FormDefault from "@COMPONENTS/FormDefault";
@@ -17,6 +16,7 @@ import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
 import ToolTip from "@/components/dashboard/ToolTip";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
+import { getFileFromServer, setFileToServer } from "@/services/dashboardService";
 
 const textData = {
   label_series_register: "シリーズ登録",
@@ -42,40 +42,69 @@ const typeDataList = ["1", "2", "3"];
 
 export default function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
-  const [isModeUpload, setMode] = useState();
+  const [isModeUpload, setMode] = useState(false);
+  const [coverImage, setCoverImage] = useState(undefined);
   const params = useParams();
 
   let seriesData = {};
 
-  const handleRegister = () => {
-    console.log("refToggle", refIsAdult);
-  };
-
-  const handlePreview = () => {
-    console.log("refToggle", refIsAdult);
-  };
-
-  const handlePostImageFile = useCallback((file) => {
-    // 폼데이터 구성
-    const formData = new FormData();
-    const config = {
-      header: {
-        "content-type": "multipart/form-data",
-      },
+  const getImageUrl = async (result) => {
+    const params = {
+      hash : result.hash
     };
-    formData.append("file", file);
-    console.log("postImage file", file);
-  }, []);
+
+    const {status, data: resultData} = await getFileFromServer(result.hash, params);
+
+    console.log("getFileAndSetStatus", status, resultData);
+  };
+
+  const handleRegister = (e) => {
+    console.log("refToggle", refIsAdult);
+  };
+
+  const handlePreview = (e) => {
+    console.log("refToggle", refIsAdult);
+  };
+
+  const handlePostImageFile = async (file) => {
+    // 폼데이터 구성
+    const params = new FormData();
+    
+    // params.append("authorId", "");
+    // params.append("subscribeTierId", "");
+    // params.append("productId", "");
+    params.append("type", "image");
+    params.append("usage", "cover");
+    params.append("loginRequired", true);
+    params.append("licenseRequired", false);
+    params.append("rating", "G");
+    params.append("file", file);
+    console.log("postImage file", params);
+
+    const {status, data: resultData} = await setFileToServer(params);
+    
+    //create sccuess
+    if( status === 201 ){
+      getImageUrl(resultData);
+    }
+    else{
+      //error 처리
+    }
+
+    console.log("result", status, resultData);
+  };
 
   const handleTimelineImageFile = (file) => {
     console.log("handleTimelineImageFile", file);
   };
 
   useEffect(() => {
-    getPostTypeList();
-
     //분기 upload or edit
-    setMode(params.id === undefined);
+    const isEdit = params.id === undefined;
+    setMode(isEdit);
+    if( isEdit === true ){
+      //TODO 게시글 정보 가져오기
+    }
   }, []);
 
   return (
@@ -152,7 +181,7 @@ export default function DashboardUploadSeries(props) {
             textInputMessage={textData.input_image}
             handleFile={handlePostImageFile}
             >
-            {tempImage}
+            {coverImage}
           </ImageUploadContainer>
           <Space height={"2.222222222vh"} />
 

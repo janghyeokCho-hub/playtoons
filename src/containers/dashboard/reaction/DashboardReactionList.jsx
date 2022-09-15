@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { Title1, Body3, Border1pxMercury, Body1 } from "@/styledMixins";
-import { getSeriesStoryList } from "@/services/dashboardService";
 import {getResizedNumber} from '@/common/common';
 
 import iconPathPlus from "@ICONS/icon_plus_blue.png";

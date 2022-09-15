@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSeriesStoryList } from "@/services/dashboardService";
 import styled from "styled-components";
 import { Title1, Body3, Border1pxMercury, Body1 } from "@/styledMixins";
 

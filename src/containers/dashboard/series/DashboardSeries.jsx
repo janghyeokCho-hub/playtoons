@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getSeriesStoryList } from "@/services/dashboardService";
 import styled from "styled-components";
 import { Title1, Body3, Border1pxMercury, Body1 } from "@/styledMixins";
 
-import iconPathRight from "@ICONS/icon_arrow_right_gray.png";
-import iconPathPlus from "@ICONS/icon_plus_blue.png";
-//temp data
-import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
-import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChevronRight } from '@fortawesome/pro-solid-svg-icons';
 
 import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import ButtonOutline from "@/components/dashboard/ButtonOutline";
+import { getSeriesStoryList } from "@/services/dashboardService";
 
 const size = {
   no: 5,
@@ -38,77 +35,82 @@ const text = {
 };
 
 export default function DashboardSeries(props) {
-  const [data, setData] = useState();
+  const [data, setData] = useState(undefined);
   const navigate = useNavigate();
 
-  const getSeriesStoryList = async () => {
-    // 시리즈 스토리 리스트
-    const params = {
-      email: "emailValue",
-      password: "passwordValue",
-    };
+  /**
+  *
+     시리즈 목록을 가져온다.
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getSeriesList = async () => {
+    const { status, data : resultData } = await getSeriesStoryList();
 
-    const { status, data } = await getSeriesStoryList(params);
-
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-
-    setData(processRsultData(data));
+    if( status === 200 ){
+      setData(resultData);
+    }
+    else{
+      //error 처리
+      console.log("error", resultData);
+    }
   };
 
+  /**
+  *
+     시리즈 목록 Right arrow를 클릭이벤트를 처리
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param {e} event
+  */
   const handleItemClick = (e) => {
     let no = e.target.getAttribute("data-id");
 
     navigate("/dashboard/series/detail/" + no);
   };
 
+  /**
+  *
+     upload 버튼 클릭 이벤트 처리
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param {e} event
+  */
   const handleClickUpload = (e) => {
     navigate('/dashboard/series/upload');
   }
 
-  const processRsultData = (result) => {
-    const tempData = [
-      {
-        no: 1,
-        image: tempImg1,
-        title: "阿修羅ゲート",
-        type: "ウェブトゥーン",
-        category: "アクション",
-        date: "2022/06/11",
-        status: <React.Fragment>連載中</React.Fragment>,
-      },
-      {
-        no: 2,
-        image: tempImg2,
-        title: "シェルターアーク",
-        type: "ウェブトゥーン",
-        category: "アクション",
-        date: "2022/06/11",
-        status: (
-          <React.Fragment>
-            休載中
-            <br />
-            (2022/06/10~)
-          </React.Fragment>
-        ),
-      },
-    ];
+  /**
+  *
+     시리즈 리스트 dom 생성
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const renderSeriesList = () => {
+    if( data === undefined ){
+      return;
+    }
 
-    return tempData.map((value, index) => {
+    return data.series.map((item, index) => {
       return (
         <Tr key={index}>
-          <Td width={size.no}>{value.no}</Td>
+          <Td width={size.no}>{item.id}</Td>
           <Td width={size.image}>
-            <Image src={value.image} />
+            {/* thumbnailImage or coverImage */}
+            <Image src={item.thumbnailImage} />      
           </Td>
-          <Td width={size.title}>{value.title}</Td>
-          <Td width={size.type}>{value.type}</Td>
-          <Td width={size.category}>{value.category}</Td>
-          <Td width={size.date}>{value.date}</Td>
-          <Td width={size.status}>{value.status}</Td>
-          <Td width={size.arrow} data-id={value.no} onClick={handleItemClick}>
-            <AngleRight />
+          <Td width={size.title}>{item.title}</Td>
+          <Td width={size.type}>{item.type.name}</Td>
+          <Td width={size.category}>{item.category.name}</Td>
+          <Td width={size.date}>{item.startAt}</Td>
+          {/* // TODO 모르겠음 description or pauseUntil  completed paused */}
+          <Td width={size.status}>{item.status}</Td>
+          <Td width={size.arrow} data-id={item.id} onClick={handleItemClick}>
+            <FontAwesomeIcon icon={faChevronRight} />
           </Td>
         </Tr>
       );
@@ -117,7 +119,7 @@ export default function DashboardSeries(props) {
 
   useEffect(() => {
     //리스트 불러오기
-    setData(processRsultData());
+    getSeriesList();
   }, []);
 
   return (
@@ -133,7 +135,7 @@ export default function DashboardSeries(props) {
             marginRight={"16px"}
             borderRadius={"5px"}
             text={text.add_series}
-            icon={iconPathPlus}
+            icon={"iconPathPlus"}
             handleClick={handleClickUpload}
           />
         </SeriesAddButtonContainer>
@@ -151,7 +153,9 @@ export default function DashboardSeries(props) {
             <HeaderCell width={size.arrow}></HeaderCell>
           </tr>
         </Header>
-        <Tbody>{data}</Tbody>
+        <Tbody>
+          { renderSeriesList() }
+        </Tbody>
       </Table>
     </BrowserContainer>
   );
@@ -216,16 +220,6 @@ const Image = styled.img`
   /* height: 130px; */
   border-radius: 5px;
   object-fit: cover;
-`;
-
-const AngleRight = styled.div`
-  width: 9px;
-  height: 16px;
-  margin-right: 20px;
-  float: right;
-  background-size: 100% 100%;
-  background-image: url(${iconPathRight});
-  pointer-events: none;
 `;
 
 const TitleContainer = styled.div`
