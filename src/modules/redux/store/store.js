@@ -8,6 +8,8 @@ import thunk from "redux-thunk";
 import { createLogger } from "redux-logger";
 import authMiddleware from "../middleware/authMiddleware";
 import createSagaMiddleware from "redux-saga";
+import { persistStore } from "redux-persist";
+
 export const sagaMiddleware = createSagaMiddleware();
 export var store = undefined;
 
@@ -39,10 +41,12 @@ const configureStore = () => {
       applyMiddleware(thunk, authMiddleware, sagaMiddleware, logger)
     )
   );
+  const persistor = persistStore(store);
 
   return {
     ...store,
     runSaga: sagaMiddleware.run,
+    persistor,
   };
 };
 

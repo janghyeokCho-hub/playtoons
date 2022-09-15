@@ -3,12 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import MarkdownPreview from "@uiw/react-markdown-preview";
+import { getEulaVersion, updateAccount } from "@API/accountService";
 
 const Agreement = () => {
-  const { state } = useLocation();
-  const code = state?.code || "user";
+  const location = useLocation();
+  const { email, password } = location.state;
 
-  const [eulaContent, setEulaContent] = useState(null);
+  const [agree, setAgree] = useState(false);
+  const [isErrorShow, setIsErrorShow] = useState(false);
+
+  const [eulaVersion, setEulaVersion] = useState(0);
 
   const markdownTxt = `
   # 마크다운 테스트
@@ -32,12 +36,33 @@ const Agreement = () => {
   `;
 
   useEffect(() => {
-    const getEulaContent = async () => {};
-
-    if (!eulaContent) {
-      getEulaContent();
+    async function getEulaVersionFn() {
+      const { data, status } = await getEulaVersion("user");
+      if (status === 200) {
+        const { version } = data.agreement;
+        setEulaVersion(version);
+      } else {
+        setEulaVersion(null);
+      }
     }
-  }, [code, eulaContent]);
+    getEulaVersionFn();
+  }, []);
+
+  const handleAgree = useCallback(async () => {
+    if (!agree) {
+      setIsErrorShow(true);
+    } else {
+      // patch account
+      const params = {
+        email,
+        password,
+        eulaVersion: eulaVersion,
+      };
+      console.log("params : ", params);
+      const response = await updateAccount(params);
+      console.log(response);
+    }
+  }, [agree, email, password, eulaVersion]);
 
   return (
     <>
@@ -52,21 +77,22 @@ const Agreement = () => {
         </div>
       </div>
 
-      <div className="inps error">
+      <div className={`${isErrorShow && !agree ? "error" : ""} inps`}>
         {/* <!-- 에러일때 추가 --> */}
         <label className="inp_checkbox">
-          <input type="checkbox" />
+          <input type="checkbox" onChange={(e) => setAgree(e.target.checked)} />
           <span>利用規約に同意します。</span>
         </label>
 
-        <p className="t_error">
-          <span className="ico_error">必須項目をチェックしてください。</span>
-        </p>
-        {/* <!-- 에러일때 추가 --> */}
+        {isErrorShow && !agree && (
+          <p className="t_error">
+            <span className="ico_error">必須項目をチェックしてください。</span>
+          </p>
+        )}
       </div>
 
       <div className="botm">
-        <button type="submit" className="btn-pk mem blue">
+        <button type="submit" className="btn-pk mem blue" onClick={handleAgree}>
           <span>同意する</span>
         </button>
       </div>

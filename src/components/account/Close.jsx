@@ -1,13 +1,30 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons";
+import { deleteAccount } from "@API/accountService";
 
 const Close = () => {
   const navigate = useNavigate();
+  const [agree, setAgree] = useState(false);
+  const [isErrorShow, setIsErrorShow] = useState(false);
 
-  // Delete user action
-  const handleClose = () => {};
+  const handleClose = useCallback(async () => {
+    if (!agree) {
+      setIsErrorShow(true);
+    } else {
+      const response = await deleteAccount();
+
+      const { status } = response;
+      if (status === 200) {
+        navigate("/");
+      } else if (status === 404) {
+        alert("존재하지 않는 계정");
+      } else if (status === 503) {
+        alert("코드 참조");
+      }
+    }
+  }, [agree]);
 
   return (
     <>
@@ -54,15 +71,21 @@ const Close = () => {
         </div>
       </div>
 
-      <div className="inps">
+      <div className={`${isErrorShow && !agree ? "error" : ""} inps`}>
         <label className="inp_checkbox">
-          <input type="checkbox" />
+          <input type="checkbox" onChange={(e) => setAgree(e.target.checked)} />
           <span>案内事項に同意し、退会します。</span>
         </label>
+
+        {isErrorShow && !agree && (
+          <p className="t_error">
+            <span className="ico_error">必須項目をチェックしてください。</span>
+          </p>
+        )}
       </div>
 
       <div className="botm">
-        <button type="submit" className="btn-pk mem blue">
+        <button type="submit" className="btn-pk mem blue" onClick={handleClose}>
           <span>退会する</span>
         </button>
       </div>

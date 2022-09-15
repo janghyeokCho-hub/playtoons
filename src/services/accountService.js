@@ -53,3 +53,32 @@ export const verifyCheckCode = async (params) => {
     return { status: e.response.status };
   }
 };
+
+/**
+ * 이용약관 버전 받아오는 API
+ * @param {string} code
+ * @returns
+ */
+export const getEulaVersion = async (code) => {
+  try {
+    return await apiAuthServer("get", `/agreement/eula/${code}`);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
+export const updateAccount = async (params) => {
+  try {
+    return await apiAuthServer("fatch", "/account", params);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
+export const deleteAccount = async () => {
+  try {
+    return await apiAuthServer("delete", "/account");
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};

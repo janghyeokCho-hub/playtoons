@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import useActions from "@/hook/useActions";
@@ -9,23 +9,11 @@ import { loginRequest } from "@REDUX/ducks/login";
 import { loginSnsRequest, loginSnsCallback } from "@API/loginService";
 
 const Login = () => {
-  /*
-authFail
-email
-errMessage
-errStatus
-password
-token
-   */
-  const dispatch = useDispatch();
-
   const navigate = useNavigate();
 
   const isLogined = useSelector(({ login }) => login.isLogined);
   const errStatus = useSelector(({ login }) => login.errStatus);
   const errMessage = useSelector(({ login }) => login.errMessage);
-  // const loading = useSelector(({ loading }) => loading["login/REQUEST"]);
-  // const sync = useSelector(({ loading }) => loading["login/SYNC"]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,7 +53,6 @@ token
    * 일반 로그인 시도
    */
   const handleLogin = useCallback(() => {
-    console.log("handleLogin");
     const data = {
       email,
       password,

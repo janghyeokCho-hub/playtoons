@@ -1,8 +1,17 @@
 import axios from "axios";
 import Config from "@/env/config";
+import { isJSONStr } from "@/common/common";
 
 const SERVER = Config.apiUrl;
 const AUTH_SERVER = Config.apiAuthUrl;
+
+const getToken = () => {
+  const rootData = localStorage.getItem("persist:root");
+  const rootJSON = isJSONStr(rootData) ? JSON.parse(rootData) : rootData;
+  const loginData = rootJSON.login;
+  const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
+  return loginJSON.token;
+};
 
 /**
  * API 호출 공통 로직
@@ -22,7 +31,7 @@ export const apiServer = (method, url, params, headers) => {
     headers: {
       "Cache-Control": "no-cache",
       "Content-Type": "application/json; charset=utf-8",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${getToken()}`,
       ...headers,
     },
   };
@@ -47,7 +56,7 @@ export const apiAuthServer = (method, url, params, headers) => {
     headers: {
       "Cache-Control": "no-cache",
       "Content-Type": "application/json; charset=utf-8",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${getToken()}`,
       ...headers,
     },
   };

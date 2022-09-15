@@ -3,9 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import { register } from "@API/accountService";
+import { useSelector } from "react-redux";
 
 const Register = () => {
   const navigate = useNavigate();
+
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
@@ -14,6 +17,11 @@ const Register = () => {
   const [isPwdShow, setIsPwdShow] = useState(false);
   const [isRePwdShow, setIsRePwdShow] = useState(false);
 
+  useEffect(() => {
+    if (isLogined) {
+      console.log(isLogined);
+    }
+  }, [isLogined]);
   /**
    * email State 변경 함수
    * @param {Event} e
@@ -63,7 +71,7 @@ const Register = () => {
       const { status } = response;
       if (status === 201) {
         const { expireOn } = response.data;
-        navigate("../verify", { state: { email, expireOn } });
+        navigate("../verify", { state: { email, password, expireOn } });
       } else if (status === 400) {
         alert("파라미터 검증 실패");
       } else if (status === 403) {
@@ -83,7 +91,7 @@ const Register = () => {
       <div className="area_member">
         <div className="inbox">
           <div className="col">
-            <label for="id" className="h">
+            <label htmlFor="id" className="h">
               メールアドレス
             </label>
             <input
@@ -94,7 +102,7 @@ const Register = () => {
             />
           </div>
           <div className="col">
-            <label for="pwd" className="h">
+            <label htmlFor="pwd" className="h">
               パスワード
             </label>
             <input
@@ -117,7 +125,7 @@ const Register = () => {
             </button>
           </div>
           <div className="col">
-            <label for="pwd" className="h">
+            <label htmlFor="pwd" className="h">
               パスワード確認
             </label>
             <input
@@ -140,7 +148,7 @@ const Register = () => {
             </button>
           </div>
           <div className="col">
-            <label for="id" className="h">
+            <label htmlFor="id" className="h">
               紹介コード
             </label>
             <input

@@ -1,8 +1,15 @@
 import { combineReducers } from "redux";
 import alertModal from "./modal";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 import login from "./login";
 import loading from "./loading";
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
 const appReducer = combineReducers({
   login,
@@ -18,4 +25,4 @@ const rootReducer = (state, action) => {
   return appReducer(state, action);
 };
 
-export default rootReducer;
+export default persistReducer(persistConfig, rootReducer);

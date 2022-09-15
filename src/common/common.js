@@ -9,19 +9,17 @@ export const emailValidation = (text) => {
   return regEmail?.test(text);
 };
 
-
 /**
-* 값을 체크해 default값이나 value 를 리턴 
-* @version 1.0.0
-* @author 이현국
-* @param value
-* @param default
-* @return value 없다면 default 있다면 value
-*/
-export const getValueOrDefault = ( value, d ) => {
+ * 값을 체크해 default값이나 value 를 리턴
+ * @version 1.0.0
+ * @author 이현국
+ * @param value
+ * @param default
+ * @return value 없다면 default 있다면 value
+ */
+export const getValueOrDefault = (value, d) => {
   return value === undefined ? d : value;
 };
-
 
 /**
 * 현재 사이즈를 resize 시켜 return
@@ -34,12 +32,26 @@ export const getValueOrDefault = ( value, d ) => {
 * @return 리사이즈된 문자형 size data
 */
 export const getResizedNumber = (strSize, resize) => {
-  if( strSize === undefined || strSize === null ){
-    return strSize
-  }
-  else{
+  if (strSize === undefined || strSize === null) {
+    return strSize;
+  } else {
     let number = strSize.replace(/[^0-9]/g, "");
     let strUnit = strSize.replace(/[0-9]/g, "");
-    return (number * resize) + strUnit;
+    return number * resize + strUnit;
   }
-}
+};
+
+/**
+ * JSON string 인지 확인하는 함수
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {string} str
+ * @returns
+ */
+export const isJSONStr = (str) => {
+  try {
+    return typeof JSON.parse(str) == "object";
+  } catch (e) {
+    return false;
+  }
+};

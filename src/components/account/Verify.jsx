@@ -2,11 +2,14 @@ import React, { useCallback, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import moment from "moment";
 import { verifyCheckCode } from "@API/accountService";
+import useActions from "@/hook/useActions";
+import { loginRequest } from "@REDUX/ducks/login";
 
 const Verify = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { email, expireOn } = location.state;
+  const { email, password, expireOn } = location.state;
+  const [onLogin] = useActions([loginRequest], []);
 
   const [seconds, setSeconds] = useState(0);
 
@@ -23,8 +26,9 @@ const Verify = () => {
 
       const { status } = response;
       if (status === 200) {
-        const { expireOn } = response.data;
-        navigate("../agreement", { state: { expireOn } });
+        const params = { email, password };
+        onLogin(params);
+        navigate("../agreement", { state: params });
       } else if (status === 400) {
         alert("코드 참조");
       } else if (status === 404) {
@@ -33,7 +37,7 @@ const Verify = () => {
         alert("코드 참조");
       }
     }
-  }, [code]);
+  }, [code, onLogin]);
 
   useEffect(() => {
     if (expireOn) {
