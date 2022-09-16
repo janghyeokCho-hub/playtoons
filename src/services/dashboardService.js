@@ -18,8 +18,20 @@ export const getSeriesStoryList = () => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getPostTypeList = () => {
+export const getPostTypeListFromServer = () => {
   return apiServer("get", "/post/type");
+};
+
+/**
+*
+   타입 별 카테고리 목록
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param typeId type id
+*/
+export const getPostCategoryListFromServer = (typeId) => {
+  return apiServer("get", `/post/category/${typeId}`);
 };
 
 /**
@@ -53,3 +65,6 @@ export const getFileFromServer = (hash, params) => {
   }
   return apiServer("get", `/file/${hash}${parameters}`);
 };
+
+
+

@@ -17,7 +17,7 @@ import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
 import ToolTip from "@/components/dashboard/ToolTip";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
-import { getFileFromServer, setFileToServer } from "@/services/dashboardService";
+import { getFileFromServer, getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
 import Slick from "@/components/dashboard/Slick";
 
 const textData = {
@@ -40,8 +40,6 @@ const textData = {
   input_image: "置いてください。",
   select_timeline: "サムネイル選択",
 };
-
-const typeDataList = ["1", "2", "3"];
 
 const tempTimeline = [
   {
@@ -67,7 +65,9 @@ const tempTimeline = [
 export default function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
   const refCoverImage = useRef();
-  const [isModeUpload, setMode] = useState(false);
+  const [ isModeUpload, setMode ] = useState(false);
+  const [ stateTypeList, setStateTypeList ] = useState(undefined);
+  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
   const params = useParams();
 
   let seriesData = {};
@@ -113,12 +113,36 @@ export default function DashboardUploadSeries(props) {
     console.log("setFile result", status, resultData);
   };
 
-  const handleRegister = (e) => {
-    console.log("handleRegister", refCoverImage.current.getImageFile());
+  const setTypeList = async () => {
+    const {status, data: result} = await getPostTypeListFromServer();
+
+    if( status === 200 ){
+      setStateTypeList(result?.types);
+    }
+    else{
+
+    }
+
+    console.log("setTypeList", status, result);
   };
 
-  const handlePreview = (e) => {
-    console.log("handlePreview", refIsAdult);
+  const setCategoryList = async (type) => {
+    const {status, data: result} = await getPostCategoryListFromServer(type?.code);
+    
+    //TODO error 처리 공통화
+    if( status === 200 ){
+      setStateCategoryList(result?.categories);
+    }
+    else{
+      
+    }
+    
+    console.log('setCategoryList', status, result);
+  };
+
+
+  const handleItemClickType = (type) => {
+    setCategoryList(type);
   };
 
   const handleCoverImage = async (fileInfo) => {
@@ -130,8 +154,19 @@ export default function DashboardUploadSeries(props) {
     console.log("handleTimelineImageFile", file);
   };
 
+  const handleRegister = (e) => {
+    console.log("handleRegister", refCoverImage.current.getImageFile());
+  };
+
+  const handlePreview = (e) => {
+    console.log("handlePreview", refIsAdult);
+  };
+
   useEffect(() => {
-    //분기 upload or edit
+    //get types
+    setTypeList();
+    
+
     const isEdit = params.id === undefined;
     setMode(isEdit);
     if( isEdit === true ){
@@ -165,14 +200,8 @@ export default function DashboardUploadSeries(props) {
           </FormDefault>
           <TextLabel>{textData.label_type}</TextLabel>
           <Dropdown 
-            {...props}
-            width={"215px"}
-            height={"45px"}
-            marginBottom={"2.222222222vh"}
-            borderRadius={"5px"}
-            backgroundColor={"var(--white)"} 
-            className={`${isModeUpload ? "" : "disabled"}`}
-            dataList={typeDataList}
+            dataList={stateTypeList}
+            handleItemClick={handleItemClickType}
             />
           <TextLabel>{textData.label_category}</TextLabel>
           <Dropdown 
@@ -182,7 +211,7 @@ export default function DashboardUploadSeries(props) {
             marginBottom={"2.222222222vh"}
             borderRadius={"5px"}
             backgroundColor={"var(--white)"} 
-            dataList={typeDataList}
+            dataList={stateCategoryList}
             />
           <AbultGroup>
             <TextLabel>{textData.label_adult}</TextLabel>

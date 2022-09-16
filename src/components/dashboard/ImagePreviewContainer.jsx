@@ -1,14 +1,10 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import styled from "styled-components";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/pro-light-svg-icons";
 
-        
-
 export default function ImagePreviewContainer(props) {
   const { children : src, handleClick } = props;
-  const refContainer = useRef();
 
   const handleIconCloseClick = () => {
     //클릭 이벤트 구현
@@ -16,7 +12,7 @@ export default function ImagePreviewContainer(props) {
   }
 
   return (
-    <Container ref={refContainer}>
+    <Container>
       <Img 
         borderRadius={props.borderRadius}
         src={src} />
