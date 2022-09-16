@@ -38,15 +38,16 @@ function Arrow(props) {
 */
 export default function Slick(props) {
   const sliderSetting = {
-    slide: 'div',
+    slide: 'div',         //slide tag 지정
     className : "timeline_slick_container",
-    infinite: true,     //loop 설정
+    infinite: true,       //loop 설정
     speed: 500,         
     slidesToShow: 5,      //화면에 보여질 slide 수
     slidesToScroll: 1,    //한번에 이동할 slide 수
     nextArrow: <Arrow customClass={"slick_arrow_container slick_arrow_next"} icon={faChevronRight} />,
     prevArrow: <Arrow customClass={"slick_arrow_container slick_arrow_prev"} icon={faChevronLeft} />,
-    respondTo : "window",
+    // variableWidth: true,     //slide수를 자동으로 결정
+    respondTo : "window",     
     responsive: [ // 반응형 웹 구현 옵션
 					{  
 						breakpoint: 960, //화면 사이즈 960px

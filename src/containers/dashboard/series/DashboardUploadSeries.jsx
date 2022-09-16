@@ -66,67 +66,64 @@ const tempTimeline = [
 
 export default function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
+  const refCoverImage = useRef();
   const [isModeUpload, setMode] = useState(false);
-  const [coverImage, setCoverImage] = useState(undefined);
   const params = useParams();
-
- 
 
   let seriesData = {};
 
-  const getImageUrl = async (result) => {
-    const params = {
-      hash : result.hash,
-      // redirect: true     // redirect 버전 
-    };
-
-    const {status, data: resultData} = await getFileFromServer(result.hash, params);
-
-    console.log("getFileAndSetStatus", status, resultData);
-    if( status === 200 ){
-      setCoverImage(resultData.url);
-    }
-    else{
-      //error
-    }
-    //TODO 타임라인이라면 하단 slick에 추가
-    
-  };
-
-  const handleRegister = (e) => {
-    console.log("refToggle", refIsAdult);
-  };
-
-  const handlePreview = (e) => {
-    console.log("refToggle", refIsAdult);
-  };
-
-  const handlePostImageFile = async (file) => {
+  /**
+  *
+    파일을 서버에 업로드 
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param {file} 
+  */
+  const setCoverImage = async(file) => {
     // 폼데이터 구성
     const params = new FormData();
     
-    // params.append("authorId", "");
-    // params.append("subscribeTierId", "");
+    // params.append("authorId", "");               
+    // params.append("subscribeTierId", "");        
     // params.append("productId", "");
-    params.append("type", "image");
-    params.append("usage", "cover");
+    params.append("type", "image");                 //image, video, binary
+    params.append("usage", "cover");                //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("loginRequired", true);
-    params.append("licenseRequired", false);
-    params.append("rating", "G");
+    params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
+    params.append("rating", "G");                   //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", file);
-    console.log("postImage file", params);
+    
+    console.log("set file params", params);
 
     const {status, data: resultData} = await setFileToServer(params);
     
     //create sccuess
     if( status === 201 ){
-      getImageUrl(resultData);
+      //set hash value to input tag 
+      refCoverImage.current.setImageHash(resultData?.hash);
+      
+      //다음 timeline이 있다면 timeline 업로드
+      
     }
     else{
       //error 처리
     }
 
-    console.log("result", status, resultData);
+    console.log("setFile result", status, resultData);
+  };
+
+  const handleRegister = (e) => {
+    console.log("handleRegister", refCoverImage.current.getImageFile());
+  };
+
+  const handlePreview = (e) => {
+    console.log("handlePreview", refIsAdult);
+  };
+
+  const handleCoverImage = async (fileInfo) => {
+    //cover image 업로드 후 처리
+    console.log("handleCoverImage", fileInfo);
   };
 
   const handleTimelineImageFile = (file) => {
@@ -208,15 +205,16 @@ export default function DashboardUploadSeries(props) {
             <ToolTip />
           </TextInfoContainer>
           <ImageUploadContainer
+            ref={refCoverImage}
             width={"200px"}
             height={"300px"}
             border={"1px dashed var(--tiara)"}
             backgroundColor={"var(--desert-storm)"}
+            name={"coverImage"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
-            handleFile={handlePostImageFile}
+            handleFile={handleCoverImage}
             >
-            {coverImage}
           </ImageUploadContainer>
           <Space height={"2.222222222vh"} />
 

@@ -47,5 +47,9 @@ export const setFileToServer = (params) => {
 * @return 파일경로
 */
 export const getFileFromServer = (hash, params) => {
-  return apiServer("get", `/file/${hash}`, params);
+  let parameters = "";
+  if( params !== undefined ){
+    parameters = "?" + new URLSearchParams(params).toString();
+  }
+  return apiServer("get", `/file/${hash}${parameters}`);
 };

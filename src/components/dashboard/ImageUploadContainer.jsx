@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import styled from "styled-components";
 import {  Body3, Border1pxTiara } from "@/styledMixins";
 import { useDropzone } from 'react-dropzone';
@@ -9,58 +9,100 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
 /**
  * 
+ * 이미지 파일 drag n drop, preivew 컴포넌트 
   <ImageUploadBox
+    ref={refCoverImage}
     width={"699px"}
     height={"300px"}
     border={"1px dashed var(--tiara)"}
-    textDragNDrop={text.label_drag_drop}
-    textInputMessage={text.input_image}
-    handleFile={handleTimelineImageFile}
+    name={"coverImage"}                     //parameter name
+    textDragNDrop={text.label_drag_drop}    //label 
+    textInputMessage={text.input_image}     //drag 중 text
     />
   
+  ex) 이미지 파일 정보 가져오기 file, preview, hash
+    refCoverImage.current.getImageFile();
+  ex) hash 정보 input에 넣기 
+    refCoverImage.current.setImageHash(hash);
+ * @version 1.0.0
+ * @author 2hyunkook
  * @param {*} props 
- * @returns 
  */
-export default function ImageUploadContainer(props) {
-  const { children, textDragNDrop, handleFile } = props;
-  const [file, setFile] = useState(null);
+function ImageUploadContainer(props, ref) {
+  const initImageObject = {file: undefined, preview: undefined, hash: undefined};
+  const { children, textDragNDrop, name } = props;
+  const [image, setImageFile] = useState(initImageObject);
 
+  
+  /**
+  *
+     업로드 전 preview 생성
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param {*} file
+  */
+  const setPreviewImage = (file) => {
+    const reader = new FileReader();
+
+    if(file){
+      reader.readAsDataURL(file);
+    }
+    
+    reader.onload = () => {
+      setImageFile({
+        ...image,
+        file: file,
+        preview: reader.result
+      });
+    };
+  };
+
+  //=============== file drag n drop 설정 ===============
   const onDrop = useCallback(async (acceptedFiles) => {
-    // setFile(acceptedFiles[0]);
-
-    if( handleFile !== undefined ){ handleFile(acceptedFiles[0]); }
+    setPreviewImage(acceptedFiles[0]);
   }, []);
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
-
   const InputProps = {
     ...getInputProps(),
     multiple: false,
     accept: "image/gif, image/jpg, image/jpeg, image/png",
     type: "file"
   };
-
   const RootProps = {
     ...getRootProps(),
   };
-
+  //===============  ===============
+  
   const handlePreviewClose = () => {
-    setFile(undefined);
-  }
+    setImageFile(initImageObject);
+  };
+
+  useImperativeHandle(ref, () => ({
+    setImageHash: (hash) => {
+      setImageFile({...image, hash: hash});
+    },
+    getImageFile: () => {
+      return image;
+    }
+  }));
 
   useEffect(() => {
-    setFile(children);
+    setImageFile({
+      ...image,
+      preview : children
+    });
   }, [children]);
 
   return (
     <RootContainer 
       width={props.width}
       height={props.height}
-      marginBottom={props.marginBottom}
-      >
+      marginBottom={props.marginBottom} >
+      <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />
       <input {...InputProps}/>
       {
-        file === undefined ? (
+        image?.preview === undefined ? (
           <Container 
             {...RootProps} 
             maxSize={100} 
@@ -68,8 +110,7 @@ export default function ImageUploadContainer(props) {
             width={props.width}
             height={props.height}
             border={props.border}
-            backgroundColor={props.backgroundColor}
-            >
+            backgroundColor={props.backgroundColor} >
               {  isDragActive ? (
                 <TextContainer>
                   <TextlabelDragNDrop>{props.textInputMessage}</TextlabelDragNDrop>
@@ -93,9 +134,8 @@ export default function ImageUploadContainer(props) {
         ) : (
           <PreviewContainer 
             width={props.width}
-            height={props.height}
-            >
-            <ImagePreviewContainer handleClick={handlePreviewClose}>{file}</ImagePreviewContainer>
+            height={props.height} >
+            <ImagePreviewContainer handleClick={handlePreviewClose}>{image?.preview}</ImagePreviewContainer>
           </PreviewContainer>
         )
       }
@@ -128,8 +168,7 @@ const Container = styled.div`
   border-radius: 4px;
   border: ${(props) => props.border};                         //1px dashed var(--tiara)
   opacity: 1;
-  
-Rectangle
+
   &.preview{
     background-color: transparent;
     border-radius: 0px;
@@ -154,3 +193,4 @@ const TextlabelDragNDrop = styled.div `
   text-align: center;
 `;
 
+export default forwardRef(ImageUploadContainer);
