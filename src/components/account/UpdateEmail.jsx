@@ -1,74 +1,29 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { updateAccount } from "@API/accountService";
 
 /**
  * 이메일 변경을 위해 새 이메일 입력 받는 폼
  */
 const UpdateEmail = () => {
-  /*
   const navigate = useNavigate();
-  const [newEmail, setNewEmail] = useState(null);
-  const [code, setCode] = useState(null);
-  const [expireOn, setExpireOn] = useState(null);
-  const [countTime, setCountTime] = useState(0);
-  const [verifyIsShow, setVerifyIsShow] = useState(false);
+  const [email, setEmail] = useState(null);
 
-  const handleNewEmailChange = (e) => {
-    setNewEmail(e.target.value);
-  };
-
-  const handleCodeChange = (e) => {
-    setCode(e.target.value);
-  };
-
-  const handleVerifySend = useCallback(async () => {
-    const { status, data } = await verifyCheckResend({ email: newEmail });
-    if (status === 200) {
-      // SUCCESS
-      setExpireOn(data?.expireOn);
+  const handleUpdateEmail = useCallback(async () => {
+    const params = { email };
+    const response = await updateAccount(params);
+    const { status } = response;
+    if (response.status === 200) {
+      const { expireOn } = response.data;
+      navigate("../update-email-verify", { state: { expireOn, email } });
     } else if (status === 400) {
-      // 코드 참조
       alert("코드 참조");
-    } else if (status === 403) {
-      // 사용할 수 없는 이메일 주소
-      alert("사용할 수 없는 이메일 주소");
-    } else if (status === 404) {
-      // 코드 참조
-      alert("코드 참조");
+    } else if (status === 409) {
+      alert("이미 사용중인 메일 주소");
     } else if (status === 503) {
-      // 코드 참조
       alert("코드 참조");
     }
-  }, [newEmail]);
-
-  const handleVerifyCheck = useCallback(async () => {
-    const { status } = await verifyCheck({ code: code });
-    if (status === 200) {
-      // SUCCESS
-      navigate("/");
-    } else if (status === 400) {
-      // 코드 참조
-      alert("코드 참조");
-    } else if (status === 404) {
-      // 코드 참조
-      alert("코드 참조");
-    } else if (status === 503) {
-      // 코드 참조
-      alert("코드 참조");
-    }
-  }, [code]);
-
-  useEffect(() => {
-    if (expireOn) {
-      setCountTime(moment(expireOn).diff(moment(), "seconds") || 0);
-      setVerifyIsShow(true);
-    }
-
-    return () => {
-      setCountTime(0);
-      setVerifyIsShow(false);
-    };
-  }, [expireOn]);
-  */
+  }, [email, navigate]);
 
   return (
     <>
@@ -80,14 +35,23 @@ const UpdateEmail = () => {
       <div className="area_member">
         <div className="inbox ty2">
           <div className="col">
-            <label for="id" className="h">
+            <label htmlFor="id" className="h">
               新しいメールアドレス
             </label>
-            <input type="text" id="id" className="inp_txt w100p" />
+            <input
+              type="text"
+              id="id"
+              className="inp_txt w100p"
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
         </div>
         <div className="btns">
-          <button type="submit" className="btn-pk mem blue">
+          <button
+            type="submit"
+            className="btn-pk mem blue"
+            onClick={handleUpdateEmail}
+          >
             <span>次へ</span>
           </button>
           <button type="submit" className="btn-pk mem blue2">

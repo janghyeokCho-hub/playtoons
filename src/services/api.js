@@ -1,17 +1,9 @@
 import axios from "axios";
 import Config from "@/env/config";
-import { isJSONStr } from "@/common/common";
+import { getToken } from "@/common/common";
 
 const SERVER = Config.apiUrl;
 const AUTH_SERVER = Config.apiAuthUrl;
-
-const getToken = () => {
-  const rootData = localStorage.getItem("persist:root");
-  const rootJSON = isJSONStr(rootData) ? JSON.parse(rootData) : rootData;
-  const loginData = rootJSON.login;
-  const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
-  return loginJSON.token;
-};
 
 /**
  * API 호출 공통 로직

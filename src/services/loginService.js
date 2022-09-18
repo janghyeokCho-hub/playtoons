@@ -12,17 +12,14 @@ export const loginRequest = (params) => {
   }
 };
 
-export const loginSnsRequest = (type) => {
+/**
+ * Login Password Check
+ * @param {string} password
+ * @returns
+ */
+export const loginPasswordCheck = (params) => {
   try {
-    return apiAuthServer("get", `/auth/${type}`);
-  } catch (e) {
-    return { status: e.response.status };
-  }
-};
-
-export const loginSnsCallback = async (type) => {
-  try {
-    return await apiAuthServer("get", `/auth/callback/${type}`);
+    return apiAuthServer("post", "/auth/login/check", params);
   } catch (e) {
     return { status: e.response.status };
   }

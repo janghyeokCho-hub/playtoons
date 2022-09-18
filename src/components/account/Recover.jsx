@@ -20,7 +20,7 @@ const Recover = () => {
       const { status } = response;
       if (status === 200) {
         const { expireOn } = response.data;
-        navigate("../recover-check", { state: { expireOn } });
+        navigate("../recover-check", { state: { email, expireOn } });
       } else if (status === 404) {
         alert("코드 참조");
       } else if (status === 503) {

@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/pro-solid-svg-icons";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "@COMPONENTS/auth/Login";
 import Register from "@COMPONENTS/account/Register";
 import Agreement from "@COMPONENTS/account/Agreement";
@@ -16,12 +16,17 @@ import UpdatePasswordCheck from "@COMPONENTS/account/UpdatePasswordCheck";
 import UpdatePasswordConfirm from "@COMPONENTS/account/UpdatePasswordConfirm";
 
 const Account = () => {
+  const navigate = useNavigate();
   return (
     <div id="wrap">
       <section className="wrap_login">
         <header className="head">
           <div className="inr-c">
-            <button type="button" className="btn_back">
+            <button
+              type="button"
+              className="btn_back"
+              onClick={() => navigate(-1)}
+            >
               <span className="icon">
                 <FontAwesomeIcon icon={faAngleLeft} />
               </span>

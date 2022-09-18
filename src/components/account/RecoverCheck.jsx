@@ -8,7 +8,7 @@ import { recoverCheckCode } from "@API/accountService";
 const RecoverCheck = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { expireOn } = location.state;
+  const { email, expireOn } = location.state;
   const [seconds, setSeconds] = useState(0);
   const [code, setCode] = useState(null);
 
@@ -27,6 +27,8 @@ const RecoverCheck = () => {
       const { status } = response;
       if (status === 200) {
         navigate("../recover-confirm", { state: { code } });
+      } else if (status === 400) {
+        alert("아마도 만료된 코드");
       } else if (status === 404) {
         alert("코드 참조");
       } else if (status === 503) {
@@ -62,7 +64,7 @@ const RecoverCheck = () => {
     <>
       <h1 className="logo">パスワードを再設定</h1>
       <div className="txt">
-        <p className="c-blue">jin@rocketstaff.com</p>
+        <p className="c-blue">{email}</p>
         <p>宛に認証用メールを送信しました。</p>
       </div>
 

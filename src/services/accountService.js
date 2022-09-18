@@ -69,7 +69,7 @@ export const getEulaVersion = async (code) => {
 
 export const updateAccount = async (params) => {
   try {
-    return await apiAuthServer("fatch", "/account", params);
+    return await apiAuthServer("patch", "/account", params);
   } catch (e) {
     return { status: e.response.status };
   }

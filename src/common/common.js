@@ -55,3 +55,15 @@ export const isJSONStr = (str) => {
     return false;
   }
 };
+
+/**
+ * Get Access Token
+ * @returns
+ */
+export const getToken = () => {
+  const rootData = localStorage.getItem("persist:root");
+  const rootJSON = isJSONStr(rootData) ? JSON.parse(rootData) : rootData;
+  const loginData = rootJSON.login;
+  const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
+  return loginJSON.token;
+};

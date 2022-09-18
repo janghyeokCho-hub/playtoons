@@ -73,7 +73,7 @@ const Verify = () => {
       <div className="area_member">
         <div className="inbox ty3">
           <div className="col">
-            <label for="id" className="h">
+            <label htmlFor="id" className="h">
               認証コード
             </label>
             <input

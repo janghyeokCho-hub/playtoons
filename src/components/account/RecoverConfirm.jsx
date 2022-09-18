@@ -2,13 +2,16 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { recoverConfirmPassword } from "@API/accountService";
-import { navigate } from "@storybook/addon-links";
 
 const RecoverConfirm = () => {
+  const navigate = useNavigate();
   const { state } = useLocation();
   const code = state?.code;
+  if (!code) {
+    navigate("/account/recover");
+  }
   const [newPwd, setNewPwd] = useState(null);
   const [newPwdCheck, setNewPwdCheck] = useState(null);
 
@@ -28,6 +31,7 @@ const RecoverConfirm = () => {
         password: newPwd,
         code: code,
       });
+      console.log(response);
 
       const { status } = response;
       if (status === 200) {
@@ -51,7 +55,7 @@ const RecoverConfirm = () => {
       <div className="area_member">
         <div className="inbox ty1">
           <div className="col">
-            <label for="pwd" className="h">
+            <label htmlFor="pwd" className="h">
               パスワード
             </label>
             <input
@@ -63,7 +67,7 @@ const RecoverConfirm = () => {
             <button
               type="button"
               className={`${isPwdShow ? "active" : ""} btn_eyes`}
-              onclick={() => setIsPwdShow(!isPwdShow)}
+              onClick={() => setIsPwdShow(!isPwdShow)}
             >
               <span className="show">
                 <FontAwesomeIcon icon={faEye} />
@@ -74,7 +78,7 @@ const RecoverConfirm = () => {
             </button>
           </div>
           <div className="col">
-            <label for="pwd" className="h">
+            <label htmlFor="pwd" className="h">
               パスワード確認
             </label>
             <input
@@ -86,7 +90,7 @@ const RecoverConfirm = () => {
             <button
               type="button"
               className={`${isRePwdShow ? "active" : ""} btn_eyes`}
-              onclick={() => setIsRePwdShow(!isRePwdShow)}
+              onClick={() => setIsRePwdShow(!isRePwdShow)}
             >
               <span className="show">
                 <FontAwesomeIcon icon={faEye} />

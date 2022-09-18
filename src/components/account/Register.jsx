@@ -4,9 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import { register } from "@API/accountService";
 import { useSelector } from "react-redux";
+import useActions from "@/hook/useActions";
+import { loginRequest } from "@REDUX/ducks/login";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [onLogin] = useActions([loginRequest], []);
 
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [email, setEmail] = useState(null);
@@ -71,6 +74,13 @@ const Register = () => {
       const { status } = response;
       if (status === 201) {
         const { expireOn } = response.data;
+
+        const data = {
+          email,
+          password,
+        };
+        onLogin(data);
+
         navigate("../verify", { state: { email, password, expireOn } });
       } else if (status === 400) {
         alert("파라미터 검증 실패");
@@ -82,7 +92,7 @@ const Register = () => {
         alert("코드 참조");
       }
     }
-  }, [email, password, rePassword, referralCode]);
+  }, [email, password, rePassword, referralCode, navigate]);
 
   return (
     <>

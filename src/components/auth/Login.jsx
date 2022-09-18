@@ -1,14 +1,26 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import useActions from "@/hook/useActions";
 
 import { loginRequest } from "@REDUX/ducks/login";
-import { loginSnsRequest, loginSnsCallback } from "@API/loginService";
+import Config from "@/env/config";
 
 const Login = () => {
+  const AUTH_SERVER = Config.apiAuthUrl;
+  // 로그인 후 이동할 페이지
+  // 로그인 컴포넌트로 이동 시 이전 페이지의 라우터 네임을 가져와야함
+  // 절대경로로 받아 올 것
+  const location = useLocation();
+  const next = location?.state?.next || "";
+  const googleUrl = `${AUTH_SERVER}/auth/google?${next ? `next=${next}` : ""}`;
+  const twitterUrl = `${AUTH_SERVER}/auth/twitter?${
+    next ? `next=${next}` : ""
+  }`;
+  const appleUrl = `${AUTH_SERVER}/auth/apple?${next ? `next=${next}` : ""}`;
+
   const navigate = useNavigate();
 
   const isLogined = useSelector(({ login }) => login.isLogined);
@@ -21,10 +33,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [onLogin] = useActions([loginRequest], []);
-
-  const GOOGLE = "google";
-  const TWITTER = "twitter";
-  const APPLE = "apple";
 
   /**
    * email State 변경 함수
@@ -60,18 +68,10 @@ const Login = () => {
     onLogin(data);
   }, [email, password, onLogin]);
 
-  /**
-   * SNS 로그인 시도
-   */
-  const handleSnsLogin = useCallback(async (type) => {
-    const response = await loginSnsRequest(type);
-    console.log("response : ", response);
-  }, []);
-
   useEffect(() => {
     if (isLogined) {
       // 로그인 성공으로 라우터 변경
-      navigate(-1);
+      // navigate(-1);
     }
   }, [isLogined]);
 
@@ -158,13 +158,13 @@ const Login = () => {
           <span className="ico i_log_animate">Animateで続行</span>
         </a>
         */}
-        <a onClick={() => handleSnsLogin(GOOGLE)} className="btn-pk mem white">
+        <a href={googleUrl} className="btn-pk mem white">
           <span className="ico i_log_google">Googleで続行</span>
         </a>
-        <a onClick={() => handleSnsLogin(TWITTER)} className="btn-pk mem white">
+        <a href={twitterUrl} className="btn-pk mem white">
           <span className="ico i_log_twitter">Twitterで続行</span>
         </a>
-        <a onClick={() => handleSnsLogin(APPLE)} className="btn-pk mem black">
+        <a href={appleUrl} className="btn-pk mem black">
           <span className="ico i_log_apple">Appleで続行</span>
         </a>
       </div>

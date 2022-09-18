@@ -1,5 +1,5 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { LOGIN_REQUEST, SYNC } from "@REDUX/ducks/login";
+import { LOGIN_REQUEST, LOGOUT_REQUEST, SYNC } from "@REDUX/ducks/login";
 import { startLoading, finishLoading } from "@REDUX/ducks/loading";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as loginApi from "@API/loginService";
@@ -17,10 +17,11 @@ function createLoginRequestSaga(loginType, syncType) {
         // 로그인 성공 시 로컬스토리지에 token 값 저장
         if (response?.status === 200) {
           const { accessToken } = response.data;
-          localStorage.setItem("token", accessToken);
-          yield put({ type: SUCCESS, payload: action.payload });
+          yield put({
+            type: SUCCESS,
+            payload: { ...action.payload, accessToken: accessToken },
+          });
         } else {
-          console.log("response : ", response);
           yield put({
             type: FAILURE,
             payload: action.payload,
@@ -50,6 +51,30 @@ function createLoginRequestSaga(loginType, syncType) {
 
 const loginRequestSaga = createLoginRequestSaga(LOGIN_REQUEST, SYNC);
 
+function createLogoutRequestSaga(type) {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+
+  return function* (action) {
+    try {
+      // REQUEST 에서 API 처리하고, redux store 처리는 SUCCESS에서
+      yield put({ type: SUCCESS });
+    } catch (e) {
+      console.dir(e);
+      yield call(exceptionHandler, { e: e, redirectError: false });
+
+      yield put({
+        type: FAILURE,
+        payload: action.payload,
+        error: true,
+      });
+    }
+  };
+}
+
+const logoutRequestSaga = createLogoutRequestSaga(LOGOUT_REQUEST);
+
 export default function* loginSaga() {
   yield takeLatest(LOGIN_REQUEST, loginRequestSaga);
+  yield takeLatest(LOGOUT_REQUEST, logoutRequestSaga);
 }

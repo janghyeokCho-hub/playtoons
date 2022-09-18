@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons";
 import { deleteAccount } from "@API/accountService";
+import { logoutRequest } from "@/modules/redux/ducks/login";
+import { useDispatch } from "react-redux";
 
 const Close = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [agree, setAgree] = useState(false);
   const [isErrorShow, setIsErrorShow] = useState(false);
@@ -17,6 +20,7 @@ const Close = () => {
 
       const { status } = response;
       if (status === 200) {
+        dispatch(logoutRequest());
         navigate("/");
       } else if (status === 404) {
         alert("존재하지 않는 계정");
@@ -24,7 +28,7 @@ const Close = () => {
         alert("코드 참조");
       }
     }
-  }, [agree]);
+  }, [agree, navigate, dispatch]);
 
   return (
     <>
