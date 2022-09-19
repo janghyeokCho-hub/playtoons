@@ -95,42 +95,33 @@ function ImageUploadContainer(props, ref) {
   }, [children]);
 
   return (
-    <RootContainer 
-      width={props.width}
-      height={props.height}
-      marginBottom={props.marginBottom} >
+    <div 
+      className={`${props.className}_container`}
+       >
       <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />
       <input {...InputProps}/>
       {
         image?.preview === undefined ? (
-          <Container 
+          <div 
             {...RootProps} 
-            maxSize={100} 
+            maxsize={100} 
             multiple={false} 
-            width={props.width}
-            height={props.height}
-            border={props.border}
-            backgroundColor={props.backgroundColor} >
+            className={`${props.className} image_upload`} >
               {  isDragActive ? (
-                <TextContainer>
-                  <TextlabelDragNDrop>{props.textInputMessage}</TextlabelDragNDrop>
-                </TextContainer>
+                <div className={`${props.className}_text_container image_upload_text_container`}>
+                  <div className={`${props.className}_text image_upload_text`}>{props.textInputMessage}</div>
+                </div>
                 ) : (
-                  <TextContainer>
+                  <div className={`${props.className}_text_container image_upload_text_container`}>
                     <FontAwesomeIcon 
                       icon={faCirclePlus}
-                      style={{ 
-                        width: "24px", 
-                        height: "24px", 
-                        marginBottom: `${props.textDragNDrop ? "12px" : ""}`,
-                        color: "var(--deep-space-sparkle)" 
-                      }}
+                      className={`${props.className}_ico image_upload_ico_plus`}
                       />
-                    <TextlabelDragNDrop >{textDragNDrop}</TextlabelDragNDrop>
-                  </TextContainer>
+                    <div className={`${props.className}_text image_upload_text`} >{textDragNDrop}</div>
+                  </div>
                 )
               }
-          </Container>
+          </div>
         ) : (
           <PreviewContainer 
             width={props.width}
@@ -139,7 +130,7 @@ function ImageUploadContainer(props, ref) {
           </PreviewContainer>
         )
       }
-    </RootContainer>
+    </div>
   );
 }
 

@@ -19,8 +19,7 @@ function Arrow(props) {
   const { className, style, onClick, customClass, icon } = props;
   return (
     <div
-      // className={`${customClass}`}
-      className={`${className} ${customClass}`}   //TODO width 값만 죽음 이유 확인 필요
+      className={`${className} ${customClass}`}
       style={{ ...style}}
       onClick={onClick} >
         <FontAwesomeIcon className={"slick_arrow_icon"} icon={icon} />
@@ -29,14 +28,18 @@ function Arrow(props) {
 }
 
 /**
-*
-   <Slick list={tempTimeline} />
+* 
+   <Slick 
+    list={tempTimeline} 
+    handleItemClick={handleSlideClick} />
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param {list} props
+* @param {list} props slide list
 */
 export default function Slick(props) {
+  const { handleItemClick } = props;
+
   const sliderSetting = {
     slide: 'div',         //slide tag 지정
     className : "timeline_slick_container",
@@ -52,17 +55,29 @@ export default function Slick(props) {
 					{  
 						breakpoint: 960, //화면 사이즈 960px
 						settings: {
-							//위에 옵션이 디폴트 , 여기에 추가하면 그걸로 변경
-							slidesToShow:3 
+							slidesToShow: 3 
 						} 
 					},
 				]
   };
 
+  const handleClick = (item) => {
+    console.log("handleItemClick", item);
+    handleItemClick?.(item);
+  };
+
   const getList = () => {
     return props?.list?.map((item, i) => {
       return <div key={i}>
-              <div className="timelins_slick_box">{item.image}</div>
+              <div 
+                className="timelins_slick_box" 
+                onClick={() => {
+                  handleClick(item);
+                }} >
+
+                  {item.image}
+
+              </div>
             </div>;
     });
   };

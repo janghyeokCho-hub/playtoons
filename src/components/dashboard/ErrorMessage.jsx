@@ -5,7 +5,7 @@ import "@/css/test.css";
 
 function ErrorMessage(props) {
   return (
-    <div className="error_message_container">
+    <div className={`error_message_container ${props.className}`}>
       <FontAwesomeIcon 
         icon={faCircleXmark}
         className={"error_message_ico"} />

@@ -2,11 +2,10 @@ import React, { useRef, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
-import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
-
+import {BROWSER_CONTENTS_AREA_TYPE, INPUT_STATUS} from '@COMMON/constant';
+import "@/css/test.css";
 
 import BrowserContainer from "@/components/dashboard/BrowserContainer";
-import FormDefault from "@COMPONENTS/FormDefault";
 import Dropdown from "@/components/dashboard/Dropdown";
 import TagGroup from "@/components/dashboard/TagGroup";
 import RegisterButton from "@/components/dashboard/ButtonDefault";
@@ -15,10 +14,15 @@ import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
 import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
 import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
 import ToolTip from "@/components/dashboard/ToolTip";
+import TextInput from "@/components/dashboard/TextInput";
+
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
-import { getFileFromServer, getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
+import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
 import Slick from "@/components/dashboard/Slick";
+import Editor from "@/components/dashboard/Editor";
+import TextInputSearch from "@/components/dashboard/TextInputSearch";
+
 
 const textData = {
   label_series_register: "シリーズ登録",
@@ -63,6 +67,7 @@ const tempTimeline = [
 ];
 
 export default function DashboardUploadSeries(props) {
+  const refTitle = useRef();
   const refIsAdult = useRef();
   const refCoverImage = useRef();
   const [ isModeUpload, setMode ] = useState(false);
@@ -156,10 +161,14 @@ export default function DashboardUploadSeries(props) {
 
   const handleRegister = (e) => {
     console.log("handleRegister", refCoverImage.current.getImageFile());
+
+    refTitle.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
   };
 
   const handlePreview = (e) => {
     console.log("handlePreview", refIsAdult);
+
+    refTitle.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
   };
 
   useEffect(() => {
@@ -190,20 +199,23 @@ export default function DashboardUploadSeries(props) {
         paddingRight={"427px"}
         >
         <form method="post" encType="multipart/form-data">
-          <PageTitle>
-            {isModeUpload
-              ? textData.label_series_register
-              : textData.label_series_edit}
-          </PageTitle>
-          <FormDefault className={""} label={textData.label_title}>
-            {seriesData.title}
-          </FormDefault>
-          <TextLabel>{textData.label_type}</TextLabel>
+          <div className="dashboard_title">
+              {textData.label_series_register}
+          </div>
+
+          <div className={"text_lbael"}>{textData.label_title}</div>
+          <TextInput 
+            name={"title"}
+            className={"series_input_title"} 
+            ref={refTitle} />
+
+          <div className={"text_lbael"}>{textData.label_type}</div>
           <Dropdown 
             dataList={stateTypeList}
             handleItemClick={handleItemClickType}
             />
-          <TextLabel>{textData.label_category}</TextLabel>
+
+          <div className={"text_lbael"}>{textData.label_category}</div>
           <Dropdown 
             {...props}
             width={"215px"}
@@ -213,59 +225,52 @@ export default function DashboardUploadSeries(props) {
             backgroundColor={"var(--white)"} 
             dataList={stateCategoryList}
             />
-          <AbultGroup>
-            <TextLabel>{textData.label_adult}</TextLabel>
-            <FlexRow>
-              <ToggleOn
-                ref={refIsAdult}
-                selected={false}
+
+          <div className={"text_lbael"}>{textData.label_adult}</div>
+          <div className="flex_container">
+            <ToggleOn
+              ref={refIsAdult}
+              selected={false}
               />
-              <R19>{textData.label_r_19}</R19>
-            </FlexRow>
-          </AbultGroup>
-          <FormDefault
-            className={"group-11-2"}
-            inputClassName={"summary-big"}
-            label={textData.label_summary}
-          ></FormDefault>
-          <TagGroup label={textData.label_tag_setting} text={textData.tag_name} />
-          <TextInfoContainer>
-            <IconTextLabel>{textData.label_post_image}</IconTextLabel>
+            <div className="r_19">{textData.label_r_19}</div>
+          </div>
+
+          <div className={"text_lbael"}>{textData.label_summary}</div>
+          <Editor />
+          
+
+          <div className={"text_lbael"}>{textData.label_tag_setting}</div>
+          <TextInputSearch 
+            name={"tags"}
+            className={"series_input_search"} 
+            placeholder={textData.tag_name}
+            ref={refTitle} />
+
+          <div className="flex_container info_margin_bottom">
+            <div className={"text_lbael text_lbael_info"}>{textData.label_post_image}</div>
             <ToolTip />
-          </TextInfoContainer>
+          </div>
           <ImageUploadContainer
             ref={refCoverImage}
-            width={"200px"}
-            height={"300px"}
-            border={"1px dashed var(--tiara)"}
-            backgroundColor={"var(--desert-storm)"}
+            className={"series_image_upload_cover"}
             name={"coverImage"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
             handleFile={handleCoverImage}
             >
           </ImageUploadContainer>
-          <Space height={"2.222222222vh"} />
 
-          <TextInfoContainer>
-            <IconTextLabel>{textData.label_timeline}</IconTextLabel>
+          <div className="flex_container info_margin_bottom">
+            <div className={"text_lbael text_lbael_info"}>{textData.label_timeline}</div>
             <ToolTip />
-          </TextInfoContainer>
+          </div>
           <ImageUploadContainer
-            width={"699px"}
-            height={"300px"}
-            border={"1px dashed var(--tiara)"}
-            backgroundColor={"var(--desert-storm)"}
+            className={"series_image_upload_timeline"}
             textDragNDrop={textData.label_drag_drop}
             textInputMessage={textData.input_image}
             handleFile={handleTimelineImageFile}
           ></ImageUploadContainer>
-          <Space height={"24px"} />
           
-          <TextLabel>{textData.select_timeline}</TextLabel>
-          {/* //TODO test용 slick css 적용 필요 */}
-          <Slick list={tempTimeline} />
-
           <ButtonContainer>
             <PreviewButton
               width={"117px"}

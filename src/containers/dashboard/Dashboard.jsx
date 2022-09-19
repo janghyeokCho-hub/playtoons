@@ -72,7 +72,7 @@ export default function Dashboard() {
           element={<Series />}    //404
         />
       </Routes>
-      //TODO 모달 기능 살리기
+      {/* //TODO 모달기능 */}
       {/* <Modal show={false} /> */}
     </>
   )
