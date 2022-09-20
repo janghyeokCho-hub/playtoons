@@ -174,7 +174,7 @@
 }
 .swiper-button-prev:after,
 .swiper-container-rtl .swiper-button-next:after {
-  content: 'prev';
+  content: '';
 }
 .swiper-button-next,
 .swiper-container-rtl .swiper-button-prev {
@@ -183,7 +183,7 @@
 }
 .swiper-button-next:after,
 .swiper-container-rtl .swiper-button-prev:after {
-  content: 'next';
+  content: '';
 }
 .swiper-button-prev.swiper-button-white,
 .swiper-button-next.swiper-button-white {

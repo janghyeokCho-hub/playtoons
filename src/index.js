@@ -4,7 +4,7 @@ import "./css/common.css";
 import "./css/default.css";
 import "./css/font.css";
 import "./css/mobile.css";
-import "./css/swiper.css";
+// import "./css/swiper.css";
 import "./css/swiper.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

@@ -264,11 +264,8 @@ const tempData = {
 
 export default function DashboardMain() {
   const [data, setData] = useState({});
-
+  
   const handleClickDetail = (e) => {
-
-    // console.log("first", getPostTypeList());
-
     
   };
 
@@ -280,10 +277,10 @@ export default function DashboardMain() {
     return data?.sales_product_list?.map((item, i) => {
       return <SwiperSlide key={i} className={"cx"}>
                 <a href="#">
-                  <div class="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
-                  <div class="cx_txt">
-                    <p class="h1">{item.title}</p>
-                    <p class="t1">{item.date}</p>
+                  <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
+                  <div className="cx_txt">
+                    <p className="h1">{item.title}</p>
+                    <p className="t1">{item.date}</p>
                   </div>
                 </a>
             </SwiperSlide>
@@ -293,8 +290,8 @@ export default function DashboardMain() {
   const getQuestionList = () => {
     return data?.question_list?.map((item, index) => {
       return  <li key={index}>
-                <p class="t1"><a href="#">{item.title}</a></p>
-                <p class="t2">{item.date}</p>
+                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t2">{item.date}</p>
               </li>
     });
   };
@@ -303,10 +300,10 @@ export default function DashboardMain() {
     return data?.review_list?.map((item, index) => {
       return <li key={index}>
               <div>
-                <div class="t_star"><span class={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
-                <p class="t1"><a href="#">{item.title}</a></p>
+                <div className="t_star"><span className={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
+                <p className="t1"><a href="#">{item.title}</a></p>
               </div>
-              <p class="t2">{item.date}</p>
+              <p className="t2">{item.date}</p>
             </li>
     });
   };
@@ -315,10 +312,10 @@ export default function DashboardMain() {
     return data?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
                   <a href="#">
-                    <div class="cx_thumb"><span><img src={item.image} alt="사진" /></span><p class="t_like"><span>{item.count}</span></p></div>
-                    <div class="cx_txt">
-                      <p class="t1 c-blue">{item.type}</p>
-                      <p class="h1">{item.title}</p>
+                    <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><span>{item.count}</span></p></div>
+                    <div className="cx_txt">
+                      <p className="t1 c-blue">{item.type}</p>
+                      <p className="h1">{item.title}</p>
                     </div>
                   </a>
               </SwiperSlide>
@@ -328,8 +325,8 @@ export default function DashboardMain() {
   const getPostList = () => {
     return data?.post_list?.map((item, i) => {
       return  <li key={item.id}>
-                <p class="t1"><a href="#">{item.title}</a></p>
-                <p class="t2">{item.date}</p>
+                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t2">{item.date}</p>
               </li>
     });
   };
@@ -337,20 +334,20 @@ export default function DashboardMain() {
   const getReactionList = () => {
     return data?.reaction_list?.map((item, index) => {
       return  <li key={item.id}>
-                <p class="t1"><a href="#">{item.title}</a></p>
-                <p class="t2">{item.date}</p>
+                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t2">{item.date}</p>
               </li>
     });
   };
 
   const getSalesListInPast = () => {
-    return data?.past_sales_list.map((item, index) => {
+    return data?.past_sales_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
-                  <p class="t2">{item.date}</p>
-                  <p class="t1_1">{item.money}</p>
+                  <p className="t2">{item.date}</p>
+                  <p className="t1_1">{item.money}</p>
                 </div>
-                <p class="t2"><a href="#" class="btn-pk s blue2"><span dataId={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><a href="#" className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
               </li>
     });
   };
@@ -359,11 +356,11 @@ export default function DashboardMain() {
     return data?.history_deposit_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
-                  <p class="t2">{item.date}</p>
-                  <p class="t1_1">{item.money}</p>
-                  <p class="t3">{item.bank_name}</p>
+                  <p className="t2">{item.date}</p>
+                  <p className="t1_1">{item.money}</p>
+                  <p className="t3">{item.bank_name}</p>
                 </div>
-                <p class="t2"><a href="#" class="btn-pk s blue2"><span dataId={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><a href="#" className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
               </li>
     });
   };
@@ -374,41 +371,56 @@ export default function DashboardMain() {
 
   return (
     <Container>
-      <div class="inr-c">
-        <section class="box_area pr-mb1">
-          <div class="hd_titbox">
-            <h2 class="h_tit1">{text.today_sales}</h2>
-            <p class="rgh hide-m">{tempData.today}</p>
+      <div className="inr-c">
+        <section className="box_area pr-mb1">
+          <div className="hd_titbox">
+            <h2 className="h_tit1">{text.today_sales}</h2>
+            <p className="rgh hide-m">{tempData.today}</p>
           </div>
 
-          <div class="b_tit">
-            <p class="h1"><strong>{tempData.sales_cases}</strong><span class="fz_s1 c-green">{tempData.before_yesterday}</span></p>
-            <div class="t1">
+          <div className="b_tit">
+            <p className="h1"><strong>{tempData.sales_cases}</strong><span className="fz_s1 c-green">{tempData.before_yesterday}</span></p>
+            <div className="t1">
               <p><strong>{tempData.pc_count}</strong></p>
-              <a href="#" class="btn-pk n blue"><span>{text.detail}</span></a>
+              <a href="#" className="btn-pk n blue"><span>{text.detail}</span></a>
             </div>
           </div>
 
-          <div class="b_cont">
-            <div class="hd_titbox">
-              <h3 class="h_tit1">{text.recently_sales_product}</h3>
-              <a href="#" class="rgh c-blue view-m"><span class="ico_arr_link">{text.see_all}</span></a>
+          <div className="b_cont">
+            <div className="hd_titbox">
+              <h3 className="h_tit1">{text.recently_sales_product}</h3>
+              <a href="#" className="rgh c-blue view-m"><span className="ico_arr_link">{text.see_all}</span></a>
             </div>
 
-            <div class="lst_comic1">
+            <div className="lst_comic1">
                 <SwiperContainer 
                   className={"mySwiper1"}
+                  slidesPerView={4}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2.3,
+                      spaceBetween: 8,
+                    },
+                    1000: {
+                      slidesPerView: 3,
+                      spaceBetween: 15,
+                    },
+                    1400: {
+                      slidesPerView: 4,
+                      spaceBetween: 30,
+                    },
+                  }}
                   list={getSalesProductList} />
             </div>
           </div>
 
-          <div class="b_cont flbox v3070">
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">{text.recently_question}</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+          <div className="b_cont flbox v3070">
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">{text.recently_question}</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getQuestionList()
@@ -417,12 +429,12 @@ export default function DashboardMain() {
               </div>
             </div>
 
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">{text.recently_review}</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">{text.recently_review}</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getReviewList()
@@ -434,41 +446,56 @@ export default function DashboardMain() {
         </section>
         
         {/* ============================================================================== */}
-        <section class="box_area">
-          <div class="hd_titbox">
-            <h2 class="h_tit1">{text.follower_count}</h2>
-            <p class="rgh">{data.today}</p>
+        <section className="box_area">
+          <div className="hd_titbox">
+            <h2 className="h_tit1">{text.follower_count}</h2>
+            <p className="rgh">{data.today}</p>
           </div>
 
-          <div class="b_tit">
-            <div class="t1">
-              <p><strong>{data.follower_count}</strong><span class="fz_s1 c-green">{data.follower_plus_count}</span></p>
+          <div className="b_tit">
+            <div className="t1">
+              <p><strong>{data.follower_count}</strong><span className="fz_s1 c-green">{data.follower_plus_count}</span></p>
             </div>
           </div>
 
-          <div class="b_cont">
-            <div class="hd_titbox">
-              <h3 class="h_tit1">{text.progress_in_series}</h3>
-              <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.series_management}</span></a>
+          <div className="b_cont">
+            <div className="hd_titbox">
+              <h3 className="h_tit1">{text.progress_in_series}</h3>
+              <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}</span></a>
             </div>
             
-            <div class="lst_comic1 long">
+            <div className="lst_comic1 long">
               {
                 <SwiperContainer 
-                className={"mySwiper2"}
-                list={getSeriesList} />
+                  className={"mySwiper2"}
+                  slidesPerView={6}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2.3,
+                      spaceBetween: 8,
+                    },
+                    1000: {
+                      slidesPerView: 4,
+                      spaceBetween: 15,
+                    },
+                    1400: {
+                      slidesPerView: 6,
+                      spaceBetween: 30,
+                    },
+                  }}
+                  list={getSeriesList} />
               }
             </div>
 
           </div>
 
-          <div class="b_cont flbox v3070">
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">最近の投稿</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">すべてみる</span></a>
+          <div className="b_cont flbox v3070">
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">最近の投稿</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">すべてみる</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getPostList()
@@ -477,12 +504,12 @@ export default function DashboardMain() {
               </div>
             </div>
 
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">最近のリアクション</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">すべてみる</span></a>
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">最近のリアクション</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">すべてみる</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getReactionList()
@@ -492,13 +519,13 @@ export default function DashboardMain() {
             </div>
           </div>
 
-          <div class="b_cont flbox v3070 pc_nofx">
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">{text.past_sales}</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+          <div className="b_cont flbox v3070 pc_nofx">
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">{text.past_sales}</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getSalesListInPast()
@@ -507,12 +534,12 @@ export default function DashboardMain() {
               </div>
             </div>
 
-            <div class="item">
-              <div class="hd_titbox">
-                <h3 class="h_tit1">{text.history_deposit}</h3>
-                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+            <div className="item">
+              <div className="hd_titbox">
+                <h3 className="h_tit1">{text.history_deposit}</h3>
+                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
-              <div class="lst_txt1">
+              <div className="lst_txt1">
                 <ul>
                   {
                     getHistoryOfDeposit()
@@ -523,8 +550,6 @@ export default function DashboardMain() {
           </div>
 
         </section>
-
-
       </div>
     </Container>
   );
