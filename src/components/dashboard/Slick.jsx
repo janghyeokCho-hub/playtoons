@@ -5,8 +5,6 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/pro-solid-svg-icons';
 
-import '@/css/test.css';          //사용자 css
-
 /**
 *
    Slick Arrow
@@ -18,19 +16,21 @@ import '@/css/test.css';          //사용자 css
 function Arrow(props) {
   const { className, style, onClick, customClass, icon } = props;
   return (
-    <div
+    <button
       className={`${className} ${customClass}`}
       style={{ ...style}}
       onClick={onClick} >
         <FontAwesomeIcon className={"slick_arrow_icon"} icon={icon} />
-    </div>
+    </button>
   );
 }
 
 /**
 * 
    <Slick 
-    list={tempTimeline} 
+    className={"swiper-wrapper"}
+    list={jsonDataList} 
+    contents={<SlickItemRecentlySalesProduct />}
     handleItemClick={handleSlideClick} />
 *
 * @version 1.0.0
@@ -42,13 +42,13 @@ export default function Slick(props) {
 
   const sliderSetting = {
     slide: 'div',         //slide tag 지정
-    className : "timeline_slick_container",
+    className : `${props?.className}`,
     infinite: true,       //loop 설정
     speed: 500,         
     slidesToShow: 5,      //화면에 보여질 slide 수
     slidesToScroll: 1,    //한번에 이동할 slide 수
-    nextArrow: <Arrow customClass={"slick_arrow_container slick_arrow_next"} icon={faChevronRight} />,
-    prevArrow: <Arrow customClass={"slick_arrow_container slick_arrow_prev"} icon={faChevronLeft} />,
+    nextArrow: <Arrow customClass={"swiper-button-next my1"} icon={faChevronRight} />,
+    prevArrow: <Arrow customClass={"swiper-button-prev my1"} icon={faChevronLeft} />,
     // variableWidth: true,     //slide수를 자동으로 결정
     respondTo : "window",     
     responsive: [ // 반응형 웹 구현 옵션
@@ -68,16 +68,14 @@ export default function Slick(props) {
 
   const getList = () => {
     return props?.list?.map((item, i) => {
-      return <div key={i}>
-              <div 
-                className="timelins_slick_box" 
-                onClick={() => {
-                  handleClick(item);
-                }} >
-
-                  {item.image}
-
-              </div>
+      return <div 
+              key={i}
+              onClick={() => {
+                handleClick(item);
+              }}>
+              {
+                props?.contents
+              }
             </div>;
     });
   };

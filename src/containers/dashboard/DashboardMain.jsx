@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Title3,Body6,Title2,Body2,Headline2Style,Body1,Body5,Body4,Border1pxTiara,Body8 } from "@/styledMixins";
-import styled from "styled-components";
+import "@/css/swiper.min.css";
+import { SwiperSlide } from 'swiper/react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faChevronRight, faStar } from "@fortawesome/pro-solid-svg-icons";
@@ -18,6 +18,10 @@ import tempImageSeries04 from '@IMAGES/temp_series_04.png';
 import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
 import { getPostTypeListFromServer } from "@/services/dashboardService";
+import Container from "@/components/Container";
+import Slick from "@/components/dashboard/Slick";
+import SlickItemRecentlySalesProduct from "@/components/dashboard/SlickItemRecentlySalesProduct";
+import SwiperContainer from "@/components/dashboard/Swiper";
 
 const text = {
   today_sales: "当日の売上",
@@ -155,27 +159,57 @@ const tempData = {
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
     },
-    // {
-    //   image: tempImageSeries01,
-    //   status: "new",
-    //   count : "1.2k",
-    //   title: "新人さんは事故123123123",
-    //   type : "ウェブトゥーン",
-    // },
-    // {
-    //   image: tempImageSeries02,
-    //   status: "new",
-    //   count : "1.2k",
-    //   title: "新人さんは事故123123123",
-    //   type : "ウェブトゥーン",
-    // },
-    // {
-    //   image: tempImageSeries03,
-    //   status: "new",
-    //   count : "1.2k",
-    //   title: "新人さんは事故123123123",
-    //   type : "ウェブトゥーン",
-    // },
+    {
+      image: tempImageSeries01,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+    },
+  ],
+  post_list : [
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 4
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 2
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 1
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 5
+    },
+  ],
+  reaction_list : [
+    {
+      title: "どうしても返却は無理なんでしょ",
+      date: "2022/06/11",
+      id : 4
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 2
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 1
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 5
+    },
   ],
   past_sales_list : [
     {
@@ -203,7 +237,7 @@ const tempData = {
     {
       date: "2022/04",
       money: "123,456,789円",
-      bank_name: "UFJ三菱銀行",
+      bank_name: "UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行",
       id: "b1",
     },
     {
@@ -238,161 +272,100 @@ export default function DashboardMain() {
     
   };
 
-  const handleItemClick = (event) => {
+  const handleItemClickSalesProduct = (event) => {
     console.log("event", event.target.getAttribute("data-id"));
   }
 
-  const getSalesProductList = (list) => {
-    if( list !== undefined ){
-
-      return list.map(( item, index ) => {
-        const marginRight = index === list.length-1 ? "" : "32px";
-
-        return  <SalesItemContainer key={index} marginRight={marginRight}>
-                  <ItemSalesImage src={item.image} />
-                  <ItemTitleText marginBottom={"8px"}>{item.title}</ItemTitleText>
-                  <ItemDateText>{item.date}</ItemDateText>
-                </SalesItemContainer>
-      });
-    }
+  const getSalesProductList = () => {
+    return data?.sales_product_list?.map((item, i) => {
+      return <SwiperSlide key={i} className={"cx"}>
+                <a href="#">
+                  <div class="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
+                  <div class="cx_txt">
+                    <p class="h1">{item.title}</p>
+                    <p class="t1">{item.date}</p>
+                  </div>
+                </a>
+            </SwiperSlide>
+    });
   };
 
-  const getQuestionList = (list) => {
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        return  <Container key={index}>
-                  <FlexContainer marginBottom={"30px"}>
-                    <ItemTitleText width={"340px"} marginRight={"48px"}>{item.title}</ItemTitleText>
-                    <ItemDateText>{item.date}</ItemDateText>
-                  </FlexContainer>
-                  <HorizontalItemLine marginBottom={"30px"} />
-                </Container>
-      });
-    }
+  const getQuestionList = () => {
+    return data?.question_list?.map((item, index) => {
+      return  <li key={index}>
+                <p class="t1"><a href="#">{item.title}</a></p>
+                <p class="t2">{item.date}</p>
+              </li>
+    });
   };
 
-  const getReviewList = (list) => {
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        return <Container key={index}>
-                <FlexContainer marginBottom={"30px"}>
-                  {getStar(item.review_count)}
-                  <ItemTitleText width={"340px"}>{item.title}</ItemTitleText>
-                  <ItemDateText marginLeft={"auto"}>{item.date}</ItemDateText>
-                </FlexContainer>
-                <HorizontalItemLine marginBottom={"30px"} />
-              </Container>
-      });
-    }
+  const getReviewList = () => {
+    return data?.review_list?.map((item, index) => {
+      return <li key={index}>
+              <div>
+                <div class="t_star"><span class={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
+                <p class="t1"><a href="#">{item.title}</a></p>
+              </div>
+              <p class="t2">{item.date}</p>
+            </li>
+    });
   };
 
-  const getStar = (starCount) => {
-    if( starCount !== undefined ){
-      const limit = 5;
-      let marginRight = "1px";
-      let color = "";
-      let result = [];
-
-      for(let i = 0; i < limit; i++){
-        if( i === limit-1 ){ marginRight = "48px"; }
-        color = i < starCount ? "var(--star-yellow)" : "var(--star-gray)";
-
-        result.push(
-          <FontAwesomeIcon 
-            icon={faStar}
-            key={i}
-            style={{ width: "17px", height: "16px", marginRight: `${marginRight}`, color: `${color}` }}
-            />
-        );
-      }
-
-      return result;
-    }
+  const getSeriesList = () => {
+    return data?.series_list?.map((item, i) => {
+      return  <SwiperSlide key={i} className={"cx"}>
+                  <a href="#">
+                    <div class="cx_thumb"><span><img src={item.image} alt="사진" /></span><p class="t_like"><span>{item.count}</span></p></div>
+                    <div class="cx_txt">
+                      <p class="t1 c-blue">{item.type}</p>
+                      <p class="h1">{item.title}</p>
+                    </div>
+                  </a>
+              </SwiperSlide>
+    });
   };
 
-  const getSeriesList = (list) => {
-    let marginRight = "32px";
-
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        if( index === list.length-1 ){ marginRight = ""; }
-
-        return  <Container width={"214px"} key={index} marginRight={marginRight}>
-                  <RelativeContainer marginBottom={"8px"}>
-                    <ItemSalesImage src={item.image} />
-
-                    <HeartContainer >
-                      <FontAwesomeIcon 
-                        icon={faHeart}
-                        style={{ width: "12px", marginRight: "6.75px", color: "white" }}
-                        />
-                        <HeartText>{item.count}</HeartText>
-                    </HeartContainer>                    
-                  </RelativeContainer>
-                  <ItemTypeText marginBottom={"4px"}>{item.type}</ItemTypeText>
-                  <ItemTitleText >{item.title}</ItemTitleText>
-                </Container>
-      });
-    }
+  const getPostList = () => {
+    return data?.post_list?.map((item, i) => {
+      return  <li key={item.id}>
+                <p class="t1"><a href="#">{item.title}</a></p>
+                <p class="t2">{item.date}</p>
+              </li>
+    });
   };
 
-  const getReactionList = (list) => {
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        return  <Container key={index}>
-                  <FlexContainer marginBottom={"30px"}>
-                    <ItemTitleText  marginRight={"48px"}>{item.title}</ItemTitleText>
-                    <ItemDateText>{item.date}</ItemDateText>
-                  </FlexContainer>
-                  <HorizontalItemLine marginBottom={"30px"} />
-                </Container>
-      });
-    }
+  const getReactionList = () => {
+    return data?.reaction_list?.map((item, index) => {
+      return  <li key={item.id}>
+                <p class="t1"><a href="#">{item.title}</a></p>
+                <p class="t2">{item.date}</p>
+              </li>
+    });
   };
 
-  const getSalesListInPast = (list) => {
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        return  <Container width={"100%"} key={index}>
-                  <FlexContainer marginBottom={"30px"}>
-                    <ItemDateText marginRight={"80px"}>{item.date}</ItemDateText>
-                    <ItemTitleText width={"auto"}  flex={"1"}>{item.money}</ItemTitleText>
-                    <ButtonOutline
-                      width={"12.4em"}
-                      height={"3.2em"}
-                      borderRadius={"4px"}
-                      text={text.detail}
-                      dataId={item.id}
-                      handleClick={handleItemClick}
-                      />
-                  </FlexContainer>
-                  <HorizontalItemLine marginBottom={"30px"} />
-                </Container>
-      });
-    }
+  const getSalesListInPast = () => {
+    return data?.past_sales_list.map((item, index) => {
+      return  <li key={index}>
+                <div>
+                  <p class="t2">{item.date}</p>
+                  <p class="t1_1">{item.money}</p>
+                </div>
+                <p class="t2"><a href="#" class="btn-pk s blue2"><span dataId={item.id}>{text.detail}</span></a></p>
+              </li>
+    });
   };
 
-  const getHistoryOfDeposit = (list) => {
-    if( list !== undefined ){
-      return list.map((item, index) => {
-        return  <Container key={index}>
-                  <FlexContainer marginBottom={"30px"}>
-                    <ItemDateText marginRight={"8em"}>{item.date}</ItemDateText>
-                    <ItemTitleText width={"124px"} marginRight={"127px"}>{item.money}</ItemTitleText>
-                    <ItemBankText>{item.bank_name}</ItemBankText>
-                    <ButtonOutline
-                      width={"12.4em"}
-                      height={"3.2em"}
-                      borderRadius={"4px"}
-                      text={text.detail}
-                      dataId={item.id}
-                      handleClick={handleItemClick}
-                      />
-                  </FlexContainer>
-                  <HorizontalItemLine marginBottom={"30px"} />
-                </Container>
-      });
-    }
+  const getHistoryOfDeposit = () => {
+    return data?.history_deposit_list?.map((item, index) => {
+      return  <li key={index}>
+                <div>
+                  <p class="t2">{item.date}</p>
+                  <p class="t1_1">{item.money}</p>
+                  <p class="t3">{item.bank_name}</p>
+                </div>
+                <p class="t2"><a href="#" class="btn-pk s blue2"><span dataId={item.id}>{text.detail}</span></a></p>
+              </li>
+    });
   };
 
   useEffect(() => {
@@ -400,147 +373,160 @@ export default function DashboardMain() {
   }, []);
 
   return (
-    <BrowserContainer
-      backgroundColor={"var(--desert-storm)"}
-      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD}
-      spaceWidth={"0"}
-      padding={"48px 48px"}
-      >
-      
-      <WhiteBoardContainer padding={"32px 32px 0px 32px"} marginBottom={"80px"}>
-        <FlexContainer alignItems={"initial"} marginBottom={"24px"}>
-          <TitleText>{text.today_sales}</TitleText>
-          <TodayText>{data.today}</TodayText>
-        </FlexContainer>
-        <FlexContainer marginBottom={"16px"}>
-          <SalesCountText>{data.sales_cases}</SalesCountText>
-          <YesterdayText>{data.before_yesterday}</YesterdayText>
-        </FlexContainer>
-        <FlexContainer marginBottom={"48px"}>
-          <PCText>{data.pc_count}</PCText>
-          <ButtonDefault
-            width={"147px"}
-            height={"44px"} 
-            borderRadius={"4px"}
-            text={text.detail}
-            handleClick={handleClickDetail}
-            marginLeft={"auto"}
-            />
-        </FlexContainer>
-        <HorizontalTitleLine marginBottom={"48px"} />
+    <Container>
+      <div class="inr-c">
+        <section class="box_area pr-mb1">
+          <div class="hd_titbox">
+            <h2 class="h_tit1">{text.today_sales}</h2>
+            <p class="rgh hide-m">{tempData.today}</p>
+          </div>
 
-        <TitleText marginBottom={"30px"} >{text.recently_sales_product}</TitleText>
-        <FlexContainer id={"sales_product_list_container"} marginBottom={"48px"} >
-          {getSalesProductList(data.sales_product_list)}
-        </FlexContainer>
-        <HorizontalTitleLine marginBottom={"46px"} />
+          <div class="b_tit">
+            <p class="h1"><strong>{tempData.sales_cases}</strong><span class="fz_s1 c-green">{tempData.before_yesterday}</span></p>
+            <div class="t1">
+              <p><strong>{tempData.pc_count}</strong></p>
+              <a href="#" class="btn-pk n blue"><span>{text.detail}</span></a>
+            </div>
+          </div>
 
-        <FlexContainer marginBottom={"18px"}>
-          {/* question list */}
-          <Container width={"475px"} marginRight={"91px"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.recently_question}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getQuestionList(data.question_list)}
-          </Container>
+          <div class="b_cont">
+            <div class="hd_titbox">
+              <h3 class="h_tit1">{text.recently_sales_product}</h3>
+              <a href="#" class="rgh c-blue view-m"><span class="ico_arr_link">{text.see_all}</span></a>
+            </div>
 
-          {/* review list */}
-          <Container flex={"1"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.recently_review}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getReviewList(data.review_list)}
-          </Container>
-        </FlexContainer>
-      </WhiteBoardContainer>
+            <div class="lst_comic1">
+                <SwiperContainer 
+                  className={"mySwiper1"}
+                  list={getSalesProductList} />
+            </div>
+          </div>
 
-      {/* follower */}
-      <WhiteBoardContainer padding={"32px 32px 0px 32px"} >
-        <FlexContainer alignItems={"initial"} marginBottom={"24px"}>
-          <TitleText>{text.follower_count}</TitleText>
-          <TodayText>{data.today}</TodayText>
-        </FlexContainer>
-        <FlexContainer marginBottom={"48px"}>
-          <PCText marginRight={"8px"}>{data.follower_count}</PCText>
-          <YesterdayText>{data.follower_plus_count}</YesterdayText>
-        </FlexContainer>
-        <HorizontalTitleLine marginBottom={"48px"} />
+          <div class="b_cont flbox v3070">
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">{text.recently_question}</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getQuestionList()
+                  }
+                </ul>
+              </div>
+            </div>
 
-        {/* series list */}
-        <TitleText marginBottom={"30px"} >{text.progress_in_series}</TitleText>
-        <FlexContainer marginBottom={"48px"} >
-          {getSeriesList(data.series_list)}
-        </FlexContainer>
-        <HorizontalTitleLine marginBottom={"46px"} />
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">{text.recently_review}</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getReviewList()
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* ============================================================================== */}
+        <section class="box_area">
+          <div class="hd_titbox">
+            <h2 class="h_tit1">{text.follower_count}</h2>
+            <p class="rgh">{data.today}</p>
+          </div>
 
-        <FlexContainer marginBottom={"18px"}>
-          {/* post list */}
-          <Container width={"475px"} marginRight={"91px"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.recently_post}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getQuestionList(data.question_list)}
-          </Container>
+          <div class="b_tit">
+            <div class="t1">
+              <p><strong>{data.follower_count}</strong><span class="fz_s1 c-green">{data.follower_plus_count}</span></p>
+            </div>
+          </div>
 
-          {/* reaction list */}
-          <Container flex={"1"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.recently_reaction}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getReactionList(data.review_list)}
-          </Container>
-        </FlexContainer>
-        <HorizontalTitleLine marginBottom={"48px"} />
+          <div class="b_cont">
+            <div class="hd_titbox">
+              <h3 class="h_tit1">{text.progress_in_series}</h3>
+              <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.series_management}</span></a>
+            </div>
+            
+            <div class="lst_comic1 long">
+              {
+                <SwiperContainer 
+                className={"mySwiper2"}
+                list={getSeriesList} />
+              }
+            </div>
 
-        <FlexContainer marginBottom={"18px"}>
-          {/* sales list In past */}
-          <Container width={"475px"} marginRight={"91px"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.past_sales}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getSalesListInPast(data.past_sales_list)}
-          </Container>
+          </div>
 
-          {/* history of deposit */}
-          <Container flex={"1"}>
-            <FlexContainer marginBottom={"48px"}>
-              <TitleText marginRight={"auto"} >{text.history_deposit}</TitleText>
-              <SeeAllText>{text.see_all}</SeeAllText>
-              <FontAwesomeIcon 
-                icon={faChevronRight}
-                style={{ width: "9px", height: "16px", color: "var(--violet-blue)" }}
-                />
-            </FlexContainer>
-            {getHistoryOfDeposit(data.history_deposit_list)}
-          </Container>
-        </FlexContainer>
-      </WhiteBoardContainer>
-    </BrowserContainer>
+          <div class="b_cont flbox v3070">
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">最近の投稿</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">すべてみる</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getPostList()
+                  }
+                </ul>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">最近のリアクション</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">すべてみる</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getReactionList()
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="b_cont flbox v3070 pc_nofx">
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">{text.past_sales}</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getSalesListInPast()
+                  }
+                </ul>
+              </div>
+            </div>
+
+            <div class="item">
+              <div class="hd_titbox">
+                <h3 class="h_tit1">{text.history_deposit}</h3>
+                <a href="#" class="rgh c-blue"><span class="ico_arr_link">{text.see_all}</span></a>
+              </div>
+              <div class="lst_txt1">
+                <ul>
+                  {
+                    getHistoryOfDeposit()
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+
+      </div>
+    </Container>
   );
 }
 //3A434D --bright-gray
@@ -549,173 +535,3 @@ export default function DashboardMain() {
 //13161A  --vulcan
 //394BC2  --violet-blue
 
-
-
-const RelativeContainer = styled.div`
-  width: 100%;
-  margin-bottom: ${(props) => props.marginBottom};
-  position: relative;
-`;
-
-const HeartText = styled.div`
-  ${Body1}
-  font-size: 1.4em;
-  font-weight: 700;
-  color: var(--white);
-`;
-
-const ItemTypeText = styled.div`
-  ${Body8}
-  margin-bottom: ${(props) => props.marginBottom};
-  font-weight: 700;
-  font-size: 1.2em;
-  color: var(--violet-blue);
-`;
-
-const Container = styled.div`
-  width: ${(props) => props.width};
-  margin-right: ${(props) => props.marginRight};
-  flex: ${(props) => props.flex};
-`;
-
-const HorizontalItemLine = styled.div`
-  width: 100%;
-  height: 1px;
-  margin-bottom: ${(props) => props.marginBottom};
-  background-color: var(--mercury);
-`;
-
-const SalesItemContainer = styled.div`
-  width: 343px;
-  margin-right: ${(props) => props.marginRight};
-`;
-
-const FlexContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: ${(props) => props.alignItems ? props.alignItems : "center"};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
-
-const HeartContainer = styled(FlexContainer)`
-  position: absolute;
-  left: 16.62px;
-  bottom: 20.77px;
-  display: flex;
-  align-items: center;
-`;
-
-const SeeAllText = styled.div`
-  ${Body4}
-  margin-right: 8px;
-  font-size: 1.4em;
-  font-weight: 700;
-  color: var(--violet-blue);
-  white-space: nowrap;
-`;
-
-const ItemDateText = styled.div`
-  ${Body5}
-  margin-left: ${(props) => props.marginLeft};
-  margin-right: ${(props) => props.marginRight};
-  font-size: 1.4em;
-  font-weight: 500;
-  color: var(--nevada);
-  white-space: nowrap;
-`;
-
-const ItemBankText = styled.div`
-  ${Body2}
-  width: 100px;
-  height: 20px;
-  margin-right: 270px;
-  font-size: 1.6em;
-  font-weight: 500;
-  color: var(--nevada);
-`;
-
-const ItemTitleText = styled.div`
-  ${Body1}
-  width: ${(props) => props.width ? props.width : "100%"};
-  margin-right: ${(props) => props.marginRight ? props.marginRight : ""};
-  margin-bottom: ${(props) => props.marginBottom};
-  flex: ${(props) => props.flex};
-  font-size: 1.6em;
-  font-weight: 700;
-  color: var(--vulcan);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-`;
-
-const ItemSalesImage = styled.img`
-  width: 100%;
-  margin-bottom: 2px;
-`;
-
-const HorizontalTitleLine = styled.div`
-  width: 100%;
-  height: 3px;
-  margin-bottom: ${(props) => props.marginBottom};
-  background-color: var(--mercury);
-`;
-
-const PCText = styled.div`
-  ${Headline2Style}
-  margin-right: ${(props) => props.marginRight};
-  font-size: 6.4em;
-  font-weight: 700;
-  color: var(--bright-gray);
-  white-space: nowrap;
-`;
-
-const YesterdayText = styled.div`
-  ${Body2}
-  font-size: 1.6em;
-  font-weight: 500;
-  color: var(--apple);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-`;
-
-const SalesCountText = styled.div`
-  ${Title2}
-  margin-right: 8px;
-  font-size: 2.8em;
-  font-weight: 700;
-  color: var(--bright-gray);
-  white-space: nowrap;
-`;
-
-const TodayText = styled.div`
-  ${Body6}
-  font-size: 1.4em;
-  font-weight: 400;
-  color: var(--nevada);
-  white-space: nowrap;
-  margin-left: auto;
-`;
-
-const TitleText = styled.div`
-  ${Title3}
-  margin-right: ${(props) => props.marginRight};
-  margin-bottom: ${(props) => props.marginBottom};
-  font-size: 2.4em;
-  font-weight: 500;
-  color: var(--nevada);
-  white-space: nowrap;
-`;
-
-const WhiteBoardContainer = styled.div`
-  ${Border1pxTiara}
-  width: 100%;
-  max-width: 1,667px;
-  padding: ${(props) => props.padding};
-  margin-bottom: ${(props) => props.marginBottom};
-  background-color: var(--white);
-  border-radius: 8px;
-  @media only screen and (max-width: 1200px) {
-    
-  }
-`;

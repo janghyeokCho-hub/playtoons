@@ -1,12 +1,14 @@
 @charset "utf-8";
+/* @import url('all.css'); */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&family=Noto+Sans+KR:wght@300;700&display=swap');
+
 /*
 @font-face {
   font-family: 'Noto Sans JP';
   font-style: normal;
   font-weight: 100;
   src: url('font/noto-sans-jp-v42-latin-100.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-100.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-100.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-100.woff') format('woff'),
@@ -19,7 +21,7 @@
   font-style: normal;
   font-weight: 300;
   src: url('font/noto-sans-jp-v42-latin-300.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-300.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-300.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-300.woff') format('woff'),
@@ -33,7 +35,7 @@
   font-weight: 400;
   font-weight: normal;
   src: url('font/noto-sans-jp-v42-latin-regular.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-regular.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-regular.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-regular.woff') format('woff'),
@@ -46,7 +48,7 @@
   font-style: normal;
   font-weight: 500;
   src: url('font/noto-sans-jp-v42-latin-500.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-500.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-500.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-500.woff') format('woff'),
@@ -59,7 +61,7 @@
   font-style: normal;
   font-weight: 700;
   src: url('font/noto-sans-jp-v42-latin-700.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-700.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-700.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-700.woff') format('woff'),
@@ -72,7 +74,7 @@
   font-style: normal;
   font-weight: 900;
   src: url('font/noto-sans-jp-v42-latin-900.eot'); 
-  src: local(''),
+  src: local('※'),
        url('font/noto-sans-jp-v42-latin-900.eot?#iefix') format('embedded-opentype'), 
        url('font/noto-sans-jp-v42-latin-900.woff2') format('woff2'), 
        url('font/noto-sans-jp-v42-latin-900.woff') format('woff'),

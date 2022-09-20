@@ -10,8 +10,11 @@ import iconBar from "@ICONS/icon_menu_without_space.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+import { faBars } from "@fortawesome/pro-solid-svg-icons";
+import tempProfile from "@IMAGES/img_profile.png";
 
 import Button from "@COMPONENTS/Button";
+import { getToken } from "@/common/common";
 
 const LoginMenu = ({ isMobile }) => {
   return (
@@ -62,7 +65,8 @@ const NonLoginMenu = ({ isMobile }) => {
 
 const Header = ({ handleLeftMenu }) => {
   // login 구현 후 redux store에서 값 받아와야함
-  const isLogin = false;
+  const token = getToken();
+  const isLogin = token !== undefined;
 
   const [isMobile, setIsMobile] = useState(false);
   const size = useWindowSize();
@@ -75,15 +79,37 @@ const Header = ({ handleLeftMenu }) => {
   }, [size]);
 
   return (
-    <HeaderDiv>
-      <LeftMenu>
-        <IcoBars onClick={handleLeftMenu}></IcoBars>
-        <ImgLogoGnb src={logoGnb} />
-      </LeftMenu>
-      <RightMenu>
-        {(isLogin && <LoginMenu />) || <NonLoginMenu isMobile={isMobile} />}
-      </RightMenu>
-    </HeaderDiv>
+    <header id="header" className="header">
+      <div className="inr-c">
+        {
+          isLogin 
+            && <button type="button" className="btn_gnb" title="메뉴"><span><FontAwesomeIcon icon={faBars} /></span></button>
+        }
+        <h1 className="logo"><a href="#"><span className="ico_logo">PlayToons</span></a></h1>
+
+        <div className="rgh">
+          <div className="box_hd_sch">
+            <input type="text" className="inp_txt" placeholder="検索キーワードを入力" />
+            <button type="button" className="btns"><span><FontAwesomeIcon icon={faMagnifyingGlass} /></span></button>
+          </div>
+          {/* mobile button */}
+          <button type="button" className="mo_btns view-m"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+          
+          {
+            isLogin  
+              ? (
+                <>
+                  <a href="#" className="btn_tugo btn-pk n blue bdrs"><span>投稿</span></a>
+                  <a href="#" className="btn_profile"><span style={{backgroundImage: `url(${tempProfile})`}}></span></a>
+                </>
+              )
+              : (
+                <a href="#" className="btn_tugo btn-pk n blue bdrs">ログイン</a>
+              )
+          }
+        </div>
+      </div>
+    </header>
   );
 };
 

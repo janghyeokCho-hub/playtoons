@@ -8,7 +8,7 @@ import {
 } from "@/styledMixins";
 
 import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
-import FormDefault from "@COMPONENTS/FormDefault";
+import FormDefault from "@COMPONENTS/dashboard/TextInput";
 
 import Dropdown from "@COMPONENTS/dashboard/Dropdown";
 import TagGroup from "@COMPONENTS/dashboard/TagGroup";
