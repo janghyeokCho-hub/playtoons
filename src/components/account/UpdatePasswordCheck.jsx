@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginPasswordCheck } from "@API/loginService";
@@ -9,24 +9,35 @@ import { loginPasswordCheck } from "@API/loginService";
 const UpdatePasswordCheck = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState(null);
+  const passwordRef = useRef(null);
+
+  const [isPasswordErrorShow, setIsPasswordErrorShow] = useState(false);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState(null);
+  const [isCheckErrorShow, setIsCheckErrorShow] = useState(false);
+  const [checkErrorMsg, setCheckErrorMsg] = useState(null);
 
   const handleUpdatePasswordCheck = useCallback(async () => {
     if (!password) {
-      alert("패스워드를 입력하세요.");
+      passwordRef.current.focus();
+      setIsPasswordErrorShow(true);
+      setPasswordErrorMsg("패스워드를 입력하세요.");
       return;
+    } else {
+      setIsPasswordErrorShow(false);
+      setPasswordErrorMsg(null);
     }
+
     const response = await loginPasswordCheck({ password });
+    console.log("response : ", response);
     const { status } = response;
     if (status === 200) {
       navigate("../update-password-confirm");
-    } else if (status === 400) {
-      alert("파라미터 검증 실패");
-    } else if (status === 403) {
-      alert("인증 실패 / 권한 없음");
-    } else if (status === 503) {
-      alert("코드 참조");
+    } else {
+      setIsCheckErrorShow(true);
+      setCheckErrorMsg(`코드 참조 : ${status}`);
     }
   }, [password, navigate]);
+
   return (
     <>
       <h1 className="logo">パスワードの変更</h1>
@@ -34,18 +45,33 @@ const UpdatePasswordCheck = () => {
         <p>既存のパスワードを入力してください。</p>
       </div>
 
+      {isCheckErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{checkErrorMsg}</p>
+        </div>
+      )}
+
       <div className="area_member">
         <div className="inbox ty2">
-          <div className="col">
+          <div className={`${isPasswordErrorShow ? "error" : ""} col`}>
             <label htmlFor="id" className="h">
               既存のパスワード
             </label>
             <input
-              type="text"
+              type="password"
               id="id"
               className="inp_txt w100p"
               onChange={(e) => setPassword(e.target.value)}
+              ref={passwordRef}
             />
+            {isPasswordErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{passwordErrorMsg}</span>
+              </p>
+            )}
           </div>
         </div>
         <div className="btns">

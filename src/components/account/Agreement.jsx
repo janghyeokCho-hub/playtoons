@@ -52,28 +52,25 @@ const Agreement = () => {
   const handleAgree = useCallback(async () => {
     if (!agree) {
       setIsErrorShow(true);
-    } else {
-      // patch account
-      const params = {
-        // email,
-        // password,
-        eulaVersion: eulaVersion,
-        // privacyVersion: 0, // 기존 버전으로 바꿔야함
-      };
-      const response = await updateAccount(params);
-
-      const { status } = response;
-      if (status === 200) {
-        navigate("/register-completed");
-      } else if (status === 400) {
-        alert("코드 참조");
-      } else if (status === 409) {
-        alert("이미 사용중인 메일 주소");
-      } else if (status === 503) {
-        alert("코드 참조");
-      }
+      return;
     }
-  }, [agree, email, password, eulaVersion, navigate]);
+    // patch account
+    const params = {
+      eulaVersion: eulaVersion,
+    };
+    const response = await updateAccount(params);
+
+    const { status } = response;
+    if (status === 200) {
+      navigate("/register-completed");
+    } else if (status === 400) {
+      alert("코드 참조");
+    } else if (status === 409) {
+      alert("이미 사용중인 메일 주소");
+    } else if (status === 503) {
+      alert("코드 참조");
+    }
+  }, [agree, eulaVersion, navigate]);
 
   return (
     <>

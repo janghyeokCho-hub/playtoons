@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -24,11 +24,19 @@ const Login = () => {
   const navigate = useNavigate();
 
   const isLogined = useSelector(({ login }) => login.isLogined);
-  const errStatus = useSelector(({ login }) => login.errStatus);
-  const errMessage = useSelector(({ login }) => login.errMessage);
 
   const [email, setEmail] = useState("");
+  const emailRef = useRef(null);
   const [password, setPassword] = useState("");
+  const passwordRef = useRef(null);
+
+  const [isEmailErrorShow, setIsEmailErrorShow] = useState(false);
+  const [isPasswordErrorShow, setIsPasswordErrorShow] = useState(false);
+  const [isLoginErrorShow, setIsLoginErrorShow] = useState(false);
+
+  const [emailErrorMsg, setEmailErrorMsg] = useState(null);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState(null);
+  const [loginErrorMsg, setLoginErrorMsg] = useState(null);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -61,12 +69,31 @@ const Login = () => {
    * 일반 로그인 시도
    */
   const handleLogin = useCallback(() => {
+    if (!email) {
+      emailRef.current.focus();
+      setIsEmailErrorShow(true);
+      setEmailErrorMsg("emile 없음");
+      return;
+    } else {
+      setIsEmailErrorShow(false);
+      setEmailErrorMsg(null);
+    }
+    if (!password) {
+      passwordRef.current.focus();
+      setIsPasswordErrorShow(true);
+      setPasswordErrorMsg("password 없음");
+      return;
+    } else {
+      setIsPasswordErrorShow(false);
+      setPasswordErrorMsg(null);
+    }
+
     const data = {
       email,
       password,
     };
     onLogin(data);
-  }, [email, password, onLogin]);
+  }, [email, password, onLogin, emailRef, passwordRef]);
 
   useEffect(() => {
     if (isLogined) {
@@ -81,17 +108,17 @@ const Login = () => {
         <span className="icon">PlayToons</span>
       </h1>
 
-      {errStatus && (
+      {isLoginErrorShow && (
         <div className="box_error">
           <p className="t1">
             <span className="ico_error">Error Message</span>
           </p>
-          <p className="t2">{errMessage}</p>
+          <p className="t2">{loginErrorMsg}</p>
         </div>
       )}
 
       <div className="area_member">
-        <div className="col">
+        <div className={`${isEmailErrorShow ? "error" : ""} col`}>
           <label htmlFor="id" className="h">
             メールアドレス
           </label>
@@ -101,9 +128,15 @@ const Login = () => {
             className="inp_txt w100p"
             onChange={handleEmailChange}
             value={email}
+            ref={emailRef}
           />
+          {isEmailErrorShow && (
+            <p className="t_error">
+              <span className="ico_error">{emailErrorMsg}</span>
+            </p>
+          )}
         </div>
-        <div className={`${errStatus ? "error" : ""} col`}>
+        <div className={`${isPasswordErrorShow ? "error" : ""} col`}>
           {/* <!-- 에러일때 error 추가 --> */}
           <label htmlFor="pwd" className="h">
             パスワード
@@ -114,6 +147,7 @@ const Login = () => {
             className="inp_txt w100p"
             onChange={handlePasswordChange}
             value={password}
+            ref={passwordRef}
           />
           <button
             type="button"
@@ -128,9 +162,9 @@ const Login = () => {
             </span>
           </button>
 
-          {errStatus && (
+          {isPasswordErrorShow && (
             <p className="t_error">
-              <span className="ico_error">{errMessage}</span>
+              <span className="ico_error">{passwordErrorMsg}</span>
             </p>
           )}
           {/* <!-- 에러일때 error 추가 --> */}

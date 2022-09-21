@@ -17,9 +17,9 @@ export const loginRequest = (params) => {
  * @param {string} password
  * @returns
  */
-export const loginPasswordCheck = (params) => {
+export const loginPasswordCheck = async (params) => {
   try {
-    return apiAuthServer("post", "/auth/login/check", params);
+    return await apiAuthServer("post", "/auth/login/check", params);
   } catch (e) {
     return { status: e.response.status };
   }
