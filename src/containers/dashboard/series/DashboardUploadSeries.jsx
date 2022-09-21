@@ -19,7 +19,6 @@ import TextInput from "@/components/dashboard/TextInput";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
-import Slick from "@/components/dashboard/Slick";
 import Editor from "@/components/dashboard/Editor";
 import TextInputSearch from "@/components/dashboard/TextInputSearch";
 

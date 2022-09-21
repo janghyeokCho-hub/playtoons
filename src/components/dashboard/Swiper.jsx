@@ -76,7 +76,7 @@ export default function SwiperContainer(props) {
       {
         props?.list?.()
       }
-      {/* add class slide_st */}
+      {/* //TODO 추가 스타일링 */}
       <button ref={prevRef} type="button" className="swiper-button-prev my1"><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
       <button ref={nextRef} type="button" className="swiper-button-next my1"><FontAwesomeIcon icon={faCircleChevronRight} /></button>
     </Swiper>

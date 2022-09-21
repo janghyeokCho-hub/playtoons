@@ -19,8 +19,6 @@ import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
 import { getPostTypeListFromServer } from "@/services/dashboardService";
 import Container from "@/components/Container";
-import Slick from "@/components/dashboard/Slick";
-import SlickItemRecentlySalesProduct from "@/components/dashboard/SlickItemRecentlySalesProduct";
 import SwiperContainer from "@/components/dashboard/Swiper";
 
 const text = {
