@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./css/common.css";
-import "./css/default.css";
-import "./css/font.css";
-import "./css/mobile.css";
-// import "./css/swiper.css";
 import "./css/swiper.min.css";
+// import "./css/swiper.css";
+import "./css/font.css";
+import "./css/default.css";
+import "./css/common.css";
+import "./css/mobile.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 

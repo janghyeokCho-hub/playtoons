@@ -1852,7 +1852,7 @@ body {
 }
 .swiper-button-prev:after,
 .swiper-button-next:after {
-  content: none;
+  content: '';
 }
 .swiper-button-prev,
 .swiper-button-next {

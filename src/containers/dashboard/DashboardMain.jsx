@@ -4,11 +4,10 @@ import { SwiperSlide } from 'swiper/react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faChevronRight, faStar } from "@fortawesome/pro-solid-svg-icons";
+import Container from "@/components/Container";
+import SwiperContainer from "@/components/dashboard/Swiper";
 
-import {BROWSER_CONTENTS_AREA_TYPE} from '@COMMON/constant';
-import BrowserContainer from "@COMPONENTS/dashboard/BrowserContainer";
-import ButtonOutline from "@COMPONENTS/dashboard/ButtonOutline";
-import ButtonDefault from "@COMPONENTS/dashboard/ButtonDefault";
+import { getPostTypeListFromServer } from "@/services/dashboardService";
 
 import tempImageSales from '@IMAGES/temp_seller_image.png';
 import tempImageSeries01 from '@IMAGES/temp_series_01.png';
@@ -17,9 +16,7 @@ import tempImageSeries03 from '@IMAGES/temp_series_03.png';
 import tempImageSeries04 from '@IMAGES/temp_series_04.png';
 import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
-import { getPostTypeListFromServer } from "@/services/dashboardService";
-import Container from "@/components/Container";
-import SwiperContainer from "@/components/dashboard/Swiper";
+
 
 const text = {
   today_sales: "当日の売上",
@@ -47,21 +44,25 @@ const tempData = {
   pc_count: "934,010PC",
   sales_product_list : [
     {
+      id: "1",
       image : tempImageSales,
       title: "大学のリンゴ一個の重さで10メートルの1111111111111111111",
       date: "2022/06/11"
     },
     {
+      id: "2",
       image : tempImageSales,
       title: "大学のリンゴ一個の重さで10メートルの22222222222222",
       date: "2022/06/11"
     },
     {
+      id: "3",
       image : tempImageSales,
       title: "大学のリンゴ一個の重さで10メートルの33333333333333",
       date: "2022/06/11"
     },
     {
+      id: "4",
       image : tempImageSales,
       title: "大学のリンゴ一個の重さで10メートルの44444444444444",
       date: "2022/06/11"
@@ -121,6 +122,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "1"
     },
     {
       image: tempImageSeries02,
@@ -128,6 +130,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "2"
     },
     {
       image: tempImageSeries03,
@@ -135,6 +138,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "3"
     },
     {
       image: tempImageSeries04,
@@ -142,6 +146,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "4"
     },
     {
       image: tempImageSeries05,
@@ -149,6 +154,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "5"
     },
     {
       image: tempImageSeries06,
@@ -156,6 +162,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "6"
     },
     {
       image: tempImageSeries01,
@@ -163,6 +170,7 @@ const tempData = {
       count : "1.2k",
       title: "新人さんは事故123123123",
       type : "ウェブトゥーン",
+      id: "7"
     },
   ],
   post_list : [
@@ -262,19 +270,11 @@ const tempData = {
 
 export default function DashboardMain() {
   const [data, setData] = useState({});
-  
-  const handleClickDetail = (e) => {
-    
-  };
-
-  const handleItemClickSalesProduct = (event) => {
-    console.log("event", event.target.getAttribute("data-id"));
-  }
 
   const getSalesProductList = () => {
     return data?.sales_product_list?.map((item, i) => {
       return <SwiperSlide key={i} className={"cx"}>
-                <a href="#">
+                <a href={`/dashboard/product/detail/${item.id}`}>
                   <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
                   <div className="cx_txt">
                     <p className="h1">{item.title}</p>
@@ -288,7 +288,7 @@ export default function DashboardMain() {
   const getQuestionList = () => {
     return data?.question_list?.map((item, index) => {
       return  <li key={index}>
-                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t1"><a href={`/dashboard/product/inquiry/${item.id}`}>{item.title}</a></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -299,7 +299,7 @@ export default function DashboardMain() {
       return <li key={index}>
               <div>
                 <div className="t_star"><span className={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
-                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t1"><a href={`/dashboard/product/review/${item.id}`}>{item.title}</a></p>
               </div>
               <p className="t2">{item.date}</p>
             </li>
@@ -309,7 +309,7 @@ export default function DashboardMain() {
   const getSeriesList = () => {
     return data?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
-                  <a href="#">
+                  <a href={`/dashboard/series/detail/${item.id}`}>
                     <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><span>{item.count}</span></p></div>
                     <div className="cx_txt">
                       <p className="t1 c-blue">{item.type}</p>
@@ -323,7 +323,7 @@ export default function DashboardMain() {
   const getPostList = () => {
     return data?.post_list?.map((item, i) => {
       return  <li key={item.id}>
-                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t1"><a href={`/dashboard/post/detail/${item.id}`}>{item.title}</a></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -332,7 +332,7 @@ export default function DashboardMain() {
   const getReactionList = () => {
     return data?.reaction_list?.map((item, index) => {
       return  <li key={item.id}>
-                <p className="t1"><a href="#">{item.title}</a></p>
+                <p className="t1"><a href={`/dashboard/reaction/detail/${item.id}`}>{item.title}</a></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -345,7 +345,7 @@ export default function DashboardMain() {
                   <p className="t2">{item.date}</p>
                   <p className="t1_1">{item.money}</p>
                 </div>
-                <p className="t2"><a href="#" className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><a href={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
               </li>
     });
   };
@@ -358,7 +358,7 @@ export default function DashboardMain() {
                   <p className="t1_1">{item.money}</p>
                   <p className="t3">{item.bank_name}</p>
                 </div>
-                <p className="t2"><a href="#" className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><a href={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
               </li>
     });
   };
@@ -380,14 +380,14 @@ export default function DashboardMain() {
             <p className="h1"><strong>{tempData.sales_cases}</strong><span className="fz_s1 c-green">{tempData.before_yesterday}</span></p>
             <div className="t1">
               <p><strong>{tempData.pc_count}</strong></p>
-              <a href="#" className="btn-pk n blue"><span>{text.detail}</span></a>
+              <a href="/dashboard/sales/list" className="btn-pk n blue"><span>{text.detail}</span></a>
             </div>
           </div>
 
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.recently_sales_product}</h3>
-              <a href="#" className="rgh c-blue view-m"><span className="ico_arr_link">{text.see_all}</span></a>
+              <a href="/dashboard/product/list" className="rgh c-blue view-m" ><span className="ico_arr_link">{text.see_all}</span></a>
             </div>
 
             <div className="lst_comic1">
@@ -416,7 +416,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_question}</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/inquiry" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -430,7 +430,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_review}</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -459,7 +459,7 @@ export default function DashboardMain() {
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.progress_in_series}</h3>
-              <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}</span></a>
+              <a href="/dashboard/series/list" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}</span></a>
             </div>
             
             <div className="lst_comic1 long">
@@ -490,8 +490,8 @@ export default function DashboardMain() {
           <div className="b_cont flbox v3070">
             <div className="item">
               <div className="hd_titbox">
-                <h3 className="h_tit1">最近の投稿</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">すべてみる</span></a>
+                <h3 className="h_tit1">{text.recently_post}</h3>
+                <a href="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -504,8 +504,8 @@ export default function DashboardMain() {
 
             <div className="item">
               <div className="hd_titbox">
-                <h3 className="h_tit1">最近のリアクション</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">すべてみる</span></a>
+                <h3 className="h_tit1">{text.recently_reaction}</h3>
+                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -521,7 +521,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.past_sales}</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -535,7 +535,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.history_deposit}</h3>
-                <a href="#" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
               </div>
               <div className="lst_txt1">
                 <ul>

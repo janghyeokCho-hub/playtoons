@@ -53,32 +53,35 @@ export default function SwiperContainer(props) {
   const nextRef = useRef(null);
 
   return (
-    <Swiper
-      className={`swiper-container ${props?.className}`}
-      slidesPerView={props?.slidesPerView}
-      spaceBetween={10}
-      observer={true}
-      observeParents={true}
-      navigation={{
-        nextEl: nextRef.current,
-        prevEl: prevRef.current,
-      }}
-      breakpoints={props?.breakpoints}
-      onSlideChange={() => console.log('slide change')}
-      onInit={(swiper) => {
-        
-      }}
-      onSwiper={(swiper) => {
-        nextRef.current.classList.add("slide_st");
-        prevRef.current.classList.add("slide_st");
-      }}
-    >
-      {
-        props?.list?.()
-      }
-      {/* //TODO 추가 스타일링 */}
+    <>
+      <Swiper
+        className={`swiper-container ${props?.className}`}
+        slidesPerView={props?.slidesPerView}
+        spaceBetween={10}
+        observer={true}
+        observeParents={true}
+        navigation={{
+          nextEl: nextRef.current,
+          prevEl: prevRef.current,
+        }}
+        breakpoints={props?.breakpoints}
+        onSlideChange={() => console.log('slide change')}
+        onInit={(swiper) => {
+          
+        }}
+        onSwiper={(swiper) => {
+          nextRef?.current?.classList?.add("slide_st");
+          prevRef?.current?.classList?.add("slide_st");
+
+        }}
+      >
+        {
+          props?.list?.()
+        }
+      </Swiper>
+
       <button ref={prevRef} type="button" className="swiper-button-prev my1"><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
       <button ref={nextRef} type="button" className="swiper-button-next my1"><FontAwesomeIcon icon={faCircleChevronRight} /></button>
-    </Swiper>
+    </>
   )
 }
