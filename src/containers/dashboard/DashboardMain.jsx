@@ -4,7 +4,7 @@ import { SwiperSlide } from 'swiper/react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faChevronRight, faStar } from "@fortawesome/pro-solid-svg-icons";
-import Container from "@/components/Container";
+import Container from "@/components/dashboard/Container";
 import SwiperContainer from "@/components/dashboard/Swiper";
 
 import { getPostTypeListFromServer } from "@/services/dashboardService";
@@ -368,7 +368,8 @@ export default function DashboardMain() {
   }, []);
 
   return (
-    <Container>
+    <Container
+      type={"dashboard"}>
       <div className="inr-c">
         <section className="box_area pr-mb1">
           <div className="hd_titbox">

@@ -7,8 +7,8 @@ import { apiServer } from "./api";
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getSeriesStoryList = () => {
-  return apiServer("get", "/post/series");
+export const getSeriesStoryList = (params) => {
+  return apiServer("get", "/post/series", params);
 };
 
 /**
