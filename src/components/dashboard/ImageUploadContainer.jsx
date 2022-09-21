@@ -1,6 +1,4 @@
 import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
-import styled from "styled-components";
-import {  Body3, Border1pxTiara } from "@/styledMixins";
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/pro-solid-svg-icons";
@@ -10,14 +8,13 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 /**
  * 
  * 이미지 파일 drag n drop, preivew 컴포넌트 
-  <ImageUploadBox
+  <ImageUploadContainer
     ref={refCoverImage}
-    width={"699px"}
-    height={"300px"}
-    border={"1px dashed var(--tiara)"}
-    name={"coverImage"}                     //parameter name
-    textDragNDrop={text.label_drag_drop}    //label 
-    textInputMessage={text.input_image}     //drag 중 text
+    className={"small"}
+    preview={imageUrl}
+    name={"coverImage"}                     
+    textDragNDrop={text.label_drag_drop}    
+    textInputMessage={text.input_image}     
     />
   
   ex) 이미지 파일 정보 가져오기 file, preview, hash
@@ -30,7 +27,7 @@ import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
  */
 function ImageUploadContainer(props, ref) {
   const initImageObject = {file: undefined, preview: undefined, hash: undefined};
-  const { children, textDragNDrop, name } = props;
+  const { className, preview, textDragNDrop, name, id } = props;
   const [image, setImageFile] = useState(initImageObject);
 
   
@@ -72,8 +69,8 @@ function ImageUploadContainer(props, ref) {
   const RootProps = {
     ...getRootProps(),
   };
-  //===============  ===============
-  
+  //==============================================================================
+
   const handlePreviewClose = () => {
     setImageFile(initImageObject);
   };
@@ -90,98 +87,46 @@ function ImageUploadContainer(props, ref) {
   useEffect(() => {
     setImageFile({
       ...image,
-      preview : children
+      preview : preview
     });
-  }, [children]);
+  }, [preview]);
 
   return (
     <div 
-      className={`${props.className}_container`}
+      className={`box_drag ${className}`}
        >
       <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />
-      <input {...InputProps}/>
+      <input {...InputProps} id={id} />
       {
         image?.preview === undefined ? (
           <div 
             {...RootProps} 
             maxsize={100} 
             multiple={false} 
-            className={`${props.className} image_upload`} >
+            className={`${className} image_upload`} >
               {  isDragActive ? (
-                <div className={`${props.className}_text_container image_upload_text_container`}>
-                  <div className={`${props.className}_text image_upload_text`}>{props.textInputMessage}</div>
-                </div>
-                ) : (
-                  <div className={`${props.className}_text_container image_upload_text_container`}>
-                    <FontAwesomeIcon 
-                      icon={faCirclePlus}
-                      className={`${props.className}_ico image_upload_ico_plus`}
-                      />
-                    <div className={`${props.className}_text image_upload_text`} >{textDragNDrop}</div>
+                  <div className={`${className}_text_container image_upload_text_container`}>
+                    <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
                   </div>
+                ) : (
+                  <label htmlFor={id} class="filetxt">
+                    <div class="txt">
+                      <div class="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                      <p class="t">{textDragNDrop}</p>
+                    </div>
+                  </label>
                 )
               }
           </div>
         ) : (
-          <PreviewContainer 
-            width={props.width}
-            height={props.height} >
+          <div className={`box_drag ${className}`}>
             <ImagePreviewContainer handleClick={handlePreviewClose}>{image?.preview}</ImagePreviewContainer>
-          </PreviewContainer>
+          </div>
         )
       }
     </div>
   );
 }
 
-const RootContainer = styled.div`
-  position: relative;
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  margin-bottom: ${(props) => props.marginBottom};
-`;
-
-const PreviewContainer = styled.div`
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  border-radius: 5px;
-  border: 2px solid rgba(57,75,194, 1);
-  opacity: 1;
-  background-color: rgba(247,248,249, 1);
-  background-size: 100%;
-`;
-
-const Container = styled.div`
-  ${Border1pxTiara}
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  background-color: ${(props) => props.backgroundColor};      //var(--desert-storm)
-  border-radius: 4px;
-  border: ${(props) => props.border};                         //1px dashed var(--tiara)
-  opacity: 1;
-
-  &.preview{
-    background-color: transparent;
-    border-radius: 0px;
-    border: 0px;
-  }
-`;
-
-const TextContainer = styled.div `
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-`;
-
-const TextlabelDragNDrop = styled.div `
-  ${Body3}
-  width: 100%;
-  height: auto;
-  color: var(--deep-space-sparkle);
-  white-space: nowrap;
-  text-align: center;
-`;
 
 export default forwardRef(ImageUploadContainer);

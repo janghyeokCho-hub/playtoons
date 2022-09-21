@@ -10,7 +10,7 @@ import iconBar from "@ICONS/icon_menu_without_space.png";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-import { faBars } from "@fortawesome/pro-solid-svg-icons";
+import { faAngleLeft, faBars } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
 
 import Button from "@COMPONENTS/Button";
@@ -63,7 +63,7 @@ const NonLoginMenu = ({ isMobile }) => {
   );
 };
 
-const Header = ({ handleLeftMenu }) => {
+const Header = ({ handleLeftMenu, backTitle, handleBack }) => {
   // login 구현 후 redux store에서 값 받아와야함
   const token = getToken();
   const isLogin = token !== undefined;
@@ -109,6 +109,12 @@ const Header = ({ handleLeftMenu }) => {
           }
         </div>
       </div>
+    {
+      backTitle && 
+        <div class="head_con">
+          <button type="button" class="btn_back" onClick={handleBack}><span class="icon"><FontAwesomeIcon icon={faAngleLeft} />{backTitle}</span></button>
+        </div>
+    }
     </header>
   );
 };

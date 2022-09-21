@@ -1,44 +1,34 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { Title3, Body1, NotosansjpNormalDeepSpaceSparkle14p } from "@/styledMixins";
-import {BROWSER_CONTENTS_AREA_TYPE, INPUT_STATUS} from '@COMMON/constant';
-import "@/css/test.css";
+import { useNavigate } from "react-router-dom";
 
-import BrowserContainer from "@/components/dashboard/BrowserContainer";
-import Dropdown from "@/components/dashboard/Dropdown";
-import TagGroup from "@/components/dashboard/TagGroup";
-import RegisterButton from "@/components/dashboard/ButtonDefault";
-import PreviewButton from "@/components/dashboard/ButtonOutline";
-import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
-import ToggleOn from "@COMPONENTS/dashboard/ToggleOn";
-import ResponsiveDiv from '@COMPONENTS/ResponsiveDiv';
-import ToolTip from "@/components/dashboard/ToolTip";
-import TextInput from "@/components/dashboard/TextInput";
-
-
-import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
 import Editor from "@/components/dashboard/Editor";
-import TextInputSearch from "@/components/dashboard/TextInputSearch";
+import Container from "@/components/dashboard/Container";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo, faCirclePlus,  } from "@fortawesome/pro-solid-svg-icons";
 
+import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+import Select from "@/components/dashboard/Select";
+import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
 
-const textData = {
-  label_series_register: "シリーズ登録",
-  label_series_edit: "シリーズ修正",
-  label_post_image: "表紙",
-  label_timeline: "タイムラインのサムネイル",
-  label_drag_drop: "ドラッグ＆ドロップ",
-  label_title: "タイトル",
-  label_type: "タイプ",
-  label_category: "カテゴリ",
-  label_tag_setting: "タグ設定",
-  label_register: "登録する",
-  label_summary: "説明",
-  label_adult: "年齢設定",
-  label_r_19: "R-19",
-  label_preview: "プレビュー",
-  label_can_not_edit: "編集不可",
+const text = {
+  series_management: "シリーズ詳細",
+  register_series: "シリーズ登録",
+  series_edit: "シリーズ修正",
+  post_image: "表紙",
+  timeline: "タイムラインのサムネイル",
+  drag_drop: "ドラッグ＆ドロップ",
+  title: "タイトル",
+  type: "タイプ",
+  category: "カテゴリ",
+  setting_tag: "タグ設定",
+  register: "登録する",
+  summary: "説明",
+  setting_adult: "年齢設定",
+  r_19: "R-19",
+  preview: "プレビュー",
+  can_not_edit: "編集不可",
   tag_name: "タグ名",
   input_image: "置いてください。",
   select_timeline: "サムネイル選択",
@@ -66,15 +56,13 @@ const tempTimeline = [
 ];
 
 export default function DashboardUploadSeries(props) {
-  const refTitle = useRef();
   const refIsAdult = useRef();
   const refCoverImage = useRef();
-  const [ isModeUpload, setMode ] = useState(false);
   const [ stateTypeList, setStateTypeList ] = useState(undefined);
   const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
-  const params = useParams();
+  const navigate = useNavigate();
 
-  let seriesData = {};
+  
 
   /**
   *
@@ -131,9 +119,8 @@ export default function DashboardUploadSeries(props) {
   };
 
   const setCategoryList = async (type) => {
-    const {status, data: result} = await getPostCategoryListFromServer(type?.code);
+    const {status, data: result} = await getPostCategoryListFromServer(type);
     
-    //TODO error 처리 공통화
     if( status === 200 ){
       setStateCategoryList(result?.categories);
     }
@@ -144,9 +131,12 @@ export default function DashboardUploadSeries(props) {
     console.log('setCategoryList', status, result);
   };
 
+  const handleClickBack = (event) => {
+    navigate('/dashboard/series');
+  };
 
-  const handleItemClickType = (type) => {
-    setCategoryList(type);
+  const handleItemClickType = (item) => {
+    setCategoryList(item.value);
   };
 
   const handleCoverImage = async (fileInfo) => {
@@ -160,218 +150,118 @@ export default function DashboardUploadSeries(props) {
 
   const handleRegister = (e) => {
     console.log("handleRegister", refCoverImage.current.getImageFile());
+    // refTitle.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
 
-    refTitle.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
+    //cover 이미지 업로드
+    //cover 이미지 hash 값 저장
+    //timeline 이미지 업로드
+    //timeline 이미지 hash 값 저장
+    //series 업로드
+
   };
 
   const handlePreview = (e) => {
     console.log("handlePreview", refIsAdult);
 
-    refTitle.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
+    // refTitle.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
   };
 
   useEffect(() => {
     //get types
     setTypeList();
-    
-
-    const isEdit = params.id === undefined;
-    setMode(isEdit);
-    if( isEdit === true ){
-      //TODO 게시글 정보 가져오기, 심플하게 나누자
-    }
   }, []);
 
   return (
-    <BrowserContainer 
-      padding={"48px 0"}
-      spaceWidth={"48px"}
-      backgroundColor={"var(--desert-storm)"} 
-      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITH_WHITE_BOX}
+    <Container
+      type={"sub series bg moty1"}
+      handleBack={handleClickBack} 
+      backTitle={text.register_series}
       >
-      <Container      
-        // width={"100%"}
-        // height={"100%"}
-        paddingTop={"48px"}
-        paddingBottom={"48px"}
-        paddingLeft={"396px"}
-        paddingRight={"427px"}
-        >
-        <form method="post" encType="multipart/form-data">
-          <div className="dashboard_title">
-              {textData.label_series_register}
-          </div>
 
-          <div className={"text_lbael"}>{textData.label_title}</div>
-          <TextInput 
-            name={"title"}
-            className={"series_input_title"} 
-            ref={refTitle} />
-
-          <div className={"text_lbael"}>{textData.label_type}</div>
-          <Dropdown 
-            dataList={stateTypeList}
-            handleItemClick={handleItemClickType}
-            />
-
-          <div className={"text_lbael"}>{textData.label_category}</div>
-          <Dropdown 
-            {...props}
-            width={"215px"}
-            height={"45px"}
-            marginBottom={"2.222222222vh"}
-            borderRadius={"5px"}
-            backgroundColor={"var(--white)"} 
-            dataList={stateCategoryList}
-            />
-
-          <div className={"text_lbael"}>{textData.label_adult}</div>
-          <div className="flex_container">
-            <ToggleOn
-              ref={refIsAdult}
-              selected={false}
-              />
-            <div className="r_19">{textData.label_r_19}</div>
-          </div>
-
-          <div className={"text_lbael"}>{textData.label_summary}</div>
-          <Editor />
+      <div class="inr-c">
+        <div class="box_area">
           
+          <section class="bbs_write">
+            <div class="hd_titbox hide-m">
+              <h2 class="h_tit1">{text.register_series}</h2>
+            </div>
 
-          <div className={"text_lbael"}>{textData.label_tag_setting}</div>
-          <TextInputSearch 
-            name={"tags"}
-            className={"series_input_search"} 
-            placeholder={textData.tag_name}
-            ref={refTitle} />
+            <div class="col">
+              <h3 class="tit1">{text.title}</h3>
+              <input name="title" type="text" class="inp_txt w100p" />
+            </div>
 
-          <div className="flex_container info_margin_bottom">
-            <div className={"text_lbael text_lbael_info"}>{textData.label_post_image}</div>
-            <ToolTip />
+            <div class="col">
+              <h3 class="tit1">{text.type}</h3>
+              <Select 
+                name={"typeId"}
+                dataList={stateTypeList}
+                handleItemClick={handleItemClickType}
+                />
+              
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.type}</h3>
+              <Select 
+                name={"categoryId"}
+                dataList={stateCategoryList}
+                // handleItemClick={handleItemClickCategory}
+                />
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.setting_adult}</h3>
+              <label class="inp_chktx"><input name="rating" type="checkbox" /><span>{text.r_19}</span></label>
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.summary}</h3>
+              <textarea name="description" id="description" class="textarea1"></textarea>
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.setting_tag}</h3>
+              <div class="inp_txt sch">
+                <button type="button" class="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                <input type="text" class="" placeholder={text.tag_name} />
+              </div>
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.post_image}<button type="button" class="btn_help" title="ヘルプ"><FontAwesomeIcon icon={faCircleInfo} /></button></h3>
+              <ImageUploadContainer
+                ref={refCoverImage}
+                id={"filebox1"}
+                className={"small"}
+                name={"coverImage"}                     
+                textDragNDrop={text.drag_drop}    
+                textInputMessage={text.input_image}     
+                />
+            </div>
+
+            <div class="col">
+              <h3 class="tit1">{text.timeline} <button type="button" class="btn_help" title="ヘルプ"><FontAwesomeIcon icon={faCircleInfo} /></button></h3>
+              <ImageUploadContainer
+                id={"filebox2"}
+                name={"thumbnailImage"}                     
+                textDragNDrop={text.drag_drop}    
+                textInputMessage={text.input_image}     
+                />
+            </div>
+          </section>
+
+          <div class="bbs_write_botm">
+            <a href="#" class="btn-pk n blue2"><span>{text.preview}</span></a>
+            <a href="#" class="btn-pk n blue"><span>{text.register}</span></a>
           </div>
-          <ImageUploadContainer
-            ref={refCoverImage}
-            className={"series_image_upload_cover"}
-            name={"coverImage"}
-            textDragNDrop={textData.label_drag_drop}
-            textInputMessage={textData.input_image}
-            handleFile={handleCoverImage}
-            >
-          </ImageUploadContainer>
-
-          <div className="flex_container info_margin_bottom">
-            <div className={"text_lbael text_lbael_info"}>{textData.label_timeline}</div>
-            <ToolTip />
-          </div>
-          <ImageUploadContainer
-            className={"series_image_upload_timeline"}
-            textDragNDrop={textData.label_drag_drop}
-            textInputMessage={textData.input_image}
-            handleFile={handleTimelineImageFile}
-          ></ImageUploadContainer>
-          
-          <ButtonContainer>
-            <PreviewButton
-              width={"117px"}
-              height={"40px"}
-              marginRight={"16px"}
-              borderRadius={"5px"}
-              text={textData.label_preview}
-              handleClick={handlePreview}
-            />
-            <RegisterButton
-              width={"102px"}
-              height={"40px"}
-              borderRadius={"5px"}
-              text={textData.label_register}
-              handleClick={handleRegister}
-            />
-          </ButtonContainer>
-        </form>
-      </Container>
-    </BrowserContainer>
+        
+        </div>
+      </div>
+    </Container>
   );
 }
 
-const TextLabel = styled.div`
-  ${Body1}
-  min-height: 20px;
-  margin-bottom: 1.851851852vh;
-  font-weight: 700;
-  color: var(--nevada);
-  line-height: 20px;
-  white-space: nowrap;
-`;
-
-
-const Container = styled(ResponsiveDiv)`
-`;
-
-const Space = styled.div`
-  width: 100%;
-  height: ${(props) => props.height};
-`;
-
-const ButtonContainer = styled.div`
-  width: 100%;
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-`;
-
-const PageTitle = styled.div`
-  ${Title3}
-  margin-bottom: 4.444444444vh;  
-  /* margin-bottom: 48px;  */
-  font-weight: 500;
-  color: var(--nevada);
-  line-height: 28px;
-  white-space: nowrap;
-`;
-
-const IconTextLabel = styled(TextLabel)`
-  margin-right: 8px;
-  margin-bottom : 0;
-`;
-
-const TextInfoContainer = styled.div`
-  width: 100%;
-  margin-bottom: 2.037037037vh;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-
-const AbultGroup = styled.div`
-  width: 100px;
-  margin-bottom: 2.222222222vh;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-height: 71px;
-`;
-
-
-const FlexRow = styled.div`
-  height: 31px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-width: 103px;
-`;
-
-const R19 = styled.div`
-  ${NotosansjpNormalDeepSpaceSparkle14p}
-  min-height: 20px;
-  margin-left: 10px;
-  margin-bottom: 1px;
-  min-width: 37px;
-  letter-spacing: 1.27px;
-  line-height: 20px;
-  white-space: nowrap;
-`;
 
 
 
