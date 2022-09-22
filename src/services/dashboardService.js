@@ -77,4 +77,13 @@ export const getFileFromServer = (hash, params) => {
 };
 
 
-
+/**
+*
+  call dashboard -> 投稿リスト
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getPostListFromServer = (params) => {
+  return apiServer("get", "/post", params);
+};

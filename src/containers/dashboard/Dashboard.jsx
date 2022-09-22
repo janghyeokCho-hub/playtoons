@@ -6,6 +6,7 @@ import SeriesUpload from "@/containers/dashboard/series/DashboardSeriesUpload";
 import SeriesEdit from "@/containers/dashboard/series/DashboardSeriesEdit";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
+import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
@@ -60,6 +61,10 @@ export default function Dashboard() {
           path="/post/detail/:id"
           element={<PostDetail />}
         />
+        <Route
+          path="/post/upload"
+          element={<PostUpload />}
+        />
         <Route 
           path="/reaction" 
           element={<ReactionList />} 
@@ -70,7 +75,7 @@ export default function Dashboard() {
         />
         <Route 
           path="/*" 
-          element={<Series />}    //404
+          element={<Series />}    //TODO 404
         />
       </Routes>
       {/* //TODO 모달기능 */}
