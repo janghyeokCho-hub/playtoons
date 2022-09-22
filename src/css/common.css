@@ -2775,7 +2775,7 @@ body {
   td.td_btns .btn-pk:hover {
     background: none;
   }
-  td.td_btns .btn-pk:after {
+  td.td_btns .btn-pk > span { /* :after 를 > span으로 변경 */
     content: "\f105";
     font-family: "Font Awesome 6 Pro";
     font-weight: 900;

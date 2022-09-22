@@ -16,7 +16,9 @@ import { useEffect } from 'react';
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param {*} props
+* @param title title
+* @param text contents text
+* @param handleClick icon 클릭시 수행하고 싶은 event
 * @return
 */
 export default function ToolTip(props) {
@@ -59,7 +61,7 @@ const Container = styled.div`
 
 const PopupContainer = styled.div`
   width: 282px;
-  min-height: 78px;
+  /* min-height: 78px; */
   margin-bottom: 8px;
   padding: 16px 16px 14px 16px;
   border-radius: 4px;
@@ -74,7 +76,7 @@ const PopupContainer = styled.div`
 const Title = styled.div`
   ${Body2}
   margin-bottom: 8px;
-  font-size: 1.6em;
+  font-size: 16px;
   font-weight: 500;
   color: var(--vulcan);
 `;
@@ -82,7 +84,7 @@ const Title = styled.div`
 const Text = styled.div`
   ${Body2}
   max-width: 250px;
-  font-size: 1.4em;
+  font-size: 14px;
   font-weight: 500;
   color: var(--deep-space-sparkle);
 `;

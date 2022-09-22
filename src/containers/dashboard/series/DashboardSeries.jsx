@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronRight, faPlus } from '@fortawesome/pro-solid-svg-icons';
+import { faAngleRight, faPlus } from '@fortawesome/pro-solid-svg-icons';
 
 import { getSeriesStoryList } from "@/services/dashboardService";
 import Container from "@/components/dashboard/Container";
@@ -71,7 +71,7 @@ export default function DashboardSeries(props) {
           <td className="td_gray"><span className="view-m">カテゴリ：</span>{item.category?.name}</td>
           <td><span className="view-m">掲載日：</span>{item.startAt}</td>
           <td className="td_txt"><span className="view-m">状態</span>{item.paused}</td>
-          <td className="td_btns"><a href={`/dashboard/series/detail/${item.id}`} className="btn-pk n blue2"><span>{text.detail}</span></a></td>
+          <td className="td_btns"><a href={`/dashboard/series/detail/${item.id}`} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faAngleRight} />{text.detail}</span></a></td>
         </tr>
       );
     });
@@ -90,7 +90,7 @@ export default function DashboardSeries(props) {
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0"><span>{text.page_title}</span></h2>
           <div className="rgh">
-            <a href="/dashboard/series/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} />{text.add_series}</span></a>
+            <a href="/dashboard/series/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.add_series}</span></a>
           </div>
         </div>
 

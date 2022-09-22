@@ -5,6 +5,9 @@ import { faCirclePlus } from "@fortawesome/pro-solid-svg-icons";
 
 import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
+// TODO image preview 스타일 임시 적용 
+import "@/css/test.css";
+
 /**
  * 
  * 이미지 파일 drag n drop, preivew 컴포넌트 
@@ -95,33 +98,40 @@ function ImageUploadContainer(props, ref) {
     <div 
       className={`box_drag ${className}`}
        >
-      <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />
+        {/* upload에 쓰일 hash 값 저장 */}
+      <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />  
+        {/* file input tag */}
       <input {...InputProps} id={id} />
       {
         image?.preview === undefined ? (
-          <div 
-            {...RootProps} 
-            maxsize={100} 
-            multiple={false} 
-            className={`${className} image_upload`} >
-              {  isDragActive ? (
+          <label htmlFor={id} class="filetxt">
+            <div 
+              {...RootProps} 
+              maxsize={100} 
+              multiple={false} 
+              className={`${className} image_upload`} >
+                {  isDragActive ? (
                   <div className={`${className}_text_container image_upload_text_container`}>
-                    <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
-                  </div>
-                ) : (
-                  <label htmlFor={id} class="filetxt">
-                    <div class="txt">
-                      <div class="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                      <p class="t">{textDragNDrop}</p>
+                      <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
                     </div>
-                  </label>
-                )
-              }
-          </div>
+                  ) : (
+                    
+                    <div class="txt">
+                        <div class="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                        <p class="t">{textDragNDrop}</p>
+                      </div>
+                    
+                    )
+                  }
+            </div>
+          </label>
         ) : (
-          <div className={`box_drag ${className}`}>
-            <ImagePreviewContainer handleClick={handlePreviewClose}>{image?.preview}</ImagePreviewContainer>
-          </div>
+          // /* TODO preview 일때 border 변경  */
+          <label htmlFor={id} class="filetxt preview_border">
+            <div className={"image_preivew"}>
+              <ImagePreviewContainer handleClick={handlePreviewClose}>{image?.preview}</ImagePreviewContainer>
+            </div>
+          </label>
         )
       }
     </div>

@@ -19,17 +19,7 @@ export default function ImagePreviewContainer(props) {
         <FontAwesomeIcon 
             icon={faCircleXmark}
             onClick={handleIconCloseClick}
-            style={{ 
-              width: "32px", 
-              height:"32px", 
-              color: "var(--deep-space-sparkle)",
-              backgroundColor: "var(--white)",
-              borderRadius: "32px",
-              position : "absolute",
-              top: "0",
-              right: "0",
-              transform: "translate(50%, -50%)"
-            }}
+            className={"preview_circle_xmark"}
             />
     </Container>
   )
@@ -47,6 +37,5 @@ const Img = styled.img`
   position: absolute;
   bottom: 0;
   left: 0;
-  border-radius: ${(props) => props.borderRadius};
 `;
 

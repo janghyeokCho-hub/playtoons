@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
-import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
 import Editor from "@/components/dashboard/Editor";
 import Container from "@/components/dashboard/Container";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo, faCirclePlus,  } from "@fortawesome/pro-solid-svg-icons";
-
-import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import Select from "@/components/dashboard/Select";
 import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
+import ToolTip from "@/components/dashboard/ToolTip";
+
+import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
+
 
 const text = {
   series_management: "シリーズ詳細",
@@ -34,35 +34,12 @@ const text = {
   select_timeline: "サムネイル選択",
 };
 
-const tempTimeline = [
-  {
-    image: "1"
-  },
-  {
-    image: "2"
-  },
-  {
-    image: "3"
-  },
-  {
-    image: "4"
-  },
-  {
-    image: "5"
-  },
-  {
-    image: "6"
-  },
-];
-
 export default function DashboardUploadSeries(props) {
   const refIsAdult = useRef();
   const refCoverImage = useRef();
   const [ stateTypeList, setStateTypeList ] = useState(undefined);
   const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
   const navigate = useNavigate();
-
-  
 
   /**
   *
@@ -139,15 +116,6 @@ export default function DashboardUploadSeries(props) {
     setCategoryList(item.value);
   };
 
-  const handleCoverImage = async (fileInfo) => {
-    //cover image 업로드 후 처리
-    console.log("handleCoverImage", fileInfo);
-  };
-
-  const handleTimelineImageFile = (file) => {
-    console.log("handleTimelineImageFile", file);
-  };
-
   const handleRegister = (e) => {
     console.log("handleRegister", refCoverImage.current.getImageFile());
     // refTitle.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
@@ -202,7 +170,7 @@ export default function DashboardUploadSeries(props) {
             </div>
 
             <div class="col">
-              <h3 class="tit1">{text.type}</h3>
+              <h3 class="tit1">{text.category}</h3>
               <Select 
                 name={"categoryId"}
                 dataList={stateCategoryList}
@@ -229,7 +197,13 @@ export default function DashboardUploadSeries(props) {
             </div>
 
             <div class="col">
-              <h3 class="tit1">{text.post_image}<button type="button" class="btn_help" title="ヘルプ"><FontAwesomeIcon icon={faCircleInfo} /></button></h3>
+              <h3 class="tit1">{text.post_image}
+                <button type="button" class="btn_help" title="ヘルプ">
+                  <ToolTip 
+                    title={text.post_image} 
+                    text={"text something123142"} />
+                </button>
+              </h3>
               <ImageUploadContainer
                 ref={refCoverImage}
                 id={"filebox1"}
@@ -241,7 +215,13 @@ export default function DashboardUploadSeries(props) {
             </div>
 
             <div class="col">
-              <h3 class="tit1">{text.timeline} <button type="button" class="btn_help" title="ヘルプ"><FontAwesomeIcon icon={faCircleInfo} /></button></h3>
+              <h3 class="tit1">{text.timeline} 
+                <button type="button" class="btn_help" title="ヘルプ">
+                  <ToolTip 
+                      title={text.timeline} 
+                      text={"text something123142"} />
+                </button>
+              </h3>
               <ImageUploadContainer
                 id={"filebox2"}
                 name={"thumbnailImage"}                     
@@ -252,8 +232,16 @@ export default function DashboardUploadSeries(props) {
           </section>
 
           <div class="bbs_write_botm">
-            <a href="#" class="btn-pk n blue2"><span>{text.preview}</span></a>
-            <a href="#" class="btn-pk n blue"><span>{text.register}</span></a>
+            <a class="btn-pk n blue2">
+              <div class="pull_width" onClick={handlePreview}>
+                <span>{text.preview}</span>
+              </div>
+            </a>
+            <a class="btn-pk n blue">
+              <div class="pull_width" onClick={handleRegister}>
+                <span>{text.register}</span>
+              </div>
+            </a>
           </div>
         
         </div>
