@@ -111,8 +111,8 @@ const Header = ({ handleLeftMenu, backTitle, handleBack }) => {
       </div>
     {
       backTitle && 
-        <div class="head_con">
-          <button type="button" class="btn_back" onClick={handleBack}><span class="icon"><FontAwesomeIcon icon={faAngleLeft} />{backTitle}</span></button>
+        <div className="head_con">
+          <button type="button" className="btn_back" onClick={handleBack}><span className="icon"><FontAwesomeIcon icon={faAngleLeft} />{backTitle}</span></button>
         </div>
     }
     </header>

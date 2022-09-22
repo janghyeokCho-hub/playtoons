@@ -146,21 +146,21 @@ export default function DashboardUploadSeries(props) {
       backTitle={text.register_series}
       >
 
-      <div class="inr-c">
-        <div class="box_area">
+      <div className="inr-c">
+        <div className="box_area">
           
-          <section class="bbs_write">
-            <div class="hd_titbox hide-m">
-              <h2 class="h_tit1">{text.register_series}</h2>
+          <section className="bbs_write">
+            <div className="hd_titbox hide-m">
+              <h2 className="h_tit1">{text.register_series}</h2>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.title}</h3>
-              <input name="title" type="text" class="inp_txt w100p" />
+            <div className="col">
+              <h3 className="tit1">{text.title}</h3>
+              <input name="title" type="text" className="inp_txt w100p" />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.type}</h3>
+            <div className="col">
+              <h3 className="tit1">{text.type}</h3>
               <Select 
                 name={"typeId"}
                 dataList={stateTypeList}
@@ -169,8 +169,8 @@ export default function DashboardUploadSeries(props) {
               
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.category}</h3>
+            <div className="col">
+              <h3 className="tit1">{text.category}</h3>
               <Select 
                 name={"categoryId"}
                 dataList={stateCategoryList}
@@ -178,27 +178,27 @@ export default function DashboardUploadSeries(props) {
                 />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.setting_adult}</h3>
-              <label class="inp_chktx"><input name="rating" type="checkbox" /><span>{text.r_19}</span></label>
+            <div className="col">
+              <h3 className="tit1">{text.setting_adult}</h3>
+              <label className="inp_chktx"><input name="rating" type="checkbox" /><span>{text.r_19}</span></label>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.summary}</h3>
-              <textarea name="description" id="description" class="textarea1"></textarea>
+            <div className="col">
+              <h3 className="tit1">{text.summary}</h3>
+              <textarea name="description" id="description" className="textarea1"></textarea>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.setting_tag}</h3>
-              <div class="inp_txt sch">
-                <button type="button" class="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                <input type="text" class="" placeholder={text.tag_name} />
+            <div className="col">
+              <h3 className="tit1">{text.setting_tag}</h3>
+              <div className="inp_txt sch">
+                <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                <input type="text" className="" placeholder={text.tag_name} />
               </div>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.post_image}
-                <button type="button" class="btn_help" title="ヘルプ">
+            <div className="col">
+              <h3 className="tit1">{text.post_image}
+                <button type="button" className="btn_help" title="ヘルプ">
                   <ToolTip 
                     title={text.post_image} 
                     text={"text something123142"} />
@@ -214,9 +214,9 @@ export default function DashboardUploadSeries(props) {
                 />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.timeline} 
-                <button type="button" class="btn_help" title="ヘルプ">
+            <div className="col">
+              <h3 className="tit1">{text.timeline} 
+                <button type="button" className="btn_help" title="ヘルプ">
                   <ToolTip 
                       title={text.timeline} 
                       text={"text something123142"} />
@@ -231,14 +231,14 @@ export default function DashboardUploadSeries(props) {
             </div>
           </section>
 
-          <div class="bbs_write_botm">
-            <a class="btn-pk n blue2">
-              <div class="pull_width" onClick={handlePreview}>
+          <div className="bbs_write_botm">
+            <a className="btn-pk n blue2">
+              <div className="pull_width" onClick={handlePreview}>
                 <span>{text.preview}</span>
               </div>
             </a>
-            <a class="btn-pk n blue">
-              <div class="pull_width" onClick={handleRegister}>
+            <a className="btn-pk n blue">
+              <div className="pull_width" onClick={handleRegister}>
                 <span>{text.register}</span>
               </div>
             </a>

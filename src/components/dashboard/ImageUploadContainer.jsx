@@ -104,7 +104,7 @@ function ImageUploadContainer(props, ref) {
       <input {...InputProps} id={id} />
       {
         image?.preview === undefined ? (
-          <label htmlFor={id} class="filetxt">
+          <label htmlFor={id} className="filetxt">
             <div 
               {...RootProps} 
               maxsize={100} 
@@ -116,9 +116,9 @@ function ImageUploadContainer(props, ref) {
                     </div>
                   ) : (
                     
-                    <div class="txt">
-                        <div class="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                        <p class="t">{textDragNDrop}</p>
+                    <div className="txt">
+                        <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                        <p className="t">{textDragNDrop}</p>
                       </div>
                     
                     )
@@ -127,7 +127,7 @@ function ImageUploadContainer(props, ref) {
           </label>
         ) : (
           // /* TODO preview 일때 border 변경  */
-          <label htmlFor={id} class="filetxt preview_border">
+          <label htmlFor={id} className="filetxt preview_border">
             <div className={"image_preivew"}>
               <ImagePreviewContainer handleClick={handlePreviewClose}>{image?.preview}</ImagePreviewContainer>
             </div>
