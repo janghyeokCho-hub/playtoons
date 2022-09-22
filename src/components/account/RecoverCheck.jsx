@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
@@ -10,7 +10,15 @@ const RecoverCheck = () => {
   const location = useLocation();
   const { email, expireOn } = location.state;
   const [seconds, setSeconds] = useState(0);
+
   const [code, setCode] = useState(null);
+  const codeRef = useRef(null);
+
+  const [isCodeErrorShow, setIsCodeErrorShow] = useState(false);
+  const [codeErrorMsg, setCodeErrorMsg] = useState(null);
+
+  const [isCheckErrorShow, setIsCheckErrorShow] = useState(false);
+  const [checkErrorMsg, setCheckErrorMsg] = useState(false);
 
   /**
    * email State 변경 함수
@@ -21,21 +29,25 @@ const RecoverCheck = () => {
   };
 
   const handleRecoverCheck = useCallback(async () => {
-    if (code) {
-      const response = await recoverCheckCode({ code });
-
-      const { status } = response;
-      if (status === 200) {
-        navigate("../recover-confirm", { state: { code } });
-      } else if (status === 400) {
-        alert("아마도 만료된 코드");
-      } else if (status === 404) {
-        alert("코드 참조");
-      } else if (status === 503) {
-        alert("코드 참조");
-      }
+    if (!code) {
+      codeRef.current.focus();
+      setIsCodeErrorShow(true);
+      setCodeErrorMsg("Code 없음");
+      return;
+    } else {
+      setIsCodeErrorShow(false);
+      setCodeErrorMsg(null);
     }
-  }, [code]);
+    const response = await recoverCheckCode({ code });
+
+    const { status } = response;
+    if (status === 200) {
+      navigate("../recover-confirm", { state: { code } });
+    } else {
+      setIsCheckErrorShow(true);
+      setCheckErrorMsg(`코드 참조 : ${status}`);
+    }
+  }, [code, navigate]);
 
   useEffect(() => {
     if (expireOn) {
@@ -68,9 +80,18 @@ const RecoverCheck = () => {
         <p>宛に認証用メールを送信しました。</p>
       </div>
 
+      {isCheckErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{checkErrorMsg}</p>
+        </div>
+      )}
+
       <div className="area_member">
         <div className="inbox ty1">
-          <div className="col">
+          <div className={`${isCodeErrorShow ? "error" : ""} col`}>
             <label htmlFor="id" className="h">
               認証コード
             </label>
@@ -79,7 +100,13 @@ const RecoverCheck = () => {
               id="id"
               className="inp_txt w100p"
               onChange={handleCodeChange}
+              ref={codeRef}
             />
+            {isCodeErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{codeErrorMsg}</span>
+              </p>
+            )}
           </div>
           <div className="col_link">
             <span className="t c-gray">

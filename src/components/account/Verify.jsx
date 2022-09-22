@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import moment from "moment";
 import { verifyCheckCode } from "@API/accountService";
@@ -14,30 +14,40 @@ const Verify = () => {
   const [seconds, setSeconds] = useState(0);
 
   const [code, setCode] = useState(null);
+  const codeRef = useRef(null);
+
+  const [isCodeErrorShow, setIsCodeErrorShow] = useState(false);
+  const [codeErrorMsg, setCodeErrorMsg] = useState(null);
+
+  const [isVerifyErrorShow, setIsVerifyErrorShow] = useState(false);
+  const [verifyErrorMsg, setVerifyErrorMsg] = useState(false);
 
   const handleCodeChange = (e) => {
     setCode(e.target.value);
   };
 
   const handleVerify = useCallback(async () => {
-    if (code) {
-      const response = await verifyCheckCode({ code });
-      console.log(response);
-
-      const { status } = response;
-      if (status === 200) {
-        const params = { email, password };
-        onLogin(params);
-        navigate("../agreement", { state: params });
-      } else if (status === 400) {
-        alert("코드 참조");
-      } else if (status === 404) {
-        alert("코드 참조");
-      } else if (status === 503) {
-        alert("코드 참조");
-      }
+    if (!code) {
+      codeRef.current.focus();
+      setIsCodeErrorShow(true);
+      setCodeErrorMsg("Code 없음");
+      return;
+    } else {
+      setIsCodeErrorShow(false);
+      setCodeErrorMsg(null);
     }
-  }, [code, onLogin]);
+    const response = await verifyCheckCode({ code });
+    console.log(response);
+    const { status } = response;
+    if (status === 200) {
+      const params = { email, password };
+      onLogin(params);
+      navigate("../agreement", { state: params });
+    } else {
+      setIsVerifyErrorShow(true);
+      setVerifyErrorMsg(`코드 참조 : ${status}`);
+    }
+  }, [code, codeRef, onLogin, email, password, navigate]);
 
   useEffect(() => {
     if (expireOn) {
@@ -70,9 +80,18 @@ const Verify = () => {
         <p>宛に認証用メールを送信しました。</p>
       </div>
 
+      {isVerifyErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{verifyErrorMsg}</p>
+        </div>
+      )}
+
       <div className="area_member">
         <div className="inbox ty3">
-          <div className="col">
+          <div className={`${isCodeErrorShow ? "error" : ""} col`}>
             <label htmlFor="id" className="h">
               認証コード
             </label>
@@ -81,7 +100,13 @@ const Verify = () => {
               id="id"
               className="inp_txt w100p"
               onChange={handleCodeChange}
+              ref={codeRef}
             />
+            {isCodeErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{codeErrorMsg}</span>
+              </p>
+            )}
           </div>
           <div className="col_link">
             <span className="t c-gray">

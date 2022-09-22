@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { verifyCheckCode } from "@API/accountService";
@@ -10,6 +10,13 @@ const UpdateEmailVerify = () => {
   const [seconds, setSeconds] = useState(0);
 
   const [code, setCode] = useState(null);
+  const codeRef = useRef(null);
+
+  const [isCodeErrorShow, setIsCodeErrorShow] = useState(false);
+  const [codeErrorMsg, setCodeErrorMsg] = useState(null);
+
+  const [isVerifyErrorShow, setIsVerifyErrorShow] = useState(false);
+  const [verifyErrorMsg, setVerifyErrorMsg] = useState(null);
 
   useEffect(() => {
     if (expireOn) {
@@ -36,8 +43,13 @@ const UpdateEmailVerify = () => {
 
   const handleUpdateEmailVerify = useCallback(async () => {
     if (!code) {
-      alert("코드를 입력하세요.");
+      codeRef.current.focus();
+      setIsCodeErrorShow(true);
+      setCodeErrorMsg("Code 없음");
       return;
+    } else {
+      setIsCodeErrorShow(false);
+      setCodeErrorMsg(null);
     }
 
     const response = await verifyCheckCode({ code });
@@ -47,12 +59,9 @@ const UpdateEmailVerify = () => {
        * @todo Update Email 을 들어오기 전 페이지로 이동
        * */
       navigate("/");
-    } else if (status === 400) {
-      alert("코드 참조");
-    } else if (status === 404) {
-      alert("코드 참조");
-    } else if (status === 503) {
-      alert("코드 참조");
+    } else {
+      setIsVerifyErrorShow(true);
+      setVerifyErrorMsg(`코드 참조 : ${status}`);
     }
   }, [code, navigate]);
 
@@ -63,6 +72,15 @@ const UpdateEmailVerify = () => {
         <p className="c-blue">{email}</p>
         <p>宛に認証用メールを送信しました。</p>
       </div>
+
+      {isVerifyErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{verifyErrorMsg}</p>
+        </div>
+      )}
 
       <div className="area_member">
         <div className="inbox ty3">
@@ -78,7 +96,7 @@ const UpdateEmailVerify = () => {
               disabled
             />
           </div>
-          <div className="col">
+          <div className={`${isCodeErrorShow ? "error" : ""} col`}>
             <label htmlFor="id" className="h">
               認証コード
             </label>
@@ -87,7 +105,13 @@ const UpdateEmailVerify = () => {
               id="id"
               className="inp_txt w100p"
               onChange={(e) => setCode(e.target.value)}
+              ref={codeRef}
             />
+            {isCodeErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{codeErrorMsg}</span>
+              </p>
+            )}
           </div>
           <div className="col_link">
             <span className="t c-gray">

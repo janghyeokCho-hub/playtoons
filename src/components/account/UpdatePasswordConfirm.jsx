@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import { updateAccount } from "@API/accountService";
@@ -7,19 +7,44 @@ import { useNavigate } from "react-router-dom";
 const UpdatePasswordConfirm = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState(null);
+  const passwordRef = useRef(null);
   const [rePassword, setRePassword] = useState(null);
+  const rePasswordRef = useRef(null);
+
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [isRePasswordShow, setIsRePasswordShow] = useState(false);
 
+  const [isPasswordErrorShow, setIsPasswordErrorShow] = useState(false);
+  const [isRePasswordErrorShow, setIsRePasswordErrorShow] = useState(false);
+  const [isConfirmErrorShow, setIsConfirmErrorShow] = useState(false);
+  const [passwordErrorMsg, setPasswordErrorMsg] = useState(null);
+  const [rePasswordErrorMsg, setRePasswordErrorMsg] = useState(null);
+  const [confirmErrorMsg, setConfirmErrorMsg] = useState(null);
+
   const handlePasswordConfirm = useCallback(async () => {
     if (!password) {
-      alert("비밀번호를 입력하세요.");
+      passwordRef.current.focus();
+      setIsPasswordErrorShow(true);
+      setPasswordErrorMsg("비밀번호를 입력하세요.");
       return;
-    } else if (!rePassword) {
-      alert("비밀번호를 재 확인하세요.");
+    } else {
+      setIsPasswordErrorShow(false);
+      setPasswordErrorMsg(null);
+    }
+
+    if (!rePassword) {
+      rePasswordRef.current.focus();
+      setIsRePasswordErrorShow(true);
+      setRePasswordErrorMsg("재확인 비밀번호를 입력하세요.");
       return;
-    } else if (password !== rePassword) {
-      alert("비밀번호가 같지 않습니다.");
+    } else {
+      setIsRePasswordErrorShow(false);
+      setRePasswordErrorMsg(null);
+    }
+
+    if (password !== rePassword) {
+      setIsRePasswordErrorShow(true);
+      setRePasswordErrorMsg("비밀번호가 같지 않습니다.");
       return;
     }
 
@@ -30,12 +55,9 @@ const UpdatePasswordConfirm = () => {
        * @todo Update Email 을 들어오기 전 페이지로 이동
        * */
       navigate("/");
-    } else if (status === 400) {
-      alert("코드 참조");
-    } else if (status === 409) {
-      alert("이미 사용중인 메일 주소");
-    } else if (status === 503) {
-      alert("코드 참조");
+    } else {
+      setIsConfirmErrorShow(true);
+      setConfirmErrorMsg(`코드 참조 : ${status}`);
     }
   }, [password, rePassword, navigate]);
 
@@ -46,9 +68,18 @@ const UpdatePasswordConfirm = () => {
         <p>新しいパスワードを入力してください。</p>
       </div>
 
+      {isConfirmErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{confirmErrorMsg}</p>
+        </div>
+      )}
+
       <div className="area_member">
         <div className="inbox ty3">
-          <div className="col">
+          <div className={`${isPasswordErrorShow ? "error" : ""} col`}>
             <label htmlFor="pwd" className="h">
               パスワード
             </label>
@@ -57,6 +88,7 @@ const UpdatePasswordConfirm = () => {
               id="pwd"
               className="inp_txt w100p"
               onChange={(e) => setPassword(e.target.value)}
+              ref={passwordRef}
             />
             <button
               type="button"
@@ -70,16 +102,22 @@ const UpdatePasswordConfirm = () => {
                 <FontAwesomeIcon icon={faEyeSlash} />
               </span>
             </button>
+            {isPasswordErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{passwordErrorMsg}</span>
+              </p>
+            )}
           </div>
-          <div className="col">
-            <label htmlFor="pwd" className="h">
+          <div className={`${isRePasswordErrorShow ? "error" : ""} col`}>
+            <label htmlFor="rePwd" className="h">
               パスワード確認
             </label>
             <input
               type={`${isRePasswordShow ? "text" : "password"}`}
-              id="pwd"
+              id="rePwd"
               className="inp_txt w100p"
               onChange={(e) => setRePassword(e.target.value)}
+              ref={rePasswordRef}
             />
             <button
               type="button"
@@ -93,6 +131,11 @@ const UpdatePasswordConfirm = () => {
                 <FontAwesomeIcon icon={faEyeSlash} />
               </span>
             </button>
+            {isRePasswordErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{rePasswordErrorMsg}</span>
+              </p>
+            )}
           </div>
         </div>
         <div className="btns">

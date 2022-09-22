@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateAccount } from "@API/accountService";
 
@@ -8,20 +8,32 @@ import { updateAccount } from "@API/accountService";
 const UpdateEmail = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
+  const emailRef = useRef(null);
+  const [isEmailErrorShow, setIsEmailErrorShow] = useState(false);
+  const [emailErrorMsg, setEmailErrorMsg] = useState(null);
+
+  const [isUpdateErrorShow, setIsUpdateErrorShow] = useState(false);
+  const [updateErrorMsg, setUpdateErrorMsg] = useState(null);
 
   const handleUpdateEmail = useCallback(async () => {
+    if (!email) {
+      emailRef.current.focus();
+      setIsEmailErrorShow(true);
+      setEmailErrorMsg("email 없음");
+      return;
+    } else {
+      setIsEmailErrorShow(false);
+      setEmailErrorMsg(null);
+    }
     const params = { email };
     const response = await updateAccount(params);
     const { status } = response;
     if (response.status === 200) {
       const { expireOn } = response.data;
       navigate("../update-email-verify", { state: { expireOn, email } });
-    } else if (status === 400) {
-      alert("코드 참조");
-    } else if (status === 409) {
-      alert("이미 사용중인 메일 주소");
-    } else if (status === 503) {
-      alert("코드 참조");
+    } else {
+      setIsUpdateErrorShow(true);
+      setUpdateErrorMsg(`코드 참조 : ${status}`);
     }
   }, [email, navigate]);
 
@@ -32,9 +44,18 @@ const UpdateEmail = () => {
         <p>新しいメールアドレスを入力してください。</p>
       </div>
 
+      {isUpdateErrorShow && (
+        <div className="box_error">
+          <p className="t1">
+            <span className="ico_error">Error Message</span>
+          </p>
+          <p className="t2">{updateErrorMsg}</p>
+        </div>
+      )}
+
       <div className="area_member">
         <div className="inbox ty2">
-          <div className="col">
+          <div className={`${isEmailErrorShow ? "error" : ""} col`}>
             <label htmlFor="id" className="h">
               新しいメールアドレス
             </label>
@@ -43,7 +64,13 @@ const UpdateEmail = () => {
               id="id"
               className="inp_txt w100p"
               onChange={(e) => setEmail(e.target.value)}
+              ref={emailRef}
             />
+            {isEmailErrorShow && (
+              <p className="t_error">
+                <span className="ico_error">{emailErrorMsg}</span>
+              </p>
+            )}
           </div>
         </div>
         <div className="btns">
