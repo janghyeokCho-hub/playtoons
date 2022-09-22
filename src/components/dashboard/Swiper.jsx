@@ -65,7 +65,9 @@ export default function SwiperContainer(props) {
           prevEl: prevRef.current,
         }}
         breakpoints={props?.breakpoints}
-        onSlideChange={() => console.log('slide change')}
+        onSlideChange={() => {
+
+        }}
         onInit={(swiper) => {
           
         }}
@@ -73,11 +75,12 @@ export default function SwiperContainer(props) {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
 
-        }}
-      >
+        }} >
+          
         {
           props?.list?.()
         }
+        
       </Swiper>
 
       <button ref={prevRef} type="button" className="swiper-button-prev my1"><FontAwesomeIcon icon={faCircleChevronLeft} /></button>

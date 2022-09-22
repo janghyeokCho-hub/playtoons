@@ -15,6 +15,7 @@ import tempProfile from "@IMAGES/img_profile.png";
 
 import Button from "@COMPONENTS/Button";
 import { getToken } from "@/common/common";
+import { useNavigate } from "react-router-dom";
 
 const LoginMenu = ({ isMobile }) => {
   return (
@@ -67,6 +68,7 @@ const Header = ({ handleLeftMenu, backTitle, handleBack }) => {
   // login 구현 후 redux store에서 값 받아와야함
   const token = getToken();
   const isLogin = token !== undefined;
+  const navigate = useNavigate();
 
   const [isMobile, setIsMobile] = useState(false);
   const size = useWindowSize();
@@ -112,7 +114,7 @@ const Header = ({ handleLeftMenu, backTitle, handleBack }) => {
     {
       backTitle && 
         <div className="head_con">
-          <button type="button" className="btn_back" onClick={handleBack}><span className="icon"><FontAwesomeIcon icon={faAngleLeft} />{backTitle}</span></button>
+          <button type="button" className="btn_back" onClick={() => {navigate(-1)}}><span className="icon"><FontAwesomeIcon icon={faAngleLeft} />{backTitle}</span></button>
         </div>
     }
     </header>

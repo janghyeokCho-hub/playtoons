@@ -108,10 +108,6 @@ export default function DashboardUploadSeries(props) {
     console.log('setCategoryList', status, result);
   };
 
-  const handleClickBack = (event) => {
-    navigate('/dashboard/series');
-  };
-
   const handleItemClickType = (item) => {
     setCategoryList(item.value);
   };
@@ -142,7 +138,6 @@ export default function DashboardUploadSeries(props) {
   return (
     <Container
       type={"sub series bg moty1"}
-      handleBack={handleClickBack} 
       backTitle={text.register_series}
       >
 
