@@ -1,11 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import { Body5 } from "@/styledMixins";
 import { useNavigate } from "react-router-dom";
-import { getResizedNumber } from "@COMMON/common";
+import { useDispatch } from "react-redux";
 
+import {showModal} from '@/modules/redux/ducks/modal';
 import NavBarItem from "@COMPONENTS/dashboard/NavBarItem";
 
+//==============================================================================
 import { 
   faTableColumns as iconDashboard,
   faDiamond as iconProduct,
@@ -14,17 +14,16 @@ import {
   faSquarePen as iconPost,
   faSeal as iconPlan,
   faChartLine as iconAnalysis } from "@fortawesome/pro-light-svg-icons";
-import { faTableColumns as iconDashboardBlue } from "@fortawesome/pro-regular-svg-icons";
+
+import { faTableColumns as iconDashboardOn } from "@fortawesome/pro-regular-svg-icons";
 import { 
-  faDiamond as iconProductBlue, 
-  faUser as iconProfileBlue, 
-  faObjectUnion as iconSeriesBlue, 
-  faSquarePen as iconPostBlue, 
-  faSeal as iconPlanBlue, 
-  faChartLine as iconAnalysisBlue } from "@fortawesome/pro-solid-svg-icons";
-  
-import { useDispatch } from "react-redux";
-import {showModal} from '@/modules/redux/ducks/modal';
+  faDiamond as iconProductOn, 
+  faUser as iconProfileOn, 
+  faObjectUnion as iconSeriesOn, 
+  faSquarePen as iconPostOn, 
+  faSeal as iconPlanOn, 
+  faChartLine as iconAnalysisOn } from "@fortawesome/pro-solid-svg-icons";
+  //==============================================================================
 
 let textData = {
   dashboard: "ダッシュボード",
@@ -95,7 +94,7 @@ export default function NavBarDashboard3(props) {
             path={DASHBOARD_PATH.ANALYSIS}
             onClick={onClickAnalysis}
             icon={iconAnalysis}
-            selectedIcon={iconAnalysisBlue}
+            selectedIcon={iconAnalysisOn}
             />
         );
     }
@@ -111,42 +110,42 @@ export default function NavBarDashboard3(props) {
             path={DASHBOARD_PATH.DASHBOARD}
             onClick={onClickDashboard}
             icon={iconDashboard}
-            selectedIcon={iconDashboardBlue}
+            selectedIcon={iconDashboardOn}
             />
           <NavBarItem 
             text={textData.product}
             path={DASHBOARD_PATH.PRODUCT}
             onClick={onClickProduct}
             icon={iconProduct}
-            selectedIcon={iconProductBlue}
+            selectedIcon={iconProductOn}
             />
           <NavBarItem 
             text={textData.profile_management}
             path={DASHBOARD_PATH.PROFILE}
             onClick={onClickProfile}
             icon={iconProfile}
-            selectedIcon={iconProfileBlue}
+            selectedIcon={iconProfileOn}
             />
           <NavBarItem 
             text={textData.series_management}
             path={DASHBOARD_PATH.SERIES}
             onClick={onClickSerise}
             icon={iconSeries}
-            selectedIcon={iconSeriesBlue}
+            selectedIcon={iconSeriesOn}
             />
           <NavBarItem 
             text={textData.post_management}
             path={DASHBOARD_PATH.POST}
             onClick={onClickPost}
             icon={iconPost}
-            selectedIcon={iconPostBlue}
+            selectedIcon={iconPostOn}
             />
           <NavBarItem 
             text={textData.plan_management}
             path={DASHBOARD_PATH.PLAN}
             onClick={onClickPlan}
             icon={iconPlan}
-            selectedIcon={iconPlanBlue}
+            selectedIcon={iconPlanOn}
             />
           {
             getExtraNav()

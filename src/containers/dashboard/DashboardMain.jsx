@@ -3,7 +3,7 @@ import "@/css/swiper.min.css";
 import { SwiperSlide } from 'swiper/react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faChevronRight, faStar } from "@fortawesome/pro-solid-svg-icons";
+import { faHeart, faAngleRight, faStar } from "@fortawesome/pro-solid-svg-icons";
 import Container from "@/components/dashboard/Container";
 import SwiperContainer from "@/components/dashboard/Swiper";
 
@@ -310,7 +310,7 @@ export default function DashboardMain() {
     return data?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
                   <a href={`/dashboard/series/detail/${item.id}`}>
-                    <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><span>{item.count}</span></p></div>
+                    <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><FontAwesomeIcon icon={faHeart} /><span>{item.count}</span></p></div>
                     <div className="cx_txt">
                       <p className="t1 c-blue">{item.type}</p>
                       <p className="h1">{item.title}</p>
@@ -388,7 +388,7 @@ export default function DashboardMain() {
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.recently_sales_product}</h3>
-              <a href="/dashboard/product/list" className="rgh c-blue view-m" ><span className="ico_arr_link">{text.see_all}</span></a>
+              <a href="/dashboard/product/list" className="rgh c-blue view-m" ><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
             </div>
 
             <div className="lst_comic1">
@@ -417,7 +417,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_question}</h3>
-                <a href="/dashboard/sales/inquiry" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/inquiry" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -431,7 +431,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_review}</h3>
-                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -460,7 +460,7 @@ export default function DashboardMain() {
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.progress_in_series}</h3>
-              <a href="/dashboard/series/list" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}</span></a>
+              <a href="/dashboard/series/list" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}<FontAwesomeIcon icon={faAngleRight} /></span></a>
             </div>
             
             <div className="lst_comic1 long">
@@ -492,7 +492,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_post}</h3>
-                <a href="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -506,7 +506,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_reaction}</h3>
-                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -522,7 +522,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.past_sales}</h3>
-                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -536,7 +536,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.history_deposit}</h3>
-                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}</span></a>
+                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
               </div>
               <div className="lst_txt1">
                 <ul>
