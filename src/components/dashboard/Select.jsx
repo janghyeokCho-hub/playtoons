@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react';
+import { useRef } from 'react';
 import { useState } from 'react';
 
 /**
@@ -8,6 +9,7 @@ import { useState } from 'react';
     dataList={stateTypeList}
     disabled={true}
     disabledText={"編集不可"}
+    selected={item.code}
     handleItemClick={handleItemClickType}
     />
 *
@@ -19,9 +21,10 @@ import { useState } from 'react';
 * @param handleItemClick option click
 * @return
 */
-export default function Select(props) {
-  const {name, dataList, disabled, handleItemClick, disabledText} = props;
+export default forwardRef( function Select(props, ref) {
+  const {name, dataList, disabled, handleItemClick, disabledText } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
+  const refSelect = useRef();
 
   const getOptionElements = () => {
     return dataList?.map((item, index) => {
@@ -30,10 +33,25 @@ export default function Select(props) {
   };
 
   const handleClickSelect = () => {
-    const objSelect = document.getElementById(name);
+    const select = refSelect.current;
     
-    handleItemClick?.(objSelect.options[objSelect.selectedIndex]);
+    handleItemClick?.(select.options[select.selectedIndex]);
   };
+
+  // ref.current로 접근하여 사용
+  useImperativeHandle(ref, () => ({
+    setSelected: (code) => {
+      const select = refSelect.current;
+      
+      dataList?.map((item, index) => {
+        if( item.code === code ){
+          select.selectedIndex = index;
+          select.options[index].setAttribute("selected", true);
+          return index;
+        }
+      });
+    }
+  }));
 
   useEffect(() => {
     setStateDisabled(disabled);
@@ -47,7 +65,7 @@ export default function Select(props) {
             <option value="">{disabledText}</option>
           </select>
         : 
-          <select name={name} id={name} className="select1 wid1" onChange={handleClickSelect} >
+          <select ref={refSelect} name={name} id={name} className="select1 wid1" onChange={handleClickSelect} >
             {
               getOptionElements()
             }
@@ -55,4 +73,4 @@ export default function Select(props) {
       }
     </>
   );
-}
+} );
