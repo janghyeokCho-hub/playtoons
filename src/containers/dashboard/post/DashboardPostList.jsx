@@ -139,6 +139,7 @@ export default function DashboardPostList(props) {
         <div class="hd_titbox2">
           <Select 
             name={"typeId"}
+            className={"select1 wid1"}
             dataList={searchList}
             handleItemClick={handleItemClickSearch} />
         </div>

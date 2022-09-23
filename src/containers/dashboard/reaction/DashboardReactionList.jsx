@@ -1,25 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect,  } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Title1, Body3, Border1pxMercury, Body1 } from "@/styledMixins";
-import {getResizedNumber} from '@/common/common';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 
-import iconPathPlus from "@ICONS/icon_plus_blue.png";
+import Container from "@/components/dashboard/Container";
+import Select from "@/components/dashboard/Select";
 
-import BrowerContainer from "@/components/dashboard/BrowserContainer";
-import ButtonOutline from "@/components/dashboard/ButtonOutline";
-import Dropdown from "@/components/dashboard/Dropdown";
-
-const cellSize = {
-  no: 5,
-  content: 22,
-  money: 10,
-  good: 10,
-  date: 10,
-  button: 15,
-};
-
-let textData = {
+let text = {
   page_title : "リアクションリスト",
   post : "投稿する",
   number : "番号",
@@ -35,10 +22,42 @@ let textData = {
   delete : "削除",
 };
 
-const dataList = ["シリーズすべて", "シリーズすべて1", "シリーズすべて3"];
+const tempData = {
+  list: [
+    {
+      id: 1,
+      content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
+      money: "500CP",
+      user: "お祭り楽しい！",
+      date: "2022/06/11",
+    },
+    {
+      id: 2,
+      content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
+      money: "500CP",
+      user: "2hyunkook",
+      date: "2022/06/11",
+    },
+  ]
+};
+
+const searchList = [
+  { 
+    code: "all",
+    name: "シリーズすべて"
+  },
+  { 
+    code: "all1",
+    name: "シリーズすべて1"
+  },
+  { 
+    code: "all2",
+    name: "シリーズすべて2"
+  },
+];
 
 export default function DashboardReactionList(props) {
-  const [data, setData] = useState();
+  const [stateData, setStateData] = useState();
   const navigate = useNavigate();
 
   const getSeriesStoryList = async () => {
@@ -54,7 +73,7 @@ export default function DashboardReactionList(props) {
     //   setList(handleGetSeriesStoryList(data));
     // }
 
-    setData(processRsultData(data));
+    setStateData(getReactionListElements(data));
   };
 
   const handleButtonClick = (e) => {
@@ -65,263 +84,111 @@ export default function DashboardReactionList(props) {
       default: // move  
         navigate( "/dashboard/reaction/detail/" + no );
         break;
-      case textData.fix:
+      case text.fix:
             
         break;
-      case textData.good:
+      case text.good:
             
         break;
-      case textData.coment:
+      case text.coment:
             
         break;
-      case textData.report:
+      case text.report:
             
         break;
-      case textData.delete:
+      case text.delete:
             
         break;
     }
   };
 
-  const handleClickPost = () => {
-    navigate("/dashboard/reaction/upload/");
+  const handleClickSearch = (event) => {
+    console.log('Search', event);
+    
   };
 
-  const handleDropItemClick = (value) => {
-    console.log("drop item ", value);
-  };
-
-  const processRsultData = (result) => {
-    const tempData = [
-      {
-        no: 1,
-        content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
-        money: "500CP",
-        good: "お祭り楽しい！",
-        date: "2022/06/11",
-      },
-      {
-        no: 2,
-        content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
-        money: "500CP",
-        good: "お祭り楽しい！",
-        date: "2022/06/11",
-      },
-    ];
-
-    return tempData.map((value, index) => {
+  const getReactionListElements = () => {
+    return stateData?.list?.map((item, index) => {
       return (
-        <Tr key={index}>
-          <Td width={cellSize.no}>{value.no}</Td>
-          <Td width={cellSize.content}>{value.content}</Td>
-          <Td width={cellSize.money}>{value.money}</Td>
-          <Td width={cellSize.good}>{value.good}</Td>
-          <Td width={cellSize.date}>{value.date}</Td>
-          <Td width={cellSize.button} data-id={value.no} >
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.move}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.fix}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.good}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.coment}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.report}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-            <ButtonOutline
-              width={"124px"}
-              height={"32px"}
-              marginLeft={"auto"}
-              marginRight={"auto"}
-              marginBottom={"12px"}
-              borderRadius={"4px"}
-              className={"reaction_list"}
-              text={textData.delete}
-              dataId={value.no}
-              handleClick={handleButtonClick}
-              />
-
-          </Td>
-        </Tr>
+        <tr>
+          <td class="hide-m">{item.id}</td>
+          <td class="td_subject2">{item.content}</td>
+          <td class="td_txt2"><span class="view-m">{text.user}</span>{item.user}</td>
+          <td class="td_txt2 mb"><span class="view-m">{text.date}：</span>{item.date}</td>
+          <td class="td_txt"><span class="view-m">{text.money}</span>{item.money}</td>
+          <td class="td_btns2">
+            <a href="#" class="btn-pk s blue2"><span>{text.move}</span></a>
+            <a href="#" class="btn-pk s blue2"><span>{text.fix}</span></a>
+            <a href="#" class="btn-pk s blue2"><span>{text.good}</span></a>
+            <a href="#" class="btn-pk s blue2"><span>{text.coment}</span></a>
+            <a href="#" class="btn-pk s blue2"><span>{text.report}</span></a>
+            <a href="#" class="btn-pk s blue2"><span>{text.delete}</span></a>
+          </td>
+        </tr>
       );
     });
   };
 
   useEffect(() => {
     //리스트 불러오기
-    setData(processRsultData());
+    setStateData(tempData);
   }, []);
 
   return (
-    <BrowerContainer
-      spaceWidth={"49px"}
-      >
-      <VerticalContainer>
-        <TitleContainer>
-          <Title>{textData.page_title}</Title>
-          <SeriesAddButtonContainer>
-            <ButtonOutline
-              width={"128px"}
-              height={"40px"}
-              marginRight={"16px"}
-              borderRadius={"5px"}
-              text={textData.post}
-              icon={iconPathPlus}
-              padding={"7px 10px"}
-              handleClick={handleClickPost}
-            />
-          </SeriesAddButtonContainer>
-        </TitleContainer>
+    <Container
+      className={"post"} 
+      backTitle={text.page_title}>
 
-        <Dropdown
-          dataList={dataList}
-          handleItemClick={handleDropItemClick}
-          width={"215px"}
-          height={"45px"}
-          borderRadius={"5px"}
-          className={"post_detail"}
-          selected={"シリーズすべて"}
-        />
-      </VerticalContainer>
-      <Table>
-        <Header>
-          <tr>
-            <HeaderCell width={cellSize.no}>{textData.number}</HeaderCell>
-            <HeaderCell width={cellSize.content}>{textData.content}</HeaderCell>
-            <HeaderCell width={cellSize.money}>{textData.money}</HeaderCell>
-            <HeaderCell width={cellSize.user}>{textData.user}</HeaderCell>
-            <HeaderCell width={cellSize.date}>{textData.date}</HeaderCell>
-            <HeaderCell width={cellSize.button}></HeaderCell>
-          </tr>
-        </Header>
-        <Tbody>{data}</Tbody>
-      </Table>
-    </BrowerContainer>
+      <div class="inr-c">
+            
+        <div class="hd_titbox hd_mst1">
+          <h2 class="h_tit0"><span>{text.page_title}</span></h2>
+          <div class="rgh">
+            <a href="/dashboard/post/upload" class="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
+          </div>
+        </div>
+        <div class="hd_titbox2">
+          <Select
+            name={"typeId"}
+            className={"select1"}
+            dataList={searchList}
+            handleItemClick={handleClickSearch}
+            />
+        </div>
+
+        <div class="tbl_basic mtbl_ty1">
+          <table class="list">
+            <caption>list</caption>
+            <colgroup>
+              <col class="num"/>
+              <col/>
+              <col class="wid1"/>
+              <col class="wid1"/>
+              <col class="wid1"/>
+              <col class="wid4"/>
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="hide-m">{text.number}</th>
+                <th>{text.content}</th>
+                <th>{text.user}</th>
+                <th>{text.date}</th>
+                <th>{text.money}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                getReactionListElements()
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </Container>
   );
 }
 
-const Table = styled.table`
-  width: 100%;
-  height: auto;
-  margin: auto;
-  border-collapse: collapse;
-  border-spacing: 0 20px;
-`;
-
-const Header = styled.thead`
-  ${Border1pxMercury}
-  width: 100%;
-  height: 6.389776357827476vh;
-  background-color: var(--desert-storm);
-`;
-
-const HeaderCell = styled.th`
-  ${Body1}
-  width : ${(props) => props.width}%;
-  min-width: ${(props) => props.minWidth}%;
-  height: 60px;
-  font-weight: 700;
-  font-size: 1.6em;
-  color: var(--vulcan);
-  white-space: nowrap;
-  text-align: center;
-  padding: 1.5vh;
-  vertical-align: middle;
-`;
-
-const Tbody = styled.tbody`
-  width: 100%;
-  height: auto;
-`;
-
-const Tr = styled.tr`
-  width: 100%;
-  height: 340px; /* 200px */
-  border-bottom: 1px solid var(--mercury);
-`;
-
-const Td = styled.td`
-  ${Body3}
-  width : ${(props) => props.width}%;
-  min-width: ${(props) => props.minWidth}%;
-  font-size: 1.6em;
-  color: var(--vulcan);
-  text-align: center;
-  vertical-align: middle;
-`;
-
-
-const TitleContainer = styled.div`
-  width: 100%;
-  padding: 30px 0;
-  margin-bottom: 35px;
-`;
-
-const VerticalContainer = styled.div`
-  margin-bottom: 32px;
-`;
-
-const Title = styled.h1`
-  ${Title1}
-  float: left;
-  color: var(--vulcan);
-  line-height: 36px;
-  white-space: nowrap;
-  font-size: 3.2em;
-`;
-
-const SeriesAddButtonContainer = styled.div`
-  float: right;
-`;
 
 

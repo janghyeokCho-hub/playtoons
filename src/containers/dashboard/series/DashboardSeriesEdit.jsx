@@ -199,6 +199,7 @@ export default function DashboardUploadSeries(props) {
               <Select 
                 ref={refType}
                 name={"typeId"}
+                className={"select1 wid1"}
                 dataList={stateTypeList}
                 handleItemClick={handleItemClickType}
                 />
@@ -209,6 +210,7 @@ export default function DashboardUploadSeries(props) {
               <h3 className="tit1">{text.category}</h3>
               <Select 
                 name={"categoryId"}
+                className={"select1 wid1"}
                 dataList={stateCategoryList}
                 // handleItemClick={handleItemClickCategory}
                 />

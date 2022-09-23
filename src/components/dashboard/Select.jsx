@@ -4,8 +4,9 @@ import { useState } from 'react';
 
 /**
 *
-   <Select 
+  <Select 
     name={"typeId"}
+    className={"select1 wid1"}
     dataList={stateTypeList}
     disabled={true}
     disabledText={"編集不可"}
@@ -22,7 +23,7 @@ import { useState } from 'react';
 * @return
 */
 export default forwardRef( function Select(props, ref) {
-  const {name, dataList, disabled, handleItemClick, disabledText } = props;
+  const {name, className, dataList, disabled, handleItemClick, disabledText } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
   const refSelect = useRef();
 
@@ -61,11 +62,11 @@ export default forwardRef( function Select(props, ref) {
     <>
       {
         stateDisabled ? 
-          <select name={name} id={name} className="select1 wid1" disabled>
+          <select name={name} id={name} className={className} disabled>
             <option value="">{disabledText}</option>
           </select>
         : 
-          <select ref={refSelect} name={name} id={name} className="select1 wid1" onChange={handleClickSelect} >
+          <select ref={refSelect} name={name} id={name} className={className} onChange={handleClickSelect} >
             {
               getOptionElements()
             }
