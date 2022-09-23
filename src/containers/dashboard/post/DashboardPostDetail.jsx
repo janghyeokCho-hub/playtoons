@@ -5,6 +5,9 @@ import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 
 import Container from "@/components/dashboard/Container";
 
+import tempImage from '@IMAGES/tmp_comic3.png';
+import tempProfile from '@IMAGES/img_profile.png';
+import { useParams } from "react-router-dom";
 
 
 const text = {
@@ -24,10 +27,11 @@ const text = {
   report: "通報",
   delete: "削除",
   icon: "アイコン",
+  sing_in_to_post : "ログインして投稿する"
 };
 
 const tempData = {
-  name: "シェルターアーク",
+  name: "シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク",
   title: "終わらない話",
   episode_count: "541話",
   public_date: "2022/06/07",
@@ -38,62 +42,39 @@ const tempData = {
   coment_count: "966",
   content_title: "シェルターアーク 2話",
   content_date: "2022.06.10",
-  content_summary: (
-    <React.Fragment>
-      モと戦う為、特殊チームレンジャーを創設したが、
-      <br />
-      クモの圧倒的な力には勝てず。
-    </React.Fragment>
-  ),
-  content_image:
-    "/img/dashboardpostdetail-rectangle-3F15B08E-F381-4DB5-9F3D-63F6E781FDA3.jpg",
-  content_next_summary:
-    "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
+  content_summary: "モと戦う為、特殊チームレンジャーを創設したが、 クモの圧倒的な力には勝てず。",
+  content_image: tempImage,
+  content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
 
-  my_icon_image:
-    "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
+  my_profile_image: tempProfile,
 };
 
-const tempReactions = [
-  {
-    id: "12",
-    profile:
-      "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
-    name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-    coment:
-      "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
-    good_count: "123",
-  },
-  {
-    id: "15",
-    profile:
-      "/img/dashboardpostdetail-oval-copy-A74BAE99-7E7C-4FC9-A864-C9DCC025808F@2x.png",
-    name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-    coment:
-      "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
-    good_count: "123",
-  },
-];
+const tempReactionList = {
+  list : [
+    {
+      id: "12",
+      profile: tempProfile,
+      name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      data: "3日前",
+      coment: "氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動パターン把握したくなります(笑)",
+      good_count: "123",
+    },
+    {
+      id: "15",
+      profile: tempProfile,
+      name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      data: "2日前",
+      coment: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
+      good_count: "10",
+    },
+  ]
+};
+
 
 export default function DashboardPostDetail() {
-  const [reactionList, setReactionList] = useState([]);
-  const [data, setData] = useState({
-    name: "",
-    title: "",
-    episode_count: "",
-    public_date: "",
-    end_date: "",
-    status: "",
-    view_count: "",
-    good_count: "",
-    coment_count: "",
-    content_title: "",
-    content_date: "",
-    content_summary: "",
-    content_image:"",
-    content_next_summary:"",
-    my_icon_image:"",
-  });
+  const [stateReactionList, setStateReactionList] = useState(undefined);
+  const [stateData, setStateData] = useState(undefined);
+  const params = useParams('id');
 
   const handleReactionClick = (e) => {
     let type = e.target.innerText;
@@ -112,17 +93,35 @@ export default function DashboardPostDetail() {
     }
   };
 
-  const getReactionList = (resultList) => {
-    return resultList.map((item, index) => {
+  const getReactionList = () => {
+    return stateReactionList?.map((item, index) => {
       return (
-        <></>
+        <div className="col" key={index}>
+          <div className="imgs"><span style={{backgroundImage: `url(${item.profile})`}}></span></div>
+          <div className="conts">
+            <p className="h1">{item.name}</p>
+            <p className="d1"><span>{item.date}</span><span>コメント</span></p>
+            <p className="t1">{item.coment}</p>
+            <div className="btns">
+              <a href="#" className="btn-pk s blue2"><span>{text.fix}</span></a>
+              <a href="#" className="btn-pk s blue2"><span>{text.good}</span></a>
+              <a href="#" className="btn-pk s blue2"><span>{text.coment}</span></a>
+              <a href="#" className="btn-pk s blue2"><span>{text.report}</span></a>
+              <a href="#" className="btn-pk s blue2"><span>{text.delete}</span></a>
+            </div>
+            <div className="rgh">
+              <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} />{item.good_count}</button>
+              <button type="button" className="btn02"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
+            </div>
+          </div>
+        </div>
       );
     });
   };
 
   useEffect(() => {
-    setData(tempData);
-    setReactionList(getReactionList(tempReactions));
+    setStateData(tempData);
+    setStateReactionList(tempReactionList.list);
   }, []);
 
   return (
@@ -130,102 +129,61 @@ export default function DashboardPostDetail() {
     type={"sub post bg"}
     backTitle={text.page_title} >
 
-    <div class="inr-c">
+    <div className="inr-c">
 
-      <div class="wrap_detail">
-        <div class="area_detail1">
-          <ul class="cx_list">
-            <li><span>シリーズ名  </span><span>シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク</span></li>
-            <li><span>タイトル  </span><span>終わらない話</span></li>
-            <li><span>話数  </span><span>541話</span></li>
-            <li><span>公開日   </span><span>2022/06/07</span></li>
-            <li><span>終了日   </span><span>2022/06/07</span></li>
-            <li><span>状態   </span><span>公開中</span></li>
+      <div className="wrap_detail">
+        <div className="area_detail1">
+          <ul className="cx_list">
+            <li><span>{text.name}  </span><span>{stateData?.name}</span></li>
+            <li><span>{text.title}  </span><span>{stateData?.title}</span></li>
+            <li><span>{text.episode_count}  </span><span>{stateData?.episode_count}</span></li>
+            <li><span>{text.public_date}   </span><span>{stateData?.public_date}</span></li>
+            <li><span>{text.end_date}   </span><span>{stateData?.end_date}</span></li>
+            <li><span>{text.status}   </span><span>{stateData?.status}</span></li>
           </ul>
-          <div class="icon">
-            <span><FontAwesomeIcon icon={faEye} />1.2k</span>
-            <span><FontAwesomeIcon icon={faHeart} />1.2k</span>
-            <span><FontAwesomeIcon icon={faCommentQuote} />966</span>
+          <div className="icon">
+            <span><FontAwesomeIcon icon={faEye} />{stateData?.view_count}</span>
+            <span><FontAwesomeIcon icon={faHeart} />{stateData?.good_count}</span>
+            <span><FontAwesomeIcon icon={faCommentQuote} />{stateData?.coment_count}</span>
           </div>
         
-          <div class="botm btn-bot">
-            <a href="#" class="btn-pk n blue"><span>リアクション管理</span></a>
-            <a href="#" class="btn-pk n blue2"><span>修正する</span></a>
+          <div className="botm btn-bot">
+            <a href="#" className="btn-pk n blue"><span>{text.reaction_management}</span></a>
+            <a href={`/dashboard/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></a>
           </div>
         </div>
         
-        <div class="area_detail2">
-          <h2 class="h1">シェルターアーク 2話</h2>
-          <p class="d1">2022.06.10</p>
-          <p class="t1">モと戦う為、特殊チームレンジャーを創設したが、クモの圧倒的な力には勝てず。</p>
+        <div className="area_detail2">
+          <h2 className="h1">{stateData?.title} {stateData?.episode_count}</h2>
+          <p className="d1">{stateData?.content_date}</p>
+          <p className="t1">{stateData?.content_summary}</p>
         </div>
         
-        <div class="">
-          <img src="../images/tmp/tmp_comic3.png" alt="" />
+        <div className="">
+          <img src={stateData?.content_image} alt="" />
         </div>
         
-        <div class="area_detail2">
-          <p class="t1 c-gray">リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。</p>
+        <div className="area_detail2">
+          <p className="t1 c-gray">{stateData?.content_next_summary}</p>
         </div>
       </div>
 
-      <div class="wrap_comment">
-        <div class="top_comm">
-          <div class="imgs"><span style={{backgroundImage: "url(../images/common/img_profile.png)"}}></span></div>
-          <div class="conts">
-            <textarea name="" id="" class="textarea1" placeholder="ログインして投稿する"></textarea>
-            <div class="btns">
-              <button type="button" class="btn-pk s gray"><span>アイコン</span></button>
-              <button type="button" class="btn-pk s blue"><span>登録</span></button>
+      <div className="wrap_comment">
+        <div className="top_comm">
+          <div className="imgs"><span style={{backgroundImage: `url(${stateData?.my_profile_image})`}}></span></div>
+          <div className="conts">
+            <textarea name="" id="" className="textarea1" placeholder={text.sing_in_to_post}></textarea>
+            <div className="btns">
+              <button type="button" className="btn-pk s gray"><span>{text.icon}</span></button>
+              <button type="button" className="btn-pk s blue"><span>{text.register}</span></button>
             </div>
           </div>
         </div>
 
-        <div class="lst_comm">
-          <div class="col">
-            <div class="imgs"><span style={{backgroundImage: "url(../images/common/img_profile.png)"}}></span></div>
-            <div class="conts">
-              <p class="h1">琉桔真緒 ✧◝(⁰▿⁰)◜✧</p>
-              <p class="d1"><span>3日前</span><span>コメント</span></p>
-              <p class="t1">氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-              だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-              パターン把握したくなります(笑)
-              </p>
-              <div class="btns">
-                <a href="#" class="btn-pk s blue2"><span>固定</span></a>
-                <a href="#" class="btn-pk s blue2"><span>いいね</span></a>
-                <a href="#" class="btn-pk s blue2"><span>コメント</span></a>
-                <a href="#" class="btn-pk s blue2"><span>通報</span></a>
-                <a href="#" class="btn-pk s blue2"><span>削除</span></a>
-              </div>
-              <div class="rgh">
-                <button type="button" class="btn01"><FontAwesomeIcon icon={faHeart} />123</button>
-                <button type="button" class="btn02"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="imgs"><span style={{backgroundImage: "url(../images/common/img_profile.png)"}}></span></div>
-            <div class="conts">
-              <p class="h1">琉桔真緒 ✧◝(⁰▿⁰)◜✧</p>
-              <p class="d1"><span>3日前</span><span>コメント</span></p>
-              <p class="t1">氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-              だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-              パターン把握したくなります(笑)
-              </p>
-              <div class="btns">
-                <a href="#" class="btn-pk s blue2"><span>固定</span></a>
-                <a href="#" class="btn-pk s blue2"><span>いいね</span></a>
-                <a href="#" class="btn-pk s blue2"><span>コメント</span></a>
-                <a href="#" class="btn-pk s blue2"><span>通報</span></a>
-                <a href="#" class="btn-pk s blue2"><span>削除</span></a>
-              </div>
-              <div class="rgh">
-                <button type="button" class="btn01"><FontAwesomeIcon icon={faHeart} />123</button>
-                <button type="button" class="btn02"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
-              </div>
-            </div>
-          </div>
+        <div className="lst_comm">
+          {
+            getReactionList()
+          }
         </div>
       </div>
     </div>
