@@ -10,6 +10,7 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
     ref={refCoverImage}
     className={"small"}
     preview={imageUrl}
+    id={"filebox2"}
     name={"coverImage"}                     
     textDragNDrop={text.label_drag_drop}    
     textInputMessage={text.input_image}     
@@ -23,7 +24,13 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
     refCoverImage.current.setImage(fileUrl, hash);
  * @version 1.0.0
  * @author 2hyunkook
- * @param {*} props 
+ * @param ref image file 접근을 위한 reference 
+ * @param className box_drag 와 같이 쓰일 class name
+ * @param preview image preview
+ * @param id file input tag id
+ * @param name upload parameter name (hash값을 가진 input tag name)
+ * @param textDragNDrop 평소에 보여질 drag n drop text
+ * @param textInputMessage drag 가 영역에 들어왔을때 보여질 text
  */
 function ImageUploadContainer(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
