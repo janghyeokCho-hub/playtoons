@@ -97,7 +97,7 @@ export default function UploadPost(props) {
   const getTypeListElements = () => {
     return stateTypeList?.map((item, index) => {
       return (
-        <label class="inp_txchk"><input type="radio" name="type" defaultValue={item.code} defaultChecked={item.checked} /><span>{item.name}</span></label>
+        <label className="inp_txchk" key={index}><input type="radio" name="type" defaultValue={item.code} defaultChecked={item.checked} /><span>{item.name}</span></label>
       );
     });
   };
@@ -131,31 +131,31 @@ export default function UploadPost(props) {
       headerType={"post"}
       headerClassName={"ty1"} >
 
-      <div class="inr-c">
-        <div class="box_area bdn">
+      <div className="inr-c">
+        <div className="box_area bdn">
           
           <form action="">
-          <section class="bbs_write">
-            <div class="hd_titbox">
-              <h2 class="h_tit1">{text.upload_post}</h2>
+          <section className="bbs_write">
+            <div className="hd_titbox">
+              <h2 className="h_tit1">{text.upload_post}</h2>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.series}</h3>
-              <input type="text" name={"series"} class="inp_txt w100p" />
+            <div className="col">
+              <h3 className="tit1">{text.series}</h3>
+              <input type="text" name={"series"} className="inp_txt w100p" />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.type}</h3>
-              <div class="lst_txchk">
+            <div className="col">
+              <h3 className="tit1">{text.type}</h3>
+              <div className="lst_txchk">
                 {
                   getTypeListElements()
                 }
               </div>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.category}</h3>
+            <div className="col">
+              <h3 className="tit1">{text.category}</h3>
               <Select 
                 name={"category"}
                 className={"select1 wid1"}
@@ -163,19 +163,19 @@ export default function UploadPost(props) {
                 handleItemClick={handleClickItemCategory} />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.title}</h3>
-              <input type="text" class="inp_txt w100p" name={"title"} />
+            <div className="col">
+              <h3 className="tit1">{text.title}</h3>
+              <input type="text" className="inp_txt w100p" name={"title"} />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.episode}</h3>
-              <input type="text" class="inp_txt w100p" name={"episode"}/>
+            <div className="col">
+              <h3 className="tit1">{text.episode}</h3>
+              <input type="text" className="inp_txt w100p" name={"episode"}/>
             </div>
 
 
-            <div class="col">
-              <h3 class="tit1">{text.contents} <button type="button" class="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
+            <div className="col">
+              <h3 className="tit1">{text.contents} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
               <ImageUploadContainer
                 ref={refContents}
                 id={"filebox2"}
@@ -185,16 +185,16 @@ export default function UploadPost(props) {
                 />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.tag}</h3>
-              <div class="inp_txt sch">
-                <button type="button" class="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                <input type="text" class="" placeholder={text.tag_name} />
+            <div className="col">
+              <h3 className="tit1">{text.tag}</h3>
+              <div className="inp_txt sch">
+                <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                <input type="text" className="" placeholder={text.tag_name} />
               </div>
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.support_user}</h3>
+            <div className="col">
+              <h3 className="tit1">{text.support_user}</h3>
               <Select 
                 name={"supportor"}
                 className={"select1 wid1"}
@@ -202,8 +202,8 @@ export default function UploadPost(props) {
                 handleItemClick={handleClickItemCategory} />
             </div>
 
-            <div class="col">
-              <h3 class="tit1">{text.timeline} <button type="button" class="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
+            <div className="col">
+              <h3 className="tit1">{text.timeline} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
               <ImageUploadContainer
                 name={"timeline"}                     
                 id={"filebox1"}                     
@@ -213,9 +213,9 @@ export default function UploadPost(props) {
             </div>
           </section>
 
-          <div class="bbs_write_botm">
-            <a href="#" class="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></a>
-            <a href="#series" class="btn-pk n blue" onClick={handleClickRegister}><span>{text.register}</span></a>
+          <div className="bbs_write_botm">
+            <a href="#" className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></a>
+            <a href="#series" className="btn-pk n blue" onClick={handleClickRegister}><span>{text.register}</span></a>
           </div>
           </form>
 

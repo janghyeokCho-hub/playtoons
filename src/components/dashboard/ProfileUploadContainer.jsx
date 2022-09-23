@@ -5,7 +5,6 @@ import {  Body3 } from "@/styledMixins";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/pro-solid-svg-icons";
 
-import ImagePreviewContainer from '@COMPONENTS/dashboard/ImagePreviewContainer';
 
 /**
  * 
@@ -87,18 +86,7 @@ export default function ProfileUploadContainer(props) {
           </Container>
         ) : (
           // preview
-          <PreviewContainer 
-            width={props.width}
-            height={props.height}
-            borderRadius={props.borderRadius}
-            >
-            <ImagePreviewContainer 
-              borderRadius={props.borderRadius}
-              handleClick={handlePreviewClose}
-              >
-              {file}
-            </ImagePreviewContainer>
-          </PreviewContainer>
+          <></>
         )
       }
     </RootContainer>

@@ -69,8 +69,8 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
         {/* post */}
         {
           renderType === "post" && 
-          <div class="inr-c">
-            <button type="button" class="btn_back"><span class="icon"><FontAwesomeIcon icon={faAngleLeft} /></span></button>
+          <div className="inr-c">
+            <button type="button" className="btn_back" onClick={() => {navigate(-1)}}><span className="icon"><FontAwesomeIcon icon={faAngleLeft} /></span></button>
           </div>
         }
 
