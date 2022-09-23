@@ -12,6 +12,7 @@ import Main from "@CONTAINERS/dashboard/DashboardMain";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 import UploadProfile from "@/containers/dashboard/profile/DashboardUploadProfile";
 import Plan from "@/containers/dashboard/plan/DashboardPlan";
+import Page404 from "@/containers/dashboard/Page404";
 import Modal from '@/components/Modal';
 
 /**
@@ -75,7 +76,7 @@ export default function Dashboard() {
         />
         <Route 
           path="/*" 
-          element={<Series />}    //TODO 404
+          element={<Page404 />}    //TODO 404
         />
       </Routes>
       {/* //TODO 모달기능 */}

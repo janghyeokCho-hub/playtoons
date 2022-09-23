@@ -11,6 +11,7 @@ import BrowserContainer from "@/components/dashboard/BrowserContainer";
 import Button from '@COMPONENTS/dashboard/ButtonOutline';
 import ProductTab from "@/components/dashboard/ProductTab";
 import Input from "@/components/dashboard/TextInputSearch";
+import Container from "@/components/dashboard/Container";
 
 const size = {
   number: 5,
@@ -150,47 +151,7 @@ export default function DashboardProductList(props) {
     if( result !== undefined ){
       return result.map((item, index) => {
         return (
-          <Tr key={index}>
-            <Td width={size.number}>{item.number}</Td>
-            <Td width={size.product}>
-              <Image src={item.image} />
-            </Td>
-            <Td width={size.title}>{item.title}</Td>
-            <Td width={size.price}>{item.price}</Td>
-            <Td width={size.date}>{item.date}</Td>
-            <Td width={size.status} color={getStatusColor(item.status)}>{item.status}</Td>
-            <Td width={size.buttons}>
-              <Button
-                width={"6.458333333vw"}
-                height={"3.703703704vh"}
-                marginLeft={"auto"}
-                marginBottom={"10px"}
-                borderRadius={"4px"}
-                text={text.detail}
-                dataId={item.number}
-                handleClick={handleItemClick}
-                />
-              <Button
-                width={"6.458333333vw"}
-                height={"3.703703704vh"}
-                marginLeft={"auto"}
-                marginBottom={"10px"}
-                borderRadius={"4px"}
-                text={text.modify}
-                dataId={item.number}
-                handleClick={handleItemClick}
-                />
-              <Button
-                width={"6.458333333vw"}
-                height={"3.703703704vh"}
-                marginLeft={"auto"}
-                borderRadius={"4px"}
-                text={text.dont_see}
-                dataId={item.number}
-                handleClick={handleItemClick}
-                />
-            </Td>
-          </Tr>
+          <></>
         );
       });
     }
@@ -200,107 +161,14 @@ export default function DashboardProductList(props) {
     //리스트 불러오기
     // getProductList();
     setData(tempData);
-    refInput.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
+    // refInput.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
   }, []);
 
   return (
-    <BrowserContainer
-      type={BROWSER_CONTENTS_AREA_TYPE.DASHBOARD_WITHOUT_PADDING}
-      display={"block"}
-      >
-        <ProductTab 
-          marginBottom={"69px"}
-          tabs={{
-            see_product : text.see_product, 
-            sales_detail : text.sales_detail, 
-            qna_product : text.qna_product, 
-            see_review : text.see_review}}
-          path={getSelectedTab()}
-          />
-        <Input 
-          width={"300px"}
-          height={"45px"}
-          marginLeft={"49px"}
-          marginBottom={"39px"}
-          borderRadius={"4px"}
-          placeholder={text.product_name}
-          ref={refInput}
-          />
-        <Table>
-          <Header>
-            <tr>
-              <HeaderCell width={size.number}>{text.number}</HeaderCell>
-              <HeaderCell width={size.product}>{text.product}</HeaderCell>
-              <HeaderCell width={size.title}>{text.title}</HeaderCell>
-              <HeaderCell width={size.price}>{text.price}</HeaderCell>
-              <HeaderCell width={size.date}>{text.date}</HeaderCell>
-              <HeaderCell width={size.status}>{text.status}</HeaderCell>
-              <HeaderCell width={size.buttons}>{""}</HeaderCell>
-            </tr>
-          </Header>
-          <Tbody>{getProductListFromResultData(data)}</Tbody>
-        </Table>
-    </BrowserContainer>
+    <Container 
+      type={"bg profile"} >
+
+
+    </Container>
   );
 }
-
-const Table = styled.table`
-  height: auto;
-  margin: 0 48px;
-  border-collapse: collapse;
-  border-spacing: 0 20px;
-`;
-
-const Header = styled.thead`
-  ${Border1pxMercury}
-  width: 100%;
-  height: 6.389776357827476vh;
-  background-color: var(--desert-storm);
-`;
-
-const HeaderCell = styled.th`
-  ${Body1}
-  width : ${(props) => props.width}%;
-  min-width: ${(props) => props.minWidth}%;
-  font-weight: 700;
-  font-size: 1.6em;
-  color: var(--vulcan);
-  white-space: nowrap;
-  text-align: center;
-  padding: 1.5vh;
-  vertical-align: middle;
-`;
-
-const Tbody = styled.tbody`
-  width: 100%;
-  height: auto;
-`;
-
-const Tr = styled.tr`
-  width: 100%;
-  height: 21.299254526091588vh; /* 200px */
-  border-bottom: 1px solid var(--mercury);
-  background-color: var(--white);
-
-  :hover{
-    background-color: var(--desert-storm);
-  }
-`;
-
-const Td = styled.td`
-  ${Body3}
-  width : ${(props) => props.width}%;
-  min-width: ${(props) => props.minWidth}%;
-  font-size: 1.6em;
-  color: ${(props) => props.color ? props.color : "var(--vulcan)"};
-  text-align: center;
-  vertical-align: middle;
-`;
-
-const Image = styled.img`
-  width: 6.822916667vw;
-  /* height: 130px; */
-  border-radius: 5px;
-  object-fit: cover;
-`;
-
