@@ -12,7 +12,7 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
     preview={imageUrl}
     id={"filebox2"}
     name={"coverImage"}                     
-    text={text.label_drag_drop}    
+    text={text.drag_drop}    
     />
   
   ex) 이미지 파일 정보 가져오기 file, preview, hash

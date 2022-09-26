@@ -9,11 +9,12 @@ export default function NavBarItem(props) {
   
 
   const handleClick = (e) => {
-    setSelected(!isSelected);
-
-    if (onClick !== undefined) {
-      onClick(e);
+    if( isSelected === true ){
+      return;
     }
+
+    setSelected(!isSelected);
+    onClick?.(e);
   };
 
   useEffect(() => {

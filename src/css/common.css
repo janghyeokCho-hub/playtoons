@@ -2965,6 +2965,7 @@ body {
   background-repeat: no-repeat;
   background-size: contain;
   background-color: #13161A;
+  overflow: auto;   /* 2022.09.26 profile background preview 영역 벗어나는걸 방지하기 위해서 추가 */
 }
 .top_profile .fileview .f_tx {
   position: absolute;

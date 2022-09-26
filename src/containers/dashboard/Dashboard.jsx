@@ -12,6 +12,9 @@ import Main from "@CONTAINERS/dashboard/DashboardMain";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 import UploadProfile from "@/containers/dashboard/profile/DashboardUploadProfile";
 import Plan from "@/containers/dashboard/plan/DashboardPlan";
+import PlanUpload from "@/containers/dashboard/plan/DashboardPlanUpload";
+import PlanEdit from "@/containers/dashboard/plan/DashboardPlanEdit";
+import PlanSubsciber from "@/containers/dashboard/plan/DashboardPlanSubsciber";
 import Page404 from "@/containers/dashboard/Page404";
 import Modal from '@/components/Modal';
 
@@ -73,6 +76,18 @@ export default function Dashboard() {
         <Route 
           path="/plan" 
           element={<Plan />} 
+        />
+        <Route 
+          path="/plan/upload" 
+          element={<PlanUpload />} 
+        />
+        <Route 
+          path="/plan/edit/:id" 
+          element={<PlanEdit />} 
+        />
+        <Route 
+          path="/plan/subscriber" 
+          element={<PlanSubsciber />} 
         />
         <Route 
           path="/*" 

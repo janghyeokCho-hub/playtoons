@@ -8,6 +8,7 @@ import tempPlanImage1 from "@IMAGES/img_mainplan1.jpg";
 import tempPlanImage2 from "@IMAGES/img_mainplan2.jpg";
 import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
 import tempProfile from "@IMAGES/img_profile.png";
+import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 
 
 const text = {
@@ -39,9 +40,9 @@ const tempData = {
     },
     {
       id: "2",
-      image: tempPlanImage1,
-      title: "ダイヤモンドプラン",
-      money: "1,000CP",
+      image: tempPlanImage2,
+      title: "プラチナプラン",
+      money: "2,000CP",
       description: "ひと月だけでも嬉しいです！タイムラプスや未統合PSD、その他限定記事が見れます。更新は不定期ですが、なるべく沢山更新できるよう頑張ります。",
       benefits : [
         {
@@ -54,9 +55,9 @@ const tempData = {
     },
     {
       id: "3",
-      image: tempPlanImage1,
-      title: "ダイヤモンドプラン",
-      money: "1,000CP",
+      image: tempPlanImage3,
+      title: "VIPプラン",
+      money: "3,000CP",
       description: "ひと月だけでも嬉しいです！タイムラプスや未統合PSD、その他限定記事が見れます。更新は不定期ですが、なるべく沢山更新できるよう頑張ります。",
       benefits : [
         {
@@ -70,17 +71,20 @@ const tempData = {
   ],
   supporters : [
     {
-      date : "2022/04",
+      image: tempProfile,
+      date : "2022/04/22",
       title : "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "VVIPプラン"
+      plan: "ダイヤモンドプラン"
     },
     {
-      date : "2022/04",
+      image: tempProfile,
+      date : "2022/06/30",
       title : "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "VVIPプラン"
+      plan: "プラチナプラン"
     },
     {
-      date : "2022/04",
+      image: tempProfile,
+      date : "2022/08/01",
       title : "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
       plan: "VVIPプラン"
     },
@@ -89,169 +93,89 @@ const tempData = {
 
 
 export default function DashboardPlan(props) {
-  const {refIsAdult, refInputNickname, refIntrodction, refTag} = useRef();
-  const [data, setData] = useState(undefined);
+  const [stateData, setStateData] = useState(undefined);
   const params = useParams();
   const navigate = useNavigate();
 
-  let seriesData = {};
-
-  const handleRegister = () => {
-    console.log("refToggle", refIsAdult);
-  };
-
-
-  const handlePostImageFile = useCallback((file) => {
-    // 폼데이터 구성
-    const formData = new FormData();
-    const config = {
-      header: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    formData.append("file", file);
-    console.log("postImage file", file);
-  }, []);
-
-  const handleClickAddPlan = () => {
-    console.log("handleTimelineImageFile");
-    //move to add plan page
-    // navigate("/");     
-  };
-
-  const handleTimelineImageFile = (file) => {
-    console.log("handleTimelineImageFile", file);
-  };
-
-  const handleItemClickPlan = (e) => {
-
-  }
 
   const getPlanList = () => {
-    if( data === undefined ){
-      return;
-    }
-
-    let containerMarginRight = "";
-
-    return data.plans.map((item, i) => {
-      containerMarginRight = i === data.plans.length - 1 ? "" : "10px";
-
+    return stateData?.plans.map((item, i) => {
       return  (
-                <></>
-              );
+        <div className="col" key={i}>
+          <div className="icon"><img src={item.image} alt="planImage" /></div>
+          <div className="cont">
+            <h3 className="h1">{item.title}</h3>
+            <p className="t1"><span className="c-blue">{item.money}</span> /{text.month}</p>
+            <p className="t2">{item.description}</p>
+            <div className="t_dot1">
+              {
+                getBenefitList(item.benefits)  
+              }
+            </div>
+            <a href={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></a>
+          </div>
+        </div>
+      );
     });
-  }
+  };
+
+  const getBenefitList = (list) => {
+    return list.map((item, i) => {
+      return <p key={i}>{item.text}</p>
+    });
+  };
 
   const getSupporterList = () => {
-    if( data === undefined ){
-      return;
-    }
-
-    return data.supporters.map((item, i) => {
+    return stateData?.supporters.map((item, i) => {
       return  (
-        <></>
-              );
+        <li key={i}>
+          <div>
+            <p className="t_profile"><span className="im" style={{backgroundImage: `url(${item.image})`}}></span><span>{item.title}</span></p>
+            <p className="t2">{item.date}</p>
+          </div>
+          <p className="t1 c-black">{item.plan}</p>
+        </li>
+      );
     });
 
-  }
+  };
 
   useEffect(() => {
-    setData(tempData);
+    setStateData(tempData);
   }, []);
 
   return (
     <Container 
       type={"plan bg"} >
 
-      <div class="inr-c">
+      <div className="inr-c">
 			
-        <section class="box_area pr-mb2 ty_plan2">
-          <header class="hd_titbox hd_mst1">
-            <h2 class="h_tit1"><span>支援管理</span></h2>
-            <div class="rgh">
-              <a href="#" class="btn-pk n blue2"><span><FontAwesomeIcon icon="fa-solid fa-plus" /> 支援を追加</span></a>
+        <section className="box_area pr-mb2 ty_plan2">
+          <header className="hd_titbox hd_mst1">
+            <h2 className="h_tit1"><span>{text.plan_management}</span></h2>
+            <div className="rgh">
+              <a href="/dashboard/plan/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.add_plan}</span></a>
             </div>
           </header>
 
-          <div class="lst_mainplan">
-            <div class="col">
-              <div class="icon"><img src={tempPlanImage1} alt="image" /></div>
-              <div class="cont">
-                <h3 class="h1">ダイヤモンドプラン</h3>
-                <p class="t1"><span class="c-blue">1,000PC</span> /月</p>
-                <p class="t2">ひと月だけでも嬉しいです！タイムラプスや未統合
-                その他限定記事が見れます。更新は不定期ですが、
-                なるべく沢山更新できるよう頑張ります。</p>
-                <div class="t_dot1">
-                  <p>・差分が見れます</p>
-                  <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-                </div>
-                <a href="#" class="btn-pk b blue w100p"><span>編集する</span></a>
-              </div>
-            </div>
-            <div class="col">
-              <div class="icon"><img src={tempPlanImage2} alt="image" /></div>
-              <div class="cont">
-                <h3 class="h1">プラチナプラン</h3>
-                <p class="t1"><span class="c-blue">2,000CP</span> /月</p>
-                <p class="t2">ひと月だけでも嬉しいです！タイムラプスや未統合
-                その他限定記事が見れます。更新は不定期ですが、
-                なるべく沢山更新できるよう頑張ります。</p>
-                <div class="t_dot1">
-                  <p>・差分が見れます</p>
-                  <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-                </div>
-                <a href="#" class="btn-pk b blue w100p"><span>編集する</span></a>
-              </div>
-            </div>
-            <div class="col">
-              <div class="icon"><img src={tempPlanImage3} alt="image" /></div>
-              <div class="cont">
-                <h3 class="h1">VIPプラン</h3>
-                <p class="t1"><span class="c-blue">3,000CP</span> /月</p>
-                <p class="t2">ひと月だけでも嬉しいです！タイムラプスや未統合
-                その他限定記事が見れます。更新は不定期ですが、
-                なるべく沢山更新できるよう頑張ります。</p>
-                <div class="t_dot1">
-                  <p>・差分が見れます</p>
-                  <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-                </div>
-                <a href="#" class="btn-pk b blue w100p"><span>編集する</span></a>
-              </div>
-            </div>
+          <div className="lst_mainplan">
+            {
+              getPlanList()
+            }
           </div>
         </section>
 
 
-        <section class="box_area ty_plan1">
-          <div class="hd_titbox">
-            <h3 class="h_tit1">支援者管理</h3>
-            <a href="#" class="rgh c-blue"><span class="ico_arr_link">すべてみる <i class="fa-solid fa-angle-right"></i></span></a>
+        <section className="box_area ty_plan1">
+          <div className="hd_titbox">
+            <h3 className="h_tit1">{text.supporter_management}</h3>
+            <a href="/dashboard/plan/subscriber" className="rgh c-blue"><span className="ico_arr_link">{text.see_all} <FontAwesomeIcon icon={faAngleRight} /></span></a>
           </div>
-          <div class="lst_txt1">
+          <div className="lst_txt1">
             <ul>
-              <li>
-                <div>
-                  <p class="t_profile"><span class="im" style={{backgroundImage: `url(${tempProfile})`}}></span><span>琉桔真緒 ✧◝(⁰▿⁰)◜✧</span></p>
-                  <p class="t2">2022/06/11</p>
-                </div>
-                <p class="t1 c-black">VVIPプラン</p>
-              </li>
-              <li>
-                <div>
-                  <p class="t_profile"><span class="im" style={{backgroundImage: `url(${tempProfile})`}}></span><span>琉桔真緒 ✧◝(⁰▿⁰)◜✧</span></p>
-                  <p class="t2">2022/06/11</p>
-                </div>
-                <p class="t1 c-black">VVIPプラン</p>
-              </li>
-              <li>
-                <div>
-                  <p class="t_profile"><span class="im" style={{backgroundImage: `url(${tempProfile})`}}></span><span>琉桔真緒 ✧◝(⁰▿⁰)◜✧</span></p>
-                  <p class="t2">2022/06/11</p>
-                </div>
-                <p class="t1 c-black">VVIPプラン</p>
-              </li>
+              {
+                getSupporterList()
+              }
             </ul>
           </div>
         </section>
