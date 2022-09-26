@@ -41,7 +41,7 @@ export default function DashboardSeriesDetail(props) {
                 <div className="cx_thumb">
                   {
                     item !== undefined &&
-                      <span><img src={item} alt="image" /></span>
+                      <span><img src={item} alt="thumbnail" /></span>
                   }
                 </div>
               </a>

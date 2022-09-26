@@ -2,8 +2,6 @@ import React, { useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
 import {hideModal, MODAL_DESIGN_TYPE} from '../modules/redux/ducks/modal'
 import styled from 'styled-components';
-import Button from '@COMPONENTS/dashboard/ButtonDefault';
-import CloseButton from '@COMPONENTS/dashboard/ButtonOutline';
 
 import iconClose from '@ICONS/icon_close_black.png'
 import useOutSideClick from '@/common/useOutSideClick';

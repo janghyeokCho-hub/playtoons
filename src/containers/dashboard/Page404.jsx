@@ -13,7 +13,7 @@ export default function Page404() {
     
     setTimeout(() => {
       naviage('/dashboard/main');
-    }, 1000);
+    }, 2000);
 
   }, []);
 

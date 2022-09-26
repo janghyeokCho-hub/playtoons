@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+import { faMagnifyingGlass, faSquarePlus } from "@fortawesome/pro-light-svg-icons";
 import { faAngleLeft, faBars } from "@fortawesome/pro-solid-svg-icons";
 
 import { getToken } from "@/common/common";
@@ -13,9 +13,9 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
   // login 구현 후 redux store에서 값 받아와야함
   const token = getToken();
   const navigate = useNavigate();
-  
+
   let renderType = "";
-  const isLogin = token !== undefined;
+  const isLogin = token !== null;
   if( type === undefined || type === null ){
     renderType = isLogin ? "login" : "logout";
   }
@@ -30,7 +30,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
         {
           renderType === "logout" && 
           <div className="inr-c">
-            <h1 className="logo"><a href="#"><span className="ico_logo">PlayToons</span></a></h1>
+            <h1 className="logo"><a href="/"><span className="ico_logo">PlayToons</span></a></h1>
             
             <div className="rgh">
               <div className="box_hd_sch">
@@ -40,7 +40,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
               {/* mobile button */}
               <button type="button" className="mo_btns view-m"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
               
-              <a href="#" className="btn_tugo btn-pk n blue bdrs">ログイン</a>
+              <a href="/account" className="btn_tugo btn-pk n blue bdrs">ログイン</a>
             </div>
           </div>
         }
@@ -50,7 +50,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
           renderType === "login" && 
           <div className="inr-c">
             <button type="button" className="btn_gnb" title="메뉴"><span><FontAwesomeIcon icon={faBars} /></span></button>
-            <h1 className="logo"><a href="#"><span className="ico_logo">PlayToons</span></a></h1>
+            <h1 className="logo"><a href="/"><span className="ico_logo">PlayToons</span></a></h1>
             
             <div className="rgh">
               <div className="box_hd_sch">
@@ -60,8 +60,9 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
               {/* mobile button */}
               <button type="button" className="mo_btns view-m"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
               
-              <a href="#" className="btn_tugo btn-pk n blue bdrs"><span>投稿</span></a>
-                  <a href="#" className="btn_profile"><span style={{backgroundImage: `url(${tempProfile})`}}></span></a>
+              <a href="/dashboard/post" className="btn_tugo btn-pk n blue bdrs"><span>投稿</span></a>
+              <span><FontAwesomeIcon icon={faSquarePlus} /></span>
+              <a href="#" className="btn_profile"><span style={{backgroundImage: `url(${tempProfile})`}}></span></a>
             </div>
           </div>
         }

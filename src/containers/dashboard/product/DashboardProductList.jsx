@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Title1, Body3, Border1pxMercury, Body1 } from "@/styledMixins";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
-import {BROWSER_CONTENTS_AREA_TYPE, INPUT_STATUS} from '@COMMON/constant';
-import BrowserContainer from "@/components/dashboard/BrowserContainer";
-import Button from '@COMPONENTS/dashboard/ButtonOutline';
-import ProductTab from "@/components/dashboard/ProductTab";
-import Input from "@/components/dashboard/TextInputSearch";
 import Container from "@/components/dashboard/Container";
 
 const size = {

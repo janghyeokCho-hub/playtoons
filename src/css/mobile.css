@@ -267,9 +267,9 @@
   .header .btn_tugo span {
     font-size: 0;
   }
-  .header .btn_tugo:after {
-    content: "\f0fe";
-    font-family: "Font Awesome 6 Pro";
+  .header .btn_tugo + span {    /* 2022.09.26 모바일 plus 버튼 */
+    /* content: "\f0fe"; */
+    /* font-family: "Font Awesome 6 Pro"; */
     font-weight: 300;
     font-size: 24px;
     color: #000;
