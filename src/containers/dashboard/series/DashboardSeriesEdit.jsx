@@ -6,7 +6,7 @@ import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import Editor from "@/components/dashboard/Editor";
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
-import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
@@ -242,13 +242,12 @@ export default function DashboardUploadSeries(props) {
                     text={"text something123142"} />
                 </button>
               </h3>
-              <ImageUploadContainer
+              <ImageUpload
                 ref={refCoverImage}
                 id={"filebox1"}
-                className={"small"}
+                className={"box_drag small"}
                 name={"coverImage"}                     
-                textDragNDrop={text.drag_drop}    
-                textInputMessage={text.input_image}     
+                text={text.drag_drop}    
                 />
             </div>
 
@@ -260,12 +259,12 @@ export default function DashboardUploadSeries(props) {
                       text={"text something123142"} />
                 </button>
               </h3>
-              <ImageUploadContainer
+              <ImageUpload
                 ref={refTimeline}
                 id={"filebox2"}
+                className={"box_drag"}
                 name={"thumbnailImage"}                     
-                textDragNDrop={text.drag_drop}    
-                textInputMessage={text.input_image}     
+                text={text.drag_drop}    
                 />
             </div>
           </section>

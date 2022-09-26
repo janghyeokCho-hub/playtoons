@@ -3,9 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/pro-solid-svg-icons';
 
 import Container from "@/components/dashboard/Container";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 
 import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImageBg from "@IMAGES/landingpage-profile-bgImg2.png";
+import ToolTip from "@/components/dashboard/ToolTip";
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+
 
 const text = {
   profile_management: "プロフィル管理",
@@ -18,12 +22,14 @@ const text = {
   tag_name: "タグ名",
   description_policy: "当サイトでは、直近５年間の長崎県公報の全文を掲載しています。",
   register: "登録する",
-  input_image: "置いてください。",
+  drag_n_drop: "ドラッグ＆ドロップ",
+	r_19: "R-19"
 };
 
-const typeDataList = ["1", "2", "3"];
 
 export default function DashboardUploadProfile(props) {
+	const refBackground = useRef();
+	const refProfile = useRef();
   
 
   useEffect(() => {
@@ -34,105 +40,92 @@ export default function DashboardUploadProfile(props) {
     <Container 
     type={"bg profile"} >
 
-    <div class="inr-c">
-			<div class="box_area">
-				<div class="hd_titbox hd_mst1">
-					<h2 class="h_tit1"><span>シリーズリスト</span></h2>
+    <div className="inr-c">
+			<div className="box_area">
+				<div className="hd_titbox hd_mst1">
+					<h2 className="h_tit1"><span>{text.profile_management}</span></h2>
 				</div>
 				
-				<div class="top_profile">
-					<div class="bg_file">
-						<input type="file" id="filebox1" />
-						<label for="filebox1" class="filetxt">
-							<div class="ico"><FontAwesomeIcon icon="fa-solid fa-circle-plus" /></div>
-						</label>
-						{/* <!-- 이미지 업로드시 
-						<div class="fileview">
-							<div style={{backgroundImage: `url(../images/tmp/tmp_comic2.jpg);`}}></div>
-							<span class="f_tx">webtoon_shorts.jpg</span>
-							<button type="button" class="btn_del" title="削除"><i class="fa-solid fa-trash-xmark"></i></button>
-						</div>*/}
-					</div>
+				<div className="top_profile">
+					<ImageUpload
+						ref={refBackground}
+						className={"bg_file"}
+						// preview={imageUrl}
+						id={"filebox1"}
+						name={"profileBackgroundImage"}                     
+						/>
 
-					<div class="profile_file">
-						<input type="file" id="filebox2" />
-						<label for="filebox2" class="filetxt">
-							<div class="ico"><FontAwesomeIcon icon="fa-solid fa-circle-plus" /></div>
-						</label>
-						{/* <!-- 이미지 업로드시 
-						<div class="fileview">
-							<div style={{backgroundImage: `url(../images/tmp/tmp_comic2.jpg);`}}></div>
-							<button type="button" class="btn_del" title="削除"><i class="fa-solid fa-circle-xmark"></i></button>
-						</div>*/}
-					</div>
+					<ImageUpload
+						ref={refProfile}
+						className={"profile_file"}
+						// preview={imageUrl}
+						id={"filebox2"}
+						name={"profileImage"} 
+						/>
 				</div>
 
 
-				<section class="bbs_write">
-					<div class="col">
-						<h3 class="tit1">ニックネーム</h3>
-						<input type="text" class="inp_txt w100p" />
+				<section className="bbs_write">
+					<div className="col">
+						<h3 className="tit1">{text.nickname}</h3>
+						<input type="text" className="inp_txt w100p" />
 					</div>
 
-					<div class="col">
-						<h3 class="tit1">紹介</h3>
-						<textarea name="" id="" class="textarea1"></textarea>
+					<div className="col">
+						<h3 className="tit1">{text.introduction}</h3>
+						<textarea name="" id="" className="textarea1"></textarea>
 					</div>
 
 
-					<div class="col">
-						<h3 class="tit1">プロフィル写真登録 <button type="button" class="btn_help" title="ヘルプ"><FontAwesomeIcon icon="fa-solid fa-circle-info" /></button></h3>
-						<div class="box_drag square">
-							<input type="file" id="filebox1" />
-							<label for="filebox1" class="filetxt">
-								<div class="txt">
-									<div class="ico"><FontAwesomeIcon icon="fa-solid fa-circle-plus" /></div>
-								</div>
-							</label>
-							<div class="fileview">
-								<div><img src="../images/tmp/tmp_comic2.jpg" alt="" /></div>
-								<button type="button" class="btn_del" title="削除"><i class="fa-solid fa-circle-xmark"></i></button>
-							</div>
+					<div className="col">
+						<h3 className="tit1">{text.register_profile_image} <button type="button" className="btn_help" title="ヘルプ">
+							<ToolTip
+								title={text.register_profile_image}
+								text={"teadaf"} />
+						</button></h3>
+						<ImageUpload
+							ref={refProfile}
+							className={"box_drag square"}
+							// preview={imageUrl}
+							id={"filebox1"}
+							name={"profileImage"} 
+							/>
+					</div>
+
+					<div className="col">
+						<h3 className="tit1">{text.register_cover_image}</h3>
+						<ImageUpload
+							ref={refProfile}
+							className={"box_drag"}
+							// preview={imageUrl}
+							id={"filebox1"}
+							name={"profileImage"} 
+							text={text.drag_n_drop}
+							/>
+					</div>
+
+					<div className="col">
+						<h3 className="tit1">{text.setting_age}</h3>
+						<label className="inp_chktx"><input type="checkbox" defaultChecked /><span>{text.r_19}</span></label>
+					</div>
+
+					<div className="col">
+						<h3 className="tit1">{text.setting_tag}</h3>
+						<div className="inp_txt sch">
+							<button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+							<input type="text" className="" placeholder={text.tag_name} />
 						</div>
 					</div>
 
-					<div class="col">
-						<h3 class="tit1">カバー写真登録</h3>
-						<div class="box_drag">
-							<input type="file" id="filebox4" />
-							<label for="filebox4" class="filetxt">
-								<div class="txt">
-									<div class="ico"><i class="fa-solid fa-circle-plus"></i><FontAwesomeIcon icon="fa-solid fa-circle-plus" /></div>
-									<p class="t">ドラッグ＆ドロップ</p>
-								</div>
-							</label>
-							<div class="fileview">
-								<div><img src="../images/tmp/tmp_comic2.jpg" alt="" /></div>
-								<button type="button" class="btn_del" title="削除"><i class="fa-solid fa-circle-xmark"></i></button>
-							</div>
-						</div>
-					</div>
-
-					<div class="col">
-						<h3 class="tit1">年齢設定</h3>
-						<label class="inp_chktx"><input type="checkbox" checked /><span>R-19</span></label>
-					</div>
-
-					<div class="col">
-						<h3 class="tit1">タグ設定</h3>
-						<div class="inp_txt sch">
-							<button type="button" class="btns" title="検索"><FontAwesomeIcon icon="fa-light fa-magnifying-glass" /></button>
-							<input type="text" class="" placeholder="タグ名" />
-						</div>
-					</div>
-
-					<div class="col">
-						<p class="t_info">当サイトでは、直近５年間の長崎県公報の<br class="view-m" />全文を掲載しています。</p>
+					<div className="col">
+						{/* TODO 뒤에서 몇칸 자르는거 필요 */}
+						<p className="t_info">{text.description_policy}<br className="view-m" /></p>
+						{/* <p className="t_info">当サイトでは、直近５年間の長崎県公報の<br className="view-m" />全文を掲載しています。</p> */}
 					</div>
 				</section>
 
-				<div class="bbs_write_botm">
-					<a href="#" class="btn-pk n blue"><span>登録する</span></a>
+				<div className="bbs_write_botm">
+					<a href="#" className="btn-pk n blue"><span>{text.register}</span></a>
 				</div>
 			
 			</div>

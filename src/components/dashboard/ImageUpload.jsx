@@ -6,14 +6,13 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 /**
  * 
  * 이미지 파일 drag n drop, preivew 컴포넌트 
-  <ImageUploadContainer
+  <ImageUpload
     ref={refCoverImage}
     className={"small"}
     preview={imageUrl}
     id={"filebox2"}
     name={"coverImage"}                     
-    textDragNDrop={text.label_drag_drop}    
-    textInputMessage={text.input_image}     
+    text={text.label_drag_drop}    
     />
   
   ex) 이미지 파일 정보 가져오기 file, preview, hash
@@ -29,13 +28,12 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
  * @param preview image preview
  * @param id file input tag id
  * @param name upload parameter name (hash값을 가진 input tag name)
- * @param textDragNDrop 평소에 보여질 drag n drop text
- * @param textInputMessage drag 가 영역에 들어왔을때 보여질 text
+ * @param text 평소에 보여질 drag n drop text
  */
-function ImageUploadContainer(props, ref) {
+export default forwardRef(function ImageUpload(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, hash: undefined};
-  const { className, preview, textDragNDrop, name, id } = props;
+  const { className, preview, text, name, id } = props;
   const [image, setImageFile] = useState(initImageObject);
 
   
@@ -67,7 +65,7 @@ function ImageUploadContainer(props, ref) {
   const onDrop = useCallback(async (acceptedFiles) => {
     setPreviewImage(acceptedFiles[0]);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, } = useDropzone({ onDrop }); //isDragActive
   const InputProps = {
     ...getInputProps(),
     multiple: false,
@@ -104,7 +102,7 @@ function ImageUploadContainer(props, ref) {
 
   return (
     <div 
-      className={`box_drag ${className}`}
+      className={`${className}`}
        >
         {/* upload에 쓰일 hash 값 저장 */}
       <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />  
@@ -117,20 +115,17 @@ function ImageUploadContainer(props, ref) {
               {...RootProps} 
               maxsize={100} 
               multiple={false} 
-              className={`${className} image_upload`} >
-                {  isDragActive ? (
-                  <div className={`${className}_text_container image_upload_text_container`}>
-                      <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
-                    </div>
-                  ) : (
-                    
+              className={`image_upload`} >
+                {
+                  text === undefined ? 
+                    <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                    :
                     <div className="txt">
-                        <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                        <p className="t">{textDragNDrop}</p>
-                      </div>
-                    
-                    )
-                  }
+                      <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                      <p className="t">{text}</p>
+                    </div>
+                }
+                
             </div>
           </label>
         ) : (
@@ -147,7 +142,4 @@ function ImageUploadContainer(props, ref) {
       }
     </div>
   );
-}
-
-
-export default forwardRef(ImageUploadContainer);
+});

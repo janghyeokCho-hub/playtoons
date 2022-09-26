@@ -6,7 +6,7 @@ import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import PostContainer from "@/components/post/PostContainer";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Select from "@/components/dashboard/Select";
-import ImageUploadContainer from "@/components/dashboard/ImageUploadContainer";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 import ThumbnailTimeline from "@/components/post/ThumbnailTimeline";
 
 import tempImage from '@IMAGES/tmp_comic2.jpg';
@@ -283,12 +283,12 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.contents} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
-                <ImageUploadContainer
+                <ImageUpload
                   ref={refContents}
                   id={"filebox2"}
+                  className={"box_drag"}
                   name={"contents"}                     
-                  textDragNDrop={text.drag_drop}    
-                  textInputMessage={text.input_image}     
+                  text={text.drag_drop}    
                   />
               </div>
 

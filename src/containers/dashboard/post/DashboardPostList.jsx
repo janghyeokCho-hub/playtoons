@@ -98,16 +98,16 @@ export default function DashboardPostList(props) {
     return data?.map((item, index) => {
       return (
         <tr key={index}>
-          <td class="hide-m">{item.id}</td>
-          <td class="td_imgs">
-            <div class="cx_thumb"><span><img src={item.thumbnailImage === null ? tempImg1 : item.thumbnailImage} alt="iamge" /></span></div>
+          <td className="hide-m">{item.id}</td>
+          <td className="td_imgs">
+            <div className="cx_thumb"><span><img src={item.thumbnailImage === null ? tempImg1 : item.thumbnailImage} alt="iamge" /></span></div>
           </td>
-          <td class="td_subject">{item.title}</td>
-          <td class="td_number1">{item.viewCount}<em class="hide-m">{text.count}</em></td>
-          <td class="td_number2">{item.likeCount}</td>
-          <td class="td_txt1"><span class="view-m">{text.date}：</span>{item.startAt}</td>
-          <td class="td_txt"><span class="view-m">{text.status}</span>{item.status}</td>
-          <td class="td_btns"><a href={`/dashboard/post/detail/${item.id}`} class="btn-pk n blue2"><span><FontAwesomeIcon icon={faAngleRight} />{text.detail}</span></a></td>
+          <td className="td_subject">{item.title}</td>
+          <td className="td_number1">{item.viewCount}<em className="hide-m">{text.count}</em></td>
+          <td className="td_number2">{item.likeCount}</td>
+          <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.startAt}</td>
+          <td className="td_txt"><span className="view-m">{text.status}</span>{item.status}</td>
+          <td className="td_btns"><a href={`/dashboard/post/detail/${item.id}`} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faAngleRight} />{text.detail}</span></a></td>
         </tr>
       );
     });
@@ -128,15 +128,15 @@ export default function DashboardPostList(props) {
     <Container
       type={"post"} >
       
-      <div class="inr-c">
+      <div className="inr-c">
 			
-        <div class="hd_titbox hd_mst1">
-          <h2 class="h_tit0"><span>{text.post_list}</span></h2>
-          <div class="rgh">
-            <a href="/dashboard/post/upload" class="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
+        <div className="hd_titbox hd_mst1">
+          <h2 className="h_tit0"><span>{text.post_list}</span></h2>
+          <div className="rgh">
+            <a href="/dashboard/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
           </div>
         </div>
-        <div class="hd_titbox2">
+        <div className="hd_titbox2">
           <Select 
             name={"typeId"}
             className={"select1 wid1"}
@@ -144,22 +144,22 @@ export default function DashboardPostList(props) {
             handleItemClick={handleItemClickSearch} />
         </div>
 
-        <div class="tbl_basic mtbl_ty1">
-          <table class="list">
+        <div className="tbl_basic mtbl_ty1">
+          <table className="list">
             <caption>list</caption>
             <colgroup>
-              <col class="num" />
-              <col class="imgs"/>
-              <col class="wid1"/>
-              <col class="wid2"/>
-              <col class="wid3"/>
-              <col class="wid3"/>
-              <col class="wid3"/>
+              <col className="num" />
+              <col className="imgs"/>
+              <col className="wid1"/>
+              <col className="wid2"/>
+              <col className="wid3"/>
+              <col className="wid3"/>
+              <col className="wid3"/>
               <col/>
             </colgroup>
             <thead>
               <tr>
-                <th class="hide-m">{text.number}</th>
+                <th className="hide-m">{text.number}</th>
                 <th>{text.cover_image}</th>
                 <th>{text.title}</th>
                 <th>{text.access_count}</th>

@@ -2486,6 +2486,10 @@ body {
 }
 .box_drag.square .ico {
   margin-bottom: 0;
+  position: absolute;               /* 2022.09.25 center css 추가 */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 .inp_chktx {
   z-index: 0;
@@ -2888,7 +2892,7 @@ body {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
-.top_profile .fa-solid {
+.top_profile .ico {   /* .fa-solid -> .ico 변경 */
   font-size: 24px;
 }
 .top_profile .ico {
@@ -2930,11 +2934,12 @@ body {
   border-style: solid;
   border-color: #fff;
 }
-.top_profile .profile_file .fileview > div {
+.top_profile .profile_file .fileview > div{
   background-size: cover;
   -webkit-border-radius: 100px;
   -moz-border-radius: 100px;
   border-radius: 100px;
+  overflow: hidden;   /* 2022.09.25 추가 profile 동그랗게 유지하기 위해서 */
 }
 .top_profile .profile_file .fileview .btn_del {
   right: 0px;
