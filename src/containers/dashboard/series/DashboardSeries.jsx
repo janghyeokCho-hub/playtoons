@@ -6,6 +6,9 @@ import { faAngleRight, faPlus } from '@fortawesome/pro-solid-svg-icons';
 import { getSeriesStoryList } from "@/services/dashboardService";
 import Container from "@/components/dashboard/Container";
 import Image from "@/components/dashboard/Image";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import Pagination from "@/components/dashboard/Pagination";
+import { useNavigate, useParams } from "react-router-dom";
 
 const text = {
   page_title :"シリーズリスト",
@@ -16,11 +19,14 @@ const text = {
   type : "タイプ",
   category: "カテゴリ",
   date: "掲載日",
-  status: "状態"
+  status: "状態",
+  empty_message: "シリーズリストがありません。"
 };
 
 export default function DashboardSeries(props) {
-  const [data, setData] = useState(undefined);
+  const [stateData, setStateData] = useState(undefined);
+  const param = useParams('page');
+  const navigate = useNavigate();
 
   /**
   *
@@ -29,7 +35,7 @@ export default function DashboardSeries(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const getSeriesList = async (pageNumber) => {
+  const getSeriesListFromAPi = async (pageNumber) => {
     const params = new FormData();
     // params.append("authorId", );
     // params.append("typeId", );
@@ -42,7 +48,7 @@ export default function DashboardSeries(props) {
     const { status, data : resultData } = await getSeriesStoryList(params);
 
     if( status === 200 ){
-      setData(resultData);
+      setStateData(resultData);
     }
     else{
       //error 처리
@@ -50,6 +56,9 @@ export default function DashboardSeries(props) {
     }
   };
 
+  const handleClickPage = (pageNumber) => {
+    navigate(`/dashboard/series/${pageNumber}`);
+  };
 
   /**
   *
@@ -59,7 +68,11 @@ export default function DashboardSeries(props) {
   * @author 2hyunkook
   */
   const renderSeriesList = () => {
-    return data?.series?.map((item, index) => {
+    if( stateData?.series.length === 0 ){
+      return <EmptyTr text={text.empty_message} />
+    }
+
+    return stateData?.series.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.id}</td>
@@ -77,10 +90,16 @@ export default function DashboardSeries(props) {
     });
   };
 
-  useEffect(() => {
+  const getSeriesList = () => {
+    const pageNumber = param?.page === undefined ? 1 : param?.page;
+    console.log("pageNumber", pageNumber);
     //리스트 불러오기
+    getSeriesListFromAPi(pageNumber);
+  };
+
+  useEffect(() => {
     getSeriesList();
-  }, []);
+  }, [param]);
 
   return (
     <Container
@@ -126,6 +145,15 @@ export default function DashboardSeries(props) {
             </tbody>
           </table>
         </div>
+        
+        {
+          stateData?.series.length > 0 &&
+            <Pagination 
+              itemsPerPage={stateData.meta.itemsPerPage} 
+              totalPages={stateData.meta.totalPages}
+              currentPage={stateData.meta.currentPage} 
+              handle={handleClickPage} />
+        }
       </div>
       
     </Container>

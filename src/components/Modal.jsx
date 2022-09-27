@@ -43,7 +43,7 @@ export default function Modal({show, contents, callback, type }) {    //TODO des
   
 
   return (
-      <Overlay id={"modal"} show={show}>
+      <Overlay id={"modal"} style={{display: show ? 'block' : 'none'}} show={show}>
         <Modalwrap ref={refModal}>
           <TopCloseButton onClick={handleClose} />
           <Contents>

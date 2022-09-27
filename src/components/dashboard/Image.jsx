@@ -7,6 +7,7 @@ import tempImage from '@IMAGES/tmp_comic2.jpg';
 
 /**
 *
+  hash값으로 이미지 url을 가져와서 img 태그에 뿌려줌.
    <Image 
     className={"series_image"}
     hash={item.coverImage} 
@@ -14,7 +15,9 @@ import tempImage from '@IMAGES/tmp_comic2.jpg';
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param {*} props
+* @param className class name
+* @param hash server에서 얻어온 hash
+* @param alt img 태그에 들어갈 alt attribute
 * @return
 */
 export default function Image(props) {

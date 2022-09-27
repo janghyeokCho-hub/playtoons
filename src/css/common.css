@@ -322,10 +322,10 @@ select:disabled {
   background-color: #C3CAD2;
 }
 input.inp_txt:focus {
-  border-color: #222;
+  border-color: #394BC2;  /* 2022.09.26 #222 -> #394BC2 칼라 변경 */
 }
 select.select1:focus {
-  border-color: #222;
+  border-color: #394BC2;
 }
 .inp_txt.sch {
   overflow: hidden;

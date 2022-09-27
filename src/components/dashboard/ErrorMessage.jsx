@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faCircleXmark} from "@fortawesome/pro-solid-svg-icons";
 import "@/css/test.css";
 
-function ErrorMessage(props) {
+export default ( function ErrorMessage(props) {
   return (
     <div className={`error_message_container ${props.className}`}>
       <FontAwesomeIcon 
@@ -12,7 +12,4 @@ function ErrorMessage(props) {
       <div className="error_message_text">{props.error}</div>
     </div>
   )
-}
-
-
-export default ErrorMessage;
+});

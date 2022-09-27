@@ -51,30 +51,30 @@ export default function NavBarDashboard3(props) {
 
   const onClickPlan = () => {
     // dispatch(showModal(<>支援管理 準備しています。</>));
-    navigate(DASHBOARD_PATH.PLAN);
+    // navigate(DASHBOARD_PATH.PLAN);
   };
   
   const onClickProduct = () => {
     // dispatch(showModal(<>商品 準備しています。</>));
-    navigate(DASHBOARD_PATH.PRODUCT);
+    // navigate(DASHBOARD_PATH.PRODUCT);
   };
 
   const onClickSerise = () => {
-    navigate(DASHBOARD_PATH.SERIES);
+    // navigate(DASHBOARD_PATH.SERIES);
   };
 
   const onClickPost = () => {
-    navigate(DASHBOARD_PATH.POST);
+    // navigate(DASHBOARD_PATH.POST);
   };
 
   const onClickProfile = () => {
     // dispatch(showModal(<>プロフィル管理 準備しています。</>));
-    navigate(DASHBOARD_PATH.PROFILE);
+    // navigate(DASHBOARD_PATH.PROFILE);
   };
 
   const onClickDashboard = () => {
     // dispatch(showModal(<>ダッシュボード 準備しています。</>));
-    navigate(DASHBOARD_PATH.DASHBOARD);
+    // navigate(DASHBOARD_PATH.DASHBOARD);
   };
 
   const onClickAnalysis = () => {

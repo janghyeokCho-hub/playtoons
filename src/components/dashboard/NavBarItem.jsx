@@ -27,7 +27,7 @@ export default function NavBarItem(props) {
 
   return (
     <li className={`${isSelected && "on "}s1`} onClick={handleClick}>
-      <a href="#">
+      <a href={myPath}>
         <span className="ico">
           <FontAwesomeIcon 
             icon={isSelected ? selectedIcon : icon} />

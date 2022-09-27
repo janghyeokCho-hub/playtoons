@@ -1,3 +1,4 @@
+import { getGetMethodUrl } from "@/common/common";
 import { apiServer } from "./api";
 
 /**
@@ -8,7 +9,7 @@ import { apiServer } from "./api";
 * @author 2hyunkook
 */
 export const getSeriesStoryList = (params) => {
-  return apiServer("get", "/post/series", params);
+  return apiServer("get", "/post/series" + getGetMethodUrl(params));
 };
 
 /**

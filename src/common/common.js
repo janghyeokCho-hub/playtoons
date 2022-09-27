@@ -67,3 +67,25 @@ export const getToken = () => {
   const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
   return loginJSON.token;
 };
+
+
+/**
+*
+   get request를 위해서 params로 url 생성
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param formData formData 객체
+* @return url get method에서 사용할 url
+*/
+export const getGetMethodUrl = (formData) => {
+  let url = "?";
+  
+  for (const item of formData.entries() ) {
+    url += `${item[0]}=${item[1]}&`;
+  }
+
+  return url.slice(0, -1);
+};
+
+

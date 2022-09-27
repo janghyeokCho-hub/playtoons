@@ -44,6 +44,10 @@ export default function Dashboard() {
           path="/series" 
           element={<Series />} 
         />
+        <Route 
+          path="/series/:page" 
+          element={<Series />} 
+        />
         <Route
           path="/series/detail/:id"
           element={<SeriesDetail />}
