@@ -1,5 +1,7 @@
 
-/* ================================================ */
+/* ============================================================================== */
+/* Dropdown component */
+/* ============================================================================== */
 .dropdown_container{
   width: 215px;
   height: 45px;
@@ -52,7 +54,9 @@
   right: 16px;
 }
 
-/* ================================================ */
+/* ============================================================================== */
+/* ErrorMessage Component */
+/* ============================================================================== */
 .error_box{
   border: 1px solid rgba(241,28,14, 1);
 }
@@ -81,6 +85,8 @@
   line-height: 14px;
 }
 
+/* ============================================================================== */
+/* ck editor */
 /* ============================================================================== */
 .ck-editor__editable{
   height: 200px;
@@ -133,3 +139,68 @@ ul.tpagination {
 .tpagination li.arrow {
   color: #3A434D;
 }
+
+/* ============================================================================== */
+/* product list gnb */
+/* ============================================================================== */
+ul.dashboard-gnb{
+  height: 96px;
+  padding-left: 55px;
+  border-bottom: 1px solid #DDE1E5;
+  display: flex;
+  align-items: end;
+}
+
+li.dashboard-gnb{
+  margin-right: 30px;
+  padding-bottom: 13px;
+  display: inline-block;
+  color: rgba(144,157,171,1);
+  font-family: "NotoSansJP-Bold";
+  font-size: 16px;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-align: left;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+li.dashboard-gnb.selected{
+  color: #394BC2;
+  padding-bottom: 11px;
+  border-bottom: 3px solid #394BC2;
+}
+
+@media  (max-width: 961px)  {
+  li.dashboard-gnb{
+    font-size: 13px;
+  }
+}
+
+/* ============================================================================== */
+/* dashboard product */
+/* ============================================================================== */
+.w300{
+  width: 300px;
+}
+.mt23{
+  margin-top: 23px;
+}
+.mt10{
+  margin-top: 10px;
+}
+.mt39{
+  margin-top: 39px;
+}
+
+.float-right{
+  float: right;
+}
+
+.w124{
+  width: 124px;
+}
+
+
+

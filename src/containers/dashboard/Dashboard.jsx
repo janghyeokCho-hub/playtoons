@@ -10,6 +10,9 @@ import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
+import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
+import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";
+import SalesReview from "@CONTAINERS/dashboard/product/DashboardSalesReview";
 import UploadProfile from "@/containers/dashboard/profile/DashboardUploadProfile";
 import Plan from "@/containers/dashboard/plan/DashboardPlan";
 import PlanUpload from "@/containers/dashboard/plan/DashboardPlanUpload";
@@ -33,8 +36,20 @@ export default function Dashboard() {
           element={<Main />} 
         />
         <Route 
-          path="/product/list" 
+          path="/product" 
           element={<ProductList />} 
+        />
+        <Route 
+          path="/product/sales/list" 
+          element={<SalesList />} 
+        />
+        <Route 
+          path="/product/sales/inquiry" 
+          element={<SalesInquiry />} 
+        />
+        <Route 
+          path="/product/sales/review" 
+          element={<SalesReview />} 
         />
         <Route 
           path="/profile/upload" 

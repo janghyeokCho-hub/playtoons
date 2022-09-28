@@ -228,16 +228,16 @@ export default function DashboardUploadSeries(props) {
           </section>
 
           <div className="bbs_write_botm">
-            <a className="btn-pk n blue2">
+            <div className="btn-pk n blue2">
               <div className="pull_width" onClick={handlePreview}>
                 <span>{text.preview}</span>
               </div>
-            </a>
-            <a className="btn-pk n blue">
+            </div>
+            <div className="btn-pk n blue">
               <div className="pull_width" onClick={handleRegister}>
                 <span>{text.register}</span>
               </div>
-            </a>
+            </div>
           </div>
         
         </div>

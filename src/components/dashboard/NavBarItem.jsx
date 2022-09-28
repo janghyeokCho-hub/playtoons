@@ -18,8 +18,7 @@ export default function NavBarItem(props) {
   };
 
   useEffect(() => {
-    const path = location.pathname;
-    if( path.indexOf(myPath) !== -1  ){
+    if( location.pathname.startsWith(myPath) ){
       setSelected(true);
     }
   }, []);

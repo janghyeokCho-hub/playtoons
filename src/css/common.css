@@ -1237,6 +1237,7 @@ body {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+  cursor: pointer;    /* 2022.09.28 a 태그가 아니더라도 cursor 모양 유지를 위해서 추가 */
 }
 .btn-pk.blue {
   border-color: #394BC2;
@@ -2335,6 +2336,7 @@ body {
 }
 .bbs_write_botm .btn-pk {
   margin-left: 10px;
+  cursor: pointer;    /* 2022.09.27 a 태그 변경시 curosr가 바뀌어서 추가 */
 }
 .box_drag {
   position: relative;

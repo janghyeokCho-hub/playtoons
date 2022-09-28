@@ -18,6 +18,6 @@ export default function Page404() {
   }, []);
 
   return (
-    <div onClick={handleClickPage}><h1 style={{width: "100%", paddingBottom: "100%"}}>Not Found page</h1></div>
+    <div onClick={handleClickPage}><h1 style={{width: "100%", marginTop: "200px", textAlign: "center"}}>Not Found Page</h1></div>
   )
 }

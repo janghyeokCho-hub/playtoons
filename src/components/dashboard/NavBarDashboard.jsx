@@ -37,7 +37,7 @@ let textData = {
 
 const DASHBOARD_PATH = {
   PLAN: "/dashboard/plan",
-  PRODUCT: "/dashboard/product/list",
+  PRODUCT: "/dashboard/product",
   SERIES: "/dashboard/series",
   POST: "/dashboard/post",
   PROFILE: "/dashboard/profile/upload",
