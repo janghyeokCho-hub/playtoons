@@ -44,7 +44,6 @@ const tempData = [
   {
     number : "2",
     id : 256,
-    id : 256,
     image : tempImg1,
     title : "大学のリンゴ一個の重さで10メートルの素材",
     price : "1200000CP",
@@ -94,6 +93,24 @@ export default function DashboardProductList(props) {
   const location = useLocation();
   const refInput = useRef();
 
+  const getStatusColor = (status) => {
+    let className = "";
+
+    switch( status.code ){
+      default: 
+        className = "status-sales";
+        break;
+        case "audit":
+          className = "status-audit";
+          break;
+        case "not_for_sale":
+          className = "status-not_for_sale";
+          break;
+    }//switch
+    
+    return className;
+  };
+
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -112,28 +129,28 @@ export default function DashboardProductList(props) {
   const handleItemClick = (e) => {
     const no = e.target.getAttribute("data-id");
 
-    navigate("/dashboard/series/detail/" + no);
+    // navigate("/dashboard/series/detail/" + no);
   };
 
-// TODO 버튼 모바일 css, 상태값에 따른 색깔변화 logo 변경 
+// TODO 모바일 css 
   const renderProductList = () => {
     return stateData?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
           <td className="td_imgs">
-            <div className="cx_thumb"><span><Image hash={item.coverImage} alt={"cover iamge"} /></span></div>
+            <div className="w131h81 cx_thumb "><span><Image hash={item.image} alt={"cover iamge"} /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
           <td className="td_group">{item.price}</td>
           <td className="td_gray"><span className="view-m">カテゴリ：</span>{item.date}</td>
-          <td className="td_txt"><span className="view-m">状態</span>{item.status.name}</td>
+          <td className={`td_txt ${getStatusColor(item.status)}`}><span className="view-m">状態</span>{item.status.name}</td>
           <td className="td_txt float-right">
             <Link className="btn-pk s blue2 w124" to={`/dashboard/product/detail/${item.id}`}><span>{text.detail}</span></Link><br/>
             <Link className="btn-pk s blue2 w124 mt10"  to={`/dashboard/product/edit/${item.id}`}><span>{text.modify}</span></Link><br/>
             <div className="btn-pk s blue2 w124 mt10" data-id={item.id} onClick={handleItemClick}><span>{text.dont_see}</span></div>
           </td>
-      </tr>
+        </tr>
       );
     });
   };

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/pro-solid-svg-icons";
 import { useState } from 'react';
 import { useEffect } from 'react';
+import useOutSideClick from '@/common/useOutSideClick';
 
 
 /**
@@ -22,21 +23,25 @@ import { useEffect } from 'react';
 export default function ToolTip(props) {
   const {title, text, handleClick} = props;
   const [isShow, setShow] = useState(false);
+  const refPopup = useRef();
 
+  
   const onClick = (e) => {
     handleClick?.(e);
     setShow(prev => !prev);
   }
-
+  
   useEffect(() => {
     setShow(isShow);
   }, [isShow]);
 
+  useOutSideClick(refPopup, onClick);
+  
   return (
     <div className="relative" onClick={onClick}>
       {
         isShow && 
-        <div className="tooltip-popup">
+        <div ref={refPopup} className="tooltip-popup">
           <div className="tooltip-title">{title}</div>
           <div className="tooltip-text">{text}</div>
         </div>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 
 //temp data
 import '@/css/test.css';
@@ -7,6 +9,8 @@ import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import Container from "@/components/dashboard/Container";
 import ProductTab from "@/components/dashboard/ProductTab";
+import Image from "@/components/dashboard/Image";
+import Calendar from "@/components/dashboard/Calendar";
 
 const text = {
   see_product : "商品一覧",
@@ -19,10 +23,10 @@ const text = {
   title: "タイトル",
   price : "価格",
   date : "販売開始日",
-  status : "状態",
-  detail : "詳細",
-  modify: "修正",
-  dont_see : "非表示"
+  amount : "数量",
+  start_date : "開始日",
+  end_date: "終了日",
+  during_sales : "期間内の売上総額"
 };
 
 const tempData = [
@@ -32,7 +36,7 @@ const tempData = [
     title : "大学のリンゴ一個の重さで10メートルの素材",
     price : "1200000CP",
     date : "2022/06/11",
-    status: "販売中",
+    amount: "32",
   },
   {
     number : "2",
@@ -40,7 +44,7 @@ const tempData = [
     title : "大学のリンゴ一個の重さで10メートルの素材",
     price : "1200000CP",
     date : "2022/06/11",
-    status: "審査中",
+    amount: "33",
   },
   {
     number : "3",
@@ -48,20 +52,15 @@ const tempData = [
     title : "大学のリンゴ一個の重さで10メートルの素材",
     price : "1200000CP",
     date : "2022/06/11",
-    status: "販売不可",
+    amount: "23",
   },
 ];
 
 
-const STATUS_TYPE = {
-  sale : "販売中",
-  audit : "審査中",
-  not_for_sale : "販売不可"
-};
-
 
 export default function DashboardSalesList(props) {
-  const [stateData, setStateData] = useState();
+  const [stateData, setStateData] = useState(undefined);
+  
   const navigate = useNavigate();
   const location = useLocation();
   const refInput = useRef();
@@ -89,23 +88,32 @@ export default function DashboardSalesList(props) {
 
 
 
-  const getProductListFromResultData = (result) => {
-    if( result !== undefined ){
-      return result.map((item, index) => {
-        return (
-          <></>
-        );
-      });
-    }
+  const renderSalesList = () => {
+    return stateData?.map((item, index) => {
+      return (
+        <tr key={index}>
+          <td className="hide-m">{item.number}</td>
+          <td className="td_imgs">
+            <div className="cx_thumb w131h81"><span><Image hash={item.image} alt={"cover iamge"} /></span></div>
+          </td>
+          <td className="td_subject">{item.title}</td>
+          <td className="td_group">{item.price}</td>
+          <td className="td_gray"><span className="view-m">{text.date}：</span>{item.date}</td>
+          <td className={`td_txt`}><span className="view-m">{text.amount}</span>{item.amount}</td>
+          <td className="td_txt float-right">
+          </td>
+        </tr>
+      );
+    });
   };
 
   useEffect(() => {
     //리스트 불러오기
     // getProductList();
     setStateData(tempData);
-    // refInput.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
-  }, []);
 
+  }, []);
+  //TODO calendar 달기, reaction component 만들기
   return (
     <Container 
       type={"series"} >
@@ -113,7 +121,49 @@ export default function DashboardSalesList(props) {
       <ProductTab />
 
       <div className="inr-c">
+        <div className="col mt2 saleslist-data-col">
+          <div className="mr24">
+            <div className="calendar-label">{text.start_date}</div>
+            <Calendar type={"-1month"} />
+          </div>
+          <div className="mr24">
+            <div className="calendar-label">{text.start_date}</div>
+            <Calendar type={"now"} />
+          </div>
 
+          
+        </div>
+
+        <div className="tbl_basic mtbl_ty1 mt39">
+          <table className="list">
+            <caption>list</caption>
+            <colgroup>
+              <col className="num" />
+              <col className="wid1" />
+              <col className="wid4" />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid4" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th className="hide-m">{text.number}</th>
+                <th>{text.product}</th>
+                <th>{text.title}</th>
+                <th>{text.price}</th>
+                <th>{text.date}</th>
+                <th>{text.amount}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                renderSalesList()
+              }
+            </tbody>
+          </table>
+        </div>
 
 
       </div>

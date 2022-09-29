@@ -46,41 +46,6 @@ const DASHBOARD_PATH = {
 };
 
 export default function NavBarDashboard3(props) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const onClickPlan = () => {
-    // dispatch(showModal(<>支援管理 準備しています。</>));
-    // navigate(DASHBOARD_PATH.PLAN);
-  };
-  
-  const onClickProduct = () => {
-    // dispatch(showModal(<>商品 準備しています。</>));
-    // navigate(DASHBOARD_PATH.PRODUCT);
-  };
-
-  const onClickSerise = () => {
-    // navigate(DASHBOARD_PATH.SERIES);
-  };
-
-  const onClickPost = () => {
-    // navigate(DASHBOARD_PATH.POST);
-  };
-
-  const onClickProfile = () => {
-    // dispatch(showModal(<>プロフィル管理 準備しています。</>));
-    // navigate(DASHBOARD_PATH.PROFILE);
-  };
-
-  const onClickDashboard = () => {
-    // dispatch(showModal(<>ダッシュボード 準備しています。</>));
-    // navigate(DASHBOARD_PATH.DASHBOARD);
-  };
-
-  const onClickAnalysis = () => {
-    dispatch(showModal(<>準備しています。</>));
-    // navigate(DASHBOARD_PATH.ANALYSIS);
-  };
 
   const getExtraNav = (props) => {
     switch (props?.type) {
@@ -92,7 +57,6 @@ export default function NavBarDashboard3(props) {
           <NavBarItem 
             text={textData.analysis}
             path={DASHBOARD_PATH.ANALYSIS}
-            onClick={onClickAnalysis}
             icon={iconAnalysis}
             selectedIcon={iconAnalysisOn}
             />
@@ -108,42 +72,36 @@ export default function NavBarDashboard3(props) {
           <NavBarItem 
             text={textData.dashboard}
             path={DASHBOARD_PATH.DASHBOARD}
-            onClick={onClickDashboard}
             icon={iconDashboard}
             selectedIcon={iconDashboardOn}
             />
           <NavBarItem 
             text={textData.product}
             path={DASHBOARD_PATH.PRODUCT}
-            onClick={onClickProduct}
             icon={iconProduct}
             selectedIcon={iconProductOn}
             />
           <NavBarItem 
             text={textData.profile_management}
             path={DASHBOARD_PATH.PROFILE}
-            onClick={onClickProfile}
             icon={iconProfile}
             selectedIcon={iconProfileOn}
             />
           <NavBarItem 
             text={textData.series_management}
             path={DASHBOARD_PATH.SERIES}
-            onClick={onClickSerise}
             icon={iconSeries}
             selectedIcon={iconSeriesOn}
             />
           <NavBarItem 
             text={textData.post_management}
             path={DASHBOARD_PATH.POST}
-            onClick={onClickPost}
             icon={iconPost}
             selectedIcon={iconPostOn}
             />
           <NavBarItem 
             text={textData.plan_management}
             path={DASHBOARD_PATH.PLAN}
-            onClick={onClickPlan}
             icon={iconPlan}
             selectedIcon={iconPlanOn}
             />

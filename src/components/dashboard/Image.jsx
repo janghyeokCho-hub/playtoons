@@ -3,8 +3,6 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-import tempImage from '@IMAGES/tmp_comic2.jpg';
-
 /**
 *
   hash값으로 이미지 url을 가져와서 img 태그에 뿌려줌.
@@ -21,12 +19,13 @@ import tempImage from '@IMAGES/tmp_comic2.jpg';
 * @return
 */
 export default function Image(props) {
-  const {alt, hash, className} = props;
-  const [image , setImage] = useState(undefined);
+  const {alt, hash, className, test = true} = props;
+  const [stateImage , setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
-    if( hash === null || hash === undefined ){
-      setImage(tempImage);
+    //test mode
+    if( test ){
+      setStateImage(hash);
       return;
     }
 
@@ -35,7 +34,7 @@ export default function Image(props) {
     console.log('getImage', status, result);
     
     if( status === 200 ){
-      setImage(result?.url);
+      setStateImage(result?.url);
     }
     else{
       console.log("error ", result?.message);
@@ -48,6 +47,6 @@ export default function Image(props) {
   }, []);
 
   return (
-    <img className={className} src={image} alt={alt} />
+    <img className={className} src={stateImage} alt={alt} />
   )
 }

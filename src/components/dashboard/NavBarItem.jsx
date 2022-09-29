@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function NavBarItem(props) {
@@ -26,7 +26,7 @@ export default function NavBarItem(props) {
 
   return (
     <li className={`${isSelected && "on "}s1`} onClick={handleClick}>
-      <a href={myPath}>
+      <Link className="pointer" to={myPath}>
         <span className="ico">
           <FontAwesomeIcon 
             icon={isSelected ? selectedIcon : icon} />
@@ -34,7 +34,7 @@ export default function NavBarItem(props) {
         <span>
           {text}
         </span>
-      </a>
+      </Link>
     </li>
   );
 }
