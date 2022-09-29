@@ -9,7 +9,11 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
-import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
+import { getFileUrlFromServer, getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
+import { getFromDataJson, getFromDataJson1, removeItemInList } from "@/common/common";
+import Tag from "@/components/dashboard/Tag";
+import { call } from "redux-saga/effects";
+import { P } from "@storybook/components";
 
 
 const text = {
@@ -35,12 +39,82 @@ const text = {
 };
 
 export default function DashboardUploadSeries(props) {
-  const refIsAdult = useRef();
+  const refR19 = useRef();
   const refCoverImage = useRef();
+  const refTimelineImage = useRef();
+  const refForm = useRef();
+  const refTags = useRef();
   const [ stateTypeList, setStateTypeList ] = useState(undefined);
   const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
   const navigate = useNavigate();
 
+
+  /**
+  *
+     cover, timeline 이미지 업로드 완료 후 series 작성
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param {*} props
+  * @return
+  */
+  const callbackTimeline = () => {
+    console.log('callbackTimeline');
+    
+    //call series 작성 api 
+    // "title": "string",               
+    // "typeId": "string",
+    // "categoryId": "string",
+    // "rating": "string",
+    // "description": "string",
+    // "tags": [
+    //   "string"
+    // ],
+    // "coverImage": "string",
+    // "thumbnailImage": "string",
+
+    // "keyword": "string",
+    // "status": "string",          //enabled, disabled, pending, suspended(사용자가 설정 못함)
+    // "authorId": "string"
+    // "titleKana": "string",
+    // "code": "string",
+    // "labelId": "string",
+    // "publisherId": "string",
+    let json = getFromDataJson(refForm);
+    json = {
+      ...json,
+      coverImage: refCoverImage.current.getImageInfo().value,
+      thumbnailImage: refTimelineImage.current.getImageInfo().value,
+      tags: refTags.current.getTagsJsonObject(),
+      rating: getRating(),
+      keyword: "",
+      status: "enabled",
+      authorId: ""
+    };
+
+    delete json[''];
+    console.log("post/series", json);
+    setSeries(json);
+  };
+
+  const callbackCoverImage = () => {
+    console.log('callbackCoverImage');
+    //upload 할 이미지가 있다면
+    if( refTimelineImage.current.getImageFile() === undefined ){
+      callbackTimeline();
+    }
+    else{
+      setImageToServer(refTimelineImage, 'thumbnail');
+    }
+  };
+
+  const getRating = () => {
+    return refR19.current.checked ? 'R-18' : 'G';
+  };
+
+  //==============================================================================
+  // api function 
+  //==============================================================================
   /**
   *
     파일을 서버에 업로드 
@@ -49,91 +123,116 @@ export default function DashboardUploadSeries(props) {
   * @author 2hyunkook
   * @param {file} 
   */
-  const setCoverImage = async(file) => {
+  const setImageToServer = async(ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    
-    // params.append("authorId", "");               
-    // params.append("subscribeTierId", "");        
-    // params.append("productId", "");
+    params.append("authorId", "");               
+    params.append("subscribeTierId", "");        
+    params.append("productId", "");
     params.append("type", "image");                 //image, video, binary
-    params.append("usage", "cover");                //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", true);
+    params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("loginRequired", false);          //언제 체크해서 보내는건지?
     params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", "G");                   //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", file);
+    params.append("rating", getRating());                   //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("file", ref.current.getImageFile());
     
     console.log("set file params", params);
 
     const {status, data: resultData} = await setFileToServer(params);
+    console.log("setFile result", status, resultData);
     
     //create sccuess
     if( status === 201 ){
-      //set hash value to input tag 
-      refCoverImage.current.setImageHash(resultData?.hash);
-      
-      //다음 timeline이 있다면 timeline 업로드
-      
+      ref.current.setImageValueToInputTag(resultData?.hash);
     }
     else{
       //error 처리
     }
 
-    console.log("setFile result", status, resultData);
   };
 
-  const setTypeList = async () => {
+  const getTypeList = async () => {
     const {status, data: result} = await getPostTypeListFromServer();
 
     if( status === 200 ){
       setStateTypeList(result?.types);
     }
     else{
-
+      //error 처리
     }
-
-    console.log("setTypeList", status, result);
   };
-
-  const setCategoryList = async (type) => {
+  
+  const getCategoryList = async (type) => {
     const {status, data: result} = await getPostCategoryListFromServer(type);
+    console.log('setCategoryList', status, result);
     
     if( status === 200 ){
       setStateCategoryList(result?.categories);
     }
     else{
+      //error 처리
       
     }
     
-    console.log('setCategoryList', status, result);
   };
 
+  const setSeries = async (params) => {
+    const {status, data: result} = await setSeriesToServer(JSON.stringify(params));
+    console.log('setSeries', status, result);
+    
+    if( status === 201 ){
+      if( window.confirm('series 등록에 성공했습니다.') ){
+        navigate('/dashboard/series');
+      }
+    }
+    else{
+      //error 처리
+    }
+    
+  };
+
+  //==============================================================================
+  // handler
+  //==============================================================================
+
+  
   const handleItemClickType = (item) => {
-    setCategoryList(item.value);
+    getCategoryList(item.value);
   };
 
   const handleRegister = (e) => {
-    console.log("handleRegister", refCoverImage.current.getImageFile());
-    // refTitle.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
+    e.preventDefault();
 
-    //cover 이미지 업로드
-    //cover 이미지 hash 값 저장
-    //timeline 이미지 업로드
-    //timeline 이미지 hash 값 저장
-    //series 업로드
-
+    //cover 이미지 업로드, thumbnail 업로드, series 업로드
+    //upload 할 이미지가 없다면 
+    if( refCoverImage.current.getImageFile() === undefined ){
+      callbackCoverImage();
+    }
+    else{
+      //이미지 업로드 후 image url 
+      setImageToServer(refCoverImage, 'cover');
+    }
   };
 
   const handlePreview = (e) => {
-    console.log("handlePreview", refIsAdult);
-
-    // refTitle.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
+    console.log("handlePreview", refR19);
   };
+
+  //==============================================================================
+  // render
+  //==============================================================================
 
   useEffect(() => {
     //get types
-    setTypeList();
+    getTypeList();
   }, []);
+
+  //get category at first time
+  useEffect(() => {
+    if( stateTypeList !== undefined ){
+      getCategoryList(stateTypeList[0].code);
+    }
+  }, [stateTypeList]);
 
   return (
     <Container
@@ -143,103 +242,109 @@ export default function DashboardUploadSeries(props) {
 
       <div className="inr-c">
         <div className="box_area">
+          <form ref={refForm} >
           
-          <section className="bbs_write">
-            <div className="hd_titbox hide-m">
-              <h2 className="h_tit1">{text.register_series}</h2>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.title}</h3>
-              <input name="title" type="text" className="inp_txt w100p" />
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.type}</h3>
-              <Select 
-                name={"typeId"}
-                className={"select1 wid1"}
-                dataList={stateTypeList}
-                handleItemClick={handleItemClickType}
-                />
-              
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.category}</h3>
-              <Select 
-                name={"categoryId"}
-                className={"select1 wid1"}
-                dataList={stateCategoryList}
-                // handleItemClick={handleItemClickCategory}
-                />
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.setting_adult}</h3>
-              <label className="inp_chktx"><input name="rating" type="checkbox" /><span>{text.r_19}</span></label>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.summary}</h3>
-              <textarea name="description" id="description" className="textarea1"></textarea>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.setting_tag}</h3>
-              <div className="inp_txt sch">
-                <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                <input type="text" className="" placeholder={text.tag_name} />
+            <section className="bbs_write">
+              <div className="hd_titbox hide-m">
+                <h2 className="h_tit1">{text.register_series}</h2>
               </div>
-            </div>
 
-            <div className="col">
-              <h3 className="tit1">{text.post_image}
-                <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip 
-                    title={text.post_image} 
-                    text={"text something123142"} />
-                </button>
-              </h3>
-              <ImageUpload
-                ref={refCoverImage}
-                id={"filebox1"}
-                className={"box_drag small"}
-                name={"coverImage"}                     
-                text={text.drag_drop}    
-                />
-            </div>
+              <div className="col">
+                <h3 className="tit1">{text.title}</h3>
+                <input name="title" type="text" className="inp_txt w100p" />
+              </div>
 
-            <div className="col">
-              <h3 className="tit1">{text.timeline} 
-                <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip 
-                      title={text.timeline} 
+              <div className="col">
+                <h3 className="tit1">{text.type}</h3>
+                <Select 
+                  name={"typeId"}
+                  className={"select1 wid1"}
+                  dataList={stateTypeList}
+                  handleItemClick={handleItemClickType}
+                  />
+                
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.category}</h3>
+                <Select
+                  name={"categoryId"}
+                  className={"select1 wid1"}
+                  dataList={stateCategoryList}
+                  // handleItemClick={handleItemClickCategory}
+                  />
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.setting_adult}</h3>
+                <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" /><span>{text.r_19}</span></label>
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.summary}</h3>
+                <textarea name="description" id="description" className="textarea1"></textarea>
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.setting_tag}</h3>
+                <Tag 
+                  ref={refTags}
+                  name={"tags"}
+                  className={"inp_txt sch"}
+                  placeholder={text.tag_name} />
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.post_image}
+                  <button type="button" className="btn_help" title="ヘルプ">
+                    <ToolTip 
+                      title={text.post_image} 
                       text={"text something123142"} />
-                </button>
-              </h3>
-              <ImageUpload
-                id={"filebox2"}
-                className={"box_drag"}
-                name={"thumbnailImage"}                     
-                text={text.drag_drop}    
-                />
-            </div>
-          </section>
+                  </button>
+                </h3>
+                <ImageUpload
+                  ref={refCoverImage}
+                  id={"filebox1"}
+                  className={"box_drag small"}
+                  name={"coverImage"}                     
+                  text={text.drag_drop}    
+                  callback={callbackCoverImage}
+                  />
+              </div>
+
+              <div className="col">
+                <h3 className="tit1">{text.timeline} 
+                  <button type="button" className="btn_help" title="ヘルプ">
+                    <ToolTip 
+                        title={text.timeline} 
+                        text={"text something123142"} />
+                  </button>
+                </h3>
+                <ImageUpload
+                  ref={refTimelineImage}
+                  id={"filebox2"}
+                  className={"box_drag"}
+                  name={"thumbnailImage"}                     
+                  text={text.drag_drop}    
+                  callback={callbackTimeline}
+                  />
+              </div>
+            </section>
+          </form>
 
           <div className="bbs_write_botm">
-            <div className="btn-pk n blue2">
-              <div className="pull_width" onClick={handlePreview}>
+            <button className="btn-pk n blue2" onClick={handlePreview}>
+              <div className="pull_width">
                 <span>{text.preview}</span>
               </div>
-            </div>
-            <div className="btn-pk n blue">
-              <div className="pull_width" onClick={handleRegister}>
+            </button>
+            <button className="btn-pk n blue" onClick={handleRegister}>
+              <div className="pull_width" >
                 <span>{text.register}</span>
               </div>
-            </div>
+            </button>
           </div>
-        
+
         </div>
       </div>
     </Container>

@@ -13,6 +13,7 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
     id={"filebox2"}
     name={"coverImage"}                     
     text={text.drag_drop}    
+    callback={callback}
     />
   
   ex) 이미지 파일 정보 가져오기 file, preview, hash
@@ -25,17 +26,17 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
  * @author 2hyunkook
  * @param ref image file 접근을 위한 reference 
  * @param className box_drag 와 같이 쓰일 class name
- * @param preview image preview
+ * @param preview image preview             file or file server url
  * @param id file input tag id
- * @param name upload parameter name (hash값을 가진 input tag name)
+ * @param name upload parameter name 
  * @param text 평소에 보여질 drag n drop text
+ * @param callback image value 설정 후 callback func
  */
 export default forwardRef(function ImageUpload(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
-  const initImageObject = {file: undefined, preview: undefined, hash: undefined};
-  const { className, preview, text, name, id } = props;
-  const [image, setImageFile] = useState(initImageObject);
-
+  const initImageObject = {file: undefined, preview: undefined, value: undefined};
+  const { className, preview, text, name, id, callback } = props;
+  const [stateImage, setStateImage] = useState(initImageObject);
   
   /**
   *
@@ -53,15 +54,15 @@ export default forwardRef(function ImageUpload(props, ref) {
     }
     
     reader.onload = () => {
-      setImageFile({
-        ...image,
+      setStateImage({
+        ...stateImage,
         file: file,
         preview: reader.result
       });
     };
   };
 
-  //=============== file drag n drop 설정 ===============
+  //=============== file drag n drop 설정 =========================================
   const onDrop = useCallback(async (acceptedFiles) => {
     setPreviewImage(acceptedFiles[0]);
   }, []);
@@ -78,44 +79,57 @@ export default forwardRef(function ImageUpload(props, ref) {
   //==============================================================================
 
   const handlePreviewClose = () => {
-    setImageFile(initImageObject);
+    setStateImage(initImageObject);
   };
 
   useImperativeHandle(ref, () => ({
-    setImageHash: (hash) => {
-      setImageFile({...image, hash: hash});
+    setImageValueToInputTag: (v, callback) => {
+      setStateImage({...stateImage, value: v});
     },
-    setImage: (fileUrl, hash) => {
-      setImageFile({...image, preview: fileUrl, hash: hash});
+    setImage: (fileUrl, v) => {
+      setStateImage({...stateImage, preview: fileUrl, value: v});
     },
     getImageFile: () => {
-      return image;
+      return stateImage.file;
+    },
+    getImageInfo: () => {
+      return stateImage;
     }
   }));
 
   useEffect(() => {
-    setImageFile({
-      ...image,
-      preview : preview
-    });
+    if( preview !== undefined ){
+      console.log("useEffect preview", preview);
+      setStateImage({
+        ...stateImage,
+        preview : preview
+      });
+    }
   }, [preview]);
+
+  useEffect(() => {
+    if( stateImage.value !== undefined ){
+      console.log("useEffect value", stateImage.value);
+      callback?.();
+    }
+  }, [stateImage.value]);
 
   return (
     <div 
       className={`${className}`}
        >
-        {/* upload에 쓰일 hash 값 저장 */}
-      <input type={"text"} name={name} defaultValue={image?.hash} style={{display: "none"}} />  
+        {/* upload에 쓰일 값  저장 */}
+      <input type={"text"} name={name} defaultValue={stateImage?.value} style={{display: "none"}} />  
         {/* file input tag */}
       <input {...InputProps} id={id} />
       {
-        image?.preview === undefined ? (
+        stateImage?.preview === undefined ? (
           <label htmlFor={id} className="filetxt">
             <div 
               {...RootProps} 
               maxsize={100} 
               multiple={false} 
-              className={`image_upload`} >
+              className={`wh100`} >
                 {
                   text === undefined ? 
                     <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
@@ -130,7 +144,7 @@ export default forwardRef(function ImageUpload(props, ref) {
           </label>
         ) : (
           <div className={"fileview"}>
-            <div><img src={image?.preview} alt="preview" /></div>
+            <div><img src={stateImage?.preview} alt="preview" /></div>
             <button type="button" className="btn_del" title="削除">
               <FontAwesomeIcon 
                     icon={faCircleXmark}

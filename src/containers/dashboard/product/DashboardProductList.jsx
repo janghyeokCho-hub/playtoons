@@ -115,7 +115,7 @@ export default function DashboardProductList(props) {
     navigate("/dashboard/series/detail/" + no);
   };
 
-// TODO 버튼 추가, 상태값에 따른 색깔변화 logo 변경 
+// TODO 버튼 모바일 css, 상태값에 따른 색깔변화 logo 변경 
   const renderProductList = () => {
     return stateData?.map((item, index) => {
       return (

@@ -88,4 +88,40 @@ export const getGetMethodUrl = (formData) => {
   return url.slice(0, -1);
 };
 
+/**
+*
+   form 태그 안의 값을 json object 로 반환해준다.
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param refForm form ref 객체
+* @return json object
+*/
+export const getFromDataJson = (refForm) => {
+  const form = refForm.current;
+  let obj = {};
+  
+  for( let i = 0; i < form.length; i++ ){
+    obj[form[i].name] = form[i].value;
+  }
+
+  return obj;
+};
+
+/**
+*
+   list 에서 value 를 제거해준다.
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param list list object
+* @param value list 에서 제거할 value
+* @return
+*/
+export const removeItemInList = (list, value) => {
+  return list.filter((item) => {
+    return item !== value;
+  });
+};
+
 

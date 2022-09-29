@@ -1,4 +1,4 @@
-import { getFileFromServer } from '@/services/dashboardService';
+import { getFileUrlFromServer } from '@/services/dashboardService';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -31,7 +31,7 @@ export default function Image(props) {
     }
 
     const params = new FormData();
-    const {status, data: result} = await getFileFromServer(hash, params);
+    const {status, data: result} = await getFileUrlFromServer(hash, params);
     console.log('getImage', status, result);
     
     if( status === 200 ){

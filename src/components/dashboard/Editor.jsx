@@ -1,7 +1,7 @@
 import React from "react";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { getFileFromServer, setFileToServer } from "@/services/dashboardService";
+import { getFileUrlFromServer, setFileToServer } from "@/services/dashboardService";
 
 /**
 *
@@ -40,7 +40,7 @@ export default function Editor(props) {
   };
 
   const getFile = async (hash, resolve, reject) => {
-    const {status , data: result} = await getFileFromServer(hash);
+    const {status , data: result} = await getFileUrlFromServer(hash);
     console.log('getFile', status, result);
     
     if( status === 200 ){

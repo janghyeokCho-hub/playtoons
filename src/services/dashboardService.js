@@ -8,8 +8,12 @@ import { apiServer } from "./api";
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getSeriesStoryList = (params) => {
-  return apiServer("get", "/post/series" + getGetMethodUrl(params));
+export const getSeriesStoryList = async (params) => {
+  try {
+    return await apiServer("get", "/post/series" + getGetMethodUrl(params));
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
 };
 
 /**
@@ -19,8 +23,12 @@ export const getSeriesStoryList = (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getPostTypeListFromServer = () => {
-  return apiServer("get", "/post/type");
+export const getPostTypeListFromServer = async () => {
+  try {
+    return await apiServer("get", "/post/type");
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
 };
 
 /**
@@ -31,8 +39,12 @@ export const getPostTypeListFromServer = () => {
 * @author 2hyunkook
 * @param typeId type id
 */
-export const getPostCategoryListFromServer = (typeId) => {
-  return apiServer("get", `/post/category/${typeId}`);
+export const getPostCategoryListFromServer = async (typeId) => {
+  try {
+    return await apiServer("get", `/post/category/${typeId}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
 };
 
 /**
@@ -53,12 +65,16 @@ export const getPostCategoryListFromServer = (typeId) => {
           params.append("file", file);
 * @return hash : [get] /file/{hash} api로 파일 경로 가져옴
 */
-export const setFileToServer = (params) => {
+export const setFileToServer = async (params) => {
   const header = {
     "content-type": "multipart/form-data",
   };
 
-  return apiServer("post", "/file", params, header);
+  try {
+    return await apiServer("post", "/file", params, header);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
 };
 
 /**
@@ -69,12 +85,17 @@ export const setFileToServer = (params) => {
 * @author 2hyunkook
 * @return 파일경로
 */
-export const getFileFromServer = (hash, params) => {
+export const getFileUrlFromServer = async (hash, params) => {
   let parameters = "";
   if( params !== undefined ){
-    parameters = "?" + new URLSearchParams(params).toString();
+    parameters = `?${getGetMethodUrl(params)}`;
   }
-  return apiServer("get", `/file/${hash}${parameters}`);
+
+  try {
+    return await apiServer("get", `/file/${hash}${parameters}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
 };
 
 
@@ -85,6 +106,60 @@ export const getFileFromServer = (hash, params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getPostListFromServer = (params) => {
-  return apiServer("get", "/post", params);
+export const getPostListFromServer = async (params) => {
+  try {
+    return await apiServer("get", "/post", params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
 };
+
+
+/**
+*
+  태그 검색
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getTagFromServer = async (query) => {
+  try {
+    return await apiServer("get", `/tag/${query}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+
+/**
+*
+  태그 작성
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @return json ex) {"result":0,"tag":{"name":"test5","public":true,"rating":"G","id":"15","createdAt":"2022-09-28T05:07:21.051Z","updatedAt":"2022-09-28T05:07:21.051Z"}}
+*/
+export const setTagToServer = async (params) => {
+  try {
+    return await apiServer("post", "/tag", params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
+  Dashbaord - series 시리즈 작성
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setSeriesToServer = async (params) => {
+  try {
+    return await apiServer("post", "/post/series", params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+

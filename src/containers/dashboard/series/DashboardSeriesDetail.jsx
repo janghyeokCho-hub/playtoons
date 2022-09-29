@@ -53,7 +53,7 @@ export default function DashboardSeriesDetail(props) {
     return data?.tagList?.map( (item, index) => {
       return <div className="i_tag" key={index}>{item}</div>
     });
-  }
+  };
 
   useEffect(() => {
     console.log("first", params);
