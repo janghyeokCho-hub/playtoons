@@ -9,6 +9,7 @@ import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
+import SalesDetail from "@CONTAINERS/dashboard/DashboardSalesDetail";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
 import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";
@@ -34,6 +35,10 @@ export default function Dashboard() {
         <Route 
           path="/main" 
           element={<Main />} 
+        />
+        <Route 
+          path="/sales/detail" 
+          element={<SalesDetail />} 
         />
         <Route 
           path="/product" 

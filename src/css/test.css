@@ -566,3 +566,53 @@ li.dashboard-gnb.selected{
 .dsi_rotate{
   transform: rotate(90deg);
 }
+
+/* ============================================================================== */
+/* sales detail */
+/* ============================================================================== */
+.dsd_search_label{
+  color: rgba(19,22,26,1);
+  font-family: "NotoSansJP-Medium";
+  font-size: 16px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-align: left;
+  line-height: 20px;
+}
+
+.dsd_search_select{
+  width: 114px;
+  height: 44px;
+  line-height: 44px;
+}
+
+.dsd_sales_detail{
+  color: rgba(19,22,26,1);
+  font-family: "NotoSansJP-Bold";
+  font-size: 32px;
+  font-weight: 700;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-align: left;
+  line-height: 36px;
+}
+
+.dsd_date{
+  color: rgba(97,112,128,1);
+  font-family: "NotoSansJP-Medium";
+  font-size: 24px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-align: left;
+  line-height: 28px;
+}
+
+.mt24{
+  margin-top: 24px;
+}
+
+.mt67{
+  margin-top: 67px;
+}

@@ -16,6 +16,7 @@ import tempImageSeries03 from '@IMAGES/temp_series_03.png';
 import tempImageSeries04 from '@IMAGES/temp_series_04.png';
 import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
+import { Link } from "react-router-dom";
 
 
 const text = {
@@ -274,13 +275,13 @@ export default function DashboardMain() {
   const getSalesProductList = () => {
     return data?.sales_product_list?.map((item, i) => {
       return <SwiperSlide key={i} className={"cx"}>
-                <a href={`/dashboard/product/detail/${item.id}`}>
+                <Link to={`/dashboard/product/detail/${item.id}`}>
                   <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
                   <div className="cx_txt">
                     <p className="h1">{item.title}</p>
                     <p className="t1">{item.date}</p>
                   </div>
-                </a>
+                </Link>
             </SwiperSlide>
     });
   };
@@ -288,7 +289,7 @@ export default function DashboardMain() {
   const getQuestionList = () => {
     return data?.question_list?.map((item, index) => {
       return  <li key={index}>
-                <p className="t1"><a href={`/dashboard/product/inquiry/${item.id}`}>{item.title}</a></p>
+                <p className="t1"><Link to={`/dashboard/product/inquiry/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -299,7 +300,7 @@ export default function DashboardMain() {
       return <li key={index}>
               <div>
                 <div className="t_star"><span className={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
-                <p className="t1"><a href={`/dashboard/product/review/${item.id}`}>{item.title}</a></p>
+                <p className="t1"><Link to={`/dashboard/product/review/${item.id}`}>{item.title}</Link></p>
               </div>
               <p className="t2">{item.date}</p>
             </li>
@@ -309,13 +310,13 @@ export default function DashboardMain() {
   const getSeriesList = () => {
     return data?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
-                  <a href={`/dashboard/series/detail/${item.id}`}>
+                  <Link to={`/dashboard/series/detail/${item.id}`}>
                     <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><FontAwesomeIcon icon={faHeart} /><span>{item.count}</span></p></div>
                     <div className="cx_txt">
                       <p className="t1 c-blue">{item.type}</p>
                       <p className="h1">{item.title}</p>
                     </div>
-                  </a>
+                  </Link>
               </SwiperSlide>
     });
   };
@@ -323,7 +324,7 @@ export default function DashboardMain() {
   const getPostList = () => {
     return data?.post_list?.map((item, i) => {
       return  <li key={item.id}>
-                <p className="t1"><a href={`/dashboard/post/detail/${item.id}`}>{item.title}</a></p>
+                <p className="t1"><Link to={`/dashboard/post/detail/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -332,7 +333,7 @@ export default function DashboardMain() {
   const getReactionList = () => {
     return data?.reaction_list?.map((item, index) => {
       return  <li key={item.id}>
-                <p className="t1"><a href={`/dashboard/reaction/detail/${item.id}`}>{item.title}</a></p>
+                <p className="t1"><Link to={`/dashboard/reaction/detail/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
@@ -345,7 +346,7 @@ export default function DashboardMain() {
                   <p className="t2">{item.date}</p>
                   <p className="t1_1">{item.money}</p>
                 </div>
-                <p className="t2"><a href={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><Link to={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></Link></p>
               </li>
     });
   };
@@ -358,7 +359,7 @@ export default function DashboardMain() {
                   <p className="t1_1">{item.money}</p>
                   <p className="t3">{item.bank_name}</p>
                 </div>
-                <p className="t2"><a href={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></a></p>
+                <p className="t2"><Link to={`/dashboard/sales/detail/${item.id}`} className="btn-pk s blue2"><span data-id={item.id}>{text.detail}</span></Link></p>
               </li>
     });
   };
@@ -381,14 +382,14 @@ export default function DashboardMain() {
             <p className="h1"><strong>{tempData.sales_cases}</strong><span className="fz_s1 c-green">{tempData.before_yesterday}</span></p>
             <div className="t1">
               <p><strong>{tempData.pc_count}</strong></p>
-              <a href="/dashboard/sales/list" className="btn-pk n blue"><span>{text.detail}</span></a>
+              <Link to="/dashboard/product/sales/list" className="btn-pk n blue"><span>{text.detail}</span></Link>
             </div>
           </div>
 
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.recently_sales_product}</h3>
-              <a href="/dashboard/product/list" className="rgh c-blue view-m" ><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+              <Link to="/dashboard/product/list" className="rgh c-blue view-m" ><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
             </div>
 
             <div className="lst_comic1">
@@ -417,7 +418,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_question}</h3>
-                <a href="/dashboard/sales/inquiry" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/product/sales/inquiry" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -431,7 +432,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_review}</h3>
-                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/product/sales/review" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -460,7 +461,7 @@ export default function DashboardMain() {
           <div className="b_cont">
             <div className="hd_titbox">
               <h3 className="h_tit1">{text.progress_in_series}</h3>
-              <a href="/dashboard/series/list" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+              <Link to="/dashboard/series/list" className="rgh c-blue"><span className="ico_arr_link">{text.series_management}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
             </div>
             
             <div className="lst_comic1 long">
@@ -492,7 +493,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_post}</h3>
-                <a href="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -506,7 +507,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_reaction}</h3>
-                <a href="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -522,7 +523,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.past_sales}</h3>
-                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/sales/detail" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -536,7 +537,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.history_deposit}</h3>
-                <a href="/dashboard/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></a>
+                <Link to="/dashboard/product/sales/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
@@ -553,9 +554,3 @@ export default function DashboardMain() {
     </Container>
   );
 }
-//3A434D --bright-gray
-//617080 --nevada
-//DDE1E5  --mercury
-//13161A  --vulcan
-//394BC2  --violet-blue
-

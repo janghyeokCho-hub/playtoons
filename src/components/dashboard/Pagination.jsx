@@ -3,11 +3,11 @@ import { useState } from 'react';
 import '@/css/test.css';          //test 용 css 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
+import { faAngleLeft, faAngleRight } from '@fortawesome/pro-light-svg-icons';
 
 /**
 *
-   pagination component
+  pagination component
 
   const handleClickPage = (pageNumber) => {
     navigate(`/dashboard/series/${pageNumber}`);
@@ -22,7 +22,7 @@ import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
 * @version 1.0.0      현재 테스트용으로 tpagination 클래스 적용 test.css 에 class 정의
 * @author 2hyunkook
 * @param itemsPerPage limit ex) 10
-* @param totalPages   총 페이지 수 ex) 10
+* @param totalPages   총 페이지 수 ex) 3
 * @param currentPage  현재 페이지 ex) 1
 * @param handle       페이지 이동 이벤트 처리 func
 * @return
@@ -86,6 +86,10 @@ export default function Pagination(props) {
       ...props
     });
   }, []);
+
+  useEffect(() => {
+    
+  }, [statePage]);
   
 
   return (

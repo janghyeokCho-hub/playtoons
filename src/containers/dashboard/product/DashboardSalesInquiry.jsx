@@ -125,7 +125,7 @@ export default function DashboardSalesInquiry(props) {
                   <div className="btn-pk s blue2 dsi_btn " data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
                   <div className="btn-pk s blue2 dsi_btn mt10" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
                 </div>
-                <div className="mr30" ><ArrowRight className="fs24" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
+                <div className="mr30" ><ArrowRight className="fs24 pointer" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
               </div>
             </td>
           </tr>
