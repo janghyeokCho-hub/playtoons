@@ -56,7 +56,6 @@ export default function DashboardSeriesDetail(props) {
   };
 
   useEffect(() => {
-    console.log("first", params);
     setData(tempData);
   }, []);
   

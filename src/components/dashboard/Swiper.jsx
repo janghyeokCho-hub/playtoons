@@ -72,10 +72,12 @@ export default function SwiperContainer(props) {
           
         }}
         onSwiper={(swiper) => {
+          // console.log('swiper', swiper);
+        }} 
+        onUpdate={(swiper) => {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
-
-        }} >
+        }}>
           
         {
           props?.list?.()
@@ -83,8 +85,8 @@ export default function SwiperContainer(props) {
         
       </Swiper>
 
-      <button ref={prevRef} type="button" className="swiper-button-prev my1"><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
-      <button ref={nextRef} type="button" className="swiper-button-next my1"><FontAwesomeIcon icon={faCircleChevronRight} /></button>
+      <button ref={prevRef} type="button" className="swiper-button-prev my1 "><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
+      <button ref={nextRef} type="button" className="swiper-button-next my1 "><FontAwesomeIcon icon={faCircleChevronRight} /></button>
     </>
   )
 }

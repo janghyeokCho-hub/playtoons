@@ -80,10 +80,16 @@ export default function DashboardSalesInquiry(props) {
     // setData(getProductListFromResultData(data));
   };
 
-  const handleItemClick = (e) => {
+  const handleItemClickAnswer = (e) => {
     let no = e.target.getAttribute("data-id");
 
     navigate("/dashboard/series/detail/" + no);
+  };
+
+  const handleItemClickReport = (e) => {
+    let no = e.target.getAttribute("data-id");
+
+    // navigate("/dashboard/series/detail/" + no);
   };
 
   const handleItemArrow = (value, isSelected) => {
@@ -116,10 +122,10 @@ export default function DashboardSalesInquiry(props) {
             <td className="td_txt">
               <div className="dsi_d_btns">
                 <div className="mr60">
-                  <div className="btn-pk s blue2 dsi_btn " data-id={item.id} onClick={handleItemClick}><span>{text.report}</span></div><br/>
-                  <div className="btn-pk s blue2 dsi_btn mt10" data-id={item.id} onClick={handleItemClick}><span>{text.answer}</span></div>
+                  <div className="btn-pk s blue2 dsi_btn " data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
+                  <div className="btn-pk s blue2 dsi_btn mt10" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
                 </div>
-                <div className="mr30" ><ArrowRight className="fs24" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}   /></div>
+                <div className="mr30" ><ArrowRight className="fs24" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
               </div>
             </td>
           </tr>
@@ -141,14 +147,14 @@ export default function DashboardSalesInquiry(props) {
 
       <div className="inr-c">
 
-        <div className="tbl_basic mtbl_ty1 mt50">
+        <div className="tbl_basic mtbl_ty1 ">
           <table className="list">
             <caption>list</caption>
             <colgroup>
               <col className="num" />
               <col className="wid1" />
               <col className="wid4" />
-              <col className="num" />
+              <col className="wid1" />
               <col className="wid1" />
               <col className="wid4" />
             </colgroup>
