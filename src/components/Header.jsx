@@ -61,7 +61,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
               <button type="button" className="mo_btns view-m"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
               
               <a href="/dashboard/post" className="btn_tugo btn-pk n blue bdrs"><span>投稿</span></a>
-              <span><FontAwesomeIcon icon={faSquarePlus} /></span>
+              <span className="view-m"><FontAwesomeIcon icon={faSquarePlus} /></span>
               <a href="#" className="btn_profile"><span style={{backgroundImage: `url(${tempProfile})`}}></span></a>
             </div>
           </div>

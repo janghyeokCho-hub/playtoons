@@ -11,9 +11,9 @@ export default function Page404() {
   
   useEffect(() => {
     
-    setTimeout(() => {
-      naviage('/dashboard/main');
-    }, 2000);
+    // setTimeout(() => {
+    //   naviage('/dashboard/main');
+    // }, 2000);
 
   }, []);
 

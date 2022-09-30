@@ -24,7 +24,6 @@ export default function ProductTab() {
   const location = useLocation();
 
   const getTabMenuElement = () => {
-    
     return TAB_MENU.map((item, index) => {
       return (
         <li className={`dashboard-gnb ${location.pathname === item.path && 'selected'}`} key={index} >

@@ -29,41 +29,42 @@ const text = {
   during_sales : "期間内の売上総額"
 };
 
-const tempData = [
-  {
-    number : "1",
-    image : tempImg1,
-    title : "大学のリンゴ一個の重さで10メートルの素材",
-    price : "1200000CP",
-    date : "2022/06/11",
-    amount: "32",
-  },
-  {
-    number : "2",
-    image : tempImg1,
-    title : "大学のリンゴ一個の重さで10メートルの素材",
-    price : "1200000CP",
-    date : "2022/06/11",
-    amount: "33",
-  },
-  {
-    number : "3",
-    image : tempImg1,
-    title : "大学のリンゴ一個の重さで10メートルの素材",
-    price : "1200000CP",
-    date : "2022/06/11",
-    amount: "23",
-  },
-];
+const tempData = {
+  sales: "144,232 PC",
+  list: [
+    {
+      number : "1",
+      image : tempImg1,
+      title : "大学のリンゴ一個の重さで10メートルの素材",
+      price : "1200000CP",
+      date : "2022/06/11",
+      amount: "32",
+    },
+    {
+      number : "2",
+      image : tempImg1,
+      title : "大学のリンゴ一個の重さで10メートルの素材",
+      price : "1200000CP",
+      date : "2022/06/11",
+      amount: "33",
+    },
+    {
+      number : "3",
+      image : tempImg1,
+      title : "大学のリンゴ一個の重さで10メートルの素材",
+      price : "1200000CP",
+      date : "2022/06/11",
+      amount: "23",
+    },
+  ]
+};
 
 
 
 export default function DashboardSalesList(props) {
   const [stateData, setStateData] = useState(undefined);
-  
-  const navigate = useNavigate();
-  const location = useLocation();
-  const refInput = useRef();
+  const refCalendarStart = useRef();
+  const refCalendarEnd = useRef();
 
   const getProductList = async () => {
     // 시리즈 스토리 리스트
@@ -80,16 +81,24 @@ export default function DashboardSalesList(props) {
     // setData(getProductListFromResultData(data));
   };
 
-  const handleItemClick = (e) => {
-    let no = e.target.getAttribute("data-id");
+  const handleClickCalendar = (name, date) => {
+    const startDate = name === 'start' ? date : refCalendarStart.current.getDate();
+    const endDate = name === 'end' ? date : refCalendarEnd.current.getDate();
+    
+    if( endDate === undefined ){
+      return true;
+    }
 
-    navigate("/dashboard/series/detail/" + no);
+    if( startDate.getTime() >= endDate.getTime() ){
+      alert('시작일은 종료일보다 클 수 없습니다.');
+      return false;
+    }
+
+    return true;
   };
 
-
-
   const renderSalesList = () => {
-    return stateData?.map((item, index) => {
+    return stateData?.list?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
@@ -124,17 +133,28 @@ export default function DashboardSalesList(props) {
         <div className="col mt2 saleslist-data-col">
           <div className="mr24">
             <div className="calendar-label">{text.start_date}</div>
-            <Calendar type={"-1month"} />
+            <Calendar 
+              ref={refCalendarStart}
+              name={"start"}
+              type={"-1month"} 
+              callback={handleClickCalendar} />
           </div>
           <div className="mr24">
-            <div className="calendar-label">{text.start_date}</div>
-            <Calendar type={"now"} />
+            <div className="calendar-label">{text.end_date}</div>
+            <Calendar 
+              ref={refCalendarEnd}
+              name={"end"}
+              type={"none"} 
+              callback={handleClickCalendar} />
           </div>
-
-          
         </div>
 
-        <div className="tbl_basic mtbl_ty1 mt39">
+        <div className="col mt41 saleslist-data-col">
+          <div className="saleslist-during-label mr50">{text.during_sales}</div>
+          <div className="saleslist-during-text">{stateData?.sales}</div>
+        </div>
+
+        <div className="tbl_basic mtbl_ty1 mt50">
           <table className="list">
             <caption>list</caption>
             <colgroup>
