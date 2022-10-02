@@ -71,7 +71,7 @@ const Detail = () => {
     ],
   };
   return (
-    <Container menus={menus}>
+    <Container menus={menus} type="series">
       <div className="inr-c">
         <div className="wrap_series_detail">
           <div className="top_detail">

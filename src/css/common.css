@@ -883,6 +883,7 @@ textarea.textarea1 {
   content: "";
   text-align: left;
   text-indent: -9999px;
+  /*background-image: url("@IMAGES/ico_common.png");*/
   background-repeat: no-repeat;
   background-size: 100vw auto;
   *display: inline;
@@ -894,6 +895,7 @@ textarea.textarea1 {
   text-align: left;
   vertical-align: middle;
   text-indent: -9999px;
+  /*background-image: url("@IMAGES/ico_common.png");*/
   background-repeat: no-repeat;
   background-size: 100vw auto;
   *display: inline;

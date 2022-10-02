@@ -9,7 +9,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
+import "@/css/swiper.css";
 
 const Webtoon = () => {
   const navigate = useNavigate();
@@ -175,7 +175,13 @@ const Webtoon = () => {
         <div className="slider">
           <div className="swiper-container mySwiper1">
             <Swiper className="swiper-wrapper">
-              <BoxVslideDiv className="box_vslide swiper-slide">
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -189,8 +195,14 @@ const Webtoon = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
-              <BoxVslideDiv className="box_vslide swiper-slide">
+              </SwiperSlide>
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -204,8 +216,14 @@ const Webtoon = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
-              <BoxVslideDiv className="box_vslide swiper-slide">
+              </SwiperSlide>
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -219,7 +237,7 @@ const Webtoon = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
+              </SwiperSlide>
             </Swiper>
           </div>
           <button type="button" className="swiper-button-prev my1">
@@ -248,11 +266,6 @@ const ImgTmpProfileBgDiv = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-`;
-
-const BoxVslideDiv = styled.div`
-  width: 316.5px;
-  margin-right: 27px;
 `;
 
 export default Webtoon;

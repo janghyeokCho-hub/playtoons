@@ -6,11 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /**
  *
  */
-const Container = ({ menus, children }) => {
+const Container = ({ menus, children, type }) => {
   return (
     <>
       <Header />
-      <div id="container" className="container dashboard series">
+      <div id="container" className={`container dashboard ${type}`}>
         <aside className="sidebar">
           {Object.entries(menus).map(([key, value]) => {
             return (
