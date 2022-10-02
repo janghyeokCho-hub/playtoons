@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 /**
  *
  */
-const Container = ({ menus, children, type }) => {
+const Container = ({ menus, children, type, contentType }) => {
   return (
     <>
       <Header />
@@ -37,7 +37,7 @@ const Container = ({ menus, children, type }) => {
           })}
         </aside>
 
-        <div className="contents">{children}</div>
+        {children}
       </div>
     </>
   );

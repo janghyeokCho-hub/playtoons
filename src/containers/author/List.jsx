@@ -33,6 +33,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -63,6 +64,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -93,6 +95,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -123,6 +126,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -153,6 +157,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -183,6 +188,7 @@ const List = () => {
                 <div className="box_profile">
                   <a href="#">
                     <ImgTmpProfileBgDiv
+                      className="pf_thumb"
                       bgImg={require("@IMAGES/tmp_profile_bg.png")}
                     />
                     <div className="pf_txt">
@@ -221,6 +227,7 @@ const List = () => {
             <div className="box_profile _half">
               <a href="#">
                 <ImgTmpProfileBgDiv
+                  className="pf_thumb"
                   bgImg={require("@IMAGES/tmp_profile_bg.png")}
                 />
                 <div className="pf_txt">
@@ -245,6 +252,7 @@ const List = () => {
             <div className="box_profile _half">
               <a href="#">
                 <ImgTmpProfileBgDiv
+                  className="pf_thumb"
                   bgImg={require("@IMAGES/tmp_profile_bg.png")}
                 />
                 <div className="pf_txt">
@@ -267,6 +275,7 @@ const List = () => {
             <div className="box_profile _half">
               <a href="#">
                 <ImgTmpProfileBgDiv
+                  className="pf_thumb"
                   bgImg={require("@IMAGES/tmp_profile_bg.png")}
                 />
                 <div className="pf_txt">
