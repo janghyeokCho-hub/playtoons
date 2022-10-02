@@ -2,28 +2,30 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
-import {showModal} from '@/modules/redux/ducks/modal';
+import { showModal } from "@/modules/redux/ducks/modal";
 import NavBarItem from "@COMPONENTS/dashboard/NavBarItem";
 
 //==============================================================================
-import { 
+import {
   faTableColumns as iconDashboard,
   faDiamond as iconProduct,
   faUser as iconProfile,
   faObjectUnion as iconSeries,
   faSquarePen as iconPost,
   faSeal as iconPlan,
-  faChartLine as iconAnalysis } from "@fortawesome/pro-light-svg-icons";
+  faChartLine as iconAnalysis,
+} from "@fortawesome/pro-light-svg-icons";
 
 import { faTableColumns as iconDashboardOn } from "@fortawesome/pro-regular-svg-icons";
-import { 
-  faDiamond as iconProductOn, 
-  faUser as iconProfileOn, 
-  faObjectUnion as iconSeriesOn, 
-  faSquarePen as iconPostOn, 
-  faSeal as iconPlanOn, 
-  faChartLine as iconAnalysisOn } from "@fortawesome/pro-solid-svg-icons";
-  //==============================================================================
+import {
+  faDiamond as iconProductOn,
+  faUser as iconProfileOn,
+  faObjectUnion as iconSeriesOn,
+  faSquarePen as iconPostOn,
+  faSeal as iconPlanOn,
+  faChartLine as iconAnalysisOn,
+} from "@fortawesome/pro-solid-svg-icons";
+//==============================================================================
 
 let textData = {
   dashboard: "ダッシュボード",
@@ -45,7 +47,8 @@ const DASHBOARD_PATH = {
   ANALYSIS: "/dashboard/analysis",
 };
 
-export default function NavBarDashboard3(props) {
+export default function NavBarDashboard(props) {
+  console.log(props);
 
   const getExtraNav = (props) => {
     switch (props?.type) {
@@ -54,12 +57,12 @@ export default function NavBarDashboard3(props) {
       case "post_detail":
         return (
           // iconAnalysis
-          <NavBarItem 
+          <NavBarItem
             text={textData.analysis}
             path={DASHBOARD_PATH.ANALYSIS}
             icon={iconAnalysis}
             selectedIcon={iconAnalysisOn}
-            />
+          />
         );
     }
   };
@@ -69,45 +72,43 @@ export default function NavBarDashboard3(props) {
       <h2 className="tit">{textData.dashboard}</h2>
       <nav className="menu">
         <ul>
-          <NavBarItem 
+          <NavBarItem
             text={textData.dashboard}
             path={DASHBOARD_PATH.DASHBOARD}
             icon={iconDashboard}
             selectedIcon={iconDashboardOn}
-            />
-          <NavBarItem 
+          />
+          <NavBarItem
             text={textData.product}
             path={DASHBOARD_PATH.PRODUCT}
             icon={iconProduct}
             selectedIcon={iconProductOn}
-            />
-          <NavBarItem 
+          />
+          <NavBarItem
             text={textData.profile_management}
             path={DASHBOARD_PATH.PROFILE}
             icon={iconProfile}
             selectedIcon={iconProfileOn}
-            />
-          <NavBarItem 
+          />
+          <NavBarItem
             text={textData.series_management}
             path={DASHBOARD_PATH.SERIES}
             icon={iconSeries}
             selectedIcon={iconSeriesOn}
-            />
-          <NavBarItem 
+          />
+          <NavBarItem
             text={textData.post_management}
             path={DASHBOARD_PATH.POST}
             icon={iconPost}
             selectedIcon={iconPostOn}
-            />
-          <NavBarItem 
+          />
+          <NavBarItem
             text={textData.plan_management}
             path={DASHBOARD_PATH.PLAN}
             icon={iconPlan}
             selectedIcon={iconPlanOn}
-            />
-          {
-            getExtraNav()
-          }
+          />
+          {getExtraNav()}
         </ul>
       </nav>
     </aside>
