@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import List from "./List";
 import Plan from "./Plan";
@@ -22,9 +22,23 @@ import {
   faStars as faStarsOFF,
   faCartShopping as faCartShoppingOFF,
 } from "@fortawesome/pro-solid-svg-icons";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const App = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [activeMenu, setActiveMenu] = useState("search");
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/author/list":
+        setActiveMenu("creatorList");
+        break;
+      default:
+        setActiveMenu("search");
+    }
+  }, [location.pathname]);
   const menus = {
     探索: [
       {
@@ -34,7 +48,7 @@ const App = () => {
           on: faHouseChimneyWindowON,
           off: faHouseChimneyWindowOFF,
         },
-        callback: () => navigate(""),
+        link: "/author/plan",
       },
       {
         code: "timeline",
@@ -43,7 +57,7 @@ const App = () => {
           on: faInfinityON,
           off: faInfinityOFF,
         },
-        callback: () => navigate(""),
+        link: "/author/series",
       },
     ],
     創作: [
@@ -54,7 +68,7 @@ const App = () => {
           on: faStarsON,
           off: faStarsOFF,
         },
-        callback: () => navigate(""),
+        link: "/author/list",
       },
       {
         code: "maquettePlace",
@@ -63,13 +77,13 @@ const App = () => {
           on: faCartShoppingON,
           off: faCartShoppingOFF,
         },
-        callback: () => navigate(""),
+        link: "/author/list",
       },
     ],
   };
   return (
     <>
-      <Container menus={menus} type="author">
+      <Container menus={menus} activeMenu={activeMenu} type="author">
         <Routes>
           <Route path="store" element={<Store />} />
           <Route path="list" element={<List />} />

@@ -12,7 +12,137 @@ import "@/css/swiper.css";
 const List = () => {
   const navigate = useNavigate();
 
-  console.log("Author");
+  const SlideItemComponent = ({ item }) => {
+    return (
+      <SwiperSlide
+        className="swiper-slide"
+        style={{
+          width: "408px",
+          marginRight: "15px",
+        }}
+      >
+        <div className="box_profile">
+          <a href="#">
+            <ImgTmpProfileBgDiv
+              className="pf_thumb"
+              bgImg={item.profileBgImg}
+            />
+            <div className="pf_txt">
+              <div className="icon">
+                <img src={item.profileImg} alt="profile" />
+              </div>
+              <p className="h1">{item.id}</p>
+              <p className="t1">{item.description}</p>
+            </div>
+          </a>
+        </div>
+      </SwiperSlide>
+    );
+  };
+
+  const RecommentAuthorComponent = ({ item }) => {
+    return (
+      <div className="item">
+        <div className="box_profile _half">
+          <a href="#">
+            <ImgTmpProfileBgDiv
+              className="pf_thumb"
+              bgImg={item.profileBgImg}
+            />
+            <div className="pf_txt">
+              <div className="icon">
+                <img src={item.profileImg} alt="profile" />
+              </div>
+              <p className="h1">{item.id}</p>
+              <p className="t1">{item.description}</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    );
+  };
+
+  /**
+   * 최근 확인한 작가 임시 데이터
+   */
+  const slideList = [
+    {
+      id: "1_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "2_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "3_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "4_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "5_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "6_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+  ];
+
+  /**
+   * 추천 작가 임시 데이터
+   */
+  const recommendedData = [
+    {
+      id: "1_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "2_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+    {
+      id: "3_名前のない人間23349名前のない人間23349",
+      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵MV制作🥀🥀 音楽、
+      ファッション、夜と光の絵…`,
+      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
+      profileImg: require("@IMAGES/img_profile.png"),
+    },
+  ];
+
   return (
     <div className="contents mauthor">
       <div className="inr-c">
@@ -23,192 +153,10 @@ const List = () => {
         <div className="slider_profile">
           <div className="swiper-container mySwiper1">
             <Swiper className="swiper-wrapper">
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide
-                className="swiper-slide"
-                style={{
-                  width: "408px",
-                  marginRight: "15px",
-                }}
-              >
-                <div className="box_profile">
-                  <a href="#">
-                    <ImgTmpProfileBgDiv
-                      className="pf_thumb"
-                      bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                    />
-                    <div className="pf_txt">
-                      <div className="icon">
-                        <img
-                          src={require("@IMAGES/img_profile.png")}
-                          alt="profile"
-                        />
-                      </div>
-                      <p className="h1">
-                        名前のない人間23349名前のない人間23349
-                      </p>
-                      <p className="t1">
-                        はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                        ファッション、夜と光の絵…
-                      </p>
-                    </div>
-                  </a>
-                </div>
-              </SwiperSlide>
+              {/* 최근 확인한 작가 */}
+              {slideList.map((item, index) => (
+                <SlideItemComponent key={index} item={item} />
+              ))}
             </Swiper>
           </div>
           <button type="button" className="swiper-button-prev my1">
@@ -223,77 +171,10 @@ const List = () => {
           <h2 className="h_tit0">おすすめクリエイター</h2>
         </div>
         <div className="lst_author_profile">
-          <div className="item">
-            <div className="box_profile _half">
-              <a href="#">
-                <ImgTmpProfileBgDiv
-                  className="pf_thumb"
-                  bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                />
-                <div className="pf_txt">
-                  <div className="icon">
-                    <img
-                      src={require("@IMAGES/img_profile.png")}
-                      alt="profile"
-                    />
-                  </div>
-                  <p className="h1">名前のない人間23349名前のない人間23349</p>
-                  <p className="t1">
-                    はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                    ファッション、夜と光の絵MV制作🥀🥀 音楽、
-                    ファッション、夜と光の絵MV制作🥀🥀 音楽、
-                    ファッション、夜と光の絵…
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div className="item">
-            <div className="box_profile _half">
-              <a href="#">
-                <ImgTmpProfileBgDiv
-                  className="pf_thumb"
-                  bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                />
-                <div className="pf_txt">
-                  <div className="icon">
-                    <img
-                      src={require("@IMAGES/img_profile.png")}
-                      alt="profile"
-                    />
-                  </div>
-                  <p className="h1">名前のない人間23349名前のない人間23349</p>
-                  <p className="t1">
-                    はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                    ファッション、夜と光の絵…
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
-          <div className="item">
-            <div className="box_profile _half">
-              <a href="#">
-                <ImgTmpProfileBgDiv
-                  className="pf_thumb"
-                  bgImg={require("@IMAGES/tmp_profile_bg.png")}
-                />
-                <div className="pf_txt">
-                  <div className="icon">
-                    <img
-                      src={require("@IMAGES/img_profile.png")}
-                      alt="profile"
-                    />
-                  </div>
-                  <p className="h1">名前のない人間23349名前のない人間23349</p>
-                  <p className="t1">
-                    はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-                    ファッション、夜と光の絵…
-                  </p>
-                </div>
-              </a>
-            </div>
-          </div>
+          {/* 추천 작가 */}
+          {recommendedData.map((item, index) => (
+            <RecommentAuthorComponent key={index} item={item} />
+          ))}
         </div>
       </div>
     </div>
