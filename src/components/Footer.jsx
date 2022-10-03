@@ -3,12 +3,12 @@ import styled from "styled-components";
 
 const Footer = () => {
   return (
-    <footer id="footer" class="footer">
-      <div class="inr-c">
-        <div class="foo_logo">PlayToons</div>
-        <p class="copy">&copy;Rocketstaff All Right Reserved.</p>
+    <footer id="footer" className="footer">
+      <div className="inr-c">
+        <div className="foo_logo">PlayToons</div>
+        <p className="copy">&copy;Rocketstaff All Right Reserved.</p>
 
-        <div class="rgh">
+        <div className="rgh">
           <a href="#">利用規約</a>
           <a href="#">会社情報</a>
           <a href="#">プライバシーポリシー</a>

@@ -10,7 +10,14 @@ import {
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
 
-const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
+const Header = ({
+  type,
+  className,
+  handleLeftMenu,
+  backTitle,
+  handleBack,
+  isMenus = true,
+}) => {
   const navigate = useNavigate();
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState("login");
@@ -29,9 +36,9 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
       {renderType === "logout" && (
         <div className="inr-c">
           <h1 className="logo">
-            <a href="/">
+            <Link to="/">
               <span className="ico_logo">PlayToons</span>
-            </a>
+            </Link>
           </h1>
 
           <div className="rgh">
@@ -62,15 +69,18 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
       {/* login */}
       {renderType === "login" && (
         <div className="inr-c">
-          <button type="button" className="btn_gnb" title="메뉴">
-            <span>
-              <FontAwesomeIcon icon={faBars} />
-            </span>
-          </button>
+          {/* Left Menus */}
+          {isMenus && (
+            <button type="button" className="btn_gnb" title="메뉴">
+              <span>
+                <FontAwesomeIcon icon={faBars} />
+              </span>
+            </button>
+          )}
           <h1 className="logo">
-            <a href="/">
+            <Link to="/">
               <span className="ico_logo">PlayToons</span>
-            </a>
+            </Link>
           </h1>
 
           <div className="rgh">

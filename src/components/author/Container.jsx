@@ -16,7 +16,7 @@ const Container = ({ menus, children, type, contentType }) => {
   }
   return (
     <>
-      <Header />
+      <Header isMenus={!isRegister} />
       <div id="container" className={className}>
         {isRegister === false && (
           <aside className="sidebar">
