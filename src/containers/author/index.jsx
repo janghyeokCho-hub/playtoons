@@ -9,7 +9,7 @@ import Series from "./Series";
 import Register from "./Register";
 import Store from "./Store";
 import Detail from "./Detail";
-import Container from "@COMPONENTS/Container";
+import Container from "@/components/author/Container";
 import {
   faHouseChimneyWindow as faHouseChimneyWindowON,
   faInfinity as faInfinityON,
