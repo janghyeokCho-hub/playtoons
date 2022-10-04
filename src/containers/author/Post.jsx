@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import ImgComic1 from "@IMAGES/tmp_comic1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -201,7 +201,7 @@ const Post = () => {
             </ul>
           </div>
           {selectTab === "POST" && <PostItem />}
-          {selectTab === "PLAN" && <Plan />}
+          {selectTab === "PLAN" && <Plan item={authorData} />}
         </div>
       </div>
     </div>

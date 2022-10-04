@@ -1,7 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getAuthorPlans as getAuthorPlansAPI } from "@/services/authorService";
 
-const Plan = () => {
+const PlanItem = ({ plan }) => {
+  return (
+    <div className="col" style={{ marginBottom: "2.33%" }}>
+      <div className="icon">
+        <img src={plan?.thumbnailImage} alt="image" />
+      </div>
+      <div className="cont">
+        <h3 className="h1">{plan.name}</h3>
+        <p className="t1">
+          <span className="c-blue">{plan.price}PC</span> /月
+        </p>
+        <p className="t2">{plan.description}</p>
+        <div className="t_dot1">
+          <p>・差分が見れます</p>
+          <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
+        </div>
+        <a href="#" className="btn-pk b blue w100p">
+          <span>編集する</span>
+        </a>
+      </div>
+    </div>
+  );
+};
+
+const Plan = ({ item }) => {
+  const [planList, setPlanList] = useState([]);
+
+  useEffect(() => {
+    async function getAuthorPlans() {
+      const response = await getAuthorPlansAPI({ id: item.id });
+      const { status, data } = response;
+      if (status === 200) {
+        setPlanList(data.subscribeTiers);
+      }
+    }
+
+    if (item) {
+      getAuthorPlans();
+    }
+  }, [item]);
   return (
     <>
       <header className="hd_titbox3">
@@ -16,86 +56,10 @@ const Plan = () => {
       </header>
 
       <div className="lst_mainplan">
-        <div className="col">
-          <div className="icon">
-            <img src={require("@IMAGES/img_mainplan1.jpg")} alt="image" />
-          </div>
-          <div className="cont">
-            <h3 className="h1">ダイヤモンドプラン</h3>
-            <p className="t1">
-              <span className="c-blue">1,000PC</span> /月
-            </p>
-            <p className="t2">
-              ひと月だけでも嬉しいです！タイムラプスや未統合
-              その他限定記事が見れます。更新は不定期ですが、
-              なるべく沢山更新できるよう頑張ります。
-            </p>
-            <div className="t_dot1">
-              <p>・差分が見れます</p>
-              <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-            </div>
-            <a href="#" className="btn-pk b blue w100p">
-              <span>編集する</span>
-            </a>
-          </div>
-        </div>
-        <div className="col">
-          <div className="icon">
-            <img src={require("@IMAGES/img_mainplan2.jpg")} alt="image" />
-          </div>
-          <div className="cont">
-            <h3 className="h1">プラチナプラン</h3>
-            <p className="t1">
-              <span className="c-blue">2,000CP</span> /月
-            </p>
-            <p className="t2">
-              ひと月だけでも嬉しいです！タイムラプスや未統合
-              その他限定記事が見れます。更新は不定期ですが、
-              なるべく沢山更新できるよう頑張ります。
-            </p>
-            <div className="t_dot1">
-              <p>・差分が見れます</p>
-              <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-            </div>
-            <a href="#" className="btn-pk b blue w100p">
-              <span>編集する</span>
-            </a>
-          </div>
-        </div>
-        <div className="col">
-          <div className="icon">
-            <img src={require("@IMAGES/img_mainplan3.jpg")} alt="image" />
-          </div>
-          <div className="cont">
-            <h3 className="h1">VIPプラン</h3>
-            <p className="t1">
-              <span className="c-blue">3,000CP</span> /月
-            </p>
-            <p className="t2">
-              ひと月だけでも嬉しいです！タイムラプスや未統合
-              その他限定記事が見れます。更新は不定期ですが、
-              なるべく沢山更新できるよう頑張ります。
-            </p>
-            <div className="t_dot1">
-              <p>・差分が見れます</p>
-              <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-            </div>
-            <a href="#" className="btn-pk b blue w100p">
-              <span>編集する</span>
-            </a>
-          </div>
-        </div>
+        {planList && planList.map((plan) => <PlanItem plan={plan} />)}
       </div>
     </>
   );
 };
-
-const ImgTmpProfileBgDiv = styled.div`
-  background-image: url(${(props) => props.bgImg});
-  height: 80px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
 
 export default Plan;
