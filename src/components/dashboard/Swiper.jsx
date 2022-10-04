@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { Swiper } from 'swiper/react';
 import SwiperCore, { Navigation, } from 'swiper';
-// import 'swiper/css';
+import "@/css/swiper.css";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronLeft, faCircleChevronRight } from '@fortawesome/pro-solid-svg-icons';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "@/css/swiper.min.css";
+
 import { SwiperSlide } from 'swiper/react';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -38,235 +38,6 @@ const text = {
   before_yesterday : "前日より",
 };
 
-const tempData = {
-  today: "2022年02月19日 12:11",
-  sales_cases: "2,112件",
-  before_yesterday: "前日より+123%",
-  pc_count: "934,010PC",
-  sales_product_list : [
-    {
-      id: "1",
-      image : tempImageSales,
-      title: "大学のリンゴ一個の重さで10メートルの1111111111111111111",
-      date: "2022/06/11"
-    },
-    {
-      id: "2",
-      image : tempImageSales,
-      title: "大学のリンゴ一個の重さで10メートルの22222222222222",
-      date: "2022/06/11"
-    },
-    {
-      id: "3",
-      image : tempImageSales,
-      title: "大学のリンゴ一個の重さで10メートルの33333333333333",
-      date: "2022/06/11"
-    },
-    {
-      id: "4",
-      image : tempImageSales,
-      title: "大学のリンゴ一個の重さで10メートルの44444444444444",
-      date: "2022/06/11"
-    },
-  ],
-  question_list : [
-    {
-      id: "1",
-      title : "どうしても返却は無理なんでしょうか？",
-      date : "2022/06/11"
-    },
-    {
-      id: "2",
-      title : "ABCに制作に関するお問い合わせです。",
-      date : "2022/06/11"
-    },
-    {
-      id: "3",
-      title : "デザインの変更依頼",
-      date : "2022/06/11"
-    },
-    {
-      id: "4",
-      title : "お願いしてたコンテンツに若干歪んでる箇asdafadsgfasdfasdfdasfas",
-      date : "2022/06/11"
-    },
-  ],
-  review_list : [
-    {
-      title: "とてもよかったです。またお願いします。",
-      date: "2022/06/11",
-      review_count : 4
-    },
-    {
-      title: "とてもよかったです。またお願いします。",
-      date: "2022/06/11",
-      review_count : 2
-    },
-    {
-      title: "とてもよかったです。またお願いします。",
-      date: "2022/06/11",
-      review_count : 1
-    },
-    {
-      title: "とてもよかったです。またお願いします。",
-      date: "2022/06/11",
-      review_count : 5
-    },
-  ],
-
-  follower_count : "451,302名",
-  follower_plus_count : "+4124名",
-  series_list : [
-    {
-      image: tempImageSeries01,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "1"
-    },
-    {
-      image: tempImageSeries02,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "2"
-    },
-    {
-      image: tempImageSeries03,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "3"
-    },
-    {
-      image: tempImageSeries04,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "4"
-    },
-    {
-      image: tempImageSeries05,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "5"
-    },
-    {
-      image: tempImageSeries06,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "6"
-    },
-    {
-      image: tempImageSeries01,
-      status: "new",
-      count : "1.2k",
-      title: "新人さんは事故123123123",
-      type : "ウェブトゥーン",
-      id: "7"
-    },
-  ],
-  post_list : [
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 4
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 2
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 1
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 5
-    },
-  ],
-  reaction_list : [
-    {
-      title: "どうしても返却は無理なんでしょ",
-      date: "2022/06/11",
-      id : 4
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 2
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 1
-    },
-    {
-      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
-      date: "2022/06/11",
-      id : 5
-    },
-  ],
-  past_sales_list : [
-    {
-      date : "2022/04",
-      money: "123,441PC",
-      id: "1"
-    },
-    {
-      date : "2022/05",
-      money: "123,441PC",
-      id: "2"
-    },
-    {
-      date : "2022/06",
-      money: "123,441PC",
-      id: "3"
-    },
-    {
-      date : "2022/07",
-      money: "123,441PC",
-      id: "4"
-    },
-  ],
-  history_deposit_list: [
-    {
-      date: "2022/04",
-      money: "123,456,789円",
-      bank_name: "UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行",
-      id: "b1",
-    },
-    {
-      date: "2022/05",
-      money: "123,456,789円",
-      bank_name: "UFJ三菱銀行",
-      id: "b2",
-    },
-    {
-      date: "2022/06",
-      money: "123,456,789円",
-      bank_name: "UFJ三菱銀行",
-      id: "b3",
-    },
-    {
-      date: "2022/07",
-      money: "123,456,789円",
-      bank_name: "UFJ三菱銀行",
-      id: "b4",
-    },
-  ],
-};
 
 
 export default function DashboardMain() {
@@ -554,3 +325,235 @@ export default function DashboardMain() {
     </Container>
   );
 }
+
+
+
+const tempData = {
+  today: "2022年02月19日 12:11",
+  sales_cases: "2,112件",
+  before_yesterday: "前日より+123%",
+  pc_count: "934,010PC",
+  sales_product_list : [
+    {
+      id: "1",
+      image : tempImageSales,
+      title: "大学のリンゴ一個の重さで10メートルの1111111111111111111",
+      date: "2022/06/11"
+    },
+    {
+      id: "2",
+      image : tempImageSales,
+      title: "大学のリンゴ一個の重さで10メートルの22222222222222",
+      date: "2022/06/11"
+    },
+    {
+      id: "3",
+      image : tempImageSales,
+      title: "大学のリンゴ一個の重さで10メートルの33333333333333",
+      date: "2022/06/11"
+    },
+    {
+      id: "4",
+      image : tempImageSales,
+      title: "大学のリンゴ一個の重さで10メートルの44444444444444",
+      date: "2022/06/11"
+    },
+  ],
+  question_list : [
+    {
+      id: "1",
+      title : "どうしても返却は無理なんでしょうか？",
+      date : "2022/06/11"
+    },
+    {
+      id: "2",
+      title : "ABCに制作に関するお問い合わせです。",
+      date : "2022/06/11"
+    },
+    {
+      id: "3",
+      title : "デザインの変更依頼",
+      date : "2022/06/11"
+    },
+    {
+      id: "4",
+      title : "お願いしてたコンテンツに若干歪んでる箇asdafadsgfasdfasdfdasfas",
+      date : "2022/06/11"
+    },
+  ],
+  review_list : [
+    {
+      title: "とてもよかったです。またお願いします。",
+      date: "2022/06/11",
+      review_count : 4
+    },
+    {
+      title: "とてもよかったです。またお願いします。",
+      date: "2022/06/11",
+      review_count : 2
+    },
+    {
+      title: "とてもよかったです。またお願いします。",
+      date: "2022/06/11",
+      review_count : 1
+    },
+    {
+      title: "とてもよかったです。またお願いします。",
+      date: "2022/06/11",
+      review_count : 5
+    },
+  ],
+
+  follower_count : "451,302名",
+  follower_plus_count : "+4124名",
+  series_list : [
+    {
+      image: tempImageSeries01,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "1"
+    },
+    {
+      image: tempImageSeries02,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "2"
+    },
+    {
+      image: tempImageSeries03,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "3"
+    },
+    {
+      image: tempImageSeries04,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "4"
+    },
+    {
+      image: tempImageSeries05,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "5"
+    },
+    {
+      image: tempImageSeries06,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "6"
+    },
+    {
+      image: tempImageSeries01,
+      status: "new",
+      count : "1.2k",
+      title: "新人さんは事故123123123",
+      type : "ウェブトゥーン",
+      id: "7"
+    },
+  ],
+  post_list : [
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 4
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 2
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 1
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 5
+    },
+  ],
+  reaction_list : [
+    {
+      title: "どうしても返却は無理なんでしょ",
+      date: "2022/06/11",
+      id : 4
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 2
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 1
+    },
+    {
+      title: "どうしても返却は無理なんでしょうか？どうしても返却は無理なんでしょうか？",
+      date: "2022/06/11",
+      id : 5
+    },
+  ],
+  past_sales_list : [
+    {
+      date : "2022/04",
+      money: "123,441PC",
+      id: "1"
+    },
+    {
+      date : "2022/05",
+      money: "123,441PC",
+      id: "2"
+    },
+    {
+      date : "2022/06",
+      money: "123,441PC",
+      id: "3"
+    },
+    {
+      date : "2022/07",
+      money: "123,441PC",
+      id: "4"
+    },
+  ],
+  history_deposit_list: [
+    {
+      date: "2022/04",
+      money: "123,456,789円",
+      bank_name: "UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行UFJ三菱銀行",
+      id: "b1",
+    },
+    {
+      date: "2022/05",
+      money: "123,456,789円",
+      bank_name: "UFJ三菱銀行",
+      id: "b2",
+    },
+    {
+      date: "2022/06",
+      money: "123,456,789円",
+      bank_name: "UFJ三菱銀行",
+      id: "b3",
+    },
+    {
+      date: "2022/07",
+      money: "123,456,789円",
+      bank_name: "UFJ三菱銀行",
+      id: "b4",
+    },
+  ],
+};
