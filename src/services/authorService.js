@@ -19,3 +19,11 @@ export const getAuthor = async (id) => {
     return { status: e.response.status };
   }
 };
+
+export const getAuthorPlans = async (params) => {
+  try {
+    return await apiServer("get", `/subscribeTier/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
