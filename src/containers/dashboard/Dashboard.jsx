@@ -7,6 +7,7 @@ import SeriesEdit from "@/containers/dashboard/series/DashboardSeriesEdit";
 import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
 import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
 import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
+import PostEdit from "@CONTAINERS/dashboard/post/DashboardPostEdit";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
 import SalesDetail from "@CONTAINERS/dashboard/DashboardSalesDetail";
@@ -88,6 +89,10 @@ export default function Dashboard() {
         <Route
           path="/post/detail/:id"
           element={<PostDetail />}
+        />
+        <Route
+          path="/post/edit/:id"
+          element={<PostEdit />}
         />
         <Route
           path="/post/upload"

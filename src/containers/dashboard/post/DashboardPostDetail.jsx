@@ -7,7 +7,9 @@ import Container from "@/components/dashboard/Container";
 
 import tempImage from '@IMAGES/tmp_comic3.png';
 import tempProfile from '@IMAGES/img_profile.png';
-import { useParams } from "react-router-dom";
+
+import { Link, useParams } from "react-router-dom";
+import IconWithText from "@/components/dashboard/IconWithText";
 
 
 const text = {
@@ -148,8 +150,8 @@ export default function DashboardPostDetail() {
           </div>
         
           <div className="botm btn-bot">
-            <a href="#" className="btn-pk n blue"><span>{text.reaction_management}</span></a>
-            <a href={`/dashboard/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></a>
+            <Link to={'/dashboard/reaction'} className="btn-pk n blue"><span>{text.reaction_management}</span></Link>
+            <Link to={`/dashboard/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></Link>
           </div>
         </div>
         
@@ -171,13 +173,13 @@ export default function DashboardPostDetail() {
       <div className="wrap_comment">
         <div className="top_comm">
           <div className="imgs"><span style={{backgroundImage: `url(${stateData?.my_profile_image})`}}></span></div>
-          <div className="conts">
-            <textarea name="" id="" className="textarea1" placeholder={text.sing_in_to_post}></textarea>
-            <div className="btns">
-              <button type="button" className="btn-pk s gray"><span>{text.icon}</span></button>
-              <button type="button" className="btn-pk s blue"><span>{text.register}</span></button>
-            </div>
-          </div>
+          <IconWithText 
+            text={{
+              sing_in_to_post: text.sing_in_to_post,
+              icon: text.icon,
+              register: text.register
+            }}
+            />
         </div>
 
         <div className="lst_comm">

@@ -132,10 +132,10 @@ export default forwardRef(function ImageUpload(props, ref) {
               className={`wh100`} >
                 {
                   text === undefined ? 
-                    <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                    <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
                     :
                     <div className="txt">
-                      <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                      <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
                       <p className="t">{text}</p>
                     </div>
                 }

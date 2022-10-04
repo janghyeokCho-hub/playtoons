@@ -110,19 +110,19 @@ export default function DashboardReactionList(props) {
   const getReactionListElements = () => {
     return stateData?.list?.map((item, index) => {
       return (
-        <tr>
-          <td class="hide-m">{item.id}</td>
-          <td class="td_subject2">{item.content}</td>
-          <td class="td_txt2"><span class="view-m">{text.user}</span>{item.user}</td>
-          <td class="td_txt2 mb"><span class="view-m">{text.date}：</span>{item.date}</td>
-          <td class="td_txt"><span class="view-m">{text.money}</span>{item.money}</td>
-          <td class="td_btns2">
-            <a href="#" class="btn-pk s blue2"><span>{text.move}</span></a>
-            <a href="#" class="btn-pk s blue2"><span>{text.fix}</span></a>
-            <a href="#" class="btn-pk s blue2"><span>{text.good}</span></a>
-            <a href="#" class="btn-pk s blue2"><span>{text.coment}</span></a>
-            <a href="#" class="btn-pk s blue2"><span>{text.report}</span></a>
-            <a href="#" class="btn-pk s blue2"><span>{text.delete}</span></a>
+        <tr key={index}>
+          <td className="hide-m">{item.id}</td>
+          <td className="td_subject2">{item.content}</td>
+          <td className="td_txt2"><span className="view-m">{text.user}</span>{item.user}</td>
+          <td className="td_txt2 mb"><span className="view-m">{text.date}：</span>{item.date}</td>
+          <td className="td_txt"><span className="view-m">{text.money}</span>{item.money}</td>
+          <td className="td_btns2">
+            <a href="#" className="btn-pk s blue2"><span>{text.move}</span></a>
+            <a href="#" className="btn-pk s blue2"><span>{text.fix}</span></a>
+            <a href="#" className="btn-pk s blue2"><span>{text.good}</span></a>
+            <a href="#" className="btn-pk s blue2"><span>{text.coment}</span></a>
+            <a href="#" className="btn-pk s blue2"><span>{text.report}</span></a>
+            <a href="#" className="btn-pk s blue2"><span>{text.delete}</span></a>
           </td>
         </tr>
       );
@@ -139,15 +139,15 @@ export default function DashboardReactionList(props) {
       className={"post"} 
       backTitle={text.page_title}>
 
-      <div class="inr-c">
+      <div className="inr-c">
             
-        <div class="hd_titbox hd_mst1">
-          <h2 class="h_tit0"><span>{text.page_title}</span></h2>
-          <div class="rgh">
-            <a href="/dashboard/post/upload" class="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
+        <div className="hd_titbox hd_mst1">
+          <h2 className="h_tit0"><span>{text.page_title}</span></h2>
+          <div className="rgh">
+            <a href="/dashboard/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
           </div>
         </div>
-        <div class="hd_titbox2">
+        <div className="hd_titbox2">
           <Select
             name={"typeId"}
             className={"select1"}
@@ -156,20 +156,20 @@ export default function DashboardReactionList(props) {
             />
         </div>
 
-        <div class="tbl_basic mtbl_ty1">
-          <table class="list">
+        <div className="tbl_basic mtbl_ty1">
+          <table className="list">
             <caption>list</caption>
             <colgroup>
-              <col class="num"/>
+              <col className="num"/>
               <col/>
-              <col class="wid1"/>
-              <col class="wid1"/>
-              <col class="wid1"/>
-              <col class="wid4"/>
+              <col className="wid1"/>
+              <col className="wid1"/>
+              <col className="wid1"/>
+              <col className="wid4"/>
             </colgroup>
             <thead>
               <tr>
-                <th class="hide-m">{text.number}</th>
+                <th className="hide-m">{text.number}</th>
                 <th>{text.content}</th>
                 <th>{text.user}</th>
                 <th>{text.date}</th>

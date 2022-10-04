@@ -16,7 +16,10 @@ import "@/css/test.css";
           },
         ]
       };
-      <Dropdown dataList={typeDataList} selected={selectedItem} handleItemClick={handleItemClick}/>
+      <Dropdown 
+        dataList={typeDataList} 
+        selected={selectedItem} 
+        handleItemClick={handleItemClick}/>
 * @version 1.0.0
 * @author 이현국
 * @param dataList 아이템 리스트
