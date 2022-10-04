@@ -14,6 +14,11 @@ import '@/css/test.css';
 /**
 *
    Calendar component
+   <Calendar 
+    ref={refCalendarEnd}
+    name={"end"}
+    type={"none"} 
+    callback={handleClickCalendar} />
 *
 * @version 1.0.0
 * @author 2hyunkook

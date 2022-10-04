@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faOilTemp, faPlus } from "@fortawesome/pro-solid-svg-icons";
 
@@ -107,7 +107,7 @@ export default function DashboardPostList(props) {
           <td className="td_number2">{item.likeCount}</td>
           <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.startAt}</td>
           <td className="td_txt"><span className="view-m">{text.status}</span>{item.status}</td>
-          <td className="td_btns"><a href={`/dashboard/post/detail/${item.id}`} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faAngleRight} />{text.detail}</span></a></td>
+          <td className="td_btns"><Link to={`/dashboard/post/detail/${item.id}`} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faAngleRight} />{text.detail}</span></Link></td>
         </tr>
       );
     });
@@ -133,7 +133,7 @@ export default function DashboardPostList(props) {
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0"><span>{text.post_list}</span></h2>
           <div className="rgh">
-            <a href="/dashboard/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
+            <Link to="/dashboard/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></Link>
           </div>
         </div>
         <div className="hd_titbox2">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faSquarePlus } from "@fortawesome/pro-light-svg-icons";
@@ -14,21 +15,34 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
   const token = getToken();
   const navigate = useNavigate();
 
-  let renderType = "";
-  const isLogin = token !== null;
-  if( type === undefined || type === null ){
-    renderType = isLogin ? "login" : "logout";
-  }
-  else{
-    renderType = type;
-  }
+  const [ stateRenderType, setStateRenderType ] = useState(undefined);
+  const isLogined = useSelector(({ login }) => login.isLogined);
+  
+
+  const getRenderType = () => {
+    let renderType = "";
+    if( type === undefined || type === null ){
+      renderType = isLogined ? "login" : "logout";
+    }
+    else{
+      renderType = type;
+    }
+
+    return renderType;
+  };
+
+  useEffect(() => {
+    console.log("dispatch", isLogined);
+    setStateRenderType( getRenderType() );
+  }, [isLogined]);
+  
 
   return (
     <header id="header" className={`header ${className}`}>
       
         {/* logout */}
         {
-          renderType === "logout" && 
+          stateRenderType === "logout" && 
           <div className="inr-c">
             <h1 className="logo"><a href="/"><span className="ico_logo">PlayToons</span></a></h1>
             
@@ -47,7 +61,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
 
         {/* login */}
         {
-          renderType === "login" && 
+          stateRenderType === "login" && 
           <div className="inr-c">
             <button type="button" className="btn_gnb" title="메뉴"><span><FontAwesomeIcon icon={faBars} /></span></button>
             <h1 className="logo"><a href="/"><span className="ico_logo">PlayToons</span></a></h1>
@@ -69,7 +83,7 @@ const Header = ({ type, className, handleLeftMenu, backTitle, handleBack }) => {
 
         {/* post */}
         {
-          renderType === "post" && 
+          stateRenderType === "post" && 
           <div className="inr-c">
             <button type="button" className="btn_back" onClick={() => {navigate(-1)}}><span className="icon"><FontAwesomeIcon icon={faAngleLeft} /></span></button>
           </div>
