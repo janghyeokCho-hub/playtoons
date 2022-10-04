@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
@@ -8,138 +8,173 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "@/css/swiper.css";
+import { useState } from "react";
+import { getAuthorList as getAuthorListAPI } from "@API/authorService";
+
+const SlideItemComponent = ({ item }) => {
+  return (
+    <SwiperSlide
+      className="swiper-slide"
+      style={{
+        width: "408px",
+        marginRight: "15px",
+      }}
+    >
+      <div className="box_profile">
+        <Link
+          to={{
+            pathname: "/author/post",
+          }}
+          state={{ item }}
+        >
+          <ImgTmpProfileBgDiv
+            className="pf_thumb"
+            bgImg={item.backgroundImage}
+          />
+          <div className="pf_txt">
+            <div className="icon">
+              <img src={item.profileImage} alt="profile" />
+            </div>
+            <p className="h1">{item.nickname}</p>
+            <p className="t1">{item.description}</p>
+          </div>
+        </Link>
+      </div>
+    </SwiperSlide>
+  );
+};
+
+const RecommentAuthorComponent = ({ item }) => {
+  return (
+    <div className="item">
+      <div className="box_profile _half">
+        <Link
+          to={{
+            pathname: "/author/post",
+          }}
+          state={{ item }}
+        >
+          <ImgTmpProfileBgDiv
+            className="pf_thumb"
+            bgImg={item.backgroundImage}
+          />
+          <div className="pf_txt">
+            <div className="icon">
+              <img src={item.profileImage} alt="profile" />
+            </div>
+            <p className="h1">{item.nickname}</p>
+            <p className="t1">{item.description}</p>
+          </div>
+        </Link>
+      </div>
+    </div>
+  );
+};
 
 const List = () => {
-  const navigate = useNavigate();
+  const [recommendedData, setRecommendedData] = useState([]);
 
-  const SlideItemComponent = ({ item }) => {
-    return (
-      <SwiperSlide
-        className="swiper-slide"
-        style={{
-          width: "408px",
-          marginRight: "15px",
-        }}
-      >
-        <div className="box_profile">
-          <a href="#">
-            <ImgTmpProfileBgDiv
-              className="pf_thumb"
-              bgImg={item.profileBgImg}
-            />
-            <div className="pf_txt">
-              <div className="icon">
-                <img src={item.profileImg} alt="profile" />
-              </div>
-              <p className="h1">{item.id}</p>
-              <p className="t1">{item.description}</p>
-            </div>
-          </a>
-        </div>
-      </SwiperSlide>
-    );
-  };
+  useEffect(() => {
+    async function getAuthorList() {
+      const response = await getAuthorListAPI();
+      const { status, data } = response;
 
-  const RecommentAuthorComponent = ({ item }) => {
-    return (
-      <div className="item">
-        <div className="box_profile _half">
-          <a href="#">
-            <ImgTmpProfileBgDiv
-              className="pf_thumb"
-              bgImg={item.profileBgImg}
-            />
-            <div className="pf_txt">
-              <div className="icon">
-                <img src={item.profileImg} alt="profile" />
-              </div>
-              <p className="h1">{item.id}</p>
-              <p className="t1">{item.description}</p>
-            </div>
-          </a>
-        </div>
-      </div>
-    );
-  };
+      if (status === 200) {
+        setRecommendedData(data.authors);
+      }
+    }
+
+    if (!recommendedData?.length) {
+      getAuthorList();
+    }
+  }, [recommendedData]);
 
   /**
    * 최근 확인한 작가 임시 데이터
    */
   const slideList = [
     {
-      id: "1_名前のない人間23349名前のない人間23349",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      id: "1",
+      description: "string",
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "h54h",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: "string",
+      backgroundImage: "string",
     },
     {
-      id: "2_名前のない人間23349名前のない人間23349",
+      id: "2",
       description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
       ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "2_名前のない人間23349名前のない人間23349",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: require("@IMAGES/img_profile.png"),
+      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
     },
     {
-      id: "3_名前のない人間23349名前のない人間23349",
+      id: "3",
       description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
       ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "3_名前のない人間23349名前のない人間23349",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: require("@IMAGES/img_profile.png"),
+      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
     },
     {
-      id: "4_名前のない人間23349名前のない人間23349",
+      id: "4",
       description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
       ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "4_名前のない人間23349名前のない人間23349",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: require("@IMAGES/img_profile.png"),
+      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
     },
     {
-      id: "5_名前のない人間23349名前のない人間23349",
+      id: "5",
       description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
       ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "5_名前のない人間23349名前のない人間23349",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: require("@IMAGES/img_profile.png"),
+      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
     },
     {
-      id: "6_名前のない人間23349名前のない人間23349",
+      id: "6",
       description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
       ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
-    },
-  ];
-
-  /**
-   * 추천 작가 임시 데이터
-   */
-  const recommendedData = [
-    {
-      id: "1_名前のない人間23349名前のない人間23349",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
-    },
-    {
-      id: "2_名前のない人間23349名前のない人間23349",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
-    },
-    {
-      id: "3_名前のない人間23349名前のない人間23349",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      profileBgImg: require("@IMAGES/tmp_profile_bg.png"),
-      profileImg: require("@IMAGES/img_profile.png"),
+      name: "string",
+      nameEng: "string",
+      nameKana: "string",
+      nickname: "6_名前のない人間23349名前のない人間23349",
+      nicknameEng: "string",
+      nicknameKana: "string",
+      logoImage: "string",
+      profileImage: require("@IMAGES/img_profile.png"),
+      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
     },
   ];
 

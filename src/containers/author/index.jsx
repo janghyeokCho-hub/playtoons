@@ -77,7 +77,7 @@ const App = () => {
           on: faCartShoppingON,
           off: faCartShoppingOFF,
         },
-        link: "/author/list",
+        link: "/author/store",
       },
     ],
   };

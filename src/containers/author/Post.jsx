@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ImgComic1 from "@IMAGES/tmp_comic1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,28 +9,44 @@ import {
   faShare,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
+import { getAuthor as getAuthorAPI } from "@API/authorService";
 
 const Post = () => {
+  const location = useLocation();
+  const { item } = location.state;
+
+  const [authorData, setAuthorData] = useState(null);
+
+  useEffect(() => {
+    async function getAuthor() {
+      const response = await getAuthorAPI(item.id);
+      console.log(response);
+      const { status, data } = response;
+
+      if (status === 200) {
+        setAuthorData(data.author);
+      }
+    }
+
+    if (item) {
+      getAuthor();
+    }
+  }, [item]);
+
   return (
     <div className="contents">
       <div className="wrap_author_detail">
         <div className="box_profile _longs">
           <ImgTmpProfileBgDiv
             className="pf_thumb"
-            bgImg={require("@IMAGES/tmp_profile_bg.png")}
+            bgImg={authorData.backgroundImage}
           ></ImgTmpProfileBgDiv>
           <div className="pf_txt">
             <div className="icon">
-              <img src={require("@IMAGES/img_profile.png")} alt="profile" />
+              <img src={authorData.profileImage} alt="profile" />
             </div>
-            <p className="h1">名前のない人間23349名前のない人間23349</p>
-            <p className="t1">
-              はみんぐです。アニメーター、イラスト、MV制作🥀🥀
-              音楽、ファッション、夜と光の絵。ポートフォリオポートフォリオポートフォリオポートフォリオポートフォリオ
-              ポートフォリオポートフォォリオポートフォリオポートフォリオポートフォリオ
-              ポートフォリオポートフォォリオポートフォリオポートフォリオポートフォリオ
-              ポートフォリオポートフォリオポートフォリオ…
-            </p>
+            <p className="h1">{authorData.nickname}</p>
+            <p className="t1">{authorData.description}</p>
             <div className="btns">
               <a href="#" className="btn-pk n blue">
                 フォロー
