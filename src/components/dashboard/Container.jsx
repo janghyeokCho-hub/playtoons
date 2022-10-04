@@ -1,6 +1,6 @@
-import React from 'react';
-import NavBarDashboard from './NavBarDashboard';
-import Header from '@/components/Header';
+import React from "react";
+import NavBarDashboard from "./NavBarDashboard";
+import Header from "@/components/Header";
 
 /**
 *
@@ -18,21 +18,17 @@ import Header from '@/components/Header';
 * @return
 */
 export default function Container(props) {
-  const {type,  backTitle, children} = props;
+  const { type, backTitle, children } = props;
 
   return (
     <div id="wrap">
-      <Header 
-        backTitle={backTitle}
-        />
+      <Header backTitle={backTitle} />
 
       <div id="container" className={`container ${type}`}>
         <NavBarDashboard />
 
-        <div className="contents">
-          {children}
-        </div>
+        <div className="contents">{children}</div>
       </div>
     </div>
-  )
+  );
 }
