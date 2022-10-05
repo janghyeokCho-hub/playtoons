@@ -14,7 +14,7 @@ export const getAuthorList = async () => {
 
 export const getAuthor = async (id) => {
   try {
-    return await apiServer("get", `/author/${id}`);
+    return await apiServer("post", `/author/${id}/view`);
   } catch (e) {
     return { status: e.response.status };
   }

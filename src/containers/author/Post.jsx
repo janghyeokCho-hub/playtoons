@@ -11,6 +11,7 @@ import {
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import { getAuthor as getAuthorAPI } from "@API/authorService";
 import Plan from "./Plan";
+import Series from "./Series";
 
 const PostItem = () => {
   return (
@@ -175,8 +176,8 @@ const Post = () => {
                 </a>
               </li>
               <li
-                className={selectTab === "POST1" ? "on" : ""}
-                onClick={() => setSelectTab("POST1")}
+                className={selectTab === "SERIES" ? "on" : ""}
+                onClick={() => setSelectTab("SERIES")}
               >
                 <a>
                   <span>シリーズ</span>
@@ -201,6 +202,7 @@ const Post = () => {
             </ul>
           </div>
           {selectTab === "POST" && <PostItem />}
+          {selectTab === "SERIES" && <Series item={authorData} />}
           {selectTab === "PLAN" && <Plan item={authorData} />}
         </div>
       </div>
