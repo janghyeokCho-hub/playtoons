@@ -43,7 +43,7 @@ const text = {
 export default function DashboardMain() {
   const [data, setData] = useState({});
 
-  const getSalesProductList = () => {
+  const renderSalesProductList = () => {
     return data?.sales_product_list?.map((item, i) => {
       return <SwiperSlide key={i} className={"cx"}>
                 <Link to={`/dashboard/product/detail/${item.id}`}>
@@ -57,28 +57,28 @@ export default function DashboardMain() {
     });
   };
 
-  const getQuestionList = () => {
+  const renderQuestionList = () => {
     return data?.question_list?.map((item, index) => {
       return  <li key={index}>
-                <p className="t1"><Link to={`/dashboard/product/inquiry/${item.id}`}>{item.title}</Link></p>
+                <p className="t1"><Link to={`/dashboard/product/sales/inquiry/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
               </li>
     });
   };
 
-  const getReviewList = () => {
+  const renderReviewList = () => {
     return data?.review_list?.map((item, index) => {
       return <li key={index}>
               <div>
                 <div className="t_star"><span className={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
-                <p className="t1"><Link to={`/dashboard/product/review/${item.id}`}>{item.title}</Link></p>
+                <p className="t1"><Link to={`/dashboard/product/sales/review/${item.id}`}>{item.title}</Link></p>
               </div>
               <p className="t2">{item.date}</p>
             </li>
     });
   };
 
-  const getSeriesList = () => {
+  const renderSeriesList = () => {
     return data?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
                   <Link to={`/dashboard/series/detail/${item.id}`}>
@@ -92,7 +92,7 @@ export default function DashboardMain() {
     });
   };
 
-  const getPostList = () => {
+  const renderPostList = () => {
     return data?.post_list?.map((item, i) => {
       return  <li key={item.id}>
                 <p className="t1"><Link to={`/dashboard/post/detail/${item.id}`}>{item.title}</Link></p>
@@ -101,7 +101,7 @@ export default function DashboardMain() {
     });
   };
 
-  const getReactionList = () => {
+  const renderReactionList = () => {
     return data?.reaction_list?.map((item, index) => {
       return  <li key={item.id}>
                 <p className="t1"><Link to={`/dashboard/reaction/detail/${item.id}`}>{item.title}</Link></p>
@@ -110,7 +110,7 @@ export default function DashboardMain() {
     });
   };
 
-  const getSalesListInPast = () => {
+  const renderSalesListInPast = () => {
     return data?.past_sales_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
@@ -122,7 +122,7 @@ export default function DashboardMain() {
     });
   };
 
-  const getHistoryOfDeposit = () => {
+  const renderHistoryOfDeposit = () => {
     return data?.history_deposit_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
@@ -181,7 +181,7 @@ export default function DashboardMain() {
                       spaceBetween: 30,
                     },
                   }}
-                  list={getSalesProductList} />
+                  list={renderSalesProductList} />
             </div>
           </div>
 
@@ -194,7 +194,7 @@ export default function DashboardMain() {
               <div className="lst_txt1">
                 <ul>
                   {
-                    getQuestionList()
+                    renderQuestionList()
                   }
                 </ul>
               </div>
@@ -208,7 +208,7 @@ export default function DashboardMain() {
               <div className="lst_txt1">
                 <ul>
                   {
-                    getReviewList()
+                    renderReviewList()
                   }
                 </ul>
               </div>
@@ -254,7 +254,7 @@ export default function DashboardMain() {
                       spaceBetween: 30,
                     },
                   }}
-                  list={getSeriesList} />
+                  list={renderSeriesList} />
               }
             </div>
 
@@ -264,12 +264,12 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_post}</h3>
-                <Link to="/dashboard/post/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
+                <Link to="/dashboard/post" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
                   {
-                    getPostList()
+                    renderPostList()
                   }
                 </ul>
               </div>
@@ -278,12 +278,12 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_reaction}</h3>
-                <Link to="/dashboard/reaction/list" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
+                <Link to="/dashboard/reaction" className="rgh c-blue"><span className="ico_arr_link">{text.see_all}<FontAwesomeIcon icon={faAngleRight} /></span></Link>
               </div>
               <div className="lst_txt1">
                 <ul>
                   {
-                    getReactionList()
+                    renderReactionList()
                   }
                 </ul>
               </div>
@@ -299,7 +299,7 @@ export default function DashboardMain() {
               <div className="lst_txt1">
                 <ul>
                   {
-                    getSalesListInPast()
+                    renderSalesListInPast()
                   }
                 </ul>
               </div>
@@ -313,7 +313,7 @@ export default function DashboardMain() {
               <div className="lst_txt1">
                 <ul>
                   {
-                    getHistoryOfDeposit()
+                    renderHistoryOfDeposit()
                   }
                 </ul>
               </div>
@@ -383,21 +383,25 @@ const tempData = {
   ],
   review_list : [
     {
+      id: "1",
       title: "とてもよかったです。またお願いします。",
       date: "2022/06/11",
       review_count : 4
     },
     {
+      id: "2",
       title: "とてもよかったです。またお願いします。",
       date: "2022/06/11",
       review_count : 2
     },
     {
+      id: "3",
       title: "とてもよかったです。またお願いします。",
       date: "2022/06/11",
       review_count : 1
     },
     {
+      id: "4",
       title: "とてもよかったです。またお願いします。",
       date: "2022/06/11",
       review_count : 5

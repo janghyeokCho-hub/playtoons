@@ -26,6 +26,7 @@ import useOutSideClick from '@/common/useOutSideClick';
       icon: text.icon,                          //icon button text
       register: text.register                   //register button text
     }}
+    callback={handler}
     />
 *
 * @version 1.0.0
@@ -34,7 +35,7 @@ import useOutSideClick from '@/common/useOutSideClick';
 * @return
 */
 export default function IconWithText(props, ref) {
-  const { text } = props;
+  const { text, callback } = props;
   const [ stateIconData, setStateIconData ] = useState(undefined);
   const [ stateTopSelected, setStateTopSelected ] = useState(0);
   const [ stateShowIcon, setStateShowIcon ] = useState(false);
@@ -126,7 +127,7 @@ export default function IconWithText(props, ref) {
       </div>
       <div className="btns">
         <button type="button" className="btn-pk s gray" onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
-        <button type="button" className="btn-pk s blue"><span>{text.register}</span></button>
+        <button type="button" className="btn-pk s blue" onClick={callback} ><span>{text.register}</span></button>
       </div>
 
       {

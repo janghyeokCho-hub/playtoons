@@ -1,14 +1,11 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect,  } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/pro-solid-svg-icons';
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
-
-import tempImage from "@IMAGES/dashboardseries-rectangle-copy.png";
-import tempImageBg from "@IMAGES/landingpage-profile-bgImg2.png";
 import ToolTip from "@/components/dashboard/ToolTip";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+
 
 
 const text = {
@@ -118,7 +115,6 @@ export default function DashboardUploadProfile(props) {
 					</div>
 
 					<div className="col">
-						{/* TODO 뒤에서 몇칸 자르는거 필요 */}
 						<p className="t_info">{text.description_policy}<br className="view-m" /></p>
 						{/* <p className="t_info">当サイトでは、直近５年間の長崎県公報の<br className="view-m" />全文を掲載しています。</p> */}
 					</div>

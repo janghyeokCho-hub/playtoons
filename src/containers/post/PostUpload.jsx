@@ -128,7 +128,7 @@ export default function UploadPost(props) {
   return (
     <PostContainer
       type={"sub post"}
-      headerType={"post"}
+      headerType={"postUpload"}
       headerClassName={"ty1"} >
 
       <div className="inr-c">

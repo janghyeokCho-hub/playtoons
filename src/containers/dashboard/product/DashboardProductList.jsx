@@ -166,7 +166,8 @@ export default function DashboardProductList(props) {
     <Container 
       type={"series"} >
 
-      <ProductTab />
+      <ProductTab 
+        pathname={'/dashboard/product'} />
 
       <div className="inr-c">
         <div className="col mt23">

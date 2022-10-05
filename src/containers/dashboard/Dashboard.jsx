@@ -42,6 +42,10 @@ export default function Dashboard() {
           element={<SalesDetail />} 
         />
         <Route 
+          path="/sales/detail/:id" 
+          element={<SalesDetail />} 
+        />
+        <Route 
           path="/product" 
           element={<ProductList />} 
         />
@@ -54,7 +58,15 @@ export default function Dashboard() {
           element={<SalesInquiry />} 
         />
         <Route 
+          path="/product/sales/inquiry/:id" 
+          element={<SalesInquiry />} 
+        />
+        <Route 
           path="/product/sales/review" 
+          element={<SalesReview />} 
+        />
+        <Route 
+          path="/product/sales/review/:id" 
           element={<SalesReview />} 
         />
         <Route 
@@ -100,6 +112,10 @@ export default function Dashboard() {
         />
         <Route 
           path="/reaction" 
+          element={<ReactionList />} 
+        />
+        <Route 
+          path="/reaction/detail/:id" 
           element={<ReactionList />} 
         />
         <Route 

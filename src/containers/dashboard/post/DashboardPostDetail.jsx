@@ -78,24 +78,20 @@ export default function DashboardPostDetail() {
   const [stateData, setStateData] = useState(undefined);
   const params = useParams('id');
 
-  const handleReactionClick = (e) => {
-    let type = e.target.innerText;
-    let id = e.target.getAttribute("data-id");
-
-    if (text.fix === type) {
-      console.log("type Click", type, id);
-    } else if (text.good === type) {
-      console.log("good Click", type, id);
-    } else if (text.coment === type) {
-      console.log("coment Click", type, id);
-    } else if (text.report === type) {
-      console.log("report Click", type, id);
-    } else if (text.delete === type) {
-      console.log("delete Click", type, id);
-    }
+  const handleClickComentRegister = (event) => {
+    console.log('ComentRegister', event);
+    
   };
 
-  const getReactionList = () => {
+  const handleClickItem = (event) => {
+    const id = event.target.getAttribute('data-id');
+    const type = event.target.getAttribute('click-type');
+    
+    console.log('Item', id, type);
+  };
+
+
+  const renderReactionList = () => {
     return stateReactionList?.map((item, index) => {
       return (
         <div className="col" key={index}>
@@ -105,11 +101,11 @@ export default function DashboardPostDetail() {
             <p className="d1"><span>{item.date}</span><span>コメント</span></p>
             <p className="t1">{item.coment}</p>
             <div className="btns">
-              <a href="#" className="btn-pk s blue2"><span>{text.fix}</span></a>
-              <a href="#" className="btn-pk s blue2"><span>{text.good}</span></a>
-              <a href="#" className="btn-pk s blue2"><span>{text.coment}</span></a>
-              <a href="#" className="btn-pk s blue2"><span>{text.report}</span></a>
-              <a href="#" className="btn-pk s blue2"><span>{text.delete}</span></a>
+              <a className="btn-pk s blue2" data-id={item.id} click-type={'fix'} onClick={handleClickItem}>{text.fix}</a>
+              <a className="btn-pk s blue2" data-id={item.id} click-type={'good'} onClick={handleClickItem}>{text.good}</a>
+              <a className="btn-pk s blue2" data-id={item.id} click-type={'coment'} onClick={handleClickItem}>{text.coment}</a>
+              <a className="btn-pk s blue2" data-id={item.id} click-type={'report'} onClick={handleClickItem}>{text.report}</a>
+              <a className="btn-pk s blue2" data-id={item.id} click-type={'delete'} onClick={handleClickItem}>{text.delete}</a>
             </div>
             <div className="rgh">
               <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} />{item.good_count}</button>
@@ -151,7 +147,7 @@ export default function DashboardPostDetail() {
         
           <div className="botm btn-bot">
             <Link to={'/dashboard/reaction'} className="btn-pk n blue"><span>{text.reaction_management}</span></Link>
-            <Link to={`/dashboard/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></Link>
+            <Link to={`/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></Link>
           </div>
         </div>
         
@@ -179,12 +175,13 @@ export default function DashboardPostDetail() {
               icon: text.icon,
               register: text.register
             }}
+            callback={handleClickComentRegister}
             />
         </div>
 
         <div className="lst_comm">
           {
-            getReactionList()
+            renderReactionList()
           }
         </div>
       </div>

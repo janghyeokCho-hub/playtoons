@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faPlus } from '@fortawesome/pro-solid-svg-icons';
 
 import { getSeriesStoryList } from "@/services/dashboardService";
+
 import Container from "@/components/dashboard/Container";
 import Image from "@/components/dashboard/Image";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Pagination from "@/components/dashboard/Pagination";
-import { Link, useNavigate, useParams } from "react-router-dom";
 
 const text = {
   page_title :"シリーズリスト",
@@ -91,9 +91,8 @@ export default function DashboardSeries(props) {
   };
 
   const getSeriesList = () => {
-    const pageNumber = param?.page === undefined ? 1 : param?.page;
-    console.log("pageNumber", pageNumber);
     //리스트 불러오기
+    const pageNumber = param?.page === undefined ? 1 : param?.page;
     getSeriesListFromAPi(pageNumber);
   };
 

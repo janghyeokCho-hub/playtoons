@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, } from 'react-router-dom';
 
 const TAB_MENU = [
   {
@@ -20,13 +20,14 @@ const TAB_MENU = [
   },
 ];
 
-export default function ProductTab() {
-  const location = useLocation();
+export default function ProductTab(props) {
+  const { pathname } = props;
+  
 
   const getTabMenuElement = () => {
     return TAB_MENU.map((item, index) => {
       return (
-        <li className={`dashboard-gnb ${location.pathname === item.path && 'selected'}`} key={index} >
+        <li className={`dashboard-gnb ${pathname === item.path && 'selected'}`} key={index} >
           <Link to={item.path} >
             { item.name }
           </Link>
@@ -34,6 +35,11 @@ export default function ProductTab() {
       );
     });
   };
+
+  useEffect(() => {
+  
+  }, [pathname]);
+  
 
   return (
     <ul className="dashboard-gnb">

@@ -18,6 +18,9 @@ export default forwardRef( function ArrowRight(props, ref) {
     init: () => {
       setStateRotate(false);
     },
+    setState: (isRotate) => {
+      setStateRotate(isRotate);
+    },
     getValue: () => {
       return value;
     },

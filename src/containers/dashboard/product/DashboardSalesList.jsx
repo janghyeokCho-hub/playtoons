@@ -122,12 +122,13 @@ export default function DashboardSalesList(props) {
     setStateData(tempData);
 
   }, []);
-  //TODO calendar 달기, reaction component 만들기
+  
   return (
     <Container 
       type={"series"} >
 
-      <ProductTab />
+      <ProductTab 
+        pathname={'/dashboard/product/sales/list'} />
 
       <div className="inr-c">
         <div className="col mt2 saleslist-data-col">

@@ -1,19 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
-import Editor from "@/components/dashboard/Editor";
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
-import { getFileUrlFromServer, getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
-import { getFromDataJson, getFromDataJson1, removeItemInList } from "@/common/common";
+import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
+import { getFromDataJson, } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
-import { call } from "redux-saga/effects";
-import { P } from "@storybook/components";
 
 
 const text = {

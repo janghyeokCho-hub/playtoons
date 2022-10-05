@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import Container from "@/components/dashboard/Container";
@@ -98,7 +98,7 @@ export default function DashboardPlan(props) {
   const navigate = useNavigate();
 
 
-  const getPlanList = () => {
+  const renderPlanList = () => {
     return stateData?.plans.map((item, i) => {
       return  (
         <div className="col" key={i}>
@@ -109,23 +109,23 @@ export default function DashboardPlan(props) {
             <p className="t2">{item.description}</p>
             <div className="t_dot1">
               {
-                getBenefitList(item.benefits)  
+                renderBenefitList(item.benefits)  
               }
             </div>
-            <a href={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></a>
+            <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></Link>
           </div>
         </div>
       );
     });
   };
 
-  const getBenefitList = (list) => {
+  const renderBenefitList = (list) => {
     return list.map((item, i) => {
       return <p key={i}>{item.text}</p>
     });
   };
 
-  const getSupporterList = () => {
+  const renderSupporterList = () => {
     return stateData?.supporters.map((item, i) => {
       return  (
         <li key={i}>
@@ -154,13 +154,13 @@ export default function DashboardPlan(props) {
           <header className="hd_titbox hd_mst1">
             <h2 className="h_tit1"><span>{text.plan_management}</span></h2>
             <div className="rgh">
-              <a href="/dashboard/plan/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.add_plan}</span></a>
+              <Link to="/dashboard/plan/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.add_plan}</span></Link>
             </div>
           </header>
 
           <div className="lst_mainplan">
             {
-              getPlanList()
+              renderPlanList()
             }
           </div>
         </section>
@@ -169,12 +169,12 @@ export default function DashboardPlan(props) {
         <section className="box_area ty_plan1">
           <div className="hd_titbox">
             <h3 className="h_tit1">{text.supporter_management}</h3>
-            <a href="/dashboard/plan/subscriber" className="rgh c-blue"><span className="ico_arr_link">{text.see_all} <FontAwesomeIcon icon={faAngleRight} /></span></a>
+            <Link to="/dashboard/plan/subscriber" className="rgh c-blue"><span className="ico_arr_link">{text.see_all} <FontAwesomeIcon icon={faAngleRight} /></span></Link>
           </div>
           <div className="lst_txt1">
             <ul>
               {
-                getSupporterList()
+                renderSupporterList()
               }
             </ul>
           </div>

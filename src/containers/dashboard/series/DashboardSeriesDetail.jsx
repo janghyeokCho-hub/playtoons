@@ -34,7 +34,7 @@ export default function DashboardSeriesDetail(props) {
   const [data, setData] = useState(undefined);
   const params = useParams('id');
 
-  const getThumbList = () => {
+  const renderThumbList = () => {
     return data?.thumbList?.map( (item, index) => {
       return <SwiperSlide className="cx swiper-slide" key={index}>
               <a href="#">
@@ -49,7 +49,7 @@ export default function DashboardSeriesDetail(props) {
     } );
   }
 
-  const getTagList = () => {
+  const renderTagList = () => {
     return data?.tagList?.map( (item, index) => {
       return <div className="i_tag" key={index}>{item}</div>
     });
@@ -91,7 +91,7 @@ export default function DashboardSeriesDetail(props) {
             <div className="txt1">
               <div className="lst_tag">
                 {
-                  getTagList()
+                  renderTagList()
                 }
               </div>
             </div>
@@ -115,7 +115,7 @@ export default function DashboardSeriesDetail(props) {
                   spaceBetween: 16,
                   },
                 }}
-              list={getThumbList} />
+              list={renderThumbList} />
             </div>
 
           </section>

@@ -48,8 +48,6 @@ const DASHBOARD_PATH = {
 };
 
 export default function NavBarDashboard(props) {
-  console.log(props);
-
   const getExtraNav = (props) => {
     switch (props?.type) {
       default:

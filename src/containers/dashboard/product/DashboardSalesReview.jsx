@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 //temp data
 import '@/css/test.css';
@@ -57,18 +57,22 @@ const tempData = [
 ];
 
 
-const STATUS_TYPE = {
-  sale : "販売中",
-  audit : "審査中",
-  not_for_sale : "販売不可"
-};
-
 
 export default function DashboardSalesReview(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateAnswer, setStateAnswer] = useState(undefined);
   const navigate = useNavigate();
   const refArrow = useRef([]);
+  const params = useParams('id');
+
+  const getSelectedItem = (id) => {
+    for( let i = 0; i < stateData?.length; i++ ){
+      if( id === stateData[i].number ){
+        refArrow.current[i].setState(true);
+        return stateData[i];
+      }  
+    }
+  };
 
   const getProductList = async () => {
     // 시리즈 스토리 리스트
@@ -151,11 +155,22 @@ export default function DashboardSalesReview(props) {
     setStateData(tempData);
   }, []);
 
+  useEffect(() => {
+    //
+    if( params.id !== undefined ){
+      setStateAnswer( getSelectedItem(params.id) );
+    }
+
+  }, [params, stateData]);
+
+  
+
   return (
     <Container 
       type={"series"} >
 
-      <ProductTab />
+      <ProductTab
+        pathname={'/dashboard/product/sales/review'}  />
 
       <div className="inr-c">
 

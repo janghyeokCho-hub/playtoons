@@ -1,9 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
-import Editor from "@/components/dashboard/Editor";
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
@@ -85,7 +83,6 @@ export default function DashboardUploadSeries(props) {
     params.append("rating", "G");                   //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", file);
     
-    console.log("set file params", params);
 
     const {status, data: resultData} = await setFileToServer(params);
     

@@ -189,6 +189,25 @@ const Header = ({
         </>
       )}
 
+      {/* post upload */}
+      {renderType === "postUpload" && (
+        <>
+          <div className="inr-c">
+            <button type="button" 
+              className="btn_back" 
+              onClick={() => {
+                navigate(-1);
+              }}>
+                <span className="icon">
+                  <i className="fa-solid fa-angle-left">
+                    <FontAwesomeIcon icon={faAngleLeft} />
+                  </i>
+                </span>
+            </button>
+          </div>
+        </>
+      )}
+
       {/* set back button and title  */}
       {backTitle && (
         <div className="head_con">

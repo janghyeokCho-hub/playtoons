@@ -171,7 +171,7 @@ export default function UploadPost(props) {
   const refContents = useRef();
   const refThumbnailTimeline = useRef();
 
-  const getTypeListElements = () => {
+  const renderTypeListElements = () => {
     return stateTypeList?.map((item, index) => {
       return (
         <label className="inp_txchk" key={index}><input type="radio" name="type" defaultValue={item.code} defaultChecked={item.checked} /><span>{item.name}</span></label>
@@ -179,7 +179,7 @@ export default function UploadPost(props) {
     });
   };
 
-  const getTimelineElements = () => {
+  const renderTimelineElements = () => {
     return statePostInfo?.timeline.list.map((item, index) => {
       return (
         <SwiperSlide key={index} className="cx swiper-slide" onClick={handleClickItemTimeline} id={item.id}>
@@ -235,7 +235,7 @@ export default function UploadPost(props) {
   return (
     <PostContainer
       type={"sub post"}
-      headerType={"post"}
+      headerType={"postUpload"}
       headerClassName={"ty1"} >
 
       <div className="inr-c">
@@ -256,7 +256,7 @@ export default function UploadPost(props) {
                 <h3 className="tit1">{text.type}</h3>
                 <div className="lst_txchk">
                   {
-                    getTypeListElements()
+                    renderTypeListElements()
                   }
                 </div>
               </div>
@@ -342,7 +342,7 @@ export default function UploadPost(props) {
                           spaceBetween: 16,
                         },
                       }}
-                    list={ getTimelineElements } />
+                    list={ renderTimelineElements } />
                 </div>
               </div>
             </section>
