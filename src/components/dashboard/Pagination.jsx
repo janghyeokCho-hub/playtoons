@@ -1,23 +1,21 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import '@/css/test.css';          //test 용 css 
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-light-svg-icons';
 
+import '@/css/test.css';          //test 용 css 
+import { useNavigate } from 'react-router-dom';
 /**
 *
   pagination component
-
-  const handleClickPage = (pageNumber) => {
-    navigate(`/dashboard/series/${pageNumber}`);
-  };
    
   <Pagination 
     itemsPerPage={stateData.meta.itemsPerPage} 
     totalPages={stateData.meta.totalPages}
     currentPage={stateData.meta.currentPage} 
-    handle={handleClickPage} />
+    naviUrl={'/dashboard/series'}
+     />
 *
 * @version 1.0.0      현재 테스트용으로 tpagination 클래스 적용 test.css 에 class 정의
 * @author 2hyunkook
@@ -29,7 +27,8 @@ import { faAngleLeft, faAngleRight } from '@fortawesome/pro-light-svg-icons';
 */
 export default function Pagination(props) {
   const [statePage, setStatePage] = useState(null);
-  const { handle } = props;
+  const { naviUrl } = props;
+  const navigate = useNavigate();
 
   const handleClickPage = (event) => {
     const pageNumber = parseInt( event.currentTarget.getAttribute('value') );
@@ -39,10 +38,10 @@ export default function Pagination(props) {
       return;
     }
 
-    handle?.(pageNumber);
+    navigate(`${naviUrl}/${pageNumber}`);
   };
   
-  const getElements = () => {
+  const renderElements = () => {
     let list = [];
 
     //push arrow left
@@ -95,7 +94,7 @@ export default function Pagination(props) {
   return (
     <ul className='tpagination'>
       {
-        getElements()
+        renderElements()
       }
     </ul>
   )

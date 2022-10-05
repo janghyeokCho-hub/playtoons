@@ -56,10 +56,6 @@ export default function DashboardSeries(props) {
     }
   };
 
-  const handleClickPage = (pageNumber) => {
-    navigate(`/dashboard/series/${pageNumber}`);
-  };
-
   /**
   *
      시리즈 리스트 dom 생성
@@ -151,7 +147,8 @@ export default function DashboardSeries(props) {
               itemsPerPage={stateData.meta.itemsPerPage} 
               totalPages={stateData.meta.totalPages}
               currentPage={stateData.meta.currentPage} 
-              handle={handleClickPage} />
+              naviUrl={'/dashboard/series'}
+              />
         }
       </div>
       

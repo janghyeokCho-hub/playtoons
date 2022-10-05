@@ -84,7 +84,8 @@ export default function SwiperContainer(props) {
         }
         
       </Swiper>
-
+      
+      {/* .lst_comic1 .swiper-button-next 이런식으로 common.css에 정의되어 있어야 스타일이 먹음*/}
       <button ref={prevRef} type="button" className="swiper-button-prev my1 "><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
       <button ref={nextRef} type="button" className="swiper-button-next my1 "><FontAwesomeIcon icon={faCircleChevronRight} /></button>
     </>
