@@ -1200,7 +1200,7 @@ body {
 =========================================================================================== */
 .pagination {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 50px;
   position: relative;
 }
 .pagination li {
@@ -1208,9 +1208,10 @@ body {
 }
 .pagination li a {
   display: inline-block;
-  width: 29px;
-  border: 1px solid #d5dce0;
-  background-color: #f9f9f9;
+  width: 38px;
+  color: rgba(144,157,171,1);
+  font-size: 24px;
+  font-weight: 350;
   line-height: 32px;
   vertical-align: middle;
 }
@@ -1233,6 +1234,18 @@ body {
 .pagination li a:hover {
   border-color: #000;
   background-color: #fff;
+}
+.pagination li.active a{    /* 2022.10.05 lhk pagination css 추가 */
+  border-radius: 10px;
+  background-color: rgba(237,238,250, 1);
+  color: #394bc2;
+}
+.pagination li.arrow a{
+  color: #3A434D;
+}
+.pagination li.arrow.disabled a{
+  color: #C3CAD2;
+  cursor: default;
 }
 /* 3: Container
 =========================================================================================== */

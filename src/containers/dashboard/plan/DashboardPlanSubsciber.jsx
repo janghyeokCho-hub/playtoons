@@ -6,6 +6,7 @@ import Container from "@/components/dashboard/Container";
 
 import tempProfile from "@IMAGES/img_profile.png";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+import Pagination from "@/components/dashboard/Pagination";
 
 
 const text = {
@@ -22,6 +23,11 @@ const text = {
 
 const tempData = {
   result : 200,
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
   supporters : [
     {
       id: "1",
@@ -50,6 +56,11 @@ const tempData = {
 
 export default function DashboardPlanSubsciber(props) {
   const [stateData, setStateData] = useState(undefined);
+
+  const handleChange = (page) => {
+    console.log('handleChange', page);
+    
+  };
 
   const handleClickSearchNickname = (event) => {
     console.log('SearchNickname', event);
@@ -128,6 +139,14 @@ export default function DashboardPlanSubsciber(props) {
             </tbody>
           </table>
         </div>
+
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
       </div>
 
     </Container>

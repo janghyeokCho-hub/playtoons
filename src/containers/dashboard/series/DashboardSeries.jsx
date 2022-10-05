@@ -86,14 +86,12 @@ export default function DashboardSeries(props) {
     });
   };
 
-  const getSeriesList = () => {
-    //리스트 불러오기
-    const pageNumber = param?.page === undefined ? 1 : param?.page;
-    getSeriesListFromAPi(pageNumber);
+  const handleChange = (page) => {
+    getSeriesListFromAPi(page);
   };
 
   useEffect(() => {
-    getSeriesList();
+    getSeriesListFromAPi(param?.page === undefined ? 1 : param?.page);
   }, [param]);
 
   return (
@@ -141,15 +139,13 @@ export default function DashboardSeries(props) {
           </table>
         </div>
         
-        {
-          stateData?.series.length > 0 &&
-            <Pagination 
-              itemsPerPage={stateData.meta.itemsPerPage} 
-              totalPages={stateData.meta.totalPages}
-              currentPage={stateData.meta.currentPage} 
-              naviUrl={'/dashboard/series'}
-              />
-        }
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
       </div>
       
     </Container>

@@ -98,6 +98,10 @@ export default function Dashboard() {
           path="/post" 
           element={<PostList />} 
         />
+        <Route 
+          path="/post/:page" 
+          element={<PostList />} 
+        />
         <Route
           path="/post/detail/:id"
           element={<PostDetail />}

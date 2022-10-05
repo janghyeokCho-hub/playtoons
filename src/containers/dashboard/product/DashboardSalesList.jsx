@@ -11,6 +11,7 @@ import Container from "@/components/dashboard/Container";
 import ProductTab from "@/components/dashboard/ProductTab";
 import Image from "@/components/dashboard/Image";
 import Calendar from "@/components/dashboard/Calendar";
+import Pagination from "@/components/dashboard/Pagination";
 
 const text = {
   see_product : "商品一覧",
@@ -31,6 +32,11 @@ const text = {
 
 const tempData = {
   sales: "144,232 PC",
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
   list: [
     {
       number : "1",
@@ -79,6 +85,11 @@ export default function DashboardSalesList(props) {
     // }
     // 
     // setData(getProductListFromResultData(data));
+  };
+
+  const handleChange = (page) => {
+    console.log('handleChange', page);
+    
   };
 
   const handleClickCalendar = (name, date) => {
@@ -185,7 +196,14 @@ export default function DashboardSalesList(props) {
             </tbody>
           </table>
         </div>
-
+        
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
 
       </div>
 

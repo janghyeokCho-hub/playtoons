@@ -10,6 +10,7 @@ import tempImg1 from "@IMAGES/temp_seller_image.png";
 import Container from "@/components/dashboard/Container";
 import ProductTab from "@/components/dashboard/ProductTab";
 import Image from "@/components/dashboard/Image";
+import Pagination from "@/components/dashboard/Pagination";
 
 const text = {
   see_product : "商品一覧",
@@ -28,7 +29,13 @@ const text = {
   dont_see : "非表示"
 };
 
-const tempData = [
+const tempData = {
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
+  list: [
   {
     number : "1",
     id : 23,
@@ -65,7 +72,7 @@ const tempData = [
       name: "販売不可",
     }
   },
-];
+]};
 
 
 const STATUS_TYPE = [
@@ -126,6 +133,11 @@ export default function DashboardProductList(props) {
     // setData(getProductListFromResultData(data));
   };
 
+  const handleChange = (page) => {
+    console.log('handleChange', page);
+    
+  };
+
   const handleItemClick = (e) => {
     const no = e.target.getAttribute("data-id");
 
@@ -134,7 +146,7 @@ export default function DashboardProductList(props) {
 
 // TODO 모바일 css 
   const renderProductList = () => {
-    return stateData?.map((item, index) => {
+    return stateData?.list?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
@@ -208,7 +220,13 @@ export default function DashboardProductList(props) {
           </table>
         </div>
 
-
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
       </div>
 
     </Container>

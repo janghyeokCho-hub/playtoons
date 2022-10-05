@@ -11,6 +11,7 @@ import Image from "@/components/dashboard/Image";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/pro-solid-svg-icons";
+import Pagination from "@/components/dashboard/Pagination";
 
 const text = {
   number : "番号",
@@ -25,7 +26,13 @@ const text = {
   time: "時",
 };
 
-const tempData = [
+const tempData ={
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
+  list: [
   {
     number : "1",
     image : tempImg1,
@@ -54,7 +61,7 @@ const tempData = [
       coment: "1リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
     }
   },
-];
+]};
 
 
 
@@ -66,10 +73,10 @@ export default function DashboardSalesReview(props) {
   const params = useParams('id');
 
   const getSelectedItem = (id) => {
-    for( let i = 0; i < stateData?.length; i++ ){
-      if( id === stateData[i].number ){
+    for( let i = 0; i < stateData?.list?.length; i++ ){
+      if( id === stateData.list[i].number ){
         refArrow.current[i].setState(true);
-        return stateData[i];
+        return stateData.list[i];
       }  
     }
   };
@@ -87,6 +94,11 @@ export default function DashboardSalesReview(props) {
     // }
     // 
     // setData(getProductListFromResultData(data));
+  };
+
+  const handleChange = (page) => {
+    console.log('handleChange', page);
+    
   };
 
   const handleItemClickAnswer = (e) => {
@@ -118,7 +130,7 @@ export default function DashboardSalesReview(props) {
 
 
   const renderSalesInquiryList = () => {
-    return stateData?.map((item, index) => {
+    return stateData?.list?.map((item, index) => {
       return (
           <tr key={index}>
             <td className="hide-m">{item.number}</td>
@@ -218,6 +230,14 @@ export default function DashboardSalesReview(props) {
           }
               
         </div>
+
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
 
       </div>
 

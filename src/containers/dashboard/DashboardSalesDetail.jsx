@@ -23,6 +23,11 @@ const text = {
 
 const tempData = {
   date: "2022/05",
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
   list: [
     {
       number : "1",
@@ -49,11 +54,6 @@ const tempData = {
       amount: "23",
     },
   ],
-  meta: {
-    itemsPerPage : 10,
-    totalPages : 3,
-    currentPage : 1,
-  }
 };
 
 const SEARCH_LIST = [
@@ -111,8 +111,9 @@ export default function DashboardSalesList(props) {
     return true;
   };
 
-  const handleClickPage = (event) => {
-    console.log('ItemSearch', event);
+  const handleChange = (page) => {
+    console.log('handleChange', page);
+    
   };
 
   const handleItemSearch = (value) => {
@@ -209,11 +210,13 @@ export default function DashboardSalesList(props) {
           </table>
         </div>
 
-        <Pagination 
-          itemsPerPage={stateData?.meta?.itemsPerPage} 
-          totalPages={stateData?.meta?.totalPages}
-          currentPage={stateData?.meta?.currentPage} 
-          handle={handleClickPage} />
+        <Pagination
+          className={''}
+          page={stateData?.meta.currentPage}
+          itemsCountPerPage={stateData?.meta.itemsPerPage}
+          totalItemsCount={stateData?.meta.totalItems}
+          callback={handleChange}
+          />
       </div>
 
     </Container>
