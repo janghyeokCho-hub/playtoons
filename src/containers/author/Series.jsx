@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare, faObjectUnion } from "@fortawesome/pro-solid-svg-icons";
 import ImgComic2 from "@IMAGES/tmp_comic2.jpg";
 
-const Series = ({ item }) => {
+const Series = () => {
   const navigate = useNavigate();
 
   return (

@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import List from "./List";
 import Plan from "./Plan";
@@ -22,11 +21,8 @@ import {
   faStars as faStarsOFF,
   faCartShopping as faCartShoppingOFF,
 } from "@fortawesome/pro-solid-svg-icons";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const App = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   const [activeMenu, setActiveMenu] = useState("search");
 
@@ -39,6 +35,7 @@ const App = () => {
         setActiveMenu("search");
     }
   }, [location.pathname]);
+
   const menus = {
     探索: [
       {

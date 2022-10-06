@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { getAuthorPlans as getAuthorPlansAPI } from "@/services/authorService";
+import { setAuthorPlans } from "@/modules/redux/ducks/author";
 
 const PlanItem = ({ plan }) => {
   return (
@@ -26,22 +28,20 @@ const PlanItem = ({ plan }) => {
   );
 };
 
-const Plan = ({ item }) => {
-  const [planList, setPlanList] = useState([]);
+const Plan = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+  const [planData, setPlanData] = useState();
 
   useEffect(() => {
-    async function getAuthorPlans() {
-      const response = await getAuthorPlansAPI({ id: item.id });
-      const { status, data } = response;
-      if (status === 200) {
-        setPlanList(data.subscribeTiers);
-      }
+    if (!currentAuthor.plan) {
+      dispatch(setAuthorPlans({ authorId: currentAuthor.id }));
+    } else {
+      setPlanData(currentAuthor.plan);
     }
+  }, [dispatch, currentAuthor.id, currentAuthor.plan]);
 
-    if (item) {
-      getAuthorPlans();
-    }
-  }, [item]);
   return (
     <>
       <header className="hd_titbox3">
@@ -56,7 +56,11 @@ const Plan = ({ item }) => {
       </header>
 
       <div className="lst_mainplan">
-        {planList && planList.map((plan) => <PlanItem plan={plan} />)}
+        {planData &&
+          planData.subscribeTiers &&
+          planData.subscribeTiers.map((plan) => (
+            <PlanItem key={`plan_${plan.id}`} plan={plan} />
+          ))}
       </div>
     </>
   );

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { useNavigate, useLocation, Link } from "react-router-dom";
 import ImgComic1 from "@IMAGES/tmp_comic1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,7 +9,6 @@ import {
   faShare,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
-import { getAuthor as getAuthorAPI } from "@API/authorService";
 import Plan from "./Plan";
 import Series from "./Series";
 
@@ -116,27 +115,8 @@ const PostItem = () => {
 };
 
 const Post = () => {
-  const location = useLocation();
-  const { item } = location.state;
-
-  const [authorData, setAuthorData] = useState(null);
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
   const [selectTab, setSelectTab] = useState("POST");
-
-  useEffect(() => {
-    async function getAuthor() {
-      const response = await getAuthorAPI(item.id);
-      console.log(response);
-      const { status, data } = response;
-
-      if (status === 200) {
-        setAuthorData(data.author);
-      }
-    }
-
-    if (item) {
-      getAuthor();
-    }
-  }, [item]);
 
   return (
     <div className="contents">
@@ -144,14 +124,14 @@ const Post = () => {
         <div className="box_profile _longs">
           <ImgTmpProfileBgDiv
             className="pf_thumb"
-            bgImg={authorData?.backgroundImage}
+            bgImg={currentAuthor?.backgroundImage}
           ></ImgTmpProfileBgDiv>
           <div className="pf_txt">
             <div className="icon">
-              <img src={authorData?.profileImage} alt="profile" />
+              <img src={currentAuthor?.profileImage} alt="profile" />
             </div>
-            <p className="h1">{authorData?.nickname}</p>
-            <p className="t1">{authorData?.description}</p>
+            <p className="h1">{currentAuthor?.nickname}</p>
+            <p className="t1">{currentAuthor?.description}</p>
             <div className="btns">
               <a href="#" className="btn-pk n blue">
                 フォロー
@@ -202,8 +182,8 @@ const Post = () => {
             </ul>
           </div>
           {selectTab === "POST" && <PostItem />}
-          {selectTab === "SERIES" && <Series item={authorData} />}
-          {selectTab === "PLAN" && <Plan item={authorData} />}
+          {selectTab === "SERIES" && <Series item={currentAuthor} />}
+          {selectTab === "PLAN" && <Plan item={currentAuthor} />}
         </div>
       </div>
     </div>

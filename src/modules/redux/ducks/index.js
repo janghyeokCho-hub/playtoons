@@ -5,6 +5,7 @@ import storage from "redux-persist/lib/storage";
 
 import login from "./login";
 import loading from "./loading";
+import author from "./author";
 
 const persistConfig = {
   key: "root",
@@ -15,6 +16,7 @@ const appReducer = combineReducers({
   login,
   loading,
   alertModal,
+  author,
 });
 
 const rootReducer = (state, action) => {

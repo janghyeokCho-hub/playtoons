@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +9,13 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "@/css/swiper.css";
-import { useState } from "react";
-import { getAuthorList as getAuthorListAPI } from "@API/authorService";
+import {
+  getAuthorList,
+  getAuthorRecent,
+  setCurrentAuthor,
+} from "@/modules/redux/ducks/author";
 
-const SlideItemComponent = ({ item }) => {
+const SlideItemComponent = ({ item, callback }) => {
   return (
     <SwiperSlide
       className="swiper-slide"
@@ -26,6 +30,7 @@ const SlideItemComponent = ({ item }) => {
             pathname: "/author/post",
           }}
           state={{ item }}
+          onClick={callback}
         >
           <ImgTmpProfileBgDiv
             className="pf_thumb"
@@ -44,7 +49,7 @@ const SlideItemComponent = ({ item }) => {
   );
 };
 
-const RecommentAuthorComponent = ({ item }) => {
+const RecommentAuthorComponent = ({ item, callback }) => {
   return (
     <div className="item">
       <div className="box_profile _half">
@@ -53,6 +58,7 @@ const RecommentAuthorComponent = ({ item }) => {
             pathname: "/author/post",
           }}
           state={{ item }}
+          onClick={callback}
         >
           <ImgTmpProfileBgDiv
             className="pf_thumb"
@@ -72,111 +78,25 @@ const RecommentAuthorComponent = ({ item }) => {
 };
 
 const List = () => {
-  const [recommendedData, setRecommendedData] = useState([]);
+  const dispatch = useDispatch();
+  const authors = useSelector(({ author }) => author.authors);
+  const recents = useSelector(({ author }) => author.recents);
 
   useEffect(() => {
-    async function getAuthorList() {
-      const response = await getAuthorListAPI();
-      const { status, data } = response;
-
-      if (status === 200) {
-        setRecommendedData(data.authors);
-      }
+    if (!authors?.length) {
+      dispatch(getAuthorList());
     }
+  }, [dispatch, authors]);
 
-    if (!recommendedData?.length) {
-      getAuthorList();
+  useEffect(() => {
+    if (!recents?.length) {
+      dispatch(getAuthorRecent());
     }
-  }, [recommendedData]);
+  }, [dispatch, recents]);
 
-  /**
-   * 최근 확인한 작가 임시 데이터
-   */
-  const slideList = [
-    {
-      id: "1",
-      description: "string",
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "h54h",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: "string",
-      backgroundImage: "string",
-    },
-    {
-      id: "2",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "2_名前のない人間23349名前のない人間23349",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: require("@IMAGES/img_profile.png"),
-      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
-    },
-    {
-      id: "3",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "3_名前のない人間23349名前のない人間23349",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: require("@IMAGES/img_profile.png"),
-      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
-    },
-    {
-      id: "4",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "4_名前のない人間23349名前のない人間23349",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: require("@IMAGES/img_profile.png"),
-      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
-    },
-    {
-      id: "5",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "5_名前のない人間23349名前のない人間23349",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: require("@IMAGES/img_profile.png"),
-      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
-    },
-    {
-      id: "6",
-      description: `はみんぐです。アニメーター、 イラスト、MV制作🥀🥀 音楽、
-      ファッション、夜と光の絵…`,
-      name: "string",
-      nameEng: "string",
-      nameKana: "string",
-      nickname: "6_名前のない人間23349名前のない人間23349",
-      nicknameEng: "string",
-      nicknameKana: "string",
-      logoImage: "string",
-      profileImage: require("@IMAGES/img_profile.png"),
-      backgroundImage: require("@IMAGES/tmp_profile_bg.png"),
-    },
-  ];
+  const handleCurrentAuthor = (item) => {
+    dispatch(setCurrentAuthor(item));
+  };
 
   return (
     <div className="contents mauthor">
@@ -189,9 +109,14 @@ const List = () => {
           <div className="swiper-container mySwiper1">
             <Swiper className="swiper-wrapper">
               {/* 최근 확인한 작가 */}
-              {slideList.map((item, index) => (
-                <SlideItemComponent key={index} item={item} />
-              ))}
+              {recents &&
+                recents.map((item, index) => (
+                  <SlideItemComponent
+                    key={index}
+                    item={item}
+                    callback={() => handleCurrentAuthor(item)}
+                  />
+                ))}
             </Swiper>
           </div>
           <button type="button" className="swiper-button-prev my1">
@@ -206,10 +131,14 @@ const List = () => {
           <h2 className="h_tit0">おすすめクリエイター</h2>
         </div>
         <div className="lst_author_profile">
-          {/* 추천 작가 */}
-          {recommendedData.map((item, index) => (
-            <RecommentAuthorComponent key={index} item={item} />
-          ))}
+          {authors &&
+            authors.map((item, index) => (
+              <RecommentAuthorComponent
+                key={index}
+                item={item}
+                callback={() => handleCurrentAuthor(item)}
+              />
+            ))}
         </div>
       </div>
     </div>
