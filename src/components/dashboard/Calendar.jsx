@@ -22,7 +22,7 @@ import '@/css/test.css';
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param type 'none', 'now', '-1month' 두개 타입만 정의 되어 있음. 필요하면 getInitDate에서 정의해서 사용
+* @param type 'none', 'now', '3month', '1month', '1week', '1day' 타입만 정의 되어 있음. 필요하면 getInitDate에서 정의해서 사용
 * @param callback 날짜를 선택했을 경우 callback
 * @return
 */
@@ -37,8 +37,17 @@ export default forwardRef( function Calendar(props, ref) {
     if(type === 'now'){
       return now;
     }
-    else if( type === '-1month' ){
+    else if( type === '3month' ){
+      return  new Date(now.setMonth(now.getMonth() - 3)) ;
+    }
+    else if( type === '1month' ){
       return  new Date(now.setMonth(now.getMonth() - 1)) ;
+    }
+    else if( type === '1week' ){
+      return  new Date(now.setDate(now.getDate() - 7)) ;
+    }
+    else if( type === '1day' ){
+      return  new Date(now.setDate(now.getDate() - 1)) ;
     }
 
     //none
@@ -82,7 +91,7 @@ export default forwardRef( function Calendar(props, ref) {
 
   useEffect(() => {
     setStateDate(getInitDate());
-  }, []);
+  }, [type]);
 
   return (
     <div className="relative" ref={refContainer}>

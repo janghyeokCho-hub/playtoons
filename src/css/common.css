@@ -776,6 +776,9 @@ textarea.textarea1 {
 .ml25 {
   margin-left: 25px !important;
 }
+.ml24 {                                 /* 2022.10.06 lhk- 24 margin left 추가 */
+  margin-left: 24px !important;
+}
 .ml30 {
   margin-left: 30px !important;
 }

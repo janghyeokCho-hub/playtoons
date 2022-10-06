@@ -82,7 +82,7 @@ export default function DashboardPostList(props) {
         <tr key={index}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb"><span><Image hash={tempImg1} alt="iamge" /></span></div>
+            <div className="cx_thumb"><span><Image hash={item.thumbnailImage} alt="thumbnail" /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
           <td className="td_number1">{item.viewCount}<em className="hide-m">{text.count}</em></td>

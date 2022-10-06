@@ -101,12 +101,11 @@ const Header = ({
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
 
-            <a href="/dashboard/post" className="btn_tugo btn-pk n blue bdrs">
+            <Link to="/dashboard/post" className="btn_tugo btn-pk n blue bdrs hide-m">
               <span>投稿</span>
-            </a>
-            <span className="view-m">
-              <FontAwesomeIcon icon={faSquarePlus} />
-            </span>
+            </Link>
+            <FontAwesomeIcon className="view-m ml24" icon={faSquarePlus} />
+            
             <a href="#" className="btn_profile">
               <span style={{ backgroundImage: `url(${tempProfile})` }}></span>
             </a>
@@ -210,7 +209,7 @@ const Header = ({
 
       {/* set back button and title  */}
       {backTitle && (
-        <div className="head_con">
+        <div className="head_con l349">
           <button
             type="button"
             className="btn_back"
@@ -218,7 +217,7 @@ const Header = ({
               navigate(-1);
             }}
           >
-            <span className="icon">
+            <span className="icon flex">
               <FontAwesomeIcon icon={faAngleLeft} />
               {backTitle}
             </span>

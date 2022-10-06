@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
 //temp data
-import '@/css/test.css';
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import Container from "@/components/dashboard/Container";
@@ -58,25 +57,31 @@ const tempData = {
 
 const SEARCH_LIST = [
   {
-    code: "direct",
+    id: "direct",
     name: "直接入力"
   },
   {
-    code: "1month",
+    id: "3month",
+    name: "3月"
+  },
+  {
+    id: "1month",
     name: "1月"
   },
   {
-    code: "1week",
+    id: "1week",
     name: "1週"
   },
   {
-    code: "1day",
+    id: "1day",
     name: "1日"
   },
 ];
 
 export default function DashboardSalesList(props) {
   const [stateData, setStateData] = useState(undefined);
+  const [stateStartDate, setStateStartDate] = useState(undefined);
+  const [stateEndDate, setStateEndDate] = useState(undefined);
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
@@ -118,6 +123,9 @@ export default function DashboardSalesList(props) {
 
   const handleItemSearch = (value) => {
     console.log('ItemSearch', value.getAttribute('value'));
+
+    setStateStartDate(value.getAttribute('value'));
+    setStateEndDate('none');
   };
 
   const handleItemClick = (event) => {
@@ -143,6 +151,8 @@ export default function DashboardSalesList(props) {
     //리스트 불러오기
     // getProductList();
     setStateData(tempData);
+    setStateStartDate('1month');
+    setStateEndDate('none');
   }, []);
   
   return (
@@ -166,7 +176,7 @@ export default function DashboardSalesList(props) {
             <Calendar 
               ref={refCalendarStart}
               name={"start"}
-              type={"-1month"} 
+              type={stateStartDate} 
               callback={handleClickCalendar} />
           </div>
           <div className="mr24">
@@ -174,7 +184,7 @@ export default function DashboardSalesList(props) {
             <Calendar 
               ref={refCalendarEnd}
               name={"end"}
-              type={"none"} 
+              type={stateEndDate} 
               callback={handleClickCalendar} />
           </div>
         </div>

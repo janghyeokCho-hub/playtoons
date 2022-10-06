@@ -1,5 +1,5 @@
 import React, { useState, useEffect,  } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 
@@ -144,7 +144,7 @@ export default function DashboardReactionList(props) {
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0"><span>{text.page_title}</span></h2>
           <div className="rgh">
-            <a href="/dashboard/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></a>
+            <Link to="/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></Link>
           </div>
         </div>
         <div className="hd_titbox2">

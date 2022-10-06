@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 
 //temp data
-import '@/css/test.css';
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import Container from "@/components/dashboard/Container";
@@ -148,7 +147,7 @@ export default function DashboardSalesList(props) {
             <Calendar 
               ref={refCalendarStart}
               name={"start"}
-              type={"-1month"} 
+              type={"1month"} 
               callback={handleClickCalendar} />
           </div>
           <div className="mr24">

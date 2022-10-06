@@ -724,3 +724,53 @@ li.dashboard-gnb.selected{
   margin-top: 27px;
 }
 
+
+/* ============================================================================== */
+/* dashboard plan edit */
+/* ============================================================================== */
+.plan_desc{
+  margin-left: 16px;
+  color: rgba(97,112,128,1);
+  font-family: "NotoSansJP-Regular";
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 1px;
+  text-align: left;
+  line-height: 16px;
+}
+
+/* ============================================================================== */
+/* temp mobile css  */
+/* ============================================================================== */
+@media screen and (min-width:1061px) and (max-width: 1165px) {
+  /* header back title 1160 되면 겹쳐서  */
+  .head_con .btn_back{
+    font-size: 20px ;
+  }
+  .hide_1160{
+    display: none;
+  }
+  .l349{
+    left: 280px;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}
+
+@media screen and (min-width:961px) and (max-width:1060px)  {
+  .head_con .btn_back{
+    font-size: 14px ;
+  }
+  .header .box_hd_sch{
+    width: 350px;
+  }
+  .hide_1060{
+    display: none;
+  }
+  .l349{
+    left: 270px;
+    top: 50%;
+    transform: translate(0, -50%);
+  }
+}

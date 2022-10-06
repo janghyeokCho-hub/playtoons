@@ -267,7 +267,7 @@
   .header .btn_tugo span {
     font-size: 0;
   }
-  .header .btn_tugo:after {
+  .header .btn_tugo + svg {    /* 2022.10.06 lhk- plus 버튼 :after -> + svg으로 변경 */
     content: "\f0fe";
     font-family: "Font Awesome 6 Pro";
     font-weight: 300;

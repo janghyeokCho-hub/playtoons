@@ -9,6 +9,8 @@ import ToolTip from "@/components/dashboard/ToolTip";
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
 import { getFromDataJson, } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
+import Type from "@/components/dashboard/Type";
+import Category from "@/components/dashboard/Category";
 
 
 const text = {
@@ -34,14 +36,15 @@ const text = {
 };
 
 export default function DashboardUploadSeries(props) {
+  const navigate = useNavigate();
+  const [ stateTypeList, setStateTypeList ] = useState(undefined);
+  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
+  const [ stateType, setStateType ] = useState(undefined);
   const refR19 = useRef();
   const refCoverImage = useRef();
   const refTimelineImage = useRef();
   const refForm = useRef();
   const refTags = useRef();
-  const [ stateTypeList, setStateTypeList ] = useState(undefined);
-  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
-  const navigate = useNavigate();
 
 
   /**
@@ -192,7 +195,7 @@ export default function DashboardUploadSeries(props) {
 
   
   const handleItemClickType = (item) => {
-    getCategoryList(item.value);
+    setStateType(item);
   };
 
   const handleRegister = (e) => {
@@ -251,23 +254,27 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.type}</h3>
-                <Select 
-                  name={"typeId"}
-                  className={"select1 wid1"}
-                  dataList={stateTypeList}
-                  handleItemClick={handleItemClickType}
-                  />
                 
+                <Type
+                  name={'typeId'}
+                  className={'select1 wid1'}
+                  callback={handleItemClickType}
+                  />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
-                <Select
+
+                {/* <Select
                   name={"categoryId"}
                   className={"select1 wid1"}
                   dataList={stateCategoryList}
                   // handleItemClick={handleItemClickCategory}
-                  />
+                /> */}
+                  <Category 
+                    name={'categoryId'}
+                    className={'select1 wid1'}
+                    typeId={stateType?.id} />
               </div>
 
               <div className="col">

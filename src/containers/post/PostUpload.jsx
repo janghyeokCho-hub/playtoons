@@ -229,14 +229,9 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
-                {/* <Select 
-                  name={"category"}
-                  className={"select1 wid1"}
-                  dataList={stateCategoryList}
-                  handleItemClick={handleClickItemCategory} /> */}
-                
                 <Category 
                   name={'categoryId'}
+                  className={'select1 wid1 '}
                   typeId={stateType?.id} />
               </div>
 

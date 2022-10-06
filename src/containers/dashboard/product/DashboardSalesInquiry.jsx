@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 //temp data
-import '@/css/test.css';
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import Container from "@/components/dashboard/Container";

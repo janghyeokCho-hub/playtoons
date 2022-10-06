@@ -1,10 +1,9 @@
 import React, { useRef, useEffect,  } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
+import Tag from "@/components/dashboard/Tag";
 
 
 
@@ -27,6 +26,7 @@ const text = {
 export default function DashboardUploadProfile(props) {
 	const refBackground = useRef();
 	const refProfile = useRef();
+	const refTags = useRef();
   
 
   useEffect(() => {
@@ -108,10 +108,11 @@ export default function DashboardUploadProfile(props) {
 
 					<div className="col">
 						<h3 className="tit1">{text.setting_tag}</h3>
-						<div className="inp_txt sch">
-							<button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-							<input type="text" className="" placeholder={text.tag_name} />
-						</div>
+						<Tag 
+							ref={refTags}
+							name={"tags"}
+							className={"inp_txt sch"}
+							placeholder={text.tag_name} />
 					</div>
 
 					<div className="col">

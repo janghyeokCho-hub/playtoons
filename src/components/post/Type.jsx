@@ -2,6 +2,23 @@ import { getPostTypeListFromServer } from "@/services/dashboardService";
 import React, { useEffect } from "react";
 import { useState } from "react";
 
+/**
+*
+  const handleClickType = (typeItem) => {
+    console.log('handleClickType', typeItem);
+    setStateType(typeItem);
+  };
+
+  <Type
+    name={'typeId'}
+    callback={handleClickType}
+    />
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param {*} props
+* @return
+*/
 export default function Type(props, ref) {
   const {name, callback} = props;
   const [stateList, setStateList] = useState(undefined);

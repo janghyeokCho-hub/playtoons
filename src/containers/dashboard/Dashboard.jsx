@@ -23,6 +23,8 @@ import PlanSubsciber from "@/containers/dashboard/plan/DashboardPlanSubsciber";
 import Page404 from "@/containers/dashboard/Page404";
 import Modal from '@/components/Modal';
 
+import '@/css/test.css';
+
 /**
 * Dashboard url 분기 처리
 *

@@ -19,16 +19,10 @@ import { useState } from 'react';
 * @return
 */
 export default function Image(props) {
-  const {alt, hash, className, test = true} = props;
+  const {alt, hash, className, } = props;
   const [stateImage , setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
-    //test mode
-    if( test ){
-      setStateImage(hash);
-      return;
-    }
-
     const params = new FormData();
     const {status, data: result} = await getFileUrlFromServer(hash, params);
     console.log('getImage', status, result);
@@ -44,7 +38,7 @@ export default function Image(props) {
 
   useEffect(() => {
     getImage(hash);
-  }, []);
+  }, [hash]);
 
   return (
     <img className={className} src={stateImage} alt={alt} />

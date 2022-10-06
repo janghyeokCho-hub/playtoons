@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 //temp data
-import '@/css/test.css';
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import Container from "@/components/dashboard/Container";
