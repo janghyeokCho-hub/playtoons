@@ -83,7 +83,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   };
 
   useImperativeHandle(ref, () => ({
-    setImageValueToInputTag: (v, callback) => {
+    setImageValueToInputTag: (v) => {
       setStateImage({...stateImage, value: v});
     },
     setImage: (fileUrl, v) => {
@@ -110,7 +110,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   useEffect(() => {
     if( stateImage.value !== undefined ){
       console.log("useEffect value", stateImage.value);
-      callback?.();
+      callback?.(stateImage);
     }
   }, [stateImage.value]);
 

@@ -29,7 +29,7 @@ export default forwardRef( function Select(props, ref) {
 
   const getOptionElements = () => {
     return dataList?.map((item, index) => {
-      return <option key={index} value={item.code} >{item.name}</option>;
+      return <option key={index} value={item.id} >{item.name}</option>;
     });
   };
 
@@ -41,11 +41,11 @@ export default forwardRef( function Select(props, ref) {
 
   // ref.current로 접근하여 사용
   useImperativeHandle(ref, () => ({
-    setSelected: (code) => {
+    setSelected: (id) => {
       const select = refSelect.current;
       
       dataList?.map((item, index) => {
-        if( item.code === code ){
+        if( item.id === id ){
           select.selectedIndex = index;
           select.options[index].setAttribute("selected", true);
           return index;

@@ -3,14 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import { useState } from 'react';
 import { useRef } from 'react';
-import { getTagFromServer, setTagToServer } from '@/services/dashboardService';
+import { setTagToServer } from '@/services/dashboardService';
 import { useImperativeHandle, forwardRef } from 'react';
-
-
+import { removeItemInList } from '@/common/common';
 
 //test 
 import '@/css/test.css';
-import { removeItemInList } from '@/common/common';
 
 /**
 * Tag Component
