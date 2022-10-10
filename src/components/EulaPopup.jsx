@@ -9,35 +9,18 @@ const EulaPopup = ({ handleClose }) => {
   const [isErrorShow, setIsErrorShow] = useState(false);
   const [eulaVersion, setEulaVersion] = useState(0);
 
-  const markdownTxt = `
-  # 마크다운 테스트
-  ## MarkdownPreview
-  
-  ## Header 2
-  
-  ### Header 3
-  A paragraph with *emphasis* and **strong importance**.
-  
-  > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-  
-  * Lists
-  * [ ] todo
-  * [x] done
-  
-  A table:
-  
-  | a | b |
-  | - | - |
-  `;
+  const [content, setContent] = useState(null);
 
   useEffect(() => {
     async function getEulaVersionFn() {
       const { data, status } = await getEulaVersion("author");
       if (status === 200) {
-        const { version } = data.agreement;
+        const { version, content } = data.agreement;
         setEulaVersion(version);
+        setContent(content);
       } else {
         setEulaVersion(null);
+        setContent(null);
       }
     }
     getEulaVersionFn();
@@ -83,7 +66,7 @@ const EulaPopup = ({ handleClose }) => {
             <div className="wrap_login">
               <div className="area_terms">
                 <div className="in scrollY">
-                  <MarkdownPreview source={markdownTxt} />
+                  <MarkdownPreview source={content} />
                 </div>
               </div>
 
