@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { logoutRequest } from "@/modules/redux/ducks/login";
@@ -11,8 +12,11 @@ import {
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import Footer from "@COMPONENTS/Footer";
+
 const LandingPage = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  console.log(location);
 
   return (
     <>

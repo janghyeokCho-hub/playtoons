@@ -37,7 +37,7 @@ export const apiServer = (method, url, params, headers) => {
  * @param {json} params
  * @param {json} headers
  */
-export const apiAuthServer = (method, url, params, headers) => {
+export const apiAuthServer = (method, url, params, headers, token) => {
   /**
    * 기본 옵션
    */
@@ -48,7 +48,7 @@ export const apiAuthServer = (method, url, params, headers) => {
     headers: {
       "Cache-Control": "no-cache",
       "Content-Type": "application/json; charset=utf-8",
-      Authorization: `Bearer ${getToken()}`,
+      Authorization: `Bearer ${getToken() || token}`,
       ...headers,
     },
   };

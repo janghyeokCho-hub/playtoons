@@ -24,3 +24,11 @@ export const loginPasswordCheck = async (params) => {
     return { status: e.response.status };
   }
 };
+
+export const getUserInfo = async (accessToken) => {
+  try {
+    return await apiAuthServer("get", "/account", null, null, accessToken);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};

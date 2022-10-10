@@ -35,3 +35,11 @@ export const getAuthorRecent = async () => {
     return { status: e.response.status };
   }
 };
+
+export const registerAuthor = async () => {
+  try {
+    return await apiServer("post", "/author");
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};

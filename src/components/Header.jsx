@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +9,8 @@ import {
 } from "@fortawesome/pro-light-svg-icons";
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
+import { getUserInfo as getUserInfoAPI } from "@API/loginService";
+import { setUserInfo } from "@/modules/redux/ducks/login";
 
 const Header = ({
   type,
@@ -18,10 +20,26 @@ const Header = ({
   handleBack,
   isMenus = true,
 }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userInfo = useSelector(({ login }) => login.userInfo);
+  const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState("login");
   const [like, setLike] = useState(false);
+
+  useEffect(() => {
+    async function getUserInfo() {
+      const response = await getUserInfoAPI(accessToken);
+      if (response.status === 200) {
+        dispatch(setUserInfo(response.data));
+      }
+    }
+
+    if (accessToken && !userInfo) {
+      getUserInfo();
+    }
+  }, [dispatch, userInfo, accessToken]);
 
   useEffect(() => {
     if (type) {
@@ -182,7 +200,13 @@ const Header = ({
             </nav>
           </div>
           <div className="inr-c">
-            <button type="button" className="btn_back">
+            <button
+              type="button"
+              className="btn_back"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
               <span className="icon">
                 <FontAwesomeIcon icon={faAngleLeft} fontSize="24px" />
                 投稿する

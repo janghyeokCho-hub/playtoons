@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,7 @@ import {
   faHeart,
   faCircleChevronLeft,
   faCircleChevronRight,
+  faLock,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -13,6 +14,7 @@ import "@/css/swiper.css";
 
 const Webtoon = () => {
   const navigate = useNavigate();
+  const [isLock, setIsLock] = useState(false);
 
   return (
     <>
@@ -28,18 +30,20 @@ const Webtoon = () => {
         <div className="area_webtoon">
           <img src={require("@IMAGES/tmp_comic3.png")} alt="" />
           {/* 잠금 시작 */}
-          <div class="area_lock">
-            <div>
-              <p>
-                <i class="fa-solid fa-lock"></i>
-              </p>
-              <p>500PC /月</p>
-              <p>クリエイターを支援してコンテンツ解禁！</p>
-              <a href="#" class="btn-pk s blue bdrs">
-                <span>支援する</span>
-              </a>
+          {isLock && (
+            <div class="area_lock">
+              <div>
+                <p>
+                  <FontAwesomeIcon icon={faLock} />
+                </p>
+                <p>500PC /月</p>
+                <p>クリエイターを支援してコンテンツ解禁！</p>
+                <a href="#" class="btn-pk s blue bdrs">
+                  <span>支援する</span>
+                </a>
+              </div>
             </div>
-          </div>
+          )}
           {/* 잠금 끝 */}
         </div>
 

@@ -63,9 +63,9 @@ export const isJSONStr = (str) => {
 export const getToken = () => {
   const rootData = localStorage.getItem("persist:root");
   const rootJSON = isJSONStr(rootData) ? JSON.parse(rootData) : rootData;
-  const loginData = rootJSON.login;
+  const loginData = rootJSON?.login;
   const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
-  return loginJSON.token;
+  return loginJSON?.accessToken;
 };
 
 /**

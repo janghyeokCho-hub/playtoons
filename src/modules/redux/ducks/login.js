@@ -11,16 +11,19 @@ export const SYNC = "login/SYNC";
 export const [LOGOUT_REQUEST, LOGOUT_REQUEST_SUCCESS, LOGOUT_REQUEST_FAILURE] =
   createRequestActionTypes("login/LOGOUT_REQUEST");
 
+export const SET_USER_INFO = "login/GET_USER_INFO";
+
 /* --- Actions --- */
 export const loginRequest = createAction(LOGIN_REQUEST);
 export const logoutRequest = createAction(LOGOUT_REQUEST);
+export const setUserInfo = createAction(SET_USER_INFO);
 
 /**
  * login reducer 초기값
  */
 const initialState = {
   email: "",
-  token: null,
+  accessToken: null,
   authFail: false,
   errMessage: null,
   errStatus: null,
@@ -28,6 +31,7 @@ const initialState = {
   isSns: false,
   snsType: null,
   isSNSLogin: false,
+  userInfo: null,
 };
 
 const login = handleActions(
@@ -36,7 +40,7 @@ const login = handleActions(
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
         draft.email = action.payload.email || "";
-        draft.token = action.payload.accessToken;
+        draft.accessToken = action.payload.accessToken;
         draft.authFail = false;
         draft.errMessage = null;
         draft.errStatus = null;
@@ -44,11 +48,10 @@ const login = handleActions(
       });
     },
     [LOGIN_REQUEST_FAILURE]: (state, action) => {
-      console.log(action);
       return {
         ...state,
         authFail: true,
-        token: initialState.token,
+        accessToken: initialState.accessToken,
         ...(action.errStatus && { errStatus: action.errStatus }),
         ...(action.errMessage && { errMessage: action.errMessage }),
       };
@@ -58,6 +61,11 @@ const login = handleActions(
         return {
           ...initialState,
         };
+      });
+    },
+    [SET_USER_INFO]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.userInfo = action.payload.account;
       });
     },
   },

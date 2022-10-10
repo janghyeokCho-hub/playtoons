@@ -6,6 +6,7 @@ import {
   faHeart,
   faCircleChevronLeft,
   faCircleChevronRight,
+  faLock,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
