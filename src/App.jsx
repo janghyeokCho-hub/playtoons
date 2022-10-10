@@ -8,7 +8,6 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import Account from "@CONTAINERS/account/Account";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
-import RegisterCompleted from "@CONTAINERS/account/RegisterCompleted";
 import Webtoon from "@CONTAINERS/webtoon";
 import Novel from "@CONTAINERS/novel";
 import Series from "@CONTAINERS/series";
@@ -33,7 +32,6 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/account/*" element={<Account />} />
-            <Route path="/register-completed" element={<RegisterCompleted />} />
             <Route path="/webtoon/*" element={<Webtoon />} />
             <Route path="/novel/*" element={<Novel />} />
             <Route path="/series/*" element={<Series />} />

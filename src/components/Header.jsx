@@ -101,11 +101,14 @@ const Header = ({
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
 
-            <Link to="/dashboard/post" className="btn_tugo btn-pk n blue bdrs hide-m">
+            <Link
+              to="/dashboard/post"
+              className="btn_tugo btn-pk n blue bdrs hide-m"
+            >
               <span>投稿</span>
             </Link>
             <FontAwesomeIcon className="view-m ml24" icon={faSquarePlus} />
-            
+
             <a href="#" className="btn_profile">
               <span style={{ backgroundImage: `url(${tempProfile})` }}></span>
             </a>
@@ -192,16 +195,18 @@ const Header = ({
       {renderType === "postUpload" && (
         <>
           <div className="inr-c">
-            <button type="button" 
-              className="btn_back" 
+            <button
+              type="button"
+              className="btn_back"
               onClick={() => {
                 navigate(-1);
-              }}>
-                <span className="icon">
-                  <i className="fa-solid fa-angle-left">
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                  </i>
-                </span>
+              }}
+            >
+              <span className="icon">
+                <i className="fa-solid fa-angle-left">
+                  <FontAwesomeIcon icon={faAngleLeft} />
+                </i>
+              </span>
             </button>
           </div>
         </>

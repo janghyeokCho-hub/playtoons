@@ -68,7 +68,6 @@ export const getToken = () => {
   return loginJSON.token;
 };
 
-
 /**
 *
    get request를 위해서 params로 url 생성
@@ -80,8 +79,8 @@ export const getToken = () => {
 */
 export const getGetMethodUrl = (formData) => {
   let url = "?";
-  
-  for (const item of formData.entries() ) {
+
+  for (const item of formData.entries()) {
     url += `${item[0]}=${item[1]}&`;
   }
 
@@ -100,8 +99,8 @@ export const getGetMethodUrl = (formData) => {
 export const getFromDataJson = (refForm) => {
   const form = refForm.current;
   let obj = {};
-  
-  for( let i = 0; i < form.length; i++ ){
+
+  for (let i = 0; i < form.length; i++) {
     obj[form[i].name] = form[i].value;
   }
 
@@ -124,4 +123,21 @@ export const removeItemInList = (list, value) => {
   });
 };
 
+export const openLayerPopup = (id) => {
+  console.log(id);
+  console.log("window.innerWidth : ", window.innerWidth);
+  console.log("window.outerWidth : ", window.outerWidth);
 
+  /*var $obj = $("#" +id);
+	var $winH = $(window).width();
+	
+	$(".layerPopup").hide();
+	$("#" +id).fadeIn(300);
+	$("#" +id).before("<div class='popup_dim'></div>");
+
+
+	$(".b-close, .popup_dim").on("click", function(){
+		$obj.fadeOut(100);
+		$(".popup_dim").remove();
+	});*/
+};

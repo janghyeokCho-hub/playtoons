@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>PlayToons</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta
+      id="viewport"
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, target-densitydpi=medium-dpi, shrink-to-fit=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="Cache-Control" content="no-cache,no-store" />
+
+    <meta name="writer" content="" />
+    <meta name="title" content="" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="" />
+
+    <link rel="canonical" href="" />
+    <link rel="shortcut icon" href="" />
+
+    <link href="../css/swiper.min.css" rel="stylesheet" />
+    <link href="../css/common.css" rel="stylesheet" />
+    <link href="../css/mobile.css" rel="stylesheet" />
+
+    <script src="../js/jquery-1.12.4.min.js"></script>
+    <script src="../js/swiper.min.js"></script>
+    <script src="../js/common.js"></script>
+  </head>
+  <body>
+    <div id="wrap" class="wrap_tophd">
+      <!-- 로그인 전 :  wrap_tophd 추가 / 로그인 후 : -->
+
+      <header id="header" class="header">
+        <div class="inr-c">
+          <h1 class="logo">
+            <a href="#"><span class="ico_logo">PlayToons</span></a>
+          </h1>
+
+          <div class="rgh">
+            <div class="box_hd_sch">
+              <input
+                type="text"
+                class="inp_txt"
+                placeholder="検索キーワードを入力"
+              />
+              <button
+                type="button"
+                class="btn_hd_del"
+                onclick="$('.box_hd_sch input').focus();"
+              >
+                <span><i class="fa-solid fa-circle-xmark"></i></span></button
+              ><!-- 삭제버튼 추가 -->
+              <button type="button" class="btns">
+                <span><i class="fa-light fa-magnifying-glass"></i></span>
+              </button>
+            </div>
+            <button type="button" class="mo_btns view-m">
+              <i class="fa-light fa-magnifying-glass"></i></button
+            ><!-- 모바일 검색 버튼 -->
+            <a href="#" class="btn_log btn-pk n blue bdrs"
+              ><span>ログイン</span></a
+            >
+          </div>
+        </div>
+      </header>
+      <!-- //header -->
+
+      <div id="container" class="container author_main">
+        <div class="bxMain">
+          <div class="bg">
+            <span class="hide-m"
+              ><img src="../images/common/visual_author.png" alt="" /></span
+            ><span class="view-m"
+              ><img src="../images/common/visual_author_m.png" alt=""
+            /></span>
+          </div>
+          <div class="cont">
+            <p class="h1">誰でも感じられる創作の楽しさ</p>
+            <p class="t1">
+              クリエイターになって自分の作品を <br />世界に広め、収益を得よう！
+            </p>
+            <button
+              type="button"
+              class="btn-pk blue bdrs"
+              onclick="openLayerPopup('popTerms'); return false;"
+            >
+              クリエイターになる</button
+            ><!-- 20221008 수정 -->
+          </div>
+        </div>
+
+        <div class="area_main mmain1">
+          <div class="inr-c">
+            <div class="lft">
+              <h2 class="h_tit0">コンテンツで繋ぐ</h2>
+              <p class="t1">
+                あなたが好きなファンのための
+                <br />専用コンテンツを製作してシェアでき、
+                <br />ファンともっと緊密にコミュニケーションする
+                <br />ことができます。国境を越えて、
+                <br />あなたのコンテンツがユーザーとつながる
+                <br />素晴らしい経験を体験してみてください！
+              </p>
+            </div>
+            <div class="rgh">
+              <img src="../images/common/main_1.png" alt="" />
+            </div>
+          </div>
+        </div>
+
+        <div class="area_main mmain2">
+          <div class="inr-c">
+            <h2 class="h_tit0">収益を得る活動</h2>
+            <ul class="list">
+              <li>
+                <div class="thumb">
+                  <span
+                    style="background-image: url(../images/common/main2_1.png)"
+                  ></span>
+                </div>
+                <div class="txt">
+                  <p class="h1">投稿</p>
+                  <p class="t1">
+                    ウェブトゥーン、ウェブ小説、写真集など
+                    <br />様々な分野のコンテンツを <br />有料でアップできます。
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="thumb">
+                  <span
+                    style="background-image: url(../images/common/main2_2.png)"
+                  ></span>
+                </div>
+                <div class="txt">
+                  <p class="h1">支援</p>
+                  <p class="t1">
+                    「支援」という機能で、 <br />ファンにコンテンツを限定的に
+                    <br />提供することができます。
+                  </p>
+                </div>
+              </li>
+              <li>
+                <div class="thumb">
+                  <span
+                    style="background-image: url(../images/common/main2_3.png)"
+                  ></span>
+                </div>
+                <div class="txt">
+                  <p class="h1">マケットに登録</p>
+                  <p class="t1">
+                    ウェブトゥーンクリエイターのための
+                    <br />3Dアセット、企業向けAPI、ePubなどを
+                    <br />販売することができます。
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="area_main mmain3">
+          <div class="inr-c">
+            <ul class="list1">
+              <li>
+                <p>
+                  ユーザーが作成したコメントに
+                  <br />返信してコミュニケーションを！
+                </p>
+              </li>
+              <li>
+                <p>投稿したコンテンツで <br />ユーザーさんの色々な反応が！</p>
+              </li>
+            </ul>
+
+            <div class="imgs">
+              <div>
+                <span class="hide-m"
+                  ><img src="../images/common/main_3.png" alt="" /></span
+                ><span class="view-m"
+                  ><img src="../images/common/main_3m.png" alt=""
+                /></span>
+              </div>
+            </div>
+
+            <ul class="list2">
+              <li>
+                <p>フォロー数を増やして <br />インフルエンサーになれる！</p>
+              </li>
+              <li>
+                <p>
+                  ユーザーがファンになり、
+                  <br />安定なクリエイター活動ができる！
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="area_main mmain4">
+          <div class="inr-c">
+            <div class="lft">
+              <h2 class="h_tit0">みつけてもらおう、自分の活かし方。</h2>
+              <p class="t1">
+                今すぐ、クリエイターになって <br />創作活動をしましょう！
+              </p>
+              <button
+                type="button"
+                class="btn-pk blue bdrs"
+                onclick="openLayerPopup('popTerms'); return false;"
+              >
+                クリエイターになる</button
+              ><!-- 20221008 수정 -->
+            </div>
+            <div class="rgh">
+              <img src="../images/common/main_4.png" alt="" />
+              <p class="desc_copy">&copy;Studio reBorn</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 202210 수정 : 약관동의 추가 -->
+      <!-- 팝업: 약관동의 팝업 -->
+      <div id="popTerms" class="layerPopup pop_terms">
+        <div class="popup">
+          <div class="pop_head">
+            <h2 class="title">クリエイター登録</h2>
+            <button type="button" class="btn_pop_close b-close">
+              <i class="fa-solid fa-xmark-large"></i>close
+            </button>
+          </div>
+          <div class="pop_cont">
+            <div class="wrap_login">
+              <div class="area_terms">
+                <div class="in scrollY">
+                  <p class="c-black">1. 定義</p>
+                  本規約では、以下の用語を使用します。 1.1.
+                  「コンテンツ」とは、文章、音声、音楽、画像、動画、ソフトウェア、プログラム、コードその他の情報のことをいいます。
+                  1.2.
+                  「本コンテンツ」とは、本サービスを通じてアクセスすることができるコンテンツのことをいいます。
+                  1.3.
+                  「投稿コンテンツ」とは、お客様が本サービスに投稿、送信、アップロードしたコンテンツのことをいいます。
+                  1.4.
+                  「コイン」とは、本サービスにおいて有償で提供されるサービスまたはコンテンツと交換可能な前払式支払手段およびこれに類するもののことをいいます。
+                  1.5.
+                  「個別利用条件」とは、本サービスに関して、本規約とは別に「規約」、「ガイドライン」、「ポリシー」等の名称で当社が配布または掲示している条件のことをいいます。
+
+                  <p class="c-black">2. 規約への同意</p>
+                  2.1.
+                  お客様は、本規約の定めに従って本サービスを利用しなければなりません。お客様は、本規約に同意をしない限り本サービスを利用できません。
+                  2.2.
+                  お客様が未成年者である場合は、親権者等の法定代理人の同意を得たうえで本サービスを利用してください。また、お客様が本サービスを事業者のために利用する場合は、当該事業者も本規約に同意したうえで本サービスを利用してください。
+                  2.3.
+                  本サービスにおいて個別利用条件がある場合、お客様は、本規約のほか個別利用条件の定めにも従って本サービスを利用しなければなりません。
+
+                  <p class="c-black">3. 規約の変更</p>
+                  当社は、当社が必要と判断する場合、本サービスの目的の範囲内で、本規約を変更することができます。その場合、当社は、変更後の本規約の内容および効力発生日を、本サービスもしくは当社ウェブサイトに表示し、または当社が定める方法によりお客様に通知することでお客様に周知します。変更後の本規約は、効力発生日から効力を生じるものとします。
+
+                  <p class="c-black">4. アカウント</p>
+                  4.1.
+                  本サービスの利用に際して、情報を登録のうえ、アカウントの作成が必要となる場合があります。この場合、お客様は、真実、正確かつ完全な情報を登録しなければならず、常に最新の情報となるよう修正しなければなりません。
+                  4.2.
+                  お客様は、本サービスの利用に際して認証情報を登録する場合、これを不正に利用されないようご自身の責任で厳重に管理しなければなりません。当社は、登録された認証情報を利用して行われた一切の行為を、お客様ご本人の行為とみなすことができます。
+                  4.3.
+                  本サービスに登録したお客様は、いつでもアカウントを削除して退会することができます。
+                  4.4.
+                  当社は、最終のアクセスから１年間以上経過しているアカウントを、あらかじめお客様に通知することなく削除することができます。
+                  4.5.
+                  お客様の本サービスにおけるすべての利用権は、理由を問わず、アカウントが削除された時点で消滅します。お客様が誤ってアカウントを削除した場合であっても、アカウントの復旧はできませんのでご注意ください。
+                  4.6.
+                  本サービスのアカウントは、お客様に一身専属的に帰属します。お客様の本サービスにおけるすべての利用権は、第三者に譲渡、貸与その他の処分または相続させることはできません。
+                </div>
+              </div>
+
+              <div class="inps">
+                <label class="inp_checkbox"
+                  ><input type="checkbox" /><span
+                    >案内事項に同意し、退会します。</span
+                  ></label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="pop_botm">
+            <button type="button" class="btn-pk blue">
+              クリエイターになる
+            </button>
+          </div>
+        </div>
+      </div>
+      <!--// 202210 수정 : 약관동의 팝업 추가 -->
+
+      <footer id="footer" class="footer">
+        <div class="inr-c">
+          <div class="foo_logo">PlayToons</div>
+          <p class="copy">&copy;Rocketstaff All Right Reserved.</p>
+
+          <div class="rgh">
+            <a href="#">利用規約</a>
+            <a href="#">会社情報</a>
+            <a href="#">プライバシーポリシー</a>
+          </div>
+        </div>
+      </footer>
+      <!-- //footer -->
+    </div>
+    <!--//wrap -->
+  </body>
+</html>
