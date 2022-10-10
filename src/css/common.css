@@ -4155,7 +4155,6 @@ body {
   background-size: 12px;
 }
 .btn_select1 .select_list {
-  display: none;
   padding: 12px 0px;
   min-width: 140px;
   z-index: 1;

@@ -31,13 +31,12 @@ const LandingPage = () => {
         <div className="main_visual">
           <div className="inr-c">
             <div className="thumb">
-              <span className="hide-m">
-                <img src={require("@IMAGES/main_visual.png")} alt="사진" />
+              <span>
+                <img src={require("@IMAGES/main_visual_img.png")} alt="사진" />
               </span>
-              <span className="view-m">
-                <img src={require("@IMAGES/main_visual_m.png")} alt="사진" />
-              </span>
+              <p className="copy">&copy;Studio reBorn</p>
             </div>
+            {/*<!-- 202210 수정 -->*/}
             <div className="txt ta-c">
               <p className="h1">あなたの好きなことが見つかる。</p>
               <p className="t1">
@@ -85,7 +84,9 @@ const LandingPage = () => {
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
                         <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                         <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -109,7 +110,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -133,7 +137,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -158,7 +165,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -182,7 +192,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -206,7 +219,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -230,7 +246,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -280,7 +299,9 @@ const LandingPage = () => {
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
                         <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                         <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -304,7 +325,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -328,7 +352,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -352,7 +379,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -376,7 +406,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -400,7 +433,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -424,7 +460,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -750,7 +789,9 @@ const LandingPage = () => {
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
                         <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                         <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -774,7 +815,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -798,7 +842,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -822,7 +869,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -846,7 +896,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -870,7 +923,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -894,7 +950,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -944,7 +1003,9 @@ const LandingPage = () => {
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
                         <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                         <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -968,7 +1029,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -992,7 +1056,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -1016,7 +1083,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -1040,7 +1110,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -1064,7 +1137,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>
@@ -1088,7 +1164,10 @@ const LandingPage = () => {
                         <p className="h1">
                           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
                         </p>
-                        <p className="t1">Studio reBorn・43話</p>
+                        <p className="t1">Studio reBorn</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
+                        <p className="t1">43話</p>
+                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
                       </div>
                     </a>
                   </div>

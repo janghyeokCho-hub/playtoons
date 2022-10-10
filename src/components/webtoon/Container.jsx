@@ -21,7 +21,7 @@ const Container = ({ menus, children, type, contentType }) => {
                   <ul>
                     {value.map((item) => {
                       return (
-                        <li className="on s1" key={item.code}>
+                        <li className=" s1" key={item.code}>
                           <a href="#">
                             <span className="ico">
                               <FontAwesomeIcon icon={item.icon.on} />
