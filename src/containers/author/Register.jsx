@@ -168,9 +168,13 @@ const Register = () => {
                 今すぐ、クリエイターになって <br />
                 創作活動をしましょう！
               </p>
-              <a href="#" className="btn-pk blue bdrs">
+
+              <button
+                className="btn-pk blue bdrs"
+                onClick={() => setIsEulaPopupShow(!isEulaPopupShow)}
+              >
                 クリエイターになる
-              </a>
+              </button>
             </div>
             <div className="rgh">
               <img src={require("@IMAGES/main_4.png")} alt="" />
