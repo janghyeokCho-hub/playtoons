@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Route, Routes } from "react-router-dom";
 import Locked from "./Locked";
 import Novel from "./Novel";
@@ -10,8 +9,8 @@ const App = () => {
   return (
     <>
       <Header className="ty1 mdetail" type="post" />
-      <div id="container" class="container sub mpost bg">
-        <div class="inr-c">
+      <div id="container" className="container sub mpost bg">
+        <div className="inr-c">
           <Routes>
             <Route path={"locked"} element={<Locked />} />
             <Route path={"novel"} element={<Novel />} />

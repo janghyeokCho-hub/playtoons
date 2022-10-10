@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -21,6 +21,7 @@ const Header = ({
   const navigate = useNavigate();
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState("login");
+  const [like, setLike] = useState(false);
 
   useEffect(() => {
     if (type) {
@@ -29,6 +30,15 @@ const Header = ({
       setRenderType(isLogined ? "login" : "logout");
     }
   }, [type, isLogined]);
+
+  const handleLikeChange = useCallback(() => {
+    if (like) {
+      // like 해제
+    } else {
+      // like 등록
+    }
+    setLike(!like);
+  }, [like]);
 
   return (
     <header id="header" className={`header ${className}`}>
@@ -174,17 +184,17 @@ const Header = ({
           <div className="inr-c">
             <button type="button" className="btn_back">
               <span className="icon">
-                <FontAwesomeIcon icon={faAngleLeft} />
+                <FontAwesomeIcon icon={faAngleLeft} fontSize="24px" />
                 投稿する
               </span>
             </button>
             <div className="rgh">
               <button
                 type="button"
-                className="btn_top_heart"
-                onClick={() => console.log("this.classList.toggle('on');")}
+                className={`btn_top_heart ${like ? "on" : ""}`}
+                onClick={handleLikeChange}
               >
-                <FontAwesomeIcon icon={faHeart} />
+                <FontAwesomeIcon icon={faHeart} fontSize="24px" />
               </button>
             </div>
           </div>
