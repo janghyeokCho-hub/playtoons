@@ -60,10 +60,12 @@ const RecommentAuthorComponent = ({ item, callback }) => {
           state={{ item }}
           onClick={callback}
         >
-          <ImgTmpProfileBgDiv
-            className="pf_thumb"
-            bgImg={item.backgroundImage}
-          />
+          <div className="pf_thumb bind3">
+            {/*<!-- 202210 수정 -->*/}
+            <ImgDiv bgImg={require("@IMAGES/tmp_profile_bg.png")} />
+            <ImgDiv bgImg={require("@IMAGES/tmp_profile_bg.png")} />
+            <div></div>
+          </div>
           <div className="pf_txt">
             <div className="icon">
               <img src={item.profileImage} alt="profile" />
@@ -151,6 +153,10 @@ const ImgTmpProfileBgDiv = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+`;
+
+const ImgDiv = styled.div`
+  background-image: url(${(props) => props.bgImg});
 `;
 
 export default List;
