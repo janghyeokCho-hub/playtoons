@@ -4,7 +4,7 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { getEulaVersion, updateAccount } from "@API/accountService";
 
-const EulaPopup = ({ handleClose }) => {
+const EulaPopup = ({ handleClose, readonly = false }) => {
   const [agree, setAgree] = useState(false);
   const [isErrorShow, setIsErrorShow] = useState(false);
   const [eulaVersion, setEulaVersion] = useState(0);
@@ -70,29 +70,37 @@ const EulaPopup = ({ handleClose }) => {
                 </div>
               </div>
 
-              <div className={`${isErrorShow && !agree ? "error" : ""} inps`}>
-                <label className="inp_checkbox">
-                  <input
-                    type="checkbox"
-                    onChange={(e) => setAgree(e.target.checked)}
-                  />
-                  <span>案内事項に同意し、退会します。</span>
-                </label>
-                {isErrorShow && !agree && (
-                  <p className="t_error">
-                    <span className="ico_error">
-                      必須項目をチェックしてください。
-                    </span>
-                  </p>
-                )}
-              </div>
+              {!readonly && (
+                <div className={`${isErrorShow && !agree ? "error" : ""} inps`}>
+                  <label className="inp_checkbox">
+                    <input
+                      type="checkbox"
+                      onChange={(e) => setAgree(e.target.checked)}
+                    />
+                    <span>案内事項に同意し、退会します。</span>
+                  </label>
+                  {isErrorShow && !agree && (
+                    <p className="t_error">
+                      <span className="ico_error">
+                        必須項目をチェックしてください。
+                      </span>
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
-          <div className="pop_botm">
-            <button type="button" className="btn-pk blue" onClick={handleAgree}>
-              クリエイターになる
-            </button>
-          </div>
+          {!readonly && (
+            <div className="pop_botm">
+              <button
+                type="button"
+                className="btn-pk blue"
+                onClick={handleAgree}
+              >
+                クリエイターになる
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

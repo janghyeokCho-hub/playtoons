@@ -7,7 +7,7 @@ import {
   faCircleChevronLeft,
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
-import { Swiper, SwiperSlide } from "swiper/react";
+
 import "@/css/swiper.css";
 import {
   getAuthorList,
@@ -15,38 +15,36 @@ import {
   setCurrentAuthor,
 } from "@/modules/redux/ducks/author";
 
-const SlideItemComponent = ({ item, callback }) => {
-  return (
-    <SwiperSlide
-      className="swiper-slide"
-      style={{
-        width: "408px",
-        marginRight: "15px",
-      }}
-    >
-      <div className="box_profile">
-        <Link
-          to={{
-            pathname: "/author/post",
-          }}
-          state={{ item }}
-          onClick={callback}
-        >
-          <ImgTmpProfileBgDiv
-            className="pf_thumb"
-            bgImg={item.backgroundImage}
-          />
-          <div className="pf_txt">
-            <div className="icon">
-              <img src={item.profileImage} alt="profile" />
+import SwiperContainer from "@/components/dashboard/Swiper";
+import { SwiperSlide } from "swiper/react";
+
+const renderItems = (items) => {
+  return items.map((item, index) => {
+    return (
+      <SwiperSlide key={index} className="cx">
+        <div className="box_profile">
+          <Link
+            to={{
+              pathname: "/author/post",
+            }}
+            state={{ item }}
+          >
+            <ImgTmpProfileBgDiv
+              className="pf_thumb"
+              bgImg={item.backgroundImage}
+            />
+            <div className="pf_txt">
+              <div className="icon">
+                <img src={item.profileImage} alt="profile" />
+              </div>
+              <p className="h1">{item.nickname}</p>
+              <p className="t1">{item.description}</p>
             </div>
-            <p className="h1">{item.nickname}</p>
-            <p className="t1">{item.description}</p>
-          </div>
-        </Link>
-      </div>
-    </SwiperSlide>
-  );
+          </Link>
+        </div>
+      </SwiperSlide>
+    );
+  });
 };
 
 const RecommentAuthorComponent = ({ item, callback }) => {
@@ -108,25 +106,27 @@ const List = () => {
         </div>
 
         <div className="slider_profile">
-          <div className="swiper-container mySwiper1">
-            <Swiper className="swiper-wrapper">
-              {/* 최근 확인한 작가 */}
-              {recents &&
-                recents.map((item, index) => (
-                  <SlideItemComponent
-                    key={index}
-                    item={item}
-                    callback={() => handleCurrentAuthor(item)}
-                  />
-                ))}
-            </Swiper>
-          </div>
-          <button type="button" className="swiper-button-prev my1">
-            <FontAwesomeIcon icon={faCircleChevronLeft} />
-          </button>
-          <button type="button" className="swiper-button-next my1">
-            <FontAwesomeIcon icon={faCircleChevronRight} />
-          </button>
+          {recents && (
+            <SwiperContainer
+              className={"mySwiper1"}
+              slidesPerView={5}
+              breakpoints={{
+                960: {
+                  slidesPerView: 1.75,
+                  spaceBetween: 8,
+                },
+                961: {
+                  slidesPerView: 3,
+                  spaceBetween: 15,
+                },
+                1400: {
+                  slidesPerView: 5,
+                  spaceBetween: 30,
+                },
+              }}
+              list={() => renderItems(recents)}
+            />
+          )}
         </div>
 
         <div className="hd_titbox">
