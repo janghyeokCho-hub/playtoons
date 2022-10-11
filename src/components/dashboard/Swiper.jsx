@@ -1,10 +1,13 @@
-import React, { useRef } from 'react';
-import { Swiper } from 'swiper/react';
-import SwiperCore, { Navigation, } from 'swiper';
+import React, { useRef } from "react";
+import { Swiper } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper";
 import "@/css/swiper.css";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronLeft, faCircleChevronRight } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleChevronLeft,
+  faCircleChevronRight,
+} from "@fortawesome/pro-solid-svg-icons";
 
 /**
 *
@@ -65,29 +68,34 @@ export default function SwiperContainer(props) {
           prevEl: prevRef.current,
         }}
         breakpoints={props?.breakpoints}
-        onSlideChange={() => {
-
-        }}
-        onInit={(swiper) => {
-          
-        }}
+        onSlideChange={() => {}}
+        onInit={(swiper) => {}}
         onSwiper={(swiper) => {
           // console.log('swiper', swiper);
-        }} 
+        }}
         onUpdate={(swiper) => {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
-        }}>
-          
-        {
-          props?.list?.()
-        }
-        
+        }}
+      >
+        {props?.list?.()}
       </Swiper>
-      
+
       {/* .lst_comic1 .swiper-button-next 이런식으로 common.css에 정의되어 있어야 스타일이 먹음*/}
-      <button ref={prevRef} type="button" className="swiper-button-prev my1 hide-m"><FontAwesomeIcon icon={faCircleChevronLeft} /></button>
-      <button ref={nextRef} type="button" className="swiper-button-next my1 hide-m"><FontAwesomeIcon icon={faCircleChevronRight} /></button>
+      <button
+        ref={prevRef}
+        type="button"
+        className="swiper-button-prev my1 hide-m"
+      >
+        <FontAwesomeIcon icon={faCircleChevronLeft} />
+      </button>
+      <button
+        ref={nextRef}
+        type="button"
+        className="swiper-button-next my1 hide-m"
+      >
+        <FontAwesomeIcon icon={faCircleChevronRight} />
+      </button>
     </>
-  )
+  );
 }
