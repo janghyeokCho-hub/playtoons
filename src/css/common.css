@@ -378,9 +378,6 @@ textarea:focus {
 .inp_txt.sch input::-ms-input-placeholder {
   color: #909DAB;
 }
-textarea.textarea1 {    /* TODO 삭제 */
-  border-color: #c3cad2;
-}
 /*간격*/
 .p0 {
   padding: 0 !important;
@@ -1428,9 +1425,10 @@ body {
 }
 .pagination li a {
   display: inline-block;
-  width: 29px;
-  border: 1px solid #d5dce0;
-  background-color: #f9f9f9;
+  width: 38px;                    /* 2022.10.05 lhk- pagination css 추가 */
+  color: rgba(144,157,171,1);
+  font-size: 24px;
+  font-weight: 350;
   line-height: 32px;
   vertical-align: middle;
 }
@@ -1454,7 +1452,7 @@ body {
   border-color: #000;
   background-color: #fff;
 }
-.pagination li.active a{    /* 2022.10.05 lhk pagination css 추가 */
+.pagination li.active a{    /* 2022.10.05 lhk- pagination css 추가 */
   border-radius: 10px;
   background-color: rgba(237,238,250, 1);
   color: #394bc2;
@@ -2214,7 +2212,7 @@ body {
 }
 .swiper-button-prev:after,
 .swiper-button-next:after {
-  content: none;
+  content: none !important;
 }
 .swiper-button-prev,
 .swiper-button-next {
@@ -2226,15 +2224,17 @@ body {
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
-  color: #fff;
-  background-color: #272d33;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  color: #fff !important;
+  background-color: #272d33 !important;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5) !important;
 }
-.swiper-button-prev {
-  left: -25px;
+.swiper-button-prev { /* 2022.09.20 button css 적용 */
+  left: 0 !important;
+  transform: translate(-50%, 0);
 }
-.swiper-button-next {
-  right: -25px;
+.swiper-button-next { /* 2022.09.20 button css 적용 */
+  right: 0 !important;
+  transform: translate(50%, 0);
 }
 .slide_st.swiper-button-prev,
 .slide_st.swiper-button-next {
@@ -5509,7 +5509,7 @@ body {
   td.td_btns .btn-pk:hover {
     background: none;
   }
-  td.td_btns .btn-pk:after {
+  td.td_btns .btn-pk > span { /* :after 를 > span으로 변경 */
     content: "\f105";
     font-family: "Font Awesome 6 Pro";
     font-weight: 900;
