@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Provider } from "react-redux";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider, useDispatch } from "react-redux";
+import { useLocation, BrowserRouter, Routes, Route } from "react-router-dom";
 import configureStore, { sagaMiddleware } from "@REDUX/store";
 import rootSaga from "@REDUX/saga";
 import { PersistGate } from "redux-persist/integration/react";
@@ -25,15 +25,31 @@ export const store = configureStore();
 sagaMiddleware.run(rootSaga);
 
 function App() {
+  /*
+  나중에 home 으로 옮기기
+  const dispatch = useDispatch();
+  const location = useLocation();
+  console.log("location : ", location);
+
+  const searchParams = new URLSearchParams(location.search);
+  const code = searchParams.get("code");
+
+  useEffect(() => {
+    if (code) {
+      console.log("code : ", code);
+    }
+  }, [dispatch, code]);
+  */
+
   return (
     <Provider store={store}>
       <PersistGate persistor={store.persistor}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/account/*" element={<Account />} />
             <Route path="/webtoon/*" element={<Webtoon />} />
             <Route path="/novel/*" element={<Novel />} />
+            <Route path="/account/*" element={<Account />} />
             <Route path="/series/*" element={<Series />} />
             <Route path="/post/*" element={<Post />} />
             <Route path="/author/*" element={<Author />} />

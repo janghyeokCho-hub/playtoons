@@ -1,24 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleXmark,
   faHeart,
   faCircleChevronLeft,
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import SearchPopup from "./SearchPopup";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const Webtoon = () => {
+  SwiperCore.use([Navigation, Pagination]);
+
   const navigate = useNavigate();
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
   const [isSelectShow, setIsSelectShow] = useState(false);
   const [selectMenu, setSelectMenu] = useState("おすすめ順");
   const [selectTab, setSelectTab] = useState("すべて");
   const [selectCategorys, setSelectCategorys] = useState([]);
+
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
   const handleSelectMenu = (menu) => {
     setIsSelectShow(!isSelectShow);
@@ -29,113 +35,115 @@ const Webtoon = () => {
     setSelectTab(tab);
   };
 
+  const renderItems = (items) => {
+    return items.map((item, index) => {
+      return (
+        <SwiperSlide key={index} className="cx">
+          <Link to="/">
+            <ContBgDiv className="cont" bgImg={item.backgroundImg}>
+              <div>
+                <p className="b1">
+                  <span className="i-txt">{item.itemName}</span>
+                </p>
+                <p className="h1">{item.title}</p>
+                <p className="t1">{item.description}</p>
+                <p className="t2">{item.author}</p>
+              </div>
+            </ContBgDiv>
+            <div className="imgs">
+              <img src={item.previewImg} alt="이미지" />
+            </div>
+          </Link>
+        </SwiperSlide>
+      );
+    });
+  };
+
+  const recommendItems = [
+    {
+      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
+      previewImg: require("@IMAGES/tmp_banner_img.png"),
+      itemName: "おすすめ作品",
+      title: "1. かまちょマン",
+      description: "超能力ストリーマー",
+      ahthor: "SIKBONG / SUKOONCE",
+    },
+    {
+      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
+      previewImg: require("@IMAGES/tmp_banner_img.png"),
+      itemName: "おすすめ作品",
+      title: "2. かまちょマン",
+      description: "超能力ストリーマー",
+      ahthor: "SIKBONG / SUKOONCE",
+    },
+    {
+      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
+      previewImg: require("@IMAGES/tmp_banner_img.png"),
+      itemName: "おすすめ作品",
+      title: "3. かまちょマン",
+      description: "超能力ストリーマー",
+      ahthor: "SIKBONG / SUKOONCE",
+    },
+  ];
+
   return (
     <>
       <div className="contents">
         <div className="inr-c">
           <div className="lst_banner">
-            <div className="swiper-container mySwiper1">
-              <div className="swiper-wrapper">
-                <div className="item swiper-slide">
-                  <a href="#">
-                    <ContBgDiv
-                      className="cont"
-                      bgImg={require("@IMAGES/tmp_banner_bg.png")}
-                    >
-                      <div>
-                        <p className="b1">
-                          <span className="i-txt">おすすめ作品</span>
-                        </p>
-                        <p className="h1">かまちょマン</p>
-                        <p className="t1">超能力ストリーマー</p>
-                        <p className="t2">SIKBONG / SUKOONCE</p>
-                      </div>
-                    </ContBgDiv>
-                    <div className="imgs">
-                      <img
-                        src={require("@IMAGES/tmp_banner_img.png")}
-                        alt="이미지"
-                      />
-                    </div>
-                  </a>
-                </div>
-                <div className="item swiper-slide">
-                  <a href="#">
-                    <ContBgDiv
-                      className="cont"
-                      bgImg={require("@IMAGES/tmp_banner_bg.png")}
-                    >
-                      <div>
-                        <p className="b1">
-                          <span className="i-txt">おすすめ作品</span>
-                        </p>
-                        <p className="h1">かまちょマン</p>
-                        <p className="t1">阿修羅の力を発揮せよ…！</p>
-                        <p className="t2">SIKBONG / SUKOONCE</p>
-                      </div>
-                    </ContBgDiv>
-                    <div className="imgs">
-                      <img
-                        src={require("@IMAGES/tmp_banner_img.png")}
-                        alt="이미지"
-                      />
-                    </div>
-                  </a>
-                </div>
-                <div className="item swiper-slide">
-                  <a href="#">
-                    <ContBgDiv
-                      className="cont"
-                      bgImg={require("@IMAGES/tmp_banner_bg.png")}
-                    >
-                      <div>
-                        <p className="b1">
-                          <span className="i-txt">おすすめ作品</span>
-                        </p>
-                        <p className="h1">かまちょマン</p>
-                        <p className="t1">超能力ストリーマー</p>
-                        <p className="t2">SIKBONG / SUKOONCE</p>
-                      </div>
-                    </ContBgDiv>
-                    <div className="imgs">
-                      <img
-                        src={require("@IMAGES/tmp_banner_img.png")}
-                        alt="이미지"
-                      />
-                    </div>
-                  </a>
-                </div>
-                <div className="item swiper-slide">
-                  <a href="#">
-                    <ContBgDiv
-                      className="cont"
-                      bgImg={require("@IMAGES/tmp_banner_bg.png")}
-                    >
-                      <div>
-                        <p className="b1">
-                          <span className="i-txt">おすすめ作品</span>
-                        </p>
-                        <p className="h1">かまちょマン</p>
-                        <p className="t1">超能力ストリーマー</p>
-                        <p className="t2">SIKBONG / SUKOONCE</p>
-                      </div>
-                    </ContBgDiv>
-                    <div className="imgs">
-                      <img
-                        src={require("@IMAGES/tmp_banner_img.png")}
-                        alt="이미지"
-                      />
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
+            <Swiper
+              className="swiper-container mySwiper1"
+              slidesPerView={3}
+              slidesPerGroup={1}
+              spaceBetween={12}
+              centeredSlides={true}
+              loop={true}
+              observer={true}
+              observeParents={true}
+              pagination={{
+                el: ".swiper-pagination",
+                clickable: true,
+              }}
+              navigation={{
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+              }}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1.3,
+                  spaceBetween: 16,
+                },
+                1000: {
+                  slidesPerView: 2,
+                  spaceBetween: 15,
+                },
+                1400: {
+                  slidesPerView: 3,
+                  spaceBetween: 12,
+                },
+              }}
+              onUpdate={(swiper) => {
+                nextRef?.current?.classList?.add("slide_st");
+                prevRef?.current?.classList?.add("slide_st");
+              }}
+            >
+              {renderItems(recommendItems)}
+            </Swiper>
 
             <div className="swiper-pagination my1"></div>
-            <button type="button" className="swiper-button-prev bt_mainSlider1">
+
+            <button
+              ref={prevRef}
+              type="button"
+              className="swiper-button-prev my1 hide-m"
+            >
               <FontAwesomeIcon icon={faCircleChevronLeft} />
             </button>
-            <button type="button" className="swiper-button-next bt_mainSlider1">
+            <button
+              ref={nextRef}
+              type="button"
+              className="swiper-button-next my1 hide-m"
+            >
               <FontAwesomeIcon icon={faCircleChevronRight} />
             </button>
           </div>

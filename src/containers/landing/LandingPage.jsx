@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import Header from "@/components/Header";
@@ -12,17 +12,6 @@ import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
 
 const LandingPage = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const code = searchParams.get("code");
-
-  useEffect(() => {
-    if (code) {
-      dispatch();
-    }
-  }, [dispatch, code]);
-
   const vogueItems = [
     {
       preview: require("@IMAGES/tmp_comic2.jpg"),
