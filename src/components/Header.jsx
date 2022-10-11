@@ -87,7 +87,7 @@ const Header = ({
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
 
-            <a href="/account" className="btn_tugo btn-pk n blue bdrs">
+            <a href="/account" className="btn_log btn-pk n blue bdrs">
               ログイン
             </a>
           </div>
@@ -131,7 +131,7 @@ const Header = ({
 
             <Link
               to="/dashboard/post"
-              className="btn_tugo btn-pk n blue bdrs hide-m"
+              className="btn_log btn-pk n blue bdrs hide-m"
             >
               <span>投稿</span>
             </Link>
@@ -171,14 +171,14 @@ const Header = ({
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </button>
               {/*<!-- 모바일 검색 버튼 -->*/}
-              <a href="#" className="btn_tugo btn-pk n blue bdrs">
+              <Link href="#" className="btn_log btn-pk n blue bdrs">
                 <span>投稿</span>
-              </a>
-              <a href="#" className="btn_profile">
+              </Link>
+              <Link href="#" className="btn_profile">
                 <ImgProfileSpan bgImg={require("@IMAGES/img_profile.png")}>
                   마이페이지
                 </ImgProfileSpan>
-              </a>
+              </Link>
             </div>
           </div>
           <div className="inr-c view-m">

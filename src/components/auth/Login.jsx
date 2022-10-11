@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import useActions from "@/hook/useActions";
@@ -101,6 +101,8 @@ const Login = () => {
       navigate("/");
     }
   }, [isLogined]);
+
+  const handleSNSLogin = () => {};
 
   return (
     <>

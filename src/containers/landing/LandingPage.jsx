@@ -1,22 +1,314 @@
-import React, { useCallback } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
+import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { logoutRequest } from "@/modules/redux/ducks/login";
 import Header from "@/components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleXmark,
-  faHeart,
-  faCircleChevronLeft,
-  faCircleChevronRight,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faCircleXmark, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import Footer from "@COMPONENTS/Footer";
+import { useEffect } from "react";
+
+import SwiperContainer from "@/components/dashboard/Swiper";
+import { SwiperSlide } from "swiper/react";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log(location);
+  const searchParams = new URLSearchParams(location.search);
+  const code = searchParams.get("code");
+
+  useEffect(() => {
+    if (code) {
+      dispatch();
+    }
+  }, [dispatch, code]);
+
+  const vogueItems = [
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+  ];
+  const latestItems = [
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+  ];
+  const recommendedWebtoonItems = [
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+  ];
+  const recommendedNovelItems = [
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+    {
+      preview: require("@IMAGES/tmp_comic2.jpg"),
+      like: "1.2k",
+      category: "ウェブトゥーン",
+      title:
+        "大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル",
+      studio: "Studio reBorn",
+      episodes: "43",
+    },
+  ];
+
+  const renderItems = (items) => {
+    return items.map((item, index) => {
+      return (
+        <SwiperSlide key={index} className="cx">
+          <Link to="/">
+            <div className="cx_thumb">
+              <span>
+                <img src={item.preview} alt="사진" />
+              </span>
+              <p className="t_like">
+                <FontAwesomeIcon icon={faHeart} />
+                <span>{item.like}</span>
+              </p>
+            </div>
+            <div className="cx_txt">
+              <p className="t1 c-blue">{item.category}</p>
+              <p className="h1">{item.title}</p>
+              <p className="t1">{item.studio}</p>
+              <p className="t1">{item.episodes}話</p>
+            </div>
+          </Link>
+        </SwiperSlide>
+      );
+    });
+  };
 
   return (
     <>
@@ -65,213 +357,25 @@ const LandingPage = () => {
           <div className="inr-c">
             <h2 className="m_tit1">🔥人気</h2>
             <div className="lst_comic1 long">
-              <div id="mainSlider1" className="swiper-container mySwiper1">
-                <div className="swiper-wrapper">
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="swiper-button-prev bt_mainSlider1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                type="button"
-                className="swiper-button-next bt_mainSlider1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
+              <SwiperContainer
+                className={"mySwiper1"}
+                slidesPerView={5}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 3,
+                    spaceBetween: 8,
+                  },
+                  961: {
+                    slidesPerView: 4,
+                    spaceBetween: 15,
+                  },
+                  1280: {
+                    slidesPerView: 5,
+                    spaceBetween: 30,
+                  },
+                }}
+                list={() => renderItems(vogueItems)}
+              />
             </div>
           </div>
         </div>
@@ -280,212 +384,25 @@ const LandingPage = () => {
           <div className="inr-c">
             <h2 className="m_tit1">⚡最新</h2>
             <div className="lst_comic1 long">
-              <div id="mainSlider2" className="swiper-container mySwiper1">
-                <div className="swiper-wrapper">
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="swiper-button-prev bt_mainSlider2"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                type="button"
-                className="swiper-button-next bt_mainSlider2"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
+              <SwiperContainer
+                className={"mySwiper1"}
+                slidesPerView={5}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 3,
+                    spaceBetween: 8,
+                  },
+                  961: {
+                    slidesPerView: 4,
+                    spaceBetween: 15,
+                  },
+                  1280: {
+                    slidesPerView: 5,
+                    spaceBetween: 15,
+                  },
+                }}
+                list={() => renderItems(latestItems)}
+              />
             </div>
           </div>
         </div>
@@ -770,212 +687,25 @@ const LandingPage = () => {
           <div className="inr-c">
             <h2 className="m_tit1">🌈おすすめウェブトゥーン</h2>
             <div className="lst_comic1 long">
-              <div id="mainSlider3" className="swiper-container mySwiper1">
-                <div className="swiper-wrapper">
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="swiper-button-prev bt_mainSlider3"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                type="button"
-                className="swiper-button-next bt_mainSlider3"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
+              <SwiperContainer
+                className={"mySwiper1"}
+                slidesPerView={5}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 3,
+                    spaceBetween: 8,
+                  },
+                  961: {
+                    slidesPerView: 4,
+                    spaceBetween: 15,
+                  },
+                  1280: {
+                    slidesPerView: 5,
+                    spaceBetween: 15,
+                  },
+                }}
+                list={() => renderItems(recommendedWebtoonItems)}
+              />
             </div>
           </div>
         </div>
@@ -984,212 +714,25 @@ const LandingPage = () => {
           <div className="inr-c">
             <h2 className="m_tit1">📝おすすめウェブ小説</h2>
             <div className="lst_comic1 long">
-              <div id="mainSlider4" className="swiper-container mySwiper1">
-                <div className="swiper-wrapper">
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                  <div className="cx swiper-slide">
-                    <a href="#">
-                      <div className="cx_thumb">
-                        <span>
-                          <img
-                            src={require("@IMAGES/tmp_comic2.jpg")}
-                            alt="사진"
-                          />
-                        </span>
-                        <p className="t_like">
-                          <FontAwesomeIcon icon={faHeart} />
-                          <span>1.2k</span>
-                        </p>
-                      </div>
-                      {/*<!-- 202209 ico수정 -->*/}
-                      <div className="cx_txt">
-                        <p className="t1 c-blue">ウェブトゥーン</p>
-                        <p className="h1">
-                          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-                        </p>
-                        <p className="t1">Studio reBorn</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                        <p className="t1">43話</p>
-                        {/*<!-- 202210 한줄로 되어있으면 두줄로  -->*/}
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="button"
-                className="swiper-button-prev bt_mainSlider4"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                type="button"
-                className="swiper-button-next bt_mainSlider4"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
+              <SwiperContainer
+                className={"mySwiper1"}
+                slidesPerView={5}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 3,
+                    spaceBetween: 8,
+                  },
+                  961: {
+                    slidesPerView: 4,
+                    spaceBetween: 15,
+                  },
+                  1280: {
+                    slidesPerView: 5,
+                    spaceBetween: 15,
+                  },
+                }}
+                list={() => renderItems(recommendedNovelItems)}
+              />
             </div>
           </div>
         </div>

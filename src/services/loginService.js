@@ -12,6 +12,14 @@ export const loginRequest = (params) => {
   }
 };
 
+export const loginSNSRequest = (params) => {
+  try {
+    return apiAuthServer("get", "/auth/login/temp", params);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
 /**
  * Login Password Check
  * @param {string} password

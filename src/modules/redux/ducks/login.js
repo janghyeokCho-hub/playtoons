@@ -6,6 +6,13 @@ import produce from "immer";
 /* --- Action Types --- */
 export const [LOGIN_REQUEST, LOGIN_REQUEST_SUCCESS, LOGIN_REQUEST_FAILURE] =
   createRequestActionTypes("login/REQUEST");
+
+export const [
+  SNS_LOGIN_REQUEST,
+  SNS_LOGIN_REQUEST_SUCCESS,
+  SNS_LOGIN_REQUEST_FAILURE,
+] = createRequestActionTypes("login/SNS_LOGIN_REQUEST");
+
 export const SYNC = "login/SYNC";
 
 export const [LOGOUT_REQUEST, LOGOUT_REQUEST_SUCCESS, LOGOUT_REQUEST_FAILURE] =
@@ -15,6 +22,7 @@ export const SET_USER_INFO = "login/GET_USER_INFO";
 
 /* --- Actions --- */
 export const loginRequest = createAction(LOGIN_REQUEST);
+export const snsLoginRequest = createAction(SNS_LOGIN_REQUEST);
 export const logoutRequest = createAction(LOGOUT_REQUEST);
 export const setUserInfo = createAction(SET_USER_INFO);
 
@@ -55,6 +63,19 @@ const login = handleActions(
         ...(action.errStatus && { errStatus: action.errStatus }),
         ...(action.errMessage && { errMessage: action.errMessage }),
       };
+    },
+    [SNS_LOGIN_REQUEST_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        /** SUCCESS 처리 */
+        draft.email = action.payload.email || "";
+        draft.accessToken = action.payload.accessToken;
+        draft.authFail = false;
+        draft.errMessage = null;
+        draft.errStatus = null;
+        draft.isLogined = true;
+        draft.isSns = "google"; // sns type
+        draft.isSNSLogin = true;
+      });
     },
     [LOGOUT_REQUEST_SUCCESS]: (state, _) => {
       return produce(state, (_) => {
