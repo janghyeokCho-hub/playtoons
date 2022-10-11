@@ -1,11 +1,12 @@
 import { combineReducers } from "redux";
-import alertModal from "./modal";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 import login from "./login";
 import loading from "./loading";
 import author from "./author";
+import post from "./post";
+import alertModal from "./modal";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
   loading,
   alertModal,
   author,
+  post,
 });
 
 const rootReducer = (state, action) => {

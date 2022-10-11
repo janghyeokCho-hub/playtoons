@@ -23,9 +23,24 @@ export const setPostToServer = async (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getPostDetailFromServer = async (id) => {
+export const getPostDetailFromServer = async (params) => {
   try {
-    return await apiServer('get', `/post/${id}`);
+    return await apiServer('get', `/post/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
+   post edit 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const editPostToServer = async (params) => {
+  try {
+    return await apiServer('patch', '/post', params);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

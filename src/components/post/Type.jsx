@@ -1,5 +1,6 @@
 import { getPostTypeListFromServer } from "@/services/dashboardService";
 import React, { useEffect } from "react";
+import { useImperativeHandle, forwardRef } from 'react';
 import { useState } from "react";
 
 /**
@@ -19,7 +20,7 @@ import { useState } from "react";
 * @param {*} props
 * @return
 */
-export default function Type(props, ref) {
+export default forwardRef( function Type(props, ref) {
   const {name, callback} = props;
   const [stateList, setStateList] = useState(undefined);
 
@@ -76,6 +77,15 @@ export default function Type(props, ref) {
     });
   };
 
+  
+  
+  useImperativeHandle(ref, () => ({
+    getTypeList: () => {
+      console.log('getTypeList');
+      return stateList;
+    }
+  }));
+
   useEffect(() => {
     getType();
   }, []);
@@ -87,4 +97,4 @@ export default function Type(props, ref) {
       }
     </>
   );
-}
+})

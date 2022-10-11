@@ -16,6 +16,10 @@ import { SwiperSlide } from "swiper/react";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
 import Tag from "@/components/dashboard/Tag";
+import { useParams } from "react-router-dom";
+import { getPostDetailFromServer } from "@/services/postService";
+import { useDispatch, useSelector } from "react-redux";
+import post, { getPostDetailAction } from "@/modules/redux/ducks/post";
 
 const text = {
   post_edit: "投稿を修正",
@@ -131,31 +135,23 @@ const tempData = {
   },
 };
 
-export default function UploadPost(props) {
+export default function PostEdit(props) {
   const [stateType, setStateType] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [statePostInfo, setStatePostInfo] = useState(undefined);
+  const dispatch = useDispatch();
+  const postInfo = useSelector( ({post}) => post?.post );
+  const params = useParams('id');
   const refContents = useRef();
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
+  const refType = useRef();
+  const refFrom = useRef();
 
 
-  const renderTimelineElements = () => {
-    return statePostInfo?.timeline.list.map((item, index) => {
-      return (
-        <SwiperSlide key={index} className="cx swiper-slide" onClick={handleClickItemTimeline} id={item.id}>
-          <div >
-            <div className="cx_thumb">
-              {
-                item.preview !== undefined &&
-                  <span><img src={item.preview} alt="timeline"/></span>
-              }
-            </div>
-          </div>
-        </SwiperSlide>
-      );
-    });
-  };
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleClickType = (typeItem) => {
     console.log('ItemType', typeItem);
@@ -189,12 +185,45 @@ export default function UploadPost(props) {
     console.log('Register', event);
     return false;
   };
+
+  //==============================================================================
+  // Hook & render
+  //==============================================================================
+
+
+  const renderTimelineElements = () => {
+    return statePostInfo?.timeline.list.map((item, index) => {
+      return (
+        <SwiperSlide key={index} className="cx swiper-slide" onClick={handleClickItemTimeline} id={item.id}>
+          <div >
+            <div className="cx_thumb">
+              {
+                item.preview !== undefined &&
+                  <span><img src={item.preview} alt="timeline"/></span>
+              }
+            </div>
+          </div>
+        </SwiperSlide>
+      );
+    });
+  };
   
   useEffect(() => {
     //temp
     setStateSupportorList(supportorList);
-    setStatePostInfo(tempData);
+    dispatch( getPostDetailAction(params) );
   }, []);
+  
+  useEffect(() => {
+    setStatePostInfo({
+      ...tempData,
+      title: postInfo.title
+    });
+  }, [dispatch, postInfo]);
+
+  useEffect(() => {
+    
+  }, [statePostInfo]);
 
   return (
     <PostContainer
@@ -205,7 +234,7 @@ export default function UploadPost(props) {
       <div className="inr-c">
         <div className="box_area bdn">
           
-          <form action="">
+          <form ref={refFrom}>
             <section className="bbs_write">
               <div className="hd_titbox">
                 <h2 className="h_tit1">{text.post_edit}</h2>
@@ -220,6 +249,7 @@ export default function UploadPost(props) {
                 <h3 className="tit1">{text.type}</h3>
                 <div className="lst_txchk">
                   <Type
+                    ref={refType}
                     name={'typeId'}
                     callback={handleClickType}
                     />

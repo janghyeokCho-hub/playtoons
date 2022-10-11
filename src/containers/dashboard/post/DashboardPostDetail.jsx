@@ -11,6 +11,8 @@ import tempProfile from '@IMAGES/img_profile.png';
 import { Link, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
 import { getPostDetailFromServer } from "@/services/postService";
+import { useDispatch, useSelector } from "react-redux";
+import { getPostDetailAction } from "@/modules/redux/ducks/post";
 
 
 const text = {
@@ -77,20 +79,10 @@ const tempReactionList = {
 export default function DashboardPostDetail() {
   const [stateReactionList, setStateReactionList] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
+  const post = useSelector(({ post }) => post?.post);
+  const dispatch = useDispatch();
   const params = useParams('id');
 
-  const getPostDetail = async () => {
-    const {status, data} = await getPostDetailFromServer(params.id);
-    console.log('getPostDetail', status, data);
-    
-    if( status === 200 ){
-      //set information to view page
-    }
-    else{
-      
-    }
-    
-  };
 
   const handleClickComentRegister = (event) => {
     console.log('ComentRegister', event);
@@ -135,8 +127,16 @@ export default function DashboardPostDetail() {
     setStateData(tempData);
     setStateReactionList(tempReactionList.list);
 
-    getPostDetail();
+    
+    dispatch( getPostDetailAction(params) );
   }, []);
+
+  useEffect(() => {
+    setStateData({
+      ...tempData,
+      title: post?.title
+    });
+  }, [dispatch, post]);
 
   return (
     <Container

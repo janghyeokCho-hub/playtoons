@@ -4,7 +4,7 @@ import produce from "immer";
 
 /* --- Action Types --- */
 export const [POPUP, POPUP_SHOW, POPUP_HIDE] =
-  createRequestActionTypes("login/REQUEST");
+  createRequestActionTypes("popup");
 
 /* --- Actions --- */
 export const loginRequest = createAction(POPUP);
