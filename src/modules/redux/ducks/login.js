@@ -7,11 +7,8 @@ import produce from "immer";
 export const [LOGIN_REQUEST, LOGIN_REQUEST_SUCCESS, LOGIN_REQUEST_FAILURE] =
   createRequestActionTypes("login/REQUEST");
 
-export const [
-  SNS_LOGIN_REQUEST,
-  SNS_LOGIN_REQUEST_SUCCESS,
-  SNS_LOGIN_REQUEST_FAILURE,
-] = createRequestActionTypes("login/SNS_LOGIN_REQUEST");
+export const [GET_TEMP_TOKEN, GET_TEMP_TOKEN_SUCCESS, GET_TEMP_TOKEN_FAILURE] =
+  createRequestActionTypes("login/GET_TEMP_TOKEN");
 
 export const SYNC = "login/SYNC";
 
@@ -22,7 +19,7 @@ export const SET_USER_INFO = "login/GET_USER_INFO";
 
 /* --- Actions --- */
 export const loginRequest = createAction(LOGIN_REQUEST);
-export const snsLoginRequest = createAction(SNS_LOGIN_REQUEST);
+export const getTempTokenRequest = createAction(GET_TEMP_TOKEN);
 export const logoutRequest = createAction(LOGOUT_REQUEST);
 export const setUserInfo = createAction(SET_USER_INFO);
 
@@ -64,9 +61,10 @@ const login = handleActions(
         ...(action.errMessage && { errMessage: action.errMessage }),
       };
     },
-    [SNS_LOGIN_REQUEST_SUCCESS]: (state, action) => {
+    [GET_TEMP_TOKEN_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
+        console.log("GET_TEMP_TOKEN_SUCCESS : ", action.payload);
         draft.email = action.payload.email || "";
         draft.accessToken = action.payload.accessToken;
         draft.authFail = false;

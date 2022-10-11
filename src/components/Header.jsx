@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +10,7 @@ import {
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
 import { getUserInfo as getUserInfoAPI } from "@API/loginService";
-import { setUserInfo } from "@/modules/redux/ducks/login";
+import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
 
 const Header = ({
   type,
@@ -21,12 +21,23 @@ const Header = ({
   isMenus = true,
 }) => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const userInfo = useSelector(({ login }) => login.userInfo);
   const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState("login");
   const [like, setLike] = useState(false);
+
+  const searchParams = new URLSearchParams(location.search);
+  const code = searchParams.get("code");
+
+  useEffect(() => {
+    if (!accessToken && code) {
+      console.log("useEffect code : ", code);
+      dispatch(getTempTokenRequest({ code: code }));
+    }
+  }, [dispatch, code, accessToken]);
 
   useEffect(() => {
     async function getUserInfo() {

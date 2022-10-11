@@ -12,7 +12,7 @@ export const loginRequest = (params) => {
   }
 };
 
-export const loginSNSRequest = (params) => {
+export const getTempTokenRequest = (params) => {
   try {
     return apiAuthServer("get", "/auth/login/temp", params);
   } catch (e) {

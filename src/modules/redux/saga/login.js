@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import {
   LOGIN_REQUEST,
-  SNS_LOGIN_REQUEST,
+  GET_TEMP_TOKEN,
   LOGOUT_REQUEST,
   SYNC,
 } from "@REDUX/ducks/login";
@@ -56,7 +56,7 @@ function createLoginRequestSaga(loginType, syncType) {
 
 const loginRequestSaga = createLoginRequestSaga(LOGIN_REQUEST, SYNC);
 
-function createSNSLoginRequestSaga(loginType) {
+function createGetTempTokenRequestSaga(loginType) {
   const SUCCESS = `${loginType}_SUCCESS`;
   const FAILURE = `${loginType}_FAILURE`;
 
@@ -65,7 +65,10 @@ function createSNSLoginRequestSaga(loginType) {
       try {
         yield put(startLoading(loginType));
 
-        const response = yield call(loginApi.loginSNSRequest, action.payload); // code , snstype
+        const response = yield call(
+          loginApi.getTempTokenRequest,
+          action.payload
+        ); // code , snstype
         // 로그인 성공 시 로컬스토리지에 token 값 저장
         if (response?.status === 200) {
           const { accessToken } = response.data;
@@ -100,7 +103,7 @@ function createSNSLoginRequestSaga(loginType) {
   };
 }
 
-const snsLoginRequestSaga = createSNSLoginRequestSaga(LOGIN_REQUEST);
+const getTempTokenRequestSaga = createGetTempTokenRequestSaga(LOGIN_REQUEST);
 
 function createLogoutRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
@@ -108,8 +111,14 @@ function createLogoutRequestSaga(type) {
 
   return function* (action) {
     try {
-      // REQUEST 에서 API 처리하고, redux store 처리는 SUCCESS에서
-      yield put({ type: SUCCESS });
+      const response = yield call(loginApi.getTempTokenRequest(action.payload));
+      if (response.status === 200) {
+        const { accessToken } = response.data;
+        yield put({
+          type: SUCCESS,
+          payload: { accessToken: accessToken },
+        });
+      }
     } catch (e) {
       console.dir(e);
       yield call(exceptionHandler, { e: e, redirectError: false });
@@ -127,6 +136,6 @@ const logoutRequestSaga = createLogoutRequestSaga(LOGOUT_REQUEST);
 
 export default function* loginSaga() {
   yield takeLatest(LOGIN_REQUEST, loginRequestSaga);
-  yield takeLatest(SNS_LOGIN_REQUEST, snsLoginRequestSaga);
+  yield takeLatest(GET_TEMP_TOKEN, getTempTokenRequestSaga);
   yield takeLatest(LOGOUT_REQUEST, logoutRequestSaga);
 }
