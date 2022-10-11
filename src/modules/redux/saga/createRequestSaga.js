@@ -46,3 +46,29 @@ export const exceptionHandler = function* ({ e, redirectError }) {
     console.dir(e);
   }
 };
+
+export function createSaga(type, func) {
+  console.log("createSaga", type);
+
+  return function* (action) {
+    try {
+      yield put(startLoading(type));
+
+      func(type);
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: `${type}_FAILURE`,
+        payload: action.payload,
+        error: true,
+        errStatus: e.response.status,
+        errMessage: e.response.data.message,
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
