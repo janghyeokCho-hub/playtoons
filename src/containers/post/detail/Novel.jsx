@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,6 +14,7 @@ import "swiper/css";
 
 const Novel = () => {
   const navigate = useNavigate();
+  const [isLock, setIsLock] = useState(false);
 
   return (
     <>
@@ -55,6 +56,20 @@ const Novel = () => {
           独り言のように呟く。僕は、なぜか物凄く嫌な予感がした。根拠のない動物的な勘だ。
           果たして、当銘さんはこともなげに言ってのけた。
           「付き合っていたんだよ。そちらの課長と」
+          {isLock && (
+            <div class="area_lock">
+              <div>
+                <p>
+                  <FontAwesomeIcon icon={faLock} />
+                </p>
+                <p>500PC /月</p>
+                <p>クリエイターを支援してコンテンツ解禁！</p>
+                <a href="#" class="btn-pk s blue bdrs">
+                  <span>支援する</span>
+                </a>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="area_detail3">
