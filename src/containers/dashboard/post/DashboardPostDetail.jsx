@@ -10,6 +10,7 @@ import tempProfile from '@IMAGES/img_profile.png';
 
 import { Link, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
+import { getPostDetailFromServer } from "@/services/postService";
 
 
 const text = {
@@ -33,14 +34,14 @@ const text = {
 };
 
 const tempData = {
-  name: "シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク",
+  series: "シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク",
   title: "終わらない話",
-  episode_count: "541話",
-  public_date: "2022/06/07",
-  end_date: "2022/06/07",
-  status: "公開中",
-  view_count: "1.2k",
-  good_count: "1.2k",
+  issue: "541話",
+  startAt: "2022/06/07",
+  endAt: "2022/06/07",  
+  status: "公開中",     
+  viewCount: "1.2k",    
+  likeCount: "1.2k",
   coment_count: "966",
   content_title: "シェルターアーク 2話",
   content_date: "2022.06.10",
@@ -77,6 +78,19 @@ export default function DashboardPostDetail() {
   const [stateReactionList, setStateReactionList] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const params = useParams('id');
+
+  const getPostDetail = async () => {
+    const {status, data} = await getPostDetailFromServer(params.id);
+    console.log('getPostDetail', status, data);
+    
+    if( status === 200 ){
+      //set information to view page
+    }
+    else{
+      
+    }
+    
+  };
 
   const handleClickComentRegister = (event) => {
     console.log('ComentRegister', event);
@@ -120,6 +134,8 @@ export default function DashboardPostDetail() {
   useEffect(() => {
     setStateData(tempData);
     setStateReactionList(tempReactionList.list);
+
+    getPostDetail();
   }, []);
 
   return (
@@ -132,16 +148,16 @@ export default function DashboardPostDetail() {
       <div className="wrap_detail">
         <div className="area_detail1">
           <ul className="cx_list">
-            <li><span>{text.name}  </span><span>{stateData?.name}</span></li>
+            <li><span>{text.name}  </span><span>{stateData?.series}</span></li>
             <li><span>{text.title}  </span><span>{stateData?.title}</span></li>
-            <li><span>{text.episode_count}  </span><span>{stateData?.episode_count}</span></li>
-            <li><span>{text.public_date}   </span><span>{stateData?.public_date}</span></li>
-            <li><span>{text.end_date}   </span><span>{stateData?.end_date}</span></li>
+            <li><span>{text.episode_count}  </span><span>{stateData?.issue}</span></li>
+            <li><span>{text.public_date}   </span><span>{stateData?.startAt}</span></li>
+            <li><span>{text.end_date}   </span><span>{stateData?.endAt}</span></li>
             <li><span>{text.status}   </span><span>{stateData?.status}</span></li>
           </ul>
           <div className="icon">
-            <span><FontAwesomeIcon icon={faEye} />{stateData?.view_count}</span>
-            <span><FontAwesomeIcon icon={faHeart} />{stateData?.good_count}</span>
+            <span><FontAwesomeIcon icon={faEye} />{stateData?.viewCount}</span>
+            <span><FontAwesomeIcon icon={faHeart} />{stateData?.likeCount}</span>
             <span><FontAwesomeIcon icon={faCommentQuote} />{stateData?.coment_count}</span>
           </div>
         

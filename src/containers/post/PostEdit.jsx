@@ -13,6 +13,9 @@ import tempImage from '@IMAGES/tmp_comic2.jpg';
 import tempImage2 from '@IMAGES/tmp_comic3.png';
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
+import Type from "@/components/post/Type";
+import Category from "@/components/dashboard/Category";
+import Tag from "@/components/dashboard/Tag";
 
 const text = {
   post_edit: "投稿を修正",
@@ -39,41 +42,6 @@ const text = {
   input_image: "置いてください。",
 };
 
-const typeList = [
-  {
-    name : text.type_webtoon,
-    code : "1",
-    checked : true,
-  },
-  {
-    name : text.type_article,
-    code : "2",
-    checked : false,
-  },
-  {
-    name : text.type_movie,
-    code : "3",
-    checked : false,
-  }
-];
-
-const categoryList = [
-  {
-    name : text.type_webtoon,
-    code : "1",
-    checked : true,
-  },
-  {
-    name : text.type_article,
-    code : "2",
-    checked : false,
-  },
-  {
-    name : text.type_movie,
-    code : "3",
-    checked : false,
-  }
-];
 
 const supportorList = [
   {
@@ -164,36 +132,34 @@ const tempData = {
 };
 
 export default function UploadPost(props) {
-  const [stateTypeList, setStateTypeList] = useState(undefined);
-  const [stateCategoryList, setStateCategoryList] = useState(undefined);
+  const [stateType, setStateType] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [statePostInfo, setStatePostInfo] = useState(undefined);
   const refContents = useRef();
   const refThumbnailTimeline = useRef();
+  const refTag = useRef();
 
-  const renderTypeListElements = () => {
-    return stateTypeList?.map((item, index) => {
-      return (
-        <label className="inp_txchk" key={index}><input type="radio" name="type" defaultValue={item.code} defaultChecked={item.checked} /><span>{item.name}</span></label>
-      );
-    });
-  };
 
   const renderTimelineElements = () => {
     return statePostInfo?.timeline.list.map((item, index) => {
       return (
         <SwiperSlide key={index} className="cx swiper-slide" onClick={handleClickItemTimeline} id={item.id}>
-          <a >
+          <div >
             <div className="cx_thumb">
               {
                 item.preview !== undefined &&
-                  <span><img src={item.preview} alt="image"/></span>
+                  <span><img src={item.preview} alt="timeline"/></span>
               }
             </div>
-          </a>
+          </div>
         </SwiperSlide>
       );
     });
+  };
+
+  const handleClickType = (typeItem) => {
+    console.log('ItemType', typeItem);
+    setStateType(typeItem);
   };
   
   const handleClickItemCategory = (event) => {
@@ -226,8 +192,6 @@ export default function UploadPost(props) {
   
   useEffect(() => {
     //temp
-    setStateTypeList(typeList);
-    setStateCategoryList(categoryList);
     setStateSupportorList(supportorList);
     setStatePostInfo(tempData);
   }, []);
@@ -255,19 +219,19 @@ export default function UploadPost(props) {
               <div className="col">
                 <h3 className="tit1">{text.type}</h3>
                 <div className="lst_txchk">
-                  {
-                    renderTypeListElements()
-                  }
+                  <Type
+                    name={'typeId'}
+                    callback={handleClickType}
+                    />
                 </div>
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
-                <Select 
-                  name={"category"}
-                  className={"select1 wid1"}
-                  dataList={stateCategoryList}
-                  handleItemClick={handleClickItemCategory} />
+                <Category
+                  name={'categoryId'}
+                  className={'select1 wid1 '}
+                  typeId={stateType?.id} />
               </div>
 
               <div className="col">
@@ -294,10 +258,11 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.tag}</h3>
-                <div className="inp_txt sch">
-                  <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                  <input type="text" className="" placeholder={text.tag_name} />
-                </div>
+                <Tag 
+                  ref={refTag}
+                  name={"tags"}
+                  className={"inp_txt sch"}
+                  placeholder={text.tag_name} />
               </div>
 
               <div className="col">
@@ -348,8 +313,8 @@ export default function UploadPost(props) {
             </section>
 
             <div className="bbs_write_botm">
-              <a href="#" className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></a>
-              <a href="#" className="btn-pk n blue" onClick={handleClickRegister}><span>{text.register}</span></a>
+              <div className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></div>
+              <div className="btn-pk n blue" onClick={handleClickRegister}><span>{text.register}</span></div>
             </div>
           </form>
 
@@ -359,5 +324,6 @@ export default function UploadPost(props) {
     </PostContainer>
   );
 }
+
 
 

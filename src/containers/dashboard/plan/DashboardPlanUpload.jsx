@@ -2,6 +2,7 @@ import React, { useEffect, useState, } from "react";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
+import { useRef } from "react";
 
 
 const text = {
@@ -20,6 +21,15 @@ const text = {
 
 export default function DashboardPlanUpload(props) {
   const [stateData, setStateData] = useState(undefined);
+  const refPrice = useRef();
+
+  const handleFocusPrice = (event) => {
+    refPrice.current.classList.add("input_focus");
+  };
+  
+  const handleBlurPrice = (event) => {
+    refPrice.current.classList.remove("input_focus");
+  };
 
   const handleClickRegister = (event) => {
     console.log('Register', event);
@@ -72,8 +82,8 @@ export default function DashboardPlanUpload(props) {
 
             <div className="col">
               <h3 className="tit1">{text.price}</h3>
-              <div className="inp_txt sch">
-                <input type="text" className="" />
+              <div className="inp_txt sch" ref={refPrice}>
+                <input type="text" className="" onFocus={handleFocusPrice}  onBlur={handleBlurPrice} />
                 <span className="won">PC</span>
               </div>
             </div>

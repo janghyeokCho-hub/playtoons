@@ -1,68 +1,45 @@
-export const modalTypes = {
-  SHOW_MODAL : 'SHOW_MODAL',
-  HIDE_MODAL : 'HIDE_MODAL'
-}
+import { createAction, handleActions } from "redux-actions";
+import { createRequestActionTypes } from "@REDUX/saga/createRequestSaga";
+import produce from "immer";
+
+/* --- Action Types --- */
+export const [POPUP, POPUP_SHOW, POPUP_HIDE] =
+  createRequestActionTypes("login/REQUEST");
+
+/* --- Actions --- */
+export const loginRequest = createAction(POPUP);
+
 
 export const MODAL_DESIGN_TYPE = {
   DEFAULT: 0,
-  CLOSE_BUTTON: 1,
-  CONFIRM_BUTTON: 2,
-  TWO_BUTTON: 3,
+  HIDE_CLOSE_BUTTON: 1,
 };
 
-
-export const showModal = (contents, callback, type) => {
-  return {
-    type: modalTypes.SHOW_MODAL,
-    payload: {
-      show: true,
-      contents,
-      callback,
-      type
-    }
-    
-  };
-};
-
-export const hideModal = () => {
-  return {
-    type: modalTypes.HIDE_MODAL
-  };
-};
-
-export const modalAction = {
-	showModal,
-  hideModal
-};
-
-const initialState = {
+/**
+ * login reducer 초기값
+ */
+ const initialState = {
   show : false,
   contents : <></>,
   callback : null,
   type: MODAL_DESIGN_TYPE.DEFAULT,
 }
-const alertModal = (state = initialState, action) => {
-  const {type, payload} = action;
-  switch( type ){
-    case modalTypes.SHOW_MODAL:
-      return {
-        show : true,
-        contents: payload.contents,
-        callback: payload.callback,
-        type: payload.type,
-      };
-      
-    case modalTypes.HIDE_MODAL:
-      return {
-        show : false,
-        contents: <></>,
-        callback: null,
-        type: MODAL_DESIGN_TYPE.DEFAULT,
-      };
-      
-      default :
+
+const popup = handleActions(
+  {
+    [POPUP_SHOW]: (state, action) => {
+      return produce(state, (draft) => {
+        console.log(action);
+        
+      });
+    },
+    [POPUP_HIDE]: (state, action) => {
+      console.log(action);
       return initialState;
-    }//switch
-  };
-  export default alertModal;
-  
+    },
+  },
+  initialState
+);
+
+export default popup;
+

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
-import {hideModal, MODAL_DESIGN_TYPE} from '../modules/redux/ducks/modal'
+// import {hideModal, MODAL_DESIGN_TYPE} from '../modules/redux/ducks/modal'
 import styled from 'styled-components';
 
 import iconClose from '@ICONS/icon_close_black.png'
@@ -25,10 +25,10 @@ export default function Modal({show, contents, callback, type }) {    //TODO des
   
 
   const handleClose = () => {
-    if( type === MODAL_DESIGN_TYPE.DEFAULT || type === MODAL_DESIGN_TYPE.CLOSE_BUTTON ){
-      callback?.();
-    }
-    dispatch(hideModal());
+    // if( type === MODAL_DESIGN_TYPE.DEFAULT || type === MODAL_DESIGN_TYPE.CLOSE_BUTTON ){
+    //   callback?.();
+    // }
+    // dispatch(hideModal());
   }
 
   useOutSideClick(refModal, handleClose);

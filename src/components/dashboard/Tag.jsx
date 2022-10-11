@@ -26,8 +26,9 @@ import '@/css/test.css';
 */
 export default forwardRef( function Tag(props, ref) {
   const { placeholder, className, name } = props;
-  const refInput = useRef();
   const [ stateList, setStateList ] = useState([]);
+  const refInput = useRef();
+  const refContainer = useRef();
   
 
   const checkExistInStateList = (keyword) => {
@@ -39,6 +40,11 @@ export default forwardRef( function Tag(props, ref) {
 
     return false;
   };
+
+
+  //==============================================================================
+  // api
+  //==============================================================================
 
   const setTag =  async (keyword) => {
     const params = {
@@ -59,6 +65,19 @@ export default forwardRef( function Tag(props, ref) {
     else{
       
     }
+  };
+
+
+  //==============================================================================
+  // handle event
+  //==============================================================================
+
+  const handleFocus = (event) => {
+    refContainer.current.classList.add("input_focus");
+  };
+  
+  const handleBlur = (event) => {
+    refContainer.current.classList.remove("input_focus");
   };
 
   const handleClickItem = (event) => {
@@ -87,6 +106,10 @@ export default forwardRef( function Tag(props, ref) {
     }
   };
 
+  //==============================================================================
+  // render & hook
+  //==============================================================================
+
   const renderTagList = () => {
     return stateList?.map( (item, index) => {
       return <div className="i_tag mt10 pointer" key={index} onClick={handleClickItem} data-id={item}>#{item}</div>
@@ -110,9 +133,9 @@ export default forwardRef( function Tag(props, ref) {
 
   return (
     <>
-      <div className={className}>
+      <div className={className} ref={refContainer}>
         <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} onClick={handleClickSearch} /></button>
-        <input ref={refInput} type="text" className="" name={name} placeholder={placeholder} onKeyDown={handleEnter} />
+        <input ref={refInput} type="text" className="" name={name} placeholder={placeholder} onKeyDown={handleEnter} onFocus={handleFocus} onBlur={handleBlur} />
       </div>
       <div className="txt1">
         <div className="lst_tag">
