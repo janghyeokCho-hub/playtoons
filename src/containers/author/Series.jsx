@@ -13,15 +13,15 @@ const Series = () => {
       <ul>
         <li>
           <a href="#">
-            <div className="thumb">
-              <img src={ImgComic2} alt="만화책" />
+            <div class="thumb">
+              <SpanImg bgImg={require("@IMAGES/tmp_comic2.jpg")}></SpanImg>
             </div>
-            <div className="txt">
-              <p className="t1">ウェブトゥーンウェブトゥーンウェブトゥーン</p>
-              <p className="h1">
+            <div class="txt">
+              <p class="t1">ウェブトゥーンウェブトゥーンウェブトゥーン</p>
+              <p class="h1">
                 阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート
               </p>
-              <button type="button" className="btn-pk s blue2">
+              <button type="button" class="btn-pk s blue2">
                 <FontAwesomeIcon icon={faObjectUnion} />
                 233
               </button>
@@ -30,13 +30,15 @@ const Series = () => {
         </li>
         <li>
           <a href="#">
-            <div className="thumb">
-              <img src={ImgComic2} alt="만화책" />
+            <div class="thumb">
+              <SpanImg bgImg={require("@IMAGES/tmp_comic2.jpg")}></SpanImg>
             </div>
-            <div className="txt">
-              <p className="t1">ウェブトゥーン</p>
-              <p className="h1">阿修羅ゲート</p>
-              <button type="button" className="btn-pk s blue2">
+            <div class="txt">
+              <p class="t1">ウェブトゥーンウェブトゥーンウェブトゥーン</p>
+              <p class="h1">
+                阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート
+              </p>
+              <button type="button" class="btn-pk s blue2">
                 <FontAwesomeIcon icon={faObjectUnion} />
                 233
               </button>
@@ -45,13 +47,15 @@ const Series = () => {
         </li>
         <li>
           <a href="#">
-            <div className="thumb">
-              <img src={ImgComic2} alt="만화책" />
+            <div class="thumb">
+              <SpanImg bgImg={require("@IMAGES/tmp_comic2.jpg")}></SpanImg>
             </div>
-            <div className="txt">
-              <p className="t1">ウェブトゥーン</p>
-              <p className="h1">阿修羅ゲート</p>
-              <button type="button" className="btn-pk s blue2">
+            <div class="txt">
+              <p class="t1">ウェブトゥーンウェブトゥーンウェブトゥーン</p>
+              <p class="h1">
+                阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート阿修羅ゲート
+              </p>
+              <button type="button" class="btn-pk s blue2">
                 <FontAwesomeIcon icon={faObjectUnion} />
                 233
               </button>
@@ -62,5 +66,9 @@ const Series = () => {
     </div>
   );
 };
+
+const SpanImg = styled.span`
+  background-image: url(${(props) => props.bgImg});
+`;
 
 export default Series;

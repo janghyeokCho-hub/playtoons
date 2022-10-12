@@ -1,3 +1,4 @@
+import { getFileUrlFromServer } from "@API/fileService";
 /**
  * Email validation
  * @param {string} text
@@ -111,21 +112,14 @@ export const removeItemInList = (list, value) => {
   });
 };
 
-export const openLayerPopup = (id) => {
-  console.log(id);
-  console.log("window.innerWidth : ", window.innerWidth);
-  console.log("window.outerWidth : ", window.outerWidth);
-
-  /*var $obj = $("#" +id);
-	var $winH = $(window).width();
-	
-	$(".layerPopup").hide();
-	$("#" +id).fadeIn(300);
-	$("#" +id).before("<div class='popup_dim'></div>");
-
-
-	$(".b-close, .popup_dim").on("click", function(){
-		$obj.fadeOut(100);
-		$(".popup_dim").remove();
-	});*/
+/**
+ * 파일의 경로를 가져오는 함수
+ * @version 1.0.0
+ * @author 조장혁
+ * @param hash File hash code (string)
+ * @param query get url query (json)
+ * @return
+ */
+export const getFileURL = (hash, query) => {
+  return getFileUrlFromServer(hash, query);
 };

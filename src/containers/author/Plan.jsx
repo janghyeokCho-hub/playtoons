@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 import { setAuthorPlans } from "@/modules/redux/ducks/author";
+
+import { getFileURL } from "@COMMON/common";
 
 const PlanItem = ({ plan }) => {
   return (
     <div className="col" style={{ marginBottom: "2.33%" }}>
       <div className="icon">
-        <img src={plan?.thumbnailImage} alt="image" />
+        <img
+          src={plan?.thumbnailImage ? getFileURL(plan.thumbnailImage) : ""}
+          alt="plan"
+        />
       </div>
       <div className="cont">
         <h3 className="h1">{plan.name}</h3>

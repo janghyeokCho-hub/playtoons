@@ -1,22 +1,15 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleChevronLeft,
-  faCircleChevronRight,
-} from "@fortawesome/pro-solid-svg-icons";
-
-import "@/css/swiper.css";
 import {
   getAuthorList,
   getAuthorRecent,
   setCurrentAuthor,
 } from "@/modules/redux/ducks/author";
-
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
+import { getFileURL } from "@COMMON/common";
 
 const renderItems = (items) => {
   return items.map((item, index) => {
@@ -29,13 +22,20 @@ const renderItems = (items) => {
             }}
             state={{ item }}
           >
+            {/* 이미지 default 값 필요 */}
             <ImgTmpProfileBgDiv
               className="pf_thumb"
-              bgImg={item.backgroundImage}
+              bgImg={
+                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
+              }
             />
             <div className="pf_txt">
               <div className="icon">
-                <img src={item.profileImage} alt="profile" />
+                {/* 이미지 default 값 필요 */}
+                <img
+                  src={item?.profileImage ? getFileURL(item.profileImage) : ""}
+                  alt="profile"
+                />
               </div>
               <p className="h1">{item.nickname}</p>
               <p className="t1">{item.description}</p>
@@ -59,14 +59,30 @@ const RecommentAuthorComponent = ({ item, callback }) => {
           onClick={callback}
         >
           <div className="pf_thumb bind3">
-            {/*<!-- 202210 수정 -->*/}
-            <ImgDiv bgImg={require("@IMAGES/tmp_profile_bg.png")} />
-            <ImgDiv bgImg={require("@IMAGES/tmp_profile_bg.png")} />
-            <div></div>
+            {/* 이미지 default 값 필요 */}
+            <ImgDiv
+              bgImg={
+                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
+              }
+            />
+            <ImgDiv
+              bgImg={
+                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
+              }
+            />
+            <ImgDiv
+              bgImg={
+                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
+              }
+            />
           </div>
           <div className="pf_txt">
             <div className="icon">
-              <img src={item.profileImage} alt="profile" />
+              {/* 이미지 default 값 필요 */}
+              <img
+                src={item.profileImage ? getFileURL(item.profileImage) : ""}
+                alt="profile"
+              />
             </div>
             <p className="h1">{item.nickname}</p>
             <p className="t1">{item.description}</p>

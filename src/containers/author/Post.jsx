@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ImgComic1 from "@IMAGES/tmp_comic1.jpg";
@@ -11,7 +11,10 @@ import {
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import Plan from "./Plan";
 import Series from "./Series";
+import { Link } from "react-router-dom";
+import { getFileURL } from "@COMMON/common";
 
+// Post API 나오면 작업
 const PostItem = () => {
   return (
     <>
@@ -116,19 +119,33 @@ const PostItem = () => {
 
 const Post = () => {
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+  console.log("currentAuthor : ", currentAuthor);
   const [selectTab, setSelectTab] = useState("POST");
 
   return (
     <div className="contents">
       <div className="wrap_author_detail">
         <div className="box_profile _longs">
+          {/* 이미지 default 값 필요 */}
           <ImgTmpProfileBgDiv
             className="pf_thumb"
-            bgImg={currentAuthor?.backgroundImage}
+            bgImg={
+              currentAuthor?.backgroundImg
+                ? getFileURL(currentAuthor.backgroundImg)
+                : ""
+            }
           ></ImgTmpProfileBgDiv>
           <div className="pf_txt">
             <div className="icon">
-              <img src={currentAuthor?.profileImage} alt="profile" />
+              {/* 이미지 default 값 필요 */}
+              <img
+                src={
+                  currentAuthor?.profileImage
+                    ? getFileURL(currentAuthor.profileImage)
+                    : ""
+                }
+                alt="profile"
+              />
             </div>
             <p className="h1">{currentAuthor?.nickname}</p>
             <p className="t1">{currentAuthor?.description}</p>
@@ -151,33 +168,33 @@ const Post = () => {
                 className={selectTab === "POST" ? "on" : ""}
                 onClick={() => setSelectTab("POST")}
               >
-                <a>
+                <Link to="">
                   <span>投稿</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "SERIES" ? "on" : ""}
                 onClick={() => setSelectTab("SERIES")}
               >
-                <a>
+                <Link to="">
                   <span>シリーズ</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "PLAN" ? "on" : ""}
                 onClick={() => setSelectTab("PLAN")}
               >
-                <a>
+                <Link to="">
                   <span>プラン</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "POST2" ? "on" : ""}
                 onClick={() => setSelectTab("POST2")}
               >
-                <a>
+                <Link to="">
                   <span>ストア</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
