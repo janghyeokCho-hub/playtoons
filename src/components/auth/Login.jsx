@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
@@ -102,8 +102,6 @@ const Login = () => {
     }
   }, [isLogined]);
 
-  const handleSNSLogin = () => {};
-
   return (
     <>
       <h1 className="logo">
@@ -172,9 +170,9 @@ const Login = () => {
           {/* <!-- 에러일때 error 추가 --> */}
         </div>
         <div className="col_link">
-          <a className="a_link" onClick={() => navigate("recover")}>
+          <Link to="/account/recover" className="a_link">
             パスワードをお忘れですか?
-          </a>
+          </Link>
         </div>
         <button
           type="submit"
@@ -208,11 +206,13 @@ const Login = () => {
       <div className="botm">
         <p className="t1">
           アカウントをお持ちでないですか?{" "}
-          <a className="c-blue" onClick={() => navigate("register")}>
+          <Link to="/account/register" className="c-blue">
             登録する
-          </a>
+          </Link>
         </p>
-        <a className="t2">プライバシーポリシー</a>
+        <Link to="#" className="t2">
+          プライバシーポリシー
+        </Link>
       </div>
     </>
   );

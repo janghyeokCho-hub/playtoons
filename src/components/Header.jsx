@@ -7,10 +7,13 @@ import {
   faMagnifyingGlass,
   faSquarePlus,
 } from "@fortawesome/pro-light-svg-icons";
+import { faXmarkLarge, faGlobe } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
 import { getUserInfo as getUserInfoAPI } from "@API/loginService";
 import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
+import { logoutRequest } from "@/modules/redux/ducks/login";
+import { clearUserData } from "@/utils/localStorageUtil";
 
 const Header = ({
   type,
@@ -28,6 +31,7 @@ const Header = ({
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState("login");
   const [like, setLike] = useState(false);
+  const [isProfileShow, setIsProfileShow] = useState(false);
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
@@ -68,6 +72,11 @@ const Header = ({
     }
     setLike(!like);
   }, [like]);
+
+  const handleLogout = useCallback(() => {
+    clearUserData();
+    dispatch(logoutRequest());
+  }, [dispatch]);
 
   return (
     <header id="header" className={`header ${className}`}>
@@ -148,9 +157,78 @@ const Header = ({
             </Link>
             <FontAwesomeIcon className="view-m ml24" icon={faSquarePlus} />
 
-            <a href="#" className="btn_profile">
-              <span style={{ backgroundImage: `url(${tempProfile})` }}></span>
-            </a>
+            <div
+              className="pos_profile"
+              onMouseEnter={() => {
+                setIsProfileShow(true);
+              }}
+              onMouseLeave={() => {
+                setIsProfileShow(false);
+              }}
+            >
+              <button type="button" className="btn_profile">
+                <span style={{ backgroundImage: `url(${tempProfile})` }}>
+                  마이페이지
+                </span>
+              </button>
+
+              {isProfileShow && (
+                <div className="box_drop">
+                  <div className="top">
+                    <button type="button" className="btn_box_close">
+                      <FontAwesomeIcon icon={faXmarkLarge} />
+                      プロフィール
+                    </button>
+                  </div>
+                  <div className="bt">
+                    <p className="t2">七語つきみ@TFO7</p>
+                    <p className="t1">保有ポイント</p>
+                    <p className="c1">
+                      <span className="c-blue">100,324,394</span>
+                      <a href="#" className="btn-pk s blue bdrs">
+                        チャージ
+                      </a>
+                    </p>
+                  </div>
+                  <ul>
+                    <li>
+                      <a href="#">クリエイター登録</a>
+                    </li>
+                    <li>
+                      <Link to="/dashboard/main">ダッシュボード</Link>
+                    </li>
+                  </ul>
+                  <ul>
+                    <li>
+                      <a href="#">支援中のクリエイター</a>
+                    </li>
+                    <li>
+                      <a href="#">フォロー中のクリエイター</a>
+                    </li>
+                  </ul>
+                  <ul>
+                    <li>
+                      <a href="#">設定</a>
+                    </li>
+                    <li>
+                      <Link to="/" onClick={() => handleLogout()}>
+                        ログアウト
+                      </Link>
+                    </li>
+                  </ul>
+                  <div>
+                    <button
+                      type="button"
+                      className="btn-pk n gray bdrs"
+                      onClick="openLayerPopup('popGlobal'); return false;"
+                    >
+                      <FontAwesomeIcon icon={faGlobe} />
+                      日本語
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

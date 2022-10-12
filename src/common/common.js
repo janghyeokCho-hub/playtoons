@@ -57,18 +57,6 @@ export const isJSONStr = (str) => {
 };
 
 /**
- * Get Access Token
- * @returns
- */
-export const getToken = () => {
-  const rootData = localStorage.getItem("persist:root");
-  const rootJSON = isJSONStr(rootData) ? JSON.parse(rootData) : rootData;
-  const loginData = rootJSON?.login;
-  const loginJSON = isJSONStr(loginData) ? JSON.parse(loginData) : loginData;
-  return loginJSON?.accessToken;
-};
-
-/**
 *
    get request를 위해서 params로 url 생성
 *

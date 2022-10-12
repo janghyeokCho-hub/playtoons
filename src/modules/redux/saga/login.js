@@ -111,14 +111,9 @@ function createLogoutRequestSaga(type) {
 
   return function* (action) {
     try {
-      const response = yield call(loginApi.getTempTokenRequest(action.payload));
-      if (response.status === 200) {
-        const { accessToken } = response.data;
-        yield put({
-          type: SUCCESS,
-          payload: { accessToken: accessToken },
-        });
-      }
+      yield put({
+        type: SUCCESS,
+      });
     } catch (e) {
       console.dir(e);
       yield call(exceptionHandler, { e: e, redirectError: false });

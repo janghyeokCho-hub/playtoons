@@ -64,7 +64,6 @@ const login = handleActions(
     [GET_TEMP_TOKEN_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
-        console.log("GET_TEMP_TOKEN_SUCCESS : ", action.payload);
         draft.email = action.payload.email || "";
         draft.accessToken = action.payload.accessToken;
         draft.authFail = false;

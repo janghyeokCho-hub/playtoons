@@ -1,6 +1,6 @@
 import axios from "axios";
 import Config from "@/env/config";
-import { getToken } from "@/common/common";
+import { getToken } from "@/utils/localStorageUtil";
 
 const SERVER = Config.apiUrl;
 const AUTH_SERVER = Config.apiAuthUrl;
