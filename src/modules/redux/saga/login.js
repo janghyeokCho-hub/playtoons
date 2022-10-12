@@ -103,7 +103,7 @@ function createGetTempTokenRequestSaga(loginType) {
   };
 }
 
-const getTempTokenRequestSaga = createGetTempTokenRequestSaga(LOGIN_REQUEST);
+const getTempTokenRequestSaga = createGetTempTokenRequestSaga(GET_TEMP_TOKEN);
 
 function createLogoutRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
