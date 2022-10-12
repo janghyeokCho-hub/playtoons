@@ -7,6 +7,7 @@ import {
   faHeart,
   faCircleChevronLeft,
   faCircleChevronRight,
+  faCircleXmark,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import SearchPopup from "./SearchPopup";
@@ -83,6 +84,34 @@ const Webtoon = () => {
       title: "3. かまちょマン",
       description: "超能力ストリーマー",
       ahthor: "SIKBONG / SUKOONCE",
+    },
+  ];
+
+  const [selectTag, setSelectTag] = useState(null);
+  const tags = [
+    {
+      id: "different",
+      name: "異世界",
+    },
+    {
+      id: "sf",
+      name: "SF",
+    },
+    {
+      id: "love",
+      name: "恋愛",
+    },
+    {
+      id: "action",
+      name: "アクション",
+    },
+    {
+      id: "everyday",
+      name: "日常",
+    },
+    {
+      id: "others",
+      name: "その他",
     },
   ];
 
@@ -197,24 +226,33 @@ const Webtoon = () => {
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
               </button>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                異世界
-              </a>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                SF
-              </a>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                恋愛
-              </a>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                アクション
-              </a>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                日常
-              </a>
-              <a href="#" className="btn-pk n blue2 bdrs">
-                その他
-              </a>
+              {tags.map((tag, index) => (
+                <Link
+                  key={`tag_${index}`}
+                  to=""
+                  className={`btn-pk n bdrs blue2 ${
+                    tag.id === selectTag ? "on" : ""
+                  }`}
+                  onClick={() => {
+                    if (tag.id === selectTag) {
+                      setSelectTag(null);
+                    } else {
+                      setSelectTag(tag.id);
+                    }
+                  }}
+                >
+                  {tag.name}
+                  {tag.id === selectTag && (
+                    <button
+                      type="button"
+                      className="btn_sch_del"
+                      onClick={() => setSelectTag(null)}
+                    >
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                  )}
+                </Link>
+              ))}
             </div>
             <div className="rgh">
               {/*<!-- 20221005 수정 : 셀렉트드롭다운 -->*/}

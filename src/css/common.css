@@ -4137,7 +4137,6 @@ body {
   color: #394bc2;
 }
 .main_sch .btn_sch_del {
-  display: none;
   position: absolute;
   right: -10px;
   top: -10px;
