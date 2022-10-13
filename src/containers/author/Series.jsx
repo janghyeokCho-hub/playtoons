@@ -24,26 +24,26 @@ const ItemComponent = ({ item }) => {
   useEffect(() => {
     async function getPostSeriesCount(id) {
       const response = await getPostSeriesCountAPI(id);
-      console.log(response);
+      console.log("getPostSeriesCount Error : ", response.status);
     }
     if (item?.id) {
       getPostSeriesCount(item.id);
     }
-    if (item?.thumbnailImage) {
-      getFileURLData(item?.thumbnailImage, setThumbnailImgURL);
+    if (item?.coverImage) {
+      getFileURLData(item?.coverImage, setThumbnailImgURL);
     }
   }, [item]);
 
   return (
     <li>
       <Link to="">
-        <div class="thumb">
+        <div className="thumb">
           <SpanImg bgImg={thumbnailImgURL}></SpanImg>
         </div>
-        <div class="txt">
-          <p class="t1">{item?.category?.name}</p>
-          <p class="h1">{item?.title}</p>
-          <button type="button" class="btn-pk s blue2">
+        <div className="txt">
+          <p className="t1">{item?.category?.name}</p>
+          <p className="h1">{item?.title}</p>
+          <button type="button" className="btn-pk s blue2">
             <FontAwesomeIcon icon={faObjectUnion} />
             233
           </button>

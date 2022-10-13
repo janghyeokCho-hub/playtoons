@@ -59,9 +59,23 @@ const renderItems = (items) => {
   ));
 };
 
-const RecommentAuthorComponent = ({ item, callback }) => {
-  const [data, setData] = useState(null);
+const SeriesImgComponent = ({ item }) => {
   const [coverImgURL, setCoverImgURL] = useState(null);
+  useEffect(() => {
+    if (item?.coverImage) {
+      getFileURLData(item.coverImage, setCoverImgURL);
+    }
+
+    return () => {
+      setCoverImgURL(null);
+    };
+  }, [item]);
+  return <ImgDiv bgImg={coverImgURL} />;
+};
+
+const RecommentAuthorComponent = ({ item, callback }) => {
+  console.log("RecommentAuthorComponent : ", item);
+  const [list, setList] = useState([]);
   const [profileImgURL, setProfileImgURL] = useState(null);
 
   useEffect(() => {
@@ -70,7 +84,15 @@ const RecommentAuthorComponent = ({ item, callback }) => {
       if (response.status === 200) {
         console.log("검색 id : ", id);
         console.log("데이터 : ", response?.data?.series);
-        setData(response?.data?.series);
+        let result = response?.data?.series || [];
+        if (!Array.isArray(result)) {
+          result = new Array(result);
+        }
+
+        while (result.length < 3) {
+          result.push({ coverImage: null });
+        }
+        setList(result);
       }
     }
 
@@ -80,19 +102,14 @@ const RecommentAuthorComponent = ({ item, callback }) => {
   }, [item]);
 
   useEffect(() => {
-    if (data?.coverImage) {
-      getFileURLData(data.coverImage, setCoverImgURL);
-    }
-
-    if (data?.author?.profileImage) {
-      getFileURLData(data?.author?.profileImage, setProfileImgURL);
+    if (item?.profileImage) {
+      getFileURLData(item?.profileImage, setProfileImgURL);
     }
 
     return () => {
       setProfileImgURL(null);
-      setCoverImgURL(null);
     };
-  }, [data]);
+  }, [item]);
 
   return (
     <div className="item">
@@ -106,9 +123,8 @@ const RecommentAuthorComponent = ({ item, callback }) => {
         >
           <div className="pf_thumb bind3">
             {/* 이미지 default 값 필요 */}
-            <ImgDiv bgImg={coverImgURL} />
-            <ImgDiv bgImg={coverImgURL} />
-            <ImgDiv bgImg={coverImgURL} />
+            {/* 어떤 이미지를 사용하면서, 배열로 주는지 확인 */}
+            {list && list.map((item) => <SeriesImgComponent item={item} />)}
           </div>
           <div className="pf_txt">
             <div className="icon">
