@@ -16,6 +16,7 @@ import Tag from "@/components/dashboard/Tag";
 
 import tempImage from '@IMAGES/tmp_comic2.jpg';
 import tempImage2 from '@IMAGES/tmp_comic3.png';
+import { getPostSeriesMine } from "@/services/postService";
 
 const text = {
   post_edit: "投稿を修正",
@@ -137,10 +138,12 @@ export default function PostEdit(props) {
   const [statePostInfo, setStatePostInfo] = useState(undefined);
   const dispatch = useDispatch();
   const postInfo = useSelector( ({post}) => post?.post );
+  const myAuthors = useSelector( ({post}) => post?.authorMine.authors );
   const params = useParams('id');
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
   const refFrom = useRef();
+
 
 
   //==============================================================================

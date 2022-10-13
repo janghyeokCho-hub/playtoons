@@ -37,7 +37,12 @@ export default function Image(props) {
   };
 
   useEffect(() => {
-    getImage(hash);
+    if( hash?.startsWith('/static/media/') ){
+      setStateImage(hash);
+    }
+    else{
+      getImage(hash);
+    }
   }, [hash]);
 
   return (

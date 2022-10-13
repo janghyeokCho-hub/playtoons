@@ -27,9 +27,13 @@ export default forwardRef( function Select(props, ref) {
   const [stateDisabled, setStateDisabled] = useState(false);
   const refSelect = useRef();
 
+  const getName = (item) => {
+    return item.name === undefined ? item.title : item.name;
+  };
+
   const getOptionElements = () => {
     return dataList?.map((item, index) => {
-      return <option key={index} value={item.id} >{item.name}</option>;
+      return <option key={index} value={item.id} >{getName(item)}</option>;
     });
   };
 

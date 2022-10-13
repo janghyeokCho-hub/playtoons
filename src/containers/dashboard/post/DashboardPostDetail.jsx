@@ -14,6 +14,7 @@ import { getPostDetailFromServer } from "@/services/postService";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
+import Image from "@/components/dashboard/Image";
 
 
 const text = {
@@ -49,7 +50,7 @@ const tempData = {
   content_title: "シェルターアーク 2話",
   content_date: "2022.06.10",
   content_summary: "モと戦う為、特殊チームレンジャーを創設したが、 クモの圧倒的な力には勝てず。",
-  content_image: tempImage,
+  thumbnailImage: tempImage,
   content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
 
   my_profile_image: tempProfile,
@@ -134,7 +135,16 @@ export default function DashboardPostDetail() {
   useEffect(() => {
     setStateData({
       ...tempData,
-      title: post?.title
+      title: post?.title,
+      series: post?.series?.title,
+      // issue:
+      startAt: post?.startAt,
+      endAt: post?.endAt,
+      status: post?.status,
+      viewCount: post?.viewCount,
+      likeCount: post?.likeCount,
+      thumbnailImage: post?.thumbnailImage,
+      
     });
   }, [post]);
 
@@ -174,7 +184,7 @@ export default function DashboardPostDetail() {
         </div>
         
         <div className="">
-          <img src={stateData?.content_image} alt="" />
+          <Image hash={stateData?.thumbnailImage} alt="playtonns thumbnailImage" />
         </div>
         
         <div className="area_detail2">

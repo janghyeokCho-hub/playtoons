@@ -11,6 +11,8 @@ import { setPostToServer } from "@/services/postService";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
 import { useSelector } from "react-redux";
+import Series from "@/components/post/Series";
+import { useNavigate } from "react-router-dom";
 
 
 const text = {
@@ -58,7 +60,8 @@ const supportorList = [
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
-  const authors = useSelector(({post}) => post?.authorMine?.authors);
+  const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const navigate = useNavigate();
   const refContents = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
@@ -91,8 +94,7 @@ export default function UploadPost(props) {
   const setImageToServer = async(ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    params.append('authorId', '');               
-    // params.append('authorId', authors[0].id);               
+    params.append('authorId', myAuthors[0].id);               
     params.append('subscribeTierId', '');        
     params.append('productId', '');
     params.append('usage', usage);                  //profile, background, cover, logo, post, product, thumbnail, attachment
@@ -138,8 +140,8 @@ export default function UploadPost(props) {
     let json = getFromDataJson(refForm);
     json = {
       ...json,
-      authorId: '1',       
-      // authorId: authors[0].id,       
+      // authorId: '1',       
+      authorId: myAuthors[0].id,       
       rating: 'G',
       status: 'enabled',
       tags: refTags.current.getTagsJsonObject(),
@@ -150,8 +152,10 @@ export default function UploadPost(props) {
     const {status, data} = await setPostToServer(json);
     console.log('setPost', status, data);
     
-    if( status === 200 ){
-      
+    if( status === 201 ){
+      if( window.confirm('post 登録を完了しました。') ){
+        navigate('/dashboard/post');
+      }
     }
     else{
       
@@ -217,7 +221,11 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.series}</h3>
-                <input type="text" name={"seriesId"} className="inp_txt w100p" />
+                <Series
+                  name={'seriesId'}
+                  className={'select1 w100'}
+                  // callback={handleClickType}
+                  />
               </div>
 
               <div className="col">
