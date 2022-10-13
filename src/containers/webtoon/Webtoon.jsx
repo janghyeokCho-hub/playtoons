@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
 
@@ -13,6 +13,26 @@ import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import SearchPopup from "./SearchPopup";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
+import { getCurationList as getCurationListAPI } from "@/services/curationService";
+import { getFileUrlFromServer } from "@API/fileService";
+
+import { getPostType as getPostTypeAPI } from "@API/postService";
+import { getPostCategoryListFromServer as getCategoryListAPI } from "@API/dashboardService";
+import { getAuthor as getAuthorAPI } from "@API/authorService";
+
+async function getFileURLData(hash, state) {
+  const response = await getFileUrlFromServer(hash);
+  if (response.status === 200) {
+    state(response?.data?.url);
+  }
+}
+
+async function getAuthor(id, state) {
+  const response = await getAuthorAPI(id);
+  if (response.status === 200) {
+    state(response?.data?.author);
+  }
+}
 
 const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
@@ -23,9 +43,57 @@ const Webtoon = () => {
   const [selectMenu, setSelectMenu] = useState("おすすめ順");
   const [selectTab, setSelectTab] = useState("すべて");
   const [selectCategorys, setSelectCategorys] = useState([]);
+  const [curation4, setCuration4] = useState([]);
+  const [postType, setPostType] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  const getPostType = async () => {
+    const response = await getPostTypeAPI();
+    if (response.status === 200) {
+      setPostType(response.data.types);
+    }
+  };
+
+  const getCategoryList = async (id) => {
+    const response = await getCategoryListAPI(id);
+    if (response.status === 200) {
+      setCategoryList(response.data.categories);
+    }
+  };
+
+  const getCurationList = async (num, state) => {
+    const response = await getCurationListAPI(num);
+    if (response.status === 200) {
+      if (num === 3) {
+        state(response.data.authors);
+      } else {
+        console.log(`posts${num} : `, response.data.posts);
+        state(response.data.posts);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!postType?.length) {
+      getPostType();
+    }
+  }, [postType]);
+
+  useEffect(() => {
+    if (!curation4?.length) {
+      getCurationList(4, setCuration4);
+    }
+  }, [curation4]);
+
+  useEffect(() => {
+    if (postType?.length && !categoryList?.length) {
+      const webtoon = postType.find((post) => post.code === "webtoon");
+      getCategoryList(webtoon.id);
+    }
+  }, [categoryList, postType]);
 
   const handleSelectMenu = (menu) => {
     setIsSelectShow(!isSelectShow);
@@ -36,56 +104,56 @@ const Webtoon = () => {
     setSelectTab(tab);
   };
 
+  const CurationComponent = ({ item, category }) => {
+    const [author, setAuthor] = useState(null);
+    const [backgroundImgURL, setBackgroundImgURL] = useState(null);
+    const [profileImgURL, setProfileImg] = useState(null);
+
+    useEffect(() => {
+      if (item?.backgroundImage) {
+        getFileURLData(item.backgroundImage, setBackgroundImgURL);
+      }
+
+      if (item?.authorId) {
+        getAuthor(item?.authorId, setAuthor);
+      }
+
+      if (item?.profileImage) {
+        getFileURLData(item?.profileImage, setProfileImg);
+      }
+    }, [item]);
+
+    return (
+      <Link to="/">
+        <ContBgDiv className="cont" bgImg={backgroundImgURL}>
+          <div>
+            <p className="b1">
+              <span className="i-txt">{category?.name}</span>
+            </p>
+            <p className="h1">{item.title}</p>
+            <p className="t1">{item.description}</p>
+            <p className="t2">{author?.name}</p>
+          </div>
+        </ContBgDiv>
+        <div className="imgs">
+          <img src={profileImgURL} alt="이미지" />
+        </div>
+      </Link>
+    );
+  };
+
   const renderItems = (items) => {
     return items.map((item, index) => {
+      const category = categoryList.find(
+        (category) => category.id === item.categoryId
+      );
       return (
         <SwiperSlide key={index} className="cx">
-          <Link to="/">
-            <ContBgDiv className="cont" bgImg={item.backgroundImg}>
-              <div>
-                <p className="b1">
-                  <span className="i-txt">{item.itemName}</span>
-                </p>
-                <p className="h1">{item.title}</p>
-                <p className="t1">{item.description}</p>
-                <p className="t2">{item.author}</p>
-              </div>
-            </ContBgDiv>
-            <div className="imgs">
-              <img src={item.previewImg} alt="이미지" />
-            </div>
-          </Link>
+          <CurationComponent item={item} category={category} />
         </SwiperSlide>
       );
     });
   };
-
-  const recommendItems = [
-    {
-      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
-      previewImg: require("@IMAGES/tmp_banner_img.png"),
-      itemName: "おすすめ作品",
-      title: "1. かまちょマン",
-      description: "超能力ストリーマー",
-      ahthor: "SIKBONG / SUKOONCE",
-    },
-    {
-      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
-      previewImg: require("@IMAGES/tmp_banner_img.png"),
-      itemName: "おすすめ作品",
-      title: "2. かまちょマン",
-      description: "超能力ストリーマー",
-      ahthor: "SIKBONG / SUKOONCE",
-    },
-    {
-      backgroundImg: require("@IMAGES/tmp_banner_bg.png"),
-      previewImg: require("@IMAGES/tmp_banner_img.png"),
-      itemName: "おすすめ作品",
-      title: "3. かまちょマン",
-      description: "超能力ストリーマー",
-      ahthor: "SIKBONG / SUKOONCE",
-    },
-  ];
 
   const [selectTag, setSelectTag] = useState(null);
   const tags = [
@@ -119,63 +187,65 @@ const Webtoon = () => {
     <>
       <div className="contents">
         <div className="inr-c">
-          <div className="lst_banner">
-            <Swiper
-              className="swiper-container mySwiper1"
-              slidesPerView={3}
-              slidesPerGroup={1}
-              spaceBetween={12}
-              centeredSlides={true}
-              loop={true}
-              observer={true}
-              observeParents={true}
-              pagination={{
-                el: ".swiper-pagination",
-                clickable: true,
-              }}
-              navigation={{
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-              }}
-              breakpoints={{
-                0: {
-                  slidesPerView: 1.3,
-                  spaceBetween: 16,
-                },
-                1000: {
-                  slidesPerView: 2,
-                  spaceBetween: 15,
-                },
-                1400: {
-                  slidesPerView: 3,
-                  spaceBetween: 12,
-                },
-              }}
-              onUpdate={(swiper) => {
-                nextRef?.current?.classList?.add("slide_st");
-                prevRef?.current?.classList?.add("slide_st");
-              }}
-            >
-              {renderItems(recommendItems)}
-            </Swiper>
+          {curation4 && (
+            <div className="lst_banner">
+              <Swiper
+                className="swiper-container mySwiper1"
+                slidesPerView={3}
+                slidesPerGroup={1}
+                spaceBetween={12}
+                centeredSlides={true}
+                loop={true}
+                observer={true}
+                observeParents={true}
+                pagination={{
+                  el: ".swiper-pagination",
+                  clickable: true,
+                }}
+                navigation={{
+                  nextEl: ".swiper-button-next",
+                  prevEl: ".swiper-button-prev",
+                }}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 1.3,
+                    spaceBetween: 16,
+                  },
+                  1000: {
+                    slidesPerView: 2,
+                    spaceBetween: 15,
+                  },
+                  1400: {
+                    slidesPerView: 3,
+                    spaceBetween: 12,
+                  },
+                }}
+                onUpdate={(swiper) => {
+                  nextRef?.current?.classList?.add("slide_st");
+                  prevRef?.current?.classList?.add("slide_st");
+                }}
+              >
+                {renderItems(curation4)}
+              </Swiper>
 
-            <div className="swiper-pagination my1"></div>
+              <div className="swiper-pagination my1"></div>
 
-            <button
-              ref={prevRef}
-              type="button"
-              className="swiper-button-prev my1 hide-m"
-            >
-              <FontAwesomeIcon icon={faCircleChevronLeft} />
-            </button>
-            <button
-              ref={nextRef}
-              type="button"
-              className="swiper-button-next my1 hide-m"
-            >
-              <FontAwesomeIcon icon={faCircleChevronRight} />
-            </button>
-          </div>
+              <button
+                ref={prevRef}
+                type="button"
+                className="swiper-button-prev my1 hide-m"
+              >
+                <FontAwesomeIcon icon={faCircleChevronLeft} />
+              </button>
+              <button
+                ref={nextRef}
+                type="button"
+                className="swiper-button-next my1 hide-m"
+              >
+                <FontAwesomeIcon icon={faCircleChevronRight} />
+              </button>
+            </div>
+          )}
 
           <div className="tabs ty1">
             <ul>
@@ -226,33 +296,34 @@ const Webtoon = () => {
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
               </button>
-              {tags.map((tag, index) => (
-                <Link
-                  key={`tag_${index}`}
-                  to=""
-                  className={`btn-pk n bdrs blue2 ${
-                    tag.id === selectTag ? "on" : ""
-                  }`}
-                  onClick={() => {
-                    if (tag.id === selectTag) {
-                      setSelectTag(null);
-                    } else {
-                      setSelectTag(tag.id);
-                    }
-                  }}
-                >
-                  {tag.name}
-                  {tag.id === selectTag && (
-                    <button
-                      type="button"
-                      className="btn_sch_del"
-                      onClick={() => setSelectTag(null)}
-                    >
-                      <FontAwesomeIcon icon={faCircleXmark} />
-                    </button>
-                  )}
-                </Link>
-              ))}
+              {categoryList &&
+                categoryList.map((tag, index) => (
+                  <Link
+                    key={`tag_${index}`}
+                    to=""
+                    className={`btn-pk n bdrs blue2 ${
+                      tag.id === selectTag ? "on" : ""
+                    }`}
+                    onClick={() => {
+                      if (tag.id === selectTag) {
+                        setSelectTag(null);
+                      } else {
+                        setSelectTag(tag.id);
+                      }
+                    }}
+                  >
+                    {tag.name}
+                    {tag.id === selectTag && (
+                      <button
+                        type="button"
+                        className="btn_sch_del"
+                        onClick={() => setSelectTag(null)}
+                      >
+                        <FontAwesomeIcon icon={faCircleXmark} />
+                      </button>
+                    )}
+                  </Link>
+                ))}
             </div>
             <div className="rgh">
               {/*<!-- 20221005 수정 : 셀렉트드롭다운 -->*/}
