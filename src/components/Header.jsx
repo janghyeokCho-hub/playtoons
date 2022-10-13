@@ -183,7 +183,7 @@ const Header = ({
                       </button>
                     </div>
                     <div className="bt">
-                      <p className="t2">七語つきみ@TFO7</p>
+                      <p className="t2">{userInfo.email}</p>
                       <p className="t1">保有ポイント</p>
                       <p className="c1">
                         <span className="c-blue">100,324,394</span>
@@ -194,7 +194,7 @@ const Header = ({
                     </div>
                     <ul>
                       <li>
-                        <a href="#">クリエイター登録</a>
+                        <Link to="/author/register">クリエイター登録</Link>
                       </li>
                       <li>
                         <Link to="/dashboard/main">ダッシュボード</Link>
