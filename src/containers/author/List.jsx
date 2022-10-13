@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import {
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
 import { getFileURL } from "@COMMON/common";
+import { getPostSeries as getPostSeriesAPI } from "@API/postService";
 
 const renderItems = (items) => {
   return items.map((item, index) => {
@@ -48,6 +49,40 @@ const renderItems = (items) => {
 };
 
 const RecommentAuthorComponent = ({ item, callback }) => {
+  const [data, setData] = useState(null);
+  const [coverImgURL, setCoverImgURL] = useState(null);
+  const [profileImgURL, setProfileImgURL] = useState(null);
+
+  useEffect(() => {
+    async function getPostSeries(id) {
+      const response = await getPostSeriesAPI(id);
+      if (response.status === 200) {
+        console.log("검색 id : ", id);
+        console.log("데이터 : ", response?.data?.series);
+        setData(response?.data?.series);
+      }
+    }
+
+    if (item?.id) {
+      getPostSeries(item.id);
+    }
+  }, [item]);
+
+  useEffect(() => {
+    if (data?.coverImage) {
+      setCoverImgURL(getFileURL(data.coverImage));
+    }
+
+    if (data?.author?.profileImage) {
+      setProfileImgURL(getFileURL(data?.author?.profileImage));
+    }
+
+    return () => {
+      setProfileImgURL(null);
+      setCoverImgURL(null);
+    };
+  }, [data]);
+
   return (
     <div className="item">
       <div className="box_profile _half">
@@ -60,29 +95,14 @@ const RecommentAuthorComponent = ({ item, callback }) => {
         >
           <div className="pf_thumb bind3">
             {/* 이미지 default 값 필요 */}
-            <ImgDiv
-              bgImg={
-                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
-              }
-            />
-            <ImgDiv
-              bgImg={
-                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
-              }
-            />
-            <ImgDiv
-              bgImg={
-                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
-              }
-            />
+            <ImgDiv bgImg={coverImgURL} />
+            <ImgDiv bgImg={coverImgURL} />
+            <ImgDiv bgImg={coverImgURL} />
           </div>
           <div className="pf_txt">
             <div className="icon">
               {/* 이미지 default 값 필요 */}
-              <img
-                src={item.profileImage ? getFileURL(item.profileImage) : ""}
-                alt="profile"
-              />
+              <img src={profileImgURL} alt="profile" />
             </div>
             <p className="h1">{item.nickname}</p>
             <p className="t1">{item.description}</p>

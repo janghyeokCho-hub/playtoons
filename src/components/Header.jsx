@@ -87,28 +87,24 @@ const Header = ({
     <div className="open">
       <header id="header" className={`header ${className}`}>
         <div className="inr-c">
-          {isLogined && (
-            <>
-              {/* 1. 로그인전 : 메뉴 버튼 없음 */}
-              {isMenus && (
-                <button
-                  type="button"
-                  className="btn_gnb hide-m"
-                  title="메뉴"
-                  onClick={() => onSideMenu()}
-                >
-                  <span>
-                    <FontAwesomeIcon icon={faBars} />
-                  </span>
-                </button>
-              )}
-              <h1 className="logo">
-                <Link to="/">
-                  <span className="ico_logo">PlayToons</span>
-                </Link>
-              </h1>
-            </>
+          {/* 1. 로그인전 : 메뉴 버튼 없음 */}
+          {isLogined && isMenus && (
+            <button
+              type="button"
+              className="btn_gnb hide-m"
+              title="메뉴"
+              onClick={() => onSideMenu()}
+            >
+              <span>
+                <FontAwesomeIcon icon={faBars} />
+              </span>
+            </button>
           )}
+          <h1 className="logo">
+            <Link to="/">
+              <span className="ico_logo">PlayToons</span>
+            </Link>
+          </h1>
 
           <div className="rgh">
             <div className="box_hd_sch">
@@ -137,116 +133,116 @@ const Header = ({
                 <span>ログイン</span>
               </Link>
             )) || (
-              <div
-                className="pos_to"
-                onMouseEnter={() => {
-                  setIsUserBoxShow(true);
-                }}
-                onMouseLeave={() => {
-                  setIsUserBoxShow(false);
-                }}
-              >
-                <button type="button" className="btn_tugo btn-pk n blue bdrs">
-                  <span>投稿</span>
-                </button>
-                {isUserBoxShow && (
-                  <div className="box_drop">
-                    <ul>
-                      <li onClick={() => navigate("/dashboard/post")}>
-                        <Link to="">
-                          <FontAwesomeIcon
-                            className="fa-light"
-                            icon={faSquarePen}
-                          />
-                          投稿する
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="">
-                          <FontAwesomeIcon
-                            className="fa-regular"
-                            icon={faCartCirclePlus}
-                          />
-                          マケットに登録
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            )}
-            <div
-              className="pos_profile"
-              onMouseEnter={() => {
-                setIsProfileShow(true);
-              }}
-              onMouseLeave={() => {
-                setIsProfileShow(false);
-              }}
-            >
-              <button type="button" className="btn_profile">
-                <span style={{ backgroundImage: `url(${tempProfile})` }}>
-                  마이페이지
-                </span>
-              </button>
-
-              {isProfileShow && (
-                <div className="box_drop">
-                  <div className="top">
-                    <button type="button" className="btn_box_close">
-                      <FontAwesomeIcon icon={faXmarkLarge} />
-                      プロフィール
-                    </button>
-                  </div>
-                  <div className="bt">
-                    <p className="t2">{userInfo.email}</p>
-                    <p className="t1">保有ポイント</p>
-                    <p className="c1">
-                      <span className="c-blue">100,324,394</span>
-                      <a href="#" className="btn-pk s blue bdrs">
-                        チャージ
-                      </a>
-                    </p>
-                  </div>
-                  <ul>
-                    <li>
-                      <Link to="/author/register">クリエイター登録</Link>
-                    </li>
-                    <li>
-                      <Link to="/dashboard/main">ダッシュボード</Link>
-                    </li>
-                  </ul>
-                  <ul>
-                    <li>
-                      <a href="#">支援中のクリエイター</a>
-                    </li>
-                    <li>
-                      <a href="#">フォロー中のクリエイター</a>
-                    </li>
-                  </ul>
-                  <ul>
-                    <li>
-                      <a href="#">設定</a>
-                    </li>
-                    <li>
-                      <Link to="/" onClick={() => handleLogout()}>
-                        ログアウト
-                      </Link>
-                    </li>
-                  </ul>
-                  <div>
-                    <button
-                      type="button"
-                      className="btn-pk n gray bdrs"
-                      onClick={() => setIsLanguageShow(true)}
-                    >
-                      <FontAwesomeIcon icon={faGlobe} />
-                      日本語
-                    </button>
-                  </div>
+              <>
+                <div
+                  className="pos_to"
+                  onMouseEnter={() => {
+                    setIsUserBoxShow(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsUserBoxShow(false);
+                  }}
+                >
+                  <button type="button" className="btn_tugo btn-pk n blue bdrs">
+                    <span>投稿</span>
+                  </button>
+                  {isUserBoxShow && (
+                    <div className="box_drop">
+                      <ul>
+                        <li onClick={() => navigate("/dashboard/post")}>
+                          <Link to="">
+                            <FontAwesomeIcon
+                              className="fa-light"
+                              icon={faSquarePen}
+                            />
+                            投稿する
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="">
+                            <FontAwesomeIcon
+                              className="fa-regular"
+                              icon={faCartCirclePlus}
+                            />
+                            マケットに登録
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+                <div
+                  className="pos_profile"
+                  onMouseEnter={() => {
+                    setIsProfileShow(true);
+                  }}
+                  onMouseLeave={() => {
+                    setIsProfileShow(false);
+                  }}
+                >
+                  <button type="button" className="btn_profile">
+                    <span style={{ backgroundImage: `url(${tempProfile})` }}>
+                      마이페이지
+                    </span>
+                  </button>
+
+                  {isProfileShow && (
+                    <div className="box_drop">
+                      <div className="top">
+                        <button type="button" className="btn_box_close">
+                          <FontAwesomeIcon icon={faXmarkLarge} />
+                          プロフィール
+                        </button>
+                      </div>
+                      <div className="bt">
+                        <p className="t2">{userInfo?.email || ""}</p>
+                        <p className="t1">保有ポイント</p>
+                        <p className="c1">
+                          <span className="c-blue">100,324,394</span>
+                          <a href="#" className="btn-pk s blue bdrs">
+                            チャージ
+                          </a>
+                        </p>
+                      </div>
+                      <ul>
+                        <li>
+                          <Link to="/author/register">クリエイター登録</Link>
+                        </li>
+                        <li>
+                          <Link to="/dashboard/main">ダッシュボード</Link>
+                        </li>
+                      </ul>
+                      <ul>
+                        <li>
+                          <a href="#">支援中のクリエイター</a>
+                        </li>
+                        <li>
+                          <a href="#">フォロー中のクリエイター</a>
+                        </li>
+                      </ul>
+                      <ul>
+                        <li>
+                          <a href="#">設定</a>
+                        </li>
+                        <li onClick={() => handleLogout()}>
+                          <Link to="/">ログアウト</Link>
+                        </li>
+                      </ul>
+                      <div>
+                        <button
+                          type="button"
+                          className="btn-pk n gray bdrs"
+                          onClick={() => setIsLanguageShow(true)}
+                        >
+                          <FontAwesomeIcon icon={faGlobe} />
+                          日本語
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
         {/* post */}

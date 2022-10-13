@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare, faObjectUnion } from "@fortawesome/pro-solid-svg-icons";
 import ImgComic2 from "@IMAGES/tmp_comic2.jpg";
+import { useSelector } from "react-redux";
+import { getPostSeries } from "@API/postService";
 
 const Series = () => {
   const navigate = useNavigate();

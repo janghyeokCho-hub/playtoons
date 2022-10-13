@@ -10,7 +10,7 @@ import { apiServer } from "./api";
 */
 export const setPostToServer = async (params) => {
   try {
-    return await apiServer('post', '/post', params);
+    return await apiServer("post", "/post", params);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -25,7 +25,7 @@ export const setPostToServer = async (params) => {
 */
 export const getPostDetailFromServer = async (params) => {
   try {
-    return await apiServer('get', `/post/${params.id}`);
+    return await apiServer("get", `/post/${params.id}`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -40,7 +40,7 @@ export const getPostDetailFromServer = async (params) => {
 */
 export const editPostToServer = async (params) => {
   try {
-    return await apiServer('patch', '/post', params);
+    return await apiServer("patch", "/post", params);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -55,7 +55,10 @@ export const editPostToServer = async (params) => {
 */
 export const getPostSeriesMine = async (params) => {
   try {
-    return await apiServer('get', `/post/series/mine${getGetMethodUrl(params)}` );
+    return await apiServer(
+      "get",
+      `/post/series/mine${getGetMethodUrl(params)}`
+    );
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -70,7 +73,7 @@ export const getPostSeriesMine = async (params) => {
 */
 export const getAuthorMineFromServer = async () => {
   try {
-    return await apiServer('get', '/author/mine', );
+    return await apiServer("get", "/author/mine");
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -85,7 +88,20 @@ export const getAuthorMineFromServer = async () => {
 */
 export const getAccountsFromServer = async () => {
   try {
-    return await apiServer('get', '/accounts', );
+    return await apiServer("get", "/accounts");
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+ * 아이디로 시리즈 검색
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getPostSeries = async (id) => {
+  try {
+    return await apiServer("get", `/post/series/${id}`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
