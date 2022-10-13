@@ -12,7 +12,14 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import Plan from "./Plan";
 import Series from "./Series";
 import { Link } from "react-router-dom";
-import { getFileURL } from "@COMMON/common";
+import { getFileUrlFromServer } from "@API/fileService";
+
+async function getFileURLData(hash, state) {
+  const response = await getFileUrlFromServer(hash);
+  if (response.status === 200) {
+    state(response?.data?.url);
+  }
+}
 
 // Post API 나오면 작업
 const PostItem = () => {
@@ -119,7 +126,17 @@ const PostItem = () => {
 
 const Post = () => {
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
-  console.log("currentAuthor : ", currentAuthor);
+  const [backgroundImgURL, setBackgroundImgURL] = useState(null);
+  const [profileImgURL, setProfileImgURL] = useState(null);
+
+  useEffect(() => {
+    if (currentAuthor?.backgroundImage) {
+      getFileURLData(currentAuthor.backgroundImage, setBackgroundImgURL);
+    }
+    if (currentAuthor?.profileImage) {
+      getFileURLData(currentAuthor.profileImage, setProfileImgURL);
+    }
+  }, [currentAuthor]);
   const [selectTab, setSelectTab] = useState("POST");
 
   return (
@@ -129,23 +146,12 @@ const Post = () => {
           {/* 이미지 default 값 필요 */}
           <ImgTmpProfileBgDiv
             className="pf_thumb"
-            bgImg={
-              currentAuthor?.backgroundImg
-                ? getFileURL(currentAuthor.backgroundImg)
-                : ""
-            }
+            bgImg={backgroundImgURL}
           ></ImgTmpProfileBgDiv>
           <div className="pf_txt">
             <div className="icon">
               {/* 이미지 default 값 필요 */}
-              <img
-                src={
-                  currentAuthor?.profileImage
-                    ? getFileURL(currentAuthor.profileImage)
-                    : ""
-                }
-                alt="profile"
-              />
+              <img src={profileImgURL} alt="profile" />
             </div>
             <p className="h1">{currentAuthor?.nickname}</p>
             <p className="t1">{currentAuthor?.description}</p>

@@ -106,3 +106,16 @@ export const getPostSeries = async (id) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+ * 시리즈 아이디로 시리즈의 게시글 수
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getPostSeriesCount = async (id) => {
+  try {
+    return await apiServer("get", `/post/series/${id}/count`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

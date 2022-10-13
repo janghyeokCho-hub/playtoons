@@ -9,43 +9,54 @@ import {
 } from "@/modules/redux/ducks/author";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
-import { getFileURL } from "@COMMON/common";
+import { getFileUrlFromServer } from "@API/fileService";
 import { getPostSeries as getPostSeriesAPI } from "@API/postService";
 
-const renderItems = (items) => {
-  return items.map((item, index) => {
-    return (
-      <SwiperSlide key={index} className="cx">
-        <div className="box_profile">
-          <Link
-            to={{
-              pathname: "/author/post",
-            }}
-            state={{ item }}
-          >
+async function getFileURLData(hash, state) {
+  const response = await getFileUrlFromServer(hash);
+  if (response.status === 200) {
+    state(response?.data?.url);
+  }
+}
+
+const RecentComponent = ({ item }) => {
+  const [backgroundImgURL, setBackgroundImgURL] = useState(null);
+  useEffect(() => {
+    if (item?.backgroundImage) {
+      getFileURLData(item.backgroundImage);
+      getFileURLData(item.backgroundImage, setBackgroundImgURL);
+    }
+  }, [item]);
+
+  return (
+    <div className="box_profile">
+      <Link
+        to={{
+          pathname: "/author/post",
+        }}
+        state={{ item }}
+      >
+        {/* 이미지 default 값 필요 */}
+        <ImgTmpProfileBgDiv className="pf_thumb" bgImg={backgroundImgURL} />
+        <div className="pf_txt">
+          <div className="icon">
             {/* 이미지 default 값 필요 */}
-            <ImgTmpProfileBgDiv
-              className="pf_thumb"
-              bgImg={
-                item?.backgroundImage ? getFileURL(item.backgroundImage) : ""
-              }
-            />
-            <div className="pf_txt">
-              <div className="icon">
-                {/* 이미지 default 값 필요 */}
-                <img
-                  src={item?.profileImage ? getFileURL(item.profileImage) : ""}
-                  alt="profile"
-                />
-              </div>
-              <p className="h1">{item.nickname}</p>
-              <p className="t1">{item.description}</p>
-            </div>
-          </Link>
+            <img src={backgroundImgURL} alt="profile" />
+          </div>
+          <p className="h1">{item.nickname}</p>
+          <p className="t1">{item.description}</p>
         </div>
-      </SwiperSlide>
-    );
-  });
+      </Link>
+    </div>
+  );
+};
+
+const renderItems = (items) => {
+  return items.map((item, index) => (
+    <SwiperSlide key={`recent_${index}`} className="cx">
+      <RecentComponent item={item} />
+    </SwiperSlide>
+  ));
 };
 
 const RecommentAuthorComponent = ({ item, callback }) => {
@@ -70,11 +81,11 @@ const RecommentAuthorComponent = ({ item, callback }) => {
 
   useEffect(() => {
     if (data?.coverImage) {
-      setCoverImgURL(getFileURL(data.coverImage));
+      getFileURLData(data.coverImage, setCoverImgURL);
     }
 
     if (data?.author?.profileImage) {
-      setProfileImgURL(getFileURL(data?.author?.profileImage));
+      getFileURLData(data?.author?.profileImage, setProfileImgURL);
     }
 
     return () => {

@@ -1,7 +1,7 @@
-import { getFileUrlFromServer } from '@/services/dashboardService';
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { getFileUrlFromServer } from "@/services/dashboardService";
+import React from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 
 /**
 *
@@ -19,33 +19,28 @@ import { useState } from 'react';
 * @return
 */
 export default function Image(props) {
-  const {alt, hash, className, } = props;
-  const [stateImage , setStateImage] = useState(undefined);
+  const { alt, hash, className } = props;
+  const [stateImage, setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
     const params = new FormData();
-    const {status, data: result} = await getFileUrlFromServer(hash, params);
-    console.log('getImage', status, result);
-    
-    if( status === 200 ){
+    const { status, data: result } = await getFileUrlFromServer(hash, params);
+    console.log("getImage", status, result);
+
+    if (status === 200) {
       setStateImage(result?.url);
-    }
-    else{
+    } else {
       console.log("error ", result?.message);
     }
-    
   };
 
   useEffect(() => {
-    if( hash?.startsWith('/static/media/') ){
+    if (hash?.startsWith("/static/media/")) {
       setStateImage(hash);
-    }
-    else{
+    } else {
       getImage(hash);
     }
   }, [hash]);
 
-  return (
-    <img className={className} src={stateImage} alt={alt} />
-  )
+  return <img className={className} src={stateImage} alt={alt} />;
 }

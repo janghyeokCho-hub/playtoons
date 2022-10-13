@@ -93,7 +93,7 @@ export const getFromDataJson = (refForm) => {
     obj[form[i].name] = form[i].value;
   }
 
-  delete obj[''];
+  delete obj[""];
   return obj;
 };
 
@@ -111,16 +111,4 @@ export const removeItemInList = (list, value) => {
   return list.filter((item) => {
     return item !== value;
   });
-};
-
-/**
- * 파일의 경로를 가져오는 함수
- * @version 1.0.0
- * @author 조장혁
- * @param hash File hash code (string)
- * @param query get url query (json)
- * @return
- */
-export const getFileURL = (hash, query) => {
-  return getFileUrlFromServer(hash, query);
 };

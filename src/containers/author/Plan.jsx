@@ -2,17 +2,26 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAuthorPlans } from "@/modules/redux/ducks/author";
+import { getFileUrlFromServer } from "@API/fileService";
 
-import { getFileURL } from "@COMMON/common";
+async function getFileURLData(hash, state) {
+  const response = await getFileUrlFromServer(hash);
+  if (response.status === 200) {
+    state(response?.data?.url);
+  }
+}
 
 const PlanItem = ({ plan }) => {
+  const [thumbnailImgURL, setThumbnailImgURL] = useState(null);
+  useEffect(() => {
+    if (plan?.thumbnailImage) {
+      getFileURLData(plan.thumbnailImage, setThumbnailImgURL);
+    }
+  }, [plan]);
   return (
     <div className="col" style={{ marginBottom: "2.33%" }}>
       <div className="icon">
-        <img
-          src={plan?.thumbnailImage ? getFileURL(plan.thumbnailImage) : ""}
-          alt="plan"
-        />
+        <img src={thumbnailImgURL} alt="plan" />
       </div>
       <div className="cont">
         <h3 className="h1">{plan.name}</h3>
