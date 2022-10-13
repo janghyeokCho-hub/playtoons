@@ -6,6 +6,8 @@ import SwiperContainer from "@/components/dashboard/Swiper";
 import Container from "@/components/dashboard/Container";
 
 import tempImage from '@IMAGES/tmp_comic2.jpg';
+import { getSeriesDetailFromServer } from "@/services/dashboardService";
+import Image from "@/components/dashboard/Image";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -31,11 +33,34 @@ const tempData = {
 };
 
 export default function DashboardSeriesDetail(props) {
-  const [data, setData] = useState(undefined);
+  const [stateData, setStateData] = useState(undefined);
   const params = useParams('id');
 
+  const getSeriesDetail = async () => {
+    const {status, data} = await getSeriesDetailFromServer(params);
+    console.log('getSeriesDetail', status, data);
+    
+    if( status === 200 ){
+      
+      setStateData({
+        ...tempData,
+        title: data.series.title,
+        category: data.series.category,
+        rating: data.series.rating,
+        type: data.series.type,
+        coverImage: data.series.coverImage,
+        tags: data.series.tags,
+        description: data.series.description
+      });
+    }
+    else{
+      
+    }
+    
+  };
+
   const renderThumbList = () => {
-    return data?.thumbList?.map( (item, index) => {
+    return stateData?.thumbList?.map( (item, index) => {
       return <SwiperSlide className="cx swiper-slide" key={index}>
               <a href="#">
                 <div className="cx_thumb">
@@ -50,13 +75,13 @@ export default function DashboardSeriesDetail(props) {
   }
 
   const renderTagList = () => {
-    return data?.tagList?.map( (item, index) => {
+    return stateData?.tags?.map( (item, index) => {
       return <div className="i_tag" key={index}>{item}</div>
     });
   };
 
   useEffect(() => {
-    setData(tempData);
+    getSeriesDetail();
   }, []);
   
 
@@ -74,18 +99,18 @@ export default function DashboardSeriesDetail(props) {
             </div>
             
             <div className="bbs_book">
-              <p className="cx_tit">{data?.title}</p>
-              <div className="cx_thumb"><span><img src={data?.main_image} alt="사진" /></span></div>
+              <p className="cx_tit">{stateData?.title}</p>
+              <div className="cx_thumb"><span><Image hash={stateData?.coverImage} alt="cover image" /></span></div>
               <ul className="cx_list">
-                <li><span>{text.category} </span><span>{data?.category}</span></li>
-                <li><span>{text.grade} </span><span>{data?.grade}</span></li>
-                <li><span>{text.status} </span><span>{data?.status}</span></li>
-                <li><span>{text.type}  </span><span>{data?.type}</span></li>
+                <li><span>{text.category} </span><span>{stateData?.category.name}</span></li>
+                <li><span>{text.grade} </span><span>{stateData?.rating}</span></li>
+                <li><span>{text.status} </span><span>{stateData?.status}</span></li>
+                <li><span>{text.type}  </span><span>{stateData?.type.name}</span></li>
               </ul>
             </div>
 
             <h3 className="tit1">{text.summary}</h3>
-            <p className="txt1">{data?.summary}</p>
+            <p className="txt1">{stateData?.description}</p>
 
             <h3 className="tit1">{text.tag}</h3>
             <div className="txt1">

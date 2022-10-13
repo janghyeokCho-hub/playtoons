@@ -162,4 +162,19 @@ export const setSeriesToServer = async (params) => {
   }
 };
 
+/**
+*
+  Dashbaord - series 시리즈 작성
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getSeriesDetailFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/post/series/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
 

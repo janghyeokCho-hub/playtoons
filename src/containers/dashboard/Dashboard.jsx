@@ -35,9 +35,10 @@ import { getAuthorMineAction } from '@/modules/redux/ducks/post';
 */
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const myAuthors = useSelector( ({post}) => post?.authorMine );
+  //TODO test 용 
+  const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   
-  if( myAuthors === undefined ){
+  if( myAuthors === undefined || myAuthors.length === 0 ){
     dispatch( getAuthorMineAction() );
   }
 

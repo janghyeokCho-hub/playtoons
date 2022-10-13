@@ -2,6 +2,7 @@ import React, { useState, useEffect, useImperativeHandle, forwardRef } from "rea
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/pro-solid-svg-icons";
 import "@/css/test.css";
+import { useRef } from "react";
 
 /**
 * Dropdown 리스트를 만든다
@@ -17,6 +18,8 @@ import "@/css/test.css";
         ]
       };
       <Dropdown 
+        name={'typeId'}
+        className={''}
         dataList={typeDataList} 
         selected={selectedItem} 
         handleItemClick={handleItemClick}/>
@@ -26,9 +29,10 @@ import "@/css/test.css";
 * @param selected 선택된 아이템
 */
 function Dropdown(props, ref) {
-  const { dataList, selected } = props;
+  const { name, dataList, selected, className, handleItemClick } = props;
   const [ isShowDropdown, setShowDropdown ] = useState(false);
   const [ stateSelectedItem, setSelectedItem ] = useState(undefined);
+  const refInput = useRef();
 
   const handleToggle = () => {
     if (dataList !== undefined && dataList.length > 0) {
@@ -39,19 +43,20 @@ function Dropdown(props, ref) {
   const handleOptionClicked = (item) => () => {
     setSelectedItem(item);
     setShowDropdown(false);
-
-    props.handleItemClick?.(item);
+    refInput.current.value = item.id;
+    handleItemClick?.(item);
   };
 
-  const getLiElements = () => {
+  const renderLiElements = () => {
     return dataList?.map((item, index) => {
       return (
         <li 
-          className="dropdown_li"
           key={index} 
-          value={item.code}
+          value={item.id}
           onClick={handleOptionClicked(item)} >
-          { item.name }
+            <a href="#">
+              { item.name }
+            </a>
         </li>
       );
     });
@@ -61,36 +66,35 @@ function Dropdown(props, ref) {
     //select 아이템 
     setSelectedItem(
       dataList?.map((item, index) => {
-        return selected?.code === item?.code && item;
+        return selected?.id === item?.id && item;
       })
     );
   }, []);
 
   return (
-    <div 
-      className={"dropdown_container"}
-      onClick={handleToggle}  >
-
-      <FontAwesomeIcon
-        icon={faChevronDown}
-        className={"dropdown_down_ico"} />
-
-      <div 
-        className="dropdown_header"
-        value={stateSelectedItem?.code}>
-        {stateSelectedItem?.name}
-      </div>
-      {
-        isShowDropdown === true && (
-          <ul 
-            className="dropdown_ul">
+    <>
+      <div className={`btn_select1 ${className}`}>
+        <button
+          type="button"
+          className="select_tit"
+          onClick={handleToggle} 
+          >
+          {stateSelectedItem?.name}
+        </button>
+        <div
+          className={`select_list dropdown_ani dropdown_div ${isShowDropdown ? 'dropdown_on' : 'dropdown_close'}`}
+          
+        >
+          <ul>
             {
-              dataList !== undefined && getLiElements()
+              renderLiElements()
             }
           </ul>
-        )
-      }
-    </div>
+        </div>
+
+        <input ref={refInput} type='hidden' name={name} />
+      </div>
+    </>
   );
 }
 

@@ -60,3 +60,18 @@ export const getAuthorMineFromServer = async () => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+*
+   post edit 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getAccountsFromServer = async () => {
+  try {
+    return await apiServer('get', '/accounts', );
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

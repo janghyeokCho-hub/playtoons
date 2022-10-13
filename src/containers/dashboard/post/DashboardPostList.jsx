@@ -14,6 +14,7 @@ import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import { useSelector } from "react-redux";
+import Dropdown from "@/components/dashboard/Dropdown";
 
 
 const text = {
@@ -31,15 +32,15 @@ const text = {
 
 const searchList = [
   {
-    code: "all",
+    id: "all",
     name: "シリーズすべて"
   },
   {
-    code: "all",
+    id: "all",
     name: "シリーズすべて1"
   },
   {
-    code: "all",
+    id: "all",
     name: "シリーズすべて2"
   },
 ];
@@ -48,7 +49,7 @@ export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState();
   const params = useParams('page');
   const navigate = useNavigate();
-  const authors = useSelector(({post}) => post.authorMine.authors);
+  const authors = useSelector(({post}) => post?.authorMine?.authors);
   
 
   const getPostList = async (page) => {
@@ -105,7 +106,7 @@ export default function DashboardPostList(props) {
   const handleClickPost = (event) => {
     console.log('Post', event);
     
-    if( authors.length === 0 ){
+    if( authors === undefined || authors.length === 0 ){
       //TODO 데모용 author가 아니라면 진입금지
       if( window.confirm('クリエイターとして登録してください。') ){
         navigate('/post/upload');
@@ -151,6 +152,13 @@ export default function DashboardPostList(props) {
             className={"select1 wid1"}
             dataList={searchList}
             handleItemClick={handleItemClickSearch} />
+          {/* <Dropdown
+            name={"typeId"}
+            className={'select1 wid1'}
+            dataList={searchList} 
+            selected={'all'} 
+            handleItemClick={handleItemClickSearch}/> */}
+            
         </div>
 
         <div className="tbl_basic mtbl_ty1">

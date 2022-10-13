@@ -25,6 +25,17 @@ export default function Type(props, ref) {
   const {name, className, callback} = props;
   const [stateList, setStateList] = useState(undefined);
 
+  const getSelectedItem = (option) => {
+    const id = option.getAttribute('value');
+    let selected = undefined;
+    for( let i = 0; i < stateList.length; i++ ){
+      if( stateList[i].id === id ){
+        selected = stateList[i];
+        break;
+      }
+    }
+    return selected;
+  };
 
   const getType = async () => {
     const {status, data} = await getPostTypeListFromServer();
@@ -39,8 +50,7 @@ export default function Type(props, ref) {
   };
 
   const handleClickItem = (option) => {
-    const item = stateList[option.getAttribute('value')];
-    callback?.( item );
+    callback?.( getSelectedItem(option) );
   };
 
 

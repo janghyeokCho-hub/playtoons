@@ -11,6 +11,8 @@ import { getFromDataJson, } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
+import { getAuthorMineFromServer } from "@/services/postService";
+import { useSelector } from "react-redux";
 
 
 const text = {
@@ -40,6 +42,7 @@ export default function DashboardUploadSeries(props) {
   const [ stateTypeList, setStateTypeList ] = useState(undefined);
   const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
   const [ stateType, setStateType ] = useState(undefined);
+  const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const refR19 = useRef();
   const refCoverImage = useRef();
   const refTimelineImage = useRef();
@@ -85,9 +88,9 @@ export default function DashboardUploadSeries(props) {
       thumbnailImage: refTimelineImage.current.getImageInfo().value,
       tags: refTags.current.getTagsJsonObject(),
       rating: getRating(),
-      keyword: "",
+      // keyword: "",
       status: "enabled",
-      authorId: ""
+      authorId: myAuthors[0].id     //author 가 아니면 못옴
     };
 
     delete json[''];
@@ -214,6 +217,12 @@ export default function DashboardUploadSeries(props) {
 
   const handlePreview = (e) => {
     console.log("handlePreview", refR19);
+
+    getAuthor();
+  };
+
+  const getAuthor = async () => {
+    
   };
 
   //==============================================================================

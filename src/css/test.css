@@ -54,6 +54,31 @@
   right: 16px;
 }
 
+.dropdown_ani{
+  transition: all 0.3s ease;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transform-origin: center top;
+}
+
+.dropdown_on{
+  /* opacity: 1;
+  display: block; */
+  transform: scaleY(100%);
+}
+
+.dropdown_close{
+  /* opacity: 0;
+  display: none; */
+  transform: scaleY(0);
+}
+
+.dropdown_div{
+  left: 0;
+}
+
+
 /* ============================================================================== */
 /* ErrorMessage Component */
 /* ============================================================================== */

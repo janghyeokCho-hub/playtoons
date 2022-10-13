@@ -81,7 +81,6 @@ export default function DashboardPostDetail() {
   const [stateReactionList, setStateReactionList] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const post = useSelector(({ post }) => post?.post);
-  const [getPostDetailFromAction] = useActions([getPostDetailAction], []);
   const dispatch = useDispatch();
   const params = useParams('id');
 
@@ -130,7 +129,6 @@ export default function DashboardPostDetail() {
     setStateReactionList(tempReactionList.list);
 
     dispatch( getPostDetailAction(params) );
-    // getPostDetailFromAction(params);
   }, []);
 
   useEffect(() => {

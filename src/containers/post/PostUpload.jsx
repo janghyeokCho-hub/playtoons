@@ -58,7 +58,7 @@ const supportorList = [
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
-  const authors = useSelector(({post}) => post.authorMine.authors);
+  const authors = useSelector(({post}) => post?.authorMine?.authors);
   const refContents = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
