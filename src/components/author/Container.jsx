@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Footer from "../Footer";
+import useSideMenu from "@/hook/useSideMenu";
+import { useRef } from "react";
 
 /**
  *
@@ -14,9 +16,17 @@ const Container = ({ menus, children, type, activeMenu }) => {
   if (isRegister === true) {
     className = `container author_main`;
   }
+
+  const wrapRef = useRef(null);
+  const { isSideMenuShow, handleChange } = useSideMenu(wrapRef);
+
   return (
-    <>
-      <Header isMenus={!isRegister} type="post" />
+    <div id="wrap" ref={wrapRef}>
+      <Header
+        isMenus={!isRegister}
+        type="post"
+        onSideMenu={() => handleChange()}
+      />
       <div id="container" className={className}>
         {isRegister === false && (
           <aside className="sidebar">
@@ -54,7 +64,7 @@ const Container = ({ menus, children, type, activeMenu }) => {
         {children}
         {isRegister === true && <Footer />}
       </div>
-    </>
+    </div>
   );
 };
 
