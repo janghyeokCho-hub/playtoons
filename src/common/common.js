@@ -93,6 +93,7 @@ export const getFromDataJson = (refForm) => {
     obj[form[i].name] = form[i].value;
   }
 
+  delete obj[''];
   return obj;
 };
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faCirclePlus, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
 
 /**
  * 
@@ -69,7 +69,18 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
   const onDrop = useCallback(async (acceptedFiles) => {
     setPreviewImage(acceptedFiles[0]);
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { 
+    getRootProps, 
+    getInputProps, 
+    open ,
+    isDragActive, 
+  } = useDropzone({ 
+    onDrop,
+    accept: {
+      'image/jpeg': [],
+      'image/png': []
+    }
+  });
   const InputProps = {
     ...getInputProps(),
     multiple: false,
@@ -82,13 +93,12 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
   //==============================================================================
 
   const handlePreviewClose = (event) => {
-    console.log('handlePreviewClose', event);
+    setStateImage(initImageObject);
     handleClose?.();
-    // setStateImage(initImageObject);
   };
 
   const handleClickEdit = (event) => {
-    console.log('Edit', event);
+    open();
     handleEdit?.();
   };
 

@@ -134,7 +134,7 @@ export default function DashboardSalesReview(props) {
           <tr key={index}>
             <td className="hide-m">{item.number}</td>
             <td className="td_imgs">
-              <div className="cx_thumb w131h81"><span><Image hash={item.image} alt={"cover iamge"} /></span></div>
+              <div className="cx_thumb w131h81"><span><img src={item.image} alt={"cover iamge"} /></span></div>
             </td>
             <td className="td_subject">{item.title}</td>
             <td className="td_group">{item.date}</td>

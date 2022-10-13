@@ -10,6 +10,7 @@ import { getFromDataJson } from "@/common/common";
 import { setPostToServer } from "@/services/postService";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
+import { useSelector } from "react-redux";
 
 
 const text = {
@@ -39,17 +40,17 @@ const text = {
 const supportorList = [
   {
     name : "閲覧範囲（支援者）",
-    code : "1",
+    id : "1",
     checked : true,
   },
   {
     name : "2hyunkook",
-    code : "2",
+    id : "2",
     checked : false,
   },
   {
     name : "yoon",
-    code : "3",
+    id : "3",
     checked : false,
   }
 ];
@@ -57,6 +58,7 @@ const supportorList = [
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
+  const authors = useSelector(({post}) => post.authorMine.authors);
   const refContents = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
@@ -90,6 +92,7 @@ export default function UploadPost(props) {
     // 폼데이터 구성
     const params = new FormData();
     params.append('authorId', '');               
+    // params.append('authorId', authors[0].id);               
     params.append('subscribeTierId', '');        
     params.append('productId', '');
     params.append('usage', usage);                  //profile, background, cover, logo, post, product, thumbnail, attachment
@@ -98,8 +101,6 @@ export default function UploadPost(props) {
     params.append('licenseRequired', false);        //product 에 관련된 항목 추후 확인 필요
     params.append('rating', 'G');                   //G, PG-13, R-15, R-17, R-18, R-18G
     params.append('file', ref.current.getImageFile());
-    
-    console.log('set file params', params);
     
     const {status, data: resultData} = await setFileToServer(params);
     console.log('setFile result', status, resultData);
@@ -137,12 +138,13 @@ export default function UploadPost(props) {
     let json = getFromDataJson(refForm);
     json = {
       ...json,
-      authorId: '',       //author id 확인 필요
+      authorId: '1',       
+      // authorId: authors[0].id,       
       rating: 'G',
       status: 'enabled',
       tags: refTags.current.getTagsJsonObject(),
     };
-    delete json[''];
+    
     console.log('setPost josn', json);
 
     const {status, data} = await setPostToServer(json);
@@ -172,6 +174,7 @@ export default function UploadPost(props) {
 
   const handleClickPreview = (event) => {
     console.log('Preview', event);
+    
     
   };
   

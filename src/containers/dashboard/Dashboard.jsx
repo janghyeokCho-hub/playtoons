@@ -24,6 +24,8 @@ import Page404 from "@/containers/dashboard/Page404";
 import Modal from '@/components/Modal';
 
 import '@/css/test.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthorMineAction } from '@/modules/redux/ducks/post';
 
 /**
 * Dashboard url 분기 처리
@@ -32,6 +34,13 @@ import '@/css/test.css';
 * @author 이현국
 */
 export default function Dashboard() {
+  const dispatch = useDispatch();
+  const myAuthors = useSelector( ({post}) => post?.authorMine );
+  
+  if( myAuthors === undefined ){
+    dispatch( getAuthorMineAction() );
+  }
+
   return (
     <>
       <Routes>

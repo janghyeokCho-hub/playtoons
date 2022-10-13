@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams, } from "react-router-dom";
+import { Link, useNavigate, useParams, } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
@@ -13,6 +13,7 @@ import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
 import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
+import { useSelector } from "react-redux";
 
 
 const text = {
@@ -46,6 +47,8 @@ const searchList = [
 export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState();
   const params = useParams('page');
+  const navigate = useNavigate();
+  const authors = useSelector(({post}) => post.authorMine.authors);
   
 
   const getPostList = async (page) => {
@@ -99,6 +102,21 @@ export default function DashboardPostList(props) {
     });
   };
 
+  const handleClickPost = (event) => {
+    console.log('Post', event);
+    
+    if( authors.length === 0 ){
+      //TODO 데모용 author가 아니라면 진입금지
+      if( window.confirm('クリエイターとして登録してください。') ){
+        navigate('/post/upload');
+      }
+    }
+    else{
+      navigate('/post/upload');
+    }
+
+  };
+
   const handleChange = (page) => {
     getPostList(page);
   };
@@ -124,7 +142,7 @@ export default function DashboardPostList(props) {
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0"><span>{text.post_list}</span></h2>
           <div className="rgh">
-            <Link to="/post/upload" className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></Link>
+            <div onClick={handleClickPost} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></div>
           </div>
         </div>
         <div className="hd_titbox2">

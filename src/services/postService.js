@@ -45,3 +45,18 @@ export const editPostToServer = async (params) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+*
+   post edit 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getAuthorMineFromServer = async () => {
+  try {
+    return await apiServer('get', '/author/mine', );
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

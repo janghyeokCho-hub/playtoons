@@ -1,25 +1,21 @@
 import React, { useRef, useEffect, useState, } from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getPostDetailAction } from "@/modules/redux/ducks/post";
+import SwiperContainer from "@/components/dashboard/Swiper";
+import { SwiperSlide } from "swiper/react";
 
 import PostContainer from "@/components/post/PostContainer";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ThumbnailTimeline from "@/components/post/ThumbnailTimeline";
-
-import tempImage from '@IMAGES/tmp_comic2.jpg';
-import tempImage2 from '@IMAGES/tmp_comic3.png';
-import SwiperContainer from "@/components/dashboard/Swiper";
-import { SwiperSlide } from "swiper/react";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
 import Tag from "@/components/dashboard/Tag";
-import { useParams } from "react-router-dom";
-import { getPostDetailFromServer } from "@/services/postService";
-import { useDispatch, useSelector } from "react-redux";
-import post, { getPostDetailAction } from "@/modules/redux/ducks/post";
+
+import tempImage from '@IMAGES/tmp_comic2.jpg';
+import tempImage2 from '@IMAGES/tmp_comic3.png';
 
 const text = {
   post_edit: "投稿を修正",
@@ -50,17 +46,17 @@ const text = {
 const supportorList = [
   {
     name : "閲覧範囲（支援者）",
-    code : "1",
+    id : "1",
     checked : true,
   },
   {
     name : "2hyunkook",
-    code : "2",
+    id : "2",
     checked : false,
   },
   {
     name : "yoon",
-    code : "3",
+    id : "3",
     checked : false,
   }
 ];
@@ -142,10 +138,8 @@ export default function PostEdit(props) {
   const dispatch = useDispatch();
   const postInfo = useSelector( ({post}) => post?.post );
   const params = useParams('id');
-  const refContents = useRef();
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
-  const refType = useRef();
   const refFrom = useRef();
 
 
@@ -183,7 +177,7 @@ export default function PostEdit(props) {
   
   const handleClickRegister = (event) => {
     console.log('Register', event);
-    return false;
+    
   };
 
   //==============================================================================
@@ -217,7 +211,7 @@ export default function PostEdit(props) {
   useEffect(() => {
     setStatePostInfo({
       ...tempData,
-      title: postInfo.title
+      title: postInfo?.title
     });
   }, [dispatch, postInfo]);
 
@@ -249,7 +243,6 @@ export default function PostEdit(props) {
                 <h3 className="tit1">{text.type}</h3>
                 <div className="lst_txchk">
                   <Type
-                    ref={refType}
                     name={'typeId'}
                     callback={handleClickType}
                     />
@@ -278,7 +271,6 @@ export default function PostEdit(props) {
               <div className="col">
                 <h3 className="tit1">{text.contents} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
                 <ImageUpload
-                  ref={refContents}
                   id={"filebox2"}
                   className={"box_drag"}
                   name={"contents"}                     

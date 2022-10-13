@@ -150,7 +150,7 @@ export default function DashboardProductList(props) {
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
           <td className="td_imgs">
-            <div className="w131h81 cx_thumb "><span><Image hash={item.image} alt={"cover iamge"} /></span></div>
+            <div className="w131h81 cx_thumb "><span><img src={item.image} alt={"cover iamge"} /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
           <td className="td_group">{item.price}</td>

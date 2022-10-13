@@ -13,6 +13,7 @@ import IconWithText from "@/components/dashboard/IconWithText";
 import { getPostDetailFromServer } from "@/services/postService";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
+import useActions from "@/hook/useActions";
 
 
 const text = {
@@ -80,6 +81,7 @@ export default function DashboardPostDetail() {
   const [stateReactionList, setStateReactionList] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const post = useSelector(({ post }) => post?.post);
+  const [getPostDetailFromAction] = useActions([getPostDetailAction], []);
   const dispatch = useDispatch();
   const params = useParams('id');
 
@@ -127,8 +129,8 @@ export default function DashboardPostDetail() {
     setStateData(tempData);
     setStateReactionList(tempReactionList.list);
 
-    
     dispatch( getPostDetailAction(params) );
+    // getPostDetailFromAction(params);
   }, []);
 
   useEffect(() => {
@@ -136,7 +138,7 @@ export default function DashboardPostDetail() {
       ...tempData,
       title: post?.title
     });
-  }, [dispatch, post]);
+  }, [post]);
 
   return (
     <Container

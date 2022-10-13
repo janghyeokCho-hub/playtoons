@@ -66,7 +66,16 @@ export default forwardRef(function ImageUpload(props, ref) {
   const onDrop = useCallback(async (acceptedFiles) => {
     setPreviewImage(acceptedFiles[0]);
   }, []);
-  const { getRootProps, getInputProps, } = useDropzone({ onDrop }); //isDragActive
+  const { 
+    getRootProps, 
+    getInputProps, 
+  } = useDropzone({ 
+    onDrop,
+    accept: {
+      'image/jpeg': [],
+      'image/png': []
+    }
+  }); //isDragActive
   const InputProps = {
     ...getInputProps(),
     multiple: false,
