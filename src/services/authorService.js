@@ -12,6 +12,14 @@ export const getAuthorList = async () => {
   }
 };
 
+export const getAuthor = async (id) => {
+  try {
+    return await apiServer("get", `/author/${id}`);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
 export const setViewAuthor = async (id) => {
   try {
     return await apiServer("post", `/author/${id}/view`);
