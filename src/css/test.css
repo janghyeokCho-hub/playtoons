@@ -773,6 +773,20 @@ li.dashboard-gnb.selected{
 }
 
 /* ============================================================================== */
+/* dashboard - profile  */
+/* ============================================================================== */
+.top_profile .fileview > div > img {
+  width: 100% !important;
+  height: 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #13161a;
+  overflow: auto; /* 2022.09.26 profile background preview 영역 벗어나는걸 방지하기 위해서 추가 */
+}
+
+
+/* ============================================================================== */
 /* temp mobile css  */
 /* ============================================================================== */
 @media screen and (min-width:1061px) and (max-width: 1165px) {

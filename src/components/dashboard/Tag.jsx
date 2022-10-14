@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import { useState } from 'react';
@@ -25,7 +25,7 @@ import '@/css/test.css';
 * @return
 */
 export default forwardRef( function Tag(props, ref) {
-  const { placeholder, className, name } = props;
+  const { placeholder, className, name, list } = props;
   const [ stateList, setStateList ] = useState([]);
   const refInput = useRef();
   const refContainer = useRef();
@@ -117,6 +117,9 @@ export default forwardRef( function Tag(props, ref) {
   };
 
   useImperativeHandle(ref, () => ({
+    setTagList: (list) => {
+      setStateList(list);
+    },
     getTagList: () => {
       return stateList;
     },
@@ -130,6 +133,10 @@ export default forwardRef( function Tag(props, ref) {
       return json;
     },
   }));
+
+  useEffect(() => {
+    setStateList(list);
+  }, []);
 
   return (
     <>

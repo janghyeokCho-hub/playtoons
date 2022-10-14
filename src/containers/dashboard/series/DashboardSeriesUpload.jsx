@@ -13,6 +13,7 @@ import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
 import { getAuthorMineFromServer } from "@/services/postService";
 import { useSelector } from "react-redux";
+import { result } from "lodash";
 
 
 const text = {
@@ -148,8 +149,8 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
+      console.log('Error : ', status, resultData);
     }
-
   };
 
   const getTypeList = async () => {
@@ -182,7 +183,7 @@ export default function DashboardUploadSeries(props) {
     console.log('setSeries', status, result);
     
     if( status === 201 ){
-      if( window.confirm('series 등록에 성공했습니다.') ){
+      if( window.confirm('series 登録を完了しました。') ){
         navigate('/dashboard/series');
       }
     }

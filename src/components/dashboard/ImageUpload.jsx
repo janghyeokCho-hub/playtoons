@@ -35,7 +35,7 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 export default forwardRef(function ImageUpload(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, value: undefined};
-  const { className, preview, text, name, id, callback } = props;
+  const { className, preview, text, name, id, callback, hash } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
   
   /**

@@ -38,7 +38,8 @@ export default function Dashboard() {
   //TODO test 용 
   const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   
-  if( myAuthors === undefined || myAuthors.length === 0 ){
+  //dashboard 진입조건 확인 필요. 여부에 따라서 로그인시 가져와야 할수도 있음.
+  if( myAuthors === undefined || myAuthors === null || myAuthors.length === 0 ){
     dispatch( getAuthorMineAction() );
   }
 

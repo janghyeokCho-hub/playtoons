@@ -77,6 +77,7 @@ export const setFileToServer = async (params) => {
   }
 };
 
+
 /**
 *
    파일 경로 불러오기 
@@ -137,7 +138,7 @@ export const getTagFromServer = async (query) => {
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @return json ex) {"result":0,"tag":{"name":"test5","public":true,"rating":"G","id":"15","createdAt":"2022-09-28T05:07:21.051Z","updatedAt":"2022-09-28T05:07:21.051Z"}}
+* @return json
 */
 export const setTagToServer = async (params) => {
   try {
@@ -164,7 +165,7 @@ export const setSeriesToServer = async (params) => {
 
 /**
 *
-  Dashbaord - series 시리즈 작성
+  Dashbaord - series - detail 시리즈 상세
 *
 * @version 1.0.0
 * @author 2hyunkook
@@ -172,6 +173,36 @@ export const setSeriesToServer = async (params) => {
 export const getSeriesDetailFromServer = async (params) => {
   try {
     return await apiServer("get", `/post/series/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
+  Dashbaord - profile 작가 정보 업데이트
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setAuthorIdToServer = async (id, params) => {
+  try {
+    return await apiServer('patch', `/author/${id}`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
+  Dashbaord - profile 작가 정보 가져오기
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getAuthorIdToServer = async (id) => {
+  try {
+    return await apiServer('get', `/author/${id}`, );
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
