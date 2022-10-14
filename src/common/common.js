@@ -69,8 +69,10 @@ export const isJSONStr = (str) => {
 export const getGetMethodUrl = (formData) => {
   let url = "?";
 
-  for (const item of formData.entries()) {
-    url += `${item[0]}=${item[1]}&`;
+  if( formData !== undefined ){
+    for (const item of formData.entries()) {
+      url += `${item[0]}=${item[1]}&`;
+    }
   }
 
   return url.slice(0, -1);

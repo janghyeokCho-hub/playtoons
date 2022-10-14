@@ -5,7 +5,7 @@ import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
 import { getFromDataJson } from "@/common/common";
-import { getAuthorIdToServer, getFileUrlFromServer, setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
+import { getAuthorIdFromServer, getFileUrlFromServer, setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import Modal from "@/components/Modal";
@@ -83,7 +83,7 @@ export default function DashboardUploadProfile(props) {
 
 	const getAuthor = async () => {
 		
-		const {status, data} = await getAuthorIdToServer(myAuthors[0].id);
+		const {status, data} = await getAuthorIdFromServer(myAuthors[0].id);
 		console.log('getAuthor', status, data);
 		
 		if( status === 200 ){

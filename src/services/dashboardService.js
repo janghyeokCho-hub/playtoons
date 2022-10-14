@@ -200,9 +200,26 @@ export const setAuthorIdToServer = async (id, params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getAuthorIdToServer = async (id) => {
+export const getAuthorIdFromServer = async (id) => {
   try {
     return await apiServer('get', `/author/${id}`, );
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+
+
+/**
+*
+  Dashbaord - plan 플랜 관리 목록 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getSubscribeTierAuthorIdFromServer = async (authorId, params) => {
+  try {
+    return await apiServer('get', `/subscribeTier/${authorId}${getGetMethodUrl(params)}`, );
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

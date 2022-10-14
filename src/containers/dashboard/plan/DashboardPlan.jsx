@@ -9,6 +9,8 @@ import tempPlanImage2 from "@IMAGES/img_mainplan2.jpg";
 import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
 
 
 const text = {
@@ -94,23 +96,46 @@ const tempData = {
 
 export default function DashboardPlan(props) {
   const [stateData, setStateData] = useState(undefined);
-  const params = useParams();
-  const navigate = useNavigate();
+  const [stateSupporter, setStateSupporter] = useState(undefined);
+  const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
 
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  const getSubscribeTier = async () => {
+    // const params = new FormData();
+    
+    const {status, data} = await getSubscribeTierAuthorIdFromServer( myAuthors[0].id);
+    console.log('getSubscribeTier', status, data);
+    
+    if( status === 200 ){
+      setStateData({
+        ...stateData,
+        plans: data?.subscribeTiers
+      });
+    }
+    else{
+      
+    }
+    
+  };
+
+  //==============================================================================
+  // render & hook
+  //==============================================================================
 
   const renderPlanList = () => {
-    return stateData?.plans.map((item, i) => {
+    return stateData?.plans?.map((item, i) => {
       return  (
         <div className="col" key={i}>
-          <div className="icon"><img src={item.image} alt="planImage" /></div>
+          <div className="icon"><img src={item.thumbnailImage} alt="planImage" /></div>
           <div className="cont">
-            <h3 className="h1">{item.title}</h3>
-            <p className="t1"><span className="c-blue">{item.money}</span> /{text.month}</p>
+            <h3 className="h1">{item.name}</h3>
+            <p className="t1"><span className="c-blue">{item.price}</span> /{text.month}</p>
             <p className="t2">{item.description}</p>
             <div className="t_dot1">
-              {
-                renderBenefitList(item.benefits)  
-              }
+              <p>{item.description}</p>
             </div>
             <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></Link>
           </div>
@@ -126,7 +151,7 @@ export default function DashboardPlan(props) {
   };
 
   const renderSupporterList = () => {
-    return stateData?.supporters.map((item, i) => {
+    return stateSupporter?.map((item, i) => {
       return  (
         <li key={i}>
           <div>
@@ -141,7 +166,8 @@ export default function DashboardPlan(props) {
   };
 
   useEffect(() => {
-    setStateData(tempData);
+    setStateSupporter(tempData.supporters);
+    getSubscribeTier();
   }, []);
 
   return (
