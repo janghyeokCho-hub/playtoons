@@ -132,3 +132,37 @@ export const getPostTypes = async () => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+ * Get post list
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getPostList = async (type, params) => {
+  let url = "/post";
+  if (type === "COMPLETED") {
+    url = `${url}?typeId=1&completed=1`;
+  } else if (type === "SERIES") {
+    url = `${url}?typeId=1&series=1`;
+  } else if (type === "SHORT") {
+    url = `${url}?typeId=1&short=1`;
+  }
+  try {
+    return await apiServer("get", url, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+ * 타입 별 카테고리 목록
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getCategorys = async (id) => {
+  try {
+    return await apiServer("get", `/post/category/${id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

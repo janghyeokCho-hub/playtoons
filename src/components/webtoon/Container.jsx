@@ -1,5 +1,4 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
 import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
