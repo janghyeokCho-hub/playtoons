@@ -11,6 +11,9 @@ import tempProfile from "@IMAGES/img_profile.png";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { useSelector } from "react-redux";
 import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
+import Image from "@/components/dashboard/Image";
+import SwiperContainer from "@/components/dashboard/Swiper";
+import { SwiperSlide } from "swiper/react";
 
 
 const text = {
@@ -128,8 +131,8 @@ export default function DashboardPlan(props) {
   const renderPlanList = () => {
     return stateData?.plans?.map((item, i) => {
       return  (
-        <div className="col" key={i}>
-          <div className="icon"><img src={item.thumbnailImage} alt="planImage" /></div>
+        <SwiperSlide className="col h_auto" key={i}>
+          <div className="icon"><Image hash={item.thumbnailImage} alt="planImage" /></div>
           <div className="cont">
             <h3 className="h1">{item.name}</h3>
             <p className="t1"><span className="c-blue">{item.price}</span> /{text.month}</p>
@@ -139,7 +142,7 @@ export default function DashboardPlan(props) {
             </div>
             <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></Link>
           </div>
-        </div>
+        </SwiperSlide>
       );
     });
   };
@@ -184,10 +187,26 @@ export default function DashboardPlan(props) {
             </div>
           </header>
 
-          <div className="lst_mainplan">
-            {
-              renderPlanList()
-            }
+          <div className="lst_mainplan relative">
+            <SwiperContainer 
+                  className={"mySwiper1"}
+                  buttonClassName={'wh_i'}    //TODO 버튼 shadow 확인 필요
+                  slidesPerView={4}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 2,
+                      spaceBetween: 8,
+                    },
+                    1000: {
+                      slidesPerView: 3,
+                      spaceBetween: 15,
+                    },
+                    1400: {
+                      slidesPerView: 3,
+                      spaceBetween: 30,
+                    },
+                  }}
+                  list={renderPlanList} />
           </div>
         </section>
 

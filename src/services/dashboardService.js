@@ -225,4 +225,19 @@ export const getSubscribeTierAuthorIdFromServer = async (authorId, params) => {
   }
 };
 
+/**
+*
+  Dashbaord - plan 플랜 관리 목록 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setSubscribeTierToServer = async (params) => {
+  try {
+    return await apiServer('post', `/subscribeTier`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
 
