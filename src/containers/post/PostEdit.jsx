@@ -224,7 +224,7 @@ export default function PostEdit(props) {
 
   return (
     <PostContainer
-      type={"sub post"}
+      className={"sub post"}
       headerType={"postUpload"}
       headerClassName={"ty1"} >
 

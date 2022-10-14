@@ -17,7 +17,7 @@ import Header from '@/components/Header';
 * @return
 */
 export default function PostContainer(props) {
-  const {type, headerType, headerClassName,  children} = props;
+  const {className, headerType, headerClassName,  children} = props;
 
   return (
     <div id="wrap">
@@ -26,7 +26,7 @@ export default function PostContainer(props) {
         className={headerClassName}
         />
 
-      <div id="container" className={`container ${type}`}>
+      <div id="container" className={`container ${className}`}>
 
         {children}
       </div>

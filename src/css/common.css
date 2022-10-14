@@ -2737,7 +2737,7 @@ body {
   box-sizing: border-box;
 }
 .box_drag .fileview div img {
-  width: 100%;
+  /* width: 100%; */        /* 2022.10.14 lhk- image upload 에서 preview 늘어나는 현상    */
   height: 100%;
 }
 .box_drag .fileview .btn_del {

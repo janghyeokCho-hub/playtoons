@@ -245,6 +245,7 @@ const Header = ({
             )}
           </div>
         </div>
+
         {/* post */}
         {renderType === "post" && (
           <div className="inr-c gnbbox view-m">
@@ -287,6 +288,7 @@ const Header = ({
             </div>
           </>
         )}
+        
         {/* 다국어 팝업 */}
         {isLanguageShow && (
           <div className="popup_dim">

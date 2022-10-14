@@ -144,7 +144,7 @@ export default function UploadPost(props) {
       authorId: myAuthors[0].id,       
       rating: 'G',
       status: 'enabled',
-      tags: refTags.current.getTagsJsonObject(),
+      tagIds: refTags.current.getTagsJsonObject(),
     };
     
     console.log('setPost josn', json);
@@ -206,7 +206,7 @@ export default function UploadPost(props) {
 
   return (
     <PostContainer
-      type={"sub post"}
+      className={"sub post"}
       headerType={"postUpload"}
       headerClassName={"ty1"} >
 
@@ -273,7 +273,7 @@ export default function UploadPost(props) {
                 <h3 className="tit1">{text.tag}</h3>
                 <Tag
                   ref={refTags}
-                  name={"tags"}
+                  name={"tagIds"}
                   className={"inp_txt sch"}
                   placeholder={text.tag_name} />
               </div>

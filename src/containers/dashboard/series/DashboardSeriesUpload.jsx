@@ -86,7 +86,7 @@ export default function DashboardUploadSeries(props) {
       ...json,
       coverImage: refCoverImage.current.getImageInfo().value,
       thumbnailImage: refTimelineImage.current.getImageInfo().value,
-      tags: refTags.current.getTagsJsonObject(),
+      tagIds: refTags.current.getTagsJsonObject(),
       rating: getRating(),
       // keyword: "",
       status: "enabled",
@@ -300,7 +300,7 @@ export default function DashboardUploadSeries(props) {
                 <h3 className="tit1">{text.setting_tag}</h3>
                 <Tag 
                   ref={refTags}
-                  name={"tags"}
+                  name={"tagIds"}
                   className={"inp_txt sch"}
                   placeholder={text.tag_name} />
               </div>
