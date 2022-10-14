@@ -13,7 +13,7 @@ import { faCartCirclePlus } from "@fortawesome/pro-regular-svg-icons";
 import { faXmarkLarge, faGlobe } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import tempProfile from "@IMAGES/img_profile.png";
-import { getUserInfo as getUserInfoAPI } from "@API/loginService";
+import { getAccount } from "@API/accountService";
 import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
 import { logoutRequest } from "@/modules/redux/ducks/login";
 import { clearUserData } from "@/utils/localStorageUtil";
@@ -44,21 +44,20 @@ const Header = ({
 
   useEffect(() => {
     if (!accessToken && code) {
-      console.log("useEffect code : ", code);
       dispatch(getTempTokenRequest({ code: code }));
     }
   }, [dispatch, code, accessToken]);
 
   useEffect(() => {
-    async function getUserInfo() {
-      const response = await getUserInfoAPI(accessToken);
+    async function getUserInfo(token) {
+      const response = await getAccount(token);
       if (response.status === 200) {
         dispatch(setUserInfo(response.data));
       }
     }
 
     if (accessToken && !userInfo) {
-      getUserInfo();
+      getUserInfo(accessToken);
     }
   }, [dispatch, userInfo, accessToken]);
 
@@ -195,7 +194,7 @@ const Header = ({
                         </button>
                       </div>
                       <div className="bt">
-                        <p className="t2">{userInfo?.email || ""}</p>
+                        <p className="t2">{userInfo?.name || ""}</p>
                         <p className="t1">保有ポイント</p>
                         <p className="c1">
                           <span className="c-blue">100,324,394</span>
@@ -288,7 +287,7 @@ const Header = ({
             </div>
           </>
         )}
-        
+
         {/* 다국어 팝업 */}
         {isLanguageShow && (
           <div className="popup_dim">

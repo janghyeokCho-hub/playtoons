@@ -16,7 +16,7 @@ import SwiperCore, { Navigation, Pagination } from "swiper";
 import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { getFileUrlFromServer } from "@API/fileService";
 
-import { getPostType as getPostTypeAPI } from "@API/postService";
+import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getPostCategoryListFromServer as getCategoryListAPI } from "@API/dashboardService";
 import { getAuthor as getAuthorAPI } from "@API/authorService";
 
@@ -50,8 +50,8 @@ const Webtoon = () => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const getPostType = async () => {
-    const response = await getPostTypeAPI();
+  const getPostTypes = async () => {
+    const response = await getPostTypesAPI();
     if (response.status === 200) {
       setPostType(response.data.types);
     }
@@ -78,7 +78,7 @@ const Webtoon = () => {
 
   useEffect(() => {
     if (!postType?.length) {
-      getPostType();
+      getPostTypes();
     }
   }, [postType]);
 

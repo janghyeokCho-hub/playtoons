@@ -2,7 +2,7 @@
  * Account 관련 API
  */
 
-import { apiAuthServer } from "./api";
+import { apiAuthServer, apiServer } from "./api";
 
 export const register = async (params) => {
   try {
@@ -78,6 +78,14 @@ export const updateAccount = async (params) => {
 export const deleteAccount = async () => {
   try {
     return await apiAuthServer("delete", "/account");
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
+export const getAccount = async (token) => {
+  try {
+    return await apiServer("get", "/accounts", null, null, token);
   } catch (e) {
     return { status: e.response.status };
   }

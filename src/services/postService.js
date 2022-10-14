@@ -121,11 +121,11 @@ export const getPostSeriesCount = async (id) => {
 };
 
 /**
- * 카테고리 목록 리스트
+ * Get post type list
  * @version 1.0.0
  * @author 조장혁
  */
-export const getPostType = async () => {
+export const getPostTypes = async () => {
   try {
     return await apiServer("get", `/post/type`);
   } catch (e) {
