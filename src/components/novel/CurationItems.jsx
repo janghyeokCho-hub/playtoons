@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -26,7 +26,7 @@ const CurationItems = ({ curationNum }) => {
     }
   }, [items, curationNum]);
 
-  const renderItems = (items) => {
+  const renderItems = useMemo(() => {
     return items.map((item, index) => {
       return (
         <SwiperSlide key={index} className="cx">
@@ -34,7 +34,7 @@ const CurationItems = ({ curationNum }) => {
         </SwiperSlide>
       );
     });
-  };
+  }, [items]);
 
   return (
     <>
@@ -61,7 +61,7 @@ const CurationItems = ({ curationNum }) => {
             prevRef?.current?.classList?.add("slide_st");
           }}
         >
-          {renderItems(items)}
+          {renderItems}
         </Swiper>
 
         <div className="swiper-pagination my1"></div>

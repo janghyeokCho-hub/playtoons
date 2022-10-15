@@ -1,46 +1,28 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useRef, useMemo } from "react";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
-import Curation from "./Curation";
+import RecentItem from "@COMPONENTS/author/RecentItem";
 
-const CurationItems = ({ curationNum }) => {
+const RecentItems = ({ items = [] }) => {
   SwiperCore.use([Navigation]);
-
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [items, setItems] = useState([]);
-
-  const getCurationList = async (curationNum) => {
-    const response = await getCurationListAPI(curationNum);
-    if (response.status === 200) {
-      setItems(response.data.posts);
-    }
-  };
-
-  useEffect(() => {
-    if (!items?.length) {
-      getCurationList(curationNum);
-    }
-  }, [items, curationNum]);
 
   const renderItems = useMemo(() => {
-    return items.map((item, index) => {
-      return (
-        <SwiperSlide key={`render_${index}`} className="cx">
-          <Curation item={item} />
-        </SwiperSlide>
-      );
-    });
+    return items.map((item, index) => (
+      <SwiperSlide key={`recent_${index}`} className="cx">
+        <RecentItem item={item} />
+      </SwiperSlide>
+    ));
   }, [items]);
 
   return (
-    <>
+    <div className="slider_profile">
       {items && (
         <>
           <Swiper
@@ -54,49 +36,45 @@ const CurationItems = ({ curationNum }) => {
               prevEl: prevRef.current,
             }}
             breakpoints={{
-              0: {
-                slidesPerView: 3,
+              960: {
+                slidesPerView: 1.75,
                 spaceBetween: 8,
               },
               961: {
-                slidesPerView: 4,
+                slidesPerView: 3,
                 spaceBetween: 15,
               },
-              1280: {
+              1400: {
                 slidesPerView: 5,
                 spaceBetween: 30,
               },
             }}
-            onSlideChange={() => {}}
-            onInit={(swiper) => {}}
-            onSwiper={(swiper) => {
-              // console.log('swiper', swiper);
-            }}
-            onUpdate={(swiper) => {
+            onUpdate={() => {
               nextRef?.current?.classList?.add("slide_st");
               prevRef?.current?.classList?.add("slide_st");
             }}
           >
             {renderItems}
           </Swiper>
+
           <button
             ref={prevRef}
             type="button"
-            className={`swiper-button-prev my1 hide-m`}
+            className="swiper-button-prev my1 hide-m"
           >
             <FontAwesomeIcon icon={faCircleChevronLeft} />
           </button>
           <button
             ref={nextRef}
             type="button"
-            className={`swiper-button-next my1 hide-m`}
+            className="swiper-button-next my1 hide-m"
           >
             <FontAwesomeIcon icon={faCircleChevronRight} />
           </button>
         </>
       )}
-    </>
+    </div>
   );
 };
 
-export default CurationItems;
+export default RecentItems;

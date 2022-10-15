@@ -10,7 +10,6 @@ import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as authorApi from "@API/authorService";
 
 function createGetAuthorListRequestSaga(type) {
-  console.log("createGetAuthorListRequestSaga");
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
 
@@ -46,7 +45,6 @@ function createGetAuthorListRequestSaga(type) {
 const getAuthorListSaga = createGetAuthorListRequestSaga(GET_AUTHOR_LIST);
 
 function createGetAuthorRecentRequestSaga(type) {
-  console.log("createGetAuthorRecentRequestSaga");
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
 

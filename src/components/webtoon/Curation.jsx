@@ -12,7 +12,6 @@ const Curation = ({ item, category }) => {
   async function getAuthor(id) {
     const response = await getAuthorAPI(id);
     if (response.status === 200) {
-      console.log(response?.data);
       setAuthor(response?.data?.author);
     }
   }

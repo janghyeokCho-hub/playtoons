@@ -12,7 +12,6 @@ import { getPostList as getPostListAPI } from "@API/postService";
 import Item from "./Item";
 
 const Items = ({ type, categorys, onSearchPopup }) => {
-  console.log(type);
   const orderByMenus = [
     {
       // 추천순
