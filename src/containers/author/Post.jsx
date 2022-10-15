@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/pro-solid-svg-icons";
 import Plan from "./Plan";
-import Series from "./Series";
+import SeriesItems from "@COMPONENTS/author/SeriesItems";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import PostItems from "@COMPONENTS/author/PostItems";
@@ -82,7 +82,7 @@ const Post = () => {
             </ul>
           </div>
           {selectTab === "POST" && <PostItems item={currentAuthor} />}
-          {selectTab === "SERIES" && <Series item={currentAuthor} />}
+          {selectTab === "SERIES" && <SeriesItems item={currentAuthor} />}
           {selectTab === "PLAN" && <Plan item={currentAuthor} />}
         </div>
       </div>

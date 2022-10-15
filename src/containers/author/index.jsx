@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import List from "./List";
-import Plan from "./Plan";
 import Post from "./Post";
-import Series from "./Series";
 import Register from "./Register";
 import Store from "./Store";
 import Detail from "./Detail";
@@ -86,7 +84,7 @@ const App = () => {
           <Route path="list" element={<List />} />
           <Route path="post" element={<Post />} />
           <Route path="register" element={<Register />} />
-          <Route path="detail" element={<Detail />} />
+          <Route path="detail/:type/:id" element={<Detail />} />
         </Routes>
       </Container>
     </>
