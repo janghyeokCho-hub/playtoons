@@ -11,7 +11,7 @@ import {
 import { getPostList as getPostListAPI } from "@API/postService";
 import Item from "./Item";
 
-const Items = ({ type, categorys, onSearchPopup }) => {
+const EveryItems = ({ type, categorys, onSearchPopup }) => {
   const orderByMenus = [
     {
       // 추천순
@@ -180,6 +180,7 @@ const Items = ({ type, categorys, onSearchPopup }) => {
           </div>
         </div>
       </div>
+
       <div className="lst_main_comic">
         <ul>
           {renderItems &&
@@ -215,4 +216,4 @@ const Items = ({ type, categorys, onSearchPopup }) => {
   );
 };
 
-export default Items;
+export default EveryItems;
