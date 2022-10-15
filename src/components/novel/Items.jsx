@@ -50,10 +50,10 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
   }, [selectOrderBy, type]);
 
   useEffect(() => {
-    if (!items?.length) {
+    if (type && selectOrderBy) {
       getPostList();
     }
-  }, [items]);
+  }, [type, selectOrderBy]);
 
   useEffect(() => {
     if (categorys?.length && items?.length) {
