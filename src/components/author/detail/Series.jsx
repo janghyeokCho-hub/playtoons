@@ -11,17 +11,20 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import SharePopup from "./SharePopup";
+import UnFollowPopup from "./UnFollowPopup";
 
 const Series = ({ id }) => {
   const [series, setSeries] = useState(null);
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
+  const [isUnFollowPopupShow, setIsUnFollowPopupShow] = useState(false);
+  const [sortTab, setSortTab] = useState("DESC");
+
   const coverImgURL = useFilePath(series?.coverImage);
   const profileImgURL = useFilePath(series?.author?.profileImage);
 
   useEffect(() => {
     async function getSeriesDetail() {
       const response = await getSeriesDetailAPI({ id: id });
-      console.log("response : ", response);
       if (response.status === 200) {
         setSeries(response.data.series);
       }
@@ -83,7 +86,7 @@ const Series = ({ id }) => {
             <button
               type="button"
               className="btn-pk n blue btn_follow"
-              onClick="openLayerPopup('popFollow'); return false;"
+              onClick={() => setIsUnFollowPopupShow(true)}
             >
               <FontAwesomeIcon icon={faCircleCheck} />
               フォロー中
@@ -94,12 +97,18 @@ const Series = ({ id }) => {
 
         <div className="tabs">
           <ul>
-            <li className="on">
+            <li
+              className={sortTab === "DESC" ? "on" : ""}
+              onClick={() => setSortTab("DESC")}
+            >
               <a href="#">
                 <span>最新話から</span>
               </a>
             </li>
-            <li>
+            <li
+              className={sortTab === "ASC" ? "on" : ""}
+              onClick={() => setSortTab("ASC")}
+            >
               <a href="#">
                 <span>1話から</span>
               </a>
@@ -195,6 +204,9 @@ const Series = ({ id }) => {
       </div>
       {isSharePopupShow && (
         <SharePopup onClose={() => setIsSharePopupShow(false)} />
+      )}
+      {isUnFollowPopupShow && (
+        <UnFollowPopup onClose={() => setIsUnFollowPopupShow(false)} />
       )}
     </>
   );

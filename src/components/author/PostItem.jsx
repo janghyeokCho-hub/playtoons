@@ -5,6 +5,7 @@ import useFilePath from "@/hook/useFilePath";
 import moment from "moment";
 
 const PostItem = ({ item }) => {
+  console.log(item);
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
 
   return (

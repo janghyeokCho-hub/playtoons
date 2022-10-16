@@ -28,8 +28,8 @@ const PostItems = ({ item }) => {
       <div className="lst_detail">
         <ul>
           {posts &&
-            posts.map((item, index) => (
-              <PostItem key={`post_${index}`} item={item} />
+            posts.map((post, index) => (
+              <PostItem key={`post_${index}`} item={post} />
             ))}
         </ul>
       </div>
