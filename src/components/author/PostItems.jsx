@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
-import { getPostDetailFromServer } from "@API/postService";
+import { getPostList } from "@API/postService";
 import PostItem from "./PostItem";
 
 const PostItems = ({ item }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    async function getPostSeries() {
-      const response = await getPostDetailFromServer({ id: item.id });
+    async function getPostSeries(item) {
+      const response = await getPostList("EVERY", { authorId: item.id });
       if (response.status === 200) {
-        let result = response.data.post;
+        let result = response.data.posts;
         if (!Array.isArray(result)) {
           result = new Array(result);
         }
@@ -19,7 +19,7 @@ const PostItems = ({ item }) => {
       }
     }
     if (item?.id && !posts?.length) {
-      getPostSeries();
+      getPostSeries(item);
     }
   }, [item, posts]);
 

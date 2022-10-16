@@ -1,23 +1,5 @@
 import { apiServer } from "./api";
-import { getGetMethodUrl } from "@/common/common";
-/**
- * json object to string
- * @returns
- */
-const getParamsToQuery = (params) => {
-  try {
-    let query = "?";
-    Object.entries(params).forEach(([key, value], index) => {
-      if (index > 0) {
-        query += `&`;
-      }
-      query += `${key}=${value}`;
-    });
-    return query;
-  } catch (e) {
-    console.error(e);
-  }
-};
+import { getParamsToQuery } from "@/common/common";
 
 /**
  * 파일 경로 불러오기

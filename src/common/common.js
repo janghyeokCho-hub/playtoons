@@ -69,7 +69,7 @@ export const isJSONStr = (str) => {
 export const getGetMethodUrl = (formData) => {
   let url = "?";
 
-  if( formData !== undefined ){
+  if (formData !== undefined) {
     for (const item of formData.entries()) {
       url += `${item[0]}=${item[1]}&`;
     }
@@ -113,4 +113,23 @@ export const removeItemInList = (list, value) => {
   return list.filter((item) => {
     return item !== value;
   });
+};
+
+/**
+ * json object to string
+ * @returns
+ */
+export const getParamsToQuery = (params) => {
+  try {
+    let query = "?";
+    Object.entries(params).forEach(([key, value], index) => {
+      if (index > 0) {
+        query += `&`;
+      }
+      query += `${key}=${value}`;
+    });
+    return query;
+  } catch (e) {
+    console.error(e);
+  }
 };

@@ -9,7 +9,7 @@ const SerieItems = () => {
 
   useEffect(() => {
     async function getPostSeries(id) {
-      const response = await getPostSeriesAPI(id);
+      const response = await getPostSeriesAPI({ authorId: id });
       if (response.status === 200) {
         let result = response?.data?.series;
         if (!Array.isArray(response?.data?.series)) {

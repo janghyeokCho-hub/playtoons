@@ -15,15 +15,18 @@ const RecommentItem = ({ item, callback }) => {
 
   useEffect(() => {
     async function getPostSeries(id) {
-      const response = await getPostSeriesAPI(id);
+      const response = await getPostSeriesAPI({ authorId: id });
       if (response.status === 200) {
         let result = response?.data?.series || [];
         if (!Array.isArray(result)) {
           result = new Array(result);
         }
 
-        while (result.length < 3) {
+        while (result?.length < 3) {
           result.push({ coverImage: null });
+        }
+        if (result?.length > 3) {
+          result = result.splice(0, 3);
         }
         setList(result);
       }

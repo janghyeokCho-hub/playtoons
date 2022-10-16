@@ -1,5 +1,5 @@
-import { getGetMethodUrl } from "@/common/common";
 import { apiServer } from "./api";
+import { getGetMethodUrl, getParamsToQuery } from "@/common/common";
 
 /**
 *
@@ -95,11 +95,24 @@ export const getAccountsFromServer = async () => {
 };
 
 /**
+ * 시리즈 검색
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getPostSeries = async (params) => {
+  try {
+    return await apiServer("get", `/post/series${getParamsToQuery(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
  * 아이디로 시리즈 검색
  * @version 1.0.0
  * @author 조장혁
  */
-export const getPostSeries = async (id) => {
+export const getPostSeriesDetail = async (id) => {
   try {
     return await apiServer("get", `/post/series/${id}`);
   } catch (e) {
@@ -139,16 +152,16 @@ export const getPostTypes = async () => {
  * @author 조장혁
  */
 export const getPostList = async (type, params) => {
-  let url = "/post";
+  params.type = 1;
   if (type === "COMPLETED") {
-    url = `${url}?typeId=1&completed=1`;
+    params.completed = 1;
   } else if (type === "SERIES") {
-    url = `${url}?typeId=1&series=1`;
+    params.series = 1;
   } else if (type === "SHORT") {
-    url = `${url}?typeId=1&short=1`;
+    params.short = 1;
   }
   try {
-    return await apiServer("get", url, params);
+    return await apiServer("get", `/post${getParamsToQuery(params)}`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

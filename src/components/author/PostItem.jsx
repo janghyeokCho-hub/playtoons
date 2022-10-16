@@ -14,13 +14,8 @@ const PostItem = ({ item }) => {
           <img src={thumbnailImgURL} alt="" />
         </div>
         <div className="txt">
-          <p className="h1">
-            {item?.title || "title 이 없을 경우 표시되는 문구"}
-          </p>
-          <p className="t1">
-            {item?.outline ||
-              `outline 이 없을 경우 표시되는 문구 근데 outline을 사용하는게 맞나요??`}
-          </p>
+          <p className="h1">{item?.title}</p>
+          <p className="t1">{item?.series?.description}</p>
         </div>
         <div className="botm">
           <p className="d1">{moment(item?.endAt).format("YYYY/MM/DD HH:mm")}</p>
