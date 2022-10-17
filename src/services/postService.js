@@ -151,8 +151,8 @@ export const getPostTypes = async () => {
  * @version 1.0.0
  * @author 조장혁
  */
-export const getPostList = async (type, params, tags) => {
-  params.type = 1;
+export const getPostList = async (type, params = {}, tags, typeId) => {
+  params.type = typeId;
   if (type === "COMPLETED") {
     params.completed = 1;
   } else if (type === "SERIES") {

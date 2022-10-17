@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
@@ -9,9 +9,10 @@ import {
 } from "@fortawesome/pro-light-svg-icons";
 
 import { getPostList as getPostListAPI } from "@API/postService";
+import { getTags as getTagsAPI } from "@API/webtoonService";
 import Item from "./Item";
 
-const EveryItems = ({ type, categorys, onSearchPopup }) => {
+const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const orderByMenus = [
     {
       // 추천순
@@ -30,83 +31,180 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
     },
   ];
   const [items, setItems] = useState([]);
-  const [useCategorys, setUseCategorys] = useState([]);
   const [isAllCategory, setIsAllCategory] = useState(true);
-  const [selectCategorys, setSelectCategorys] = useState([]);
+  const [selectTags, setSelectTags] = useState([]);
   const [isOrderByShow, setIsOrderByShow] = useState(false);
   const [selectOrderBy, setSelectOrderBy] = useState(orderByMenus[0]);
   const [renderItems, setRenderItems] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [urlQueryParams, setUrlQueryParams] = useState();
+  const [meta, setMeta] = useState(null);
 
-  const getPostList = useCallback(async () => {
-    const params = {
-      orderKey: selectOrderBy.code,
-      order: "DESC",
-    };
-    const response = await getPostListAPI(type, params);
+  const getPostList = async (tab, params, tags, typeId) => {
+    const response = await getPostListAPI(tab, params, tags, typeId);
     if (response.status === 200) {
+      console.log(response.data);
       setItems(response.data.posts);
-      setRenderItems(response.data.posts);
+      setMeta(response.data.meta);
     }
-  }, [selectOrderBy, type]);
+  };
 
   useEffect(() => {
-    if (type && selectOrderBy) {
-      getPostList();
+    if (searchText) {
+      handleSearch(searchText);
     }
-  }, [type, selectOrderBy]);
+  }, [searchText]);
 
   useEffect(() => {
-    if (categorys?.length && items?.length) {
-      const list = [...new Set(items.map((item) => item.categoryId))];
-      const categoryList = categorys.filter((category) =>
-        list.includes(category.id)
-      );
-      setUseCategorys(categoryList);
-    }
-  }, [categorys, items]);
-
-  useEffect(() => {
-    if (!selectCategorys?.length) {
+    if (items?.length) {
       setRenderItems(items);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    console.log(tab, urlQueryParams, selectTags, typeId);
+    getPostList(tab, urlQueryParams, selectTags, typeId);
+  }, [tab, urlQueryParams, selectTags, typeId]);
+
+  useEffect(() => {
+    async function getTags() {
+      const response = await getTagsAPI();
+      if (response?.status === 200) {
+        setTags(response.data?.tags);
+      }
+    }
+    if (!tags?.length) {
+      getTags();
+    }
+  }, [tags]);
+
+  useEffect(() => {
+    if (!selectTags?.length) {
       setIsAllCategory(true);
     } else {
-      let filterItems = [];
-      selectCategorys.forEach((categoryId) => {
-        const filterItem = items.filter(
-          (item) => item.categoryId === categoryId
-        );
-        filterItems = filterItems.concat(filterItem);
-      });
-      setRenderItems(filterItems);
       setIsAllCategory(false);
     }
-  }, [selectCategorys, items]);
+  }, [selectTags]);
 
-  const handleSelectCategoryChange = useCallback(
-    (id) => {
-      if (selectCategorys.includes(id)) {
-        const updateCategory = selectCategorys.filter(
-          (cateId) => cateId !== id
-        );
-        setSelectCategorys(updateCategory);
+  /**
+   * 검색 쿼리 String
+   */
+  const handleURLQueryChange = useCallback(
+    (key, value) => {
+      let params = { ...urlQueryParams, page: 1 };
+      if (key) {
+        console.log(key !== "page");
+        if (key !== "page") {
+          delete params["page"];
+        }
+        if (!value) {
+          delete params[key];
+        } else {
+          params[key] = value;
+        }
+      }
+      setUrlQueryParams(params);
+    },
+    [urlQueryParams]
+  );
+
+  const handleSelectTagChange = useCallback(
+    (item) => {
+      // 검색으로 변경
+      const selected = selectTags.findIndex((tag) => tag.id === item.id) > -1;
+      if (selected) {
+        const newTags = selectTags.filter((tag) => tag.id !== item.id);
+        setSelectTags(newTags);
       } else {
-        const newCategorys = [...selectCategorys, id];
-        setSelectCategorys(newCategorys);
+        const newTags = [...selectTags, item];
+        setSelectTags(newTags);
       }
     },
-    [selectCategorys]
+    [selectTags]
   );
 
-  const handleSelectOrderBy = useCallback(
-    (menu) => {
-      /**
-       * 여기서 정렬
-       */
-      setSelectOrderBy(menu);
-      setIsOrderByShow(!isOrderByShow);
+  const handleSearch = useCallback(
+    (searchText) => {
+      if (searchText) {
+        const filterItems = items.filter((item) => {
+          if (item?.title?.toLowerCase().includes(searchText.toLowerCase())) {
+            return true;
+            // }else if(item?.de?.toLowerCase().includes(searchText.toLowerCase())){
+          } else {
+            return false;
+          }
+        });
+        setItems(filterItems);
+      }
     },
-    [isOrderByShow]
+    [items]
   );
+
+  const pagination = useMemo(() => {
+    if (meta) {
+      const { currentPage, totalPages } = meta;
+      let pageList = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pageList.push(i);
+      }
+
+      const prev = currentPage - 1;
+      const prevPage = prev - 1;
+      const next = currentPage + 1;
+      const nextPage = next + 1;
+
+      let showPages;
+      if (currentPage === 1) {
+        if (totalPages === 0) {
+          showPages = [1];
+        } else {
+          showPages = pageList.splice(prev, 3);
+        }
+      } else if (currentPage === totalPages) {
+        showPages = pageList.splice(currentPage - 3, 3);
+      } else {
+        showPages = pageList.splice(currentPage - 2, 3);
+      }
+
+      return (
+        <>
+          {prevPage > 0 && (
+            <li
+              className="prev"
+              onClick={() => handleURLQueryChange("page", prevPage)}
+            >
+              <a href="#">
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </a>
+            </li>
+          )}
+          {showPages &&
+            showPages.map((page, index) => (
+              <li
+                key={`page_${index}`}
+                className={`${page === currentPage ? "on" : ""}`}
+                onClick={() => handleURLQueryChange("page", page)}
+              >
+                <a href="#">{page}</a>
+              </li>
+            ))}
+
+          {totalPages - nextPage > 0 && (
+            <li
+              className="next"
+              onClick={() => handleURLQueryChange("page", nextPage)}
+            >
+              <a href="#">
+                <FontAwesomeIcon icon={faAngleRight} />
+              </a>
+            </li>
+          )}
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  }, [meta]);
 
   return (
     <>
@@ -116,7 +214,7 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
             to="#"
             className={`btn-pk n bdrs ${isAllCategory ? "blue" : "blue2"}`}
             onClick={() => {
-              setSelectCategorys([]);
+              setSelectTags([]);
             }}
           >
             すべて
@@ -128,30 +226,32 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
           </button>
-          {useCategorys &&
-            useCategorys.map((tag, index) => (
-              <Link
-                key={`tag_${index}`}
-                to="#"
-                className={`btn-pk n bdrs blue2 ${
-                  selectCategorys.includes(tag.id) ? "on" : ""
-                }`}
-                onClick={() => {
-                  handleSelectCategoryChange(tag.id);
-                }}
-              >
-                {tag.name}
-                {selectCategorys.includes(tag.id) && (
-                  <button
-                    type="button"
-                    className="btn_sch_del"
-                    onClick={() => handleSelectCategoryChange(tag.id)}
-                  >
-                    <FontAwesomeIcon icon={faCircleXmark} />
-                  </button>
-                )}
-              </Link>
-            ))}
+          {tags &&
+            tags.map((tag, index) => {
+              const selected =
+                selectTags.findIndex((sTag) => sTag.id === tag.id) > -1;
+              return (
+                <Link
+                  key={`tag_${index}`}
+                  to="#"
+                  className={`btn-pk n bdrs blue2 ${selected ? "on" : ""}`}
+                  onClick={() => {
+                    handleSelectTagChange(tag);
+                  }}
+                >
+                  #{tag.name}
+                  {selected && (
+                    <button
+                      type="button"
+                      className="btn_sch_del"
+                      onClick={() => handleSelectTagChange(tag)}
+                    >
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                  )}
+                </Link>
+              );
+            })}
         </div>
         <div className="rgh">
           <div className="btn_select1">
@@ -170,7 +270,10 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
                 {orderByMenus.map((menu, index) => (
                   <li
                     key={`orderby_${index}`}
-                    onClick={() => handleSelectOrderBy(menu)}
+                    onClick={() => {
+                      handleURLQueryChange("orderKey", menu.code);
+                      setIsOrderByShow(!isOrderByShow);
+                    }}
                   >
                     <a href="#">{menu.name}</a>
                   </li>
@@ -190,30 +293,10 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
         </ul>
       </div>
       <div className="pagenation">
-        <ul>
-          <li className="prev">
-            <a href="#">
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </a>
-          </li>
-          <li>
-            <a href="#">1</a>
-          </li>
-          <li className="on">
-            <a href="#">2</a>
-          </li>
-          <li>
-            <a href="#">3</a>
-          </li>
-          <li className="next">
-            <a href="#">
-              <FontAwesomeIcon icon={faAngleRight} />
-            </a>
-          </li>
-        </ul>
+        <ul>{pagination}</ul>
       </div>
     </>
   );
 };
 
-export default EveryItems;
+export default Items;

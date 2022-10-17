@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 
-const SearchPopup = ({ handleClose }) => {
+const SearchPopup = ({ handleClose, onSearch }) => {
+  const [text, setText] = useState(null);
   return (
     <div className="popup_dim">
       <div id="popSearch" className="layerPopup pop_search">
@@ -22,6 +23,7 @@ const SearchPopup = ({ handleClose }) => {
               type="text"
               className="inp_txt w100p"
               placeholder="ハッシュタグ名"
+              onChange={(e) => setText(e.target.value)}
             />
           </div>
           <div className="pop_botm">
@@ -32,7 +34,14 @@ const SearchPopup = ({ handleClose }) => {
             >
               キャンセル
             </button>
-            <button type="button" className="btn-pk blue">
+            <button
+              type="button"
+              className="btn-pk blue"
+              onClick={() => {
+                onSearch(text);
+                handleClose();
+              }}
+            >
               検索
             </button>
           </div>

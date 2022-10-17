@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/pro-solid-svg-icons";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import SearchPopup from "@COMPONENTS/novel/SearchPopup";
-import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
@@ -17,9 +10,11 @@ const Novel = () => {
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
+  const [searchText, setSearchText] = useState(null);
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
+  const [typeId, setTypeId] = useState();
   const getPostTypes = async () => {
     const response = await getPostTypesAPI();
     if (response.status === 200) {
@@ -43,8 +38,9 @@ const Novel = () => {
   };
   useEffect(() => {
     if (postType?.length && !categorys?.length) {
-      const webtoon = postType.find((post) => post.code === "novel");
-      getCategorys(webtoon.id);
+      const novel = postType.find((post) => post.code === "novel");
+      setTypeId(novel.id);
+      getCategorys(novel.id);
     }
   }, [categorys, postType]);
   /** ===== Post type id <=> category API End ===== */
@@ -52,14 +48,6 @@ const Novel = () => {
   const handleSearchPopup = useCallback(() => {
     setIsSearchPopupShow(!isSearchPopupShow);
   }, [isSearchPopupShow]);
-
-  const [isSelectShow, setIsSelectShow] = useState(false);
-  const [selectMenu, setSelectMenu] = useState("おすすめ順");
-
-  const handleSelectMenu = (menu) => {
-    setIsSelectShow(!isSelectShow);
-    setSelectMenu(menu);
-  };
 
   /**
    * EVERY - 모두
@@ -70,6 +58,10 @@ const Novel = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
+  };
+
+  const handleSearch = (txt) => {
+    setSearchText(txt);
   };
 
   return (
@@ -116,15 +108,19 @@ const Novel = () => {
           </div>
 
           <Items
-            type={selectTab}
-            categorys={categorys}
+            tab={selectTab}
+            typeId={typeId}
             onSearchPopup={handleSearchPopup}
+            searchText={searchText}
           />
         </div>
       </div>
 
       {isSearchPopupShow && (
-        <SearchPopup handleClose={() => handleSearchPopup()} />
+        <SearchPopup
+          handleClose={() => handleSearchPopup()}
+          onSearch={handleSearch}
+        />
       )}
     </>
   );

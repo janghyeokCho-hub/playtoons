@@ -12,7 +12,7 @@ import { getPostList as getPostListAPI } from "@API/postService";
 import { getTags as getTagsAPI } from "@API/webtoonService";
 import Item from "./Item";
 
-const Items = ({ type, categorys, onSearchPopup, searchText }) => {
+const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const orderByMenus = [
     {
       // 추천순
@@ -37,11 +37,11 @@ const Items = ({ type, categorys, onSearchPopup, searchText }) => {
   const [selectOrderBy, setSelectOrderBy] = useState(orderByMenus[0]);
   const [renderItems, setRenderItems] = useState([]);
   const [tags, setTags] = useState([]);
-  const [urlQueryParams, setUrlQueryParams] = useState([]);
+  const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
 
-  const getPostList = async (params, tags) => {
-    const response = await getPostListAPI(type, params, tags);
+  const getPostList = async (tab, params, tags, typeId) => {
+    const response = await getPostListAPI(tab, params, tags, typeId);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
@@ -61,8 +61,8 @@ const Items = ({ type, categorys, onSearchPopup, searchText }) => {
   }, [items]);
 
   useEffect(() => {
-    getPostList(urlQueryParams, selectTags);
-  }, [urlQueryParams, selectTags]);
+    getPostList(tab, urlQueryParams, selectTags, typeId);
+  }, [tab, urlQueryParams, selectTags, typeId]);
 
   useEffect(() => {
     async function getTags() {
@@ -154,7 +154,11 @@ const Items = ({ type, categorys, onSearchPopup, searchText }) => {
 
       let showPages;
       if (currentPage === 1) {
-        showPages = pageList.splice(prev, 3);
+        if (totalPages === 0) {
+          showPages = [1];
+        } else {
+          showPages = pageList.splice(prev, 3);
+        }
       } else if (currentPage === totalPages) {
         showPages = pageList.splice(currentPage - 3, 3);
       } else {

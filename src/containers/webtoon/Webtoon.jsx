@@ -14,6 +14,7 @@ const Webtoon = () => {
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
+  const [typeId, setTypeId] = useState();
   const getPostTypes = async () => {
     const response = await getPostTypesAPI();
     if (response.status === 200) {
@@ -38,6 +39,7 @@ const Webtoon = () => {
   useEffect(() => {
     if (postType?.length && !categorys?.length) {
       const webtoon = postType.find((post) => post.code === "webtoon");
+      setTypeId(webtoon.id);
       getCategorys(webtoon.id);
     }
   }, [categorys, postType]);
@@ -106,8 +108,8 @@ const Webtoon = () => {
           </div>
 
           <Items
-            type={selectTab}
-            categorys={categorys}
+            tab={selectTab}
+            typeId={typeId}
             onSearchPopup={handleSearchPopup}
             searchText={searchText}
           />
