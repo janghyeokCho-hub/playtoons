@@ -95,6 +95,19 @@ export const getAccountsFromServer = async () => {
 };
 
 /**
+ * 게시글 검색
+ * @version 1.0.0
+ * @author 조장혁
+ */
+export const getPosts = async (params) => {
+  try {
+    return await apiServer("get", `/post${getParamsToQuery(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
  * 시리즈 검색
  * @version 1.0.0
  * @author 조장혁

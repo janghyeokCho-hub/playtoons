@@ -12,10 +12,15 @@ import {
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import SharePopup from "./SharePopup";
 import UnFollowPopup from "./UnFollowPopup";
-import { getPostSeriesDetail as getPostSeriesDetailAPI } from "@/services/postService";
+import {
+  getPostSeriesDetail as getPostSeriesDetailAPI,
+  getPosts as getPostsAPI,
+} from "@/services/postService";
+import moment from "moment";
 
 const Series = ({ id }) => {
   const [series, setSeries] = useState(null);
+  const [posts, setPosts] = useState(null);
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
   const [isUnFollowPopupShow, setIsUnFollowPopupShow] = useState(false);
   const [sortTab, setSortTab] = useState("DESC");
@@ -27,7 +32,7 @@ const Series = ({ id }) => {
     async function getSeriesDetail(seriesId) {
       const response = await getPostSeriesDetailAPI(seriesId);
       if (response.status === 200) {
-        console.log("response : ", response.data.series);
+        console.log("seies response : ", response.data.series);
         setSeries(response.data.series);
       }
     }
@@ -35,6 +40,66 @@ const Series = ({ id }) => {
       getSeriesDetail(id);
     }
   }, [id, series]);
+
+  useEffect(() => {
+    async function getPosts() {
+      let params = {
+        page: 1,
+        authorId: series.author.id,
+        seriesId: series.id,
+        typeId: series.type.id,
+        series: 1,
+      };
+      console.log("params : ", params);
+      const response = await getPostsAPI(params);
+      console.log(response);
+      if (response.status === 200) {
+        setPosts(response.data?.posts);
+      }
+    }
+    if (series) {
+      getPosts();
+    }
+  }, [series]);
+
+  const PostComponent = ({ item }) => {
+    const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+
+    return (
+      <li className="item">
+        <a href="#">
+          <div className="thumb">
+            <img src={thumbnailImgURL} alt="" />
+
+            <div className="area_lock">
+              <div>
+                <FontAwesomeIcon icon={faLock} />
+              </div>
+            </div>
+          </div>
+          <div className="txt">
+            <p className="h1">
+              <span className="i-txt">支援</span>3話 : {item?.title}
+            </p>
+            <p className="t1">{item?.description}</p>
+          </div>
+          <div className="botm">
+            <p className="d1">
+              {moment(item?.endAt).format("YYYY/MM/DD HH:mm")}
+            </p>
+            <button type="button" className="btn01">
+              <FontAwesomeIcon icon={faHeart} />
+              {item?.likeCount}
+            </button>
+            <button type="button" className="btn01">
+              <FontAwesomeIcon icon={faCommentQuote} />
+              {item?.commnetCount}
+            </button>
+          </div>
+        </a>
+      </li>
+    );
+  };
   return (
     <>
       <div className="wrap_series_detail">
@@ -120,67 +185,14 @@ const Series = ({ id }) => {
 
         <div className="lst_detail">
           <ul>
-            <li className="item">
-              <a href="#">
-                <div className="thumb">
-                  <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
-                </div>
-                <div className="txt">
-                  <p className="h1">
-                    2話 :
-                    シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク
-                  </p>
-                  <p className="t1">
-                    モと戦う為、特殊チームレンジャーを創設したが、
-                    <br />
-                    クモの圧倒的な力には勝てず。
-                  </p>
-                </div>
-                <div className="botm">
-                  <p className="d1">2022/09/12 12:00</p>
-                  <button type="button" className="btn01">
-                    <i className="fa-solid fa-heart"></i>1.2k
-                  </button>
-                  <button type="button" className="btn01">
-                    <i className="fa-solid fa-comment-quote"></i>966
-                  </button>
-                </div>
-              </a>
-            </li>
-            <li className="item">
-              <a href="#">
-                <div className="thumb">
-                  <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
-
-                  <div className="area_lock">
-                    <div>
-                      <FontAwesomeIcon icon={faLock} />
-                    </div>
-                  </div>
-                </div>
-                <div className="txt">
-                  <p className="h1">
-                    <span className="i-txt">支援</span>3話 : シェルターアーク
-                  </p>
-                  <p className="t1">
-                    モと戦う為、特殊チームレンジャーを創設したが、
-                    <br />
-                    クモの圧倒的な力には勝てず。
-                  </p>
-                </div>
-                <div className="botm">
-                  <p className="d1">2022/09/12 12:00</p>
-                  <button type="button" className="btn01">
-                    <FontAwesomeIcon icon={faHeart} />
-                    1.2k
-                  </button>
-                  <button type="button" className="btn01">
-                    <FontAwesomeIcon icon={faCommentQuote} />
-                    966
-                  </button>
-                </div>
-              </a>
-            </li>
+            {(posts &&
+              posts.map((post, index) => (
+                <PostComponent key={`post_${index}`} item={post} />
+              ))) || (
+              <li className="item">
+                <a href="#">게시글 없음</a>
+              </li>
+            )}
           </ul>
         </div>
 

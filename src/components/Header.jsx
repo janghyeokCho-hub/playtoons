@@ -25,6 +25,7 @@ const Header = ({
   handleBack,
   isMenus = true,
   onSideMenu,
+  isDetailView,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -75,7 +76,11 @@ const Header = ({
   return (
     <div className="open">
       <header id="header" className={`header ${className}`}>
-        <div className={`inr-c ${renderType === "post" ? "view-m" : ""}`}>
+        <div
+          className={`inr-c ${
+            renderType === "post" && isDetailView ? "view-m" : ""
+          }`}
+        >
           {/* 1. 로그인전 : 메뉴 버튼 없음 */}
           {isLogined && isMenus && (
             <button
@@ -256,62 +261,64 @@ const Header = ({
                 </ul>
               </nav>
             </div>
-            <div className="inr-c">
-              <button type="button" className="btn_back">
-                <span className="icon">
-                  <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
-                </span>
-              </button>
-              <div className="rgh">
-                <button
-                  type="button"
-                  className="btn_top_heart on"
-                  onClick={() => setIsLikeShow(!isLikeShow)}
-                >
-                  {/*<!-- 이미 누른것엔 on 추가 -->*/}
-                  <FontAwesomeIcon icon={faHeart} fontSize={24} />
+            {isDetailView && (
+              <div className="inr-c">
+                <button type="button" className="btn_back">
+                  <span className="icon">
+                    <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
+                  </span>
                 </button>
+                <div className="rgh">
+                  <button
+                    type="button"
+                    className="btn_top_heart on"
+                    onClick={() => setIsLikeShow(!isLikeShow)}
+                  >
+                    {/*<!-- 이미 누른것엔 on 추가 -->*/}
+                    <FontAwesomeIcon icon={faHeart} fontSize={24} />
+                  </button>
 
-                {isLikeShow && (
-                  <div className="box_drop box_favorit">
-                    <ul>
-                      {/* <!-- 이미 누른것엔 on 추가 --> */}
-                      <li className="on">
-                        <button type="button">
-                          <span className="i_favorit1">313</span>
-                        </button>
-                      </li>
+                  {isLikeShow && (
+                    <div className="box_drop box_favorit">
+                      <ul>
+                        {/* <!-- 이미 누른것엔 on 추가 --> */}
+                        <li className="on">
+                          <button type="button">
+                            <span className="i_favorit1">313</span>
+                          </button>
+                        </li>
 
-                      <li>
-                        <button type="button">
-                          <span className="i_favorit2">414</span>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button">
-                          <span className="i_favorit3">1.2k</span>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button">
-                          <span className="i_favorit4">512</span>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button">
-                          <span className="i_favorit5">512</span>
-                        </button>
-                      </li>
-                      <li>
-                        <button type="button">
-                          <span className="i_favorit6">0</span>
-                        </button>
-                      </li>
-                    </ul>
-                  </div>
-                )}
+                        <li>
+                          <button type="button">
+                            <span className="i_favorit2">414</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button">
+                            <span className="i_favorit3">1.2k</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button">
+                            <span className="i_favorit4">512</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button">
+                            <span className="i_favorit5">512</span>
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button">
+                            <span className="i_favorit6">0</span>
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </>
         )}
 

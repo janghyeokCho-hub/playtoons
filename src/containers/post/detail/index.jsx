@@ -11,7 +11,7 @@ const App = () => {
   console.log(params);
   return (
     <>
-      <Header className="ty1 mdetail" type="post" />
+      <Header className="ty1 mdetail" type="post" isDetailView={true} />
       <div id="container" className="container sub mpost bg">
         <div className="inr-c">
           <Routes>
