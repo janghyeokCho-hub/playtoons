@@ -140,7 +140,7 @@ export default function DashboardPlan(props) {
             <div className="t_dot1">
               <p>{item.description}</p>
             </div>
-            <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p"><span>{text.edit}</span></Link>
+            <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p bottom"><span>{text.edit}</span></Link>
           </div>
         </SwiperSlide>
       );
