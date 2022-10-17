@@ -151,7 +151,7 @@ export const getPostTypes = async () => {
  * @version 1.0.0
  * @author 조장혁
  */
-export const getPostList = async (type, params) => {
+export const getPostList = async (type, params, tags) => {
   params.type = 1;
   if (type === "COMPLETED") {
     params.completed = 1;
@@ -161,7 +161,7 @@ export const getPostList = async (type, params) => {
     params.short = 1;
   }
   try {
-    return await apiServer("get", `/post${getParamsToQuery(params)}`);
+    return await apiServer("get", `/post${getParamsToQuery(params, tags)}`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

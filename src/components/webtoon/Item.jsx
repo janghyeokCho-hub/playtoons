@@ -4,6 +4,7 @@ import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import useFilePath from "@/hook/useFilePath";
 const Item = ({ item }) => {
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  console.log(item);
   return (
     <li>
       <a href="#">

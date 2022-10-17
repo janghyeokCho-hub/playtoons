@@ -119,15 +119,21 @@ export const removeItemInList = (list, value) => {
  * json object to string
  * @returns
  */
-export const getParamsToQuery = (params) => {
+export const getParamsToQuery = (params, tags) => {
   try {
     let query = "?";
+
     Object.entries(params).forEach(([key, value], index) => {
       if (index > 0) {
         query += `&`;
       }
       query += `${key}=${value}`;
     });
+
+    if (tags?.length) {
+      tags.forEach((tag) => (query += `&tags=${tag.id}`));
+    }
+
     return query;
   } catch (e) {
     console.error(e);

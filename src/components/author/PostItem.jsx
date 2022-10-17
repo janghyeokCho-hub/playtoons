@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faCommentQuote } from "@fortawesome/pro-solid-svg-icons";
 import useFilePath from "@/hook/useFilePath";
@@ -10,7 +11,7 @@ const PostItem = ({ item }) => {
 
   return (
     <li className="item">
-      <a href="#">
+      <Link to={`/author/detail/post/${item?.id}`} state={{ item: item }}>
         <div className="thumb">
           <img src={thumbnailImgURL} alt="" />
         </div>
@@ -32,7 +33,7 @@ const PostItem = ({ item }) => {
             {item?.viewCount}
           </button>
         </div>
-      </a>
+      </Link>
     </li>
   );
 };

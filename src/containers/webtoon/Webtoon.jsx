@@ -10,6 +10,7 @@ const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
+  const [searchText, setSearchText] = useState(null);
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
@@ -55,6 +56,10 @@ const Webtoon = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
+  };
+
+  const handleSearch = (txt) => {
+    setSearchText(txt);
   };
 
   return (
@@ -104,11 +109,15 @@ const Webtoon = () => {
             type={selectTab}
             categorys={categorys}
             onSearchPopup={handleSearchPopup}
+            searchText={searchText}
           />
         </div>
       </div>
       {isSearchPopupShow && (
-        <SearchPopup handleClose={() => handleSearchPopup()} />
+        <SearchPopup
+          handleClose={() => handleSearchPopup()}
+          onSearch={handleSearch}
+        />
       )}
     </>
   );

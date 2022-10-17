@@ -40,7 +40,7 @@ const EveryItems = ({ type, categorys, onSearchPopup }) => {
   const getPostList = useCallback(async () => {
     const params = {
       orderKey: selectOrderBy.code,
-      order: "desc",
+      order: "DESC",
     };
     const response = await getPostListAPI(type, params);
     if (response.status === 200) {
