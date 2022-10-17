@@ -54,7 +54,7 @@ export default function DashboardPostList(props) {
 
   const getPostList = async (page) => {
     const params = new FormData();
-    // params.append("authorId", "");
+    params.append("authorId", authors[0].id);
     // params.append("typeId", "");
     // params.append("categoryId", "");
     // params.append("seriesId", "");

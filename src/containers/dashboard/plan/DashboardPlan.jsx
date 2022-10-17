@@ -138,7 +138,7 @@ export default function DashboardPlan(props) {
             <p className="t1"><span className="c-blue">{item.price}</span> /{text.month}</p>
             <p className="t2">{item.description}</p>
             <div className="t_dot1">
-              <p>{item.description}</p>
+              {/* <p>{item.description}</p> */}
             </div>
             <Link to={`/dashboard/plan/edit/${item.id}`} className="btn-pk b blue w100p bottom"><span>{text.edit}</span></Link>
           </div>

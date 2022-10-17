@@ -9,6 +9,7 @@ import Container from "@/components/dashboard/Container";
 import Image from "@/components/dashboard/Image";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Pagination from "@/components/dashboard/Pagination";
+import { useSelector } from "react-redux";
 
 const text = {
   page_title :"シリーズリスト",
@@ -25,6 +26,7 @@ const text = {
 
 export default function DashboardSeries(props) {
   const [stateData, setStateData] = useState(undefined);
+  const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const param = useParams('page');
   const navigate = useNavigate();
 
@@ -37,7 +39,7 @@ export default function DashboardSeries(props) {
   */
   const getSeriesListFromAPi = async (pageNumber) => {
     const params = new FormData();
-    // params.append("authorId", );
+    params.append("authorId", myAuthors[0].id);
     // params.append("typeId", );
     // params.append("categoryId", );
     // params.append("keyword", );

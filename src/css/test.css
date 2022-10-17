@@ -787,7 +787,11 @@ li.dashboard-gnb.selected{
 }
 
 .bottom{
-  position: inherit;
+  /* position: absolute;
+  left: 23px;
+  bottom: 40px;
+  width: calc(100% - 46px) !important; */
+  position: relative;
 }
 
 /* ============================================================================== */
