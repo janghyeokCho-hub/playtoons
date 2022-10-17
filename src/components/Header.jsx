@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMagnifyingGlass,
-  faSquarePlus,
   faCircleXmark,
   faSquarePen,
 } from "@fortawesome/pro-light-svg-icons";
@@ -85,7 +84,7 @@ const Header = ({
   return (
     <div className="open">
       <header id="header" className={`header ${className}`}>
-        <div className="inr-c">
+        <div className={`inr-c ${renderType === "post" ? "view-m" : ""}`}>
           {/* 1. 로그인전 : 메뉴 버튼 없음 */}
           {isLogined && isMenus && (
             <button
@@ -247,24 +246,76 @@ const Header = ({
 
         {/* post */}
         {renderType === "post" && (
-          <div className="inr-c gnbbox view-m">
-            <nav className="gnb">
-              <ul>
-                <li>
-                  <a href="#">ホーム</a>
-                </li>
-                <li>
-                  <a href="#">タイムライン</a>
-                </li>
-                <li>
-                  <a href="#">クリエイター</a>
-                </li>
-                <li>
-                  <a href="#">マケット</a>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          <>
+            <div className="inr-c gnbbox view-m">
+              <nav className="gnb">
+                <ul>
+                  <li>
+                    <a href="#">ホーム</a>
+                  </li>
+                  <li>
+                    <a href="#">タイムライン</a>
+                  </li>
+                  <li>
+                    <a href="#">クリエイター</a>
+                  </li>
+                  <li>
+                    <a href="#">マケット</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+            <div className="inr-c">
+              <button type="button" className="btn_back">
+                <span className="icon">
+                  <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
+                </span>
+              </button>
+              <div className="rgh">
+                <button type="button" className="btn_top_heart on">
+                  {/*<!-- 이미 누른것엔 on 추가 -->*/}
+                  <FontAwesomeIcon icon={faHeart} fontSize={24} />
+                </button>
+
+                <div className="box_drop box_favorit">
+                  <ul>
+                    {/* <!-- 이미 누른것엔 on 추가 --> */}
+                    <li className="on">
+                      <button type="button">
+                        <span className="i_favorit1">313</span>
+                      </button>
+                    </li>
+
+                    <li>
+                      <button type="button">
+                        <span className="i_favorit2">414</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button">
+                        <span className="i_favorit3">1.2k</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button">
+                        <span className="i_favorit4">512</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button">
+                        <span className="i_favorit5">512</span>
+                      </button>
+                    </li>
+                    <li>
+                      <button type="button">
+                        <span className="i_favorit6">0</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </>
         )}
 
         {/* post upload */}

@@ -1198,11 +1198,11 @@ body {
   color: #394bc2;
   background-color: #eeeffa;
 }
-.header .pos_to .box_drop i.fa-regular {
+.header .pos_to .box_drop .fa-regular {
   margin-top: 22px;
   width: 20px;
 }
-.header .pos_to .box_drop i.fa-light {
+.header .pos_to .box_drop .fa-light {
   margin-top: 22px;
   width: 20px;
 }
@@ -2737,7 +2737,7 @@ body {
   box-sizing: border-box;
 }
 .box_drag .fileview div img {
-  /* width: 100%; */        /* 2022.10.14 lhk- image upload 에서 preview 늘어나는 현상    */
+  /* width: 100%; */ /* 2022.10.14 lhk- image upload 에서 preview 늘어나는 현상    */
   height: 100%;
 }
 .box_drag .fileview .btn_del {

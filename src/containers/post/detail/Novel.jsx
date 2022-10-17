@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
@@ -9,12 +9,18 @@ import {
   faLock,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
+import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
 const Novel = () => {
+  SwiperCore.use([Navigation]);
+  const params = useParams();
+  console.log(params.id);
   const navigate = useNavigate();
   const [isLock, setIsLock] = useState(false);
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
 
   return (
     <>
@@ -197,8 +203,28 @@ const Novel = () => {
       <div className="detail_botm_slider">
         <div className="slider">
           <div className="swiper-container mySwiper1">
-            <Swiper className="swiper-wrapper">
-              <BoxVslideDiv className="box_vslide swiper-slide">
+            <Swiper
+              className="swiper-container mySwiper1"
+              slidesPerView={2}
+              spaceBetween={10}
+              observer={true}
+              observeParents={true}
+              navigation={{
+                nextEl: nextRef.current,
+                prevEl: prevRef.current,
+              }}
+              onUpdate={() => {
+                nextRef?.current?.classList?.add("slide_st");
+                prevRef?.current?.classList?.add("slide_st");
+              }}
+            >
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -212,8 +238,14 @@ const Novel = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
-              <BoxVslideDiv className="box_vslide swiper-slide">
+              </SwiperSlide>
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -227,8 +259,14 @@ const Novel = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
-              <BoxVslideDiv className="box_vslide swiper-slide">
+              </SwiperSlide>
+              <SwiperSlide
+                className="box_vslide swiper-slide"
+                style={{
+                  width: "316.5px",
+                  marginRight: "27px",
+                }}
+              >
                 <a href="#">
                   <ImgComicDiv
                     className="thumb"
@@ -242,13 +280,21 @@ const Novel = () => {
                     </p>
                   </div>
                 </a>
-              </BoxVslideDiv>
+              </SwiperSlide>
             </Swiper>
           </div>
-          <button type="button" className="swiper-button-prev my1">
+          <button
+            ref={prevRef}
+            type="button"
+            className="swiper-button-prev my1"
+          >
             <FontAwesomeIcon icon={faCircleChevronLeft} />
           </button>
-          <button type="button" className="swiper-button-next my1">
+          <button
+            ref={nextRef}
+            type="button"
+            className="swiper-button-next my1"
+          >
             <FontAwesomeIcon icon={faCircleChevronRight} />
           </button>
         </div>

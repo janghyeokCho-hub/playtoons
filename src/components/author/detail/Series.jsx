@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getSeriesDetailFromServer as getSeriesDetailAPI } from "@/services/dashboardService";
 import useFilePath from "@/hook/useFilePath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,10 +7,12 @@ import {
   faCommentQuote,
   faShare,
   faCircleCheck,
+  faLock,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import SharePopup from "./SharePopup";
 import UnFollowPopup from "./UnFollowPopup";
+import { getPostSeriesDetail as getPostSeriesDetailAPI } from "@/services/postService";
 
 const Series = ({ id }) => {
   const [series, setSeries] = useState(null);
@@ -23,14 +24,15 @@ const Series = ({ id }) => {
   const profileImgURL = useFilePath(series?.author?.profileImage);
 
   useEffect(() => {
-    async function getSeriesDetail() {
-      const response = await getSeriesDetailAPI({ id: id });
+    async function getSeriesDetail(seriesId) {
+      const response = await getPostSeriesDetailAPI(seriesId);
       if (response.status === 200) {
+        console.log("response : ", response.data.series);
         setSeries(response.data.series);
       }
     }
     if (id && !series) {
-      getSeriesDetail();
+      getSeriesDetail(id);
     }
   }, [id, series]);
   return (
@@ -67,7 +69,7 @@ const Series = ({ id }) => {
 
               <div className="lst_tag">
                 {series?.tags?.map((tag) => (
-                  <div className="i_tag">{tag.name}</div>
+                  <div className="i_tag">#{tag.name}</div>
                 ))}
               </div>
             </div>
@@ -121,7 +123,7 @@ const Series = ({ id }) => {
             <li className="item">
               <a href="#">
                 <div className="thumb">
-                  <img src="../images/tmp/tmp_comic1.jpg" alt="" />
+                  <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
                 </div>
                 <div className="txt">
                   <p className="h1">
@@ -148,13 +150,11 @@ const Series = ({ id }) => {
             <li className="item">
               <a href="#">
                 <div className="thumb">
-                  <img src="../images/tmp/tmp_comic1.jpg" alt="" />
+                  <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
+
                   <div className="area_lock">
-                    {/*<!-- 잠금 -->*/}
                     <div>
-                      <p>
-                        <i className="fa-solid fa-lock"></i>
-                      </p>
+                      <FontAwesomeIcon icon={faLock} />
                     </div>
                   </div>
                 </div>

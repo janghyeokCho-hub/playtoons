@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import RecentItem from "@COMPONENTS/author/RecentItem";
 
-const RecentItems = ({ items = [] }) => {
+const RecentItems = ({ items = [], postType }) => {
   SwiperCore.use([Navigation]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);

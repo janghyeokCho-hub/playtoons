@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAuthorRecent } from "@/modules/redux/ducks/author";
 import RecentItems from "@COMPONENTS/author/RecentItems";
@@ -7,6 +7,7 @@ import { getAuthorList, setCurrentAuthor } from "@/modules/redux/ducks/author";
 
 const List = () => {
   const dispatch = useDispatch();
+
   const recents = useSelector(({ author }) => author.recents);
   useEffect(() => {
     if (!recents?.length) {

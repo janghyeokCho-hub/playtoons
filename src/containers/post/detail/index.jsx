@@ -4,6 +4,7 @@ import Locked from "./Locked";
 import Novel from "./Novel";
 import Webtoon from "./Webtoon";
 import Header from "@COMPONENTS/Header";
+import Container from "@/components/author/Container";
 
 const App = () => {
   return (
@@ -12,9 +13,8 @@ const App = () => {
       <div id="container" className="container sub mpost bg">
         <div className="inr-c">
           <Routes>
-            <Route path={"locked"} element={<Locked />} />
-            <Route path={"novel"} element={<Novel />} />
-            <Route path={"webtoon"} element={<Webtoon />} />
+            <Route path={"novel/:id"} element={<Novel />} />
+            <Route path={"webtoon/:id"} element={<Webtoon />} />
           </Routes>
         </div>
       </div>

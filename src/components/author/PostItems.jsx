@@ -3,9 +3,26 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
 import { getPostList } from "@API/postService";
 import PostItem from "./PostItem";
+import { getPostTypes as getPostTypesAPI } from "@API/postService";
 
 const PostItems = ({ item }) => {
   const [posts, setPosts] = useState([]);
+
+  /** ===== Post type API Start ===== */
+  const [postType, setPostType] = useState([]);
+  const [typeId, setTypeId] = useState();
+  const getPostTypes = async () => {
+    const response = await getPostTypesAPI();
+    if (response.status === 200) {
+      setPostType(response.data.types);
+    }
+  };
+  useEffect(() => {
+    if (!postType?.length) {
+      getPostTypes();
+    }
+  }, [postType]);
+  /** ===== Post type API End ===== */
 
   useEffect(() => {
     async function getPostSeries(item) {
