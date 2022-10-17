@@ -33,7 +33,7 @@ const Header = ({
   const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState(null);
-  const [like, setLike] = useState(false);
+  const [isLikeShow, setIsLikeShow] = useState(false);
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
@@ -66,15 +66,6 @@ const Header = ({
       setRenderType(null);
     };
   }, [type]);
-
-  const handleLikeChange = useCallback(() => {
-    if (like) {
-      // like 해제
-    } else {
-      // like 등록
-    }
-    setLike(!like);
-  }, [like]);
 
   const handleLogout = useCallback(() => {
     clearUserData();
@@ -272,47 +263,53 @@ const Header = ({
                 </span>
               </button>
               <div className="rgh">
-                <button type="button" className="btn_top_heart on">
+                <button
+                  type="button"
+                  className="btn_top_heart on"
+                  onClick={() => setIsLikeShow(!isLikeShow)}
+                >
                   {/*<!-- 이미 누른것엔 on 추가 -->*/}
                   <FontAwesomeIcon icon={faHeart} fontSize={24} />
                 </button>
 
-                <div className="box_drop box_favorit">
-                  <ul>
-                    {/* <!-- 이미 누른것엔 on 추가 --> */}
-                    <li className="on">
-                      <button type="button">
-                        <span className="i_favorit1">313</span>
-                      </button>
-                    </li>
+                {isLikeShow && (
+                  <div className="box_drop box_favorit">
+                    <ul>
+                      {/* <!-- 이미 누른것엔 on 추가 --> */}
+                      <li className="on">
+                        <button type="button">
+                          <span className="i_favorit1">313</span>
+                        </button>
+                      </li>
 
-                    <li>
-                      <button type="button">
-                        <span className="i_favorit2">414</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button">
-                        <span className="i_favorit3">1.2k</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button">
-                        <span className="i_favorit4">512</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button">
-                        <span className="i_favorit5">512</span>
-                      </button>
-                    </li>
-                    <li>
-                      <button type="button">
-                        <span className="i_favorit6">0</span>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit2">414</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit3">1.2k</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit4">512</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit5">512</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit6">0</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
           </>

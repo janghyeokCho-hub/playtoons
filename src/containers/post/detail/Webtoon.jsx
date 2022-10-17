@@ -1,26 +1,74 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHeart,
   faCircleChevronLeft,
   faCircleChevronRight,
   faLock,
 } from "@fortawesome/pro-solid-svg-icons";
-import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "@/css/swiper.css";
+import Comment from "./Comment";
+import { getPostSeriesDetail as getPostSeriesDetailAPI } from "@/services/postService";
+import useFilePath from "@/hook/useFilePath";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation]);
   const params = useParams();
-  console.log(params.id);
-  const navigate = useNavigate();
+  const id = params?.id;
+  const [series, setSeries] = useState(null);
   const [isLock, setIsLock] = useState(false);
+  const profileImgURL = useFilePath(series?.author?.profileImage);
+  const backgroundImgURL = useFilePath(series?.author?.backgroundImage);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  useEffect(() => {
+    async function getPostSeriesDetail(id) {
+      const response = await getPostSeriesDetailAPI(id);
+      console.log(response);
+      if (response.status === 200) {
+        setSeries(response?.data?.series);
+      }
+    }
+    if (id && !series) {
+      getPostSeriesDetail(id);
+    }
+  }, [series]);
+
+  const tempComment = [
+    {
+      profileImage: null,
+      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      date: "3日前",
+      comment: `
+      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
+      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
+      パターン把握したくなります(笑)`,
+      likeCount: 123,
+    },
+    {
+      profileImage: null,
+      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      date: "3日前",
+      comment: `
+      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
+      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
+      パターン把握したくなります(笑)`,
+      likeCount: 123,
+    },
+    {
+      profileImage: null,
+      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      date: "3日前",
+      comment: `
+      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
+      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
+      パターン把握したくなります(笑)`,
+      likeCount: 123,
+    },
+  ];
 
   return (
     <>
@@ -61,12 +109,12 @@ const Webtoon = () => {
 
         <div className="area_detail3">
           <div className="box_profile">
-            <ImgTmpProfileBgDiv bgImg={require("@IMAGES/tmp_profile_bg.png")} />
+            <ImgTmpProfileBgDiv bgImg={backgroundImgURL} />
             <div className="pf_txt">
               <div className="icon">
-                <img src={require("@IMAGES/img_profile.png")} alt="profile" />
+                <img src={profileImgURL} alt="profile" />
               </div>
-              <p className="h1">名前のない人間23349名前のない人間23349</p>
+              <p className="h1">{series?.author?.name}</p>
               <div className="btns">
                 <a href="#" className="btn-pk n blue">
                   <span>フォロー</span>
@@ -106,74 +154,10 @@ const Webtoon = () => {
         </div>
 
         <div className="lst_comm">
-          <div className="col">
-            <div className="imgs">
-              <ImgProfileSpan
-                bgImg={require("@IMAGES/img_profile.png")}
-              ></ImgProfileSpan>
-            </div>
-            <div className="conts">
-              <p className="h1">琉桔真緒 ✧◝(⁰▿⁰)◜✧</p>
-              <p className="d1">
-                <span>3日前</span>
-                <span>コメント</span>
-              </p>
-              <p className="t1">
-                氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-                だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-                パターン把握したくなります(笑)
-              </p>
-              <div className="rgh">
-                <button type="button" className="btn01">
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    style={{ marginRight: "8px" }}
-                  />
-                  123
-                </button>
-                <button type="button" className="btn02">
-                  <FontAwesomeIcon
-                    icon={faEllipsisVertical}
-                    style={{ marginRight: "8px" }}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="col">
-            <div className="imgs">
-              <ImgProfileSpan
-                bgImg={require("@IMAGES/img_profile.png")}
-              ></ImgProfileSpan>
-            </div>
-            <div className="conts">
-              <p className="h1">琉桔真緒 ✧◝(⁰▿⁰)◜✧</p>
-              <p className="d1">
-                <span>3日前</span>
-                <span>コメント</span>
-              </p>
-              <p className="t1">
-                氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-                だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-                パターン把握したくなります(笑)
-              </p>
-              <div className="rgh">
-                <button type="button" className="btn01">
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    style={{ marginRight: "8px" }}
-                  />
-                  123
-                </button>
-                <button type="button" className="btn02">
-                  <FontAwesomeIcon
-                    icon={faEllipsisVertical}
-                    style={{ marginRight: "8px" }}
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
+          {tempComment &&
+            tempComment.map((comment, index) => (
+              <Comment key={`comment_${index}`} item={comment} />
+            ))}
 
           <div className="botm">
             <a href="#">コメントをもっと見る</a>
