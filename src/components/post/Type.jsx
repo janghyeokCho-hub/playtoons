@@ -2,6 +2,7 @@ import { getPostTypeListFromServer } from "@/services/dashboardService";
 import React, { useEffect } from "react";
 import { useImperativeHandle, forwardRef } from 'react';
 import { useState } from "react";
+import ErrorMessage from "../dashboard/ErrorMessage";
 
 /**
 *
@@ -21,8 +22,10 @@ import { useState } from "react";
 * @return
 */
 export default forwardRef( function Type(props, ref) {
-  const {name, callback} = props;
+  const {name, callback, selected} = props;
   const [stateList, setStateList] = useState(undefined);
+  const [stateError, setStateError] = useState(undefined);
+      
 
   const initCheckecInList = () => {
     stateList?.forEach((item, i) => {
@@ -30,11 +33,22 @@ export default forwardRef( function Type(props, ref) {
     });
   };
 
+  const getChecked = (item, i) => {
+    if( selected === undefined ){
+      return i === 0 ? true : false;
+    }
+    else{
+      return item.id === selected;
+    }
+    
+  };
+
   const setCheckedToList = (list) => {
     return list.map( (item, i) => {
       return {
         ...item,
-        checked: i === 0 ? true : false
+        // checked: i === 0 ? true : false
+        checked: getChecked(item, i)
       }
     } );
   };
@@ -48,6 +62,7 @@ export default forwardRef( function Type(props, ref) {
     }
     else{
       //error 처리
+      setStateError( String(status, data) );
     }
   };
 
@@ -76,25 +91,24 @@ export default forwardRef( function Type(props, ref) {
       );
     });
   };
-
-  
   
   useImperativeHandle(ref, () => ({
     getTypeList: () => {
-      console.log('getTypeList');
       return stateList;
-    }
+    },
   }));
 
   useEffect(() => {
     getType();
-  }, []);
+  }, [selected]);
+
 
   return (
     <>
       {
         renderTypeListElements()
       }
+      <ErrorMessage error={stateError} />
     </>
   );
 })

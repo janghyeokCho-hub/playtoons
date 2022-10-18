@@ -123,9 +123,9 @@ export const getPostListFromServer = async (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getTagFromServer = async (query) => {
+export const getTagFromServer = async (query, params) => {
   try {
-    return await apiServer("get", `/tag/${query}`);
+    return await apiServer("get", `/tag/${query}${getGetMethodUrl(params)}`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

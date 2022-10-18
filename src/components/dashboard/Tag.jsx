@@ -3,12 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import { useState } from 'react';
 import { useRef } from 'react';
-import { setTagToServer } from '@/services/dashboardService';
+import { getTagFromServer, setTagToServer } from '@/services/dashboardService';
 import { useImperativeHandle, forwardRef } from 'react';
-import { removeItemInList } from '@/common/common';
+import { getFromDataJson, removeItemInList } from '@/common/common';
 
 //test 
 import '@/css/test.css';
+import ErrorMessage from './ErrorMessage';
 
 /**
 * Tag Component
@@ -27,6 +28,7 @@ import '@/css/test.css';
 export default forwardRef( function Tag(props, ref) {
   const { placeholder, className, name, list } = props;
   const [ stateList, setStateList ] = useState([]);
+  const [ stateError, setStateError ] = useState(undefined);
   const refInput = useRef();
   const refContainer = useRef();
   
@@ -51,20 +53,46 @@ export default forwardRef( function Tag(props, ref) {
       'name' : keyword
     };
     
-    const {status, data: result} = await setTagToServer(JSON.stringify(params));
-    console.log('setTag', status, result);
+    const {status, data} = await setTagToServer(JSON.stringify(params));
+    console.log('setTag', status, data);
     
     //409 이미 태그가 존재함.
-    if( status === 201 || status === 409 ){
+    if( status === 201){
       //태그 state에 추가
       setStateList([
         ...stateList,
-        `${keyword}`
+        data.tag
       ]);
+      refInput.current.value = '';
+    }
+    else if( status === 409 ){
+      //get tag id from server
+      getTagId(keyword);
     }
     else{
-      
+      setStateError( String(data) );
     }
+  };
+
+  const getTagId = async (tagName) => {
+    const formData = new FormData();
+    formData.append('order', 'ASC');
+    const {status, data} = await getTagFromServer(tagName, formData);
+    console.log('getTagId', status, data);
+    
+    if( status === 200 ){
+      //find my id from list of result
+      //태그 state에 추가
+      setStateList([
+        ...stateList,
+        data?.tags[0]
+      ]);
+      refInput.current.value = '';
+    }
+    else{
+      setStateError( String(data) );
+    }
+    
   };
 
 
@@ -87,6 +115,7 @@ export default forwardRef( function Tag(props, ref) {
   };
 
   const handleClickSearch = (event) => {
+    setStateError(undefined);
     const keyword = refInput.current.value;
 
     //list에서 같은 값이 있는지 확인
@@ -112,7 +141,7 @@ export default forwardRef( function Tag(props, ref) {
 
   const renderTagList = () => {
     return stateList?.map( (item, index) => {
-      return <div className="i_tag mt10 pointer" key={index} onClick={handleClickItem} data-id={item}>#{item}</div>
+      return <div className="i_tag mt10 pointer" key={index} onClick={handleClickItem} data-id={item.id}>#{item.name}</div>
     });
   };
 
@@ -127,7 +156,7 @@ export default forwardRef( function Tag(props, ref) {
       let json = [];
 
       stateList.forEach((item) => {
-        json.push(item);
+        json.push(item.id);
       });
 
       return json;
@@ -138,7 +167,7 @@ export default forwardRef( function Tag(props, ref) {
     if( list !== undefined ){
       setStateList(list);
     }
-  }, []);
+  }, [list]);
 
   return (
     <>
@@ -153,6 +182,10 @@ export default forwardRef( function Tag(props, ref) {
           }
         </div>
       </div>
+      {
+        stateError !== undefined &&
+          <ErrorMessage error={stateError} />
+      }
     </>
   );
 })

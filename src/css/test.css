@@ -93,25 +93,25 @@
 .error_message_container{
   margin-top: 8px;
   display: flex;
+  align-items: center;
 }
 
 .error_message_ico{
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
+  /* width: 16px;
+  height: 16px; */
+  margin-right: 8px; 
+  font-size: 12px;
   color: rgba(241,28,14,1);
 }
 
 .error_message_text{
-  opacity: 1;
+  /* font-family: "NotoSansJP-Regular"; */
   color: rgba(241,28,14,1);
-  font-family: "NotoSansJP-Regular";
   font-size: 12px;
   font-weight: 400;
   font-style: normal;
   letter-spacing: 1px;
   text-align: left;
-  line-height: 14px;
 }
 
 /* ============================================================================== */

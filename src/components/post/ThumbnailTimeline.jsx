@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRe
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
+import ErrorMessage from '../dashboard/ErrorMessage';
+import { getFileUrlFromServer } from '@/services/fileService';
 
 /**
  * 
@@ -38,8 +40,10 @@ import { faCirclePlus, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
 export default forwardRef( function ThumbnailTimeline(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, hash: undefined, filename: "", fileLenth: ""};
-  const { className, textDragNDrop, name, id, textEdit, handleClose, handleEdit } = props;
+  const { className, textDragNDrop, name, id, textEdit, handleClose, handleEdit, previewHash, callback } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
+  const [stateError, setStateError] = useState(undefined);
+      
 
   /**
   *
@@ -63,6 +67,25 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
         preview: reader.result
       });
     };
+  };
+
+
+  //==============================================================================
+  // api
+  //==============================================================================
+  const getImageUrl = async (hash) => {
+    const {status, data} = await getFileUrlFromServer(hash);
+    
+    if( status === 200 ){
+      setStateImage({
+        ...stateImage,
+        preview: data?.url
+      });
+    }
+    else{
+      setStateError( String(status, data) );
+      // setStateError( undefined );
+    }
   };
 
   //=============== file drag n drop 설정 ==========================================
@@ -103,6 +126,9 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
   };
 
   useImperativeHandle(ref, () => ({
+    setImageValueToInputTag: (v) => {
+      setStateImage({...stateImage, hash: v});
+    },
     setImageHash: (hash) => {
       setStateImage({...stateImage, hash: hash});
     },
@@ -110,55 +136,74 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
       setStateImage(imageFileInfo);
     },
     getImageFile: () => {
-      return stateImage;
-    }
+      return stateImage.file;
+    },
+    setError: (msg) => {
+      setStateError(msg);
+    },
   }));
+
+  useEffect(() => {
+    if( previewHash !== undefined ){
+      getImageUrl(previewHash);
+    }
+  }, [previewHash]);
 
   useEffect(() => {
     setStateImage(props.image);
   }, [props.image]);
 
+  useEffect(() => {
+    if( stateImage?.hash !== undefined ){
+      callback?.(stateImage);
+    }
+  }, [stateImage?.hash]);
+
 
   return (
-    <div 
-      className={`box_drag ${className}`} >
-        {/* upload에 쓰일 hash 값 저장 */}
-      <input type={"text"} name={name} defaultValue={stateImage?.hash} style={{display: "none"}} />  
-        {/* file input tag */}
-      <input {...InputProps} id={id} />
-      {
-        stateImage?.preview === undefined ? (
-          <label htmlFor={id} className="filetxt">
-            <div 
-              {...RootProps} 
-              maxsize={100} 
-              multiple={false} 
-              className={`${className} image_upload`} >
-                {  isDragActive ? (
-                  <div className={`${className}_text_container image_upload_text_container`}>
-                      <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
-                    </div>
-                  ) : (
-                    
-                    <div className="txt">
-                        <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                        <p className="t">{textDragNDrop}</p>
+    <>
+      <div 
+        className={`box_drag ${className}`} >
+          {/* upload에 쓰일 hash 값 저장 */}
+        <input type={"text"} name={name} defaultValue={stateImage?.hash} style={{display: "none"}} />  
+          {/* file input tag */}
+        <input {...InputProps} id={id} />
+        {
+          stateImage?.preview === undefined ? (
+            <label htmlFor={id} className="filetxt">
+              <div 
+                {...RootProps} 
+                maxsize={100} 
+                multiple={false} 
+                className={`${className} image_upload`} >
+                  {  isDragActive ? (
+                    <div className={`${className}_text_container image_upload_text_container`}>
+                        <div className={`${className}_text image_upload_text`}>{props.textInputMessage}</div>
                       </div>
-                    
-                    )
-                  }
+                    ) : (
+                      
+                      <div className="txt">
+                          <div className="ico"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                          <p className="t">{textDragNDrop}</p>
+                        </div>
+                      
+                      )
+                    }
+              </div>
+            </label>
+          ) : (
+            <div className={"fileview2"}>
+              <div><img src={stateImage?.preview} alt="preview" /></div>
+              <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
+                <button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
+                <button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>
             </div>
-          </label>
-        ) : (
-          <div className={"fileview2"}>
-            <div><img src={stateImage?.preview} alt="preview" /></div>
-            <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
-							<button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
-							<button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>
-          </div>
-        )
-      }
-    </div>
+          )
+        }
+      </div>
+      
+      <ErrorMessage error={stateError} />
+    </>
   );
 });
 

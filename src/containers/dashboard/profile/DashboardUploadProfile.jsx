@@ -1,4 +1,4 @@
-import React, { useRef, useEffect,  } from "react";
+import React, { useRef, useEffect, useLayoutEffect,  } from "react";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
@@ -8,7 +8,6 @@ import { getFromDataJson } from "@/common/common";
 import { getAuthorIdFromServer, getFileUrlFromServer, setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import Modal from "@/components/Modal";
 
 
 
@@ -69,18 +68,6 @@ export default function DashboardUploadProfile(props) {
 	// api
 	//==============================================================================
 
-	const getFileUrl = async (hash) => {
-		const {status, data} = await getFileUrlFromServer(hash);
-		console.log('getFileUrl', status, data);
-		
-		if( status === 200 ){
-			return data?.url;
-		}
-		else{
-			console.log('Error : ', status, data);
-		}
-	};
-
 	const getAuthor = async () => {
 		
 		const {status, data} = await getAuthorIdFromServer(myAuthors[0].id);
@@ -88,14 +75,6 @@ export default function DashboardUploadProfile(props) {
 		
 		if( status === 200 ){
 			setStateAuthorInfo( data?.author );
-
-			const profile = await getFileUrl(data?.author?.profileImage);
-			const background = await getFileUrl(data?.author?.backgroundImage);
-			setStateAuthorInfo({
-				...stateAuthorInfo,
-				profileImagePreview: profile,
-				backgroundImagePreview: background
-			});
 		}
 		else{
 			// refModal.current.setContent('Error : '+status);
@@ -144,6 +123,12 @@ export default function DashboardUploadProfile(props) {
 	const setAuthor = async () => {
 		const id = myAuthors[0].id;
 		let json = getFromDataJson(refForm);
+
+		json = {
+			...json,
+			tagIds: refTags.current.getTagsJsonObject()
+		};
+
 		console.log('setAccounts', json, id);
 		const {status, data} = await setAuthorIdToServer(id, json);
 		console.log('setAccounts', status, data);
@@ -159,7 +144,7 @@ export default function DashboardUploadProfile(props) {
 	};
 
 	//==============================================================================
-	// event & Hook & render
+	// event & 
 	//==============================================================================
   
 	const handleClickRegister = (event) => {
@@ -176,6 +161,10 @@ export default function DashboardUploadProfile(props) {
     }
 	};
 
+	//==============================================================================
+	// Hook & render
+	//==============================================================================
+
   useEffect(() => {
 		//chekc author
 		if( myAuthors === undefined || myAuthors === null || myAuthors.length === 0 ){
@@ -185,7 +174,6 @@ export default function DashboardUploadProfile(props) {
 			//get accounts info
 			getAuthor();
 		}
-		
   }, []);
 
   return (
@@ -201,14 +189,14 @@ export default function DashboardUploadProfile(props) {
 					<div className="top_profile">
 						<ImageUpload
 							className={"bg_file"}
-							preview={stateAuthorInfo?.backgroundImagePreview}
+							previewHash={stateAuthorInfo?.backgroundImage}
 							id={"filebox1"}
 							                
 							/>
 
 						<ImageUpload
 							className={"profile_file"}
-							preview={stateAuthorInfo?.profileImagePreview}
+							previewHash={stateAuthorInfo?.profileImage}
 							id={"filebox2"}
 							
 							/>
@@ -218,17 +206,17 @@ export default function DashboardUploadProfile(props) {
 						<section className="bbs_write">
 							<div className="col">
 								<h3 className="tit1">{text.nickname}</h3>
-								<input type="text" name='nickname' className="inp_txt w100p" value={stateAuthorInfo?.nickname}/>
+								<input type="text" name='nickname' className="inp_txt w100p" value={stateAuthorInfo?.nickname || ''} onChange={() => {}} />
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.name}</h3>
-								<input type="text" name='name' className="inp_txt w100p" value={stateAuthorInfo?.name}/>
+								<input type="text" name='name' className="inp_txt w100p" value={stateAuthorInfo?.name || ''} onChange={() => {}} />
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.introduction}</h3>
-								<textarea name="description" id="" className="textarea1" value={stateAuthorInfo?.description}></textarea>
+								<textarea name="description" className="textarea1" value={stateAuthorInfo?.description}></textarea>
 							</div>
 
 
@@ -241,7 +229,7 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refProfile}
 									className={"box_drag square"}
-									preview={stateAuthorInfo?.profileImagePreview}
+									previewHash={stateAuthorInfo?.profileImage}
 									id={"filebox1"}
 									name={"profileImage"} 
 									callback={callbackProfileImage}
@@ -253,7 +241,7 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refBackground}
 									className={"box_drag"}
-									preview={stateAuthorInfo?.backgroundImagePreview}
+									previewHash={stateAuthorInfo?.backgroundImage}
 									id={"filebox2"}
 									name={"backgroundImage"} 
 									text={text.drag_n_drop}
@@ -290,7 +278,6 @@ export default function DashboardUploadProfile(props) {
 			</div>
 
 		
-			{/* <Modal ref={refModal} /> */}
     </Container>
     
   );

@@ -23,7 +23,7 @@ import { useState } from 'react';
 * @version 1.0.0
 * @author 이현국
 */
-export default forwardRef( function Modal(ref) {    //TODO design type 작업
+export default forwardRef( function Modal(props, ref) {    //TODO design type 작업
   const [ stateIsShow, setStateIsShow ] = useState(false);
   const [ stateContent, setStateContent ] = useState(undefined);
   const refPopup = useRef();
