@@ -1,4 +1,4 @@
-import React, { useEffect, useState, } from "react";
+import React, { useCallback, useEffect, useState, } from "react";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
@@ -115,7 +115,7 @@ export default function DashboardPlanUpload(props) {
     refPriceContainer.current.classList.remove("input_focus");
   };
 
-  const handleClickRegister = (event) => {
+  const handleClickRegister = useCallback((event) => {
     console.log('Register', event);
     
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
@@ -127,7 +127,7 @@ export default function DashboardPlanUpload(props) {
       //이미지 업로드 후 image url 
       setImageToServer(refThumbnailImage, 'thumbnail');
     }
-  };
+  }, []);
 
   //==============================================================================
   // render & hook

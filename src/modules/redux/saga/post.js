@@ -8,7 +8,6 @@ import { finishLoading, startLoading } from "../ducks/loading";
 // edit post
 //==============================================================================
 function createEditPostRequestSaga(type, func) {
-  console.log("createSaga", type);
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -43,7 +42,6 @@ function createEditPostRequestSaga(type, func) {
 // get post detail
 //==============================================================================
 function createPostDetailRequestSaga(type, func) {
-  console.log("createSaga", type);
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -81,7 +79,6 @@ function createPostDetailRequestSaga(type, func) {
 // get author mine
 //==============================================================================
 function createAuthorMineRequestSaga(type, func) {
-  console.log("createSaga", type);
   return function* (action) {
     try {
       yield put(startLoading(type));

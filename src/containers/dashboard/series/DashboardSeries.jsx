@@ -28,7 +28,6 @@ export default function DashboardSeries(props) {
   const [stateData, setStateData] = useState(undefined);
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const param = useParams('page');
-  const navigate = useNavigate();
 
   /**
   *

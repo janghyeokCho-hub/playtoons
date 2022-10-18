@@ -25,7 +25,6 @@ export default function Image(props) {
   const getImage = async (hash) => {
     const params = new FormData();
     const { status, data: result } = await getFileUrlFromServer(hash, params);
-    console.log("getImage", status, result);
 
     if (status === 200) {
       setStateImage(result?.url);
