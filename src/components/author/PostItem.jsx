@@ -37,7 +37,7 @@ const PostItem = ({ item }) => {
           </div>
           <div className="txt">
             <p className="h1">{post?.title}</p>
-            <p className="t1">{post?.description || "description 필드 없음"}</p>
+            <p className="t1">{post?.outline}</p>
           </div>
           <div className="botm">
             <p className="d1">

@@ -41,7 +41,20 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const [meta, setMeta] = useState(null);
 
   const getPostList = async (tab, params, tags, typeId) => {
-    const response = await getPostListAPI(tab, params, tags, typeId);
+    delete params["completed"];
+    delete params["series"];
+    delete params["short"];
+
+    params.type = typeId;
+    if (tab === "COMPLETED") {
+      params.completed = 1;
+    } else if (tab === "SERIES") {
+      params.series = 1;
+    } else if (tab === "SHORT") {
+      params.short = 1;
+    }
+
+    const response = await getPostListAPI(params, tags);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
@@ -55,9 +68,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   }, [searchText]);
 
   useEffect(() => {
-    if (items?.length) {
-      setRenderItems(items);
-    }
+    setRenderItems(items);
   }, [items]);
 
   useEffect(() => {
@@ -90,9 +101,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const handleURLQueryChange = useCallback(
     (key, value) => {
       let params = { ...urlQueryParams, page: 1 };
-      console.log(key);
       if (key) {
-        console.log(key !== "page");
         if (key !== "page") {
           delete params["page"];
         }
@@ -141,7 +150,8 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
 
   const pagination = useMemo(() => {
     if (meta) {
-      const { currentPage, totalPages } = meta;
+      console.log(meta);
+      const { currentPage, totalPages, itemCount } = meta;
       let pageList = [];
       for (let i = 1; i <= totalPages; i++) {
         pageList.push(i);
@@ -188,7 +198,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
               </li>
             ))}
 
-          {totalPages - nextPage > 0 && (
+          {itemCount > 0 && totalPages - nextPage > 0 && (
             <li
               className="next"
               onClick={() => handleURLQueryChange("page", nextPage)}

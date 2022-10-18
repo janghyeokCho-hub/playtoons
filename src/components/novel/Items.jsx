@@ -41,9 +41,20 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const [meta, setMeta] = useState(null);
 
   const getPostList = async (tab, params, tags, typeId) => {
-    const response = await getPostListAPI(tab, params, tags, typeId);
+    delete params["completed"];
+    delete params["series"];
+    delete params["short"];
+
+    params.type = typeId;
+    if (tab === "COMPLETED") {
+      params.completed = 1;
+    } else if (tab === "SERIES") {
+      params.series = 1;
+    } else if (tab === "SHORT") {
+      params.short = 1;
+    }
+    const response = await getPostListAPI(params, tags);
     if (response.status === 200) {
-      console.log(response.data);
       setItems(response.data.posts);
       setMeta(response.data.meta);
     }
@@ -56,13 +67,10 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   }, [searchText]);
 
   useEffect(() => {
-    if (items?.length) {
-      setRenderItems(items);
-    }
+    setRenderItems(items);
   }, [items]);
 
   useEffect(() => {
-    console.log(tab, urlQueryParams, selectTags, typeId);
     getPostList(tab, urlQueryParams, selectTags, typeId);
   }, [tab, urlQueryParams, selectTags, typeId]);
 

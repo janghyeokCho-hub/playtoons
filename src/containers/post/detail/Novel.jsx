@@ -78,9 +78,7 @@ const Novel = () => {
             <p className="d1">
               {moment(post.startAt).format("YYYY/MM/DD HH:mm")}
             </p>
-            <p className="t1 c-gray">
-              {post.discription || "discription 필드 없음"}
-            </p>
+            <p className="t1 c-gray">{post.outline}</p>
           </div>
 
           <div className="area_novel">

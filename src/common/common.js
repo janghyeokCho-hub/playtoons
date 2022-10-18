@@ -131,7 +131,7 @@ export const getParamsToQuery = (params, tags) => {
     });
 
     if (tags?.length) {
-      tags.forEach((tag) => (query += `&tags=${tag.id}`));
+      tags.forEach((tag) => (query += `&tags=${tag.name}`));
     }
 
     return query;

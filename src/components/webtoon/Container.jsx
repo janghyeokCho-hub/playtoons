@@ -1,16 +1,20 @@
 import React from "react";
 import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useSideMenu from "@/hook/useSideMenu";
+import { useRef } from "react";
 
 /**
  *
  */
-const Container = ({ menus, children, type, contentType }) => {
-  const className = `container dashboard webtoon`;
+const Container = ({ menus, children }) => {
+  const wrapRef = useRef(null);
+  const { handleChange } = useSideMenu(wrapRef);
+
   return (
-    <>
-      <Header />
-      <div id="container" className={className}>
+    <div id="wrap" ref={wrapRef}>
+      <Header isMenus={true} onSideMenu={() => handleChange()} />
+      <div id="container" className="container dashboard webtoon">
         <aside className="sidebar">
           {Object.entries(menus).map(([key, value]) => {
             return (
@@ -39,7 +43,7 @@ const Container = ({ menus, children, type, contentType }) => {
 
         {children}
       </div>
-    </>
+    </div>
   );
 };
 

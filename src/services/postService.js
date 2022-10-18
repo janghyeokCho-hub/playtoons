@@ -164,15 +164,7 @@ export const getPostTypes = async () => {
  * @version 1.0.0
  * @author 조장혁
  */
-export const getPostList = async (type, params = {}, tags, typeId) => {
-  params.type = typeId;
-  if (type === "COMPLETED") {
-    params.completed = 1;
-  } else if (type === "SERIES") {
-    params.series = 1;
-  } else if (type === "SHORT") {
-    params.short = 1;
-  }
+export const getPostList = async (params = {}, tags) => {
   try {
     return await apiServer("get", `/post${getParamsToQuery(params, tags)}`);
   } catch (e) {
@@ -193,9 +185,29 @@ export const getCategorys = async (id) => {
   }
 };
 
+/**
+ * 게시글의 내용 조회
+ * @version 1.0.0
+ * @author 조장혁
+ */
 export const getPostContent = async (id) => {
   try {
     return await apiServer("get", `/post/${id}/content`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+ * 게시글 좋아요
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {string} method (post / delete)
+ * @param {number} id 해당 게시글 아이디
+ */
+export const setPostLike = async (method, id) => {
+  try {
+    return await apiServer(method, `/post/${id}/like`);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
