@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import useFilePath from "@/hook/useFilePath";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,8 +18,12 @@ import {
   getPosts as getPostsAPI,
 } from "@/services/postService";
 import moment from "moment";
+import { useCallback } from "react";
+import { Link } from "react-router-dom";
 
 const Series = ({ id }) => {
+  const location = useLocation();
+  const postType = location?.state?.postType;
   const [series, setSeries] = useState(null);
   const [posts, setPosts] = useState(null);
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
@@ -28,11 +33,27 @@ const Series = ({ id }) => {
   const coverImgURL = useFilePath(series?.coverImage);
   const profileImgURL = useFilePath(series?.author?.profileImage);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    if (posts?.length) {
+      const list = posts.sort((a, b) => {
+        a = new Date(a.startAt);
+        b = new Date(b.startAt);
+        if (sortTab === "ASC") {
+          return a - b;
+        } else {
+          return b - a;
+        }
+      });
+      setPosts(list);
+    }
+  }, [sortTab, posts]);
+
   useEffect(() => {
     async function getSeriesDetail(seriesId) {
       const response = await getPostSeriesDetailAPI(seriesId);
       if (response.status === 200) {
-        console.log("seies response : ", response.data.series);
         setSeries(response.data.series);
       }
     }
@@ -41,22 +62,19 @@ const Series = ({ id }) => {
     }
   }, [id, series]);
 
-  useEffect(() => {
-    async function getPosts() {
-      let params = {
-        page: 1,
-        authorId: series.author.id,
-        seriesId: series.id,
-        typeId: series.type.id,
-        series: 1,
-      };
-      console.log("params : ", params);
-      const response = await getPostsAPI(params);
-      console.log(response);
-      if (response.status === 200) {
-        setPosts(response.data?.posts);
-      }
+  const getPosts = useCallback(async () => {
+    const response = await getPostsAPI({
+      authorId: series.author.id,
+      seriesId: series.id,
+      page: currentPage,
+    });
+
+    if (response.status === 200) {
+      setPosts(response.data?.posts);
     }
+  }, [series, currentPage]);
+
+  useEffect(() => {
     if (series) {
       getPosts();
     }
@@ -67,25 +85,31 @@ const Series = ({ id }) => {
 
     return (
       <li className="item">
-        <a href="#">
+        <Link
+          to={`/post/detail/${postType}/${item?.id}`}
+          state={{ item: item }}
+        >
           <div className="thumb">
             <img src={thumbnailImgURL} alt="" />
 
+            {/* Lock 기준이 뭔지? 
             <div className="area_lock">
               <div>
                 <FontAwesomeIcon icon={faLock} />
               </div>
             </div>
+            */}
           </div>
           <div className="txt">
             <p className="h1">
-              <span className="i-txt">支援</span>3話 : {item?.title}
+              <span className="i-txt">支援</span>
+              {item?.title}
             </p>
             <p className="t1">{item?.description}</p>
           </div>
           <div className="botm">
             <p className="d1">
-              {moment(item?.endAt).format("YYYY/MM/DD HH:mm")}
+              {moment(item?.startAt).format("YYYY/MM/DD HH:mm")}
             </p>
             <button type="button" className="btn01">
               <FontAwesomeIcon icon={faHeart} />
@@ -96,7 +120,7 @@ const Series = ({ id }) => {
               {item?.commnetCount}
             </button>
           </div>
-        </a>
+        </Link>
       </li>
     );
   };

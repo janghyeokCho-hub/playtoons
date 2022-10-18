@@ -87,13 +87,15 @@ function createSetCurrentAuthorRequestSaga(type) {
   return function* (action) {
     if (action.payload) {
       try {
-        const response = yield call(authorApi.setViewAuthor, action.payload.id);
-        console.log("getAuthor response : ", response);
+        yield call(authorApi.setViewAuthor, action.payload.id);
+        const response = yield call(authorApi.getAuthor, action.payload.id);
 
-        yield put({
-          type: SUCCESS,
-          payload: action.payload,
-        });
+        if (response.status === 200) {
+          yield put({
+            type: SUCCESS,
+            payload: response.data.author,
+          });
+        }
       } catch (e) {
         console.dir(e);
         yield call(exceptionHandler, { e: e, redirectError: false });

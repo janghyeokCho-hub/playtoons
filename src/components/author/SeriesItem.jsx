@@ -24,7 +24,10 @@ const SeriesItem = ({ item }) => {
 
   return (
     <li>
-      <Link to={`/author/detail/series/${item?.id}`} state={{ item: item }}>
+      <Link
+        to={`/author/detail/series/${item?.id}`}
+        state={{ postType: item.type.code }}
+      >
         <div className="thumb">
           <SpanImg bgImg={thumbnailImgURL}></SpanImg>
         </div>

@@ -192,3 +192,11 @@ export const getCategorys = async (id) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+export const getPostContent = async (id) => {
+  try {
+    return await apiServer("get", `/post/${id}/content`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

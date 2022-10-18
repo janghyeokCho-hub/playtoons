@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
-import { getPostList } from "@API/postService";
+import { getPosts as getPostsAPI } from "@API/postService";
 import PostItem from "./PostItem";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
+import { useCallback } from "react";
 
 const PostItems = ({ item }) => {
   const [posts, setPosts] = useState([]);
@@ -22,23 +23,22 @@ const PostItems = ({ item }) => {
       getPostTypes();
     }
   }, [postType]);
+
   /** ===== Post type API End ===== */
+  const getPosts = useCallback(async () => {
+    const response = await getPostsAPI({ authorId: item.id });
+    if (response.status === 200) {
+      let result = response.data.posts;
+      if (!Array.isArray(result)) {
+        result = new Array(result);
+      }
+      setPosts(result);
+    }
+  }, [item]);
 
   useEffect(() => {
-    async function getPostSeries(item) {
-      const response = await getPostList("EVERY", { authorId: item.id });
-      if (response.status === 200) {
-        let result = response.data.posts;
-        if (!Array.isArray(result)) {
-          result = new Array(result);
-        }
-        setPosts(result);
-      }
-    }
-    if (item?.id && !posts?.length) {
-      getPostSeries(item);
-    }
-  }, [item, posts]);
+    getPosts();
+  }, []);
 
   return (
     <>

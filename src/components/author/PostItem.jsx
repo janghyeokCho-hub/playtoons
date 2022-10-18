@@ -4,52 +4,55 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faCommentQuote } from "@fortawesome/pro-solid-svg-icons";
 import useFilePath from "@/hook/useFilePath";
 import moment from "moment";
-import { getPostSeriesDetail as getPostSeriesDetailAPI } from "@/services/postService";
+import { getPostDetailFromServer as getPostDetilAPI } from "@/services/postService";
+import { useCallback } from "react";
 
 const PostItem = ({ item }) => {
-  const [series, setSeries] = useState(null);
-  const thumbnailImgURL = useFilePath(series?.thumbnailImage);
+  const [post, setPost] = useState(null);
+  const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+
+  const getPost = useCallback(async () => {
+    const params = {
+      id: item.id,
+    };
+    const response = await getPostDetilAPI(params);
+    if (response.status === 200) {
+      setPost(response.data.post);
+    }
+  }, [item]);
 
   useEffect(() => {
-    async function getPostSeriesDetail(seriesId) {
-      const response = await getPostSeriesDetailAPI(seriesId);
-      if (response.status === 200) {
-        setSeries(response.data.series);
-      }
-    }
-    if (item?.series && !series) {
-      getPostSeriesDetail(item.series?.id);
-    }
-  }, [item, series]);
+    getPost();
+  }, []);
 
   return (
     <li className="item">
-      {series && (
+      {post && (
         <Link
-          to={`/post/detail/${series.type.code}/${series?.id}`}
-          state={{ item: series }}
+          to={`/post/detail/${post.type.code}/${post?.id}`}
+          state={{ item: post }}
         >
           <div className="thumb">
             <img src={thumbnailImgURL} alt="" />
           </div>
           <div className="txt">
-            <p className="h1">{series?.title}</p>
-            <p className="t1">{series?.description}</p>
+            <p className="h1">{post?.title}</p>
+            <p className="t1">{post?.description || "description 필드 없음"}</p>
           </div>
           <div className="botm">
             <p className="d1">
-              {moment(item?.endAt).format("YYYY/MM/DD HH:mm")}
+              {moment(post?.startAt).format("YYYY/MM/DD HH:mm")}
             </p>
             <button type="button" className="btn01">
               <FontAwesomeIcon icon={faHeart} style={{ marginRight: "7px" }} />
-              {item?.likeCount}
+              {post?.likeCount}
             </button>
             <button type="button" className="btn01">
               <FontAwesomeIcon
                 icon={faCommentQuote}
                 style={{ marginRight: "7px" }}
               />
-              {item?.viewCount}
+              {post?.viewCount}
             </button>
           </div>
         </Link>
