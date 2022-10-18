@@ -2,6 +2,8 @@ import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRe
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
+import { getFileUrlFromServer } from '@/services/dashboardService';
+import ErrorMessage from './ErrorMessage';
 
 /**
  * 
@@ -35,9 +37,10 @@ import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 export default forwardRef(function ImageUpload(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, value: undefined};
-  const { className, preview, text, name, id, callback, hash } = props;
+  const { className, preview, text, name, id, callback, previewHash } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
-  
+  const [stateError, setStateError] = useState(undefined);
+
   /**
   *
      업로드 전 preview 생성
@@ -60,6 +63,25 @@ export default forwardRef(function ImageUpload(props, ref) {
         preview: reader.result
       });
     };
+  };
+
+
+  //==============================================================================
+  // api
+  //==============================================================================
+  const getImageUrl = async (hash) => {
+    const {status, data} = await getFileUrlFromServer(hash);
+    
+    if( status === 200 ){
+      setStateImage({
+        ...stateImage,
+        preview: data?.url
+      });
+    }
+    else{
+      setStateError( String(status, data) );
+      // setStateError( undefined );
+    }
   };
 
   //=============== file drag n drop 설정 =========================================
@@ -103,12 +125,14 @@ export default forwardRef(function ImageUpload(props, ref) {
     },
     getImageInfo: () => {
       return stateImage;
-    }
+    },
+    setError: (msg) => {
+      setStateError(msg);
+    },
   }));
 
   useEffect(() => {
     if( preview !== undefined ){
-      console.log("useEffect preview", preview);
       setStateImage({
         ...stateImage,
         preview : preview
@@ -117,52 +141,61 @@ export default forwardRef(function ImageUpload(props, ref) {
   }, [preview]);
 
   useEffect(() => {
+    if( previewHash !== undefined ){
+      getImageUrl(previewHash);
+    }
+  }, [previewHash]);
+
+  useEffect(() => {
     if( stateImage.value !== undefined ){
-      console.log("useEffect value", stateImage.value);
       callback?.(stateImage);
     }
   }, [stateImage.value]);
 
   return (
-    <div 
-      className={`${className}`}
-       >
-        {/* upload에 쓰일 값  저장 */}
-      <input type={"text"} name={name} defaultValue={stateImage?.value} style={{display: "none"}} />  
-        {/* file input tag */}
-      <input {...InputProps} id={id} />
-      {
-        stateImage?.preview === undefined ? (
-          <label htmlFor={id} className="filetxt">
-            <div 
-              {...RootProps} 
-              maxsize={100} 
-              multiple={false} 
-              className={`wh100`} >
-                {
-                  text === undefined ? 
-                    <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                    :
-                    <div className="txt">
+    <>
+      <div 
+        className={`${className}`}
+        >
+          {/* upload에 쓰일 값  저장 */}
+        <input type={"text"} name={name} defaultValue={stateImage?.value} style={{display: "none"}} />  
+          {/* file input tag */}
+        <input {...InputProps} id={id} />
+        {
+          stateImage?.preview === undefined ? (
+            <label htmlFor={id} className="filetxt">
+              <div 
+                {...RootProps} 
+                maxsize={100} 
+                multiple={false} 
+                className={`wh100`} >
+                  {
+                    text === undefined ? 
                       <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                      <p className="t">{text}</p>
-                    </div>
-                }
-                
+                      :
+                      <div className="txt">
+                        <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
+                        <p className="t">{text}</p>
+                      </div>
+                  }
+                  
+              </div>
+            </label>
+          ) : (
+            <div className={"fileview"}>
+              <div><img src={stateImage?.preview} alt="preview" /></div>
+              <button type="button" className="btn_del" title="削除">
+                <FontAwesomeIcon 
+                      icon={faCircleXmark}
+                      onClick={handlePreviewClose}
+                      />
+                </button>
             </div>
-          </label>
-        ) : (
-          <div className={"fileview"}>
-            <div><img src={stateImage?.preview} alt="preview" /></div>
-            <button type="button" className="btn_del" title="削除">
-              <FontAwesomeIcon 
-                    icon={faCircleXmark}
-                    onClick={handlePreviewClose}
-                    />
-              </button>
-          </div>
-        )
-      }
-    </div>
+          )
+        }
+      </div>
+      
+      <ErrorMessage error={stateError} />
+    </>
   );
 });
