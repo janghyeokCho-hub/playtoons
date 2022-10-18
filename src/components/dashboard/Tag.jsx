@@ -135,7 +135,9 @@ export default forwardRef( function Tag(props, ref) {
   }));
 
   useEffect(() => {
-    setStateList(list);
+    if( list !== undefined ){
+      setStateList(list);
+    }
   }, []);
 
   return (

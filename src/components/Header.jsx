@@ -7,6 +7,7 @@ import {
   faMagnifyingGlass,
   faCircleXmark,
   faSquarePen,
+  faSquarePlus,
 } from "@fortawesome/pro-light-svg-icons";
 import { faCartCirclePlus } from "@fortawesome/pro-regular-svg-icons";
 import { faXmarkLarge, faGlobe } from "@fortawesome/pro-solid-svg-icons";
@@ -143,6 +144,7 @@ const Header = ({
                     >
                       <button type="button" className="btn_tugo btn-pk n blue bdrs">
                         <span>投稿</span>
+                        <FontAwesomeIcon className="view-m" icon={faSquarePlus} />
                       </button>
                       {isUserBoxShow && (
                         <div className="box_drop">
