@@ -96,7 +96,10 @@ export default forwardRef(function ImageUpload(props, ref) {
     accept: {
       'image/jpeg': [],
       'image/png': []
-    }
+    },
+    noDragEventsBubbling: true,
+    noKeyboard: true,
+    // noClick: true
   }); //isDragActive
   const InputProps = {
     ...getInputProps(),
@@ -129,6 +132,13 @@ export default forwardRef(function ImageUpload(props, ref) {
     setError: (msg) => {
       setStateError(msg);
     },
+    checkToEmpty: () => {
+      if( JSON.stringify(stateImage) === JSON.stringify(initImageObject) ){
+        return true;
+      }
+
+      return false;
+    },
   }));
 
   useEffect(() => {
@@ -156,14 +166,15 @@ export default forwardRef(function ImageUpload(props, ref) {
     <>
       <div 
         className={`${className}`}
+        onClick={e => e.preventDefault()} 
         >
           {/* upload에 쓰일 값  저장 */}
         <input type={"text"} name={name} defaultValue={stateImage?.value} style={{display: "none"}} />  
           {/* file input tag */}
-        <input {...InputProps} id={id} />
+        <input {...InputProps} id={id}  />
         {
           stateImage?.preview === undefined ? (
-            <label htmlFor={id} className="filetxt">
+            <label htmlFor={id} className="filetxt" >
               <div 
                 {...RootProps} 
                 maxsize={100} 

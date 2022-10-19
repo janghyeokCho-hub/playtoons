@@ -102,7 +102,9 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
     accept: {
       'image/jpeg': [],
       'image/png': []
-    }
+    },
+    noDragEventsBubbling: true,
+    noKeyboard: true,
   });
   const InputProps = {
     ...getInputProps(),

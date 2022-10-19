@@ -104,13 +104,25 @@ export default function DashboardPlanEdit(props) {
 			subscribeTierId: params.id,
 		};
 
+    if( refImage.current.checkToEmpty() ){
+      refImage.current.setError('サムネイルが必要です。');
+      return false;
+    }
+
+    if( !json.thumbnailImage.length ){
+      json = {
+        ...json,
+        thumbnailImage: stateData.thumbnailImage,
+      };
+    }
+
     console.log('updateSubscribeTier', json);
     const {status, data} = await editSubscribeTierToServer(json);
     console.log('updateSubscribeTier', status, data);
     
     if( status === 200 ){
       if( window.confirm('支援を編集しました。') ){
-        navigate(params);
+        navigate('/dashboard/plan');
       }
     }
     else{

@@ -47,14 +47,15 @@ export default forwardRef( function Select(props, ref) {
   useImperativeHandle(ref, () => ({
     setSelected: (id) => {
       const select = refSelect.current;
-      
-      dataList?.map((item, index) => {
-        if( item.id === id ){
-          select.selectedIndex = index;
-          select.options[index].setAttribute("selected", true);
-          return index;
-        }
-      });
+      if( select !== null ){
+        dataList?.map((item, index) => {
+          if( item.id === id ){
+            select.selectedIndex = index;
+            select.options[index].setAttribute("selected", true);
+            return index;
+          }
+        });
+      }
     }
   }));
 

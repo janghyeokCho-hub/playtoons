@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { useParams} from 'react-router-dom';
+import { Link, useParams} from 'react-router-dom';
 import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/Swiper";
@@ -8,6 +8,8 @@ import Container from "@/components/dashboard/Container";
 import tempImage from '@IMAGES/tmp_comic2.jpg';
 import { getSeriesDetailFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
+import { useDispatch, useSelector } from "react-redux";
+import { getSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -18,6 +20,7 @@ const text = {
   status: "状態",
   type: "タイプ",
   series_detail: "シリーズ詳細",
+  modify: "修正する",
 };
 
 const tempData = {
@@ -34,7 +37,9 @@ const tempData = {
 
 export default function DashboardSeriesDetail(props) {
   const [stateData, setStateData] = useState(undefined);
+  const reduxSeries = useSelector(({ dashboard }) => dashboard?.series);
   const params = useParams('id');
+  const dispatch = useDispatch();
 
   const getSeriesDetail = async () => {
     const {status, data} = await getSeriesDetailFromServer(params);
@@ -54,14 +59,14 @@ export default function DashboardSeriesDetail(props) {
       });
     }
     else{
-      
+      alert( String(status, data) );
     }
     
   };
 
   const renderThumbList = () => {
     return stateData?.thumbList?.map( (item, index) => {
-      return <SwiperSlide className="cx swiper-slide" key={index}>
+      return <SwiperSlide className="cx  swiper-slide" key={index}>
               <a href="#">
                 <div className="cx_thumb">
                   {
@@ -76,14 +81,28 @@ export default function DashboardSeriesDetail(props) {
 
   const renderTagList = () => {
     return stateData?.tags?.map( (item, index) => {
-      return <div className="i_tag" key={index}>{item}</div>
+      return <div className="i_tag" key={item.id}>{`#${item.name}`}</div>
     });
   };
+  
+  
+  
+  useEffect(() => {
+    setStateData({
+      ...tempData,
+      title: reduxSeries?.title,
+      category: reduxSeries?.category,
+      rating: reduxSeries?.rating,
+      type: reduxSeries?.type,
+      coverImage: reduxSeries?.coverImage,
+      tags: reduxSeries?.tags,
+      description: reduxSeries?.description
+    });
+  }, [dispatch, reduxSeries]);
 
   useEffect(() => {
-    getSeriesDetail();
+    dispatch( getSeriedDetailAction(params) );
   }, []);
-  
 
   return (
     <Container
@@ -99,7 +118,10 @@ export default function DashboardSeriesDetail(props) {
             </div>
             
             <div className="bbs_book">
-              <p className="cx_tit">{stateData?.title}</p>
+              <div className="flex relative">
+                <p className="cx_tit">{stateData?.title}</p>
+                <Link to={`/dashboard/series/edit/${params.id}`} className="btn-pk n blue2 modify"><span>{text.modify}</span></Link>
+              </div>
               <div className="cx_thumb"><span><Image hash={stateData?.coverImage} alt="cover image" /></span></div>
               <ul className="cx_list">
                 <li><span>{text.category} </span><span>{stateData?.category.name}</span></li>

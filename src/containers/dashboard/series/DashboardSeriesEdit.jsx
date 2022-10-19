@@ -11,6 +11,10 @@ import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServ
 
 import tempCoverImage from '@IMAGES/tmp_comic2.jpg';
 import tempTimelineImage from '@IMAGES/temp_seller_image.png';
+import { useSelector } from "react-redux";
+import Type from "@/components/dashboard/Type";
+import Category from "@/components/dashboard/Category";
+import Tag from "@/components/dashboard/Tag";
 
 
 const text = {
@@ -51,24 +55,26 @@ const tempData = {
 
 
 export default function DashboardUploadSeries(props) {
-  const refType = useRef();
+  const [ stateType, setStateType ] = useState(undefined);
+  const reduxSeriesDetail = useSelector(({dashboard}) => dashboard?.series );
+  const refTags = useRef();
   const refR19 = useRef();
   const refCoverImage = useRef();
   const refTimeline  = useRef();
-  const [ stateTypeList, setStateTypeList ] = useState(undefined);
-  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
-  const [ stateData, setStateData ] = useState(undefined);
 
 
+  //==============================================================================
+  // function
+  //==============================================================================
 
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
+  const getCheckedToSeriesDetail = () => {
+      return reduxSeriesDetail.rating === 'R-18';
+  };
+  
+  //==============================================================================
+  // api
+  //==============================================================================
+  
   const setCoverImage = async(file) => {
     // 폼데이터 구성
     const params = new FormData();
@@ -100,37 +106,14 @@ export default function DashboardUploadSeries(props) {
 
     console.log("setFile result", status, resultData);
   };
+ 
 
-  const setTypeList = async () => {
-    const {status, data: result} = await getPostTypeListFromServer();
-
-    if( status === 200 ){
-      setStateTypeList(result?.types);
-      
-    }
-    else{
-
-    }
-
-    console.log("setTypeList", status, result);
-  };
-
-  const setCategoryList = async (type) => {
-    const {status, data: result} = await getPostCategoryListFromServer(type);
-    
-    if( status === 200 ){
-      setStateCategoryList(result?.categories);
-
-    }
-    else{
-      
-    }
-    
-    console.log('setCategoryList', status, result);
-  };
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleItemClickType = (item) => {
-    setCategoryList(item.value);
+    setStateType(item);
   };
 
   const handleRegister = (e) => {
@@ -151,26 +134,14 @@ export default function DashboardUploadSeries(props) {
     // refTitle.current.setStatusInInput({type: INPUT_STATUS.ERROR, error: "error"});
   };
 
+  //==============================================================================
+  // Hook & render
+  //==============================================================================
   
   useEffect(() => {
-    //get types
-    setTypeList();
-    setStateData(tempData);
-  }, []);
+    
+  }, [reduxSeriesDetail]);
   
-  // series 정보 변경 후 작업
-  useEffect(() => {
-    //get detail info
-    refR19.current.checked = true;
-    refTimeline.current.setImage(tempTimelineImage, "");
-    refCoverImage.current.setImage(stateData?.main_image, "");
-  }, [stateData]);
-
-  //type list 변경 후 작업
-  useEffect(() => {
-    refType.current.setSelected(tempData?.typeCode);
-  }, [stateTypeList]);
-
 
   return (
     <Container
@@ -188,47 +159,48 @@ export default function DashboardUploadSeries(props) {
 
             <div className="col">
               <h3 className="tit1">{text.title}</h3>
-              <input name="title" type="text" className="inp_txt w100p" defaultValue={stateData?.title} />
+              <input name="title" type="text" className="inp_txt w100p" defaultValue={reduxSeriesDetail?.title} />
             </div>
 
             <div className="col">
               <h3 className="tit1">{text.type}</h3>
-              <Select 
-                ref={refType}
-                name={"typeId"}
-                className={"select1 wid1"}
-                dataList={stateTypeList}
-                handleItemClick={handleItemClickType}
+              <Type
+                name={'typeId'}
+                className={'select1 wid1'}
+                selected={reduxSeriesDetail?.type.id}
+                disabled={true}
+                disabledText={text.can_not_edit}
                 />
-              
             </div>
 
             <div className="col">
               <h3 className="tit1">{text.category}</h3>
-              <Select 
-                name={"categoryId"}
-                className={"select1 wid1"}
-                dataList={stateCategoryList}
-                // handleItemClick={handleItemClickCategory}
+              <Category 
+                name={'categoryId'}
+                className={'select1 wid1'}
+                typeId={reduxSeriesDetail?.type.id}
+                selected={reduxSeriesDetail?.category.id}
                 />
             </div>
 
             <div className="col">
               <h3 className="tit1">{text.setting_adult}</h3>
-              <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" /><span>{text.r_19}</span></label>
+              <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" defaultChecked={getCheckedToSeriesDetail} /><span>{text.r_19}</span></label>
             </div>
 
             <div className="col">
               <h3 className="tit1">{text.summary}</h3>
-              <textarea name="description" id="description" className="textarea1">{stateData?.summary}</textarea>
+              <textarea name="description" id="description" className="textarea1" defaultValue={reduxSeriesDetail?.description} />
             </div>
 
             <div className="col">
               <h3 className="tit1">{text.setting_tag}</h3>
-              <div className="inp_txt sch">
-                <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                <input type="text" className="" placeholder={text.tag_name} />
-              </div>
+              <Tag
+                ref={refTags}
+                name={"tagIds"}
+                className={"inp_txt sch"}
+                placeholder={text.tag_name}
+                list={reduxSeriesDetail?.tags} />
             </div>
 
             <div className="col">
@@ -245,6 +217,7 @@ export default function DashboardUploadSeries(props) {
                 className={"box_drag small"}
                 name={"coverImage"}                     
                 text={text.drag_drop}    
+                previewHash={reduxSeriesDetail?.coverImage}
                 />
             </div>
 
@@ -262,6 +235,7 @@ export default function DashboardUploadSeries(props) {
                 className={"box_drag"}
                 name={"thumbnailImage"}                     
                 text={text.drag_drop}    
+                previewHash={reduxSeriesDetail?.thumbnailImage}
                 />
             </div>
           </section>

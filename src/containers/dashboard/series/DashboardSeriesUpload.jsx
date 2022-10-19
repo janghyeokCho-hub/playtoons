@@ -264,7 +264,6 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.type}</h3>
-                
                 <Type
                   name={'typeId'}
                   className={'select1 wid1'}
@@ -274,17 +273,10 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
-
-                {/* <Select
-                  name={"categoryId"}
-                  className={"select1 wid1"}
-                  dataList={stateCategoryList}
-                  // handleItemClick={handleItemClickCategory}
-                /> */}
-                  <Category 
-                    name={'categoryId'}
-                    className={'select1 wid1'}
-                    typeId={stateType?.id} />
+                <Category 
+                  name={'categoryId'}
+                  className={'select1 wid1'}
+                  typeId={stateType?.id} />
               </div>
 
               <div className="col">

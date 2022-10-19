@@ -254,7 +254,7 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.episode}</h3>
-                <input type="text" className="inp_txt w100p" name={"issueId"}/>
+                <input type="text" className="inp_txt w100p" name={"number"}/>
               </div>
 
 

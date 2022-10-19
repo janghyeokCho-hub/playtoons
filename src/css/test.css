@@ -650,7 +650,21 @@ li.dashboard-gnb.selected{
 .mt67{
   margin-top: 67px;
 }
-  
+
+.modify{
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(0, -20%);
+
+}
+@media (max-width: 960px) {
+  .modify{
+    font-size: 12px !important;
+    line-height: 30px !important;
+  }
+}
+
 /* ============================================================================== */
 /* icon with text */
 /* ============================================================================== */
