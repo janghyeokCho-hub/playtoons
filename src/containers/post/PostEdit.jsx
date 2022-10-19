@@ -225,10 +225,15 @@ export default function PostEdit(props) {
       // number: '',
     };
 
+    if( refThumbnailTimeline.current.checkToEmpty() ){
+      refThumbnailTimeline.current.setError('サムネイルが必要です。');
+      return false;
+    }
+
     if( !json.thumbnailImage.length ){
       json = {
         ...json,
-        thumbnailImage: reduxPostInfo.thumbnailImage
+        thumbnailImage: reduxPostInfo.thumbnailImage,
       };
     }
 
@@ -353,7 +358,7 @@ export default function PostEdit(props) {
                     name={'typeId'}
                     callback={handleClickType}
                     selected={reduxPostInfo?.typeId}
-                    disabled={true} 
+                    disabled={true}   //2022.10.19 edit일때는 type이 변경되면 안된다.
                     />
                 </div>
               </div>
@@ -398,6 +403,7 @@ export default function PostEdit(props) {
                   ref={refTag}
                   name={"tagIds"}
                   className={"inp_txt sch"}
+                  list={reduxPostInfo?.tags}
                   placeholder={text.tag_name} />
               </div>
 

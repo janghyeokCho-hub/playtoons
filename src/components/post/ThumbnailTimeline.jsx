@@ -141,10 +141,21 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
     setError: (msg) => {
       setStateError(msg);
     },
+    checkToEmpty: () => {
+      if( JSON.stringify(stateImage) === JSON.stringify(initImageObject) ){
+        return true;
+      }
+
+      return false;
+    },
   }));
 
   useEffect(() => {
     if( previewHash !== undefined ){
+      setStateImage({
+        ...stateImage,
+        hash: previewHash
+      });
       getImageUrl(previewHash);
     }
   }, [previewHash]);

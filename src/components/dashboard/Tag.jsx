@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { useRef } from 'react';
 import { getTagFromServer, setTagToServer } from '@/services/dashboardService';
 import { useImperativeHandle, forwardRef } from 'react';
-import { getFromDataJson, removeItemInList } from '@/common/common';
 
 //test 
 import '@/css/test.css';
@@ -43,6 +42,11 @@ export default forwardRef( function Tag(props, ref) {
     return false;
   };
 
+  const removeItemInList = (list, id) => {
+    return list.filter((item) => {
+      return item.id !== id;
+    });
+  };
 
   //==============================================================================
   // api
@@ -110,8 +114,8 @@ export default forwardRef( function Tag(props, ref) {
 
   const handleClickItem = (event) => {
     console.log('Item', event);
-    const tag = event.target.getAttribute('data-id');
-    setStateList( removeItemInList(stateList, tag) );
+    const tagId = event.target.getAttribute('data-id');
+    setStateList( removeItemInList(stateList, tagId) );
   };
 
   const handleClickSearch = (event) => {

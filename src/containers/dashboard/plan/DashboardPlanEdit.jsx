@@ -85,6 +85,7 @@ export default function DashboardPlanEdit(props) {
               <ImageUpload 
                 // ref={refCoverImage}
                 className={"box_drag half"}
+                // previewHash={stateData?.image}
                 preview={stateData?.image}
                 id={"filebox1"}
                 name={"image"}                     
