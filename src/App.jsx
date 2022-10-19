@@ -19,31 +19,17 @@ import Review from "@CONTAINERS/review";
 import Search from "@CONTAINERS/search";
 import Inquiry from "@CONTAINERS/inquiry";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
+import ScrollToTop from "@COMPONENTS/ScrollToTop";
 
 export const store = configureStore();
 sagaMiddleware.run(rootSaga);
 
 function App() {
-  /*
-  나중에 home 으로 옮기기
-  const dispatch = useDispatch();
-  const location = useLocation();
-  console.log("location : ", location);
-
-  const searchParams = new URLSearchParams(location.search);
-  const code = searchParams.get("code");
-
-  useEffect(() => {
-    if (code) {
-      console.log("code : ", code);
-    }
-  }, [dispatch, code]);
-  */
-
   return (
     <Provider store={store}>
       <PersistGate persistor={store.persistor}>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/webtoon/*" element={<Webtoon />} />

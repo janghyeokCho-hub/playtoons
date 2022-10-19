@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import useFilePath from "@/hook/useFilePath";
+import { Link } from "react-router-dom";
 
 const Author = ({ item }) => {
   const backgroundImgURL = useFilePath(item?.backgroundImage);
@@ -8,7 +9,12 @@ const Author = ({ item }) => {
 
   return (
     <div className="box_profile">
-      <a href="#">
+      <Link
+        to={{
+          pathname: "/author/post",
+        }}
+        state={{ item: item }}
+      >
         <ImgTmpProfileBgDiv
           className="pf_thumb"
           bgImg={backgroundImgURL}
@@ -20,7 +26,7 @@ const Author = ({ item }) => {
           <p className="h1">{item.name}</p>
           <p className="t1">{item.description}</p>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };

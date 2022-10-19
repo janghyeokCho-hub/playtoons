@@ -8,10 +8,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 
 const Curation = ({ item }) => {
+  console.log("item : ", item);
   const userInfo = useSelector(({ login }) => login.userInfo);
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
   return (
-    <Link to="/">
+    <Link to={`/post/detail/${item?.type?.code}/${item?.id}`}>
       <div className="cx_thumb">
         <span>
           <img src={thumbnailImgURL} alt="사진" />

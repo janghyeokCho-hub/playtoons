@@ -6,6 +6,7 @@ import Footer from "@COMPONENTS/Footer";
 import CurationItems from "@COMPONENTS/landingPage/CurationItems";
 import AuthorItems from "@COMPONENTS/landingPage/AuthorItems";
 import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
+import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
@@ -43,9 +44,13 @@ const LandingPage = () => {
                 数えきれない作品をご覧にいただけます。
               </p>
               <div className="btn-bot">
-                <a href="#" className="btn-pk b blue2 bdrs">
+                <Link
+                  to=""
+                  onClick={() => alert("/home 으로 페이지 이동 예정")}
+                  className="btn-pk b blue2 bdrs"
+                >
                   <span>はじめる</span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

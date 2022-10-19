@@ -3,6 +3,7 @@ import Header from "../Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useSideMenu from "@/hook/useSideMenu";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 
 /**
  *
@@ -24,13 +25,19 @@ const Container = ({ menus, children }) => {
                   <ul>
                     {value.map((item) => {
                       return (
-                        <li className=" s1" key={item.code}>
-                          <a href="#">
+                        <li className="s1" key={item.code}>
+                          <Link
+                            to={`${item.link}`}
+                            onClick={() =>
+                              !item?.link &&
+                              alert(`${item?.link} 링크 준비중입니다.`)
+                            }
+                          >
                             <span className="ico">
                               <FontAwesomeIcon icon={item.icon.on} />
                             </span>
                             <span>{item.name}</span>
-                          </a>
+                          </Link>
                         </li>
                       );
                     })}
