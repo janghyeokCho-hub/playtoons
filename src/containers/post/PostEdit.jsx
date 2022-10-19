@@ -215,6 +215,7 @@ export default function PostEdit(props) {
     json = {
       ...json,
       postId: params.id,
+      typeId: stateType.id,
       tagIds: refTag.current.getTagsJsonObject(),
       // rating: reduxPostInfo.rating,
       // status: reduxPostInfo.status,
@@ -251,7 +252,6 @@ export default function PostEdit(props) {
   //==============================================================================
 
   const handleClickType = (typeItem) => {
-    console.log('ItemType', typeItem);
     setStateType(typeItem);
   };
   
@@ -353,6 +353,7 @@ export default function PostEdit(props) {
                     name={'typeId'}
                     callback={handleClickType}
                     selected={reduxPostInfo?.typeId}
+                    disabled={true} 
                     />
                 </div>
               </div>
@@ -360,9 +361,11 @@ export default function PostEdit(props) {
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
                 <Category
-                  name={''}
+                  name={'categoryId'}
                   className={'select1 wid1 '}
-                  typeId={stateType?.id} />
+                  typeId={stateType?.id} 
+                  selected={reduxPostInfo?.categoryId}
+                  />
               </div>
 
               <div className="col">

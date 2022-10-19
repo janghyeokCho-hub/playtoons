@@ -22,7 +22,7 @@ import ErrorMessage from "../dashboard/ErrorMessage";
 * @return
 */
 export default forwardRef( function Type(props, ref) {
-  const {name, callback, selected} = props;
+  const {name, callback, selected, disabled} = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
       
@@ -67,6 +67,11 @@ export default forwardRef( function Type(props, ref) {
   };
 
   const handleClickItem = (event) => {
+    if( disabled ){
+      event.preventDefault();
+      return false;
+    }
+
     initCheckecInList();
     const item = stateList[event.target.getAttribute('data-index')];
     item.checked = true;
@@ -86,7 +91,8 @@ export default forwardRef( function Type(props, ref) {
             defaultChecked={item.checked}
             onClick={handleClickItem}
           />
-          <span>{item.name}</span>
+          
+          <span className={`${disabled ? 'inp_disabled' : ''}`}>{item.name}</span>
         </label>
       );
     });

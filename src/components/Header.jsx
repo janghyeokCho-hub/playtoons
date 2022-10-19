@@ -157,7 +157,7 @@ const Header = ({
                     {isUserBoxShow && (
                       <div className="box_drop">
                         <ul>
-                          <li onClick={() => navigate("/dashboard/post")}>
+                          <li onClick={() => navigate("/post/upload")}>
                             <Link to="">
                               <FontAwesomeIcon
                                 className="fa-light"

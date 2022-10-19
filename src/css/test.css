@@ -768,8 +768,17 @@ li.dashboard-gnb.selected{
   text-align: left;
   line-height: 16px;
 }
+
 .input_focus{
   border-color: #394BC2 !important;  /* 2022.10.07 lhk- focus효과*/
+}
+
+.inp_disabled{
+  border-style: none;
+  border-width: 0;
+  background-color: #C3CAD2;
+  color: #8e8e8e;
+  cursor: default !important;
 }
 
 /* ============================================================================== */

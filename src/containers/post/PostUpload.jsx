@@ -144,6 +144,7 @@ export default function UploadPost(props) {
       authorId: myAuthors[0].id,       
       rating: 'G',
       status: 'enabled',
+      typeId: stateType.id,
       tagIds: refTags.current.getTagsJsonObject(),
     };
     

@@ -1,5 +1,5 @@
 import { getPostCategoryListFromServer } from '@/services/dashboardService';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import ErrorMessage from './ErrorMessage';
 import Select from './Select';
@@ -17,10 +17,11 @@ import Select from './Select';
 * @return
 */
 export default function Category(props, ref) {
-  const {name, className, typeId, handleClickItem} = props;
+  const {name, className, typeId, selected, handleClickItem} = props;
   const [stateTypeId, setStateTypeId] = useState(undefined);
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
+  const refSelect = useRef();
 
   const getCategory = async () => {
     const {status, data} = await getPostCategoryListFromServer(stateTypeId);
@@ -30,11 +31,15 @@ export default function Category(props, ref) {
     }
     else{
       setStateError( String(status, data) );
-      // setStateError( undefined );
     }
-    
   };
 
+
+  useEffect(() => {
+    if( selected !== undefined ){
+      refSelect.current.setSelected(selected);
+    }
+  }, [selected, stateList]);
 
   useEffect(() => {
     setStateTypeId(typeId);
@@ -47,6 +52,7 @@ export default function Category(props, ref) {
   return (
     <>
       <Select
+        ref={refSelect}
         name={name}
         className={`${className}`}
         dataList={stateList}
