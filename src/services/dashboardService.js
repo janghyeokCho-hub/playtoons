@@ -217,9 +217,10 @@ export const getAuthorIdFromServer = async (id) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getSubscribeTierAuthorIdFromServer = async (authorId, params) => {
+export const getSubscribeTierAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/subscribeTier/${authorId}${getGetMethodUrl(params)}`, );
+    return await apiServer('get', `/subscribeTier/${params.authorId}`, );
+    // return await apiServer('get', `/subscribeTier/${params.authorId}${getGetMethodUrl(params)}`, );
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }
@@ -239,5 +240,22 @@ export const setSubscribeTierToServer = async (params) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+*
+  Dashbaord - plan 플랜 수정 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const editSubscribeTierToServer = async (params) => {
+  try {
+    return await apiServer('patch', `/subscribeTier`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+
 
 

@@ -9,11 +9,12 @@ import tempPlanImage2 from "@IMAGES/img_mainplan2.jpg";
 import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
+import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 
 
 const text = {
@@ -98,38 +99,18 @@ const tempData = {
 
 
 export default function DashboardPlan(props) {
-  const [stateData, setStateData] = useState(undefined);
   const [stateSupporter, setStateSupporter] = useState(undefined);
-  const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const dispatch = useDispatch();
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxSubscribeTiers = useSelector(({dashboard}) => dashboard?.subscribeTiers);
 
-  //==============================================================================
-  // api
-  //==============================================================================
-
-  const getSubscribeTier = async () => {
-    // const params = new FormData();
-    
-    const {status, data} = await getSubscribeTierAuthorIdFromServer( myAuthors[0].id);
-    console.log('getSubscribeTier', status, data);
-    
-    if( status === 200 ){
-      setStateData({
-        ...stateData,
-        plans: data?.subscribeTiers
-      });
-    }
-    else{
-      
-    }
-    
-  };
 
   //==============================================================================
   // render & hook
   //==============================================================================
 
   const renderPlanList = () => {
-    return stateData?.plans?.map((item, i) => {
+    return reduxSubscribeTiers?.map((item, i) => {
       return  (
         <SwiperSlide className="col h_auto" key={i}>
           <div className="icon"><Image hash={item.thumbnailImage} alt="planImage" /></div>
@@ -169,8 +150,9 @@ export default function DashboardPlan(props) {
   };
 
   useEffect(() => {
+    //temp
     setStateSupporter(tempData.supporters);
-    getSubscribeTier();
+    dispatch( getSubscribeTierAction({authorId: reduxAuthors[0].id}) );
   }, []);
 
   return (
@@ -190,7 +172,7 @@ export default function DashboardPlan(props) {
           <div className="lst_mainplan relative">
             <SwiperContainer 
                   className={"mySwiper1"}
-                  buttonClassName={'wh_i'}    //TODO 버튼 shadow 확인 필요
+                  buttonClassName={'wh_i'}    
                   slidesPerView={4}
                   breakpoints={{
                     0: {
