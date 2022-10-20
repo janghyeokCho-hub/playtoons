@@ -3,13 +3,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { getEulaVersion, updateAccount } from "@API/accountService";
+import { useNavigate } from "react-router-dom";
 
 const EulaPopup = ({ handleClose, readonly = false }) => {
   const [agree, setAgree] = useState(false);
   const [isErrorShow, setIsErrorShow] = useState(false);
   const [eulaVersion, setEulaVersion] = useState(0);
-
   const [content, setContent] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getEulaVersionFn() {
@@ -31,23 +32,27 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
       setIsErrorShow(true);
       return;
     }
-    // patch account
-    const params = {
-      eulaVersion: eulaVersion,
-    };
-    const response = await updateAccount(params);
 
-    const { status } = response;
-    if (status === 200) {
-      //
-      console.log("status === 200");
-    } else if (status === 400) {
-      alert("코드 참조");
-    } else if (status === 409) {
-      alert("이미 사용중인 메일 주소");
-    } else if (status === 503) {
-      alert("코드 참조");
-    }
+    //2022.10.20 register form 으로 이동, author 등록 허용 횟수 확인 필요
+    navigate('/author/register/form');
+
+    // patch account
+    // const params = {
+    //   eulaVersion: eulaVersion,
+    // };
+    // const response = await updateAccount(params);
+
+    // const { status } = response;
+    // if (status === 200) {
+    //   //
+    //   console.log("status === 200");
+    // } else if (status === 400) {
+    //   alert("코드 참조");
+    // } else if (status === 409) {
+    //   alert("이미 사용중인 메일 주소");
+    // } else if (status === 503) {
+    //   alert("코드 참조");
+    // }
   }, [agree, eulaVersion]);
 
   return (

@@ -26,6 +26,7 @@ import Modal from '@/components/Modal';
 import '@/css/test.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthorMineAction } from '@/modules/redux/ducks/post';
+import { useLayoutEffect } from 'react';
 
 /**
 * Dashboard url 분기 처리
@@ -35,12 +36,11 @@ import { getAuthorMineAction } from '@/modules/redux/ducks/post';
 */
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   
-  //dashboard 진입조건 확인 필요. 여부에 따라서 로그인시 가져와야 할수도 있음.
-  if( reduxAuthors === undefined || reduxAuthors === null ){
+  useLayoutEffect(() => {
+    //get author info
     dispatch( getAuthorMineAction() );
-  }
+  }, []);
 
   return (
     <>

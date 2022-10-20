@@ -1,23 +1,14 @@
 import React from 'react';
 
 export default function EmptyTr(props) {
+  const {trClassName, tdClassName, text} = props;
+
   return (
-    <tr style={{ height: "198px", position: "relative" }}>
+    <tr className={`empty_tr ${trClassName}`} >
       <td
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%, -50%)",
-          color: "rgba(97,112,128,1)",
-          fontFamily: "NotoSansJP-Regular",
-          fontSize: "16px",
-          fontWeight: 400,
-          fontStyle: "normal",
-          letterSpacing: "1px",
-        }}>
+        className={`empty_text ${tdClassName}`}>
         {
-          props.text
+          text
         }
       </td>
     </tr>

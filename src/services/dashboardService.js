@@ -185,6 +185,20 @@ export const getSeriesDetailFromServer = async (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
+export const setAuthorToServer = async (params) => {
+  try {
+    return await apiServer('post', `/author`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+/**
+*
+  Dashbaord - profile 작가 정보 업데이트
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
 export const setAuthorIdToServer = async (id, params) => {
   try {
     return await apiServer('patch', `/author/${id}`, params);
