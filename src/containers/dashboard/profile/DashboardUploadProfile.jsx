@@ -4,10 +4,12 @@ import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
-import { getFromDataJson } from "@/common/common";
-import { getAuthorIdFromServer, getFileUrlFromServer, setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import { getFromDataJson, getRatingToChecked } from "@/common/common";
+import {  setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuthorIdAction } from "@/modules/redux/ducks/dashboard";
+import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
 
 
 
@@ -29,8 +31,12 @@ const text = {
 
 
 export default function DashboardUploadProfile(props) {
-	const [ stateAuthorInfo, setStateAuthorInfo ] = useState(undefined);
-	const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+	const reduxAuthor = useSelector( ({dashboard}) => dashboard?.author );
+	const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+	const dispatch = useDispatch();
+	const refNickname = useRef();
+	const refName = useRef();
+	const refDescription = useRef();
 	const refBackground = useRef();
 	const refProfile = useRef();
 	const refTags = useRef();
@@ -41,8 +47,6 @@ export default function DashboardUploadProfile(props) {
 	// function
 	//==============================================================================
 	const callbackProfileImage = () => {
-		console.log('callbackProfileImage');
-		
 		//profile 이미지 업로드, background 업로드, author 업로드
     //upload 할 이미지가 없다면 
     if( refBackground.current.getImageFile() === undefined ){
@@ -55,32 +59,19 @@ export default function DashboardUploadProfile(props) {
 	};
 
 	const callbackBackgroundImage = () => {
-		console.log('callbackBackgroundImage');
 		setAuthor();
 	};
-
-
-	const getRating = () => {
-    return refR19.current.checked ? 'R-18' : 'G';
-  };
 
 	//==============================================================================
 	// api
 	//==============================================================================
 
 	const getAuthor = async () => {
+		const params = {
+			id: reduxAuthors[0].id
+		};
 		
-		const {status, data} = await getAuthorIdFromServer(myAuthors[0].id);
-		console.log('getAuthor', status, data);
-		
-		if( status === 200 ){
-			setStateAuthorInfo( data?.author );
-		}
-		else{
-			// refModal.current.setContent('Error : '+status);
-			console.log('Error : ', status, data);
-		}
-		
+		dispatch( getAuthorIdAction(params) );
 	};
 
 	/**
@@ -94,34 +85,29 @@ export default function DashboardUploadProfile(props) {
 	const setImageToServer = async(ref, usage) => {
 		// 폼데이터 구성
 		const params = new FormData();
-		params.append("authorId", myAuthors[0].id);               
+		params.append("authorId", reduxAuthors[0].id);               
 		params.append("subscribeTierId", "");        
 		params.append("productId", "");
 		params.append("type", "image");                 //image, video, binary
 		params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
 		params.append("loginRequired", false);          //언제 체크해서 보내는건지?
 		params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-		params.append("rating", getRating());                   //G, PG-13, R-15, R-17, R-18, R-18G
+		params.append("rating", getRatingToChecked(refR19));                   //G, PG-13, R-15, R-17, R-18, R-18G
 		params.append("file", ref.current.getImageFile());
 		
-		console.log("set file params", params);
-
 		const {status, data: resultData} = await setFileToServer(params);
-		console.log("setFile result", status, resultData);
-		
-		//create sccuess
 		if( status === 201 ){
 			//ImageUpload component hash가 state 비동기적으로 저장된 뒤 props로 정의해둔 callback이 실행됨
 			ref.current.setImageValueToInputTag(resultData?.hash);
 		}
 		else{
 			//error 처리
-			console.log('Error : ', status, resultData);
+			ref.current.setError( String(status, resultData) );
 		}
 	};
 
 	const setAuthor = async () => {
-		const id = myAuthors[0].id;
+		const id = reduxAuthors[0].id;
 		let json = getFromDataJson(refForm);
 
 		json = {
@@ -131,7 +117,6 @@ export default function DashboardUploadProfile(props) {
 
 		console.log('setAccounts', json, id);
 		const {status, data} = await setAuthorIdToServer(id, json);
-		console.log('setAccounts', status, data);
 		
 		if( status === 200 ){
 			if( window.confirm('profile 変更しました。') ){
@@ -139,7 +124,8 @@ export default function DashboardUploadProfile(props) {
       }
 		}
 		else{
-			
+			//error 
+			alert( String(status, data) );
 		}
 	};
 
@@ -148,10 +134,36 @@ export default function DashboardUploadProfile(props) {
 	//==============================================================================
   
 	const handleClickRegister = (event) => {
-		console.log('Register', event);
+		if( refNickname.current.isEmpty() ){
+			refNickname.current.setError( 'ニックネームが必要です。' );
+			refNickname.current.focus();
+			return;
+		}
+
+		if( refName.current.isEmpty() ){
+			refName.current.setError( '名前が必要です。' );
+			refName.current.focus();
+			return;
+		}
+
+		if( refDescription.current.isEmpty() ){
+			refDescription.current.setError( '紹介が必要です。' );
+			refDescription.current.focus();
+			return;
+		}
+
+		if( refProfile.current.checkToEmpty() ){
+      refProfile.current.setError('プロフィル写真が必要です。');
+      return false;
+    }
+
+		if( refBackground.current.checkToEmpty() ){
+      refBackground.current.setError('カバー写真が必要です。');
+      return false;
+    }
 		
-		//profile 이미지 업로드, background 업로드, author 업로드
-    //upload 할 이미지가 없다면 
+		// profile 이미지 업로드, background 업로드, author 업로드
+    // upload 할 이미지가 없다면 
     if( refProfile.current.getImageFile() === undefined ){
       callbackProfileImage();
     }
@@ -165,9 +177,9 @@ export default function DashboardUploadProfile(props) {
 	// Hook & render
 	//==============================================================================
 
-  useEffect(() => {
+  useLayoutEffect(() => {
 		//chekc author
-		if( myAuthors === undefined || myAuthors === null || myAuthors.length === 0 ){
+		if( reduxAuthors === undefined || reduxAuthors === null || reduxAuthors.length === 0 ){
 			alert('クリエーターじゃないんです。');
 		}
 		else{
@@ -189,14 +201,13 @@ export default function DashboardUploadProfile(props) {
 					<div className="top_profile">
 						<ImageUpload
 							className={"bg_file"}
-							previewHash={stateAuthorInfo?.backgroundImage}
+							previewHash={reduxAuthor?.backgroundImage}
 							id={"filebox1"}
-							                
 							/>
 
 						<ImageUpload
 							className={"profile_file"}
-							previewHash={stateAuthorInfo?.profileImage}
+							previewHash={reduxAuthor?.profileImage}
 							id={"filebox2"}
 							
 							/>
@@ -204,19 +215,19 @@ export default function DashboardUploadProfile(props) {
 
 					<form ref={refForm}>
 						<section className="bbs_write">
-							<div className="col">
+							<div className="col" >
 								<h3 className="tit1">{text.nickname}</h3>
-								<input type="text" name='nickname' className="inp_txt w100p" value={stateAuthorInfo?.nickname || ''} onChange={() => {}} />
+								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p" defaultValue={reduxAuthor?.nickname || ''}  />
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.name}</h3>
-								<input type="text" name='name' className="inp_txt w100p" value={stateAuthorInfo?.name || ''} onChange={() => {}} />
+								<Input ref={refName} type="text" name='name' className="inp_txt w100p" defaultValue={reduxAuthor?.name || ''} />
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.introduction}</h3>
-								<textarea name="description" className="textarea1" value={stateAuthorInfo?.description}></textarea>
+								<Textarea ref={refDescription} name="description" className="textarea1" defaultValue={reduxAuthor?.description} />
 							</div>
 
 
@@ -229,7 +240,7 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refProfile}
 									className={"box_drag square"}
-									previewHash={stateAuthorInfo?.profileImage}
+									previewHash={reduxAuthor?.profileImage}
 									id={"filebox1"}
 									name={"profileImage"} 
 									callback={callbackProfileImage}
@@ -241,7 +252,7 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refBackground}
 									className={"box_drag"}
-									previewHash={stateAuthorInfo?.backgroundImage}
+									previewHash={reduxAuthor?.backgroundImage}
 									id={"filebox2"}
 									name={"backgroundImage"} 
 									text={text.drag_n_drop}
@@ -260,7 +271,7 @@ export default function DashboardUploadProfile(props) {
 									ref={refTags}
 									name={"tagIds"}
 									className={"inp_txt sch"}
-									list={stateAuthorInfo?.tags}
+									list={reduxAuthor?.tags}
 									placeholder={text.tag_name} />
 							</div>
 

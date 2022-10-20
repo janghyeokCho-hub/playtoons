@@ -5,16 +5,19 @@ import produce from "immer";
 /* --- Action Types --- */
 export const [GET_DASHBOARD_PLAN, GET_DASHBOARD_PLAN_SUCCESS, GET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("dashboard/plan/GET");
 export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, GET_DASHBOARD_SERIES_DETAIL_FAILURE] = createRequestActionTypes("dashboard/series/detail/GET");
+export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
 
 
 /* --- Actions --- */
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const getSeriedDetailAction = createAction(GET_DASHBOARD_SERIES_DETAIL);
+export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 
 const initialState = {
   subscribeTiers: null,
   subscribeTiersMeta: null,
   series: null,
+  author: null
 };
 
 const post = handleActions(
@@ -30,6 +33,12 @@ const post = handleActions(
       return produce(state, (draft) => {
         console.log('GET_DASHBOARD_SERIES_DETAIL_SUCCESS', action.payload);
         draft.series = action.payload.series;
+      });
+    },
+    [GET_DASHBOARD_AUTHOR_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        console.log('GET_DASHBOARD_AUTHOR_SUCCESS', action.payload);
+        draft.author = action.payload.author;
       });
     },
 

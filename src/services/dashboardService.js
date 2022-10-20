@@ -200,9 +200,9 @@ export const setAuthorIdToServer = async (id, params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getAuthorIdFromServer = async (id) => {
+export const getAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/author/${id}`, );
+    return await apiServer('get', `/author/${params.id}`, );
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

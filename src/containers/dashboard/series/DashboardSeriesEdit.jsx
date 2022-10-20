@@ -172,11 +172,7 @@ export default function DashboardUploadSeries(props) {
       };
     }
 
-
-    console.log('editSeries json', json);
     const {status, data} = await editPostSeriesToServer(json);
-    console.log('editSeries', status, data);
-    
     if( status === 200 ){
       if( window.confirm('シリーズ修正しました。') ){
         navigate(`/dashboard/series/detail/${params.id}`);
@@ -213,7 +209,6 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
   
   useEffect(() => {
-    console.log('first', reduxSeriesDetail);
     setCheckedFromSeriesDetailInfo();
   }, [reduxSeriesDetail]);
   

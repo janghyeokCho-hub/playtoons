@@ -38,7 +38,7 @@ export default function Dashboard() {
   const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   
   //dashboard 진입조건 확인 필요. 여부에 따라서 로그인시 가져와야 할수도 있음.
-  if( reduxAuthors === undefined || reduxAuthors === null || reduxAuthors.length === 0 ){
+  if( reduxAuthors === undefined || reduxAuthors === null ){
     dispatch( getAuthorMineAction() );
   }
 
