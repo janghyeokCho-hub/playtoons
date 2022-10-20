@@ -1,24 +1,24 @@
-import React, { useRef, useEffect, useLayoutEffect,  } from "react";
+import React, { useRef, useLayoutEffect,  } from "react";
 
-import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
 import { getFromDataJson, getRatingToChecked } from "@/common/common";
-import {  setAuthorIdToServer, setFileToServer } from "@/services/dashboardService";
-import { useDispatch, useSelector } from "react-redux";
-import { getAuthorIdAction } from "@/modules/redux/ducks/dashboard";
+import {  setAuthorToServer, setFileToServer } from "@/services/dashboardService";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
-import { getAuthorMineFromServer } from "@/services/postService";
+import { useNavigate } from "react-router-dom";
+import { getEulaVersion } from "@/services/accountService";
+import { useState } from "react";
+
 
 
 
 const text = {
-  profile_management: "プロフィル管理",
+	register_creator: 'クリエイター登録',
   nickname: "ニックネーム",
   name: "名前",
-  introduction: "紹介",
+  introduction: "クリエイターの説明",
   register_profile_image: "プロフィル写真登録",
   register_cover_image: "カバー写真登録",
   setting_age: "年齢設定",
@@ -31,17 +31,16 @@ const text = {
 };
 
 
-export default function DashboardUploadProfile(props) {
-	const reduxAuthor = useSelector( ({dashboard}) => dashboard?.author );
-	const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
-	const dispatch = useDispatch();
+export default function RegisterForm(props) {
+	const [stateAgreement, setStateAgreement] = useState(undefined);
+	const navigate = useNavigate();
+	const refForm = useRef();
 	const refNickname = useRef();
 	const refName = useRef();
 	const refDescription = useRef();
-	const refBackground = useRef();
 	const refProfile = useRef();
+	const refBackground = useRef();
 	const refTags = useRef();
-	const refForm = useRef();
 	const refR19 = useRef();
 
 	//==============================================================================
@@ -55,7 +54,7 @@ export default function DashboardUploadProfile(props) {
     }
     else{
       //이미지 업로드 후 image hash 저장 
-      setImageToServer(refBackground, 'background');
+      setImage(refBackground, 'background');
     }
 	};
 
@@ -67,32 +66,28 @@ export default function DashboardUploadProfile(props) {
 	// api
 	//==============================================================================
 
-	const getAuthor = async () => {
-		const params = {
-			id: reduxAuthors[0].id
-		};
+	const getAgreementInfo = async () => {
+		const {status, data} = await getEulaVersion("author");
+		console.log('getAgreementInfor', status, data);
 		
-		dispatch( getAuthorIdAction(params) );
+		if( status === 200 ){
+			setStateAgreement(data?.agreement);
+		}
+		else{
+			alert( String('Agreement', status, data) );		
+		}
 	};
 
-	/**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
-	const setImageToServer = async(ref, usage) => {
+	const setImage = async(ref, usage) => {
 		// 폼데이터 구성
 		const params = new FormData();
-		params.append("authorId", reduxAuthors[0].id);               
-		params.append("subscribeTierId", "");        
-		params.append("productId", "");
-		params.append("type", "image");                 //image, video, binary
-		params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
-		params.append("loginRequired", false);          //언제 체크해서 보내는건지?
-		params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
+		// params.append("authorId", '');               
+		// params.append("subscribeTierId", "");        
+		// params.append("productId", "");
+		params.append("type", "image");             					    //image, video, binary
+		params.append("usage", usage);              						  //profile, background, cover, logo, post, product, thumbnail, attachment
+		params.append("loginRequired", false);        					  //언제 체크해서 보내는건지?
+		params.append("licenseRequired", false);        					//product 에 관련된 항목 추후 확인 필요
 		params.append("rating", getRatingToChecked(refR19));                   //G, PG-13, R-15, R-17, R-18, R-18G
 		params.append("file", ref.current.getImageFile());
 		
@@ -108,20 +103,20 @@ export default function DashboardUploadProfile(props) {
 	};
 
 	const setAuthor = async () => {
-		const id = reduxAuthors[0].id;
 		let json = getFromDataJson(refForm);
 
 		json = {
 			...json,
-			tagIds: refTags.current.getTagsJsonObject()
+			tagIds: refTags.current.getTagsJsonObject(),
+			eulaVersion: stateAgreement?.version
 		};
 
-		console.log('setAccounts', json, id);
-		const {status, data} = await setAuthorIdToServer(id, json);
+		console.log('setAccounts', json);
+		const {status, data} = await setAuthorToServer(json);
 		
-		if( status === 200 ){
-			if( window.confirm('profile 変更しました。') ){
-        getAuthor();
+		if( status === 201 ){
+			if( window.confirm('クリエイター登録しました。') ){
+        navigate('/dashboard/profile/upload');
       }
 		}
 		else{
@@ -170,7 +165,7 @@ export default function DashboardUploadProfile(props) {
     }
     else{
       //이미지 업로드 후 image hash 저장
-      setImageToServer(refProfile, 'profile');
+      setImage(refProfile, 'profile');
     }
 	};
 
@@ -179,56 +174,33 @@ export default function DashboardUploadProfile(props) {
 	//==============================================================================
 
   useLayoutEffect(() => {
-		//chekc author
-		if( reduxAuthors === undefined || reduxAuthors === null || reduxAuthors.length === 0 ){
-			alert('クリエーターじゃないんです。');
-		}
-		else{
-			//get accounts info
-			getAuthor();
-		}
+		//get eulaVersion
+		getAgreementInfo();
   }, []);
 
   return (
-    <Container 
-    type={"bg profile"} >
+    <div className="container sub mpost bg" style={{padding: '55px 16px'}}>
 
-			<div className="inr-c">
-				<div className="box_area">
+				<div className="inr-c">
 					<div className="hd_titbox hd_mst1">
-						<h2 className="h_tit1"><span>{text.profile_management}</span></h2>
-					</div>
-					
-					<div className="top_profile">
-						<ImageUpload
-							className={"bg_file"}
-							previewHash={reduxAuthor?.backgroundImage}
-							id={"filebox1"}
-							/>
-
-						<ImageUpload
-							className={"profile_file"}
-							previewHash={reduxAuthor?.profileImage}
-							id={"filebox2"}
-							
-							/>
+						<h2 className="h_tit1"><span>{text.register_creator}</span></h2>
 					</div>
 
 					<form ref={refForm}>
 						<section className="bbs_write">
 							<div className="col" >
 								<h3 className="tit1">{text.nickname}</h3>
-								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p" defaultValue={reduxAuthor?.nickname || ''}  />
+								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p"/>
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.name}</h3>
-								<Input ref={refName} type="text" name='name' className="inp_txt w100p" defaultValue={reduxAuthor?.name || ''} />
+								<Input ref={refName} type="text" name='name' className="inp_txt w100p"/>
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.introduction}</h3>
-								<Textarea ref={refDescription} name="description" className="textarea1" defaultValue={reduxAuthor?.description} />
+								<Textarea ref={refDescription} name="description" className="textarea1"/>
 							</div>
 
 
@@ -241,7 +213,6 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refProfile}
 									className={"box_drag square"}
-									previewHash={reduxAuthor?.profileImage}
 									id={"filebox1"}
 									name={"profileImage"} 
 									callback={callbackProfileImage}
@@ -253,7 +224,6 @@ export default function DashboardUploadProfile(props) {
 								<ImageUpload
 									ref={refBackground}
 									className={"box_drag"}
-									previewHash={reduxAuthor?.backgroundImage}
 									id={"filebox2"}
 									name={"backgroundImage"} 
 									text={text.drag_n_drop}
@@ -272,7 +242,6 @@ export default function DashboardUploadProfile(props) {
 									ref={refTags}
 									name={"tagIds"}
 									className={"inp_txt sch"}
-									list={reduxAuthor?.tags}
 									placeholder={text.tag_name} />
 							</div>
 
@@ -285,12 +254,9 @@ export default function DashboardUploadProfile(props) {
 					<div className="bbs_write_botm">
 						<div onClick={handleClickRegister} className="btn-pk n blue"><span>{text.register}</span></div>
 					</div>
-				
+					
 				</div>
-			</div>
-
-		
-    </Container>
+    </div>
     
   );
 }

@@ -95,7 +95,7 @@ export default forwardRef( function Calendar(props, ref) {
 
   return (
     <div className="relative" ref={refContainer}>
-      <div className={`btn-pk s calendar-text ${stateDate !== undefined ? 'blue2' : ''}`} onClick={handleClick}>
+      <div className={`btn-pk s calendar-text ${stateDate !== undefined ? 'blue2' : 'gray'}`} onClick={handleClick}>
         <FontAwesomeIcon className="fs14 mr12" icon={faCalendarDay} />{getStateDateFormated()} 
       </div>
       {

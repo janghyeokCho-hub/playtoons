@@ -15,6 +15,8 @@ import Image from "@/components/dashboard/Image";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
 import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import EmptyDiv from "@/components/dashboard/EmptyDiv";
 
 
 const text = {
@@ -24,6 +26,8 @@ const text = {
   supporter_management: "支援者管理",
   see_all: "すべてみる",
   month: "月",
+  plan_empty: '支援が登録されてないです。',
+  supportor_empty: '支援者がいません。'
 };
 
 const tempData = {
@@ -170,25 +174,32 @@ export default function DashboardPlan(props) {
           </header>
 
           <div className="lst_mainplan relative">
-            <SwiperContainer 
-                  className={"mySwiper1"}
-                  buttonClassName={'wh_i'}    
-                  slidesPerView={4}
-                  breakpoints={{
-                    0: {
-                      slidesPerView: 2,
-                      spaceBetween: 8,
-                    },
-                    1000: {
-                      slidesPerView: 3,
-                      spaceBetween: 15,
-                    },
-                    1400: {
-                      slidesPerView: 3,
-                      spaceBetween: 30,
-                    },
-                  }}
-                  list={renderPlanList} />
+            {
+              reduxSubscribeTiers?.length === 0 ?(
+                <EmptyDiv className={'plan_empty'} text={text.plan_empty} />
+              ) : (
+                <SwiperContainer 
+                      className={"mySwiper1"}
+                      buttonClassName={'wh_i'}    
+                      slidesPerView={4}
+                      breakpoints={{
+                        0: {
+                          slidesPerView: 2,
+                          spaceBetween: 8,
+                        },
+                        1000: {
+                          slidesPerView: 3,
+                          spaceBetween: 15,
+                        },
+                        1400: {
+                          slidesPerView: 3,
+                          spaceBetween: 30,
+                        },
+                      }}
+                      list={renderPlanList} />
+              )
+            }
+            
           </div>
         </section>
 
@@ -198,13 +209,19 @@ export default function DashboardPlan(props) {
             <h3 className="h_tit1">{text.supporter_management}</h3>
             <Link to="/dashboard/plan/subscriber" className="rgh c-blue"><span className="ico_arr_link">{text.see_all} <FontAwesomeIcon icon={faAngleRight} /></span></Link>
           </div>
-          <div className="lst_txt1">
-            <ul>
-              {
-                renderSupporterList()
-              }
-            </ul>
-          </div>
+          {
+            stateSupporter?.length === 0 ? (
+              <EmptyDiv className={'supportor_empty'} text={text.supportor_empty} />
+            ) : (
+              <div className="lst_txt1">
+                <ul>
+                  {
+                    renderSupporterList()
+                  }
+                </ul>
+              </div>
+            )
+          }
         </section>
 			
 		  </div>

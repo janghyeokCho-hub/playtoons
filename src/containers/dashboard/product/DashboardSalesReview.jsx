@@ -149,8 +149,8 @@ export default function DashboardSalesReview(props) {
             <td className="td_txt">
               <div className="dsi_d_btns">
                 <div className="mr60">
-                  <div className="btn-pk s blue2 dsi_btn " data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
-                  <div className="btn-pk s blue2 dsi_btn mt10" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
+                  <div className="btn-pk s blue2 dsi_btn mr12" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
+                  <div className="btn-pk s blue2 dsi_btn mt10 mr12" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
                 </div>
                 <div className="mr30" ><ArrowRight className="fs24" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}   /></div>
               </div>

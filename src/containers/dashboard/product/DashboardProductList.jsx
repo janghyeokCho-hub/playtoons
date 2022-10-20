@@ -156,10 +156,10 @@ export default function DashboardProductList(props) {
           <td className="td_group">{item.price}</td>
           <td className="td_gray"><span className="view-m">カテゴリ：</span>{item.date}</td>
           <td className={`td_txt ${getStatusColor(item.status)}`}><span className="view-m">状態</span>{item.status.name}</td>
-          <td className="td_txt float-right">
-            <Link className="btn-pk s blue2 w124" to={`/dashboard/product/detail/${item.id}`}><span>{text.detail}</span></Link><br/>
-            <Link className="btn-pk s blue2 w124 mt10"  to={`/dashboard/product/edit/${item.id}`}><span>{text.modify}</span></Link><br/>
-            <div className="btn-pk s blue2 w124 mt10" data-id={item.id} onClick={handleItemClick}><span>{text.dont_see}</span></div>
+          <td className="td_txt">
+            <Link className="btn-pk s blue2 w124 mr12" to={`/dashboard/product/detail/${item.id}`}><span>{text.detail}</span></Link>
+            <Link className="btn-pk s blue2 w124 mt10 mr12"  to={`/dashboard/product/edit/${item.id}`}><span>{text.modify}</span></Link>
+            <div className="btn-pk s blue2 w124 mt10 mr12" data-id={item.id} onClick={handleItemClick}><span>{text.dont_see}</span></div>
           </td>
         </tr>
       );

@@ -21,7 +21,7 @@ const text = {
   category: "カテゴリ",
   date: "掲載日",
   status: "状態",
-  empty_message: "シリーズリストがありません。"
+  empty_message: "シリーズが登録されてないです。",
 };
 
 export default function DashboardSeries(props) {
@@ -53,7 +53,7 @@ export default function DashboardSeries(props) {
     }
     else{
       //error 처리
-      console.log("error", resultData);
+      alert( String(status, resultData) );
     }
   };
 

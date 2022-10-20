@@ -15,6 +15,7 @@ import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import { useSelector } from "react-redux";
 import Dropdown from "@/components/dashboard/Dropdown";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 
 
 const text = {
@@ -28,6 +29,7 @@ const text = {
   date : "掲載日",
   status : "状態",
   count : "回",
+  empty_message: "投稿がありません。",
 };
 
 const searchList = [
@@ -81,6 +83,10 @@ export default function DashboardPostList(props) {
 
 
   const renderPostListElements = () => {
+    if( stateData?.posts.length === 0 ){
+      return <EmptyTr text={text.empty_message} />
+    }
+
     return stateData?.posts?.map((item, index) => {
       return (
         <tr key={index}>

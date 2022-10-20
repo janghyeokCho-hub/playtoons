@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import List from "./List";
 import Post from "./Post";
 import Register from "./Register";
+import RegisterForm from "./RegisterForm";
 import Store from "./Store";
 import Detail from "./Detail";
 import Container from "@/components/author/Container";
@@ -84,6 +85,7 @@ const App = () => {
           <Route path="list" element={<List />} />
           <Route path="post" element={<Post />} />
           <Route path="register" element={<Register />} />
+          <Route path="register/form" element={<RegisterForm />} />
           <Route path="detail/:type/:id" element={<Detail />} />
         </Routes>
       </Container>
