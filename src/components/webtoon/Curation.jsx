@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import useFilePath from "@/hook/useFilePath";
 import { getAuthor as getAuthorAPI } from "@API/authorService";
+import useFilePath from "@/hook/useFilePath";
 
 const Curation = ({ item, category }) => {
-  const backgroundImgURL = useFilePath(item?.backgroundImage);
-  const profileImgURL = useFilePath(item?.profileImage);
+  console.log("item : ", item);
+
+  const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  const profileImgURL = useFilePath(item?.author?.profileImage);
   const [author, setAuthor] = useState(null);
 
   async function getAuthor(id) {
@@ -24,19 +26,16 @@ const Curation = ({ item, category }) => {
 
   return (
     <Link to="/">
-      <ContBgDiv className="cont" bgImg={backgroundImgURL}>
+      <ContBgDiv className="cont" bgImg={thumbnailImgURL}>
         <div>
-          <p className="b1">
-            <span className="i-txt">{category?.name}</span>
+          <p class="b1">
+            <span class="i-txt">おすすめ作品</span>
           </p>
-          <p className="h1">{item.title}</p>
-          <p className="t1">{item.description}</p>
-          <p className="t2">{author?.name}</p>
+          <p class="h1">{item.title}</p>
+          <p class="t1">{item.description}</p>
+          <p class="t2">{item?.author?.name}</p>
         </div>
       </ContBgDiv>
-      <div className="imgs">
-        <img src={profileImgURL} alt="이미지" />
-      </div>
     </Link>
   );
 };

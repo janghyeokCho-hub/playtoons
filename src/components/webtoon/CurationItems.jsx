@@ -29,7 +29,10 @@ const CurationItems = ({ curationNum, categorys }) => {
   const renderItems = useMemo(() => {
     return items.map((item, index) => {
       return (
-        <SwiperSlide key={index} className="cx">
+        <SwiperSlide
+          key={`swiper_slide_${index}`}
+          className="item swiper-slide"
+        >
           <Curation
             item={item}
             category={categorys.find(({ id }) => id === item.categoryId)}
@@ -78,23 +81,15 @@ const CurationItems = ({ curationNum, categorys }) => {
             prevRef?.current?.classList?.add("slide_st");
           }}
         >
-          {renderItems}
+          <div class="swiper-wrapper">{renderItems}</div>
         </Swiper>
 
         <div className="swiper-pagination my1"></div>
 
-        <button
-          ref={prevRef}
-          type="button"
-          className="swiper-button-prev my1 hide-m"
-        >
+        <button ref={prevRef} type="button" className="swiper-button-prev my1">
           <FontAwesomeIcon icon={faCircleChevronLeft} />
         </button>
-        <button
-          ref={nextRef}
-          type="button"
-          className="swiper-button-next my1 hide-m"
-        >
+        <button ref={nextRef} type="button" className="swiper-button-next my1">
           <FontAwesomeIcon icon={faCircleChevronRight} />
         </button>
       </div>
