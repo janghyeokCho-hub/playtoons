@@ -1,8 +1,6 @@
 import React from "react";
-import styled from "styled-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Novel from "./Novel";
-
 import Container from "@COMPONENTS/webtoon/Container";
 import {
   faHouseChimneyWindow as faHouseChimneyWindowON,
@@ -28,7 +26,7 @@ const App = () => {
           on: faHouseChimneyWindowON,
           off: faHouseChimneyWindowOFF,
         },
-        callback: () => navigate(""),
+        link: "",
       },
       {
         code: "timeline",
@@ -37,7 +35,7 @@ const App = () => {
           on: faInfinityON,
           off: faInfinityOFF,
         },
-        callback: () => navigate(""),
+        link: "",
       },
     ],
     創作: [
@@ -48,7 +46,7 @@ const App = () => {
           on: faStarsON,
           off: faStarsOFF,
         },
-        callback: () => navigate(""),
+        link: "/author/list",
       },
       {
         code: "maquettePlace",
@@ -57,7 +55,7 @@ const App = () => {
           on: faCartShoppingON,
           off: faCartShoppingOFF,
         },
-        callback: () => navigate(""),
+        link: "",
       },
     ],
   };

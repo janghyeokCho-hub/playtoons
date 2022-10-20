@@ -307,7 +307,6 @@
     font-weight: 300;
     font-size: 24px;
     color: #000;
-    transform: translate(0, -50%);
   }
   .header .btn_tugo.btn-pk {
     background: none;
@@ -506,12 +505,12 @@
     color: #394bc2;
     background-color: #eeeffa;
   }
-  .header .pos_to .box_drop i.fa-regular {
+  .header .pos_to .box_drop .fa-regular {
     margin-top: 18px;
     width: 10px;
     font-size: 15px;
   }
-  .header .pos_to .box_drop i.fa-light {
+  .header .pos_to .box_drop .fa-light {
     margin-top: 18px;
     width: 20px;
     font-size: 18px;
@@ -1394,8 +1393,12 @@
     border-top-style: solid;
     border-top-color: #f7f8f9;
   }
+  .wrap_detail .area_webtoon {
+    margin-bottom: 40px;
+  }
   .wrap_detail .area_novel {
-    padding: 0px 16px 40px 16px;
+    padding: 0px 16px 0px 16px;
+    margin-bottom: 40px;
     font-size: 14px;
     color: #3a434d;
   }
@@ -2597,6 +2600,10 @@
   }
   .main_area .swiper-slide {
     height: calc((100% - 30px) / 2) !important;
+  }
+  .main_area .swiper-wrapper {
+    flex-wrap: wrap;
+    flex-direction: column;
   }
   .lst_card {
     width: calc(100% + 15px);

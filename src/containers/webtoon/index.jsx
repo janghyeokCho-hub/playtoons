@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Webtoon from "./Webtoon";
 import Container from "@COMPONENTS/webtoon/Container";
