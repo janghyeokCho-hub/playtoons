@@ -6,7 +6,7 @@ const Curation = ({ item }) => {
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
 
   return (
-    <Link to="/">
+    <Link to={`/post/detail/novel/${item.id}`}>
       <img src={thumbnailImgURL} alt="이미지" />
     </Link>
   );

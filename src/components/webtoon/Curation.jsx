@@ -22,7 +22,7 @@ const Curation = ({ item }) => {
   }, [author, item]);
 
   return (
-    <Link to="/">
+    <Link to={`/post/detail/webtoon/${item.id}`}>
       <ContBgDiv className="cont" bgImg={thumbnailImgURL}>
         <div>
           <p className="b1">

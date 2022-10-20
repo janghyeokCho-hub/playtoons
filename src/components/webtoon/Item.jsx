@@ -5,7 +5,6 @@ import useFilePath from "@/hook/useFilePath";
 import { Link } from "react-router-dom";
 const Item = ({ item }) => {
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
-  console.log(item);
   return (
     <li>
       {item && (
