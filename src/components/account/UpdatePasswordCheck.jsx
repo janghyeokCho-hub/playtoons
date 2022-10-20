@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { useCallback } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginPasswordCheck } from "@API/loginService";
 
@@ -7,6 +7,7 @@ import { loginPasswordCheck } from "@API/loginService";
  * 비밀번호 변경을 위해 기존 비밀번호 입력 폼
  */
 const UpdatePasswordCheck = () => {
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const navigate = useNavigate();
   const [password, setPassword] = useState(null);
   const passwordRef = useRef(null);
@@ -15,6 +16,15 @@ const UpdatePasswordCheck = () => {
   const [passwordErrorMsg, setPasswordErrorMsg] = useState(null);
   const [isCheckErrorShow, setIsCheckErrorShow] = useState(false);
   const [checkErrorMsg, setCheckErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (!isLogined) {
+      // 로그인 된 상태가 아니라면 로그인 페이지로
+      navigate("/account", {
+        state: { next: "/account/update-password-check" },
+      });
+    }
+  }, [isLogined, navigate]);
 
   const handleUpdatePasswordCheck = useCallback(async () => {
     if (!password) {

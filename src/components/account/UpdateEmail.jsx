@@ -1,4 +1,5 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { updateAccount } from "@API/accountService";
 
@@ -6,6 +7,7 @@ import { updateAccount } from "@API/accountService";
  * 이메일 변경을 위해 새 이메일 입력 받는 폼
  */
 const UpdateEmail = () => {
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const emailRef = useRef(null);
@@ -14,6 +16,13 @@ const UpdateEmail = () => {
 
   const [isUpdateErrorShow, setIsUpdateErrorShow] = useState(false);
   const [updateErrorMsg, setUpdateErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (!isLogined) {
+      // 로그인 된 상태가 아니라면 로그인 페이지로
+      navigate("/account", { state: { next: "/account/update-email" } });
+    }
+  }, [isLogined, navigate]);
 
   const handleUpdateEmail = useCallback(async () => {
     if (!email) {

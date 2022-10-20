@@ -1,10 +1,12 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/pro-solid-svg-icons";
 import { updateAccount } from "@API/accountService";
 import { useNavigate } from "react-router-dom";
 
 const UpdatePasswordConfirm = () => {
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const navigate = useNavigate();
   const [password, setPassword] = useState(null);
   const passwordRef = useRef(null);
@@ -20,6 +22,15 @@ const UpdatePasswordConfirm = () => {
   const [passwordErrorMsg, setPasswordErrorMsg] = useState(null);
   const [rePasswordErrorMsg, setRePasswordErrorMsg] = useState(null);
   const [confirmErrorMsg, setConfirmErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (!isLogined) {
+      // 로그인 된 상태가 아니라면 로그인 페이지로
+      navigate("/account", {
+        state: { next: "/account/update-password-check" },
+      });
+    }
+  }, [isLogined, navigate]);
 
   const handlePasswordConfirm = useCallback(async () => {
     if (!password) {

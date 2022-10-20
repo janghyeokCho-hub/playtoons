@@ -1,12 +1,15 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { verifyCheckCode } from "@API/accountService";
 
 const UpdateEmailVerify = () => {
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const navigate = useNavigate();
   const location = useLocation();
-  const { email, expireOn } = location.state;
+  const [email, setEmail] = useState(null);
+  const [expireOn, setExpireOn] = useState(null);
   const [seconds, setSeconds] = useState(0);
 
   const [code, setCode] = useState(null);
@@ -17,6 +20,28 @@ const UpdateEmailVerify = () => {
 
   const [isVerifyErrorShow, setIsVerifyErrorShow] = useState(false);
   const [verifyErrorMsg, setVerifyErrorMsg] = useState(null);
+
+  useEffect(() => {
+    if (!isLogined) {
+      // 로그인 된 상태가 아니라면 로그인 페이지로
+      navigate("/account", { state: { next: "/account/update-email" } });
+    }
+  }, [isLogined, navigate]);
+
+  useEffect(() => {
+    if (location?.state) {
+      const emailStr = location.state?.email;
+      const expireOnStr = location.state?.expireOn;
+      if (!emailStr || !expireOnStr) {
+        navigate("/account/update-email");
+      } else {
+        setEmail(emailStr);
+        setExpireOn(expireOnStr);
+      }
+    } else {
+      navigate("/account/update-email");
+    }
+  }, [location, navigate]);
 
   useEffect(() => {
     if (expireOn) {
@@ -92,7 +117,7 @@ const UpdateEmailVerify = () => {
               type="text"
               id="id"
               className="inp_txt w100p"
-              value={email}
+              value={email || ""}
               disabled
             />
           </div>

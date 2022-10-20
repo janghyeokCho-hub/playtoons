@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/pro-solid-svg-icons";
@@ -7,10 +8,18 @@ import { logoutRequest } from "@/modules/redux/ducks/login";
 import { useDispatch } from "react-redux";
 
 const Close = () => {
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [agree, setAgree] = useState(false);
   const [isErrorShow, setIsErrorShow] = useState(false);
+
+  useEffect(() => {
+    if (!isLogined) {
+      // 로그인 된 상태가 아니라면 로그인 페이지로
+      navigate("/account", { state: { next: "/account/close" } });
+    }
+  }, [isLogined, navigate]);
 
   const handleClose = useCallback(async () => {
     if (!agree) {

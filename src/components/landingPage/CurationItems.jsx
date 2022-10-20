@@ -82,14 +82,14 @@ const CurationItems = ({ curationNum }) => {
           <button
             ref={prevRef}
             type="button"
-            className={`swiper-button-prev my1 hide-m`}
+            className={`swiper-button-prev my1 hide-m slide_st`}
           >
             <FontAwesomeIcon icon={faCircleChevronLeft} />
           </button>
           <button
             ref={nextRef}
             type="button"
-            className={`swiper-button-next my1 hide-m`}
+            className={`swiper-button-next my1 hide-m slide_st`}
           >
             <FontAwesomeIcon icon={faCircleChevronRight} />
           </button>
