@@ -61,8 +61,6 @@ export default function DashboardUploadSeries(props) {
   * @return
   */
   const callbackTimeline = () => {
-    console.log('callbackTimeline');
-    
     //call series 작성 api 
     // "title": "string",               
     // "typeId": "string",
@@ -94,7 +92,6 @@ export default function DashboardUploadSeries(props) {
       authorId: myAuthors[0].id     //author 가 아니면 못옴
     };
 
-    delete json[''];
     console.log("post/series", json);
     setSeries(json);
   };
@@ -189,8 +186,8 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
+      alert( String(status, result) );
     }
-    
   };
 
   //==============================================================================

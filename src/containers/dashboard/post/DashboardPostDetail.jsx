@@ -10,7 +10,7 @@ import tempProfile from '@IMAGES/img_profile.png';
 
 import { Link, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
-import { getPostDetailFromServer } from "@/services/postService";
+import { getPostDetailFromServer, getPostIdMineFromServer } from "@/services/postService";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
@@ -81,10 +81,18 @@ const tempReactionList = {
 export default function DashboardPostDetail() {
   const [stateReactionList, setStateReactionList] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
-  const post = useSelector(({ post }) => post?.post);
+  const reduxPostDetail = useSelector(({ post }) => post?.post);
   const dispatch = useDispatch();
   const params = useParams('id');
 
+
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleClickComentRegister = (event) => {
     console.log('ComentRegister', event);
@@ -98,6 +106,11 @@ export default function DashboardPostDetail() {
     console.log('Item', id, type);
   };
 
+  
+
+  //==============================================================================
+  // Hook & render
+  //==============================================================================
 
   const renderReactionList = () => {
     return stateReactionList?.map((item, index) => {
@@ -135,18 +148,20 @@ export default function DashboardPostDetail() {
   useEffect(() => {
     setStateData({
       ...tempData,
-      title: post?.title,
-      series: post?.series?.title,
+      title: reduxPostDetail?.title,
+      series: reduxPostDetail?.series?.title,
       // issue:
-      startAt: post?.startAt,
-      endAt: post?.endAt,
-      status: post?.status,
-      viewCount: post?.viewCount,
-      likeCount: post?.likeCount,
-      thumbnailImage: post?.thumbnailImage,
+      startAt: reduxPostDetail?.startAt,
+      endAt: reduxPostDetail?.endAt,
+      status: reduxPostDetail?.status,
+      viewCount: reduxPostDetail?.viewCount,
+      likeCount: reduxPostDetail?.likeCount,
+      reactionCount: reduxPostDetail?.reactionCount,
+      content: reduxPostDetail?.content,
+      thumbnailImage: reduxPostDetail?.thumbnailImage,
       
     });
-  }, [post]);
+  }, [reduxPostDetail]);
 
   return (
     <Container
@@ -168,7 +183,7 @@ export default function DashboardPostDetail() {
           <div className="icon">
             <span><FontAwesomeIcon icon={faEye} />{stateData?.viewCount}</span>
             <span><FontAwesomeIcon icon={faHeart} />{stateData?.likeCount}</span>
-            <span><FontAwesomeIcon icon={faCommentQuote} />{stateData?.coment_count}</span>
+            <span><FontAwesomeIcon icon={faCommentQuote} />{stateData?.reactionCount}</span>
           </div>
         
           <div className="botm btn-bot">
@@ -179,12 +194,12 @@ export default function DashboardPostDetail() {
         
         <div className="area_detail2">
           <h2 className="h1">{stateData?.title} {stateData?.episode_count}</h2>
-          <p className="d1">{stateData?.content_date}</p>
+          <p className="d1">{stateData?.startAt}</p>
           <p className="t1">{stateData?.content_summary}</p>
         </div>
         
         <div className="">
-          <Image hash={stateData?.thumbnailImage} alt="playtonns thumbnailImage" />
+          <Image hash={stateData?.content} alt="playtonns content" />
         </div>
         
         <div className="area_detail2">

@@ -390,9 +390,9 @@ export default function PostEdit(props) {
                   ref={refContents}
                   id={"filebox2"}
                   className={"box_drag"}
-                  name={""}                     
+                  name={"content"}                     
                   text={text.drag_drop}    
-                  // previewHash={statePostInfo?.thumbnailImage}
+                  previewHash={statePostInfo?.content}
                   callback={callbackContents}
                   />
               </div>

@@ -116,6 +116,19 @@ export const removeItemInList = (list, value) => {
 };
 
 /**
+*
+   R-19 check 를 확인해서 code 값 리턴
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param ref R-19 input ref 객체
+* @return G, PG-13, R-15, R-17, R-18, R-18G
+*/
+export const getRatingToChecked = (ref) => {
+  return ref.current.checked ? 'R-18' : 'G';
+};
+
+/**
  * json object to string
  * @returns
  */

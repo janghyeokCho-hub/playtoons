@@ -49,7 +49,7 @@ function createPostDetailRequestSaga(type, func) {
       const params = {
         id: action.payload.id,
       };
-      const response = yield call(postApi.getPostDetailFromServer, params);
+      const response = yield call(postApi.getPostIdMineFromServer, params);
       console.log("createPostDetailRequestSaga response : ", response);
       if (response?.status === 200) {
         yield put({

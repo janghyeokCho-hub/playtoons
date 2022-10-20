@@ -53,7 +53,6 @@ export default function Type(props, ref) {
     const {status, data} = await getPostTypeListFromServer();
     
     if( status === 200 ){
-      console.log('first', selected);
       setStateList( data?.types );
       callback?.(data.types[0]);
     }

@@ -256,6 +256,21 @@ export const editSubscribeTierToServer = async (params) => {
   }
 };
 
+/**
+*
+  Dashbaord - series 수정 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const editPostSeriesToServer = async (params) => {
+  try {
+    return await apiServer('patch', `/post/series`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
 
 
 

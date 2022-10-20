@@ -33,6 +33,21 @@ export const getPostDetailFromServer = async (params) => {
 
 /**
 *
+   post detail 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getPostIdMineFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/post/${params.id}/mine`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
    post edit 
 *
 * @version 1.0.0
