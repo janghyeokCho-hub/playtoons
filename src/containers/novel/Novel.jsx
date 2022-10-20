@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
-import SearchPopup from "@COMPONENTS/novel/SearchPopup";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
+import { Link } from "react-router-dom";
 
 const Novel = () => {
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
-  const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
-  const [searchText, setSearchText] = useState(null);
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
@@ -45,10 +43,6 @@ const Novel = () => {
   }, [categorys, postType]);
   /** ===== Post type id <=> category API End ===== */
 
-  const handleSearchPopup = useCallback(() => {
-    setIsSearchPopupShow(!isSearchPopupShow);
-  }, [isSearchPopupShow]);
-
   /**
    * EVERY - 모두
    * COMPLETED - 완결
@@ -58,10 +52,6 @@ const Novel = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
-  };
-
-  const handleSearch = (txt) => {
-    setSearchText(txt);
   };
 
   return (
@@ -76,52 +66,40 @@ const Novel = () => {
                 className={selectTab === "EVERY" ? "on" : ""}
                 onClick={() => handleSelectTab("EVERY")}
               >
-                <a href="#">
+                <Link to="">
                   <span>すべて</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "COMPLETED" ? "on" : ""}
                 onClick={() => handleSelectTab("COMPLETED")}
               >
-                <a href="#">
+                <Link to="">
                   <span>連載</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "SERIES" ? "on" : ""}
                 onClick={() => handleSelectTab("SERIES")}
               >
-                <a href="#">
+                <Link to="">
                   <span>完結</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "SHORT" ? "on" : ""}
                 onClick={() => handleSelectTab("SHORT")}
               >
-                <a href="#">
+                <Link to="">
                   <span>短編</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
 
-          <Items
-            tab={selectTab}
-            typeId={typeId}
-            onSearchPopup={handleSearchPopup}
-            searchText={searchText}
-          />
+          <Items tab={selectTab} typeId={typeId} />
         </div>
       </div>
-
-      {isSearchPopupShow && (
-        <SearchPopup
-          handleClose={() => handleSearchPopup()}
-          onSearch={handleSearch}
-        />
-      )}
     </>
   );
 };

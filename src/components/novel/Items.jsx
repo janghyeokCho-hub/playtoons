@@ -11,8 +11,9 @@ import {
 import { getPostList as getPostListAPI } from "@API/postService";
 import { getTags as getTagsAPI } from "@API/webtoonService";
 import Item from "./Item";
+import SearchPopup from "@COMPONENTS/webtoon/SearchPopup";
 
-const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
+const Items = ({ tab, typeId }) => {
   const orderByMenus = [
     {
       // 추천순
@@ -31,6 +32,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
     },
   ];
   const [items, setItems] = useState([]);
+  const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
   const [isAllCategory, setIsAllCategory] = useState(true);
   const [selectTags, setSelectTags] = useState([]);
   const [isOrderByShow, setIsOrderByShow] = useState(false);
@@ -71,12 +73,6 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   useEffect(() => {
     getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
   }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
-
-  useEffect(() => {
-    if (searchText) {
-      handleSearch(searchText);
-    }
-  }, [searchText]);
 
   useEffect(() => {
     setRenderItems(items);
@@ -138,22 +134,9 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
     [selectTags]
   );
 
-  const handleSearch = useCallback(
-    (searchText) => {
-      if (searchText) {
-        const filterItems = items.filter((item) => {
-          if (item?.title?.toLowerCase().includes(searchText.toLowerCase())) {
-            return true;
-            // }else if(item?.de?.toLowerCase().includes(searchText.toLowerCase())){
-          } else {
-            return false;
-          }
-        });
-        setItems(filterItems);
-      }
-    },
-    [items]
-  );
+  const handleSearch = (searchText) => {
+    handleURLQueryChange("keyword", searchText);
+  };
 
   const pagination = useMemo(() => {
     if (meta) {
@@ -237,7 +220,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
           <button
             type="button"
             className="btn_sch_input"
-            onClick={() => onSearchPopup()}
+            onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
           >
             <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
           </button>
@@ -310,6 +293,13 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
       <div className="pagenation">
         <ul>{pagination}</ul>
       </div>
+
+      {isSearchPopupShow && (
+        <SearchPopup
+          handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}
+          onSearch={handleSearch}
+        />
+      )}
     </>
   );
 };

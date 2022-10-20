@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
-import SearchPopup from "@COMPONENTS/webtoon/SearchPopup";
+import React, { useState, useEffect } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
@@ -10,8 +9,6 @@ import { Link } from "react-router-dom";
 const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
-  const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
-  const [searchText, setSearchText] = useState(null);
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
@@ -47,10 +44,6 @@ const Webtoon = () => {
   }, [categorys, postType]);
   /** ===== Post type id <=> category API End ===== */
 
-  const handleSearchPopup = useCallback(() => {
-    setIsSearchPopupShow(!isSearchPopupShow);
-  }, [isSearchPopupShow]);
-
   /**
    * EVERY - 모두
    * COMPLETED - 완결
@@ -60,10 +53,6 @@ const Webtoon = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
-  };
-
-  const handleSearch = (txt) => {
-    setSearchText(txt);
   };
 
   return (
@@ -109,20 +98,9 @@ const Webtoon = () => {
             </ul>
           </div>
 
-          <Items
-            tab={selectTab}
-            typeId={typeId}
-            onSearchPopup={handleSearchPopup}
-            searchText={searchText}
-          />
+          <Items tab={selectTab} typeId={typeId} />
         </div>
       </div>
-      {isSearchPopupShow && (
-        <SearchPopup
-          handleClose={() => handleSearchPopup()}
-          onSearch={handleSearch}
-        />
-      )}
     </>
   );
 };
