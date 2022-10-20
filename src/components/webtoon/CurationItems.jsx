@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import Curation from "./Curation";
 
-const CurationItems = ({ curationNum, categorys }) => {
+const CurationItems = ({ curationNum }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
@@ -33,14 +33,11 @@ const CurationItems = ({ curationNum, categorys }) => {
           key={`swiper_slide_${index}`}
           className="item swiper-slide"
         >
-          <Curation
-            item={item}
-            category={categorys.find(({ id }) => id === item.categoryId)}
-          />
+          <Curation item={item} />
         </SwiperSlide>
       );
     });
-  }, [items, categorys]);
+  }, [items]);
 
   return (
     <>
@@ -81,7 +78,7 @@ const CurationItems = ({ curationNum, categorys }) => {
             prevRef?.current?.classList?.add("slide_st");
           }}
         >
-          <div class="swiper-wrapper">{renderItems}</div>
+          <div className="swiper-wrapper">{renderItems}</div>
         </Swiper>
 
         <div className="swiper-pagination my1"></div>

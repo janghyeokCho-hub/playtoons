@@ -5,6 +5,7 @@ import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
 import Items from "@COMPONENTS/webtoon/Items";
 import CurationItems from "@COMPONENTS/webtoon/CurationItems";
+import { Link } from "react-router-dom";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
@@ -69,7 +70,7 @@ const Webtoon = () => {
     <>
       <div className="contents">
         <div className="inr-c">
-          <CurationItems curationNum={4} categorys={categorys} />
+          <CurationItems curationNum={4} />
 
           <div className="tabs ty1">
             <ul>
@@ -77,33 +78,33 @@ const Webtoon = () => {
                 className={selectTab === "EVERY" ? "on" : ""}
                 onClick={() => handleSelectTab("EVERY")}
               >
-                <a href="#">
+                <Link to="">
                   <span>すべて</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "COMPLETED" ? "on" : ""}
                 onClick={() => handleSelectTab("COMPLETED")}
               >
-                <a href="#">
+                <Link to="">
                   <span>連載</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "SERIES" ? "on" : ""}
                 onClick={() => handleSelectTab("SERIES")}
               >
-                <a href="#">
+                <Link to="">
                   <span>完結</span>
-                </a>
+                </Link>
               </li>
               <li
                 className={selectTab === "SHORT" ? "on" : ""}
                 onClick={() => handleSelectTab("SHORT")}
               >
-                <a href="#">
+                <Link to="">
                   <span>短編</span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

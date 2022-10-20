@@ -4,11 +4,8 @@ import { Link } from "react-router-dom";
 import { getAuthor as getAuthorAPI } from "@API/authorService";
 import useFilePath from "@/hook/useFilePath";
 
-const Curation = ({ item, category }) => {
-  console.log("item : ", item);
-
+const Curation = ({ item }) => {
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
-  const profileImgURL = useFilePath(item?.author?.profileImage);
   const [author, setAuthor] = useState(null);
 
   async function getAuthor(id) {
@@ -28,12 +25,12 @@ const Curation = ({ item, category }) => {
     <Link to="/">
       <ContBgDiv className="cont" bgImg={thumbnailImgURL}>
         <div>
-          <p class="b1">
-            <span class="i-txt">おすすめ作品</span>
+          <p className="b1">
+            <span className="i-txt">おすすめ作品</span>
           </p>
-          <p class="h1">{item.title}</p>
-          <p class="t1">{item.description}</p>
-          <p class="t2">{item?.author?.name}</p>
+          <p className="h1">{item.title}</p>
+          <p className="t1">{item.description}</p>
+          <p className="t2">{item?.author?.name}</p>
         </div>
       </ContBgDiv>
     </Link>

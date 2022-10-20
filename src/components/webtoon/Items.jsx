@@ -40,12 +40,14 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
 
-  const getPostList = async (tab, params, tags, typeId) => {
+  const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
     delete params["completed"];
     delete params["series"];
     delete params["short"];
 
     params.type = typeId;
+    params.orderKey = selectOrderBy.code;
+    params.order = "DESC";
     if (tab === "COMPLETED") {
       params.completed = 1;
     } else if (tab === "SERIES") {
@@ -62,6 +64,15 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   };
 
   useEffect(() => {
+    // 연재중 탭이 바뀔때마다
+    handleURLQueryChange("page", 1);
+  }, [tab]);
+
+  useEffect(() => {
+    getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+  }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
+
+  useEffect(() => {
     if (searchText) {
       handleSearch(searchText);
     }
@@ -70,10 +81,6 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   useEffect(() => {
     setRenderItems(items);
   }, [items]);
-
-  useEffect(() => {
-    getPostList(tab, urlQueryParams, selectTags, typeId);
-  }, [tab, urlQueryParams, selectTags, typeId]);
 
   useEffect(() => {
     async function getTags() {
@@ -150,7 +157,6 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
 
   const pagination = useMemo(() => {
     if (meta) {
-      console.log(meta);
       const { currentPage, totalPages, itemCount } = meta;
       let pageList = [];
       for (let i = 1; i <= totalPages; i++) {
@@ -280,7 +286,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
                   <li
                     key={`orderby_${index}`}
                     onClick={() => {
-                      handleURLQueryChange("orderKey", menu.code);
+                      setSelectOrderBy(menu);
                       setIsOrderByShow(!isOrderByShow);
                     }}
                   >

@@ -37,15 +37,17 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   const [selectOrderBy, setSelectOrderBy] = useState(orderByMenus[0]);
   const [renderItems, setRenderItems] = useState([]);
   const [tags, setTags] = useState([]);
-  const [urlQueryParams, setUrlQueryParams] = useState();
+  const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
 
-  const getPostList = async (tab, params, tags, typeId) => {
-    delete params["completed"];
-    delete params["series"];
-    delete params["short"];
+  const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
+    delete params?.completed;
+    delete params?.series;
+    delete params?.short;
 
     params.type = typeId;
+    params.orderKey = selectOrderBy.code;
+    params.order = "DESC";
     if (tab === "COMPLETED") {
       params.completed = 1;
     } else if (tab === "SERIES") {
@@ -53,12 +55,22 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
     } else if (tab === "SHORT") {
       params.short = 1;
     }
+
     const response = await getPostListAPI(params, tags);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
     }
   };
+
+  useEffect(() => {
+    // 연재중 탭이 바뀔때마다
+    handleURLQueryChange("page", 1);
+  }, [tab]);
+
+  useEffect(() => {
+    getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+  }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
 
   useEffect(() => {
     if (searchText) {
@@ -69,10 +81,6 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
   useEffect(() => {
     setRenderItems(items);
   }, [items]);
-
-  useEffect(() => {
-    getPostList(tab, urlQueryParams, selectTags, typeId);
-  }, [tab, urlQueryParams, selectTags, typeId]);
 
   useEffect(() => {
     async function getTags() {
@@ -101,7 +109,6 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
     (key, value) => {
       let params = { ...urlQueryParams, page: 1 };
       if (key) {
-        console.log(key !== "page");
         if (key !== "page") {
           delete params["page"];
         }
@@ -279,7 +286,7 @@ const Items = ({ tab, typeId, onSearchPopup, searchText }) => {
                   <li
                     key={`orderby_${index}`}
                     onClick={() => {
-                      handleURLQueryChange("orderKey", menu.code);
+                      setSelectOrderBy(menu);
                       setIsOrderByShow(!isOrderByShow);
                     }}
                   >

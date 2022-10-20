@@ -5,6 +5,7 @@ import useFilePath from "@/hook/useFilePath";
 import { Link } from "react-router-dom";
 const Item = ({ item }) => {
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  console.log(item);
   return (
     <li>
       {item && (
@@ -23,8 +24,10 @@ const Item = ({ item }) => {
             <p className="t1">{item.author?.name}</p>
             <p className="t1 c-gray">96話 어떤 필드 사용해야 하는지</p>
             <div className="lst_tag">
-              {item.tag?.map((t) => (
-                <div className="i_tag">{t?.name}</div>
+              {item.tags?.map((tag, index) => (
+                <div key={`tag_${index}`} className="i_tag">
+                  #{tag?.name}
+                </div>
               ))}
             </div>
           </div>
