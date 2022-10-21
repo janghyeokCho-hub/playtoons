@@ -206,7 +206,7 @@ export default function PostEdit(props) {
     }
     else{
       //error 처리
-      ref.current.setError(status);
+      ref.current.setError(status, resultData);
     }
   };
 

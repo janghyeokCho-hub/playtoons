@@ -48,8 +48,10 @@ const DASHBOARD_PATH = {
 };
 
 export default function NavBarDashboard(props) {
-  const getExtraNav = (props) => {
-    switch (props?.type) {
+  const { type, className } = props;
+
+  const getExtraNav = () => {
+    switch (type) {
       default:
         break;
       case "post_detail":
@@ -66,7 +68,7 @@ export default function NavBarDashboard(props) {
   };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${className}`}>
       <h2 className="tit">{textData.dashboard}</h2>
       <nav className="menu">
         <ul>

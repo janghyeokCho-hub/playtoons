@@ -113,6 +113,7 @@ export default function UploadPost(props) {
     }
     else{
       //error 처리
+      ref.current.setError( String(status, resultData) );
     }
   };
 
@@ -159,7 +160,7 @@ export default function UploadPost(props) {
       }
     }
     else{
-      
+      alert( String(status, data) );
     }
     
   };

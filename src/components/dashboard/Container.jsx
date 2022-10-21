@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBarDashboard from "./NavBarDashboard";
 import Header from "@/components/Header";
+import { useState } from "react";
+import { useWindowSize } from "@/hook/useWindowSize";
 
 /**
 *
@@ -18,17 +20,62 @@ import Header from "@/components/Header";
 * @return
 */
 export default function Container(props) {
+  const [ stateIsOpen, setStateIsOpen ] = useState(false);
   const { type, backTitle, children } = props;
+  const windowSize = useWindowSize();
+  const [ stateIsMobile, setStateIsMobile ] = useState(false);
+
+  const getWrapClassName = () => {
+    return stateIsOpen ? 'open' : '';
+  };
+
+  const getNavClassName = () => {
+    return stateIsOpen ? 'w100p' : 'w0';
+  };
+  
+  const handleClickMenu = (event) => {
+    setStateIsOpen( !stateIsOpen );
+  };
+
+  useEffect(() => {
+    setStateIsMobile(windowSize.width < 961);
+  }, [windowSize]);
+
+  useEffect(() => {
+    if(stateIsMobile && stateIsOpen){
+      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    }
+    else{
+      document.getElementsByTagName('body')[0].style.overflow = 'auto';
+    }
+
+  }, [stateIsOpen]);
 
   return (
-    <div id="wrap">
-      <Header backTitle={backTitle} />
+      stateIsMobile ? (
+        <>
+          <div id="wrap" className={getWrapClassName()} >
+            <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()}/>
+            <div id="container" className={`container ${type}`}>
+              <div className="contents">{children}</div>
+            </div>
 
-      <div id="container" className={`container ${type}`}>
-        <NavBarDashboard />
+                <div className={`popup_dim ${getNavClassName()}`} onClick={() => handleClickMenu()}>
+                  <NavBarDashboard className={`transition ${getNavClassName()}`} />
+                </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div id="wrap" className={getWrapClassName()}>
+            <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()}/>
 
-        <div className="contents">{children}</div>
-      </div>
-    </div>
+            <div id="container" className={`container ${type}`}>
+              <NavBarDashboard />
+              <div className="contents">{children}</div>
+            </div>
+          </div>
+        </>
+      )
   );
 }

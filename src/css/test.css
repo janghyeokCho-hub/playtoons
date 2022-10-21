@@ -830,6 +830,21 @@ li.dashboard-gnb.selected{
   overflow: auto; /* 2022.09.26 profile background preview 영역 벗어나는걸 방지하기 위해서 추가 */
 }
 
+.transition{
+  -webkit-transition: all 200ms ease-in-out;
+  -moz-transition: all 200ms ease-in-out;
+  -ms-transition: all 200ms ease-in-out;
+  -o-transition: all 200ms ease-in-out;
+  transition: all 200ms ease-in-out;
+}
+
+.w0{
+  width: 0px;
+}
+.w100p{
+  width: 100%;
+}
+
 /* ============================================================================== */
 /* emptyTr  */
 /* ============================================================================== */
