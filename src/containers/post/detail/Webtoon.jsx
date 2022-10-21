@@ -26,6 +26,7 @@ const Webtoon = () => {
   const id = params?.id;
   // content 접근 여부로 Lock 판단
   const [isLock, setIsLock] = useState(true);
+  const [content, setContent] = useState(null);
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
@@ -43,8 +44,11 @@ const Webtoon = () => {
     const response = await getPostContentAPI(id);
     if (response.status === 200) {
       setIsLock(false);
+      setContent(response.data?.content);
+      console.log("response.data?.content : ", response.data?.content);
     } else {
       setIsLock(true);
+      setContent(null);
     }
   }, [id]);
 
