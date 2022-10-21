@@ -53,7 +53,6 @@ const post = handleActions(
     },
     [GET_CURRENT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("current Post : ", action.payload);
         draft.currentPost = action.payload.post;
       });
     },

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
@@ -15,6 +15,7 @@ import Comment from "./Comment";
 import { getCurrentPost } from "@/modules/redux/ducks/post";
 import useFilePath from "@/hook/useFilePath";
 import { getPostContent as getPostContentAPI } from "@API/postService";
+import { insertAuthorFollow, deleteAuthorFollow } from "@API/authorService";
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -45,7 +46,6 @@ const Novel = () => {
     if (response.status === 200) {
       setIsLock(false);
       setContent(response.data?.content);
-      console.log("response.data?.content : ", response.data?.content);
     } else {
       setIsLock(true);
       setContent(null);
@@ -60,6 +60,29 @@ const Novel = () => {
       navigate("/account", { state: { next: location?.pathname } });
     }
   }, [dispatch, id, isLogined, location, navigate]);
+
+  const handleFollow = useCallback(
+    async (type) => {
+      if (currentPost?.author?.id) {
+        if (type === "POST") {
+          const response = await insertAuthorFollow(currentPost.author.id);
+          if (response?.status === 201) {
+            alert("SUCCESS");
+          } else {
+            alert(response?.data?.message);
+          }
+        } else if (type === "DELETE") {
+          const response = await deleteAuthorFollow(currentPost.author.id);
+          if (response?.status === 200) {
+            alert("DELETE SUCCESS");
+          } else {
+            alert(response?.data?.message);
+          }
+        }
+      }
+    },
+    [currentPost]
+  );
 
   const tempComment = [
     {
@@ -134,9 +157,20 @@ const Novel = () => {
                   </div>
                   <p className="h1">{currentPost?.author?.nickname}</p>
                   <div className="btns">
-                    <a href="#" className="btn-pk n blue">
+                    <Link
+                      to=""
+                      className="btn-pk n blue"
+                      onClick={() => handleFollow("DELETE")}
+                    >
+                      <span>임시언팔</span>
+                    </Link>
+                    <Link
+                      to=""
+                      className="btn-pk n blue"
+                      onClick={() => handleFollow("POST")}
+                    >
                       <span>フォロー</span>
-                    </a>
+                    </Link>
                     <a href="#" className="btn-pk n blue2">
                       <span>支援する</span>
                     </a>

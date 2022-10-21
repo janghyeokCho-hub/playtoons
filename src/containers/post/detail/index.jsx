@@ -1,12 +1,10 @@
 import React from "react";
-import { Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Novel from "./Novel";
 import Webtoon from "./Webtoon";
 import Header from "@COMPONENTS/Header";
 
 const App = () => {
-  const params = useParams();
-  console.log(params);
   return (
     <>
       <Header className="ty1 mdetail" type="post" isDetailView={true} />

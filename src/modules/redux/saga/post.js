@@ -122,14 +122,13 @@ function createAuthorMineRequestSaga(type, func) {
 function createCurrentPostRequestSaga(type, func) {
   return function* (action) {
     try {
-      console.log("action.payload : ", action.payload);
       yield put(startLoading(type));
 
       const response = yield call(
         postApi.getPostDetailFromServer,
         action.payload
       );
-      console.log("createCurrentPostRequestSaga response : ", response);
+
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,

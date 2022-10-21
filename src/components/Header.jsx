@@ -46,7 +46,7 @@ const Header = ({
   /**
    * 게시글 좋아요 관련이 헤더에 있기 때문에, post는 꼭 리덕스 사용해야함.
    */
-  const post = useSelector(({ post }) => post.post);
+  const currentPost = useSelector(({ post }) => post.currentPost);
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
