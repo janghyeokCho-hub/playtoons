@@ -32,8 +32,8 @@ const text = {
 
 
 export default function DashboardUploadProfile(props) {
-	const reduxAuthor = useSelector( ({dashboard}) => dashboard?.author );
-	const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+	const reduxAuthor = useSelector( ({dashboard}) => dashboard.author );
+	const reduxAuthors = useSelector( ({post}) => post.authorMine.authors );
 	const dispatch = useDispatch();
 	const refNickname = useRef();
 	const refName = useRef();
@@ -189,7 +189,7 @@ export default function DashboardUploadProfile(props) {
 		}
   }, []);
 
-  return (
+	  return (
     <Container 
     type={"bg profile"} >
 
@@ -218,12 +218,12 @@ export default function DashboardUploadProfile(props) {
 						<section className="bbs_write">
 							<div className="col" >
 								<h3 className="tit1">{text.nickname}</h3>
-								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p" defaultValue={reduxAuthor?.nickname || ''}  />
+								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p" defaultValue={reduxAuthor?.nickname}  />
 							</div>
 
 							<div className="col">
 								<h3 className="tit1">{text.name}</h3>
-								<Input ref={refName} type="text" name='name' className="inp_txt w100p" defaultValue={reduxAuthor?.name || ''} />
+								<Input ref={refName} type="text" name='name' className="inp_txt w100p" defaultValue={reduxAuthor?.name} />
 							</div>
 
 							<div className="col">

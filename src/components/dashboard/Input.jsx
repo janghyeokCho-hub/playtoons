@@ -7,6 +7,7 @@ import { useRef } from 'react';
 export default forwardRef( function Input(props, ref) {
   const {type, name, className, defaultValue} = props;
   const [stateError, setStateError] = useState(undefined);
+  const [stateValue, setStateValue] = useState(undefined);
   const refInput = useRef();
 
   
@@ -26,12 +27,12 @@ export default forwardRef( function Input(props, ref) {
   }));
 
   useEffect(() => {
-    // setStateError(error);
-  }, []);
+    setStateValue(defaultValue);
+  }, [defaultValue]);
 
   return (
     <>
-      <input ref={refInput} type={type} name={name} className={className} defaultValue={defaultValue || ''} onChange={() => setStateError(undefined)} />
+      <input ref={refInput} type={type} name={name} className={className} defaultValue={stateValue} onChange={() => setStateError(undefined)} />
       
       <ErrorMessage error={stateError} />
     </>
