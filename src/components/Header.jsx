@@ -82,150 +82,190 @@ const Header = ({
     dispatch(logoutRequest());
   }, [dispatch]);
 
+  useEffect(() => {
+    setRenderType( isLogined ? type : 'logout' );
+  }, [isLogined]);
+
   useEffect(() => {}, []);
 
   return (
     <div className="open">
       <header id="header" className={`header ${className}`}>
         {/* logout, login, author */}
-        <div className="inr-c">
-          {isMenus && (
-            <button
-              type="button"
-              className="btn_gnb"
-              title="메뉴"
-              onClick={() => onSideMenu?.()}
-            >
-              <span>
-                <FontAwesomeIcon icon={faBars} />
-              </span>
-            </button>
-          )}
-          <h1 className="logo">
-            <Link to="/">
-              <span className="ico_logo">PlayToons</span>
-            </Link>
-          </h1>
-
-          <div className="rgh">
-            <div className="box_hd_sch">
-              <input
-                type="text"
-                className="inp_txt"
-                placeholder="検索キーワードを入力"
-              />
-              <button type="button" className="btns">
+        {renderType === undefined && (            //post detail, post upload 에서 중복되도록 나오기때문에 변경
+          <div className="inr-c">
+            {isMenus && (
+              <button
+                type="button"
+                className="btn_gnb"
+                title="메뉴"
+                onClick={() => onSideMenu?.()}
+              >
                 <span>
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                  <FontAwesomeIcon icon={faBars} />
                 </span>
               </button>
-            </div>
-            <button type="button" className="mo_btns view-m">
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
+            )}
+            <h1 className="logo">
+              <Link to="/">
+                <span className="ico_logo">PlayToons</span>
+              </Link>
+            </h1>
 
-            <div
-              className="pos_to"
-              onMouseEnter={() => {
-                setIsUserBoxShow(true);
-              }}
-              onMouseLeave={() => {
-                setIsUserBoxShow(false);
-              }}
-            >
-              <button type="button" className="btn_tugo btn-pk n blue bdrs">
-                <span>投稿</span>
+            <div className="rgh">
+              <div className="box_hd_sch">
+                <input
+                  type="text"
+                  className="inp_txt"
+                  placeholder="検索キーワードを入力"
+                />
+                <button type="button" className="btns">
+                  <span>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                  </span>
+                </button>
+              </div>
+              <button type="button" className="mo_btns view-m">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
               </button>
-              {isUserBoxShow && (
-                <div className="box_drop">
-                  <ul>
-                    <li>
-                      <Link to="">
-                        <FontAwesomeIcon icon={faSquarePen} />
-                        投稿する
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="">
-                        <FontAwesomeIcon icon={faCartCirclePlus} />
-                        マケットに登録
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
+             
+              <div
+                className="pos_to"
+                onMouseEnter={() => {
+                  setIsUserBoxShow(true);
+                }}
+                onMouseLeave={() => {
+                  setIsUserBoxShow(false);
+                }}
+              >
+                <button type="button" className="btn_tugo btn-pk n blue bdrs">
+                  <span>投稿</span>
+                </button>
+                {isUserBoxShow && (
+                  <div className="box_drop">
+                    <ul>
+                      <li>
+                        <Link to="/post/upload">
+                          <FontAwesomeIcon icon={faSquarePen} />
+                          投稿する
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to="">
+                          <FontAwesomeIcon icon={faCartCirclePlus} />
+                          マケットに登録
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
 
-            <div
-              className="pos_profile"
-              onMouseEnter={() => {
-                setIsProfileShow(true);
-              }}
-              onMouseLeave={() => {
-                setIsProfileShow(false);
-              }}
-            >
-              <button type="button" className="btn_profile">
-                <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
-              </button>
+              <div
+                className="pos_profile"
+                onMouseEnter={() => {
+                  setIsProfileShow(true);
+                }}
+                onMouseLeave={() => {
+                  setIsProfileShow(false);
+                }}
+              >
+                <button type="button" className="btn_profile">
+                  <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
+                </button>
 
-              {isProfileShow && (
-                <div className="box_drop">
-                  <div className="top">
-                    <button type="button" className="btn_box_close">
-                      <FontAwesomeIcon icon={faXmarkLarge} />
-                      プロフィール
-                    </button>
+                {isProfileShow && (
+                  <div className="box_drop">
+                    <div className="top">
+                      <button type="button" className="btn_box_close">
+                        <FontAwesomeIcon icon={faXmarkLarge} />
+                        プロフィール
+                      </button>
+                    </div>
+                    <div className="bt">
+                      <p className="t2">{userInfo?.name || ""}</p>
+                      <p className="t1">保有ポイント</p>
+                      <p className="c1">
+                        <span className="c-blue">100,324,394</span>
+                        <a href="#" className="btn-pk s blue bdrs">
+                          チャージ
+                        </a>
+                      </p>
+                    </div>
+                    <ul>
+                      <li>
+                        <Link to="/author/register">クリエイター登録</Link>
+                      </li>
+                      <li>
+                        <Link to="/dashboard/main">ダッシュボード</Link>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <a href="#">支援中のクリエイター</a>
+                      </li>
+                      <li>
+                        <a href="#">フォロー中のクリエイター</a>
+                      </li>
+                    </ul>
+                    <ul>
+                      <li>
+                        <a href="#">設定</a>
+                      </li>
+                      <li onClick={() => handleLogout()}>
+                        <Link to="/">ログアウト</Link>
+                      </li>
+                    </ul>
+                    <div>
+                      <button
+                        type="button"
+                        className="btn-pk n gray bdrs"
+                        onClick={() => setIsLanguageShow(true)}
+                      >
+                        <FontAwesomeIcon icon={faGlobe} />
+                        日本語
+                      </button>
+                    </div>
                   </div>
-                  <div className="bt">
-                    <p className="t2">{userInfo?.name || ""}</p>
-                    <p className="t1">保有ポイント</p>
-                    <p className="c1">
-                      <span className="c-blue">100,324,394</span>
-                      <a href="#" className="btn-pk s blue bdrs">
-                        チャージ
-                      </a>
-                    </p>
-                  </div>
-                  <ul>
-                    <li>
-                      <Link to="/author/register">クリエイター登録</Link>
-                    </li>
-                    <li>
-                      <Link to="/dashboard/main">ダッシュボード</Link>
-                    </li>
-                  </ul>
-                  <ul>
-                    <li>
-                      <a href="#">支援中のクリエイター</a>
-                    </li>
-                    <li>
-                      <a href="#">フォロー中のクリエイター</a>
-                    </li>
-                  </ul>
-                  <ul>
-                    <li>
-                      <a href="#">設定</a>
-                    </li>
-                    <li onClick={() => handleLogout()}>
-                      <Link to="/">ログアウト</Link>
-                    </li>
-                  </ul>
-                  <div>
-                    <button
-                      type="button"
-                      className="btn-pk n gray bdrs"
-                      onClick={() => setIsLanguageShow(true)}
-                    >
-                      <FontAwesomeIcon icon={faGlobe} />
-                      日本語
-                    </button>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
+
+        {/* logout */}
+        {renderType === 'logout' && (
+          <div className="inr-c">
+            <h1 className="logo">
+              <Link to="/">
+                <span className="ico_logo">PlayToons</span>
+              </Link>
+            </h1>
+
+            <div className="rgh">
+              <div className="box_hd_sch">
+                <input
+                  type="text"
+                  className="inp_txt"
+                  placeholder="検索キーワードを入力"
+                />
+                <button type="button" className="btns">
+                  <span>
+                    <FontAwesomeIcon icon={faMagnifyingGlass} />
+                  </span>
+                </button>
+              </div>
+              <button type="button" className="mo_btns view-m">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </button>
+            
+              <Link to="/account" className="btn_log btn-pk n blue bdrs">
+                <span>ログイン</span>
+              </Link>
+            </div>
+          </div>
+        )}
+
 
         {renderType === "post" && (
           <>
@@ -249,7 +289,12 @@ const Header = ({
             </div>
             {isDetailView && (
               <div className="inr-c">
-                <button type="button" className="btn_back">
+                <button 
+                  type="button" 
+                  className="btn_back"
+                  onClick={() => {
+                    navigate(-1);
+                  }}>
                   <span className="icon">
                     <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
                   </span>
@@ -310,24 +355,22 @@ const Header = ({
 
         {/* post upload */}
         {renderType === "postUpload" && (
-          <>
-            <div className="inr-c">
-              <button
-                type="button"
-                className="btn_back"
-                onClick={() => {
-                  navigate(-1);
-                }}
-              >
-                <span className="icon">
-                  <i className="fa-solid fa-angle-left">
-                    <FontAwesomeIcon icon={faAngleLeft} />
-                  </i>
-                </span>
-              </button>
-            </div>
-          </>
-        )}
+          <div className="inr-c">
+            <button
+              type="button"
+              className="btn_back"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <span className="icon">
+                <i className="fa-solid fa-angle-left">
+                  <FontAwesomeIcon icon={faAngleLeft} />
+                </i>
+              </span>
+            </button>
+          </div>
+      )}
 
         {/* 다국어 팝업 */}
         {isLanguageShow && (

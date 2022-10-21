@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams, } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
 
 
@@ -9,8 +9,6 @@ import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
 
 //temp data
-import tempImg1 from "@IMAGES/dashboardseries-rectangle-copy.png";
-import tempImg2 from "@IMAGES/mdashboardseries-rectangle.jpg";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import { useSelector } from "react-redux";
@@ -51,12 +49,12 @@ export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState();
   const params = useParams('page');
   const navigate = useNavigate();
-  const authors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   
 
   const getPostList = async (page) => {
     const params = new FormData();
-    params.append("authorId", authors[0].id);
+    params.append("authorId", reduxAuthors[0].id);
     // params.append("typeId", "");
     // params.append("categoryId", "");
     // params.append("seriesId", "");
@@ -76,11 +74,9 @@ export default function DashboardPostList(props) {
     }
     else{
       //error 처리
-      
+      alert( String(status, result) );
     }
   };
-
-
 
   const renderPostListElements = () => {
     if( stateData?.posts.length === 0 ){
@@ -112,8 +108,7 @@ export default function DashboardPostList(props) {
   const handleClickPost = (event) => {
     console.log('Post', event);
     
-    if( authors === undefined || authors.length === 0 ){
-      //TODO 데모용 author가 아니라면 진입금지
+    if( reduxAuthors === undefined || reduxAuthors.length === 0 ){
       if( window.confirm('クリエイターとして登録してください。') ){
         navigate('/post/upload');
       }
@@ -137,8 +132,6 @@ export default function DashboardPostList(props) {
     //리스트 불러오기
     getPostList( params.page === undefined ? 1 : params.page );
   }, [params]);
-
-
 
   return (
     <Container

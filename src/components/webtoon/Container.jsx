@@ -70,7 +70,7 @@ const Container = ({ menus, children }) => {
 
   return (
     <div id="wrap" className={`${isSideMenuShow ? "open" : ""}`}>
-      <Header type="post" isMenus={true} onSideMenu={() => handleChange()} />
+      <Header isMenus={true} onSideMenu={() => handleChange()} />         {/* type 제거 */}
       <div id="container" className="container dashboard webtoon">
         {(isSideMenuShow && isMobile && (
           <div className="popup_dim" onClick={() => handleChange()}>

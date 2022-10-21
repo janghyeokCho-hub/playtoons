@@ -79,7 +79,7 @@ const Container = ({ menus, children, type, activeMenu }) => {
   return (
     <div id="wrap" className={`${isSideMenuShow ? "open" : ""}`}>
       <Header
-        type="post"
+        // type="post"          //author는 header type이 없어도 되도록 변경
         isMenus={!isRegister}
         onSideMenu={() => handleChange()}
       />
