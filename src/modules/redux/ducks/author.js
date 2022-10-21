@@ -10,12 +10,6 @@ export const [
 ] = createRequestActionTypes("author/GET_AUTHOR_LIST");
 
 export const [
-  GET_AUTHOR_RECENT,
-  GET_AUTHOR_RECENT_SUCCESS,
-  GET_AUTHOR_RECENT_FAILURE,
-] = createRequestActionTypes("author/GET_AUTHOR_RECENT");
-
-export const [
   SET_CURRENT_AUTHOR,
   SET_CURRENT_AUTHOR_SUCCESS,
   SET_CURRENT_AUTHOR_FAILURE,
@@ -29,7 +23,6 @@ export const [
 
 /* --- Actions --- */
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
-export const getAuthorRecent = createAction(GET_AUTHOR_RECENT);
 export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
 export const setAuthorPlans = createAction(SET_AUTHOR_PLANS);
 
@@ -52,14 +45,6 @@ const author = handleActions(
         console.log("GET_AUTHOR_LIST_SUCCESS : ", action.payload);
         draft.authorsMeta = action.payload.meta || null;
         draft.authors = action.payload.authors || [];
-      });
-    },
-    [GET_AUTHOR_RECENT_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        /** SUCCESS 처리 */
-        console.log("GET_AUTHOR_RECENT_SUCCESS : ", action.payload);
-        draft.recentsMeta = action.payload.meta || null;
-        draft.recents = action.payload.authors || [];
       });
     },
     [SET_CURRENT_AUTHOR_SUCCESS]: (state, action) => {

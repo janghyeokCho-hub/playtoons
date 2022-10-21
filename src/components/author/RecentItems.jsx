@@ -8,15 +8,15 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import RecentItem from "@COMPONENTS/author/RecentItem";
 
-const RecentItems = ({ items = [], postType }) => {
+const RecentItems = ({ items, postType }) => {
   SwiperCore.use([Navigation]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
   const renderItems = useMemo(() => {
-    return items.map((item, index) => (
+    return items.map((author, index) => (
       <SwiperSlide key={`recent_${index}`} className="cx">
-        <RecentItem item={item} />
+        <RecentItem item={author} />
       </SwiperSlide>
     ));
   }, [items]);

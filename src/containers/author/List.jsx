@@ -1,19 +1,25 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAuthorRecent } from "@/modules/redux/ducks/author";
 import RecentItems from "@COMPONENTS/author/RecentItems";
 import RecommentItems from "@COMPONENTS/author/RecommentItems";
 import { getAuthorList, setCurrentAuthor } from "@/modules/redux/ducks/author";
+import { getAuthorRecent as getAuthorRecentAPI } from "@API/authorService";
 
 const List = () => {
   const dispatch = useDispatch();
 
-  const recents = useSelector(({ author }) => author.recents);
-  useEffect(() => {
-    if (!recents?.length) {
-      dispatch(getAuthorRecent());
+  const [recents, setRecents] = useState(null);
+
+  const getAuthorRecents = useCallback(async () => {
+    const response = await getAuthorRecentAPI();
+    if (response?.status === 200) {
+      setRecents(response.data.authors);
     }
-  }, [dispatch, recents]);
+  }, []);
+
+  useEffect(() => {
+    getAuthorRecents();
+  }, []);
 
   const authors = useSelector(({ author }) => author.authors);
 

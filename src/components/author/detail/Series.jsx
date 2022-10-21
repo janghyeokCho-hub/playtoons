@@ -157,8 +157,10 @@ const Series = ({ id }) => {
               <p className="t1">{series?.description}</p>
 
               <div className="lst_tag">
-                {series?.tags?.map((tag) => (
-                  <div className="i_tag">#{tag.name}</div>
+                {series?.tags?.map((tag, index) => (
+                  <div key={`tag_${index}`} className="i_tag">
+                    #{tag.name}
+                  </div>
                 ))}
               </div>
             </div>
