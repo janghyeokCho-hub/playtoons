@@ -14,8 +14,8 @@ const RecentItems = ({ items, postType }) => {
   const nextRef = useRef(null);
 
   const renderItems = useMemo(() => {
-    return items.map((author, index) => (
-      <SwiperSlide key={`recent_${index}`} className="cx">
+    return items?.map((author, index) => (
+      <SwiperSlide key={`recent_${index}`} className="swiper-slide">
         <RecentItem item={author} />
       </SwiperSlide>
     ));
@@ -23,24 +23,24 @@ const RecentItems = ({ items, postType }) => {
 
   return (
     <div className="slider_profile">
-      {items && (
+      {items?.length > 0 && (
         <>
           <Swiper
             className="swiper-container mySwiper1"
             slidesPerView={5}
-            spaceBetween={10}
+            spaceBetween={30}
             observer={true}
             observeParents={true}
             navigation={{
-              nextEl: nextRef.current,
-              prevEl: prevRef.current,
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
             }}
             breakpoints={{
-              960: {
-                slidesPerView: 1.75,
-                spaceBetween: 8,
+              0: {
+                slidesPerView: 1.8,
+                spaceBetween: 12,
               },
-              961: {
+              1000: {
                 slidesPerView: 3,
                 spaceBetween: 15,
               },
@@ -49,25 +49,30 @@ const RecentItems = ({ items, postType }) => {
                 spaceBetween: 30,
               },
             }}
-            onUpdate={() => {
+            onSlideChange={() => {}}
+            onInit={(swiper) => {}}
+            onSwiper={(swiper) => {
+              // console.log('swiper', swiper);
+            }}
+            onUpdate={(swiper) => {
               nextRef?.current?.classList?.add("slide_st");
               prevRef?.current?.classList?.add("slide_st");
             }}
           >
-            {renderItems}
+            <div className="swiper-wrapper">{renderItems}</div>
           </Swiper>
 
           <button
             ref={prevRef}
             type="button"
-            className="swiper-button-prev my1 hide-m"
+            className="swiper-button-prev my1 slide_st"
           >
             <FontAwesomeIcon icon={faCircleChevronLeft} />
           </button>
           <button
             ref={nextRef}
             type="button"
-            className="swiper-button-next my1 hide-m"
+            className="swiper-button-next my1 slide_st"
           >
             <FontAwesomeIcon icon={faCircleChevronRight} />
           </button>

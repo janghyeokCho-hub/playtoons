@@ -39,14 +39,10 @@ const List = () => {
   return (
     <div className="contents mauthor">
       <div className="inr-c">
-        {recents && (
-          <>
-            <div className="hd_titbox">
-              <h2 className="h_tit0">最近確認したクリエイター</h2>
-            </div>
-            <RecentItems items={recents} />
-          </>
-        )}
+        <div className="hd_titbox">
+          <h2 className="h_tit0">最近確認したクリエイター</h2>
+        </div>
+        <RecentItems items={recents} />
         <div className="hd_titbox">
           <h2 className="h_tit0">おすすめクリエイター</h2>
         </div>
