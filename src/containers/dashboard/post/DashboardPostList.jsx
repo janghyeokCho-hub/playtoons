@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useParams, } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { faAngleRight, faPlus, faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
 
 
@@ -91,8 +91,8 @@ export default function DashboardPostList(props) {
             <div className="cx_thumb"><span><Image hash={item.thumbnailImage} alt="thumbnail" /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
-          <td className="td_number1">{item.viewCount}<em className="hide-m">{text.count}</em></td>
-          <td className="td_number2">{item.likeCount}</td>
+          <td className="td_number1"><FontAwesomeIcon icon={faEye} className='view-m' />{item.viewCount}<em className="hide-m">{text.count}</em></td>
+          <td className="td_number2"><FontAwesomeIcon icon={faHeart} className='view-m' />{item.likeCount}</td>
           <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.startAt}</td>
           <td className="td_txt"><span className="view-m">{text.status}</span>{item.status}</td>
           <td className="td_btns">

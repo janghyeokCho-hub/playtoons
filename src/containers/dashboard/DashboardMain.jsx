@@ -41,10 +41,10 @@ const text = {
 
 
 export default function DashboardMain() {
-  const [data, setData] = useState({});
+  const [stateData, setStateData] = useState({});
 
   const renderSalesProductList = () => {
-    return data?.sales_product_list?.map((item, i) => {
+    return stateData?.sales_product_list?.map((item, i) => {
       return <SwiperSlide key={i} className={"cx"}>
                 <Link to={`/dashboard/product/detail/${item.id}`}>
                   <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span></div>
@@ -58,7 +58,7 @@ export default function DashboardMain() {
   };
 
   const renderQuestionList = () => {
-    return data?.question_list?.map((item, index) => {
+    return stateData?.question_list?.map((item, index) => {
       return  <li key={index}>
                 <p className="t1"><Link to={`/dashboard/product/sales/inquiry/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
@@ -67,7 +67,7 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
-    return data?.review_list?.map((item, index) => {
+    return stateData?.review_list?.map((item, index) => {
       return <li key={index}>
               <div>
                 <div className="t_star"><span className={`s${item.review_count}`}><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/></span></div>
@@ -79,7 +79,7 @@ export default function DashboardMain() {
   };
 
   const renderSeriesList = () => {
-    return data?.series_list?.map((item, i) => {
+    return stateData?.series_list?.map((item, i) => {
       return  <SwiperSlide key={i} className={"cx"}>
                   <Link to={`/dashboard/series/detail/${item.id}`}>
                     <div className="cx_thumb"><span><img src={item.image} alt="사진" /></span><p className="t_like"><FontAwesomeIcon icon={faHeart} /><span>{item.count}</span></p></div>
@@ -93,7 +93,7 @@ export default function DashboardMain() {
   };
 
   const renderPostList = () => {
-    return data?.post_list?.map((item, i) => {
+    return stateData?.post_list?.map((item, i) => {
       return  <li key={item.id}>
                 <p className="t1"><Link to={`/dashboard/post/detail/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
@@ -102,7 +102,7 @@ export default function DashboardMain() {
   };
 
   const renderReactionList = () => {
-    return data?.reaction_list?.map((item, index) => {
+    return stateData?.reaction_list?.map((item, index) => {
       return  <li key={item.id}>
                 <p className="t1"><Link to={`/dashboard/reaction/detail/${item.id}`}>{item.title}</Link></p>
                 <p className="t2">{item.date}</p>
@@ -111,7 +111,7 @@ export default function DashboardMain() {
   };
 
   const renderSalesListInPast = () => {
-    return data?.past_sales_list?.map((item, index) => {
+    return stateData?.past_sales_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
                   <p className="t2">{item.date}</p>
@@ -123,7 +123,7 @@ export default function DashboardMain() {
   };
 
   const renderHistoryOfDeposit = () => {
-    return data?.history_deposit_list?.map((item, index) => {
+    return stateData?.history_deposit_list?.map((item, index) => {
       return  <li key={index}>
                 <div>
                   <p className="t2">{item.date}</p>
@@ -136,7 +136,7 @@ export default function DashboardMain() {
   };
 
   useEffect(() => {
-    setData(tempData);
+    setStateData(tempData);
   }, []);
 
   return (
@@ -220,12 +220,12 @@ export default function DashboardMain() {
         <section className="box_area">
           <div className="hd_titbox">
             <h2 className="h_tit1">{text.follower_count}</h2>
-            <p className="rgh">{data.today}</p>
+            <p className="rgh">{stateData.today}</p>
           </div>
 
           <div className="b_tit">
             <div className="t1">
-              <p><strong>{data.follower_count}</strong><span className="fz_s1 c-green">{data.follower_plus_count}</span></p>
+              <p><strong>{stateData.follower_count}</strong><span className="fz_s1 c-green">{stateData.follower_plus_count}</span></p>
             </div>
           </div>
 

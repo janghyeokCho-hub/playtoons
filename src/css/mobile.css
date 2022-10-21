@@ -299,7 +299,6 @@
     font-size: 0;
   }
   .header .btn_tugo > svg {   /* 2022.10.18 lhk- 모바일 plus 버튼 수정 */
-    content: "\f0fe";
     position: absolute;
     top: 50%;
     left: 4px;
@@ -307,6 +306,7 @@
     font-weight: 300;
     font-size: 24px;
     color: #000;
+    transform: translateY(-50%);
   }
   .header .btn_tugo.btn-pk {
     background: none;
@@ -1066,15 +1066,15 @@
     padding-left: 17px;
     color: #4d5a67;
   }
-  .mtbl_ty1 td.td_number1:after {
-    content: "\f06e";
+  .mtbl_ty1 td.td_number1 > svg {   /* 2022.10.21 lhk- icon 수정 */
     position: absolute;
     left: 0;
-    bottom: -1px;
+    bottom: 0;
     font-weight: 900;
     font-family: "Font Awesome 6 Pro";
     font-size: 12px;
     color: #4d5a67;
+    transform: translateY(-0.5px);
   }
   .mtbl_ty1 td.td_number2 {
     position: relative;
@@ -1083,15 +1083,15 @@
     padding-left: 17px;
     color: #4d5a67;
   }
-  .mtbl_ty1 td.td_number2:after {
-    content: "\f004";
+  .mtbl_ty1 td.td_number2 > svg {
     position: absolute;
     left: 0;
-    bottom: -1px;
+    bottom: 0;
     font-weight: 900;
     font-family: "Font Awesome 6 Pro";
     font-size: 12px;
     color: #4d5a67;
+    transform: translateY(-0.5px);
   }
   .bbs_view {
     padding-top: 0px;

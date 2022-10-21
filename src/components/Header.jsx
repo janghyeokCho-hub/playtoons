@@ -140,6 +140,7 @@ const Header = ({
               >
                 <button type="button" className="btn_tugo btn-pk n blue bdrs">
                   <span>投稿</span>
+                  <FontAwesomeIcon icon={faSquarePlus} className='view-m' />
                 </button>
                 {isUserBoxShow && (
                   <div className="box_drop">
