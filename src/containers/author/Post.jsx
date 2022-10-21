@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,6 +8,7 @@ import SeriesItems from "@COMPONENTS/author/SeriesItems";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import PostItems from "@COMPONENTS/author/PostItems";
+import { setAuthorFollow } from "@API/authorService";
 
 const Post = () => {
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
@@ -15,6 +16,28 @@ const Post = () => {
   const profileImgURL = useFilePath(currentAuthor?.profileImage);
 
   const [selectTab, setSelectTab] = useState("POST");
+
+  const handleFollow = useCallback(
+    async (type) => {
+      if (currentAuthor?.id) {
+        const response = await setAuthorFollow(type, currentAuthor.id);
+        if (type === "post") {
+          if (response?.status === 201) {
+            alert("SUCCESS");
+          } else {
+            alert(response?.data?.message);
+          }
+        } else {
+          if (response?.status === 200) {
+            alert("DELETE SUCCESS");
+          } else {
+            alert(response?.data?.message);
+          }
+        }
+      }
+    },
+    [currentAuthor]
+  );
 
   return (
     <div className="contents">
@@ -33,9 +56,20 @@ const Post = () => {
             <p className="h1">{currentAuthor?.nickname}</p>
             <p className="t1">{currentAuthor?.description}</p>
             <div className="btns">
-              <a href="#" className="btn-pk n blue">
+              <Link
+                to=""
+                className="btn-pk n blue"
+                onClick={() => handleFollow("delete")}
+              >
+                임시언팔
+              </Link>
+              <Link
+                to=""
+                className="btn-pk n blue"
+                onClick={() => handleFollow("post")}
+              >
                 フォロー
-              </a>
+              </Link>
               <a href="#" className="btn-pk n blue2">
                 <FontAwesomeIcon icon={faShare} />
                 共有する

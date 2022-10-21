@@ -28,11 +28,11 @@ const Webtoon = () => {
   // content 접근 여부로 Lock 판단
   const [isLock, setIsLock] = useState(true);
   const [content, setContent] = useState(null);
+  const contentURL = useFilePath(content);
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
-  const thumbnailImgURL = useFilePath(currentPost?.thumbnailImage);
   // 로그인 한 사용자
   const isLogined = useSelector(({ login }) => login.isLogined);
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -46,7 +46,6 @@ const Webtoon = () => {
     if (response.status === 200) {
       setIsLock(false);
       setContent(response.data?.content);
-      console.log("response.data?.content : ", response.data?.content);
     } else {
       setIsLock(true);
       setContent(null);
@@ -131,7 +130,7 @@ const Webtoon = () => {
             </div>
 
             <div className="area_webtoon">
-              <img src={thumbnailImgURL} alt="" />
+              <img src={contentURL} alt="" />
               {/* 잠금 시작 */}
               {isLock && (
                 <div className="area_lock">

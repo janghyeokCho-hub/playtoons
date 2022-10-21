@@ -28,11 +28,11 @@ const Novel = () => {
   // content 접근 여부로 Lock 판단
   const [isLock, setIsLock] = useState(true);
   const [content, setContent] = useState(null);
+  const contentURL = useFilePath(content);
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
-  const thumbnailImgURL = useFilePath(currentPost?.thumbnailImage);
   // 로그인 한 사용자
   const isLogined = useSelector(({ login }) => login.isLogined);
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -130,7 +130,7 @@ const Novel = () => {
             </div>
 
             <div className="area_novel">
-              <img src={thumbnailImgURL} alt="" />
+              <img src={contentURL} alt="" />
               {isLock && (
                 <div className="area_lock">
                   <div>
