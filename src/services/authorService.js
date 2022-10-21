@@ -54,25 +54,13 @@ export const registerAuthor = async () => {
 
 /**
  * 해당 작가 팔로우
+ * @param {string} method post / delete
  * @param {number} id 작가 ID
  * @returns
  */
-export const insertAuthorFollow = async (id) => {
+export const setAuthorFollow = async (method, id) => {
   try {
-    return await apiServer("post", `/author/${id}/follow`);
-  } catch (e) {
-    return { status: e.response.status };
-  }
-};
-
-/**
- * 해당 작가 팔로우 취소
- * @param {number} id 작가 ID
- * @returns
- */
-export const deleteAuthorFollow = async (id) => {
-  try {
-    return await apiServer("delete", `/author/${id}/follow`);
+    return await apiServer(method, `/author/${id}/follow`);
   } catch (e) {
     return { status: e.response.status };
   }

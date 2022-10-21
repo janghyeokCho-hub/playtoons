@@ -84,9 +84,7 @@ const Header = ({
 
   useEffect(() => {
     setRenderType(isLogined ? type : "logout");
-  }, [isLogined]);
-
-  useEffect(() => {}, []);
+  }, [isLogined, type]);
 
   return (
     <div className="open">

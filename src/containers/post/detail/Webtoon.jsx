@@ -15,7 +15,7 @@ import Comment from "./Comment";
 import { getCurrentPost } from "@/modules/redux/ducks/post";
 import useFilePath from "@/hook/useFilePath";
 import { getPostContent as getPostContentAPI } from "@API/postService";
-import { insertAuthorFollow, deleteAuthorFollow } from "@API/authorService";
+import { setAuthorFollow } from "@API/authorService";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation]);
@@ -65,15 +65,14 @@ const Webtoon = () => {
   const handleFollow = useCallback(
     async (type) => {
       if (currentPost?.author?.id) {
-        if (type === "POST") {
-          const response = await insertAuthorFollow(currentPost.author.id);
+        const response = await setAuthorFollow(type, currentPost.author.id);
+        if (type === "post") {
           if (response?.status === 201) {
             alert("SUCCESS");
           } else {
             alert(response?.data?.message);
           }
-        } else if (type === "DELETE") {
-          const response = await deleteAuthorFollow(currentPost.author.id);
+        } else {
           if (response?.status === 200) {
             alert("DELETE SUCCESS");
           } else {
@@ -169,14 +168,14 @@ const Webtoon = () => {
                     <Link
                       to=""
                       className="btn-pk n blue"
-                      onClick={() => handleFollow("DELETE")}
+                      onClick={() => handleFollow("delete")}
                     >
                       <span>임시언팔</span>
                     </Link>
                     <Link
                       to=""
                       className="btn-pk n blue"
-                      onClick={() => handleFollow("POST")}
+                      onClick={() => handleFollow("post")}
                     >
                       <span>フォロー</span>
                     </Link>
