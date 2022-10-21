@@ -18,6 +18,7 @@ const CurationItems = ({ curationNum }) => {
 
   const getCurationList = async (curationNum) => {
     const response = await getCurationListAPI(curationNum);
+    console.log("response : ", response);
     if (response.status === 200) {
       setItems(response.data.posts);
     }

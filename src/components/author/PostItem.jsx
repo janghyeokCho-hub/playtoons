@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faCommentQuote } from "@fortawesome/pro-solid-svg-icons";
+import {
+  faHeart,
+  faCommentQuote,
+  faLock,
+} from "@fortawesome/pro-solid-svg-icons";
 import useFilePath from "@/hook/useFilePath";
 import moment from "moment";
-import { getPostDetailFromServer as getPostDetilAPI } from "@/services/postService";
+import {
+  getPostDetailFromServer as getPostDetilAPI,
+  getPostContent as getPostContentAPI,
+} from "@/services/postService";
 import { useCallback } from "react";
 
 const PostItem = ({ item }) => {
   const [post, setPost] = useState(null);
+  const [isLock, setIsLock] = useState(true);
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
 
   const getPost = useCallback(async () => {
@@ -21,8 +29,18 @@ const PostItem = ({ item }) => {
     }
   }, [item]);
 
+  const getPostContent = useCallback(async () => {
+    const response = await getPostContentAPI(item?.id);
+    if (response.status === 200) {
+      setIsLock(false);
+    } else {
+      setIsLock(true);
+    }
+  }, [item]);
+
   useEffect(() => {
     getPost();
+    getPostContent();
   }, []);
 
   return (
@@ -34,6 +52,18 @@ const PostItem = ({ item }) => {
         >
           <div className="thumb">
             <img src={thumbnailImgURL} alt="" />
+
+            {/* 잠금 시작 */}
+            {isLock && (
+              <div className="area_lock">
+                <div>
+                  <p>
+                    <FontAwesomeIcon icon={faLock} />
+                  </p>
+                </div>
+              </div>
+            )}
+            {/* 잠금 끝 */}
           </div>
           <div className="txt">
             <p className="h1">{post?.title}</p>

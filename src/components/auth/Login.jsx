@@ -98,9 +98,9 @@ const Login = () => {
   useEffect(() => {
     if (isLogined) {
       // 로그인 성공으로 라우터 변경
-      navigate("/");
+      navigate(next || "/");
     }
-  }, [isLogined, navigate]);
+  }, [isLogined, navigate, next]);
 
   return (
     <>

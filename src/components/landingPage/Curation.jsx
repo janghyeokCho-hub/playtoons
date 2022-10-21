@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 
 const Curation = ({ item }) => {
-  const userInfo = useSelector(({ login }) => login.userInfo);
   const thumbnailImgURL = useFilePath(item?.thumbnailImage);
 
   return (
@@ -25,8 +24,8 @@ const Curation = ({ item }) => {
       <div className="cx_txt">
         <p className="t1 c-blue">{item?.type?.name}</p>
         <p className="h1">{item.title}</p>
-        <p className="t1">{userInfo?.name}</p>
-        <p className="t1">{item.endAt || 0}話</p>
+        <p className="t1">{item?.author?.nickname}</p>
+        <p className="t1">{item.idx || 0}話</p>
       </div>
     </Link>
   );

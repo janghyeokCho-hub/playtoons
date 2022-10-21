@@ -1,7 +1,12 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import { exceptionHandler, } from "@REDUX/saga/createRequestSaga";
-import * as postApi from '@API/postService';
-import { AUTHOR_MINE, EDIT_POST, POST_DETAIL } from "../ducks/post";
+import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
+import * as postApi from "@API/postService";
+import {
+  AUTHOR_MINE,
+  EDIT_POST,
+  POST_DETAIL,
+  GET_CURRENT_POST,
+} from "../ducks/post";
 import { finishLoading, startLoading } from "../ducks/loading";
 
 //==============================================================================
@@ -50,7 +55,6 @@ function createPostDetailRequestSaga(type, func) {
         id: action.payload.id,
       };
       const response = yield call(postApi.getPostIdMineFromServer, params);
-      console.log("createPostDetailRequestSaga response : ", response);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
@@ -112,10 +116,50 @@ function createAuthorMineRequestSaga(type, func) {
   };
 }
 
+//==============================================================================
+// get current post
+//==============================================================================
+function createCurrentPostRequestSaga(type, func) {
+  return function* (action) {
+    try {
+      console.log("action.payload : ", action.payload);
+      yield put(startLoading(type));
 
+      const response = yield call(
+        postApi.getPostDetailFromServer,
+        action.payload
+      );
+      console.log("createCurrentPostRequestSaga response : ", response);
+      if (response?.status === 200) {
+        yield put({
+          type: `${type}_SUCCESS`,
+          payload: response.data,
+        });
+      }
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: `${type}_FAILURE`,
+        payload: action.payload,
+        error: true,
+        errStatus: e.response.status,
+        errMessage: e.response.data.message,
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
 
 export default function* postSaga() {
   yield takeLatest(EDIT_POST, createEditPostRequestSaga(EDIT_POST));
   yield takeLatest(POST_DETAIL, createPostDetailRequestSaga(POST_DETAIL));
   yield takeLatest(AUTHOR_MINE, createAuthorMineRequestSaga(AUTHOR_MINE));
+  yield takeLatest(
+    GET_CURRENT_POST,
+    createCurrentPostRequestSaga(GET_CURRENT_POST)
+  );
 }

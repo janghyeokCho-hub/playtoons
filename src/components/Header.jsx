@@ -83,7 +83,7 @@ const Header = ({
   }, [dispatch]);
 
   useEffect(() => {
-    setRenderType( isLogined ? type : 'logout' );
+    setRenderType(isLogined ? type : "logout");
   }, [isLogined]);
 
   useEffect(() => {}, []);
@@ -92,7 +92,7 @@ const Header = ({
     <div className="open">
       <header id="header" className={`header ${className}`}>
         {/* logout, login, author, webtoon, novel */}
-        {renderType === undefined && (            //post detail, post upload 에서 중복되도록 나오기때문에 변경
+        {renderType === undefined && ( //post detail, post upload 에서 중복되도록 나오기때문에 변경
           <div className="inr-c">
             {isMenus && (
               <button
@@ -128,7 +128,7 @@ const Header = ({
               <button type="button" className="mo_btns view-m">
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </button>
-             
+
               <div
                 className="pos_to"
                 onMouseEnter={() => {
@@ -140,7 +140,7 @@ const Header = ({
               >
                 <button type="button" className="btn_tugo btn-pk n blue bdrs">
                   <span>投稿</span>
-                  <FontAwesomeIcon icon={faSquarePlus} className='view-m' />
+                  <FontAwesomeIcon icon={faSquarePlus} className="view-m" />
                 </button>
                 {isUserBoxShow && (
                   <div className="box_drop">
@@ -235,7 +235,7 @@ const Header = ({
         )}
 
         {/* logout */}
-        {renderType === 'logout' && (
+        {renderType === "logout" && (
           <div className="inr-c">
             <h1 className="logo">
               <Link to="/">
@@ -259,14 +259,13 @@ const Header = ({
               <button type="button" className="mo_btns view-m">
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
               </button>
-            
+
               <Link to="/account" className="btn_log btn-pk n blue bdrs">
                 <span>ログイン</span>
               </Link>
             </div>
           </div>
         )}
-
 
         {renderType === "post" && (
           <>
@@ -290,12 +289,13 @@ const Header = ({
             </div>
             {isDetailView && (
               <div className="inr-c">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="btn_back"
                   onClick={() => {
                     navigate(-1);
-                  }}>
+                  }}
+                >
                   <span className="icon">
                     <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
                   </span>
@@ -371,7 +371,7 @@ const Header = ({
               </span>
             </button>
           </div>
-      )}
+        )}
 
         {/* 다국어 팝업 */}
         {isLanguageShow && (
