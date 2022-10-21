@@ -27,6 +27,7 @@ import '@/css/test.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthorMineAction } from '@/modules/redux/ducks/post';
 import { useLayoutEffect } from 'react';
+import ModalContainer from '@/components/ModalContainer';
 
 /**
 * Dashboard url 분기 처리
@@ -155,8 +156,8 @@ export default function Dashboard() {
           element={<Page404 />}    //TODO 404
         />
       </Routes>
-      {/* //TODO 모달기능 */}
-      {/* <Modal show={false} /> */}
+      
+      <ModalContainer />
     </>
   )
 }

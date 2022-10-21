@@ -3,17 +3,12 @@ import { createRequestActionTypes } from "@REDUX/saga/createRequestSaga";
 import produce from "immer";
 
 /* --- Action Types --- */
-export const [POPUP, POPUP_SHOW, POPUP_HIDE] =
-  createRequestActionTypes("popup");
+export const [POPUP, POPUP_SHOW, POPUP_HIDE] = createRequestActionTypes("popup");
 
 /* --- Actions --- */
-export const loginRequest = createAction(POPUP);
+export const showModal = createAction(POPUP_SHOW);
+export const hideModal = createAction(POPUP_HIDE);
 
-
-export const MODAL_DESIGN_TYPE = {
-  DEFAULT: 0,
-  HIDE_CLOSE_BUTTON: 1,
-};
 
 /**
  * login reducer 초기값
@@ -22,19 +17,20 @@ export const MODAL_DESIGN_TYPE = {
   show : false,
   contents : <></>,
   callback : null,
-  type: MODAL_DESIGN_TYPE.DEFAULT,
 }
 
 const popup = handleActions(
   {
     [POPUP_SHOW]: (state, action) => {
       return produce(state, (draft) => {
-        console.log(action);
-        
+        console.log('POPUP_SHOW', action);
+        draft.show = true;
+        draft.contents = action.payload.contents;
+        draft.callback = action.payload.callback;
       });
     },
     [POPUP_HIDE]: (state, action) => {
-      console.log(action);
+      console.log('POPUP_HIDE', action);
       return initialState;
     },
   },

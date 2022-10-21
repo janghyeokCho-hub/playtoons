@@ -17,6 +17,9 @@ import tempImageSeries04 from '@IMAGES/temp_series_04.png';
 import tempImageSeries05 from '@IMAGES/temp_series_05.png';
 import tempImageSeries06 from '@IMAGES/temp_series_06.png';
 import { Link } from "react-router-dom";
+import Modal from "@/components/Modal";
+import { useDispatch } from "react-redux";
+import { showModal } from "@/modules/redux/ducks/modal";
 
 
 const text = {
@@ -134,7 +137,7 @@ export default function DashboardMain() {
               </li>
     });
   };
-
+  
   useEffect(() => {
     setStateData(tempData);
   }, []);
@@ -143,6 +146,7 @@ export default function DashboardMain() {
     <Container
       type={"dashboard"}>
       <div className="inr-c">
+
         <section className="box_area pr-mb1">
           <div className="hd_titbox">
             <h2 className="h_tit1">{text.today_sales}</h2>

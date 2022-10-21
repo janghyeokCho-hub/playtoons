@@ -10,6 +10,8 @@ import Container from "@/components/dashboard/Container";
 import ProductTab from "@/components/dashboard/ProductTab";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
+import { useDispatch } from "react-redux";
+import { showModal } from "@/modules/redux/ducks/modal";
 
 const text = {
   see_product : "商品一覧",
@@ -136,14 +138,15 @@ export default function DashboardProductList(props) {
     console.log('handleChange', page);
     
   };
-
+  
+  
   const handleItemClick = (e) => {
     const no = e.target.getAttribute("data-id");
 
     // navigate("/dashboard/series/detail/" + no);
   };
 
-// TODO 모바일 css 
+
   const renderProductList = () => {
     return stateData?.list?.map((item, index) => {
       return (
