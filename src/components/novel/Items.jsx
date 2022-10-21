@@ -71,7 +71,9 @@ const Items = ({ tab, typeId }) => {
   }, [tab]);
 
   useEffect(() => {
-    getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+    if( typeId !== undefined ){     //typeId가 준비되지 않은 상태에서도 api 날아가는걸 방지
+      getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+    }
   }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
 
   useEffect(() => {
