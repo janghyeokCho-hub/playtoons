@@ -7,6 +7,7 @@ import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { useCallback } from "react";
 
 const PostItems = ({ item }) => {
+  console.log(item);
   const [posts, setPosts] = useState([]);
 
   /** ===== Post type API Start ===== */
@@ -25,7 +26,7 @@ const PostItems = ({ item }) => {
 
   /** ===== Post type API End ===== */
   const getPosts = useCallback(async () => {
-    const response = await getPostsAPI({ authorId: item.id });
+    const response = await getPostsAPI({ authorId: item?.id });
     if (response.status === 200) {
       let result = response.data.posts;
       if (!Array.isArray(result)) {
@@ -37,7 +38,7 @@ const PostItems = ({ item }) => {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [item]);
 
   return (
     <>

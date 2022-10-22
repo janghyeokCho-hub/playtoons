@@ -9,6 +9,9 @@ import Header from "../Header";
 import Footer from "../Footer";
 
 const SideBar = ({ menus, handleChange }) => {
+  const location = useLocation();
+  const pathname = location.pathname;
+  console.log(pathname);
   return (
     <aside className="sidebar">
       <div className="top view-m">
@@ -36,19 +39,35 @@ const SideBar = ({ menus, handleChange }) => {
               <ul>
                 {value.map((item) => {
                   return (
-                    <li className="s1" key={item.code}>
-                      <Link
-                        to={`${item.link}`}
-                        onClick={() =>
-                          !item?.link &&
-                          alert(`${item?.link} 링크 준비중입니다.`)
-                        }
-                      >
-                        <span className="ico">
-                          <FontAwesomeIcon icon={item.icon.on} />
-                        </span>
-                        <span>{item.name}</span>
-                      </Link>
+                    <li
+                      className={`s1 ${item?.link === pathname ? "on" : ""}`}
+                      key={item.code}
+                    >
+                      {(item?.link !== "" && (
+                        <Link
+                          to={item?.link}
+                          onClick={() =>
+                            !item?.link && alert(`${item?.link} 준비중입니다.1`)
+                          }
+                        >
+                          <span className="ico">
+                            <FontAwesomeIcon icon={item.icon.on} />
+                          </span>
+                          <span>{item.name}</span>
+                        </Link>
+                      )) || (
+                        <Link
+                          to="#"
+                          onClick={() =>
+                            !item?.link && alert(`${item?.link} 준비중입니다.`)
+                          }
+                        >
+                          <span className="ico">
+                            <FontAwesomeIcon icon={item.icon.on} />
+                          </span>
+                          <span>{item.name}</span>
+                        </Link>
+                      )}
                     </li>
                   );
                 })}

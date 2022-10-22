@@ -32,7 +32,7 @@ const SeriesItem = ({ item }) => {
           <SpanImg bgImg={thumbnailImgURL}></SpanImg>
         </div>
         <div className="txt">
-          <p className="t1">{item?.category?.name}</p>
+          <p className="t1">{item?.type?.name}</p>
           <p className="h1">{item?.title}</p>
           <button type="button" className="btn-pk s blue2">
             <FontAwesomeIcon icon={faObjectUnion} />

@@ -1,33 +1,36 @@
 import React, { useEffect, useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import RecentItems from "@COMPONENTS/author/RecentItems";
 import RecommentItems from "@COMPONENTS/author/RecommentItems";
-import { getAuthorList, setCurrentAuthor } from "@/modules/redux/ducks/author";
+import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import { getAuthorRecent as getAuthorRecentAPI } from "@API/authorService";
+import { getCurationList as getCurationListAPI } from "@API/curationService";
 
 const List = () => {
   const dispatch = useDispatch();
 
   const [recents, setRecents] = useState(null);
+  const [recommend, setRecommend] = useState(null);
 
   const getAuthorRecents = useCallback(async () => {
     const response = await getAuthorRecentAPI();
     if (response?.status === 200) {
+      console.log(response.data);
       setRecents(response.data.authors);
+    }
+  }, []);
+
+  const getCurationList = useCallback(async () => {
+    const response = await getCurationListAPI(6, { order: "DESC", limit: 6 });
+    if (response?.status === 200) {
+      setRecommend(response.data.authors);
     }
   }, []);
 
   useEffect(() => {
     getAuthorRecents();
+    getCurationList();
   }, []);
-
-  const authors = useSelector(({ author }) => author.authors);
-
-  useEffect(() => {
-    if (!authors?.length) {
-      dispatch(getAuthorList());
-    }
-  }, [dispatch, authors]);
 
   const handleCurrentAuthor = useCallback(
     (item) => {
@@ -47,7 +50,7 @@ const List = () => {
           <h2 className="h_tit0">おすすめクリエイター</h2>
         </div>
         <RecommentItems
-          items={authors}
+          items={recommend}
           handleCurrentAuthor={handleCurrentAuthor}
         />
       </div>

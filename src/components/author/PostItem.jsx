@@ -81,7 +81,7 @@ const PostItem = ({ item }) => {
                 icon={faCommentQuote}
                 style={{ marginRight: "7px" }}
               />
-              {post?.viewCount}
+              {post?.reactionCount}
             </button>
           </div>
         </Link>

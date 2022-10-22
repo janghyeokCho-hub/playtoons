@@ -1,33 +1,19 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { getAuthor as getAuthorAPI } from "@API/authorService";
 import useFilePath from "@/hook/useFilePath";
 
 const RecentItem = ({ item }) => {
-  const [author, setAuthor] = useState(null);
-
-  const getAuthor = useCallback(async () => {
-    const response = await getAuthorAPI(item?.id);
-    if (response?.status === 200) {
-      setAuthor(response.data.author);
-    }
-  }, [item]);
-
-  useEffect(() => {
-    getAuthor();
-  }, []);
-
-  const backgroundImgURL = useFilePath(author?.backgroundImage);
-  const profileImgURL = useFilePath(author?.profileImage);
+  const backgroundImgURL = useFilePath(item?.backgroundImage);
+  const profileImgURL = useFilePath(item?.profileImage);
 
   return (
     <div className="box_profile">
       <Link
         to={{
-          pathname: "/author/post",
+          pathname: `/author/post/${item.id}`,
         }}
-        state={{ item: author }}
+        state={{ item: item }}
       >
         {/* 이미지 default 값 필요 */}
         <ImgTmpProfileBgDiv className="pf_thumb" bgImg={backgroundImgURL} />
@@ -36,8 +22,8 @@ const RecentItem = ({ item }) => {
             {/* 이미지 default 값 필요 */}
             <img src={profileImgURL} alt="profile" />
           </div>
-          <p className="h1">{author?.nickname}</p>
-          <p className="t1">{author?.description}</p>
+          <p className="h1">{item?.nickname}</p>
+          <p className="t1">{item?.description}</p>
         </div>
       </Link>
     </div>

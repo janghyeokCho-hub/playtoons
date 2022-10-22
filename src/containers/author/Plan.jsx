@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { setAuthorPlans } from "@/modules/redux/ducks/author";
 import { getFileUrlFromServer } from "@API/fileService";
+import { getAuthorPlans as getAuthorPlansAPI } from "@API/authorService";
+import { useCallback } from "react";
 
 async function getFileURLData(hash, state) {
   const response = await getFileUrlFromServer(hash);
@@ -41,19 +40,19 @@ const PlanItem = ({ plan }) => {
   );
 };
 
-const Plan = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+const Plan = ({ item }) => {
   const [planData, setPlanData] = useState();
 
-  useEffect(() => {
-    if (!currentAuthor.plan) {
-      dispatch(setAuthorPlans({ authorId: currentAuthor.id }));
-    } else {
-      setPlanData(currentAuthor.plan);
+  const getAuthorPlans = useCallback(async () => {
+    const response = await getAuthorPlansAPI({ authorId: item?.id });
+    if (response?.status === 200) {
+      setPlanData(response.data.subscribeTiers);
     }
-  }, [dispatch, currentAuthor.id, currentAuthor.plan]);
+  }, [item]);
+
+  useEffect(() => {
+    getAuthorPlans();
+  }, [item]);
 
   return (
     <>
@@ -70,9 +69,8 @@ const Plan = () => {
 
       <div className="lst_mainplan">
         {planData &&
-          planData.subscribeTiers &&
-          planData.subscribeTiers.map((plan) => (
-            <PlanItem key={`plan_${plan.id}`} plan={plan} />
+          planData.map((plan, index) => (
+            <PlanItem key={`plan_${index}`} plan={plan} />
           ))}
       </div>
     </>

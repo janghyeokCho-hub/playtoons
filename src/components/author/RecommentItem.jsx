@@ -42,7 +42,7 @@ const RecommentItem = ({ item, callback }) => {
       <div className="box_profile _half">
         <Link
           to={{
-            pathname: "/author/post",
+            pathname: `/author/post/${item.id}`,
           }}
           state={{ item }}
           onClick={callback}

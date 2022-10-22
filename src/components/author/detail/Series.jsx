@@ -29,6 +29,7 @@ const Series = ({ id }) => {
   const location = useLocation();
   const postType = location?.state?.postType;
   const [series, setSeries] = useState(null);
+  console.log(series);
   const [posts, setPosts] = useState(null);
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
   const [isUnFollowPopupShow, setIsUnFollowPopupShow] = useState(false);
@@ -148,7 +149,7 @@ const Series = ({ id }) => {
               </button>
               <button type="button" className="btn01">
                 <FontAwesomeIcon icon={faCommentQuote} />
-                {post?.commnetCount}
+                {post?.reactionCount}
               </button>
             </div>
           </Link>
@@ -170,11 +171,11 @@ const Series = ({ id }) => {
                 <div className="rgh">
                   <button type="button" className="btn01">
                     <FontAwesomeIcon icon={faHeart} />
-                    {series?.likeCount || "likeCount 필드가 없음"}
+                    {series?.likeCount}
                   </button>
                   <button type="button" className="btn01">
                     <FontAwesomeIcon icon={faCommentQuote} />
-                    {series?.commentCount || "commentCount 필드가 없음"}
+                    {series?.reactionCount}
                   </button>
                   <button
                     type="button"

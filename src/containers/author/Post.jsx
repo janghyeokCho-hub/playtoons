@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,18 +10,32 @@ import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import PostItems from "@COMPONENTS/author/PostItems";
 import { setAuthorFollow } from "@API/authorService";
+import { getAuthor as getAuthorAPI } from "@API/authorService";
+import { useEffect } from "react";
 
 const Post = () => {
-  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
-  const backgroundImgURL = useFilePath(currentAuthor?.backgroundImage);
-  const profileImgURL = useFilePath(currentAuthor?.profileImage);
-
+  const params = useParams();
+  const id = params?.id;
+  const [author, setAuthor] = useState(null);
   const [selectTab, setSelectTab] = useState("POST");
+  const backgroundImgURL = useFilePath(author?.backgroundImage);
+  const profileImgURL = useFilePath(author?.profileImage);
+
+  const getAuthor = useCallback(async () => {
+    const response = await getAuthorAPI(id);
+    if (response?.status === 200) {
+      setAuthor(response.data.author);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    getAuthor();
+  }, []);
 
   const handleFollow = useCallback(
     async (type) => {
-      if (currentAuthor?.id) {
-        const response = await setAuthorFollow(type, currentAuthor.id);
+      if (author?.id) {
+        const response = await setAuthorFollow(type, author.id);
         if (type === "post") {
           if (response?.status === 201) {
             alert("SUCCESS");
@@ -36,7 +51,7 @@ const Post = () => {
         }
       }
     },
-    [currentAuthor]
+    [author]
   );
 
   return (
@@ -53,8 +68,8 @@ const Post = () => {
               {/* 이미지 default 값 필요 */}
               <img src={profileImgURL} alt="profile" />
             </div>
-            <p className="h1">{currentAuthor?.nickname}</p>
-            <p className="t1">{currentAuthor?.description}</p>
+            <p className="h1">{author?.nickname}</p>
+            <p className="t1">{author?.description}</p>
             <div className="btns">
               <Link
                 to=""
@@ -115,9 +130,9 @@ const Post = () => {
               </li>
             </ul>
           </div>
-          {selectTab === "POST" && <PostItems item={currentAuthor} />}
-          {selectTab === "SERIES" && <SeriesItems item={currentAuthor} />}
-          {selectTab === "PLAN" && <Plan item={currentAuthor} />}
+          {selectTab === "POST" && <PostItems item={author} />}
+          {selectTab === "SERIES" && <SeriesItems item={author} />}
+          {selectTab === "PLAN" && <Plan item={author} />}
         </div>
       </div>
     </div>

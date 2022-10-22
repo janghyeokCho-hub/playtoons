@@ -44,7 +44,7 @@ const App = () => {
           on: faHouseChimneyWindowON,
           off: faHouseChimneyWindowOFF,
         },
-        link: "/author/plan",
+        link: "",
       },
       {
         code: "timeline",
@@ -53,7 +53,7 @@ const App = () => {
           on: faInfinityON,
           off: faInfinityOFF,
         },
-        link: "/author/series",
+        link: "",
       },
     ],
     創作: [
@@ -73,7 +73,7 @@ const App = () => {
           on: faCartShoppingON,
           off: faCartShoppingOFF,
         },
-        link: "/author/store",
+        link: "",
       },
     ],
   };
@@ -83,7 +83,7 @@ const App = () => {
         <Routes>
           <Route path="store" element={<Store />} />
           <Route path="list" element={<List />} />
-          <Route path="post" element={<Post />} />
+          <Route path="post/:id" element={<Post />} />
           <Route path="register" element={<Register />} />
           <Route path="register/form" element={<RegisterForm />} />
           <Route path="detail/:type/:id" element={<Detail />} />
