@@ -24,13 +24,13 @@ const Curation = ({ item }) => {
   return (
     <Link to={`/post/detail/webtoon/${item.id}`}>
       <ContBgDiv className="cont" bgImg={thumbnailImgURL}>
-        <div>
+        <div style={{ color: "#fff" }}>
           <p className="b1">
             <span className="i-txt">おすすめ作品</span>
           </p>
           <p className="h1">{item.title}</p>
-          <p className="t1">{item.description}</p>
-          <p className="t2">{item?.author?.name}</p>
+          <p className="t1">{item.outline}</p>
+          <p className="t2">{item.author?.name}</p>
         </div>
       </ContBgDiv>
     </Link>

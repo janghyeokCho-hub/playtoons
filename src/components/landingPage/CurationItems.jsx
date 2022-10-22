@@ -18,7 +18,6 @@ const CurationItems = ({ curationNum }) => {
 
   const getCurationList = async (curationNum) => {
     const response = await getCurationListAPI(curationNum);
-    console.log("response : ", response);
     if (response.status === 200) {
       setItems(response.data.posts);
     }
@@ -83,14 +82,14 @@ const CurationItems = ({ curationNum }) => {
           <button
             ref={prevRef}
             type="button"
-            className={`swiper-button-prev bt_mainSlider4`}
+            className={`swiper-button-prev bt_mainSlider4 hide-m`}
           >
             <FontAwesomeIcon icon={faCircleChevronLeft} />
           </button>
           <button
             ref={nextRef}
             type="button"
-            className={`swiper-button-next bt_mainSlider4`}
+            className={`swiper-button-next bt_mainSlider4 hide-m`}
           >
             <FontAwesomeIcon icon={faCircleChevronRight} />
           </button>

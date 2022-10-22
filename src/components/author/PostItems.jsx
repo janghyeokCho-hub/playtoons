@@ -11,7 +11,6 @@ const PostItems = ({ item }) => {
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
-  const [typeId, setTypeId] = useState();
   const getPostTypes = async () => {
     const response = await getPostTypesAPI();
     if (response.status === 200) {

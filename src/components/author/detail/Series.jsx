@@ -20,6 +20,10 @@ import {
 import moment from "moment";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
+import {
+  getPostDetailFromServer as getPostDetilAPI,
+  getPostContent as getPostContentAPI,
+} from "@/services/postService";
 
 const Series = ({ id }) => {
   const location = useLocation();
@@ -81,46 +85,74 @@ const Series = ({ id }) => {
   }, [series]);
 
   const PostComponent = ({ item }) => {
-    const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+    const [post, setPost] = useState(null);
+    const [isLock, setIsLock] = useState(true);
+    const thumbnailImgURL = useFilePath(post?.thumbnailImage);
+
+    const getPost = useCallback(async () => {
+      const params = {
+        id: item.id,
+      };
+      const response = await getPostDetilAPI(params);
+      if (response.status === 200) {
+        setPost(response.data.post);
+      }
+    }, [item]);
+
+    const getPostContent = useCallback(async () => {
+      const response = await getPostContentAPI(item?.id);
+      if (response.status === 200) {
+        setIsLock(false);
+      } else {
+        setIsLock(true);
+      }
+    }, [item]);
+
+    useEffect(() => {
+      getPost();
+      getPostContent();
+    }, []);
 
     return (
       <li className="item">
-        <Link
-          to={`/post/detail/${postType}/${item?.id}`}
-          state={{ item: item }}
-        >
-          <div className="thumb">
-            <img src={thumbnailImgURL} alt="" />
+        {post && (
+          <Link
+            to={`/post/detail/${post.type.code}/${post?.id}`}
+            state={{ item: post }}
+          >
+            <div className="thumb">
+              <img src={thumbnailImgURL} alt="" />
 
-            {/* Lock 기준이 뭔지? 
-            <div className="area_lock">
-              <div>
-                <FontAwesomeIcon icon={faLock} />
-              </div>
+              {isLock && (
+                <div className="area_lock">
+                  <div>
+                    <FontAwesomeIcon icon={faLock} />
+                  </div>
+                </div>
+              )}
             </div>
-            */}
-          </div>
-          <div className="txt">
-            <p className="h1">
-              <span className="i-txt">支援</span>
-              {item?.title}
-            </p>
-            <p className="t1">{item?.description}</p>
-          </div>
-          <div className="botm">
-            <p className="d1">
-              {moment(item?.startAt).format("YYYY/MM/DD HH:mm")}
-            </p>
-            <button type="button" className="btn01">
-              <FontAwesomeIcon icon={faHeart} />
-              {item?.likeCount}
-            </button>
-            <button type="button" className="btn01">
-              <FontAwesomeIcon icon={faCommentQuote} />
-              {item?.commnetCount}
-            </button>
-          </div>
-        </Link>
+            <div className="txt">
+              <p className="h1">
+                <span className="i-txt">支援</span>
+                {post?.title}
+              </p>
+              <p className="t1">{post?.description}</p>
+            </div>
+            <div className="botm">
+              <p className="d1">
+                {moment(post?.startAt).format("YYYY/MM/DD HH:mm")}
+              </p>
+              <button type="button" className="btn01">
+                <FontAwesomeIcon icon={faHeart} />
+                {post?.likeCount}
+              </button>
+              <button type="button" className="btn01">
+                <FontAwesomeIcon icon={faCommentQuote} />
+                {post?.commnetCount}
+              </button>
+            </div>
+          </Link>
+        )}
       </li>
     );
   };

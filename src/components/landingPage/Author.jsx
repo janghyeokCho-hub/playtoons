@@ -23,7 +23,7 @@ const Author = ({ item }) => {
           <div className="icon">
             <img src={profileImgURL} alt="profile" />
           </div>
-          <p className="h1">{item.name}</p>
+          <p className="h1">{item.nickname}</p>
           <p className="t1">{item.description}</p>
         </div>
       </Link>

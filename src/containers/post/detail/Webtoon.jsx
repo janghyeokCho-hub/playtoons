@@ -115,7 +115,7 @@ const Webtoon = () => {
       likeCount: 123,
     },
   ];
-
+  console.log("currentPost : ", currentPost);
   return (
     <>
       {currentPost && (
@@ -130,7 +130,10 @@ const Webtoon = () => {
             </div>
 
             <div className="area_webtoon">
-              <img src={contentURL} alt="" />
+              <img
+                src={contentURL || require("@IMAGES/sampleImage.png")}
+                alt=""
+              />
               {/* 잠금 시작 */}
               {isLock && (
                 <div className="area_lock">

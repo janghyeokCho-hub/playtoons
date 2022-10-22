@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -12,7 +12,6 @@ import {
   getPostDetailFromServer as getPostDetilAPI,
   getPostContent as getPostContentAPI,
 } from "@/services/postService";
-import { useCallback } from "react";
 
 const PostItem = ({ item }) => {
   const [post, setPost] = useState(null);

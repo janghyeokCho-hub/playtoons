@@ -130,7 +130,10 @@ const Novel = () => {
             </div>
 
             <div className="area_novel">
-              <img src={contentURL} alt="" />
+              <img
+                src={contentURL || require("@IMAGES/sampleImage.png")}
+                alt=""
+              />
               {isLock && (
                 <div className="area_lock">
                   <div>

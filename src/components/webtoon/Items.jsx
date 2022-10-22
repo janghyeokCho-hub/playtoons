@@ -16,6 +16,11 @@ import SearchPopup from "@COMPONENTS/webtoon/SearchPopup";
 const Items = ({ tab, typeId }) => {
   const orderByMenus = [
     {
+      // 신작순
+      code: "recent",
+      name: "新着順",
+    },
+    {
       // 추천순
       code: "recommend",
       name: "おすすめ順",
@@ -24,11 +29,6 @@ const Items = ({ tab, typeId }) => {
       // 평가순
       code: "rank",
       name: "評価順",
-    },
-    {
-      // 신작순
-      code: "recent",
-      name: "新着順",
     },
   ];
   const [items, setItems] = useState([]);
@@ -41,24 +41,32 @@ const Items = ({ tab, typeId }) => {
   const [tags, setTags] = useState([]);
   const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
+  const [searchText, setSearchText] = useState(null);
 
   const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
     delete params["completed"];
     delete params["series"];
     delete params["short"];
 
-    params.type = typeId;
+    params.typeId = typeId;
     params.orderKey = selectOrderBy.code;
     params.order = "DESC";
+    params.limit = 16;
+
     if (tab === "COMPLETED") {
-      params.completed = 1;
+      params.completed = true;
     } else if (tab === "SERIES") {
-      params.series = 1;
+      params.series = true;
     } else if (tab === "SHORT") {
-      params.short = 1;
+      params.short = true;
+    }
+
+    if (!params?.page) {
+      params["page"] = 1;
     }
 
     const response = await getPostListAPI(params, tags);
+    console.log("response : ", response);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
@@ -71,7 +79,10 @@ const Items = ({ tab, typeId }) => {
   }, [tab]);
 
   useEffect(() => {
-    getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+    if (typeId !== undefined) {
+      //typeId가 준비되지 않은 상태에서도 api 날아가는걸 방지
+      getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
+    }
   }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
 
   useEffect(() => {
@@ -97,6 +108,10 @@ const Items = ({ tab, typeId }) => {
       setIsAllCategory(false);
     }
   }, [selectTags]);
+
+  useEffect(() => {
+    handleURLQueryChange("keyword", searchText);
+  }, [searchText]);
 
   /**
    * 검색 쿼리 String
@@ -135,7 +150,7 @@ const Items = ({ tab, typeId }) => {
   );
 
   const handleSearch = (searchText) => {
-    handleURLQueryChange("keyword", searchText);
+    setSearchText(searchText);
   };
 
   const pagination = useMemo(() => {
@@ -222,7 +237,8 @@ const Items = ({ tab, typeId }) => {
             className="btn_sch_input"
             onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
           >
-            <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
+            <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
+            {searchText || "ハッシュタグ検索"}
           </button>
           {tags &&
             tags.map((tag, index) => {
