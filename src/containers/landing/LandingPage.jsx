@@ -16,7 +16,6 @@ const LandingPage = () => {
 
   const getNotice = useCallback(async () => {
     const response = await getEmergencyNotice();
-    console.log(response);
     if (response?.status === 200) {
       setNotice(response.data?.notice);
       if (response.data?.notice) {
