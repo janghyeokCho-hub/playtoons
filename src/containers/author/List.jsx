@@ -15,7 +15,6 @@ const List = () => {
   const getAuthorRecents = useCallback(async () => {
     const response = await getAuthorRecentAPI();
     if (response?.status === 200) {
-      console.log(response.data);
       setRecents(response.data.authors);
     }
   }, []);

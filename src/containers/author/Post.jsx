@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/pro-solid-svg-icons";
@@ -16,8 +15,12 @@ import { useEffect } from "react";
 const Post = () => {
   const params = useParams();
   const id = params?.id;
+
+  const location = useLocation();
+  const tab = location?.state?.tab;
+
   const [author, setAuthor] = useState(null);
-  const [selectTab, setSelectTab] = useState("POST");
+  const [selectTab, setSelectTab] = useState(tab ? tab : "POST");
   const backgroundImgURL = useFilePath(author?.backgroundImage);
   const profileImgURL = useFilePath(author?.profileImage);
 

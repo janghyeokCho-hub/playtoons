@@ -142,9 +142,13 @@ const Novel = () => {
                     </p>
                     <p>500PC /月</p>
                     <p>クリエイターを支援してコンテンツ解禁！</p>
-                    <a href="#" className="btn-pk s blue bdrs">
+                    <Link
+                      to={`/author/post/${currentPost?.author?.id}`}
+                      state={{ tab: "PLAN" }}
+                      className="btn-pk s blue bdrs"
+                    >
                       <span>支援する</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               )}

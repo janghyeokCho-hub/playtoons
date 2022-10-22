@@ -29,7 +29,6 @@ const Series = ({ id }) => {
   const location = useLocation();
   const postType = location?.state?.postType;
   const [series, setSeries] = useState(null);
-  console.log(series);
   const [posts, setPosts] = useState(null);
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
   const [isUnFollowPopupShow, setIsUnFollowPopupShow] = useState(false);

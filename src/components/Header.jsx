@@ -34,7 +34,6 @@ const Header = ({
   const location = useLocation();
   const navigate = useNavigate();
   const userInfo = useSelector(({ login }) => login.userInfo);
-  console.log(userInfo);
   const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
   const [renderType, setRenderType] = useState(null);

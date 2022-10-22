@@ -7,7 +7,6 @@ import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { useCallback } from "react";
 
 const PostItems = ({ item }) => {
-  console.log(item);
   const [posts, setPosts] = useState([]);
 
   /** ===== Post type API Start ===== */
