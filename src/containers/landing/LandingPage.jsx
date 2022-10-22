@@ -12,12 +12,18 @@ import moment from "moment";
 
 const LandingPage = () => {
   const [notice, setNotice] = useState(null);
+  const [isNoticeShow, setIsNoticeShow] = useState(false);
 
   const getNotice = useCallback(async () => {
     const response = await getEmergencyNotice();
     console.log(response);
     if (response?.status === 200) {
       setNotice(response.data?.notice);
+      if (response.data?.notice) {
+        setIsNoticeShow(true);
+      } else {
+        setIsNoticeShow(false);
+      }
     }
   }, []);
 
@@ -29,7 +35,7 @@ const LandingPage = () => {
     <>
       <Header isMenus={false} />
       <div id="container" className="container landing">
-        {notice && (
+        {notice && isNoticeShow && (
           <div className="main_notice">
             <p>
               {notice.content} <br className="view-m" />{" "}
@@ -37,7 +43,11 @@ const LandingPage = () => {
                 "YYYY年MM月DD日 HH時mm分"
               )}
             </p>
-            <button type="button" className="btn_del">
+            <button
+              type="button"
+              className="btn_del"
+              onClick={() => setIsNoticeShow(false)}
+            >
               <FontAwesomeIcon icon={faCircleXmark} />
             </button>
           </div>
