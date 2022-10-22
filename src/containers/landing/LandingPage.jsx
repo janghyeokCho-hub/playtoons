@@ -1,28 +1,47 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Header from "@/components/Header";
+import Footer from "@COMPONENTS/Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
-import Footer from "@COMPONENTS/Footer";
 import CurationItems from "@COMPONENTS/landingPage/CurationItems";
 import AuthorItems from "@COMPONENTS/landingPage/AuthorItems";
 import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
 import { Link } from "react-router-dom";
+import { getEmergencyNotice } from "@/services/noticeService";
+import moment from "moment";
 
 const LandingPage = () => {
+  const [notice, setNotice] = useState(null);
+
+  const getNotice = useCallback(async () => {
+    const response = await getEmergencyNotice();
+    console.log(response);
+    if (response?.status === 200) {
+      setNotice(response.data?.notice);
+    }
+  }, []);
+
+  useEffect(() => {
+    getNotice();
+  }, []);
+
   return (
     <>
       <Header isMenus={false} />
       <div id="container" className="container landing">
-        <div className="main_notice">
-          <p>
-            クレジットカードのメンテナンスお知らせ <br className="view-m" />
-            2022年6月14日 07時00分
-          </p>
-          <button type="button" className="btn_del">
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
-        </div>
-
+        {notice && (
+          <div className="main_notice">
+            <p>
+              {notice.content} <br className="view-m" />{" "}
+              {moment(notice?.startAt || "2022/06/14 07:00").format(
+                "YYYY年MM月DD日 HH時mm分"
+              )}
+            </p>
+            <button type="button" className="btn_del">
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </button>
+          </div>
+        )}
         <div className="main_visual">
           <div className="inr-c">
             <div className="thumb">

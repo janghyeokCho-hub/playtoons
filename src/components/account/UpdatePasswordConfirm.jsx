@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const UpdatePasswordConfirm = () => {
   const isLogined = useSelector(({ login }) => login.isLogined);
+  const userInfo = useSelector(({ login }) => login.userInfo);
   const navigate = useNavigate();
   const [password, setPassword] = useState(null);
   const passwordRef = useRef(null);
@@ -59,7 +60,10 @@ const UpdatePasswordConfirm = () => {
       return;
     }
 
-    const response = await updateAccount({ password });
+    const response = await updateAccount({
+      email: userInfo.email,
+      password: password,
+    });
     const { status } = response;
     if (status === 200) {
       /**
@@ -70,7 +74,7 @@ const UpdatePasswordConfirm = () => {
       setIsConfirmErrorShow(true);
       setConfirmErrorMsg(`코드 참조 : ${status}`);
     }
-  }, [password, rePassword, navigate]);
+  }, [password, rePassword, userInfo, navigate]);
 
   return (
     <>

@@ -182,7 +182,7 @@ const Header = ({
                       </button>
                     </div>
                     <div className="bt">
-                      <p className="t2">{userInfo?.name || ""}</p>
+                      <p className="t2">{userInfo?.name || userInfo?.email}</p>
                       <p className="t1">保有ポイント</p>
                       <p className="c1">
                         <span className="c-blue">100,324,394</span>
