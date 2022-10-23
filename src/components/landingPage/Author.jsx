@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import useFilePath from "@/hook/useFilePath";
 import { Link } from "react-router-dom";
@@ -9,12 +9,7 @@ const Author = ({ item }) => {
 
   return (
     <div className="box_profile">
-      <Link
-        to={{
-          pathname: "/author/post",
-        }}
-        state={{ item: item }}
-      >
+      <Link to={`/author/post/${item.id}`} state={{ item: item }}>
         <ImgTmpProfileBgDiv
           className="pf_thumb"
           bgImg={backgroundImgURL}

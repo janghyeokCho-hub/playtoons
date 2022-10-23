@@ -11,6 +11,7 @@ import PostItems from "@COMPONENTS/author/PostItems";
 import { setAuthorFollow } from "@API/authorService";
 import { getAuthor as getAuthorAPI } from "@API/authorService";
 import { useEffect } from "react";
+import SharePopup from "@COMPONENTS/author/detail/SharePopup";
 
 const Post = () => {
   const params = useParams();
@@ -21,6 +22,7 @@ const Post = () => {
 
   const [author, setAuthor] = useState(null);
   const [selectTab, setSelectTab] = useState(tab ? tab : "POST");
+  const [isSharePopupShow, setIsSharePopupShow] = useState(false);
   const backgroundImgURL = useFilePath(author?.backgroundImage);
   const profileImgURL = useFilePath(author?.profileImage);
 
@@ -88,10 +90,14 @@ const Post = () => {
               >
                 フォロー
               </Link>
-              <a href="#" className="btn-pk n blue2">
+              <Link
+                to=""
+                className="btn-pk n blue2"
+                onClick={() => setIsSharePopupShow(true)}
+              >
                 <FontAwesomeIcon icon={faShare} />
                 共有する
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -138,6 +144,10 @@ const Post = () => {
           {selectTab === "PLAN" && <Plan item={author} />}
         </div>
       </div>
+
+      {isSharePopupShow && (
+        <SharePopup onClose={() => setIsSharePopupShow(false)} />
+      )}
     </div>
   );
 };
