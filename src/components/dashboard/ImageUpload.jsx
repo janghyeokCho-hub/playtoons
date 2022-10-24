@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 import { getFileUrlFromServer } from '@/services/dashboardService';
 import ErrorMessage from './ErrorMessage';
+import { FILE_MAX_SIZE } from '@/common/constant';
 
 /**
  * 
@@ -40,7 +41,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   const { className, preview, text, name, id, callback, previewHash } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
   const [stateError, setStateError] = useState(undefined);
-
+  
   /**
   *
      업로드 전 preview 생성
@@ -99,7 +100,9 @@ export default forwardRef(function ImageUpload(props, ref) {
     },
     noDragEventsBubbling: true,
     noKeyboard: true,
-    // noClick: true
+    maxSize: FILE_MAX_SIZE,
+    onDropAccepted: (accept) => setStateError(undefined),
+    onDropRejected: (reject) => handleRejected(reject),
   }); //isDragActive
   const InputProps = {
     ...getInputProps(),
@@ -111,6 +114,19 @@ export default forwardRef(function ImageUpload(props, ref) {
     ...getRootProps(),
   };
   //==============================================================================
+
+  const handleRejected = (reject) => {
+    let message = '';
+    for( let i = 0; i < reject[0].errors.length; i++ ){
+      message += reject[0].errors[i].message;
+
+      if( i !== reject[0].errors.length - 1 ){
+        message += ' and ';
+      }
+    }
+    
+    setStateError(message);
+  };
 
   const handlePreviewClose = () => {
     setStateImage(initImageObject);

@@ -7,13 +7,17 @@ import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
-import { getFromDataJson, } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
 import { getAuthorMineFromServer } from "@/services/postService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { result } from "lodash";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
 
 
 const text = {
@@ -36,14 +40,20 @@ const text = {
   tag_name: "タグ名",
   input_image: "置いてください。",
   select_timeline: "サムネイル選択",
+  please_input_cover: '表紙を入力してください。',
+  please_input_thumbnail: 'サムネイルを入力してください。',
+  please_input_title: 'タイトルを入力してください。',
+  please_input_description: '説明を入力してください。',
+  error_title: 'お知らせ',
 };
 
 export default function DashboardUploadSeries(props) {
   const navigate = useNavigate();
-  const [ stateTypeList, setStateTypeList ] = useState(undefined);
-  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
   const [ stateType, setStateType ] = useState(undefined);
-  const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+  const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+  const dispatch = useDispatch();
+  const refTitle = useRef();
+  const refDescription = useRef();
   const refR19 = useRef();
   const refCoverImage = useRef();
   const refTimelineImage = useRef();
@@ -61,6 +71,18 @@ export default function DashboardUploadSeries(props) {
   * @return
   */
   const callbackTimeline = () => {
+
+    //필드 확인 
+    if( refTitle.current.isEmpty() ){
+			refTitle.current.setError( text.please_input_title );
+			return;
+		}
+
+    if( refDescription.current.isEmpty() ){
+			refDescription.current.setError( text.please_input_description );
+			return;
+		}
+
     //call series 작성 api 
     // "title": "string",               
     // "typeId": "string",
@@ -86,10 +108,9 @@ export default function DashboardUploadSeries(props) {
       coverImage: refCoverImage.current.getImageInfo().value,
       thumbnailImage: refTimelineImage.current.getImageInfo().value,
       tagIds: refTags.current.getTagsJsonObject(),
-      rating: getRating(),
-      // keyword: "",
+      rating: getRatingToChecked(refR19),
       status: "enabled",
-      authorId: myAuthors[0].id     //author 가 아니면 못옴
+      authorId: reduxAuthors[0].id     //author 가 아니면 못옴
     };
 
     console.log("post/series", json);
@@ -97,19 +118,17 @@ export default function DashboardUploadSeries(props) {
   };
 
   const callbackCoverImage = () => {
-    console.log('callbackCoverImage');
     //upload 할 이미지가 있다면
     if( refTimelineImage.current.getImageFile() === undefined ){
-      callbackTimeline();
+      refTimelineImage.current.setError( text.please_input_thumbnail );
+      // callbackTimeline();
     }
     else{
+      refTimelineImage.current.setError( undefined );
       setImageToServer(refTimelineImage, 'thumbnail');
     }
   };
 
-  const getRating = () => {
-    return refR19.current.checked ? 'R-18' : 'G';
-  };
 
   //==============================================================================
   // api function 
@@ -125,14 +144,14 @@ export default function DashboardUploadSeries(props) {
   const setImageToServer = async(ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    params.append("authorId", "");               
+    params.append("authorId", reduxAuthors[0].id);               
     params.append("subscribeTierId", "");        
     params.append("productId", "");
     params.append("type", "image");                 //image, video, binary
-    params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("usage", usage);                  //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("loginRequired", false);          //언제 체크해서 보내는건지?
     params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRating());                   //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("rating", getRatingToChecked(refR19));    
     params.append("file", ref.current.getImageFile());
     
     console.log("set file params", params);
@@ -146,47 +165,43 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
-      console.log('Error : ', status, resultData);
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(resultData)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
   };
 
-  const getTypeList = async () => {
-    const {status, data: result} = await getPostTypeListFromServer();
-
-    if( status === 200 ){
-      setStateTypeList(result?.types);
-    }
-    else{
-      //error 처리
-    }
-  };
-  
-  const getCategoryList = async (type) => {
-    const {status, data: result} = await getPostCategoryListFromServer(type);
-    console.log('setCategoryList', status, result);
-    
-    if( status === 200 ){
-      setStateCategoryList(result?.categories);
-    }
-    else{
-      //error 처리
-      
-    }
-    
-  };
 
   const setSeries = async (params) => {
     const {status, data: result} = await setSeriesToServer(JSON.stringify(params));
     console.log('setSeries', status, result);
     
     if( status === 201 ){
-      if( window.confirm('series 登録を完了しました。') ){
-        navigate('/dashboard/series');
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'シリーズ登録しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate('/dashboard/series')}
+          }
+        )
+      );
     }
     else{
       //error 처리
-      alert( String(status, result) );
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(result)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
   };
 
@@ -205,39 +220,29 @@ export default function DashboardUploadSeries(props) {
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
     //upload 할 이미지가 없다면 
     if( refCoverImage.current.getImageFile() === undefined ){
-      callbackCoverImage();
+      refCoverImage.current.setError( text.please_input_cover );
+      // callbackCoverImage();
     }
     else{
       //이미지 업로드 후 image url 
+      refCoverImage.current.setError( undefined );
       setImageToServer(refCoverImage, 'cover');
     }
   };
 
   const handlePreview = (e) => {
     console.log("handlePreview", refR19);
-
-    getAuthor();
   };
 
-  const getAuthor = async () => {
-    
-  };
 
   //==============================================================================
   // render
   //==============================================================================
 
   useEffect(() => {
-    //get types
-    getTypeList();
+    
   }, []);
 
-  //get category at first time
-  useEffect(() => {
-    if( stateTypeList !== undefined ){
-      getCategoryList(stateTypeList[0].code);
-    }
-  }, [stateTypeList]);
 
   return (
     <Container
@@ -256,7 +261,7 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.title}</h3>
-                <input name="title" type="text" className="inp_txt w100p" />
+                <Input ref={refTitle} name="title" type="text" className="inp_txt w100p" />
               </div>
 
               <div className="col">
@@ -283,7 +288,7 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.summary}</h3>
-                <textarea name="description" id="description" className="textarea1"></textarea>
+                <Textarea ref={refDescription} name="description" id="description" className="textarea1"></Textarea>
               </div>
 
               <div className="col">

@@ -11,13 +11,17 @@ import { editPostSeriesToServer, getPostCategoryListFromServer, getPostTypeListF
 
 import tempCoverImage from '@IMAGES/tmp_comic2.jpg';
 import tempTimelineImage from '@IMAGES/temp_seller_image.png';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
 import Tag from "@/components/dashboard/Tag";
-import { getFromDataJson, getRatingToChecked } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked } from "@/common/common";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPostIdMineFromServer } from "@/services/postService";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
 
 
 const text = {
@@ -40,20 +44,11 @@ const text = {
   tag_name: "タグ名",
   input_image: "置いてください。",
   select_timeline: "サムネイル選択",
-};
-
-
-const tempData = {
-  thumbList: [tempTimelineImage, undefined, undefined, undefined, undefined, undefined, undefined, undefined, ],
-  tagList: ["#アクション", "#異世界"],
-  summary: "No.13の災害後、人類はシェルターにバラバラに散った。<br />そして、奇妙なロボット”クモ”の出現によりシェルター周辺に防壁が張り<br />巡らされた。クモと戦う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。そこで、レンジャーたちは人間と機械を融合する<br />アダマ手術を施し、クモに挑むが…果たしてレンジャーたちの行く末は..? <br />クモの正体、そして突如現れた謎の組織カンパニーヌルの正体とは…?!",
-  title: "シェルターアーク・世界を滅ぼすものたち",
-  category: "アクション",
-  grade: "R18",
-  status: "連載中",
-  type: "マンガ",
-  typeCode: "photo",
-  main_image: tempCoverImage,
+  please_input_cover: '表紙を入力してください。',
+  please_input_thumbnail: 'サムネイルを入力してください。',
+  please_input_title: 'タイトルを入力してください。',
+  please_input_description: '説明を入力してください。',
+  error_title: 'お知らせ',
 };
 
 
@@ -61,8 +56,11 @@ export default function DashboardUploadSeries(props) {
   const reduxSeriesDetail = useSelector(({dashboard}) => dashboard?.series );
   const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const params = useParams('id');
   const refForm = useRef();
+  const refTitle = useRef();
+  const refDescription = useRef();
   const refTags = useRef();
   const refR19 = useRef();
   const refCoverImage = useRef();
@@ -72,12 +70,6 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
   // function
   //==============================================================================
-
-  const setCheckedFromSeriesDetailInfo = () => {
-    if( reduxSeriesDetail?.rating === 'R-18' ){
-      refR19.current.checked = true;
-    }
-  };
 
   const getCheckedToSeriesDetail = () => {
       return reduxSeriesDetail.rating === 'R-18';
@@ -129,27 +121,39 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
-      refImage.current.setError( String(status, data) );
+      refImage.current.setError( String(status, getErrorMessageFromResultCode(data)) );
     }
   };
 
 
   const editSeries = async () => {
+    
+    //필드 확인 
+    if( refTitle.current.isEmpty() ){
+			refTitle.current.setError( text.please_input_title );
+			return;
+		}
+
+    if( refDescription.current.isEmpty() ){
+			refDescription.current.setError( text.please_input_description );
+			return;
+		}
+
+    if( refCoverImage.current.checkToEmpty() ){
+      refCoverImage.current.setError( text.please_input_cover );
+      return;
+    }
+
+    if( refTimeline.current.checkToEmpty() ){
+      refTimeline.current.setError( text.please_input_thumbnail );
+      return;
+    }
+    
     //"titleKana": "string",
     //"code": "string",
     //"labelId": "string",
     //"publisherId": "string",
     //"status": "pending",
-    if( refCoverImage.current.checkToEmpty() ){
-      refCoverImage.current.setError('サムネイルが必要です。');
-      return false;
-    }
-
-    if( refTimeline.current.checkToEmpty() ){
-      refTimeline.current.setError('サムネイルが必要です。');
-      return false;
-    }
-
     let json = getFromDataJson(refForm);
     json = {
       ...json,
@@ -174,13 +178,26 @@ export default function DashboardUploadSeries(props) {
 
     const {status, data} = await editPostSeriesToServer(json);
     if( status === 200 ){
-      if( window.confirm('シリーズ修正しました。') ){
-        navigate(`/dashboard/series/detail/${params.id}`);
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'シリーズ修正しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/series/detail/${params.id}`)}
+          }
+        )
+      );
     }
     else{
       //error 처리
-      alert( String(status, data) );
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
   };
  
@@ -209,7 +226,7 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
   
   useEffect(() => {
-    setCheckedFromSeriesDetailInfo();
+    
   }, [reduxSeriesDetail]);
   
 
@@ -230,7 +247,7 @@ export default function DashboardUploadSeries(props) {
             <form ref={refForm}>
               <div className="col">
                 <h3 className="tit1">{text.title}</h3>
-                <input name="title" type="text" className="inp_txt w100p" defaultValue={reduxSeriesDetail?.title} />
+                <Input ref={refTitle} name="title" type="text" className="inp_txt w100p" defaultValue={reduxSeriesDetail?.title} />
               </div>
 
               <div className="col">
@@ -255,12 +272,12 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.setting_adult}</h3>
-                <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" defaultChecked={getCheckedToSeriesDetail} /><span>{text.r_19}</span></label>
+                <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" defaultChecked={getCheckedToSeriesDetail()} /><span>{text.r_19}</span></label>
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.summary}</h3>
-                <textarea name="description" id="description" className="textarea1" defaultValue={reduxSeriesDetail?.description} />
+                <Textarea ref={refDescription} name="description" id="description" className="textarea1" defaultValue={reduxSeriesDetail?.description} />
               </div>
 
               <div className="col">
@@ -314,16 +331,16 @@ export default function DashboardUploadSeries(props) {
           </section>
 
           <div className="bbs_write_botm">
-            <a className="btn-pk n blue2">
-              <div className="pull_width" onClick={handlePreview}>
+            <div className="btn-pk n blue2" onClick={handlePreview}>
+              <div className="pull_width" >
                 <span>{text.preview}</span>
               </div>
-            </a>
-            <a className="btn-pk n blue">
-              <div className="pull_width" onClick={handleRegister}>
+            </div>
+            <div className="btn-pk n blue" onClick={handleRegister}>
+              <div className="pull_width" >
                 <span>{text.register}</span>
               </div>
-            </a>
+            </div>
           </div>
         
         </div>

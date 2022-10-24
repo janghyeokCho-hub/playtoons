@@ -58,7 +58,7 @@ export default function Category(props, ref) {
         dataList={stateList}
         handleItemClick={handleClickItem} />
 
-        <ErrorMessage error={stateError} />
+      <ErrorMessage error={stateError} />
     </>
   );
 }

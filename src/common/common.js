@@ -1,4 +1,5 @@
 import { getFileUrlFromServer } from "@API/fileService";
+import { RESULT_CODE_LIST } from "./constant";
 /**
  * Email validation
  * @param {string} text
@@ -151,4 +152,26 @@ export const getParamsToQuery = (params, tags) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+/**
+*
+   response 의 result code로 에러메세지를 리턴받는다.
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param response api response
+* @return 에러메세지
+*/
+export const getErrorMessageFromResultCode = (response) => {
+  let returnMessage = '';
+
+  for( let i = 0; i < RESULT_CODE_LIST.length; i++ ){
+    if( RESULT_CODE_LIST[i].code === response?.result ){
+      returnMessage = String(RESULT_CODE_LIST[i].name, ' ', response?.message);
+      break;
+    }
+  }
+  
+  return returnMessage;
 };

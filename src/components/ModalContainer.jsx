@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Modal from "@/components/Modal";
 
 export default function ModalContainer() {
-  const alertModal = useSelector((state) => state.alertModal);
+  const alertModal = useSelector(({alertModal}) => alertModal);
 
   return (
     <>
@@ -12,8 +12,8 @@ export default function ModalContainer() {
         alertModal.show && 
         <Modal  
             show={alertModal.show}
+            title={alertModal.title} 
             contents={alertModal.contents} 
-            callback={alertModal.callback} 
             /> 
       }
     </>

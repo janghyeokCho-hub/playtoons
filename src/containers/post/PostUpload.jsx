@@ -6,13 +6,16 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Tag from "@/components/dashboard/Tag";
 import { setFileToServer } from "@/services/dashboardService";
-import { getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson } from "@/common/common";
 import { setPostToServer } from "@/services/postService";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Series from "@/components/post/Series";
 import { useNavigate } from "react-router-dom";
+import Input from "@/components/dashboard/Input";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 
 const text = {
@@ -37,6 +40,11 @@ const text = {
   type_movie: "映像",
   label_can_not_edit: "編集不可",
   input_image: "置いてください。",
+  please_input_content: '表紙を入力してください。',
+  please_input_thumbnail: 'サムネイルを入力してください。',
+  please_input_title: 'タイトルを入力してください。',
+  please_input_number: '話を入力してください。',
+  error_title: 'お知らせ',
 };
 
 const supportorList = [
@@ -62,6 +70,9 @@ export default function UploadPost(props) {
   const [stateType, setStateType] = useState(undefined);
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const refTitle = useRef();
+  const refNumber = useRef();
   const refContents = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
@@ -72,16 +83,14 @@ export default function UploadPost(props) {
   //==============================================================================
 
   const callbackThumbnailImageAfterUpload = (imageInfo) => {
-    console.log('callbackThumbnailImageAfterUpload');
     //[post] '/post' upload
     setPost();
   };
 
   const callbackContentImageAfterUpload = (imageInfo) => {
-    console.log('callbackContentImageAfterUpload');
     //thumbnailImage upload
     if( refThumbnail.current.getImageFile() === undefined ){
-      callbackThumbnailImageAfterUpload();
+      refThumbnail.current.setError( text.please_input_thumbnail );
     }
     else{
       setImageToServer( refThumbnail, 'thumbnail' );
@@ -113,11 +122,24 @@ export default function UploadPost(props) {
     }
     else{
       //error 처리
-      ref.current.setError( String(status, resultData) );
+      ref.current.setError( String(status, getErrorMessageFromResultCode(resultData)) );
     }
   };
 
   const setPost = async () => {
+
+    //check filed
+    //필드 확인 
+    if( refTitle.current.isEmpty() ){
+			refTitle.current.setError( text.please_input_title );
+			return;
+		}
+
+    if( refNumber.current.isEmpty() ){
+			refNumber.current.setError( text.please_input_description );
+			return;
+		}
+
     /*
     {
       "authorId": "string",
@@ -155,12 +177,25 @@ export default function UploadPost(props) {
     console.log('setPost', status, data);
     
     if( status === 201 ){
-      if( window.confirm('post 登録を完了しました。') ){
-        navigate('/dashboard/post');
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'投稿登録しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/post`)}
+          }
+        )
+      );
     }
     else{
-      alert( String(status, data) );
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
     
   };
@@ -169,24 +204,21 @@ export default function UploadPost(props) {
   // event
   //==============================================================================
   const handleClickType = (typeItem) => {
-    console.log('handleClickType', typeItem);
     setStateType(typeItem);
   };
   
-  const handleClickItemCategory = (event) => {
-    console.log('ItemCategory', event);
+  const handleClickItemSubscribeTier = (event) => {
+    console.log('handleClickItemSubscribeTier', event);
     
   };
 
   const handleClickPreview = (event) => {
-    console.log('Preview', event);
-    
     
   };
   
   const handleClickRegister = (event) => {
     if( refContents.current.getImageFile() === undefined ){
-      callbackContentImageAfterUpload();
+      refContents.current.setError( text.please_input_content );
     }
     else{
       //content upload
@@ -250,12 +282,12 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.title}</h3>
-                <input type="text" className="inp_txt w100p" name={"title"} />
+                <Input ref={refTitle} type="text" className="inp_txt w100p" name={"title"} />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.episode}</h3>
-                <input type="text" className="inp_txt w100p" name={"number"}/>
+                <Input ref={refNumber} type="text" className="inp_txt w100p" name={"number"}/>
               </div>
 
 
@@ -286,7 +318,7 @@ export default function UploadPost(props) {
                   name={"subscribeTierId"}
                   className={"select1 wid1"}
                   dataList={stateSupportorList}
-                  handleItemClick={handleClickItemCategory} />
+                  handleItemClick={handleClickItemSubscribeTier} />
               </div>
 
               <div className="col">

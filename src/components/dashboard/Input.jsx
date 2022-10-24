@@ -14,6 +14,7 @@ export default forwardRef( function Input(props, ref) {
   useImperativeHandle(ref, () => ({
     setError: (msg) => {
       setStateError(msg);
+      refInput.current.focus();
     },
     getValue: () => {
       return refInput.current.value;

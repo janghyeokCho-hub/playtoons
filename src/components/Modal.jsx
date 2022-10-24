@@ -1,9 +1,6 @@
 import React, { useEffect, useRef} from 'react';
 import { useDispatch } from 'react-redux';
-// import {hideModal, MODAL_DESIGN_TYPE} from '../modules/redux/ducks/modal'
-import styled from 'styled-components';
 
-import iconClose from '@ICONS/icon_close_black.png'
 import useOutSideClick from '@/common/useOutSideClick';
 import { useImperativeHandle, forwardRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,15 +15,24 @@ import { hideModal } from '@/modules/redux/ducks/modal';
     import { useDispatch } from "react-redux";
     
     const dispatch = useDispatch();
-    dispatch(showModal({contents: <>{no}支援管理 準備しています。</>, callback: ()=> {console.log('first')}}));
+    dispatch(
+      showModal(
+        {
+          title: 'お知らせ', 
+          contents: <ErrorPopup message={getErrorMessageFromResultCode(result)} buttonTitle={'確認'} />, 
+          callback: ()=> {console.log('callback')}
+        }
+      )
+    );
     dispatch(hideModal());
 *
 * @version 1.0.0
 * @author 이현국
 */
 export default forwardRef( function Modal(props, ref) {    
-  const { show, contents, callback } = props;
+  const { show, title, contents } = props;
   const [ stateIsShow, setStateIsShow ] = useState(false);
+  const [ stateTitle, setStateTitle ] = useState(undefined);
   const [ stateContent, setStateContent ] = useState(undefined);
   const dispatch = useDispatch();
   const refPopup = useRef();
@@ -35,13 +41,12 @@ export default forwardRef( function Modal(props, ref) {
   const handleClose = () => {
     setStateIsShow(false);
     dispatch(hideModal());
-
-    callback?.();
   }
 
   
   useImperativeHandle(ref, () => ({
-    setContent: (content) => {
+    setContent: (title, content) => {
+      setStateTitle(title);
       setStateContent(content);
       setStateIsShow(true);
     },
@@ -65,6 +70,14 @@ export default forwardRef( function Modal(props, ref) {
     }
   }, [contents]);
 
+  useEffect(() => {
+    setStateTitle(title);
+    
+    return () => {
+      setStateTitle(undefined);
+    }
+  }, [title]);
+
 
   return (
     <>
@@ -74,14 +87,14 @@ export default forwardRef( function Modal(props, ref) {
             <div ref={refPopup}  id="popTerms" className="layerPopup pop_terms">
               <div className="popup">
                 <div className="pop_head">
-                  <h2 className="title"> </h2>
+                  <h2 className="title">{stateTitle}</h2>
                   <FontAwesomeIcon
                     icon={faXmarkLarge}
                     className="btn_pop_close"
                     onClick={handleClose}
                   />
                 </div>
-                <div className="pop_cont">
+                <div className="pop_cont ta_center">
                   {stateContent}
                 </div>
               </div>

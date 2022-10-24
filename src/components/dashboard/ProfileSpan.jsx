@@ -18,8 +18,8 @@ import { useState } from "react";
 * @param alt img 태그에 들어갈 alt attribute
 * @return
 */
-export default function Image(props) {
-  const { alt, hash, className } = props;
+export default function ProfileSpan(props) {
+  const { hash, className } = props;
   const [stateImage, setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
@@ -41,5 +41,5 @@ export default function Image(props) {
     }
   }, [hash]);
 
-  return <img className={className} src={stateImage} alt={alt} />;
+  return <span className={className} style={{backgroundImage: `url(${stateImage})`}}></span>
 }
