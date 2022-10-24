@@ -1,8 +1,25 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { reportReaction } from "@API/reactionService";
+import { useCallback } from "@storybook/addons";
 
-const ReportPopup = ({ onClose }) => {
+const ReportPopup = ({ onClose, postId }) => {
+  const handleReport = useCallback(async () => {
+    const params = {
+      type: "sexual",
+      refId: "string",
+      content: "string",
+      id: postId,
+    };
+    const response = await reportReaction(params);
+    console.log(response);
+    if (response.status === 200) {
+      alert("신고 완료");
+    } else {
+      alert("신고 실패");
+    }
+  }, [postId]);
   return (
     <div className="popup_dim">
       <div className="layerPopup pop_report">
@@ -39,7 +56,11 @@ const ReportPopup = ({ onClose }) => {
             <textarea className="textarea1" placeholder="詳細(任意)"></textarea>
           </div>
           <div className="pop_botm">
-            <button type="button" className="btn-pk blue">
+            <button
+              type="button"
+              className="btn-pk blue"
+              onClick={handleReport}
+            >
               通報する
             </button>
           </div>

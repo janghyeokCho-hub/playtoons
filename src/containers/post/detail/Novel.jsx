@@ -17,7 +17,7 @@ import useFilePath from "@/hook/useFilePath";
 import { getPostContent as getPostContentAPI } from "@API/postService";
 import { setAuthorFollow } from "@API/authorService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
-import Reply from "./Reply";
+import ReplyItems from "./ReplyItems";
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -227,7 +227,7 @@ const Novel = () => {
               </div>
               <div className="conts">
                 {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-                <div className="textarea1 emo">
+                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
                   {/*<!-- 입력시 사라짐 -->*/}
                   <p className="c-gray">ログインして投稿する</p>
 
@@ -312,9 +312,7 @@ const Novel = () => {
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              {tempComment.map((item, index) => {
-                return <Reply key={`reply_${index}`} item={item} />;
-              })}
+              <ReplyItems postId={id} />
             </div>
           </div>
 

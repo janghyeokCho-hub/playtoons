@@ -1,17 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
 import { useSelector } from "react-redux";
 import useFilePath from "@/hook/useFilePath";
 import ReportPopup from "../ReportPopup";
 import DeletePopup from "../DeletePopup";
 import ReplyControlBox from "../ReplyControlBox";
+import {
+  updateReaction,
+  insertLikeReaction,
+  deleteLikeReaction,
+} from "@API/reactionService";
 
-const Reply = ({ item }) => {
+const Reply = ({ item, postId }) => {
   const currentPost = useSelector(({ post }) => post.currentPost);
   // 댓글 수정 시 입력폼으로 변경하기 위한 Flag
+  const [content, setContent] = useState(item?.content);
 
   const [isEdit, setIsEdit] = useState(false);
   const [isLikeShow, setIsLikeShow] = useState(false);
@@ -20,6 +26,45 @@ const Reply = ({ item }) => {
   const profileImgURL = useFilePath(item?.profileImage);
   // 댓글 제어 모달 Flag
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
+
+  const handleUpdate = useCallback(async () => {
+    if (!content) {
+      alert("내용없음");
+      return;
+    }
+    const response = await updateReaction({ content });
+    console.log(response);
+    if (response.status === 200) {
+      alert("수정 완료");
+    } else {
+      alert("수정 실패");
+    }
+  }, [content]);
+
+  const handleLike = useCallback(async () => {
+    const reactionId = 0;
+    if (isLikeShow) {
+      const response = await deleteLikeReaction(reactionId);
+      console.log(response);
+      if (response?.status === 200) {
+        alert("좋아요 성공");
+        setIsLikeShow(true);
+      } else {
+        alert("좋아요 실패");
+        setIsLikeShow(false);
+      }
+    } else {
+      const response = await insertLikeReaction(reactionId);
+      console.log(response);
+      if (response?.status === 200) {
+        alert("좋아요 삭제 성공");
+        setIsLikeShow(false);
+      } else {
+        alert("좋아요 삭제 실패");
+        setIsLikeShow(true);
+      }
+    }
+  }, [isLikeShow]);
 
   return (
     <>
@@ -53,11 +98,7 @@ const Reply = ({ item }) => {
               </p>
             )}
             <div className="rgh">
-              <button
-                type="button"
-                className="btn01"
-                onClick={() => setIsLikeShow(true)}
-              >
+              <button type="button" className="btn01" onClick={handleLike}>
                 <FontAwesomeIcon icon={faHeart} />
                 {item?.likeCount}
               </button>
@@ -122,6 +163,8 @@ const Reply = ({ item }) => {
             <textarea
               className="textarea1"
               placeholder="ログインして投稿する"
+              onChange={(e) => setContent(e.target.value)}
+              value={content || ""}
             ></textarea>
             <div className="btns">
               <div className="l">
@@ -137,7 +180,11 @@ const Reply = ({ item }) => {
                 >
                   <span>取り消</span>
                 </button>
-                <button type="button" className="btn-pk s blue">
+                <button
+                  type="button"
+                  className="btn-pk s blue"
+                  onClick={handleUpdate}
+                >
                   <span>登録する</span>
                 </button>
               </div>
@@ -145,10 +192,16 @@ const Reply = ({ item }) => {
           </div>
         )}
         {isDeletePopupShow && (
-          <DeletePopup onClose={() => setIsDeletePopupShow(false)} />
+          <DeletePopup
+            onClose={() => setIsDeletePopupShow(false)}
+            postId={postId}
+          />
         )}
         {isReportPopupShow && (
-          <ReportPopup onClose={() => setIsReportPopupShow(false)} />
+          <ReportPopup
+            onClose={() => setIsReportPopupShow(false)}
+            postId={postId}
+          />
         )}
       </div>
     </>

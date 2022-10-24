@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { deleteReaction } from "@API/reactionService";
 
-const DeletePopup = ({ onClose }) => {
+const DeletePopup = ({ onClose, postId }) => {
+  const handleDelete = useCallback(async () => {
+    const response = await deleteReaction(postId);
+    console.log(response);
+    if (response.status === 200) {
+      alert("삭제 완료");
+    } else {
+      alert("삭제 실패");
+    }
+  }, [postId]);
   return (
     <div className="popup_dim">
       <div className="layerPopup pop_delete">
@@ -24,7 +34,11 @@ const DeletePopup = ({ onClose }) => {
             <button type="button" className="btn-pk blue2" onClick={onClose}>
               キャンセル
             </button>
-            <button type="button" className="btn-pk blue">
+            <button
+              type="button"
+              className="btn-pk blue"
+              onClick={handleDelete}
+            >
               削除する
             </button>
           </div>

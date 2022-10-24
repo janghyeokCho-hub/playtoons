@@ -17,7 +17,7 @@ import useFilePath from "@/hook/useFilePath";
 import { getPostContent as getPostContentAPI } from "@API/postService";
 import { setAuthorFollow } from "@API/authorService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
-import Reply from "./Reply";
+import ReplyItems from "./ReplyItems";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation]);
@@ -89,53 +89,6 @@ const Webtoon = () => {
     [currentPost]
   );
 
-  const tempComment = [
-    {
-      profileImage: null,
-      nickname: "내가 쓴 글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `내가 쓴 글 내용`,
-      isDelete: false,
-      likeCount: 999,
-      userId: "75",
-      date: "3日前",
-      level: 1,
-    },
-    {
-      profileImage: null,
-      nickname: "정상 댓글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `정상 댓글 내용`,
-      isDelete: false,
-      likeCount: 123,
-      userId: "12",
-      date: "3日前",
-      level: 1,
-    },
-    {
-      profileImage: null,
-      nickname: "댓글에 댓글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `댓글에 댓글 내용`,
-      isDelete: false,
-      likeCount: 456,
-      userId: currentPost?.author?.id,
-      date: "3日前",
-      level: 2,
-    },
-    {
-      profileImage: null,
-      nickname: "삭제된 댓글의 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `삭제된 댓글의 내용`,
-      isDelete: true,
-      likeCount: 789,
-      userId: "12",
-      date: "3日前",
-      level: 1,
-    },
-  ];
-
   const tempEmoticons = [
     require("@IMAGES/icon0.png"),
     require("@IMAGES/icon1.png"),
@@ -149,6 +102,8 @@ const Webtoon = () => {
     require("@IMAGES/icon9.png"),
     require("@IMAGES/icon10.png"),
   ];
+
+  const handleReply = useCallback(() => {}, []);
 
   return (
     <>
@@ -235,7 +190,7 @@ const Webtoon = () => {
               </div>
               <div className="conts">
                 {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-                <div className="textarea1 emo">
+                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
                   {/*<!-- 입력시 사라짐 -->*/}
                   <p className="c-gray">ログインして投稿する</p>
 
@@ -262,7 +217,11 @@ const Webtoon = () => {
                   >
                     <span>アイコン</span>
                   </button>
-                  <button type="button" className="btn-pk s blue">
+                  <button
+                    type="button"
+                    className="btn-pk s blue"
+                    onClick={() => handleReply()}
+                  >
                     <span>登録</span>
                   </button>
                 </div>
@@ -294,10 +253,16 @@ const Webtoon = () => {
                         </div>
                       </Swiper>
                       <button type="button" className="swiper-button-prev myem">
-                        <FontAwesomeIcon icon={faAngleLeft} />
+                        <FontAwesomeIcon
+                          className="fa-regular fa-angle-left"
+                          icon={faAngleLeft}
+                        />
                       </button>
                       <button type="button" className="swiper-button-next myem">
-                        <FontAwesomeIcon icon={faAngleRight} />
+                        <FontAwesomeIcon
+                          className="fa-regular fa-angle-right"
+                          icon={faAngleRight}
+                        />
                       </button>
                     </div>
                     <div className="cont_emo scrollY">
@@ -320,9 +285,7 @@ const Webtoon = () => {
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              {tempComment.map((item, index) => {
-                return <Reply key={`reply_${index}`} item={item} />;
-              })}
+              <ReplyItems postId={id} />
             </div>
           </div>
 
