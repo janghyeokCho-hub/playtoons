@@ -6,16 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
   faCircleChevronRight,
+  faCircleXmark,
   faLock,
 } from "@fortawesome/pro-solid-svg-icons";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import moment from "moment";
-import Comment from "./Comment";
 import { getCurrentPost } from "@/modules/redux/ducks/post";
 import useFilePath from "@/hook/useFilePath";
 import { getPostContent as getPostContentAPI } from "@API/postService";
 import { setAuthorFollow } from "@API/authorService";
+import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
+import Reply from "./Reply";
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -40,6 +42,10 @@ const Novel = () => {
   // 이전회차 / 다음회차 버튼 Ref
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  // 댓글 이모티콘 창 활성 플래그
+  const [isEmoticonShow, setIsEmoticonShow] = useState(false);
+  // 이모티콘 선택
+  const [selectEmoticon, setSelectEmoticon] = useState(null);
 
   const getPostContent = useCallback(async () => {
     const response = await getPostContentAPI(id);
@@ -86,34 +92,62 @@ const Novel = () => {
   const tempComment = [
     {
       profileImage: null,
-      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      nickname: "내가 쓴 글 제목",
+      startAt: "2022-10-23T22:10",
+      comment: `내가 쓴 글 내용`,
+      isDelete: false,
+      likeCount: 999,
+      userId: "75",
       date: "3日前",
-      comment: `
-      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-      パターン把握したくなります(笑)`,
-      likeCount: 123,
+      level: 1,
     },
     {
       profileImage: null,
-      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      date: "3日前",
-      comment: `
-      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-      パターン把握したくなります(笑)`,
+      nickname: "정상 댓글 제목",
+      startAt: "2022-10-23T22:10",
+      comment: `정상 댓글 내용`,
+      isDelete: false,
       likeCount: 123,
+      userId: "12",
+      date: "3日前",
+      level: 1,
     },
     {
       profileImage: null,
-      author: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
+      nickname: "댓글에 댓글 제목",
+      startAt: "2022-10-23T22:10",
+      comment: `댓글에 댓글 내용`,
+      isDelete: false,
+      likeCount: 456,
+      userId: currentPost?.author?.id,
       date: "3日前",
-      comment: `
-      氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-      だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-      パターン把握したくなります(笑)`,
-      likeCount: 123,
+      level: 2,
     },
+    {
+      profileImage: null,
+      nickname: "삭제된 댓글의 제목",
+      startAt: "2022-10-23T22:10",
+      comment: `삭제된 댓글의 내용`,
+      isDelete: true,
+      likeCount: 789,
+      userId: "12",
+      date: "3日前",
+      level: 1,
+    },
+  ];
+
+  const tempEmoticons = [
+    require("@IMAGES/icon0.png"),
+    require("@IMAGES/icon1.png"),
+    require("@IMAGES/icon2.png"),
+    require("@IMAGES/icon3.png"),
+    require("@IMAGES/icon4.png"),
+    require("@IMAGES/icon5.png"),
+    require("@IMAGES/icon6.png"),
+    require("@IMAGES/icon7.png"),
+    require("@IMAGES/icon8.png"),
+    require("@IMAGES/icon9.png"),
+    require("@IMAGES/icon10.png"),
   ];
 
   return (
@@ -192,32 +226,95 @@ const Novel = () => {
                 <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
               </div>
               <div className="conts">
-                <textarea
-                  name=""
-                  id=""
-                  className="textarea1"
-                  placeholder="ログインして投稿する"
-                ></textarea>
+                {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
+                <div className="textarea1 emo">
+                  {/*<!-- 입력시 사라짐 -->*/}
+                  <p className="c-gray">ログインして投稿する</p>
+
+                  {/*<!-- 삽입된 이모티콘 -->*/}
+                  {selectEmoticon && (
+                    <div className="ico_emo">
+                      <span>
+                        <img src={selectEmoticon} alt="" />
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectEmoticon(null)}
+                      >
+                        <FontAwesomeIcon icon={faCircleXmark} />
+                      </button>
+                    </div>
+                  )}
+                </div>
                 <div className="btns">
-                  <button type="button" className="btn-pk s gray">
+                  <button
+                    type="button"
+                    className="btn-pk s blue2"
+                    onClick={() => setIsEmoticonShow(!isEmoticonShow)}
+                  >
                     <span>アイコン</span>
                   </button>
                   <button type="button" className="btn-pk s blue">
                     <span>登録</span>
                   </button>
                 </div>
+
+                {/*<!-- 이모티콘 창 활성화시 -->*/}
+                {isEmoticonShow && (
+                  <div className="box_emoji" style={{ display: "block" }}>
+                    <div className="tit_emo">
+                      <Swiper
+                        className="swiper-container myEmoji1"
+                        slidesPerView="auto"
+                        spaceBetween={10}
+                        observer={true}
+                        observeParents={true}
+                        navigation={{
+                          nextEl: ".swiper-button-next.myem",
+                          prevEl: ".swiper-button-prev.myem",
+                        }}
+                        onSlideChange={() => {}}
+                        onInit={(swiper) => {}}
+                        onSwiper={(swiper) => {
+                          // console.log('swiper', swiper);
+                        }}
+                      >
+                        <div className="swiper-wrapper">
+                          <SwiperSlide className="swiper-slide">
+                            <img src={require("@IMAGES/icon0.png")} alt="" />
+                          </SwiperSlide>
+                        </div>
+                      </Swiper>
+                      <button type="button" className="swiper-button-prev myem">
+                        <FontAwesomeIcon icon={faAngleLeft} />
+                      </button>
+                      <button type="button" className="swiper-button-next myem">
+                        <FontAwesomeIcon icon={faAngleRight} />
+                      </button>
+                    </div>
+                    <div className="cont_emo scrollY">
+                      <ul>
+                        {tempEmoticons.map((item, index) => (
+                          <li
+                            key={`emoticon_${index}`}
+                            onClick={() => setSelectEmoticon(item)}
+                          >
+                            <span>
+                              <img src={item} alt="" />
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-
+            {/* 댓글 목록 */}
             <div className="lst_comm">
-              {tempComment &&
-                tempComment.map((comment, index) => (
-                  <Comment key={`comment_${index}`} item={comment} />
-                ))}
-
-              <div className="botm">
-                <a href="#">コメントをもっと見る</a>
-              </div>
+              {tempComment.map((item, index) => {
+                return <Reply key={`reply_${index}`} item={item} />;
+              })}
             </div>
           </div>
 
