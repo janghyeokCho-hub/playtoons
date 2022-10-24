@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
 import ErrorMessage from '../dashboard/ErrorMessage';
 import { getFileUrlFromServer } from '@/services/fileService';
+import { FILE_MAX_SIZE } from '@/common/constant';
 
 /**
  * 
@@ -105,6 +106,9 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
     },
     noDragEventsBubbling: true,
     noKeyboard: true,
+    maxSize: FILE_MAX_SIZE,
+    onDropAccepted: (accept) => setStateError(undefined),
+    onDropRejected: (reject) => handleRejected(reject),
   });
   const InputProps = {
     ...getInputProps(),
@@ -116,6 +120,18 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
     ...getRootProps(),
   };
   //==============================================================================
+  const handleRejected = (reject) => {
+    let message = '';
+    for( let i = 0; i < reject[0].errors.length; i++ ){
+      message += reject[0].errors[i].message;
+
+      if( i !== reject[0].errors.length - 1 ){
+        message += ' and ';
+      }
+    }
+    
+    setStateError(message);
+  };
 
   const handlePreviewClose = (event) => {
     setStateImage(initImageObject);

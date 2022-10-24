@@ -137,19 +137,16 @@ export default function DashboardUploadProfile(props) {
 	const handleClickRegister = (event) => {
 		if( refNickname.current.isEmpty() ){
 			refNickname.current.setError( 'ニックネームが必要です。' );
-			refNickname.current.focus();
 			return;
 		}
 
 		if( refName.current.isEmpty() ){
 			refName.current.setError( '名前が必要です。' );
-			refName.current.focus();
 			return;
 		}
 
 		if( refDescription.current.isEmpty() ){
 			refDescription.current.setError( '紹介が必要です。' );
-			refDescription.current.focus();
 			return;
 		}
 

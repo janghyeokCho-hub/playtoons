@@ -4,13 +4,13 @@ import {faCircleXmark} from "@fortawesome/pro-solid-svg-icons";
 import "@/css/test.css";
 
 export default ( function ErrorMessage(props) {
-  const { error } = props;
+  const { error, className } = props;
 
   return (
     <>
       {
         error !== undefined &&
-          <div className={`error_message_container ${props.className}`}>
+          <div className={`error_message_container ${className}`}>
             <FontAwesomeIcon 
               icon={faCircleXmark}
               className={"error_message_ico"} />

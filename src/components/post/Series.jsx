@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "@COMPONENTS/dashboard/Select";
 import ErrorMessage from "../dashboard/ErrorMessage";
+import { getErrorMessageFromResultCode } from "@/common/common";
 
 /**
 *
@@ -54,7 +55,7 @@ export default function Series(props) {
     }
     else{
       //error 처리
-      setStateError( String(status, data) );
+      setStateError( String(status, getErrorMessageFromResultCode(data)) );
     }
   };
 

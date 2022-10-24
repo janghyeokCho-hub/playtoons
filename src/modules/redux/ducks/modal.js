@@ -15,6 +15,7 @@ export const hideModal = createAction(POPUP_HIDE);
  */
  const initialState = {
   show : false,
+  title: null,
   contents : <></>,
   callback : null,
 }
@@ -25,12 +26,14 @@ const popup = handleActions(
       return produce(state, (draft) => {
         console.log('POPUP_SHOW', action);
         draft.show = true;
+        draft.title = action.payload.title;
         draft.contents = action.payload.contents;
         draft.callback = action.payload.callback;
       });
     },
     [POPUP_HIDE]: (state, action) => {
       console.log('POPUP_HIDE', action);
+      state.callback?.();
       return initialState;
     },
   },

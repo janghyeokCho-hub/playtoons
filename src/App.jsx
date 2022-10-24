@@ -20,6 +20,7 @@ import Search from "@CONTAINERS/search";
 import Inquiry from "@CONTAINERS/inquiry";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import ScrollToTop from "@COMPONENTS/ScrollToTop";
+import ModalContainer from "./components/ModalContainer";
 
 export const store = configureStore();
 sagaMiddleware.run(rootSaga);
@@ -46,6 +47,7 @@ function App() {
             <Route path="/dashboard/*" element={<Dashboard />} />
           </Routes>
         </BrowserRouter>
+        <ModalContainer />
       </PersistGate>
     </Provider>
   );

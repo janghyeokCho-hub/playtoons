@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
 import Image from "@/components/dashboard/Image";
+import ProfileSpan from "@/components/dashboard/ProfileSpan";
 
 
 const text = {
@@ -173,17 +174,17 @@ export default function DashboardPostDetail() {
       <div className="wrap_detail">
         <div className="area_detail1">
           <ul className="cx_list">
-            <li><span>{text.name}  </span><span>{stateData?.series}</span></li>
-            <li><span>{text.title}  </span><span>{stateData?.title}</span></li>
-            <li><span>{text.episode_count}  </span><span>{stateData?.issue}</span></li>
-            <li><span>{text.public_date}   </span><span>{stateData?.startAt}</span></li>
-            <li><span>{text.end_date}   </span><span>{stateData?.endAt}</span></li>
-            <li><span>{text.status}   </span><span>{stateData?.status}</span></li>
+            <li><span>{text.name}  </span><span>{reduxPostDetail?.series?.title}</span></li>
+            <li><span>{text.title}  </span><span>{reduxPostDetail?.title}</span></li>
+            <li><span>{text.episode_count}  </span><span>{reduxPostDetail?.number}</span></li>
+            <li><span>{text.public_date}   </span><span>{reduxPostDetail?.startAt}</span></li>
+            <li><span>{text.end_date}   </span><span>{reduxPostDetail?.endAt}</span></li>
+            <li><span>{text.status}   </span><span>{reduxPostDetail?.status}</span></li>
           </ul>
           <div className="icon">
-            <span><FontAwesomeIcon icon={faEye} />{stateData?.viewCount}</span>
-            <span><FontAwesomeIcon icon={faHeart} />{stateData?.likeCount}</span>
-            <span><FontAwesomeIcon icon={faCommentQuote} />{stateData?.reactionCount}</span>
+            <span><FontAwesomeIcon icon={faEye} />{reduxPostDetail?.viewCount}</span>
+            <span><FontAwesomeIcon icon={faHeart} />{reduxPostDetail?.likeCount}</span>
+            <span><FontAwesomeIcon icon={faCommentQuote} />{reduxPostDetail?.reactionCount}</span>
           </div>
         
           <div className="botm btn-bot">
@@ -193,13 +194,13 @@ export default function DashboardPostDetail() {
         </div>
         
         <div className="area_detail2">
-          <h2 className="h1">{stateData?.title} {stateData?.episode_count}</h2>
-          <p className="d1">{stateData?.startAt}</p>
-          <p className="t1">{stateData?.content_summary}</p>
+          <h2 className="h1">{reduxPostDetail?.title} {reduxPostDetail?.number}</h2>
+          <p className="d1">{reduxPostDetail?.startAt}</p>
+          <p className="t1">{reduxPostDetail?.series?.description}</p>
         </div>
         
         <div className="ta_center">
-          <Image hash={stateData?.content} alt="playtonns content" />
+          <Image hash={reduxPostDetail?.content} alt="playtonns content" />
         </div>
         
         <div className="area_detail2">
@@ -209,7 +210,7 @@ export default function DashboardPostDetail() {
 
       <div className="wrap_comment">
         <div className="top_comm">
-          <div className="imgs"><span style={{backgroundImage: `url(${stateData?.my_profile_image})`}}></span></div>
+          <div className="imgs"><ProfileSpan hash={reduxPostDetail?.author?.profileImage}></ProfileSpan></div>
           <IconWithText 
             text={{
               sing_in_to_post: text.sing_in_to_post,
