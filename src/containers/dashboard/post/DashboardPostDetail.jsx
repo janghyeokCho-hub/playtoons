@@ -16,6 +16,7 @@ import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
 import Image from "@/components/dashboard/Image";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
+import { getDateYYYYMMDD, getDescriptionToHtml } from "@/common/common";
 
 
 const text = {
@@ -177,14 +178,14 @@ export default function DashboardPostDetail() {
             <li><span>{text.name}  </span><span>{reduxPostDetail?.series?.title}</span></li>
             <li><span>{text.title}  </span><span>{reduxPostDetail?.title}</span></li>
             <li><span>{text.episode_count}  </span><span>{reduxPostDetail?.number}</span></li>
-            <li><span>{text.public_date}   </span><span>{reduxPostDetail?.startAt}</span></li>
+            <li><span>{text.public_date}   </span><span>{ getDateYYYYMMDD(reduxPostDetail?.startAt, '/') }</span></li>
             <li><span>{text.end_date}   </span><span>{reduxPostDetail?.endAt}</span></li>
             <li><span>{text.status}   </span><span>{reduxPostDetail?.status}</span></li>
           </ul>
           <div className="icon">
-            <span><FontAwesomeIcon icon={faEye} />{reduxPostDetail?.viewCount}</span>
-            <span><FontAwesomeIcon icon={faHeart} />{reduxPostDetail?.likeCount}</span>
-            <span><FontAwesomeIcon icon={faCommentQuote} />{reduxPostDetail?.reactionCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faEye} />{reduxPostDetail?.viewCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faHeart} />{reduxPostDetail?.likeCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faCommentQuote} />{reduxPostDetail?.reactionCount}</span>
           </div>
         
           <div className="botm btn-bot">
@@ -195,8 +196,8 @@ export default function DashboardPostDetail() {
         
         <div className="area_detail2">
           <h2 className="h1">{reduxPostDetail?.title} {reduxPostDetail?.number}</h2>
-          <p className="d1">{reduxPostDetail?.startAt}</p>
-          <p className="t1">{reduxPostDetail?.series?.description}</p>
+          <p className="d1">{ getDateYYYYMMDD(reduxPostDetail?.startAt, '.') }</p>
+          <pre className="t1">{ reduxPostDetail?.series?.description }</pre>
         </div>
         
         <div className="ta_center">

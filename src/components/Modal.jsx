@@ -78,6 +78,13 @@ export default forwardRef( function Modal(props, ref) {
     }
   }, [title]);
 
+  useEffect(() => {
+    
+    return () => {
+      dispatch(hideModal());
+    }
+  }, []);
+
 
   return (
     <>

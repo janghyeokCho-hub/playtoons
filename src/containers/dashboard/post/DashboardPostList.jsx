@@ -14,6 +14,9 @@ import Pagination from "@/components/dashboard/Pagination";
 import { useSelector } from "react-redux";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
+import moment from "moment/moment";
+import { DATE_FORMAT } from "@/common/constant";
+import { getDateYYYYMMDD } from "@/common/common";
 
 
 const text = {
@@ -93,7 +96,7 @@ export default function DashboardPostList(props) {
           <td className="td_subject">{item.title}</td>
           <td className="td_number1"><FontAwesomeIcon icon={faEye} className='view-m' />{item.viewCount}<em className="hide-m">{text.count}</em></td>
           <td className="td_number2"><FontAwesomeIcon icon={faHeart} className='view-m' />{item.likeCount}</td>
-          <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.startAt}</td>
+          <td className="td_txt1"><span className="view-m">{text.date}：</span>{ getDateYYYYMMDD(item.startAt, '/') }</td>
           <td className="td_txt"><span className="view-m">{text.status}</span>{item.status}</td>
           <td className="td_btns">
             <Link to={`/dashboard/post/detail/${item.id}`} className="btn-pk n blue2">

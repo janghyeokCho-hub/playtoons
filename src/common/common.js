@@ -1,5 +1,6 @@
 import { getFileUrlFromServer } from "@API/fileService";
-import { RESULT_CODE_LIST } from "./constant";
+import moment from "moment/moment";
+import { DATE_FORMAT, RESULT_CODE_LIST } from "./constant";
 /**
  * Email validation
  * @param {string} text
@@ -164,14 +165,40 @@ export const getParamsToQuery = (params, tags) => {
 * @return 에러메세지
 */
 export const getErrorMessageFromResultCode = (response) => {
-  let returnMessage = '';
+  let returnMessage = '' + response;
 
   for( let i = 0; i < RESULT_CODE_LIST.length; i++ ){
     if( RESULT_CODE_LIST[i].code === response?.result ){
-      returnMessage = String(RESULT_CODE_LIST[i].name, ' ', response?.message);
+      returnMessage = RESULT_CODE_LIST[i].name + ' ' + response;
       break;
     }
   }
   
   return returnMessage;
+};
+
+/**
+*
+   date format
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param date date 정보
+* @param separator 구분자
+*/
+export const getDateYYYYMMDD = (date, separator) => {
+  return moment(date).format( ['YYYY', 'MM', 'DD'].join(separator) );
+};
+
+/**
+*
+   date format
+*
+* @version 1.0.0
+* @author 2hyunkook
+* @param date date 정보
+* @param separator 구분자
+*/
+export const setInputValueToNumber = (ref, value) => {
+  ref.current.value = value.replace(/[^0-9]/g, '');
 };

@@ -4,11 +4,16 @@ import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 
 import tempPlanImage1 from "@IMAGES/img_mainplan1.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";
 import { editSubscribeTierToServer, setFileToServer } from "@/services/dashboardService";
-import { getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, setInputValueToNumber } from "@/common/common";
+import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
+import Price from "@/components/dashboard/Price";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 const text = {
   edit_plan: "支援を編集する",
@@ -20,7 +25,12 @@ const text = {
   r_19: "R-19",
   price: "価格",
   register: "登録する",
-  description_next_month: "(既存支援者には翌月から反映されます。)"
+  description_next_month: "(既存支援者には翌月から反映されます。)",
+  please_input_image: 'イメージを入力してください。',
+  please_input_product_name: '商品名を入力してください。',
+  please_input_description: '説明を入力してください。',
+  please_input_price: '価格を入力してください。',
+  error_title: 'お知らせ',
 };
 
 export default function DashboardPlanEdit(props) {
@@ -29,10 +39,13 @@ export default function DashboardPlanEdit(props) {
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const params = useParams('id');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const refForm = useRef();
+  const refProductName = useRef();
+  const refDescription = useRef();
   const refImage = useRef();
-  const refPriceContainer = useRef();
   const refRating = useRef();
+  const refPrice = useRef();
 
   //==============================================================================
   // function
@@ -90,24 +103,36 @@ export default function DashboardPlanEdit(props) {
     }
     else{
       //error 처리
-      ref.current.setError(status);
+      ref.current.setError(status + resultData);
     }
   };
 
   const updateSubscribeTier = async () => {
-    let json = getFromDataJson(refForm);
 
-    const price = parseInt( json.price );
-		json = {
-			...json,
-      price: price,
-			subscribeTierId: params.id,
-		};
-
+    //필드 확인 
+    if( refProductName.current.isEmpty() ){
+			refProductName.current.setError( text.please_input_product_name );
+			return;
+		}
+    if( refDescription.current.isEmpty() ){
+			refDescription.current.setError( text.please_input_description );
+			return;
+		}
     if( refImage.current.checkToEmpty() ){
-      refImage.current.setError('サムネイルが必要です。');
+      refImage.current.setError( text.please_input_image );
       return false;
     }
+    if( refPrice.current.isEmpty() ){
+			refPrice.current.setError( text.please_input_price );
+			return;
+		}
+
+    let json = getFromDataJson(refForm);
+		json = {
+			...json,
+      price: parseInt( json.price ),
+			subscribeTierId: params.id,
+		};
 
     if( !json.thumbnailImage.length ){
       json = {
@@ -121,15 +146,27 @@ export default function DashboardPlanEdit(props) {
     console.log('updateSubscribeTier', status, data);
     
     if( status === 200 ){
-      if( window.confirm('支援を編集しました。') ){
-        navigate('/dashboard/plan');
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'支援を編集しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/plan`)}
+          }
+        )
+      );
     }
     else{
       //error 처리
-      alert( String(status, data) );
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
-    
   };
 
 
@@ -148,14 +185,6 @@ export default function DashboardPlanEdit(props) {
       //이미지 업로드 후 image url 
       setImageToServer(refImage, 'cover');
     }
-  };
-
-  const handleFocus = (event) => {
-    refPriceContainer.current.classList.add("input_focus");
-  };
-  
-  const handleBlur = (event) => {
-    refPriceContainer.current.classList.remove("input_focus");
   };
 
   //==============================================================================
@@ -182,12 +211,12 @@ export default function DashboardPlanEdit(props) {
             <form ref={refForm}>
               <div className="col">
                 <h3 className="tit1">{text.product_name}</h3>
-                <input type="text" name='name' className="inp_txt w100p" defaultValue={stateData?.name} />
+                <Input ref={refProductName} type="text" name='name' className="inp_txt w100p" defaultValue={stateData?.name} />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.summary}</h3>
-                <textarea name='description' className="textarea1" defaultValue={stateData?.description}></textarea>
+                <Textarea ref={refDescription} name='description' className="textarea1" defaultValue={stateData?.description}></Textarea>
               </div>
 
               <div className="col">
@@ -210,10 +239,7 @@ export default function DashboardPlanEdit(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.price} <span className="plan_desc" >{text.description_next_month}</span></h3>
-                <div ref={refPriceContainer} className="inp_txt sch">
-                  <input type="number" className="" name='price' defaultValue={stateData?.price} onFocus={handleFocus} onBlur={handleBlur} />
-                  <span className="won">PC</span>
-                </div>
+                <Price ref={refPrice} type="text" className="" name='price' defaultValue={stateData?.price}  />
               </div>
             </form>
           </section>

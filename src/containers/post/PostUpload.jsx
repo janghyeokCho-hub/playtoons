@@ -258,7 +258,6 @@ export default function UploadPost(props) {
                 <Series
                   name={'seriesId'}
                   className={'select1 w100'}
-                  // callback={handleClickType}
                   />
               </div>
 

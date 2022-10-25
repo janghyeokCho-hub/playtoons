@@ -3,10 +3,15 @@ import React, { useCallback, useEffect, useState, } from "react";
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import { useRef } from "react";
-import { getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, setInputValueToNumber } from "@/common/common";
 import { setFileToServer, setSubscribeTierToServer } from "@/services/dashboardService";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
+import Price from "@/components/dashboard/Price";
 
 
 const text = {
@@ -19,6 +24,11 @@ const text = {
   r_19: "R-19",
   price: "価格",
   register: "登録する",
+  please_input_image: 'イメージを入力してください。',
+  please_input_product_name: '商品名を入力してください。',
+  please_input_description: '説明を入力してください。',
+  please_input_price: '価格を入力してください。',
+  error_title: 'お知らせ',
 };
 
 
@@ -26,17 +36,19 @@ const text = {
 export default function DashboardPlanUpload(props) {
   const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const refForm = useRef();
+  const refProductName = useRef();
+  const refDescription = useRef();
+  const refThumbnailImage = useRef();
   const refPriceContainer = useRef();
   const refPrice = useRef();
-  const refForm = useRef();
-  const refThumbnailImage = useRef();
   const refRating = useRef();
 
   //==============================================================================
   // function 
   //==============================================================================
   const callbackThumbnailImage = () => {
-    console.log('callbackThumbnailImage');
     setSubscribeTier();
   };
 
@@ -80,25 +92,54 @@ export default function DashboardPlanUpload(props) {
     };
 
   const setSubscribeTier = async () => {
+
+    //필드 확인 
+    if( refProductName.current.isEmpty() ){
+			refProductName.current.setError( text.please_input_product_name );
+			return;
+		}
+    if( refDescription.current.isEmpty() ){
+			refDescription.current.setError( text.please_input_description );
+			return;
+		}
+    if( refPrice.current.isEmpty() ){
+			refPrice.current.setError( text.please_input_price );
+			return;
+		}
+
     let json = getFromDataJson(refForm);
     json = {
       ...json,
       tier: 0,
       authorId: myAuthors[0].id,
       status: 'enabled',
-      price: parseInt(refPrice.current.value),
+      price: parseInt(refPrice.current.getValue()),
     };
 
     const {status, data} = await setSubscribeTierToServer(json);
     console.log('setSubscribeTier', status, data);
     
     if( status === 201 ){
-      if( window.confirm('支援を追加しました。') ){
-        navigate('/dashboard/plan');
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'支援を追加しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/plan`)}
+          }
+        )
+      );
     }
     else{
-      
+      //error 처리
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
     
   };
@@ -107,11 +148,12 @@ export default function DashboardPlanUpload(props) {
   // event
   //==============================================================================
 
-  const handleFocusPrice = (event) => {
+
+  const handleFocusPrice = () => {
     refPriceContainer.current.classList.add("input_focus");
   };
   
-  const handleBlurPrice = (event) => {
+  const handleBlurPrice = () => {
     refPriceContainer.current.classList.remove("input_focus");
   };
 
@@ -121,7 +163,7 @@ export default function DashboardPlanUpload(props) {
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
     //upload 할 이미지가 없다면 
     if( refThumbnailImage.current.getImageFile() === undefined ){
-      callbackThumbnailImage();
+      refThumbnailImage.current.setError( text.please_input_image );
     }
     else{
       //이미지 업로드 후 image url 
@@ -153,12 +195,12 @@ export default function DashboardPlanUpload(props) {
             <form ref={refForm}>
               <div className="col">
                 <h3 className="tit1">{text.product_name}</h3>
-                <input type="text" name='name' className="inp_txt w100p" />
+                <Input ref={refProductName} type="text" name='name' className="inp_txt w100p" />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.summary}</h3>
-                <textarea name="description" id="" className="textarea1"></textarea>
+                <Textarea ref={refDescription} name="description" id="" className="textarea1"></Textarea>
               </div>
 
               <div className="col">
@@ -166,7 +208,6 @@ export default function DashboardPlanUpload(props) {
                 <ImageUpload 
                   ref={refThumbnailImage}
                   className={"box_drag half"}
-                  // preview={imageUrl}
                   id={"filebox1"}
                   name={"thumbnailImage"}                     
                   text={text.drag_drop} 
@@ -181,10 +222,7 @@ export default function DashboardPlanUpload(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.price}</h3>
-                <div className="inp_txt sch" ref={refPriceContainer}>
-                  <input ref={refPrice} type="number" name='price' className="" onFocus={handleFocusPrice}  onBlur={handleBlurPrice} />
-                  <span className="won">PC</span>
-                </div>
+                <Price ref={refPrice} type="text" name='price' className=""  />
               </div>
             </form>
           </section>

@@ -747,6 +747,10 @@ li.dashboard-gnb.selected{
   color: rgba(127,139,218, 1);
 }
 
+.mr8{
+  margin-right: 8px;
+}
+
 .mr16{
   margin-right: 16px;
 }
@@ -848,6 +852,15 @@ li.dashboard-gnb.selected{
 .w100p{
   width: 100%;
 }
+
+/* ============================================================================== */
+/* dashboard - post  */
+/* ============================================================================== */
+.wrap_detail .area_detail2 .t1{
+  font-family: "NotoSansJP-Regular";
+  letter-spacing: 1px;
+}
+
 
 /* ============================================================================== */
 /* emptyTr  */
