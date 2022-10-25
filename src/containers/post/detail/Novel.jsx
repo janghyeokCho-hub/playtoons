@@ -12,11 +12,11 @@ import {
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import moment from "moment";
-import { getCurrentPost } from "@/modules/redux/ducks/post";
+import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
 import useFilePath from "@/hook/useFilePath";
-import { getPostContent as getPostContentAPI } from "@API/postService";
 import { setAuthorFollow } from "@API/authorService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
+import { insertReaction } from "@API/reactionService";
 import ReplyItems from "./ReplyItems";
 
 const Novel = () => {
@@ -27,14 +27,14 @@ const Novel = () => {
   const params = useParams();
   // 현재 게시물의 아이디
   const id = params?.id;
-  // content 접근 여부로 Lock 판단
-  const [isLock, setIsLock] = useState(true);
-  const [content, setContent] = useState(null);
-  const contentURL = useFilePath(content);
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
+  // content 접근 여부로 Lock 판단
+  const [isLock, setIsLock] = useState(currentPost?.isLock);
+  const [content, setContent] = useState(currentPost?.content);
+  const contentURL = useFilePath(content);
   // 로그인 한 사용자
   const isLogined = useSelector(({ login }) => login.isLogined);
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -46,26 +46,17 @@ const Novel = () => {
   const [isEmoticonShow, setIsEmoticonShow] = useState(false);
   // 이모티콘 선택
   const [selectEmoticon, setSelectEmoticon] = useState(null);
-
-  const getPostContent = useCallback(async () => {
-    const response = await getPostContentAPI(id);
-    if (response.status === 200) {
-      setIsLock(false);
-      setContent(response.data?.content);
-    } else {
-      setIsLock(true);
-      setContent(null);
-    }
-  }, [id]);
+  const [replyLimit, setReplyLimit] = useState(
+    currentPost?.reactions?.length || 0
+  );
 
   useEffect(() => {
     if (isLogined) {
       dispatch(getCurrentPost({ id: id }));
-      getPostContent();
     } else {
       navigate("/account", { state: { next: location?.pathname } });
     }
-  }, [dispatch, id, isLogined, location, navigate]);
+  }, [dispatch, navigate, id, isLogined, location.pathname]);
 
   const handleFollow = useCallback(
     async (type) => {
@@ -89,53 +80,6 @@ const Novel = () => {
     [currentPost]
   );
 
-  const tempComment = [
-    {
-      profileImage: null,
-      nickname: "내가 쓴 글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `내가 쓴 글 내용`,
-      isDelete: false,
-      likeCount: 999,
-      userId: "75",
-      date: "3日前",
-      level: 1,
-    },
-    {
-      profileImage: null,
-      nickname: "정상 댓글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `정상 댓글 내용`,
-      isDelete: false,
-      likeCount: 123,
-      userId: "12",
-      date: "3日前",
-      level: 1,
-    },
-    {
-      profileImage: null,
-      nickname: "댓글에 댓글 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `댓글에 댓글 내용`,
-      isDelete: false,
-      likeCount: 456,
-      userId: currentPost?.author?.id,
-      date: "3日前",
-      level: 2,
-    },
-    {
-      profileImage: null,
-      nickname: "삭제된 댓글의 제목",
-      startAt: "2022-10-23T22:10",
-      comment: `삭제된 댓글의 내용`,
-      isDelete: true,
-      likeCount: 789,
-      userId: "12",
-      date: "3日前",
-      level: 1,
-    },
-  ];
-
   const tempEmoticons = [
     require("@IMAGES/icon0.png"),
     require("@IMAGES/icon1.png"),
@@ -149,6 +93,36 @@ const Novel = () => {
     require("@IMAGES/icon9.png"),
     require("@IMAGES/icon10.png"),
   ];
+
+  const handleReply = useCallback(async () => {
+    const value = document.getElementById("replyInput").innerText;
+    if (!value) {
+      alert("댓글 내용 없음");
+      return;
+    }
+
+    const params = {
+      content: value,
+      iconImage: selectEmoticon,
+      type: "reply",
+      postId: id,
+      authorId: currentPost.author.id,
+    };
+    const response = await insertReaction(params);
+    if (response?.status === 201) {
+      alert("댓글 작성 성공");
+      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
+      document.getElementById("replyInput").innerText = "";
+    } else {
+      alert("댓글 작성 실패");
+    }
+  }, [dispatch, selectEmoticon, id, replyLimit, currentPost]);
+
+  useEffect(() => {
+    if (replyLimit > 0) {
+      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
+    }
+  }, [dispatch, id, replyLimit]);
 
   return (
     <>
@@ -186,6 +160,12 @@ const Novel = () => {
                   </div>
                 </div>
               )}
+            </div>
+
+            <div className="area_detail2">
+              <p className="t1 c-gray">
+                リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。
+              </p>
             </div>
 
             <div className="area_detail3">
@@ -227,25 +207,31 @@ const Novel = () => {
               </div>
               <div className="conts">
                 {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
-                  {/*<!-- 입력시 사라짐 -->*/}
-                  <p className="c-gray">ログインして投稿する</p>
-
+                <InputReply
+                  id="replyInput"
+                  className={`textarea1 ${selectEmoticon ? "emo" : ""}`}
+                  contentEditable
+                  suppressContentEditableWarning
+                  placeholder="ログインして投稿する"
+                >
                   {/*<!-- 삽입된 이모티콘 -->*/}
                   {selectEmoticon && (
-                    <div className="ico_emo">
-                      <span>
-                        <img src={selectEmoticon} alt="" />
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setSelectEmoticon(null)}
-                      >
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                      </button>
-                    </div>
+                    <>
+                      <br />
+                      <div className="ico_emo" tabIndex={-1}>
+                        <span>
+                          <img src={selectEmoticon} alt="" />
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectEmoticon(null)}
+                        >
+                          <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                      </div>
+                    </>
                   )}
-                </div>
+                </InputReply>
                 <div className="btns">
                   <button
                     type="button"
@@ -254,7 +240,11 @@ const Novel = () => {
                   >
                     <span>アイコン</span>
                   </button>
-                  <button type="button" className="btn-pk s blue">
+                  <button
+                    type="button"
+                    className="btn-pk s blue"
+                    onClick={() => handleReply()}
+                  >
                     <span>登録</span>
                   </button>
                 </div>
@@ -286,10 +276,16 @@ const Novel = () => {
                         </div>
                       </Swiper>
                       <button type="button" className="swiper-button-prev myem">
-                        <FontAwesomeIcon icon={faAngleLeft} />
+                        <FontAwesomeIcon
+                          className="fa-regular fa-angle-left"
+                          icon={faAngleLeft}
+                        />
                       </button>
                       <button type="button" className="swiper-button-next myem">
-                        <FontAwesomeIcon icon={faAngleRight} />
+                        <FontAwesomeIcon
+                          className="fa-regular fa-angle-right"
+                          icon={faAngleRight}
+                        />
                       </button>
                     </div>
                     <div className="cont_emo scrollY">
@@ -313,6 +309,12 @@ const Novel = () => {
             {/* 댓글 목록 */}
             <div className="lst_comm">
               <ReplyItems postId={id} />
+              <div
+                className="botm"
+                onClick={() => setReplyLimit(replyLimit + 3)}
+              >
+                <Link to="">コメントをもっと見る</Link>
+              </div>
             </div>
           </div>
 
@@ -420,6 +422,13 @@ const Novel = () => {
     </>
   );
 };
+
+const InputReply = styled.div`
+  &:empty:before {
+    content: attr(placeholder);
+    color: #909dab !important;
+  }
+`;
 
 const ImgProfileSpan = styled.span`
   background-image: url(${(props) => props.bgImg});

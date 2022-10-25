@@ -16,12 +16,18 @@ export const [
   GET_CURRENT_POST_SUCCESS,
   GET_CURRENT_POST_FAILURE,
 ] = createRequestActionTypes("post/GET_CURRENT_POST");
+export const [
+  GET_POST_REACTION,
+  GET_POST_REACTION_SUCCESS,
+  GET_POST_REACTION_FAILURE,
+] = createRequestActionTypes("post/GET_POST_REACTION");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
 export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
 export const getCurrentPost = createAction(GET_CURRENT_POST);
+export const getPostReaction = createAction(GET_POST_REACTION);
 
 const initialState = {
   post: null,
@@ -53,7 +59,13 @@ const post = handleActions(
     },
     [GET_CURRENT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        draft.currentPost = action.payload.post;
+        draft.currentPost = action.payload;
+      });
+    },
+    [GET_POST_REACTION_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        console.log("action.payload.reactions : ", action.payload.reactions);
+        draft.currentPost.reactions = action.payload.reactions;
       });
     },
   },

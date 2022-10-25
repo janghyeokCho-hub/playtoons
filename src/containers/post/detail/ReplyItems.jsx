@@ -1,24 +1,20 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { getReaction as getReactionAPI } from "@API/reactionService";
+import React, { useState, useEffect } from "react";
 import Reply from "./Reply";
 
-const ReplyItems = ({ postId }) => {
+const ReplyItems = ({ currentPost }) => {
   const [reactions, setReactions] = useState(null);
 
-  const getReaction = useCallback(async () => {
-    const response = await getReactionAPI({ postId });
-    if (response?.status === 200) {
-      setReactions(response.data?.reactions);
-    }
-  }, [postId]);
-
   useEffect(() => {
-    getReaction();
-  }, []);
+    if (currentPost?.reactions) {
+      setReactions(currentPost?.reactions || []);
+    } else {
+      setReactions([]);
+    }
+  }, [currentPost]);
   return (
     <>
       {reactions?.map((item, index) => {
-        return <Reply key={`reply_${index}`} item={item} postId={postId} />;
+        return <Reply key={`reply_${index}`} item={item} />;
       })}
     </>
   );

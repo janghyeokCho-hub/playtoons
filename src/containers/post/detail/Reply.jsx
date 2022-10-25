@@ -14,7 +14,8 @@ import {
   deleteLikeReaction,
 } from "@API/reactionService";
 
-const Reply = ({ item, postId }) => {
+const Reply = ({ item }) => {
+  console.log(item);
   const currentPost = useSelector(({ post }) => post.currentPost);
   // 댓글 수정 시 입력폼으로 변경하기 위한 Flag
   const [content, setContent] = useState(item?.content);
@@ -76,11 +77,13 @@ const Reply = ({ item, postId }) => {
           <div className="conts">
             {/* 댓글 내용 */}
 
-            {currentPost?.author?.id === item?.userId && (
-              <p className="h1">
-                <span className="i-writer">作成者</span>琉桔真緒 ✧◝(⁰▿⁰)◜✧
-              </p>
-            )}
+            <p className="h1">
+              {currentPost?.author?.id === item?.userId && (
+                <span className="i-writer">作成者</span>
+              )}
+              {item?.author?.nickname}
+            </p>
+
             <p className="h1">{item?.nickname}</p>
             <p className="d1">
               {/*<span>3日前</span>*/}
@@ -88,19 +91,14 @@ const Reply = ({ item, postId }) => {
               <span>コメント</span>
             </p>
             {/* 삭제시 className 에 c-gray 추가 */}
-            {item?.isDelete ? (
+            {item?.status === "disabled" ? (
               <p className="t1 c-gray">削除されたコメントです。</p>
             ) : (
-              <p className="t1">
-                氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪
-                だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動
-                パターン把握したくなります(笑)
-              </p>
+              <p className="t1">{item?.content}</p>
             )}
             <div className="rgh">
               <button type="button" className="btn01" onClick={handleLike}>
-                <FontAwesomeIcon icon={faHeart} />
-                {item?.likeCount}
+                <FontAwesomeIcon icon={faHeart} /> {item?.likeCount}
               </button>
               {isLikeShow && (
                 <div className="box_drop box_favorit">
@@ -194,13 +192,13 @@ const Reply = ({ item, postId }) => {
         {isDeletePopupShow && (
           <DeletePopup
             onClose={() => setIsDeletePopupShow(false)}
-            postId={postId}
+            postId={currentPost?.id}
           />
         )}
         {isReportPopupShow && (
           <ReportPopup
             onClose={() => setIsReportPopupShow(false)}
-            postId={postId}
+            postId={currentPost?.id}
           />
         )}
       </div>

@@ -12,11 +12,11 @@ import {
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import moment from "moment";
-import { getCurrentPost } from "@/modules/redux/ducks/post";
+import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
 import useFilePath from "@/hook/useFilePath";
-import { getPostContent as getPostContentAPI } from "@API/postService";
 import { setAuthorFollow } from "@API/authorService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
+import { insertReaction } from "@API/reactionService";
 import ReplyItems from "./ReplyItems";
 
 const Webtoon = () => {
@@ -27,14 +27,14 @@ const Webtoon = () => {
   const params = useParams();
   // 현재 게시물의 아이디
   const id = params?.id;
-  // content 접근 여부로 Lock 판단
-  const [isLock, setIsLock] = useState(true);
-  const [content, setContent] = useState(null);
-  const contentURL = useFilePath(content);
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
+  // content 접근 여부로 Lock 판단
+  const [isLock, setIsLock] = useState(currentPost?.isLock);
+  const [content, setContent] = useState(currentPost?.content);
+  const contentURL = useFilePath(content);
   // 로그인 한 사용자
   const isLogined = useSelector(({ login }) => login.isLogined);
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -46,26 +46,17 @@ const Webtoon = () => {
   const [isEmoticonShow, setIsEmoticonShow] = useState(false);
   // 이모티콘 선택
   const [selectEmoticon, setSelectEmoticon] = useState(null);
-
-  const getPostContent = useCallback(async () => {
-    const response = await getPostContentAPI(id);
-    if (response.status === 200) {
-      setIsLock(false);
-      setContent(response.data?.content);
-    } else {
-      setIsLock(true);
-      setContent(null);
-    }
-  }, [id]);
+  const [replyLimit, setReplyLimit] = useState(
+    currentPost?.reactions?.length || 0
+  );
 
   useEffect(() => {
     if (isLogined) {
       dispatch(getCurrentPost({ id: id }));
-      getPostContent();
     } else {
       navigate("/account", { state: { next: location?.pathname } });
     }
-  }, [dispatch, id, isLogined, location, navigate]);
+  }, [dispatch, navigate, id, isLogined, location.pathname]);
 
   const handleFollow = useCallback(
     async (type) => {
@@ -103,7 +94,35 @@ const Webtoon = () => {
     require("@IMAGES/icon10.png"),
   ];
 
-  const handleReply = useCallback(() => {}, []);
+  const handleReply = useCallback(async () => {
+    const value = document.getElementById("replyInput").innerText;
+    if (!value) {
+      alert("댓글 내용 없음");
+      return;
+    }
+
+    const params = {
+      content: value,
+      iconImage: selectEmoticon,
+      type: "reply",
+      postId: id,
+      authorId: currentPost.author.id,
+    };
+    const response = await insertReaction(params);
+    if (response?.status === 201) {
+      alert("댓글 작성 성공");
+      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
+      document.getElementById("replyInput").innerText = "";
+    } else {
+      alert("댓글 작성 실패");
+    }
+  }, [dispatch, selectEmoticon, id, replyLimit, currentPost]);
+
+  useEffect(() => {
+    if (replyLimit > 0) {
+      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
+    }
+  }, [dispatch, id, replyLimit]);
 
   return (
     <>
@@ -190,25 +209,31 @@ const Webtoon = () => {
               </div>
               <div className="conts">
                 {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
-                  {/*<!-- 입력시 사라짐 -->*/}
-                  <p className="c-gray">ログインして投稿する</p>
-
+                <InputReply
+                  id="replyInput"
+                  className={`textarea1 ${selectEmoticon ? "emo" : ""}`}
+                  contentEditable
+                  suppressContentEditableWarning
+                  placeholder="ログインして投稿する"
+                >
                   {/*<!-- 삽입된 이모티콘 -->*/}
                   {selectEmoticon && (
-                    <div className="ico_emo">
-                      <span>
-                        <img src={selectEmoticon} alt="" />
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setSelectEmoticon(null)}
-                      >
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                      </button>
-                    </div>
+                    <>
+                      <br />
+                      <div className="ico_emo" tabIndex={-1}>
+                        <span>
+                          <img src={selectEmoticon} alt="" />
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectEmoticon(null)}
+                        >
+                          <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                      </div>
+                    </>
                   )}
-                </div>
+                </InputReply>
                 <div className="btns">
                   <button
                     type="button"
@@ -285,7 +310,13 @@ const Webtoon = () => {
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              <ReplyItems postId={id} />
+              <ReplyItems currentPost={currentPost} />
+              <div
+                className="botm"
+                onClick={() => setReplyLimit(replyLimit + 3)}
+              >
+                <Link to="">コメントをもっと見る</Link>
+              </div>
             </div>
           </div>
 
@@ -391,6 +422,13 @@ const Webtoon = () => {
     </>
   );
 };
+
+const InputReply = styled.div`
+  &:empty:before {
+    content: attr(placeholder);
+    color: #909dab !important;
+  }
+`;
 
 const ImgProfileSpan = styled.span`
   background-image: url(${(props) => props.bgImg});
