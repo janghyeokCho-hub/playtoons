@@ -227,3 +227,17 @@ export const setPostLike = async (method, id) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+ * 게시글 조회 수 증가
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {number} id 해당 게시글 아이디
+ */
+export const setPostView = async (id) => {
+  try {
+    return await apiServer("post", `/post/${id}/view`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

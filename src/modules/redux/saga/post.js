@@ -2,7 +2,6 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as postApi from "@API/postService";
 import * as reactionApi from "@API/reactionService";
-import { getPostContent as getPostContentAPI } from "@API/postService";
 import {
   AUTHOR_MINE,
   EDIT_POST,
@@ -138,6 +137,10 @@ function createCurrentPostRequestSaga(type, func) {
       );
       if (response?.status === 200) {
         const payload = response.data?.post;
+
+        /** 게시글 조회 수 증가 */
+        const viewResponse = yield call(postApi.setPostView, payload.id);
+        console.log("viewResponse : ", viewResponse);
 
         /** 게시글의 content 조회 */
         const contentResponse = yield call(postApi.getPostContent, payload.id);
