@@ -1,33 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { getFileUrlFromServer } from "@API/fileService";
-import { getAuthorPlans as getAuthorPlansAPI } from "@API/authorService";
-import { useCallback } from "react";
-
-async function getFileURLData(hash, state) {
-  const response = await getFileUrlFromServer(hash);
-  if (response.status === 200) {
-    state(response?.data?.url);
-  }
-}
+import React from "react";
+import { useSelector } from "react-redux";
+import useFilePath from "@/hook/useFilePath";
 
 const PlanItem = ({ plan }) => {
-  const [thumbnailImgURL, setThumbnailImgURL] = useState(null);
-  useEffect(() => {
-    if (plan?.thumbnailImage) {
-      getFileURLData(plan.thumbnailImage, setThumbnailImgURL);
-    }
-  }, [plan]);
+  const thumbnailImgURL = useFilePath(plan.thumbnailImage);
+
   return (
     <div className="col" style={{ marginBottom: "2.33%" }}>
       <div className="icon">
         <img src={thumbnailImgURL} alt="plan" />
       </div>
       <div className="cont">
-        <h3 className="h1">{plan.name}</h3>
+        <h3 className="h1">{plan?.name}</h3>
         <p className="t1">
-          <span className="c-blue">{plan.price}PC</span> /月
+          <span className="c-blue">{plan?.price}PC</span> /月
         </p>
-        <p className="t2">{plan.description}</p>
+        <p className="t2">{plan?.description}</p>
         <div className="t_dot1">
           <p>・差分が見れます</p>
           <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
@@ -41,18 +29,7 @@ const PlanItem = ({ plan }) => {
 };
 
 const Plan = ({ item }) => {
-  const [planData, setPlanData] = useState();
-
-  const getAuthorPlans = useCallback(async () => {
-    const response = await getAuthorPlansAPI({ authorId: item?.id });
-    if (response?.status === 200) {
-      setPlanData(response.data.subscribeTiers);
-    }
-  }, [item]);
-
-  useEffect(() => {
-    getAuthorPlans();
-  }, [item]);
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
 
   return (
     <>
@@ -68,8 +45,8 @@ const Plan = ({ item }) => {
       </header>
 
       <div className="lst_mainplan">
-        {planData &&
-          planData.map((plan, index) => (
+        {currentAuthor?.subscribeTiers &&
+          currentAuthor?.subscribeTiers?.map((plan, index) => (
             <PlanItem key={`plan_${index}`} plan={plan} />
           ))}
       </div>

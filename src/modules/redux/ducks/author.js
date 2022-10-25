@@ -15,25 +15,18 @@ export const [
   SET_CURRENT_AUTHOR_FAILURE,
 ] = createRequestActionTypes("author/SET_CURRENT_AUTHOR");
 
-export const [
-  SET_AUTHOR_PLANS,
-  SET_AUTHOR_PLANS_SUCCESS,
-  SET_AUTHOR_PLANS_FAILURE,
-] = createRequestActionTypes("author/SET_AUTHOR_PLANS");
-
 /* --- Actions --- */
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
 export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
-export const setAuthorPlans = createAction(SET_AUTHOR_PLANS);
 
 /**
  * login reducer 초기값
  */
 const initialState = {
-  authorsMeta: null,
   authors: [],
-  recentsMeta: null,
+  authorsMeta: null,
   recents: [],
+  recentsMeta: null,
   currentAuthor: null,
 };
 
@@ -43,24 +36,16 @@ const author = handleActions(
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
         console.log("GET_AUTHOR_LIST_SUCCESS : ", action.payload);
-        draft.authorsMeta = action.payload.meta || null;
         draft.authors = action.payload.authors || [];
+        draft.authorsMeta = action.payload.authorsMeta || null;
+        draft.recents = action.payload.recents || [];
+        draft.recentsMeta = action.payload.recentsMeta || null;
       });
     },
     [SET_CURRENT_AUTHOR_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         console.log("SET_CURRENT_AUTHOR : ", action.payload);
         draft.currentAuthor = action.payload;
-      });
-    },
-    [SET_AUTHOR_PLANS_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        console.log("SET_CURRENT_AUTHOR : ", action.payload);
-        draft.currentAuthor = {
-          ...draft.currentAuthor,
-          plan: action.payload,
-        };
-        // draft.currentAuthor = action.payload;
       });
     },
   },

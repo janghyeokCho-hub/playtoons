@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,8 +9,10 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import RecentItem from "@COMPONENTS/author/RecentItem";
 
-const RecentItems = ({ items }) => {
+const RecentItems = () => {
   SwiperCore.use([Navigation]);
+  const recents = useSelector(({ author }) => author.recents);
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -51,7 +54,7 @@ const RecentItems = ({ items }) => {
           }}
         >
           <div className="swiper-wrapper">
-            {items?.map((item, index) => (
+            {recents?.map((item, index) => (
               <SwiperSlide key={`recent_${index}`} className="swiper-slide">
                 <RecentItem item={item} />
               </SwiperSlide>

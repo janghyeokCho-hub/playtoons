@@ -1,50 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
-import { getPosts as getPostsAPI } from "@API/postService";
 import PostItem from "./PostItem";
-import { getPostTypes as getPostTypesAPI } from "@API/postService";
-import { useCallback } from "react";
+import { useSelector } from "react-redux";
 
-const PostItems = ({ item }) => {
-  const [posts, setPosts] = useState([]);
-
-  /** ===== Post type API Start ===== */
-  const [postType, setPostType] = useState([]);
-  const getPostTypes = async () => {
-    const response = await getPostTypesAPI();
-    if (response.status === 200) {
-      setPostType(response.data.types);
-    }
-  };
-  useEffect(() => {
-    if (!postType?.length) {
-      getPostTypes();
-    }
-  }, [postType]);
-
-  /** ===== Post type API End ===== */
-  const getPosts = useCallback(async () => {
-    const response = await getPostsAPI({ authorId: item?.id });
-    if (response.status === 200) {
-      let result = response.data.posts;
-      if (!Array.isArray(result)) {
-        result = new Array(result);
-      }
-      setPosts(result);
-    }
-  }, [item]);
-
-  useEffect(() => {
-    getPosts();
-  }, [item]);
+const PostItems = () => {
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
 
   return (
     <>
       <div className="lst_detail">
         <ul>
-          {posts &&
-            posts.map((post, index) => (
+          {currentAuthor?.posts &&
+            currentAuthor?.posts?.map((post, index) => (
               <PostItem key={`post_${index}`} item={post} />
             ))}
         </ul>

@@ -1,18 +1,15 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import RecommentItem from "./RecommentItem";
 
-const RecommentItems = ({ items, handleCurrentAuthor }) => {
+const RecommentItems = () => {
+  const authors = useSelector(({ author }) => author.authors);
+
   return (
     <div className="lst_author_profile">
-      {items &&
-        items.map((item, index) => {
-          return (
-            <RecommentItem
-              key={`recomment_${index}`}
-              item={item}
-              callback={() => handleCurrentAuthor(item)}
-            />
-          );
+      {authors &&
+        authors.map((item, index) => {
+          return <RecommentItem key={`recomment_${index}`} item={item} />;
         })}
     </div>
   );

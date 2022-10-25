@@ -208,32 +208,30 @@ const Webtoon = () => {
                 <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
               </div>
               <div className="conts">
-                {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-                <InputReply
-                  id="replyInput"
-                  className={`textarea1 ${selectEmoticon ? "emo" : ""}`}
-                  contentEditable
-                  suppressContentEditableWarning
-                  placeholder="ログインして投稿する"
-                >
+                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
+                  {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
+
+                  <textarea
+                    className="textarea1"
+                    placeholder="ログインして投稿する"
+                  ></textarea>
+
                   {/*<!-- 삽입된 이모티콘 -->*/}
                   {selectEmoticon && (
-                    <>
-                      <br />
-                      <div className="ico_emo" tabIndex={-1}>
-                        <span>
-                          <img src={selectEmoticon} alt="" />
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setSelectEmoticon(null)}
-                        >
-                          <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                      </div>
-                    </>
+                    <div className="ico_emo">
+                      <span>
+                        <img src={selectEmoticon} alt="" />
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setSelectEmoticon(null)}
+                      >
+                        <FontAwesomeIcon icon={faCircleXmark} />
+                      </button>
+                    </div>
                   )}
-                </InputReply>
+                </div>
+
                 <div className="btns">
                   <button
                     type="button"

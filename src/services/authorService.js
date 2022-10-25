@@ -117,3 +117,11 @@ export const deleteAuthorDisLike = async (id) => {
     return { status: e.response.status };
   }
 };
+
+export const getCurationList = async () => {
+  try {
+    return await apiServer("get", `/curation/6/list?order=DESC&limit=6`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

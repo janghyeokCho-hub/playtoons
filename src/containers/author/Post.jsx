@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,38 +10,31 @@ import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import PostItems from "@COMPONENTS/author/PostItems";
 import { setAuthorFollow } from "@API/authorService";
-import { getAuthor as getAuthorAPI } from "@API/authorService";
-import { useEffect } from "react";
+import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import SharePopup from "@COMPONENTS/author/detail/SharePopup";
 
 const Post = () => {
+  const dispatch = useDispatch();
   const params = useParams();
   const id = params?.id;
 
   const location = useLocation();
   const tab = location?.state?.tab;
 
-  const [author, setAuthor] = useState(null);
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
   const [selectTab, setSelectTab] = useState(tab ? tab : "POST");
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
-  const backgroundImgURL = useFilePath(author?.backgroundImage);
-  const profileImgURL = useFilePath(author?.profileImage);
-
-  const getAuthor = useCallback(async () => {
-    const response = await getAuthorAPI(id);
-    if (response?.status === 200) {
-      setAuthor(response.data.author);
-    }
-  }, [id]);
+  const backgroundImgURL = useFilePath(currentAuthor?.backgroundImage);
+  const profileImgURL = useFilePath(currentAuthor?.profileImage);
 
   useEffect(() => {
-    getAuthor();
-  }, []);
+    dispatch(setCurrentAuthor(id));
+  }, [dispatch, id]);
 
   const handleFollow = useCallback(
     async (type) => {
-      if (author?.id) {
-        const response = await setAuthorFollow(type, author.id);
+      if (currentAuthor?.id) {
+        const response = await setAuthorFollow(type, currentAuthor.id);
         if (type === "post") {
           if (response?.status === 201) {
             alert("SUCCESS");
@@ -56,7 +50,7 @@ const Post = () => {
         }
       }
     },
-    [author]
+    [currentAuthor]
   );
 
   return (
@@ -73,8 +67,8 @@ const Post = () => {
               {/* 이미지 default 값 필요 */}
               <img src={profileImgURL} alt="profile" />
             </div>
-            <p className="h1">{author?.nickname}</p>
-            <p className="t1">{author?.description}</p>
+            <p className="h1">{currentAuthor?.nickname}</p>
+            <p className="t1">{currentAuthor?.description}</p>
             <div className="btns">
               <Link
                 to=""
@@ -139,9 +133,9 @@ const Post = () => {
               </li>
             </ul>
           </div>
-          {selectTab === "POST" && <PostItems item={author} />}
-          {selectTab === "SERIES" && <SeriesItems item={author} />}
-          {selectTab === "PLAN" && <Plan item={author} />}
+          {selectTab === "POST" && <PostItems />}
+          {selectTab === "SERIES" && <SeriesItems />}
+          {selectTab === "PLAN" && <Plan />}
         </div>
       </div>
 

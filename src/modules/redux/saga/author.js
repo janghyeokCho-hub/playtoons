@@ -1,12 +1,9 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import {
-  GET_AUTHOR_LIST,
-  SET_CURRENT_AUTHOR,
-  SET_AUTHOR_PLANS,
-} from "@REDUX/ducks/author";
+import { GET_AUTHOR_LIST, SET_CURRENT_AUTHOR } from "@REDUX/ducks/author";
 import { startLoading, finishLoading } from "@REDUX/ducks/loading";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as authorApi from "@API/authorService";
+import * as postApi from "@API/postService";
 
 function createGetAuthorListRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
@@ -16,12 +13,22 @@ function createGetAuthorListRequestSaga(type) {
     try {
       yield put(startLoading(type));
       // 작가 리스트
-      const response = yield call(authorApi.getAuthorList);
-      console.log("getAuthorList response : ", response);
-      if (response?.status === 200) {
+      const authors = yield call(authorApi.getCurationList);
+      if (authors?.status === 200) {
+        const payload = {
+          authorsMeta: authors?.data?.meta,
+          authors: authors?.data?.authors,
+        };
+        const recents = yield call(authorApi.getAuthorRecent);
+
+        if (recents?.status === 200) {
+          payload.recents = recents?.data?.authors;
+          payload.recentsMeta = recents?.data?.meta;
+        }
+
         yield put({
           type: SUCCESS,
-          payload: response.data,
+          payload: payload,
         });
       }
 
@@ -50,13 +57,45 @@ function createSetCurrentAuthorRequestSaga(type) {
   return function* (action) {
     if (action.payload) {
       try {
-        yield call(authorApi.setViewAuthor, action.payload.id);
-        const response = yield call(authorApi.getAuthor, action.payload.id);
+        yield call(authorApi.setViewAuthor, action.payload);
+        const response = yield call(authorApi.getAuthor, action.payload);
 
         if (response.status === 200) {
+          const payload = response?.data?.author;
+          /** 해당 작가의 게시물 목록 */
+          const postResponse = yield call(postApi.getPosts, {
+            authorId: payload?.id || action.payload,
+          });
+
+          if (postResponse?.status === 200) {
+            payload.posts = postResponse?.data?.posts || [];
+          } else {
+            payload.posts = [];
+          }
+
+          /** 해당 작가의 시리즈 목록 */
+          const seriesResponse = yield call(postApi.getPostSeries, {
+            authorId: payload?.id || action.payload,
+          });
+          if (seriesResponse?.status === 200) {
+            payload.series = seriesResponse?.data?.series || [];
+          } else {
+            payload.series = [];
+          }
+
+          /** 해당 작가의 구독 플랜 목록 */
+          const planResponse = yield call(authorApi.getAuthorPlans, {
+            authorId: payload?.id || action.payload,
+          });
+          if (planResponse?.status === 200) {
+            payload.subscribeTiers = planResponse?.data?.subscribeTiers || [];
+          } else {
+            payload.subscribeTiers = [];
+          }
+
           yield put({
             type: SUCCESS,
-            payload: response.data.author,
+            payload: payload,
           });
         }
       } catch (e) {
@@ -81,52 +120,7 @@ function createSetCurrentAuthorRequestSaga(type) {
 const setCurrentAuthorSaga =
   createSetCurrentAuthorRequestSaga(SET_CURRENT_AUTHOR);
 
-function createSetAuthorPlansRequestSaga(type) {
-  const SUCCESS = `${type}_SUCCESS`;
-  const FAILURE = `${type}_FAILURE`;
-
-  return function* (action) {
-    if (action.payload) {
-      try {
-        const params = {
-          authorId: action.payload.authorId,
-          keyword: action.payload.keyword || null,
-          orderKey: action.payload.orderKey || null,
-          order: action.payload.order || null, // ASC || DESC
-          page: action.payload.page || null,
-          limit: action.payload.limit || null,
-        };
-        const response = yield call(authorApi.getAuthorPlans, params);
-        console.log("getAuthorPlans response : ", response);
-        if (response.status === 200) {
-          yield put({
-            type: SUCCESS,
-            payload: response.data,
-          });
-        }
-      } catch (e) {
-        console.dir(e);
-        yield call(exceptionHandler, { e: e, redirectError: false });
-
-        yield put({
-          type: FAILURE,
-          payload: action.payload,
-          error: true,
-        });
-      }
-    } else {
-      yield put({
-        type: SUCCESS,
-        payload: action.payload,
-      });
-    }
-  };
-}
-
-const setAuthorPlansSaga = createSetAuthorPlansRequestSaga(SET_AUTHOR_PLANS);
-
 export default function* authorSaga() {
   yield takeLatest(GET_AUTHOR_LIST, getAuthorListSaga);
   yield takeLatest(SET_CURRENT_AUTHOR, setCurrentAuthorSaga);
-  yield takeLatest(SET_AUTHOR_PLANS, setAuthorPlansSaga);
 }

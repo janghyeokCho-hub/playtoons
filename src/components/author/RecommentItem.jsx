@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getPostSeries as getPostSeriesAPI } from "@API/postService";
+import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import useFilePath from "@/hook/useFilePath";
 
 const SeriesImgComponent = ({ item }) => {
@@ -9,9 +11,14 @@ const SeriesImgComponent = ({ item }) => {
   return <ImgDiv bgImg={coverImgURL} />;
 };
 
-const RecommentItem = ({ item, callback }) => {
+const RecommentItem = ({ item }) => {
+  const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const profileImgURL = useFilePath(item?.profileImage);
+
+  const handleCurrentAuthor = useCallback(() => {
+    dispatch(setCurrentAuthor(item.id));
+  }, [dispatch, item]);
 
   useEffect(() => {
     async function getPostSeries(id) {
@@ -42,10 +49,10 @@ const RecommentItem = ({ item, callback }) => {
       <div className="box_profile _half">
         <Link
           to={{
-            pathname: `/author/post/${item.id}`,
+            pathname: `/author/post/${item?.id}`,
           }}
-          state={{ item }}
-          onClick={callback}
+          state={{ item: item }}
+          onClick={handleCurrentAuthor}
         >
           <div className="pf_thumb bind3">
             {/* 이미지 default 값 필요 */}
@@ -60,8 +67,8 @@ const RecommentItem = ({ item, callback }) => {
               {/* 이미지 default 값 필요 */}
               <img src={profileImgURL} alt="profile" />
             </div>
-            <p className="h1">{item.nickname}</p>
-            <p className="t1">{item.description}</p>
+            <p className="h1">{item?.nickname}</p>
+            <p className="t1">{item?.description}</p>
           </div>
         </Link>
       </div>

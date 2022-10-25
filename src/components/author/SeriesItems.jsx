@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { getPostSeries as getPostSeriesAPI } from "@API/postService";
+import React from "react";
 import SeriesItem from "./SeriesItem";
-import { useCallback } from "react";
+import { useSelector } from "react-redux";
 
-const SerieItems = ({ item }) => {
-  const [list, setList] = useState();
-  const getPostSeries = useCallback(async () => {
-    const response = await getPostSeriesAPI({ authorId: item.id });
-    if (response.status === 200) {
-      let result = response?.data?.series;
-      if (!Array.isArray(response?.data?.series)) {
-        result = new Array(result);
-      }
-      setList(result);
-    }
-  }, [item]);
-
-  useEffect(() => {
-    getPostSeries();
-  }, [item]);
+const SerieItems = () => {
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
 
   return (
     <div className="lst_series">
       <ul>
-        {list &&
-          list.map((item, index) => (
+        {currentAuthor?.series &&
+          currentAuthor?.series?.map((item, index) => (
             <SeriesItem key={`item_${index}`} item={item} />
           ))}
       </ul>
