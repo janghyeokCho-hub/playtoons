@@ -39,9 +39,9 @@ import { FILE_MAX_SIZE } from '@/common/constant';
  * @param handleEdit 
  */
 export default forwardRef( function ThumbnailTimeline(props, ref) {
+  const { className, textDragNDrop, name, id, textEdit, handleClose, handleEdit, previewHash, callback } = props;
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, hash: undefined, filename: "", fileLenth: ""};
-  const { className, textDragNDrop, name, id, textEdit, handleClose, handleEdit, previewHash, callback } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
   const [stateError, setStateError] = useState(undefined);
       
@@ -84,8 +84,7 @@ export default forwardRef( function ThumbnailTimeline(props, ref) {
       });
     }
     else{
-      setStateError( String(status, data) );
-      // setStateError( undefined );
+      setStateError( status + data );
     }
   };
 

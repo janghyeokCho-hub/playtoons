@@ -55,7 +55,7 @@ export default function Series(props) {
     }
     else{
       //error 처리
-      setStateError( String(status, getErrorMessageFromResultCode(data)) );
+      setStateError( String(status + getErrorMessageFromResultCode(data)) );
     }
   };
 

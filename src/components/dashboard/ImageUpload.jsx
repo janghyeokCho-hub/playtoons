@@ -36,9 +36,9 @@ import { FILE_MAX_SIZE } from '@/common/constant';
  * @param callback image value 설정 후 callback func
  */
 export default forwardRef(function ImageUpload(props, ref) {
+  const { className, preview, text, name, id, callback, previewHash } = props;
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {file: undefined, preview: undefined, value: undefined};
-  const { className, preview, text, name, id, callback, previewHash } = props;
   const [stateImage, setStateImage] = useState(initImageObject);
   const [stateError, setStateError] = useState(undefined);
   

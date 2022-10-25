@@ -122,13 +122,12 @@ export default function UploadPost(props) {
     }
     else{
       //error 처리
-      ref.current.setError( String(status, getErrorMessageFromResultCode(resultData)) );
+      ref.current.setError( status + getErrorMessageFromResultCode(resultData) );
     }
   };
 
   const setPost = async () => {
 
-    //check filed
     //필드 확인 
     if( refTitle.current.isEmpty() ){
 			refTitle.current.setError( text.please_input_title );

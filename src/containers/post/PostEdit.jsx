@@ -20,7 +20,10 @@ import { editPostToServer, getPostSeriesMine } from "@/services/postService";
 import Series from "@/components/post/Series";
 import { getFileUrlFromServer } from "@/services/fileService";
 import { setFileToServer } from "@/services/dashboardService";
-import { getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson } from "@/common/common";
+import Input from "@/components/dashboard/Input";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 const text = {
   post_edit: "投稿を修正",
@@ -45,6 +48,11 @@ const text = {
   type_movie: "映像",
   label_can_not_edit: "編集不可",
   input_image: "置いてください。",
+  please_input_content: '表紙を入力してください。',
+  please_input_thumbnail: 'サムネイルを入力してください。',
+  please_input_title: 'タイトルを入力してください。',
+  please_input_number: '話を入力してください。',
+  error_title: 'お知らせ',
 };
 
 
@@ -145,17 +153,18 @@ export default function PostEdit(props) {
   const reduxAuthors = useSelector( ({post}) => post?.authorMine.authors );
   const params = useParams('id');
   const navigate = useNavigate();
+  const refForm = useRef();
+  const refTitle = useRef();
+  const refNumber = useRef();
   const refContents = useRef();
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
-  const refForm = useRef();
 
   //==============================================================================
   // function
   //==============================================================================
 
   const callbackContents = () => {
-    console.log('callbackContents');
      //upload 할 이미지가 없다면
      if( refThumbnailTimeline.current.getImageFile() === undefined ){
         callbackTimeline();
@@ -167,8 +176,6 @@ export default function PostEdit(props) {
 
 
   const callbackTimeline = () => {
-    console.log('callbackTimeline');
-    
     editPost();
   };
 
@@ -183,7 +190,6 @@ export default function PostEdit(props) {
   *
   * @version 1.0.0
   * @author 2hyunkook
-  * @param {file} 
   */
   const setImageToServer = async(ref, usage) => {
     // 폼데이터 구성
@@ -210,7 +216,36 @@ export default function PostEdit(props) {
     }
   };
 
+  /**
+  *
+    edit post
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const editPost = async () => {
+
+    //필드 확인
+    if( refTitle.current.isEmpty() ){
+			refTitle.current.setError( text.please_input_title );
+			return;
+		}
+    if( refNumber.current.isEmpty() ){
+			refNumber.current.setError( text.please_input_number );
+			return;
+		}
+    if( refContents.current.checkToEmpty() ){
+      refContents.current.setError( text.please_input_content );
+      return;
+    }
+    if( refThumbnailTimeline.current.checkToEmpty() ){
+      refThumbnailTimeline.current.setError( text.please_input_thumbnail );
+      return;
+    }
+
+    
+
+
     let json = getFromDataJson(refForm);
     json = {
       ...json,
@@ -224,31 +259,44 @@ export default function PostEdit(props) {
       // outline: '',
       // number: '',
     };
-
-    if( refThumbnailTimeline.current.checkToEmpty() ){
-      refThumbnailTimeline.current.setError('サムネイルが必要です。');
-      return false;
+    if( !json.content.length ){
+      json = {
+        ...json,
+        content: reduxPostInfo.content,
+      };
     }
-
     if( !json.thumbnailImage.length ){
       json = {
         ...json,
         thumbnailImage: reduxPostInfo.thumbnailImage,
       };
     }
+    
 
     console.log('editPost json', json);
 
     const {status, data} = await editPostToServer(json);
     
     if( status === 200 ){
-      if( window.confirm('投稿を修正しました。') ){
-        navigate(`/dashboard/post/detail/${params.id}`);
-      }
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'投稿を修正しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/post/detail/${params.id}`)}
+          }
+        )
+      );
     }
     else{
-      //temp
-      alert( String(status, data) );
+      dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
     }
     
   };
@@ -318,7 +366,6 @@ export default function PostEdit(props) {
   }, []);
   
   useEffect(() => {
-    //test
     setStatePostInfo(reduxPostInfo);
     setStateType(reduxPostInfo?.type);
   }, [dispatch, reduxPostInfo]);
@@ -375,12 +422,12 @@ export default function PostEdit(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.title}</h3>
-                <input type="text" className="inp_txt w100p" name={"title"} defaultValue={reduxPostInfo?.title} />
+                <Input ref={refTitle} type="text" className="inp_txt w100p" name={"title"} defaultValue={reduxPostInfo?.title} />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.episode}</h3>
-                <input type="text" className="inp_txt w100p" name={"number"} defaultValue={reduxPostInfo?.number} />
+                <Input ref={refNumber} type="text" className="inp_txt w100p" name={"number"} defaultValue={reduxPostInfo?.number} />
               </div>
 
 
@@ -423,7 +470,6 @@ export default function PostEdit(props) {
                   id={"filebox1"}                     
                   name={"thumbnailImage"}
                   previewHash={reduxPostInfo?.thumbnailImage}
-                  // image={statePostInfo?.timeline.image}          
                   textDragNDrop={text.drag_drop}    
                   textInputMessage={text.input_image}     
                   textEdit={text.edit}
