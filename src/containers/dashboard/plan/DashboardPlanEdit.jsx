@@ -3,17 +3,17 @@ import React, { useEffect, useState, } from "react";
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 
-import tempPlanImage1 from "@IMAGES/img_mainplan1.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";
 import { editSubscribeTierToServer, setFileToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson, setInputValueToNumber } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus } from "@/common/common";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import Price from "@/components/dashboard/Price";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import Button from "@/components/dashboard/Button";
 
 const text = {
   edit_plan: "支援を編集する",
@@ -46,6 +46,7 @@ export default function DashboardPlanEdit(props) {
   const refImage = useRef();
   const refRating = useRef();
   const refPrice = useRef();
+  const refRegister = useRef();
 
   //==============================================================================
   // function
@@ -54,9 +55,6 @@ export default function DashboardPlanEdit(props) {
     return stateData?.rating === "G" ? true : false; 
   };
 
-  const getCheckedToRating = () => {
-    return refRating.checked ? 'R-18' : 'G'; 
-  };
 
   const findPlan = () => {
     for( let i = 0; i < reduxSubscribeTiers?.length; i++ ){
@@ -92,7 +90,7 @@ export default function DashboardPlanEdit(props) {
     params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("loginRequired", false);          //언제 체크해서 보내는건지?
     params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getCheckedToRating());                   //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("rating", getRatingToChecked(refRating));                   //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", ref.current.getImageFile());
     
     const {status, data: resultData} = await setFileToServer(params);
@@ -103,6 +101,7 @@ export default function DashboardPlanEdit(props) {
     }
     else{
       //error 처리
+      initButtonInStatus(refRegister);
       ref.current.setError(status + resultData);
     }
   };
@@ -111,18 +110,22 @@ export default function DashboardPlanEdit(props) {
 
     //필드 확인 
     if( refProductName.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refProductName.current.setError( text.please_input_product_name );
 			return;
 		}
     if( refDescription.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refDescription.current.setError( text.please_input_description );
 			return;
 		}
     if( refImage.current.checkToEmpty() ){
+      initButtonInStatus(refRegister);
       refImage.current.setError( text.please_input_image );
       return false;
     }
     if( refPrice.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refPrice.current.setError( text.please_input_price );
 			return;
 		}
@@ -133,7 +136,6 @@ export default function DashboardPlanEdit(props) {
       price: parseInt( json.price ),
 			subscribeTierId: params.id,
 		};
-
     if( !json.thumbnailImage.length ){
       json = {
         ...json,
@@ -141,7 +143,6 @@ export default function DashboardPlanEdit(props) {
       };
     }
 
-    console.log('updateSubscribeTier', json);
     const {status, data} = await editSubscribeTierToServer(json);
     console.log('updateSubscribeTier', status, data);
     
@@ -167,6 +168,8 @@ export default function DashboardPlanEdit(props) {
         )
       );
     }
+
+    initButtonInStatus(refRegister);
   };
 
 
@@ -244,8 +247,8 @@ export default function DashboardPlanEdit(props) {
             </form>
           </section>
 
-          <div id="btn" className="bbs_write_botm" onClick={handleClickRegister}>
-            <a href="#btn" className="btn-pk n blue"><span>{text.register}</span></a>
+          <div id="btn" className="bbs_write_botm">
+            <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleClickRegister} />
           </div>
         
         </div>

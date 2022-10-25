@@ -6,7 +6,7 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Tag from "@/components/dashboard/Tag";
 import { setFileToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus } from "@/common/common";
 import { setPostToServer } from "@/services/postService";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "@/components/dashboard/Input";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import Button from "@/components/dashboard/Button";
 
 
 const text = {
@@ -71,12 +72,13 @@ export default function UploadPost(props) {
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const refForm = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
   const refContents = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
-  const refForm = useRef();
+  const refRegister = useRef();
 
   //==============================================================================
   // function
@@ -90,6 +92,7 @@ export default function UploadPost(props) {
   const callbackContentImageAfterUpload = (imageInfo) => {
     //thumbnailImage upload
     if( refThumbnail.current.getImageFile() === undefined ){
+      initButtonInStatus(refRegister);
       refThumbnail.current.setError( text.please_input_thumbnail );
     }
     else{
@@ -122,6 +125,7 @@ export default function UploadPost(props) {
     }
     else{
       //error 처리
+      initButtonInStatus(refRegister);
       ref.current.setError( status + getErrorMessageFromResultCode(resultData) );
     }
   };
@@ -130,11 +134,13 @@ export default function UploadPost(props) {
 
     //필드 확인 
     if( refTitle.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refTitle.current.setError( text.please_input_title );
 			return;
 		}
 
     if( refNumber.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refNumber.current.setError( text.please_input_description );
 			return;
 		}
@@ -197,6 +203,7 @@ export default function UploadPost(props) {
       );
     }
     
+    initButtonInStatus(refRegister);
   };
 
   //==============================================================================
@@ -217,6 +224,7 @@ export default function UploadPost(props) {
   
   const handleClickRegister = (event) => {
     if( refContents.current.getImageFile() === undefined ){
+      initButtonInStatus(refRegister);
       refContents.current.setError( text.please_input_content );
     }
     else{
@@ -334,7 +342,7 @@ export default function UploadPost(props) {
 
             <div className="bbs_write_botm">
               <div className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></div>
-              <div className="btn-pk n blue" onClick={handleClickRegister}><span>{text.register}</span></div>
+              <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleClickRegister} />
             </div>
           </form>
 

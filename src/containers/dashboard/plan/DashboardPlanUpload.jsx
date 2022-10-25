@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState, } from "react";
+import React, { useCallback, useEffect, } from "react";
 
 import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import { useRef } from "react";
-import { getErrorMessageFromResultCode, getFromDataJson, setInputValueToNumber } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus, } from "@/common/common";
 import { setFileToServer, setSubscribeTierToServer } from "@/services/dashboardService";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import Textarea from "@/components/dashboard/Textarea";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import Price from "@/components/dashboard/Price";
+import Button from "@/components/dashboard/Button";
 
 
 const text = {
@@ -41,9 +42,9 @@ export default function DashboardPlanUpload(props) {
   const refProductName = useRef();
   const refDescription = useRef();
   const refThumbnailImage = useRef();
-  const refPriceContainer = useRef();
-  const refPrice = useRef();
   const refRating = useRef();
+  const refPrice = useRef();
+  const refRegister = useRef();
 
   //==============================================================================
   // function 
@@ -61,7 +62,6 @@ export default function DashboardPlanUpload(props) {
   *
   * @version 1.0.0
   * @author 2hyunkook
-  * @param {file} 
   */
     const setImageToServer = async(ref, usage) => {
       // 폼데이터 구성
@@ -76,33 +76,41 @@ export default function DashboardPlanUpload(props) {
       params.append("rating", refRating.current.checked ? 'R-18' : 'G');                   //G, PG-13, R-15, R-17, R-18, R-18G
       params.append("file", ref.current.getImageFile());
       
-      console.log("set file params", params);
-  
       const {status, data: resultData} = await setFileToServer(params);
       console.log("setFile result", status, resultData);
-      
       //create sccuess
       if( status === 201 ){
         ref.current.setImageValueToInputTag(resultData?.hash);
       }
       else{
         //error 처리
-        console.log('Error : ', status, resultData);
+        initButtonInStatus(refRegister);
+        ref.current.setError( String(status + resultData) );
       }
     };
 
+  /**
+  *
+    plan upload 
+  *
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const setSubscribeTier = async () => {
 
     //필드 확인 
     if( refProductName.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refProductName.current.setError( text.please_input_product_name );
 			return;
 		}
     if( refDescription.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refDescription.current.setError( text.please_input_description );
 			return;
 		}
     if( refPrice.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refPrice.current.setError( text.please_input_price );
 			return;
 		}
@@ -118,7 +126,6 @@ export default function DashboardPlanUpload(props) {
 
     const {status, data} = await setSubscribeTierToServer(json);
     console.log('setSubscribeTier', status, data);
-    
     if( status === 201 ){
       dispatch(
         showModal(
@@ -142,27 +149,18 @@ export default function DashboardPlanUpload(props) {
       );
     }
     
+    initButtonInStatus(refRegister);
   };
 
   //==============================================================================
   // event
   //==============================================================================
 
-
-  const handleFocusPrice = () => {
-    refPriceContainer.current.classList.add("input_focus");
-  };
-  
-  const handleBlurPrice = () => {
-    refPriceContainer.current.classList.remove("input_focus");
-  };
-
   const handleClickRegister = useCallback((event) => {
-    console.log('Register', event);
-    
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
     //upload 할 이미지가 없다면 
     if( refThumbnailImage.current.getImageFile() === undefined ){
+      initButtonInStatus(refRegister);
       refThumbnailImage.current.setError( text.please_input_image );
     }
     else{
@@ -227,10 +225,9 @@ export default function DashboardPlanUpload(props) {
             </form>
           </section>
 
-          <div id="btnReg" className="bbs_write_botm" onClick={handleClickRegister}>
-            <a href="#btnReg" className="btn-pk n blue"><span>{text.register}</span></a>
+          <div id="btnReg" className="bbs_write_botm" >
+            <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleClickRegister} />
           </div>
-        
         </div>
       </div>
 

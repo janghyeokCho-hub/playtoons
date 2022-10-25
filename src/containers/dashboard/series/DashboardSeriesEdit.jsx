@@ -15,13 +15,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
 import Tag from "@/components/dashboard/Tag";
-import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus } from "@/common/common";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPostIdMineFromServer } from "@/services/postService";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
+import Button from "@/components/dashboard/Button";
 
 
 const text = {
@@ -65,6 +66,7 @@ export default function DashboardUploadSeries(props) {
   const refR19 = useRef();
   const refCoverImage = useRef();
   const refTimeline  = useRef();
+  const refRegister  = useRef();
 
 
   //==============================================================================
@@ -121,7 +123,8 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
-      refImage.current.setError( String(status, getErrorMessageFromResultCode(data)) );
+      refImage.current.setError( String(status + getErrorMessageFromResultCode(data)) );
+      initButtonInStatus(refRegister);
     }
   };
 
@@ -130,21 +133,25 @@ export default function DashboardUploadSeries(props) {
     
     //필드 확인 
     if( refTitle.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refTitle.current.setError( text.please_input_title );
 			return;
 		}
 
     if( refDescription.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refDescription.current.setError( text.please_input_description );
 			return;
 		}
 
     if( refCoverImage.current.checkToEmpty() ){
+      initButtonInStatus(refRegister);
       refCoverImage.current.setError( text.please_input_cover );
       return;
     }
 
     if( refTimeline.current.checkToEmpty() ){
+      initButtonInStatus(refRegister);
       refTimeline.current.setError( text.please_input_thumbnail );
       return;
     }
@@ -199,6 +206,8 @@ export default function DashboardUploadSeries(props) {
         )
       );
     }
+    
+    initButtonInStatus(refRegister);
   };
  
   //==============================================================================
@@ -336,11 +345,7 @@ export default function DashboardUploadSeries(props) {
                 <span>{text.preview}</span>
               </div>
             </div>
-            <div className="btn-pk n blue" onClick={handleRegister}>
-              <div className="pull_width" >
-                <span>{text.register}</span>
-              </div>
-            </div>
+            <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleRegister}/>
           </div>
         
         </div>

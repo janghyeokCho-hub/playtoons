@@ -285,6 +285,21 @@ export const editPostSeriesToServer = async (params) => {
   }
 };
 
+/**
+*
+  Dashbaord - reaction list 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getReactionMineAuthorIdFromServer = async (params) => {
+  try {
+    return await apiServer('get', `/reaction/mine${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
 
 
 

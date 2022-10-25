@@ -3,13 +3,17 @@ import React, { useRef, useLayoutEffect,  } from "react";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
-import { getFromDataJson, getRatingToChecked } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus } from "@/common/common";
 import {  setAuthorToServer, setFileToServer } from "@/services/dashboardService";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import { useNavigate } from "react-router-dom";
 import { getEulaVersion } from "@/services/accountService";
 import { useState } from "react";
+import Button from "@/components/dashboard/Button";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { useDispatch } from "react-redux";
 
 
 
@@ -34,14 +38,16 @@ const text = {
 export default function RegisterForm(props) {
 	const [stateAgreement, setStateAgreement] = useState(undefined);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const refForm = useRef();
 	const refNickname = useRef();
 	const refName = useRef();
 	const refDescription = useRef();
 	const refProfile = useRef();
 	const refBackground = useRef();
-	const refTags = useRef();
 	const refR19 = useRef();
+	const refTags = useRef();
+	const refRegister = useRef();
 
 	//==============================================================================
 	// function
@@ -74,7 +80,14 @@ export default function RegisterForm(props) {
 			setStateAgreement(data?.agreement);
 		}
 		else{
-			alert( String('Agreement', status, data) );		
+			dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
 		}
 	};
 
@@ -98,7 +111,8 @@ export default function RegisterForm(props) {
 		}
 		else{
 			//error 처리
-			ref.current.setError( String(status, resultData) );
+			initButtonInStatus(refRegister);
+			ref.current.setError( String(status + resultData) );
 		}
 	};
 
@@ -111,18 +125,31 @@ export default function RegisterForm(props) {
 			eulaVersion: stateAgreement?.version
 		};
 
-		console.log('setAccounts', json);
 		const {status, data} = await setAuthorToServer(json);
-		
 		if( status === 201 ){
-			if( window.confirm('クリエイター登録しました。') ){
-        navigate('/dashboard/profile/upload');
-      }
+			dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={'クリエイター登録しました。'} buttonTitle={'確認'} />, 
+            callback: ()=> {navigate(`/dashboard/profile/upload`)}
+          }
+        )
+      );
 		}
 		else{
 			//error 
-			alert( String(status, data) );
+			dispatch(
+        showModal(
+          {
+            title: text.error_title, 
+            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
+          }
+        )
+      );
 		}
+
+		initButtonInStatus(refRegister);
 	};
 
 	//==============================================================================
@@ -131,29 +158,31 @@ export default function RegisterForm(props) {
   
 	const handleClickRegister = (event) => {
 		if( refNickname.current.isEmpty() ){
+			initButtonInStatus(refRegister);
 			refNickname.current.setError( 'ニックネームが必要です。' );
-			refNickname.current.focus();
 			return;
 		}
 
 		if( refName.current.isEmpty() ){
+			initButtonInStatus(refRegister);
 			refName.current.setError( '名前が必要です。' );
-			refName.current.focus();
 			return;
 		}
 
 		if( refDescription.current.isEmpty() ){
+			initButtonInStatus(refRegister);
 			refDescription.current.setError( '紹介が必要です。' );
-			refDescription.current.focus();
 			return;
 		}
 
 		if( refProfile.current.checkToEmpty() ){
+			initButtonInStatus(refRegister);
       refProfile.current.setError('プロフィル写真が必要です。');
       return false;
     }
 
 		if( refBackground.current.checkToEmpty() ){
+			initButtonInStatus(refRegister);
       refBackground.current.setError('カバー写真が必要です。');
       return false;
     }
@@ -252,7 +281,7 @@ export default function RegisterForm(props) {
 					</form>
 
 					<div className="bbs_write_botm">
-						<div onClick={handleClickRegister} className="btn-pk n blue"><span>{text.register}</span></div>
+						<Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleClickRegister} />
 					</div>
 					
 				</div>

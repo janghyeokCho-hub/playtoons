@@ -132,7 +132,7 @@ export default function DashboardSeriesDetail(props) {
             </div>
 
             <h3 className="tit1">{text.summary}</h3>
-            <p className="txt1">{stateData?.description}</p>
+            <p className="txt1 ws_pre">{stateData?.description}</p>
 
             <h3 className="tit1">{text.tag}</h3>
             <div className="txt1">

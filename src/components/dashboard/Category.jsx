@@ -56,7 +56,9 @@ export default function Category(props, ref) {
         name={name}
         className={`${className}`}
         dataList={stateList}
-        handleItemClick={handleClickItem} />
+        handleItemClick={handleClickItem} 
+        selected={selected}
+        />
 
       <ErrorMessage error={stateError} />
     </>

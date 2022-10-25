@@ -7,7 +7,7 @@ import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
 import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus, } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
@@ -18,6 +18,7 @@ import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
+import Button from "@/components/dashboard/Button";
 
 
 const text = {
@@ -59,6 +60,10 @@ export default function DashboardUploadSeries(props) {
   const refTimelineImage = useRef();
   const refForm = useRef();
   const refTags = useRef();
+  const refRegister = useRef();
+
+
+ 
 
 
   /**
@@ -74,11 +79,13 @@ export default function DashboardUploadSeries(props) {
 
     //필드 확인 
     if( refTitle.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refTitle.current.setError( text.please_input_title );
 			return;
 		}
 
     if( refDescription.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refDescription.current.setError( text.please_input_description );
 			return;
 		}
@@ -120,8 +127,8 @@ export default function DashboardUploadSeries(props) {
   const callbackCoverImage = () => {
     //upload 할 이미지가 있다면
     if( refTimelineImage.current.getImageFile() === undefined ){
+      initButtonInStatus(refRegister);
       refTimelineImage.current.setError( text.please_input_thumbnail );
-      // callbackTimeline();
     }
     else{
       refTimelineImage.current.setError( undefined );
@@ -165,6 +172,7 @@ export default function DashboardUploadSeries(props) {
     }
     else{
       //error 처리
+      initButtonInStatus(refRegister);
       dispatch(
         showModal(
           {
@@ -203,6 +211,8 @@ export default function DashboardUploadSeries(props) {
         )
       );
     }
+
+    initButtonInStatus(refRegister);
   };
 
   //==============================================================================
@@ -220,8 +230,8 @@ export default function DashboardUploadSeries(props) {
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
     //upload 할 이미지가 없다면 
     if( refCoverImage.current.getImageFile() === undefined ){
+      initButtonInStatus(refRegister);
       refCoverImage.current.setError( text.please_input_cover );
-      // callbackCoverImage();
     }
     else{
       //이미지 업로드 후 image url 
@@ -344,11 +354,7 @@ export default function DashboardUploadSeries(props) {
                 <span>{text.preview}</span>
               </div>
             </button>
-            <button className="btn-pk n blue" onClick={handleRegister}>
-              <div className="pull_width" >
-                <span>{text.register}</span>
-              </div>
-            </button>
+            <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleRegister}/>
           </div>
 
         </div>

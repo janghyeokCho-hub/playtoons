@@ -192,13 +192,22 @@ export const getDateYYYYMMDD = (date, separator) => {
 
 /**
 *
-   date format
+  input에 숫자만
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param date date 정보
-* @param separator 구분자
 */
 export const setInputValueToNumber = (ref, value) => {
   ref.current.value = value.replace(/[^0-9]/g, '');
+};
+
+/**
+*
+  button 상태 초기화
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const initButtonInStatus = (refButton) => {
+  refButton.current.setStatus(undefined);
 };

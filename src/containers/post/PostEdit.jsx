@@ -20,10 +20,11 @@ import { editPostToServer, getPostSeriesMine } from "@/services/postService";
 import Series from "@/components/post/Series";
 import { getFileUrlFromServer } from "@/services/fileService";
 import { setFileToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus } from "@/common/common";
 import Input from "@/components/dashboard/Input";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import Button from "@/components/dashboard/Button";
 
 const text = {
   post_edit: "投稿を修正",
@@ -159,6 +160,7 @@ export default function PostEdit(props) {
   const refContents = useRef();
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
+  const refRegister = useRef();
 
   //==============================================================================
   // function
@@ -212,7 +214,8 @@ export default function PostEdit(props) {
     }
     else{
       //error 처리
-      ref.current.setError(status, resultData);
+      initButtonInStatus(refRegister);
+      ref.current.setError( String(status + resultData) );
     }
   };
 
@@ -227,24 +230,25 @@ export default function PostEdit(props) {
 
     //필드 확인
     if( refTitle.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refTitle.current.setError( text.please_input_title );
 			return;
 		}
     if( refNumber.current.isEmpty() ){
+      initButtonInStatus(refRegister);
 			refNumber.current.setError( text.please_input_number );
 			return;
 		}
     if( refContents.current.checkToEmpty() ){
+      initButtonInStatus(refRegister);
       refContents.current.setError( text.please_input_content );
       return;
     }
     if( refThumbnailTimeline.current.checkToEmpty() ){
+      initButtonInStatus(refRegister);
       refThumbnailTimeline.current.setError( text.please_input_thumbnail );
       return;
     }
-
-    
-
 
     let json = getFromDataJson(refForm);
     json = {
@@ -271,12 +275,9 @@ export default function PostEdit(props) {
         thumbnailImage: reduxPostInfo.thumbnailImage,
       };
     }
-    
-
     console.log('editPost json', json);
 
     const {status, data} = await editPostToServer(json);
-    
     if( status === 200 ){
       dispatch(
         showModal(
@@ -298,7 +299,8 @@ export default function PostEdit(props) {
         )
       );
     }
-    
+
+    initButtonInStatus(refRegister);
   };
   //==============================================================================
   // event
@@ -504,7 +506,7 @@ export default function PostEdit(props) {
 
             <div className="bbs_write_botm">
               <div className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></div>
-              <div className="btn-pk n blue" onClick={handleClickRegister}><span>{text.btn_edit}</span></div>
+              <Button ref={refRegister} className={'btn-pk n blue'} text={text.btn_edit} onClick={handleClickRegister} />
             </div>
           </form>
 

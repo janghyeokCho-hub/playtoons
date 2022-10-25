@@ -23,7 +23,7 @@ import { useState } from 'react';
 * @return
 */
 export default forwardRef( function Select(props, ref) {
-  const {name, className, dataList, disabled, handleItemClick, disabledText } = props;
+  const {name, className, dataList, disabled, selected, handleItemClick, disabledText } = props;
   const [stateDisabled, setStateDisabled] = useState(false);
   const refSelect = useRef();
 
@@ -37,16 +37,8 @@ export default forwardRef( function Select(props, ref) {
     });
   };
 
-  const handleClickSelect = () => {
+  const setSelectedItem = (id) => {
     const select = refSelect.current;
-    
-    handleItemClick?.(select.options[select.selectedIndex]);
-  };
-
-  // ref.current로 접근하여 사용
-  useImperativeHandle(ref, () => ({
-    setSelected: (id) => {
-      const select = refSelect.current;
       if( select !== null ){
         dataList?.map((item, index) => {
           if( item.id === id ){
@@ -56,12 +48,31 @@ export default forwardRef( function Select(props, ref) {
           }
         });
       }
-    }
+    
+  };
+
+  const handleClickSelect = () => {
+    const select = refSelect.current;
+    
+    handleItemClick?.(select.options[select.selectedIndex]);
+  };
+
+  // ref.current로 접근하여 사용
+  useImperativeHandle(ref, () => ({
+    setSelected: (id) => {
+      setSelectedItem(id);
+    },
   }));
 
   useEffect(() => {
     setStateDisabled(disabled);
   }, []);
+
+  useEffect(() => {
+    if( selected !== undefined ){
+      setSelectedItem(selected);
+    }
+  }, [selected]);
 
   return (
     <>

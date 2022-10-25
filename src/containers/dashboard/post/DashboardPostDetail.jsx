@@ -197,7 +197,7 @@ export default function DashboardPostDetail() {
         <div className="area_detail2">
           <h2 className="h1">{reduxPostDetail?.title} {reduxPostDetail?.number}</h2>
           <p className="d1">{ getDateYYYYMMDD(reduxPostDetail?.startAt, '.') }</p>
-          <pre className="t1">{ reduxPostDetail?.series?.description }</pre>
+          <p className="ws_pre">{ reduxPostDetail?.series?.description }</p>
         </div>
         
         <div className="ta_center">
