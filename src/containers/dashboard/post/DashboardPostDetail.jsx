@@ -8,7 +8,7 @@ import Container from "@/components/dashboard/Container";
 import tempImage from '@IMAGES/tmp_comic3.png';
 import tempProfile from '@IMAGES/img_profile.png';
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
 import { getPostDetailFromServer, getPostIdMineFromServer } from "@/services/postService";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,9 @@ import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
 import Image from "@/components/dashboard/Image";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
-import { getDateYYYYMMDD, getDescriptionToHtml } from "@/common/common";
+import { getDateYYYYMMDD, getDescriptionToHtml, getErrorMessageFromResultCode } from "@/common/common";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 
 const text = {
@@ -85,12 +87,37 @@ export default function DashboardPostDetail() {
   const [stateData, setStateData] = useState(undefined);
   const reduxPostDetail = useSelector(({ post }) => post?.post);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const params = useParams('id');
 
 
   //==============================================================================
   // api
   //==============================================================================
+  const getPostDetail = async () => {
+    const {status, data} = await getPostIdMineFromServer(params);
+    console.log('getPostDetail', status, data);
+    
+    if( status === 200 ){
+      setStateData({
+        ...tempData,
+        title: data?.post?.title,
+        series: data?.post?.series?.title,
+        // issue:
+        startAt: data?.post?.startAt,
+        endAt: data?.post?.endAt,
+        status: data?.post?.status,
+        viewCount: data?.post?.viewCount,
+        likeCount: data?.post?.likeCount,
+        reactionCount: data?.post?.reactionCount,
+        content: data?.post?.content,
+        thumbnailImage: data?.post?.thumbnailImage,
+      });
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, callback: () => navigate(-1)}) );
+    }
+  };
 
   //==============================================================================
   // event
@@ -107,9 +134,6 @@ export default function DashboardPostDetail() {
     
     console.log('Item', id, type);
   };
-
-  
-
   //==============================================================================
   // Hook & render
   //==============================================================================
@@ -124,11 +148,11 @@ export default function DashboardPostDetail() {
             <p className="d1"><span>{item.date}</span><span>コメント</span></p>
             <p className="t1">{item.coment}</p>
             <div className="btns">
-              <a className="btn-pk s blue2" data-id={item.id} click-type={'fix'} onClick={handleClickItem}>{text.fix}</a>
-              <a className="btn-pk s blue2" data-id={item.id} click-type={'good'} onClick={handleClickItem}>{text.good}</a>
-              <a className="btn-pk s blue2" data-id={item.id} click-type={'coment'} onClick={handleClickItem}>{text.coment}</a>
-              <a className="btn-pk s blue2" data-id={item.id} click-type={'report'} onClick={handleClickItem}>{text.report}</a>
-              <a className="btn-pk s blue2" data-id={item.id} click-type={'delete'} onClick={handleClickItem}>{text.delete}</a>
+              <div className="btn-pk s blue2" data-id={item.id} click-type={'fix'} onClick={handleClickItem}>{text.fix}</div>
+              <div className="btn-pk s blue2" data-id={item.id} click-type={'good'} onClick={handleClickItem}>{text.good}</div>
+              <div className="btn-pk s blue2" data-id={item.id} click-type={'coment'} onClick={handleClickItem}>{text.coment}</div>
+              <div className="btn-pk s blue2" data-id={item.id} click-type={'report'} onClick={handleClickItem}>{text.report}</div>
+              <div className="btn-pk s blue2" data-id={item.id} click-type={'delete'} onClick={handleClickItem}>{text.delete}</div>
             </div>
             <div className="rgh">
               <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} />{item.good_count}</button>
@@ -144,26 +168,8 @@ export default function DashboardPostDetail() {
     setStateData(tempData);
     setStateReactionList(tempReactionList.list);
 
-    dispatch( getPostDetailAction(params) );
+    getPostDetail();
   }, []);
-
-  useEffect(() => {
-    setStateData({
-      ...tempData,
-      title: reduxPostDetail?.title,
-      series: reduxPostDetail?.series?.title,
-      // issue:
-      startAt: reduxPostDetail?.startAt,
-      endAt: reduxPostDetail?.endAt,
-      status: reduxPostDetail?.status,
-      viewCount: reduxPostDetail?.viewCount,
-      likeCount: reduxPostDetail?.likeCount,
-      reactionCount: reduxPostDetail?.reactionCount,
-      content: reduxPostDetail?.content,
-      thumbnailImage: reduxPostDetail?.thumbnailImage,
-      
-    });
-  }, [reduxPostDetail]);
 
   return (
     <Container

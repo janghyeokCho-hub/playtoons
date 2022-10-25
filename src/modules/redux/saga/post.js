@@ -51,13 +51,16 @@ function createPostDetailRequestSaga(type, func) {
     try {
       yield put(startLoading(type));
 
-      const params = {
-        id: action.payload.id,
-      };
-      const response = yield call(postApi.getPostIdMineFromServer, params);
+      const response = yield call(postApi.getPostIdMineFromServer, action.payload);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
+          payload: response.data,
+        });
+      }
+      else{
+        yield put({
+          type: `${type}_FAILURE`,
           payload: response.data,
         });
       }
@@ -91,7 +94,6 @@ function createAuthorMineRequestSaga(type, func) {
         // id: action.payload.id,
       };
       const response = yield call(postApi.getAuthorMineFromServer, params);
-      console.log("createAuthorMineRequestSaga response : ", response);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,

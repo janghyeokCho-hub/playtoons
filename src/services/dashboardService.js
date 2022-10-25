@@ -294,7 +294,22 @@ export const editPostSeriesToServer = async (params) => {
 */
 export const getReactionMineAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/reaction/mine${params.id}`);
+    return await apiServer('get', `/reaction/mine/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};
+
+/**
+*
+  Dashbaord - reaction list - 고정
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getReactionReactionIdPinFromServer = async (params) => {
+  try {
+    return await apiServer('post', `/reaction/${params.authorId}/pin`, params);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

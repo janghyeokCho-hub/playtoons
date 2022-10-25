@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmarkLarge } from '@fortawesome/pro-regular-svg-icons';
 import { useState } from 'react';
 import { hideModal } from '@/modules/redux/ducks/modal';
+import { useNavigate } from 'react-router-dom';
 
 
 /**
@@ -79,9 +80,13 @@ export default forwardRef( function Modal(props, ref) {
   }, [title]);
 
   useEffect(() => {
+    window.addEventListener("beforeunload", (e) => handleClose());  //창닫기, 주소창을 통항 이동시 
+    window.addEventListener("keydown", (e) => handleClose());       //키 이벤트작동시
     
     return () => {
-      dispatch(hideModal());
+      handleClose();
+      window.removeEventListener("beforeunload", (e) => handleClose());
+      window.removeEventListener("keydown", (e) => handleClose());
     }
   }, []);
 
@@ -102,7 +107,7 @@ export default forwardRef( function Modal(props, ref) {
                   />
                 </div>
                 <div className="pop_cont ta_center">
-                  {stateContent}
+                  {stateContent || ''}
                 </div>
               </div>
             </div>

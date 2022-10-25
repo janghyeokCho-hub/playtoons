@@ -5,8 +5,15 @@ import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
+import { getReactionMineAuthorIdFromServer, getReactionReactionIdPinFromServer } from "@/services/dashboardService";
+import { useDispatch, useSelector } from "react-redux";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { getErrorMessageFromResultCode } from "@/common/common";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import ReactionButtons from "@/components/dashboard/ReactionButtons";
 
-let text = {
+const text = {
   page_title : "リアクションリスト",
   post : "投稿する",
   number : "番号",
@@ -20,26 +27,25 @@ let text = {
   coment : "コメント",
   report : "通報",
   delete : "削除",
+  empty_message: 'リアクションがありません。'
 };
 
-const tempData = {
-  list: [
-    {
-      id: 1,
-      content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
-      money: "500CP",
-      user: "お祭り楽しい！",
-      date: "2022/06/11",
-    },
-    {
-      id: 2,
-      content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
-      money: "500CP",
-      user: "2hyunkook",
-      date: "2022/06/11",
-    },
-  ]
-};
+const tempData = [
+  {
+    id: 1,
+    content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
+    money: "500CP",
+    user: "お祭り楽しい！",
+    date: "2022/06/11",
+  },
+  {
+    id: 2,
+    content: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな",
+    money: "500CP",
+    user: "2hyunkook",
+    date: "2022/06/11",
+  },
+];
 
 const searchList = [
   { 
@@ -57,46 +63,77 @@ const searchList = [
 ];
 
 export default function DashboardReactionList(props) {
-  const [stateData, setStateData] = useState();
+  const [stateData, setStateData] = useState([]);
+  const reduxAuthors = useSelector( ({post}) => post.authorMine.authors );
+  const reduxUserInfo = useSelector( ({login}) => login.userInfo );
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const getSeriesStoryList = async () => {
-    // 시리즈 스토리 리스트
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  const getReactionList = async () => {
+    
     const params = {
-      email: "emailValue",
-      password: "passwordValue",
+      id: reduxAuthors[0].id,
     };
 
-    const { status, data } = await getSeriesStoryList(params);
-
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-
-    setStateData(getReactionListElements(data));
+    const { status, data } = await getReactionMineAuthorIdFromServer(params);
+    if( status === 200 ){
+      // 왜??? 배열이 아니지
+      setStateData([data?.reaction]);
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+    }
   };
 
-  const handleButtonClick = (e) => {
-    const no = e.target.getAttribute("data-id");
-    const text = e.target.firstChild.innerText;
+  const setReactionPin = async (reactionId) => {
     
-    switch(text){
+    const params = {
+      id: reactionId,
+    };
+
+    const { status, data } = await getReactionReactionIdPinFromServer(reduxAuthors[0].id, params);
+    if( status === 200 ){
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={''} buttonTitle={'確認'} />, }) );
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+    }
+  };
+
+  //==============================================================================
+  // event
+  //==============================================================================
+
+  const handleButtonClick = (e) => {
+    const id = e.target.getAttribute("data-id");
+    const innerText = e.target.innerText;
+    
+    switch(innerText){
       default: // move  
-        navigate( "/dashboard/reaction/detail/" + no );
+        navigate( "/dashboard/post/detail/" + id );
         break;
       case text.fix:
-            
+        console.log('fix');
+        
         break;
-      case text.good:
-            
+        case text.good:
+        console.log('good');
+        
         break;
-      case text.coment:
-            
+        case text.coment:
+        console.log('coment');
+        
         break;
-      case text.report:
-            
-        break;
-      case text.delete:
+        case text.report:
+        console.log('report');
+          
+          break;
+        case text.delete:
+        console.log('delete');
             
         break;
     }
@@ -106,32 +143,42 @@ export default function DashboardReactionList(props) {
     console.log('Search', event);
     
   };
+  //==============================================================================
+  // hook & render
+  //==============================================================================
 
   const getReactionListElements = () => {
-    return stateData?.list?.map((item, index) => {
+    if( stateData?.length === 0 ){
+      return <EmptyTr text={text.empty_message} />
+    }
+
+    return stateData?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.id}</td>
           <td className="td_subject2">{item.content}</td>
           <td className="td_txt2"><span className="view-m">{text.user}</span>{item.user}</td>
           <td className="td_txt2 mb"><span className="view-m">{text.date}：</span>{item.date}</td>
-          <td className="td_txt"><span className="view-m">{text.money}</span>{item.money}</td>
+          <td className="td_txt"><span className="view-m">{text.money}</span>{item.amount}</td>
           <td className="td_btns2">
-            <a href="#" className="btn-pk s blue2"><span>{text.move}</span></a>
-            <a href="#" className="btn-pk s blue2"><span>{text.fix}</span></a>
-            <a href="#" className="btn-pk s blue2"><span>{text.good}</span></a>
-            <a href="#" className="btn-pk s blue2"><span>{text.coment}</span></a>
-            <a href="#" className="btn-pk s blue2"><span>{text.report}</span></a>
-            <a href="#" className="btn-pk s blue2"><span>{text.delete}</span></a>
+            {/* <div data-id={item.post.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.move}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.fix}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.good}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.coment}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.report}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.delete}</div> */}
+            <ReactionButtons text={text} item={item} />
           </td>
         </tr>
       );
     });
   };
 
+  
+
   useEffect(() => {
     //리스트 불러오기
-    setStateData(tempData);
+    getReactionList();
   }, []);
 
   return (
