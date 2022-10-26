@@ -241,3 +241,17 @@ export const setPostView = async (id) => {
     return { status: e.response.status, data: e.message };
   }
 };
+
+/**
+   리액션 작성
+* @version 1.0.0
+* @author 2hyunkook
+* @param params
+*/
+export const setPostReactionToServer = async (params) => {
+  try {
+    return await apiServer("post", `/reaction`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e.message };
+  }
+};

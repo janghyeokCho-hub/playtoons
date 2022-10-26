@@ -9,7 +9,10 @@ import Container from "@/components/dashboard/Container";
 import Image from "@/components/dashboard/Image";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Pagination from "@/components/dashboard/Pagination";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getErrorMessageFromResultCode } from "@/common/common";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
 
 const text = {
   page_title :"シリーズリスト",
@@ -28,6 +31,7 @@ export default function DashboardSeries(props) {
   const [stateData, setStateData] = useState(undefined);
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const param = useParams('page');
+  const dispatch = useDispatch();
 
   /**
   *
@@ -39,12 +43,12 @@ export default function DashboardSeries(props) {
   const getSeriesListFromAPi = async (pageNumber) => {
     const params = new FormData();
     params.append("authorId", myAuthors[0].id);
+    params.append("page", pageNumber);
     // params.append("typeId", );
     // params.append("categoryId", );
     // params.append("keyword", );
     // params.append("orderKey", );
     // params.append("order", );     //ASC, DESC
-    params.append("page", pageNumber);
     // params.append("limit", );
     const { status, data : resultData } = await getSeriesStoryList(params);
 
@@ -53,7 +57,7 @@ export default function DashboardSeries(props) {
     }
     else{
       //error 처리
-      alert( String(status, resultData) );
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(resultData)} buttonTitle={'確認'} />, }) );
     }
   };
 
@@ -87,9 +91,6 @@ export default function DashboardSeries(props) {
     });
   };
 
-  const handleChange = (page) => {
-    getSeriesListFromAPi(page);
-  };
 
   useEffect(() => {
     getSeriesListFromAPi(param?.page === undefined ? 1 : param?.page);
@@ -145,7 +146,7 @@ export default function DashboardSeries(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={handleChange}
+          callback={(page) => getSeriesListFromAPi(page)}
           />
       </div>
       

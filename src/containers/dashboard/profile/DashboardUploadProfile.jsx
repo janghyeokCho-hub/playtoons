@@ -11,6 +11,8 @@ import { getAuthorIdAction } from "@/modules/redux/ducks/dashboard";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import { getAuthorMineFromServer } from "@/services/postService";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
 
 
 
@@ -106,6 +108,7 @@ export default function DashboardUploadProfile(props) {
 			ref.current.setError( String(status, resultData) );
 		}
 	};
+	
 
 	const setAuthor = async () => {
 		const id = reduxAuthors[0].id;
@@ -120,13 +123,12 @@ export default function DashboardUploadProfile(props) {
 		const {status, data} = await setAuthorIdToServer(id, json);
 		
 		if( status === 200 ){
-			if( window.confirm('profile 変更しました。') ){
-        getAuthor();
-      }
+			getAuthor();
+			dispatch( showModal({title: 'お知らせ', contents: <ErrorPopup message={'profile 変更しました。'} buttonTitle={'確認'} />, }) );
 		}
 		else{
 			//error 
-			alert( String(status, data) );
+			dispatch( showModal({title:'お知らせ', contents: <ErrorPopup message={ String(status + data) } buttonTitle={'確認'} />, }) );
 		}
 	};
 
@@ -178,7 +180,7 @@ export default function DashboardUploadProfile(props) {
   useLayoutEffect(() => {
 		//chekc author
 		if( reduxAuthors === undefined || reduxAuthors === null || reduxAuthors.length === 0 ){
-			alert('クリエーターじゃないんです。');
+			dispatch( showModal({title:'お知らせ', contents: <ErrorPopup message={'クリエーターじゃないんです。'} buttonTitle={'確認'} />, }) );
 		}
 		else{
 			//get accounts info

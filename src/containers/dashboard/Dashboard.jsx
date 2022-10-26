@@ -132,7 +132,11 @@ export default function Dashboard() {
           element={<ReactionList />} 
         />
         <Route 
-          path="/reaction/detail/:id" 
+          path="/reaction/:page" 
+          element={<ReactionList />} 
+        />
+        <Route 
+          path="/reaction/detail/:postId/:page" 
           element={<ReactionList />} 
         />
         <Route 

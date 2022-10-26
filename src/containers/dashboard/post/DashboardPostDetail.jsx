@@ -19,6 +19,9 @@ import ProfileSpan from "@/components/dashboard/ProfileSpan";
 import { getDateYYYYMMDD, getDescriptionToHtml, getErrorMessageFromResultCode } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import ReactionButtons from "@/components/dashboard/ReactionButtons";
+import { getReactionFromServer } from "@/services/dashboardService";
+import Pagination from "@/components/dashboard/Pagination";
 
 
 const text = {
@@ -38,7 +41,10 @@ const text = {
   report: "通報",
   delete: "削除",
   icon: "アイコン",
-  sing_in_to_post : "ログインして投稿する"
+  sing_in_to_post : "ログインして投稿する",
+  modal_title: 'お知らせ',
+  register_coment: 'コメントを登録しました。',
+  please_input_coment: 'コメントを入力してください。',
 };
 
 const tempData = {
@@ -83,9 +89,8 @@ const tempReactionList = {
 
 
 export default function DashboardPostDetail() {
-  const [stateReactionList, setStateReactionList] = useState(undefined);
+  const [stateReactions, setStateReactions] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
-  const reduxPostDetail = useSelector(({ post }) => post?.post);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams('id');
@@ -99,23 +104,26 @@ export default function DashboardPostDetail() {
     console.log('getPostDetail', status, data);
     
     if( status === 200 ){
-      setStateData({
-        ...tempData,
-        title: data?.post?.title,
-        series: data?.post?.series?.title,
-        // issue:
-        startAt: data?.post?.startAt,
-        endAt: data?.post?.endAt,
-        status: data?.post?.status,
-        viewCount: data?.post?.viewCount,
-        likeCount: data?.post?.likeCount,
-        reactionCount: data?.post?.reactionCount,
-        content: data?.post?.content,
-        thumbnailImage: data?.post?.thumbnailImage,
-      });
+      setStateData(data?.post);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, callback: () => navigate(-1)}) );
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
+    }
+  };
+
+  const getReactions = async (page) => {
+    const formData = new FormData();
+    formData.append('postId', params.id);
+    formData.append('page', page);
+
+    const {status, data} = await getReactionFromServer(formData);
+    console.log('getReactions', status, data);
+    
+    if( status === 200 ){
+      setStateReactions(data);
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
     }
   };
 
@@ -124,38 +132,28 @@ export default function DashboardPostDetail() {
   //==============================================================================
 
   const handleClickComentRegister = (event) => {
-    console.log('ComentRegister', event);
-    
+    getReactions(1);
   };
 
-  const handleClickItem = (event) => {
-    const id = event.target.getAttribute('data-id');
-    const type = event.target.getAttribute('click-type');
-    
-    console.log('Item', id, type);
-  };
   //==============================================================================
   // Hook & render
   //==============================================================================
 
   const renderReactionList = () => {
-    return stateReactionList?.map((item, index) => {
+    return stateReactions?.reactions?.map((item, index) => {
       return (
         <div className="col" key={index}>
-          <div className="imgs"><span style={{backgroundImage: `url(${item.profile})`}}></span></div>
+          <div className="imgs"><ProfileSpan hash={stateData?.author?.profileImage} /></div>  {/* item.profileImage 데이터 없음*/}
           <div className="conts">
-            <p className="h1">{item.name}</p>
-            <p className="d1"><span>{item.date}</span><span>コメント</span></p>
-            <p className="t1">{item.coment}</p>
+            <p className="h1">{item.account.email}</p>  {/* item.account.name 데이터 없음*/}
+            <p className="d1"><span>{item.date || '1日前'}</span><span>コメント</span></p> {/* date 항목 없음 */}
+            <p className="t1">{item.content}</p>
+            <p className="icon_image"><img src={'/temp/' + item.iconImage} alt='icon' /></p>
             <div className="btns">
-              <div className="btn-pk s blue2" data-id={item.id} click-type={'fix'} onClick={handleClickItem}>{text.fix}</div>
-              <div className="btn-pk s blue2" data-id={item.id} click-type={'good'} onClick={handleClickItem}>{text.good}</div>
-              <div className="btn-pk s blue2" data-id={item.id} click-type={'coment'} onClick={handleClickItem}>{text.coment}</div>
-              <div className="btn-pk s blue2" data-id={item.id} click-type={'report'} onClick={handleClickItem}>{text.report}</div>
-              <div className="btn-pk s blue2" data-id={item.id} click-type={'delete'} onClick={handleClickItem}>{text.delete}</div>
+              <ReactionButtons type={'postDetail'} text={text} item={item}  />
             </div>
             <div className="rgh">
-              <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} />{item.good_count}</button>
+              <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} /> {item.likeCount}</button>
               <button type="button" className="btn02"><FontAwesomeIcon icon={faEllipsisVertical} /></button>
             </div>
           </div>
@@ -165,10 +163,9 @@ export default function DashboardPostDetail() {
   };
 
   useEffect(() => {
-    setStateData(tempData);
-    setStateReactionList(tempReactionList.list);
-
+    //temp
     getPostDetail();
+    getReactions(1);
   }, []);
 
   return (
@@ -181,49 +178,46 @@ export default function DashboardPostDetail() {
       <div className="wrap_detail">
         <div className="area_detail1">
           <ul className="cx_list">
-            <li><span>{text.name}  </span><span>{reduxPostDetail?.series?.title}</span></li>
-            <li><span>{text.title}  </span><span>{reduxPostDetail?.title}</span></li>
-            <li><span>{text.episode_count}  </span><span>{reduxPostDetail?.number}</span></li>
-            <li><span>{text.public_date}   </span><span>{ getDateYYYYMMDD(reduxPostDetail?.startAt, '/') }</span></li>
-            <li><span>{text.end_date}   </span><span>{reduxPostDetail?.endAt}</span></li>
-            <li><span>{text.status}   </span><span>{reduxPostDetail?.status}</span></li>
+            <li><span>{text.name}  </span><span>{stateData?.series?.title}</span></li>
+            <li><span>{text.title}  </span><span>{stateData?.title}</span></li>
+            <li><span>{text.episode_count}  </span><span>{stateData?.number}</span></li>
+            <li><span>{text.public_date}   </span><span>{ getDateYYYYMMDD(stateData?.startAt, '/') }</span></li>
+            <li><span>{text.end_date}   </span><span>{stateData?.endAt}</span></li>
+            <li><span>{text.status}   </span><span>{stateData?.status}</span></li>
           </ul>
           <div className="icon">
-            <span><FontAwesomeIcon className='mr8' icon={faEye} />{reduxPostDetail?.viewCount}</span>
-            <span><FontAwesomeIcon className='mr8' icon={faHeart} />{reduxPostDetail?.likeCount}</span>
-            <span><FontAwesomeIcon className='mr8' icon={faCommentQuote} />{reduxPostDetail?.reactionCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faEye} />{stateData?.viewCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faHeart} />{stateData?.likeCount}</span>
+            <span><FontAwesomeIcon className='mr8' icon={faCommentQuote} />{stateData?.reactionCount}</span>
           </div>
         
           <div className="botm btn-bot">
-            <Link to={'/dashboard/reaction'} className="btn-pk n blue"><span>{text.reaction_management}</span></Link>
+            <Link to={`/dashboard/reaction/detail/${stateData?.id}/1`} className="btn-pk n blue"><span>{text.reaction_management}</span></Link>
             <Link to={`/post/edit/${params.id}`} className="btn-pk n blue2"><span>{text.modify}</span></Link>
           </div>
         </div>
         
         <div className="area_detail2">
-          <h2 className="h1">{reduxPostDetail?.title} {reduxPostDetail?.number}</h2>
-          <p className="d1">{ getDateYYYYMMDD(reduxPostDetail?.startAt, '.') }</p>
-          <p className="ws_pre">{ reduxPostDetail?.series?.description }</p>
+          <h2 className="h1">{stateData?.title} {stateData?.number}</h2>
+          <p className="d1">{ getDateYYYYMMDD(stateData?.startAt, '.') }</p>
+          <p className="ws_pre">{ stateData?.series?.description }</p>
         </div>
         
         <div className="ta_center">
-          <Image hash={reduxPostDetail?.content} alt="playtonns content" />
+          <Image hash={stateData?.content} alt="playtonns content" />
         </div>
         
         <div className="area_detail2">
-          <p className="t1 c-gray">{stateData?.content_next_summary}</p>
+          <p className="t1 c-gray">{tempData.content_next_summary}</p>
         </div>
       </div>
 
       <div className="wrap_comment">
         <div className="top_comm">
-          <div className="imgs"><ProfileSpan hash={reduxPostDetail?.author?.profileImage}></ProfileSpan></div>
-          <IconWithText 
-            text={{
-              sing_in_to_post: text.sing_in_to_post,
-              icon: text.icon,
-              register: text.register
-            }}
+          <div className="imgs"><ProfileSpan hash={stateData?.author?.profileImage} /></div>
+          <IconWithText
+            postInfo={stateData}
+            text={text}
             callback={handleClickComentRegister}
             />
         </div>
@@ -232,6 +226,13 @@ export default function DashboardPostDetail() {
           {
             renderReactionList()
           }
+
+          <Pagination
+            className={''}
+            page={stateReactions?.meta.currentPage}
+            itemsCountPerPage={stateReactions?.meta.itemsPerPage}
+            totalItemsCount={stateReactions?.meta.totalItems}
+            callback={(page) => getReactions(page)} />
         </div>
       </div>
     </div>

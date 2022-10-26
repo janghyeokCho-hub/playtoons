@@ -10,6 +10,8 @@ import { getSeriesDetailFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { getSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -46,35 +48,25 @@ export default function DashboardSeriesDetail(props) {
     console.log('getSeriesDetail', status, data);
     
     if( status === 200 ){
-      
-      setStateData({
-        ...tempData,
-        title: data.series.title,
-        category: data.series.category,
-        rating: data.series.rating,
-        type: data.series.type,
-        coverImage: data.series.coverImage,
-        tags: data.series.tags,
-        description: data.series.description
-      });
+      setStateData(data?.series);
     }
     else{
-      alert( String(status, data) );
+      dispatch( showModal({title: 'お知らせ', contents: <ErrorPopup message={String(status + data)} buttonTitle={'確認'} />, }) );
     }
     
   };
 
   const renderThumbList = () => {
-    return stateData?.thumbList?.map( (item, index) => {
+    return tempData?.thumbList?.map( (item, index) => {
       return <SwiperSlide className="cx  swiper-slide" key={index}>
-              <a href="#">
+              <div href="#">
                 <div className="cx_thumb">
                   {
                     item !== undefined &&
                       <span><img src={item} alt="thumbnail" /></span>
                   }
                 </div>
-              </a>
+              </div>
             </SwiperSlide>;
     } );
   }
@@ -88,16 +80,7 @@ export default function DashboardSeriesDetail(props) {
   
   
   useEffect(() => {
-    setStateData({
-      ...tempData,
-      title: reduxSeries?.title,
-      category: reduxSeries?.category,
-      rating: reduxSeries?.rating,
-      type: reduxSeries?.type,
-      coverImage: reduxSeries?.coverImage,
-      tags: reduxSeries?.tags,
-      description: reduxSeries?.description
-    });
+    setStateData(reduxSeries);
   }, [dispatch, reduxSeries]);
 
   useEffect(() => {

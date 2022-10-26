@@ -7,6 +7,9 @@ import Container from "@/components/dashboard/Container";
 import Calendar from "@/components/dashboard/Calendar";
 import Select from "@/components/dashboard/Select";
 import Pagination from "@/components/dashboard/Pagination";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
+import { useDispatch } from "react-redux";
 
 const text = {
   search_period : "検索期限",
@@ -82,6 +85,7 @@ export default function DashboardSalesList(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateStartDate, setStateStartDate] = useState(undefined);
   const [stateEndDate, setStateEndDate] = useState(undefined);
+  const dispatch = useDispatch();
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
@@ -109,7 +113,7 @@ export default function DashboardSalesList(props) {
     }
 
     if( startDate.getTime() >= endDate.getTime() ){
-      alert('시작일은 종료일보다 클 수 없습니다.');
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'시작일은 종료일보다 클 수 없습니다.'} buttonTitle={'確認'} />, }) );
       return false;
     }
 

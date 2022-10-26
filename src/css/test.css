@@ -682,7 +682,7 @@ li.dashboard-gnb.selected{
 
 .icon_textarea{
   width: 100%;
-  height: auto;
+  min-height: 80px;
   border: 0;
   overflow-y: visible;
 }
@@ -691,6 +691,10 @@ li.dashboard-gnb.selected{
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 12px;
+}
+
+.icon_image{
+  width: 70px;
 }
 
 .icon_arrow{
@@ -714,6 +718,12 @@ li.dashboard-gnb.selected{
 }
 
 .icon_top:hover{
+  border-radius: 4px;
+  border: 1px solid rgba(200,205,239, 1);
+  background-color: rgba(237,238,250, 1);
+}
+
+.icon_top_selected{
   border-radius: 4px;
   border: 1px solid rgba(200,205,239, 1);
   background-color: rgba(237,238,250, 1);

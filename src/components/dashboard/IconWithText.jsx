@@ -2,24 +2,33 @@ import React, { useEffect, useRef, useState } from 'react';
 
 //TODO delete test
 import '@/css/test.css';
-import temp1 from '@IMAGES/landingpage-profile1.png';
-import temp2 from '@IMAGES/landingpage-profile2.png';
-import temp3 from '@IMAGES/landingpage-profile3.png';
-import temp4 from '@IMAGES/landingpage-profile4.png';
-import temp5 from '@IMAGES/landingpage-profile5.png';
-import temp6 from '@IMAGES/landingpage-profile6.png';
-import temp7 from '@IMAGES/landingpage-profile7.png';
-import temp8 from '@IMAGES/landingpage-profile8.png';
-import tempTop1 from '@IMAGES/ico_twitter.png';
-import tempTop2 from '@IMAGES/ico-animate.png';
+import temp1 from '@IMAGES/icon2.png';
+import temp2 from '@IMAGES/icon3.png';
+import temp3 from '@IMAGES/icon4.png';
+import temp4 from '@IMAGES/icon5.png';
+import temp5 from '@IMAGES/icon6.png';
+import temp6 from '@IMAGES/icon7.png';
+import temp7 from '@IMAGES/icon8.png';
+import temp8 from '@IMAGES/icon9.png';
+import tempTop1 from '@IMAGES/icon1.png';
+import tempTop2 from '@IMAGES/icon0.png';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft, faAngleRight, faCircleXmark, } from '@fortawesome/pro-solid-svg-icons';
 import useOutSideClick from '@/common/useOutSideClick';
+import { setPostReactionToServer } from '@/services/postService';
+import ErrorPopup from './ErrorPopup';
+import { showModal } from '@/modules/redux/ducks/modal';
+import { useDispatch } from 'react-redux';
+import { setFileToServer } from '@/services/dashboardService';
+import ErrorMessage from './ErrorMessage';
+import Button from './Button';
 
 
 /**
 *
+  아이콘 댓글 등록창
    <IconWithText 
     text={{
       sing_in_to_post: text.sing_in_to_post,    //placeholder
@@ -35,17 +44,67 @@ import useOutSideClick from '@/common/useOutSideClick';
 * @return
 */
 export default function IconWithText(props, ref) {
-  const { text, callback } = props;
+  const { text, postInfo, callback } = props;
   const [ stateIconData, setStateIconData ] = useState(undefined);
   const [ stateTopSelected, setStateTopSelected ] = useState(0);
   const [ stateShowIcon, setStateShowIcon ] = useState(false);
   const [ stateSelectedIcons, setStateSelectedIcons ] = useState([]);
+  const [ stateError, setStateError ] = useState(undefined);
+  const dispatch = useDispatch();
   const refContaienr = useRef();
+  const refTextArea = useRef();
+  const refButton = useRef();
 
+  //==============================================================================
+  //  function 
+  //==============================================================================
   const getMarginRightOfIcon = (index) => {
     let tempIndex = index + 1;
     return (tempIndex % 5) === 0 ? '' : 'mr16';
   };
+
+  const initStatus = () => {
+    setStateError(undefined);
+    refButton.current.setStatus(undefined);
+  };
+
+  //==============================================================================
+  //  api
+  //==============================================================================
+
+  /**
+  * 리액션 작성
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const setReaction = async () => {
+    
+    let params = {
+      content: refTextArea.current.value,
+      iconImage: stateSelectedIcons[0].src,
+      type: "reply",
+      postId: postInfo.id,
+      authorId: postInfo.author.id,
+      // reactionId: "string"
+    };
+
+    const {status, data} = await setPostReactionToServer(params);
+    console.log('setReaction', status, data);
+    if( status === 201 ){
+      callback?.();
+      initStatus();
+      dispatch( showModal({title: text.modal_title, contents: <ErrorPopup message={text.register_coment} buttonTitle={'確認'} />, }) );
+    }
+    else{
+      setStateError( String(status + data) );
+      refButton.current.setStatus(undefined);
+    }
+  };
+
+
+  //==============================================================================
+  //  event
+  //==============================================================================
 
   const handleClickItemDelete = (event) => {
     event.stopPropagation();
@@ -73,6 +132,20 @@ export default function IconWithText(props, ref) {
     ]);
   };
 
+  const handleClickRegister = (event) => {
+    if( !refTextArea.current.value ){
+      setStateError(text.please_input_coment);
+      refButton.current.setStatus(undefined);
+      return false;
+    }
+
+    setReaction();
+  };
+
+  //==============================================================================
+  //  hook & render
+  //==============================================================================
+
   const renderSelectedIconsElement = () => {
     return stateSelectedIcons?.map((item, index) => {
       return (
@@ -86,8 +159,9 @@ export default function IconWithText(props, ref) {
 
   const renderTopIconElement = () => {
     return stateIconData?.topIcons?.map((item, index) => {
+      
       return (
-        <div className="icon_top" key={index} >
+        <div className={`icon_top ${stateTopSelected === index ? 'icon_top_selected' : ''}`} key={index} >
           <img src={item.image} alt="top icon" data-id={index} onClick={handleClickItemTopIcon} />
         </div>
       );
@@ -109,49 +183,55 @@ export default function IconWithText(props, ref) {
   //component did mount
   useEffect(() => {
     setStateIconData(tempData);
+    
   }, []);
-  
+
 
   return (
-    <div className="conts relative" ref={refContaienr}>
-      <div className="icon_textarea_container" >
-        <textarea name="" id="" className="icon_textarea" placeholder={text.sing_in_to_post}></textarea>
+    <>
+      <div className="conts relative" ref={refContaienr}>
+        <div className="icon_textarea_container" >
+          <textarea ref={refTextArea} name="content" id="" className="icon_textarea" placeholder={text.sing_in_to_post} onChange={() => setStateError(undefined)} />
+          {
+            stateSelectedIcons.length !== 0 &&
+            <div className="flex mt27">
+              {
+                renderSelectedIconsElement()
+              }
+            </div>
+          }
+        </div>
+        <div className="btns">
+          <button type="button" className="btn-pk s gray" onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
+          {/* <button type="button" className="btn-pk s blue" onClick={callback} ><span>{text.register}</span></button> */}
+          <Button ref={refButton} text={text.register} className="btn-pk s blue"  onClick={handleClickRegister}/>
+        </div>
+
         {
-          stateSelectedIcons.length !== 0 &&
-          <div className="flex mt27">
-            {
-              renderSelectedIconsElement()
-            }
-          </div>
-        }
-      </div>
-      <div className="btns">
-        <button type="button" className="btn-pk s gray" onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
-        <button type="button" className="btn-pk s blue" onClick={callback} ><span>{text.register}</span></button>
-      </div>
-
-      {
-        stateShowIcon && 
-          <div className="icon_wrap">
-            <div className="icon_top_container">
-              <FontAwesomeIcon className="icon_arrow" icon={faAngleLeft} />
-              <div className="ml34 mr34 flex">
-                {
-                  renderTopIconElement()
-                }
+          stateShowIcon && 
+            <div className="icon_wrap">
+              <div className="icon_top_container">
+                <FontAwesomeIcon className="icon_arrow" icon={faAngleLeft} />
+                <div className="ml34 mr34 flex">
+                  {
+                    renderTopIconElement()
+                  }
+                </div>
+                <FontAwesomeIcon className="icon_arrow mla" icon={faAngleRight} />
               </div>
-              <FontAwesomeIcon className="icon_arrow mla" icon={faAngleRight} />
-            </div>
-            <div className="icon_container">
-                {
-                  renderIconElement()
-                }
-            </div>
+              <div className="icon_container">
+                  {
+                    renderIconElement()
+                  }
+              </div>
 
-          </div>
-      }
+            </div>
+        }
+        
+        <ErrorMessage error={stateError} />
+      </div>
       
-    </div>
+    </>
   )
 }
 
@@ -162,35 +242,43 @@ const tempData = {
       icons: [
         {
           code: "icon1",
-          image: temp1
+          image: temp1,
+          src: 'src/assets/images/icon2.png'
         },
         {
           code: "icon2",
-          image: temp2
+          image: temp2,
+          src: 'src/assets/images/icon3.png'
         },
         {
           code: "icon3",
-          image: temp3
+          image: temp3,
+          src: 'src/assets/images/icon4.png'
         },
         {
           code: "icon4",
-          image: temp4
+          image: temp4,
+          src: 'src/assets/images/icon5.png'
         },
         {
           code: "icon5",
-          image: temp5
+          image: temp5,
+          src: 'src/assets/images/icon6.png'
         },
         {
           code: "icon6",
-          image: temp6
+          image: temp6,
+          src: 'src/assets/images/icon7.png'
         },
         {
           code: "icon7",
-          image: temp7
+          image: temp7,
+          src: 'src/assets/images/icon8.png'
         },
         {
           code: "icon8",
-          image: temp8
+          image: temp8,
+          src: 'src/assets/images/icon9.png'
         },
       ]
     },
@@ -199,51 +287,63 @@ const tempData = {
       icons: [
         {
           code: "icon11",
-          image: temp8
+          image: temp8,
+          src: 'src/assets/images/icon9.png'
         },
         {
           code: "icon21",
-          image: temp7
+          image: temp7,
+          src: 'src/assets/images/icon8.png'
         },
         {
           code: "icon31",
-          image: temp6
+          image: temp6,
+          src: 'src/assets/images/icon7.png'
         },
         {
           code: "icon41",
-          image: temp5
+          image: temp5,
+          src: 'src/assets/images/icon6.png'
         },
         {
           code: "icon51",
-          image: temp4
+          image: temp4,
+          src: 'src/assets/images/icon5.png'
         },
         {
           code: "icon61",
-          image: temp3
+          image: temp3,
+          src: 'src/assets/images/icon4.png'
         },
         {
           code: "icon71",
-          image: temp2
+          image: temp2,
+          src: 'src/assets/images/icon3.png'
         },
         {
           code: "icon81",
-          image: temp1
+          image: temp1,
+          src: 'src/assets/images/icon2.png'
         },
         {
           code: "icon91",
-          image: temp1
+          image: temp1,
+          src: 'src/assets/images/icon2.png'
         },
         {
           code: "icon101",
-          image: temp2
+          image: temp2,
+          src: 'src/assets/images/icon3.png'
         },
         {
           code: "icon111",
-          image: temp3
+          image: temp3,
+          src: 'src/assets/images/icon4.png'
         },
         {
           code: "icon121",
-          image: temp4
+          image: temp4,
+          src: 'src/assets/images/icon5.png'
         },
       ]
     },

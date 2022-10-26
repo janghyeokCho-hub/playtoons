@@ -11,6 +11,9 @@ import ProductTab from "@/components/dashboard/ProductTab";
 import Image from "@/components/dashboard/Image";
 import Calendar from "@/components/dashboard/Calendar";
 import Pagination from "@/components/dashboard/Pagination";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
+import { useDispatch } from "react-redux";
 
 const text = {
   see_product : "商品一覧",
@@ -68,6 +71,7 @@ const tempData = {
 
 export default function DashboardSalesList(props) {
   const [stateData, setStateData] = useState(undefined);
+  const dispatch = useDispatch();
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
@@ -100,7 +104,7 @@ export default function DashboardSalesList(props) {
     }
 
     if( startDate.getTime() >= endDate.getTime() ){
-      alert('시작일은 종료일보다 클 수 없습니다.');
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'시작일은 종료일보다 클 수 없습니다.'} buttonTitle={'確認'} />, }) );
       return false;
     }
 

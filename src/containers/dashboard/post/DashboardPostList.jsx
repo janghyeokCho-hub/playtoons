@@ -11,12 +11,12 @@ import Select from "@/components/dashboard/Select";
 //temp data
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import moment from "moment/moment";
-import { DATE_FORMAT } from "@/common/constant";
 import { getDateYYYYMMDD } from "@/common/common";
+import { showModal } from "@/modules/redux/ducks/modal";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
 
 
 const text = {
@@ -50,14 +50,16 @@ const searchList = [
 
 export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState();
-  const params = useParams('page');
-  const navigate = useNavigate();
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const params = useParams('page');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   
 
   const getPostList = async (page) => {
     const params = new FormData();
     params.append("authorId", reduxAuthors[0].id);
+    params.append("page", page);
     // params.append("typeId", "");
     // params.append("categoryId", "");
     // params.append("seriesId", "");
@@ -66,7 +68,6 @@ export default function DashboardPostList(props) {
     // params.append("keyword", "");
     // params.append("orderKey", "");
     // params.append("order", "");
-    params.append("page", page);
     // params.append("limit", "");
 
     const {status, data: result} = await getPostListFromServer(params);
@@ -77,8 +78,22 @@ export default function DashboardPostList(props) {
     }
     else{
       //error 처리
-      alert( String(status, result) );
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(result)} buttonTitle={'確認'} />, }) );
     }
+  };
+
+  const handleClickPost = (event) => {
+    if( reduxAuthors === undefined || reduxAuthors.length === 0 ){
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'クリエイターとして登録してください。'} buttonTitle={'確認'} />, }) );
+    }
+    else{
+      navigate('/post/upload');
+    }
+  };
+
+  const handleItemClickSearch = (event) => {
+    console.log('Search', event);
+    
   };
 
   const renderPostListElements = () => {
@@ -106,29 +121,6 @@ export default function DashboardPostList(props) {
         </tr>
       );
     });
-  };
-
-  const handleClickPost = (event) => {
-    console.log('Post', event);
-    
-    if( reduxAuthors === undefined || reduxAuthors.length === 0 ){
-      if( window.confirm('クリエイターとして登録してください。') ){
-        navigate('/post/upload');
-      }
-    }
-    else{
-      navigate('/post/upload');
-    }
-
-  };
-
-  const handleChange = (page) => {
-    getPostList(page);
-  };
-
-  const handleItemClickSearch = (event) => {
-    console.log('Search', event);
-    
   };
 
   useEffect(() => {
@@ -201,7 +193,7 @@ export default function DashboardPostList(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={handleChange}
+          callback={(page) => getPostList(page)}
           />
        
       </div>

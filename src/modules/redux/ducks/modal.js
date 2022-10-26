@@ -24,7 +24,6 @@ const popup = handleActions(
   {
     [POPUP_SHOW]: (state, action) => {
       return produce(state, (draft) => {
-        console.log('POPUP_SHOW', action);
         draft.show = true;
         draft.title = action.payload.title;
         draft.contents = action.payload.contents;
@@ -32,7 +31,6 @@ const popup = handleActions(
       });
     },
     [POPUP_HIDE]: (state, action) => {
-      console.log('POPUP_HIDE', action);
       state.callback?.();
       return initialState;
     },

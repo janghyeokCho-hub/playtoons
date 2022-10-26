@@ -1,12 +1,55 @@
+import { getErrorMessageFromResultCode } from '@/common/common';
+import { showModal } from '@/modules/redux/ducks/modal';
+import { deleteReactionReactionIdPinFromServer, getReactionReactionIdPinFromServer } from '@/services/dashboardService';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import ErrorPopup from './ErrorPopup';
 
 export default function ReactionButtons(props) {
   const { type, text, item } = props;
-  const [ stateType, setStateType ] = useState(undefined);
+  const [ stateType, setStateType ] = useState(type);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  //==============================================================================
+  // function
+  //==============================================================================
+
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  const setReactionPin = async () => {
+    
+    const params = {
+      id: item.reactionId,
+    };
+
+    let response = undefined;
+    if( item.pinned ){
+      response = await deleteReactionReactionIdPinFromServer(params);
+    }
+    else{
+      response = await getReactionReactionIdPinFromServer(params);
+    }
+    const { status, data } = response;
+    console.log('pin', status, data);
+
+    if( status === 200 ){
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={''} buttonTitle={'確認'} />, }) );
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+    }
+  };
+
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleButtonClick = (e) => {
     const id = e.target.getAttribute("data-id");
@@ -19,6 +62,7 @@ export default function ReactionButtons(props) {
       case text.fix:
         console.log('fix');
         ///reaction/:reactionId/pin
+        setReactionPin();
         break;
       case text.good:
         console.log('good');
@@ -39,6 +83,10 @@ export default function ReactionButtons(props) {
     }
   };
 
+  //==============================================================================
+  // hook & render
+  //==============================================================================
+
   useEffect(() => {
     setStateType(type);
   }, [type]);
@@ -49,7 +97,7 @@ export default function ReactionButtons(props) {
       {
         stateType === undefined && 
           <>
-            <div data-id={item.post.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.move}</div>
+            <div data-id={item.postId} onClick={handleButtonClick} className="btn-pk s blue2">{text.move}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.fix}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.good}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.coment}</div>
