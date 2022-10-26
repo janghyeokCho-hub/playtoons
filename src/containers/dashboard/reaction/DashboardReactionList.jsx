@@ -48,6 +48,7 @@ const searchList = [
 ];
 
 export default function DashboardReactionList(props) {
+  const [statePinnedData, setStatePinnedData] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const reduxAuthors = useSelector( ({post}) => post.authorMine.authors );
   const reduxUserInfo = useSelector( ({login}) => login.userInfo );
@@ -80,6 +81,27 @@ export default function DashboardReactionList(props) {
     }
   };
 
+  const getPinnedReactionList = async () => {
+    
+    const formData = new FormData();
+    if( params.postId === undefined ){
+      formData.append('authorId', reduxAuthors[0].id);
+    }
+    else{
+      formData.append('postId', params.postId);
+    }
+    formData.append('pinned', true);
+
+    const { status, data } = await getReactionMineFromServer(formData);
+    console.log('PinnedReaction list', data);
+    if( status === 200 ){
+      setStatePinnedData(data);
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+    }
+  };
+
   //==============================================================================
   // event
   //==============================================================================
@@ -92,7 +114,7 @@ export default function DashboardReactionList(props) {
   //==============================================================================
 
   const getReactionListElements = () => {
-    if( stateData?.reactions?.length === 0 ){
+    if( stateData?.reactions?.length === 0 && statePinnedData?.reactions?.length === 0 ){
       return <EmptyTr text={text.empty_message} />
     }
 
@@ -112,10 +134,28 @@ export default function DashboardReactionList(props) {
     });
   };
 
+  const getPinnedReactionListElements = () => {
+    return statePinnedData?.reactions?.map((item, index) => {
+      return (
+        <tr key={index}>
+          <td className="hide-m">{item.id}</td>
+          <td className="td_subject2">{item.content}</td>
+          <td className="td_txt2"><span className="view-m">{text.user}</span>{reduxAuthors[0].name}</td>
+          <td className="td_txt2 mb"><span className="view-m">{text.date}：</span>{item.date}</td>
+          <td className="td_txt"><span className="view-m">{text.money}</span>{item.amount}</td>
+          <td className="td_btns2">
+            <ReactionButtons text={text} item={item} />
+          </td>
+        </tr>
+      );
+    });
+  };
+
   
 
   useEffect(() => {
     //리스트 불러오기
+    getPinnedReactionList();
     getReactionList(params === undefined ? 1 : params.page);
   }, [params]);
 
@@ -163,6 +203,11 @@ export default function DashboardReactionList(props) {
               </tr>
             </thead>
             <tbody>
+              {/* pinned list */}
+              {
+                getPinnedReactionListElements()
+              }
+              {/* reaction list */}
               {
                 getReactionListElements()
               }

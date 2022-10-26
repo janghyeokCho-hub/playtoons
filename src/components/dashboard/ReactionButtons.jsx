@@ -26,7 +26,7 @@ export default function ReactionButtons(props) {
   const setReactionPin = async () => {
     
     const params = {
-      id: item.reactionId,
+      id: item.id,
     };
 
     let response = undefined;
@@ -98,7 +98,7 @@ export default function ReactionButtons(props) {
         stateType === undefined && 
           <>
             <div data-id={item.postId} onClick={handleButtonClick} className="btn-pk s blue2">{text.move}</div>
-            <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.fix}</div>
+            <div data-id={item.id} onClick={handleButtonClick} className={`btn-pk s ${item.pinned ? 'blue' : 'blue2'}`}>{text.fix}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.good}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.coment}</div>
             <div data-id={item.id} onClick={handleButtonClick} className="btn-pk s blue2">{text.report}</div>
@@ -110,7 +110,7 @@ export default function ReactionButtons(props) {
       {
         stateType === 'postDetail' && 
           <>
-            <div className="btn-pk s blue2" data-id={item.id} onClick={handleButtonClick}>{text.fix}</div>
+            <div className={`btn-pk s ${item.pinned ? 'blue' : 'blue2'}`} data-id={item.id} onClick={handleButtonClick}>{text.fix}</div>
             <div className="btn-pk s blue2" data-id={item.id} onClick={handleButtonClick}>{text.good}</div>
             <div className="btn-pk s blue2" data-id={item.id} onClick={handleButtonClick}>{text.coment}</div>
             <div className="btn-pk s blue2" data-id={item.id} onClick={handleButtonClick}>{text.report}</div>

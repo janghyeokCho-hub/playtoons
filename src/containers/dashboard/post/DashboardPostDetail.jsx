@@ -89,6 +89,7 @@ const tempReactionList = {
 
 
 export default function DashboardPostDetail() {
+  const [statePinnedReactions, setStatePinnedReactions] = useState(undefined);
   const [stateReactions, setStateReactions] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const dispatch = useDispatch();
@@ -127,6 +128,22 @@ export default function DashboardPostDetail() {
     }
   };
 
+  const getPinnedReactions = async () => {
+    const formData = new FormData();
+    formData.append('postId', params.id);
+    formData.append('pinned', true);
+
+    const {status, data} = await getReactionFromServer(formData);
+    console.log('getPinnedReactions', status, data);
+    
+    if( status === 200 ){
+      setStatePinnedReactions(data);
+    }
+    else{
+      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
+    }
+  };
+
   //==============================================================================
   // event
   //==============================================================================
@@ -139,8 +156,8 @@ export default function DashboardPostDetail() {
   // Hook & render
   //==============================================================================
 
-  const renderReactionList = () => {
-    return stateReactions?.reactions?.map((item, index) => {
+  const renderReactionList = (data) => {
+    return data?.reactions?.map((item, index) => {
       return (
         <div className="col" key={index}>
           <div className="imgs"><ProfileSpan hash={stateData?.author?.profileImage} /></div>  {/* item.profileImage 데이터 없음*/}
@@ -165,6 +182,7 @@ export default function DashboardPostDetail() {
   useEffect(() => {
     //temp
     getPostDetail();
+    getPinnedReactions();
     getReactions(1);
   }, []);
 
@@ -223,16 +241,24 @@ export default function DashboardPostDetail() {
         </div>
 
         <div className="lst_comm">
+          {/* pinned reaction */}
           {
-            renderReactionList()
+            renderReactionList(statePinnedReactions)
+          }
+          {/* reaction */}
+          {
+            renderReactionList(stateReactions)
           }
 
-          <Pagination
-            className={''}
-            page={stateReactions?.meta.currentPage}
-            itemsCountPerPage={stateReactions?.meta.itemsPerPage}
-            totalItemsCount={stateReactions?.meta.totalItems}
-            callback={(page) => getReactions(page)} />
+          {
+            stateReactions?.reactions?.length > 0 &&
+              <Pagination
+                className={''}
+                page={stateReactions?.meta.currentPage}
+                itemsCountPerPage={stateReactions?.meta.itemsPerPage}
+                totalItemsCount={stateReactions?.meta.totalItems}
+                callback={(page) => getReactions(page)} />
+          }
         </div>
       </div>
     </div>
