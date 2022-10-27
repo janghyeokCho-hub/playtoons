@@ -13,11 +13,9 @@ export default function ErrorPopup(props) {
   return (
     <>
       <div className='error_popup_message'>{message}</div>
-      <button className="btn-pk n blue w336" onClick={() => handleClickConfirm()}>
-        <div className="pull_width" >
-          <span>{buttonTitle}</span>
-        </div>
-      </button>
+      <div className="btn-pk n blue w100p" onClick={() => handleClickConfirm()}>
+        {buttonTitle}
+      </div>
     </>
   )
 }

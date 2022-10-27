@@ -38,7 +38,7 @@ const text = {
   report: "通報",
   delete: "削除",
   icon: "アイコン",
-  sing_in_to_post : "ログインして投稿する",
+  sing_in_to_post : "リアクションする",
   modal_title: 'お知らせ',
   register_coment: 'コメントを登録しました。',
   please_input_coment: 'コメントを入力してください。',
@@ -141,7 +141,10 @@ export default function DashboardPostDetail() {
             <p className="h1">{item.account.email}</p>  {/* item.account.name 데이터 없음*/}
             <p className="d1"><span>{item.date || '1日前'}</span><span>コメント</span></p> {/* date 항목 없음 */}
             <p className="t1">{item.content}</p>
-            <p className="icon_image"><img src={'/temp/' + item.iconImage} alt='icon' /></p>
+            {
+              item.iconImage !== '' && 
+                <p className="icon_image"><img src={'/temp/' + item.iconImage} alt='icon' /></p>
+            }
             <div className="btns">
               <ReactionButtons type={'postDetail'} text={text} item={item} callback={() => getReactionAllList()} />
             </div>

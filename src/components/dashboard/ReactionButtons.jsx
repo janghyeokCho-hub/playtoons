@@ -1,4 +1,5 @@
 import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { hideModal } from "@/modules/redux/ducks/modal";
 import {
   deleteReactionIdToServer,
   deleteReactionLikeToServer,
@@ -41,6 +42,9 @@ export default function ReactionButtons(props) {
     console.log("deleteReaction", status, data);
 
     if (status === 200) {
+      callback?.();
+      dispatch(hideModal());
+      showOneButtonPopup(dispatch, text.do_delete);
     } else {
       showOneButtonPopup(dispatch, data);
     }

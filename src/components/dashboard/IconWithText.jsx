@@ -65,7 +65,11 @@ export default function IconWithText(props, ref) {
   };
 
   const initStatus = () => {
+    setStateTopSelected(0);
+    setStateShowIcon(false);
+    setStateSelectedIcons([]);
     setStateError(undefined);
+    refTextArea.current.value = '';
     refButton.current.setStatus(undefined);
   };
 
@@ -82,7 +86,7 @@ export default function IconWithText(props, ref) {
     
     let params = {
       content: refTextArea.current.value,
-      iconImage: stateSelectedIcons[0].src,
+      iconImage: stateSelectedIcons.length === 0 ? '' : stateSelectedIcons[0].src,
       type: "reply",
       postId: postInfo.id,
       authorId: postInfo.author.id,

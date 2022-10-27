@@ -235,7 +235,7 @@ export const showOneButtonPopup = (dispatch, message, callback) => {
 };
 
 /**
-  show error popup 
+  show confirm popup 
 * @version 1.0.0
 * @author 2hyunkook
 * @param dispatch useDispatch 객체
