@@ -1,5 +1,9 @@
+import ConfirmPopup from "@/components/dashboard/ConfirmPopup";
+import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { showModal } from "@/modules/redux/ducks/modal";
 import { getFileUrlFromServer } from "@API/fileService";
 import moment from "moment/moment";
+import { useDispatch } from "react-redux";
 import { DATE_FORMAT, RESULT_CODE_LIST } from "./constant";
 /**
  * Email validation
@@ -127,7 +131,7 @@ export const removeItemInList = (list, value) => {
 * @return G, PG-13, R-15, R-17, R-18, R-18G
 */
 export const getRatingToChecked = (ref) => {
-  return ref.current.checked ? 'R-18' : 'G';
+  return ref.current.checked ? "R-18" : "G";
 };
 
 /**
@@ -161,19 +165,19 @@ export const getParamsToQuery = (params, tags) => {
 *
 * @version 1.0.0
 * @author 2hyunkook
-* @param response api response
+* @param data api response
 * @return 에러메세지
 */
-export const getErrorMessageFromResultCode = (response) => {
-  let returnMessage = '' + response;
+export const getErrorMessageFromResultCode = (data) => {
+  let returnMessage = 'Error';
 
-  for( let i = 0; i < RESULT_CODE_LIST.length; i++ ){
-    if( RESULT_CODE_LIST[i].code === response?.result ){
-      returnMessage = RESULT_CODE_LIST[i].name + ' ' + response;
+  for (let i = 0; i < RESULT_CODE_LIST.length; i++) {
+    if (RESULT_CODE_LIST[i].code === data?.result) {
+      returnMessage = RESULT_CODE_LIST[i].name + " " + data?.message;
       break;
     }
   }
-  
+
   return returnMessage;
 };
 
@@ -187,7 +191,7 @@ export const getErrorMessageFromResultCode = (response) => {
 * @param separator 구분자
 */
 export const getDateYYYYMMDD = (date, separator) => {
-  return moment(date).format( ['YYYY', 'MM', 'DD'].join(separator) );
+  return moment(date).format(["YYYY", "MM", "DD"].join(separator));
 };
 
 /**
@@ -198,7 +202,7 @@ export const getDateYYYYMMDD = (date, separator) => {
 * @author 2hyunkook
 */
 export const setInputValueToNumber = (ref, value) => {
-  ref.current.value = value.replace(/[^0-9]/g, '');
+  ref.current.value = value.replace(/[^0-9]/g, "");
 };
 
 /**
@@ -210,4 +214,41 @@ export const setInputValueToNumber = (ref, value) => {
 */
 export const initButtonInStatus = (refButton) => {
   refButton.current.setStatus(undefined);
+};
+
+/**
+  show error popup 
+* @version 1.0.0
+* @author 2hyunkook
+* @param dispatch useDispatch 객체
+* @param message error message string
+* @param callback popup이 사라질때 callback
+*/
+export const showOneButtonPopup = (dispatch, message, callback) => {
+  dispatch(
+    showModal({
+      title: "お知らせ",
+      contents: <ErrorPopup message={message} buttonTitle={"確認"} />,
+      callback: callback
+    })
+  );
+};
+
+/**
+  show error popup 
+* @version 1.0.0
+* @author 2hyunkook
+* @param dispatch useDispatch 객체
+* @param message error message string
+* @param confirmCallback 확인 버튼 callback
+* @param callback popup이 사라질때 callback
+*/
+export const showTwoButtonPopup = (dispatch, message, confirmCallback, callback,) => {
+  dispatch(
+    showModal({
+      title: "お知らせ",
+      contents: <ConfirmPopup message={message} buttonTitle={"確認"} callback={confirmCallback} />,
+      callback: callback
+    })
+  );
 };

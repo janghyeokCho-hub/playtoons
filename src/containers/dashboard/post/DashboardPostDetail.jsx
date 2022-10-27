@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentQuote, faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 
 import Container from "@/components/dashboard/Container";
-
-import tempImage from '@IMAGES/tmp_comic3.png';
-import tempProfile from '@IMAGES/img_profile.png';
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
@@ -16,7 +13,7 @@ import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import useActions from "@/hook/useActions";
 import Image from "@/components/dashboard/Image";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
-import { getDateYYYYMMDD, getDescriptionToHtml, getErrorMessageFromResultCode } from "@/common/common";
+import { getDateYYYYMMDD, getDescriptionToHtml, getErrorMessageFromResultCode, showOneButtonPopup } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
@@ -45,46 +42,20 @@ const text = {
   modal_title: 'お知らせ',
   register_coment: 'コメントを登録しました。',
   please_input_coment: 'コメントを入力してください。',
+  do_pinned: '固定しました。',
+  do_off_pinned: '固定解除しました。',
+  do_good: 'いいねしました。',
+  do_off_good: 'いいねをキャンセルしました。',
+  do_coment: 'コメントしました。',
+  do_report: '通報しました。',
+  do_delete: '削除しました。',
+  can_do_myself: '本人のみ削除可能です。',
+  do_you_delete: '削除しますか？',
+  cancel: 'キャンセル',
 };
 
 const tempData = {
-  series: "シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク",
-  title: "終わらない話",
-  issue: "541話",
-  startAt: "2022/06/07",
-  endAt: "2022/06/07",  
-  status: "公開中",     
-  viewCount: "1.2k",    
-  likeCount: "1.2k",
-  coment_count: "966",
-  content_title: "シェルターアーク 2話",
-  content_date: "2022.06.10",
-  content_summary: "モと戦う為、特殊チームレンジャーを創設したが、 クモの圧倒的な力には勝てず。",
-  thumbnailImage: tempImage,
   content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
-
-  my_profile_image: tempProfile,
-};
-
-const tempReactionList = {
-  list : [
-    {
-      id: "12",
-      profile: tempProfile,
-      name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      data: "3日前",
-      coment: "氷室くんの感情の機微を、冬月さんはどのくらい把握出来てるのかなぁ…嬉しい時の雪だるまは嬉しそうな雰囲気に見えてるんだろうか…第三者的に見てると、観察して行動パターン把握したくなります(笑)",
-      good_count: "123",
-    },
-    {
-      id: "15",
-      profile: tempProfile,
-      name: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      data: "2日前",
-      coment: "#SSSRearise はシンプルに技術とのフュージョンがめちゃくちゃイカしてた。印刷技術もこだわりもえぐい。米山さん目当てで行ったけれども、タイキさんの空気感とかNAJI柳田さんの没入感とか思いっきり感じれてよかったな。",
-      good_count: "10",
-    },
-  ]
 };
 
 
@@ -97,6 +68,11 @@ export default function DashboardPostDetail() {
   const params = useParams('id');
 
 
+  const getReactionAllList = () => {
+    getPinnedReactions();
+    getReactions(1);
+  };
+
   //==============================================================================
   // api
   //==============================================================================
@@ -108,7 +84,7 @@ export default function DashboardPostDetail() {
       setStateData(data?.post);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, String(status + data));
     }
   };
 
@@ -124,7 +100,7 @@ export default function DashboardPostDetail() {
       setStateReactions(data);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, String(status + data));
     }
   };
 
@@ -140,7 +116,7 @@ export default function DashboardPostDetail() {
       setStatePinnedReactions(data);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(data)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, String(status + data));
     }
   };
 
@@ -149,7 +125,7 @@ export default function DashboardPostDetail() {
   //==============================================================================
 
   const handleClickComentRegister = (event) => {
-    getReactions(1);
+    getReactionAllList();
   };
 
   //==============================================================================
@@ -167,7 +143,7 @@ export default function DashboardPostDetail() {
             <p className="t1">{item.content}</p>
             <p className="icon_image"><img src={'/temp/' + item.iconImage} alt='icon' /></p>
             <div className="btns">
-              <ReactionButtons type={'postDetail'} text={text} item={item}  />
+              <ReactionButtons type={'postDetail'} text={text} item={item} callback={() => getReactionAllList()} />
             </div>
             <div className="rgh">
               <button type="button" className="btn01"><FontAwesomeIcon icon={faHeart} /> {item.likeCount}</button>
@@ -182,8 +158,7 @@ export default function DashboardPostDetail() {
   useEffect(() => {
     //temp
     getPostDetail();
-    getPinnedReactions();
-    getReactions(1);
+    getReactionAllList();
   }, []);
 
   return (

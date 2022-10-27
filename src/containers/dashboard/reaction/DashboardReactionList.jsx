@@ -5,11 +5,11 @@ import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
-import { getReactionMineAuthorIdFromServer as getReactionMineFromServer, getReactionReactionIdPinFromServer } from "@/services/dashboardService";
+import { getReactionMineAuthorIdFromServer as getReactionMineFromServer, setReactionReactionIdPinToServer } from "@/services/dashboardService";
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { getErrorMessageFromResultCode } from "@/common/common";
+import { getErrorMessageFromResultCode, showOneButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import Pagination from "@/components/dashboard/Pagination";
@@ -28,7 +28,18 @@ const text = {
   coment : "コメント",
   report : "通報",
   delete : "削除",
-  empty_message: 'リアクションがありません。'
+  empty_message: 'リアクションがありません。',
+  modal_title: 'お知らせ',
+  do_pinned: '固定しました。',
+  do_off_pinned: '固定解除しました。',
+  do_good: 'いいねしました。',
+  do_off_good: 'いいねをキャンセルしました。',
+  do_coment: 'コメントしました。',
+  do_report: '通報しました。',
+  do_delete: '削除しました。',
+  can_do_myself: '本人のみ削除可能です。',
+  do_you_delete: '削除しますか？',
+  cancel: 'キャンセル',
 };
 
 
@@ -51,10 +62,17 @@ export default function DashboardReactionList(props) {
   const [statePinnedData, setStatePinnedData] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const reduxAuthors = useSelector( ({post}) => post.authorMine.authors );
-  const reduxUserInfo = useSelector( ({login}) => login.userInfo );
   const params = useParams('page');
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+
+  //==============================================================================
+  // function
+  //==============================================================================
+  const getList = () => {
+    getPinnedReactionList();
+    getReactionList(params === undefined ? 1 : params.page);
+  };
 
   //==============================================================================
   // api
@@ -72,12 +90,11 @@ export default function DashboardReactionList(props) {
     formData.append('page', pageNumber);
 
     const { status, data } = await getReactionMineFromServer(formData);
-    console.log('reaction list', data);
     if( status === 200 ){
       setStateData(data);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, String(status + data));
     }
   };
 
@@ -93,12 +110,11 @@ export default function DashboardReactionList(props) {
     formData.append('pinned', true);
 
     const { status, data } = await getReactionMineFromServer(formData);
-    console.log('PinnedReaction list', data);
     if( status === 200 ){
       setStatePinnedData(data);
     }
     else{
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, String(status + data));
     }
   };
 
@@ -127,7 +143,7 @@ export default function DashboardReactionList(props) {
           <td className="td_txt2 mb"><span className="view-m">{text.date}：</span>{item.date}</td>
           <td className="td_txt"><span className="view-m">{text.money}</span>{item.amount}</td>
           <td className="td_btns2">
-            <ReactionButtons text={text} item={item} />
+            <ReactionButtons text={text} item={item} callback={() => getList()}/>
           </td>
         </tr>
       );
@@ -144,7 +160,7 @@ export default function DashboardReactionList(props) {
           <td className="td_txt2 mb"><span className="view-m">{text.date}：</span>{item.date}</td>
           <td className="td_txt"><span className="view-m">{text.money}</span>{item.amount}</td>
           <td className="td_btns2">
-            <ReactionButtons text={text} item={item} />
+            <ReactionButtons text={text} item={item} callback={() => getList()}/>
           </td>
         </tr>
       );
@@ -155,8 +171,7 @@ export default function DashboardReactionList(props) {
 
   useEffect(() => {
     //리스트 불러오기
-    getPinnedReactionList();
-    getReactionList(params === undefined ? 1 : params.page);
+    getList();
   }, [params]);
 
   return (

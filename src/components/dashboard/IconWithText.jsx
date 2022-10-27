@@ -24,6 +24,7 @@ import { useDispatch } from 'react-redux';
 import { setFileToServer } from '@/services/dashboardService';
 import ErrorMessage from './ErrorMessage';
 import Button from './Button';
+import { showOneButtonPopup } from '@/common/common';
 
 
 /**
@@ -89,11 +90,10 @@ export default function IconWithText(props, ref) {
     };
 
     const {status, data} = await setPostReactionToServer(params);
-    console.log('setReaction', status, data);
     if( status === 201 ){
       callback?.();
       initStatus();
-      dispatch( showModal({title: text.modal_title, contents: <ErrorPopup message={text.register_coment} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, text.register_coment);
     }
     else{
       setStateError( String(status + data) );
@@ -202,8 +202,7 @@ export default function IconWithText(props, ref) {
           }
         </div>
         <div className="btns">
-          <button type="button" className="btn-pk s gray" onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
-          {/* <button type="button" className="btn-pk s blue" onClick={callback} ><span>{text.register}</span></button> */}
+          <button type="button" className={`btn-pk s ${stateShowIcon ? 'blue2' : 'gray'}`} onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
           <Button ref={refButton} text={text.register} className="btn-pk s blue"  onClick={handleClickRegister}/>
         </div>
 

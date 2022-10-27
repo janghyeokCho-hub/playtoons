@@ -1,4 +1,4 @@
-import { getGetMethodUrl } from "@/common/common";
+import { getErrorMessageFromResultCode, getGetMethodUrl } from "@/common/common";
 import { apiServer } from "./api";
 
 /**
@@ -12,7 +12,7 @@ export const getSeriesStoryList = async (params) => {
   try {
     return await apiServer("get", "/post/series" + getGetMethodUrl(params));
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -27,7 +27,7 @@ export const getPostTypeListFromServer = async () => {
   try {
     return await apiServer("get", "/post/type");
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -43,7 +43,7 @@ export const getPostCategoryListFromServer = async (typeId) => {
   try {
     return await apiServer("get", `/post/category/${typeId}`);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -73,7 +73,7 @@ export const setFileToServer = async (params) => {
   try {
     return await apiServer("post", "/file", params, header);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -111,7 +111,7 @@ export const getPostListFromServer = async (params) => {
   try {
     return await apiServer("get", "/post" + getGetMethodUrl(params));
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -127,7 +127,7 @@ export const getTagFromServer = async (query, params) => {
   try {
     return await apiServer("get", `/tag/${query}${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -144,7 +144,7 @@ export const setTagToServer = async (params) => {
   try {
     return await apiServer("post", "/tag", params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -159,7 +159,7 @@ export const setSeriesToServer = async (params) => {
   try {
     return await apiServer("post", "/post/series", params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -174,7 +174,7 @@ export const getSeriesDetailFromServer = async (params) => {
   try {
     return await apiServer("get", `/post/series/${params.id}`);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -189,7 +189,7 @@ export const setAuthorToServer = async (params) => {
   try {
     return await apiServer('post', `/author`, params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 /**
@@ -203,7 +203,7 @@ export const setAuthorIdToServer = async (id, params) => {
   try {
     return await apiServer('patch', `/author/${id}`, params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -218,7 +218,7 @@ export const getAuthorIdFromServer = async (params) => {
   try {
     return await apiServer('get', `/author/${params.id}`, );
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -236,7 +236,7 @@ export const getSubscribeTierAuthorIdFromServer = async (params) => {
     return await apiServer('get', `/subscribeTier/${params.authorId}`, );
     // return await apiServer('get', `/subscribeTier/${params.authorId}${getGetMethodUrl(params)}`, );
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -251,7 +251,7 @@ export const setSubscribeTierToServer = async (params) => {
   try {
     return await apiServer('post', `/subscribeTier`, params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -266,7 +266,7 @@ export const editSubscribeTierToServer = async (params) => {
   try {
     return await apiServer('patch', `/subscribeTier`, params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -281,7 +281,7 @@ export const editPostSeriesToServer = async (params) => {
   try {
     return await apiServer('patch', `/post/series`, params);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -296,7 +296,7 @@ export const getReactionMineAuthorIdFromServer = async (params) => {
   try {
     return await apiServer('get', `/reaction/mine/${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -307,11 +307,11 @@ export const getReactionMineAuthorIdFromServer = async (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getReactionReactionIdPinFromServer = async (params) => {
+export const setReactionReactionIdPinToServer = async (params) => {
   try {
     return await apiServer('post', `/reaction/${params.id}/pin`, );
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -326,7 +326,7 @@ export const deleteReactionReactionIdPinFromServer = async (params) => {
   try {
     return await apiServer('delete', `/reaction/${params.id}/pin`, );
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
@@ -341,10 +341,69 @@ export const getReactionFromServer = async (params) => {
   try {
     return await apiServer('get', `/reaction${getGetMethodUrl(params)}`, );
   } catch (e) {
-    return { status: e.response.status, data: e.message };
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
 };
 
+/**
+*
+  Dashbaord - reaction list - like 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setReactionLikeToServer = async (params) => {
+  try {
+    return await apiServer('post', `/reaction/${params.id}/like`, );
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+
+/**
+*
+  Dashbaord - reaction list - like 취소
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deleteReactionLikeToServer = async (params) => {
+  try {
+    return await apiServer('delete', `/reaction/${params.id}/like`, );
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+
+/**
+*
+  Dashbaord - reaction list - report 리액션 신고 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setPostReactionIdReportToServer = async (id, params) => {
+  try {
+    return await apiServer('post', `/reaction/${id}/report`, params);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+
+/**
+*
+  Dashbaord - reaction list - delete 리액션 삭제 
+*
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deleteReactionIdToServer = async (id) => {
+  try {
+    return await apiServer('delete', `/reaction/${id}`, );
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
 
 
 
