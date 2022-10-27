@@ -6,7 +6,7 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Tag from "@/components/dashboard/Tag";
 import { setFileToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus } from "@/common/common";
+import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus, showOneButtonPopup } from "@/common/common";
 import { setPostToServer } from "@/services/postService";
 import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
@@ -69,10 +69,12 @@ const supportorList = [
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
+  const [stateSeries, setStateSeries] = useState(undefined);
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const refForm = useRef();
+  const refType = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
   const refContents = useRef();
@@ -193,14 +195,7 @@ export default function UploadPost(props) {
       );
     }
     else{
-      dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
-          }
-        )
-      );
+      showOneButtonPopup(dispatch, data);
     }
     
     initButtonInStatus(refRegister);
@@ -209,6 +204,11 @@ export default function UploadPost(props) {
   //==============================================================================
   // event
   //==============================================================================
+  const handleSeries = (series) => {
+    setStateSeries(series);
+    // setStateType(series.type);
+  };
+  
   const handleClickType = (typeItem) => {
     setStateType(typeItem);
   };
@@ -240,6 +240,12 @@ export default function UploadPost(props) {
   //==============================================================================
 
   useEffect(() => {
+    if( stateSeries !== undefined ){
+      refType.current.setSelected(stateSeries.type);
+    }
+  }, [stateSeries]); 
+
+  useEffect(() => {
     //temp
     setStateSupportorList(supportorList);
   }, []);
@@ -265,6 +271,7 @@ export default function UploadPost(props) {
                 <Series
                   name={'seriesId'}
                   className={'select1 w100'}
+                  callback={handleSeries}
                   />
               </div>
 
@@ -272,8 +279,9 @@ export default function UploadPost(props) {
                 <h3 className="tit1">{text.type}</h3>
                 <div className="lst_txchk">
                   <Type
+                    ref={refType}
                     name={'typeId'}
-                    callback={handleClickType}
+                    
                     />
                 </div>
               </div>
@@ -283,7 +291,8 @@ export default function UploadPost(props) {
                 <Category 
                   name={'categoryId'}
                   className={'select1 wid1 '}
-                  typeId={stateType?.id} />
+                  typeId={stateSeries?.type.id} 
+                  selected={stateSeries?.category.id} />
               </div>
 
               <div className="col">

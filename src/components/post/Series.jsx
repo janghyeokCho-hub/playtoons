@@ -26,7 +26,7 @@ import { getErrorMessageFromResultCode } from "@/common/common";
 * @return
 */
 export default function Series(props) {
-  const {name, className, callback, selected} = props;
+  const {name, className, callback, selected, disabled, disabledText} = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
   const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
@@ -45,16 +45,15 @@ export default function Series(props) {
   };
 
   const getSeries = async () => {
-    let form = new FormData();
+    const form = new FormData();
     form.append( 'authorId', myAuthors[0].id );
+
     const {status, data} = await getPostSeriesMineFromServer(form);
-    
     if( status === 200 ){
       setStateList( data?.series );
       callback?.(data.series[0]);
     }
     else{
-      //error 처리
       setStateError( String(status + getErrorMessageFromResultCode(data)) );
     }
   };
@@ -70,8 +69,6 @@ export default function Series(props) {
   useEffect(() => {
     getSeries();
   }, []);
-  
-  
 
   return (
     <>
@@ -81,6 +78,8 @@ export default function Series(props) {
         className={`${className}`}
         dataList={stateList}
         handleItemClick={handleClickItem}
+        disabled={disabled}
+        disabledText={disabledText}
         />
       <ErrorMessage error={stateError} />
     </>

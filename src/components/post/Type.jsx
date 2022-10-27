@@ -27,31 +27,43 @@ export default forwardRef( function Type(props, ref) {
   const [stateError, setStateError] = useState(undefined);
       
 
+  //==============================================================================
+  // function
+  //==============================================================================
   const initCheckecInList = () => {
     stateList?.forEach((item, i) => {
       item.checked = false;
     });
   };
 
-  const getChecked = (item, i) => {
-    if( selected === undefined ){
-      return i === 0 ? true : false;
-    }
-    else{
-      return item.id === selected;
-    }
-    
+  const getChecked = (item) => {
+    const tempId = selected === undefined ? 0 : selected;
+    return item.id === tempId;
   };
 
   const setCheckedToList = (list) => {
     return list.map( (item, i) => {
       return {
         ...item,
-        // checked: i === 0 ? true : false
-        checked: getChecked(item, i)
+        checked: getChecked(item)
       }
     } );
   };
+
+  const setSelectedInStateList = (typeId) => {
+    const typeList = document.getElementsByName('typeId');
+    for( let i = 0; i < typeList.length; i++ ){
+      if( typeId === typeList[i].getAttribute('data-id') ){
+        typeList[i].checked = true;
+        break;
+      }
+    }
+  };
+
+
+  //==============================================================================
+  // api
+  //==============================================================================
 
   const getType = async () => {
     const {status, data} = await getPostTypeListFromServer();
@@ -62,9 +74,12 @@ export default forwardRef( function Type(props, ref) {
     }
     else{
       //error 처리
-      setStateError( String(status, data) );
+      setStateError(data);
     }
   };
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleClickItem = (event) => {
     if( disabled ){
@@ -77,6 +92,10 @@ export default forwardRef( function Type(props, ref) {
     item.checked = true;
     callback?.( item );
   };
+
+  //==============================================================================
+  // hook & render
+  //==============================================================================
 
   const renderTypeListElements = () => {
     return stateList?.map((item, index) => {
@@ -102,7 +121,12 @@ export default forwardRef( function Type(props, ref) {
     getTypeList: () => {
       return stateList;
     },
+    setSelected: (typeItem) => {
+      setSelectedInStateList(typeItem.id);
+    },
   }));
+
+  
 
   useEffect(() => {
     getType();

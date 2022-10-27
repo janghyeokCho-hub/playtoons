@@ -39,15 +39,16 @@ export default forwardRef( function Select(props, ref) {
 
   const setSelectedItem = (id) => {
     const select = refSelect.current;
-      if( select !== null ){
-        dataList?.map((item, index) => {
-          if( item.id === id ){
-            select.selectedIndex = index;
-            select.options[index].setAttribute("selected", true);
-            return index;
-          }
-        });
-      }
+    const selctedId = id;
+    if( select !== null && selected !== undefined ){
+      dataList?.map((item, index) => {
+        if( item.id === selctedId ){
+          select.selectedIndex = index;
+          select.options[index].setAttribute("selected", true);
+          return index;
+        }
+      });
+    }
     
   };
 
@@ -82,7 +83,7 @@ export default forwardRef( function Select(props, ref) {
             <option value="">{disabledText}</option>
           </select>
         : 
-          <select ref={refSelect} name={name} id={name} className={className} onChange={handleClickSelect} >
+          <select ref={refSelect} name={name} id={name} className={className} onChange={handleClickSelect}  >
             {
               getOptionElements()
             }

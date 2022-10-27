@@ -207,7 +207,7 @@ export const setInputValueToNumber = (ref, value) => {
 
 /**
 *
-  button 상태 초기화
+  lottie 적용된 button 상태 초기화
 *
 * @version 1.0.0
 * @author 2hyunkook

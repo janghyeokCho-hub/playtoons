@@ -397,6 +397,8 @@ export default function PostEdit(props) {
                   name={'seriesId'}
                   className={'select1 w100'}
                   selected={reduxPostInfo?.seriesId}
+                  disabled={true}
+                  disabledText={reduxPostInfo?.series.title}
                   />
               </div>
 
@@ -419,6 +421,8 @@ export default function PostEdit(props) {
                   className={'select1 wid1 '}
                   typeId={stateType?.id} 
                   selected={reduxPostInfo?.categoryId}
+                  disabled={true}
+                  disabledText={reduxPostInfo?.category.name}
                   />
               </div>
 

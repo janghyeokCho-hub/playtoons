@@ -54,9 +54,9 @@ const text = {
   cancel: 'キャンセル',
 };
 
-const tempData = {
-  content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
-};
+// const tempData = {
+//   content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
+// };
 
 
 export default function DashboardPostDetail() {
@@ -203,9 +203,9 @@ export default function DashboardPostDetail() {
           <Image hash={stateData?.content} alt="playtonns content" />
         </div>
         
-        <div className="area_detail2">
+        {/* <div className="area_detail2">
           <p className="t1 c-gray">{tempData.content_next_summary}</p>
-        </div>
+        </div> */}
       </div>
 
       <div className="wrap_comment">
