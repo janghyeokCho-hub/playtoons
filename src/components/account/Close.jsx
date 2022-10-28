@@ -87,7 +87,7 @@ const Close = () => {
       <div className={`${isErrorShow && !agree ? "error" : ""} inps`}>
         <label className="inp_checkbox">
           <input type="checkbox" onChange={(e) => setAgree(e.target.checked)} />
-          <span>案内事項に同意し、退会します。</span>
+          <span>クリエイターになる</span>
         </label>
 
         {isErrorShow && !agree && (
