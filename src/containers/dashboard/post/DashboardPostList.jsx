@@ -17,6 +17,7 @@ import EmptyTr from "@/components/dashboard/EmptyTr";
 import { getDateYYYYMMDD } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { useWindowSize } from "@/hook/useWindowSize";
 
 
 const text = {
@@ -54,7 +55,15 @@ export default function DashboardPostList(props) {
   const params = useParams('page');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+  const windows = useWindowSize();
+
+
+  const moveToDetailPage = (item) => {
+    if( windows.width > 960 ){
+      navigate(`/dashboard/post/detail/${item.id}`)
+    }
+  };
+
 
   const getPostList = async (page) => {
     const params = new FormData();
@@ -103,7 +112,7 @@ export default function DashboardPostList(props) {
 
     return stateData?.posts?.map((item, index) => {
       return (
-        <tr key={index}>
+        <tr key={index} onClick={() => moveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb"><span><Image hash={item.thumbnailImage} alt="thumbnail" /></span></div>
