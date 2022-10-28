@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '@/css/test.css';
 import Pagination from 'react-js-pagination';
 import { useState } from 'react';
@@ -26,20 +26,25 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/pro-light-svg-icons';
 * @return
 */
 export default function Pagination1(props) {
-  const { className, itemsCountPerPage, totalItemsCount, callback } = props;
-  const [page, setPage] = useState(props.page);
+  const { className, itemsCountPerPage, totalItemsCount, callback, page } = props;
+  const [ statePage, setStatePage] = useState(page);
 
   const handleChange = (page) => {
-    setPage(page);
+    setStatePage(page);
     callback?.(page);
   };
+
+  useEffect(() => {
+    setStatePage(page);
+  }, [page]);
+  
 
   return (
     <>
       {
-        props.totalItemsCount > 0 &&
+        totalItemsCount > 0 &&
         <Pagination 
-              activePage={page}
+              activePage={statePage}
               itemsCountPerPage={itemsCountPerPage}
               totalItemsCount={totalItemsCount}
               pageRangeDisplayed={10}

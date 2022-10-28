@@ -32,6 +32,7 @@ export default function DashboardSeries(props) {
   const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const param = useParams('page');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   /**
   *
@@ -146,7 +147,7 @@ export default function DashboardSeries(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={(page) => getSeriesListFromAPi(page)}
+          callback={(page) => navigate(`/dashboard/series/${page}`)}
           />
       </div>
       

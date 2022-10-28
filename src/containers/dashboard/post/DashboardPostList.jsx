@@ -128,6 +128,7 @@ export default function DashboardPostList(props) {
     getPostList( params.page === undefined ? 1 : params.page );
   }, [params]);
 
+  //header back callback 현재 로케이션 보내느걸로
   return (
     <Container
       type={"post"} >
@@ -193,7 +194,7 @@ export default function DashboardPostList(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={(page) => getPostList(page)}
+          callback={(page) => navigate(`/dashboard/post/${page}`)}
           />
        
       </div>
