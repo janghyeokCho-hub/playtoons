@@ -36,7 +36,6 @@ const Novel = () => {
   const [content, setContent] = useState(currentPost?.content);
   const contentURL = useFilePath(content);
   // 로그인 한 사용자
-  const isLogined = useSelector(({ login }) => login.isLogined);
   const userInfo = useSelector(({ login }) => login.userInfo);
   const myProfileImgURL = useFilePath(userInfo?.profileImage);
   // 이전회차 / 다음회차 버튼 Ref
@@ -51,12 +50,8 @@ const Novel = () => {
   );
 
   useEffect(() => {
-    if (isLogined) {
-      dispatch(getCurrentPost({ id: id }));
-    } else {
-      navigate("/account", { state: { next: location?.pathname } });
-    }
-  }, [dispatch, navigate, id, isLogined, location.pathname]);
+    dispatch(getCurrentPost({ id: id }));
+  }, [dispatch, navigate, id, location.pathname]);
 
   const handleFollow = useCallback(
     async (type) => {
