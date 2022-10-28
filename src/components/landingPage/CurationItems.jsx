@@ -49,6 +49,7 @@ const CurationItems = ({ curationNum }) => {
             spaceBetween={10}
             observer={true}
             observeParents={true}
+            touchRatio={0}
             navigation={{
               nextEl: nextRef.current,
               prevEl: prevRef.current,

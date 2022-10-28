@@ -63,6 +63,7 @@ export default function SwiperContainer(props) {
         spaceBetween={10}
         observer={true}
         observeParents={true}
+        touchRatio={0}
         navigation={{
           nextEl: nextRef.current,
           prevEl: prevRef.current,
@@ -76,8 +77,8 @@ export default function SwiperContainer(props) {
         onUpdate={(swiper) => {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
-          
-          if( props.buttonClassName !== undefined ){
+
+          if (props.buttonClassName !== undefined) {
             nextRef?.current?.classList?.add(props.buttonClassName);
             prevRef?.current?.classList?.add(props.buttonClassName);
           }

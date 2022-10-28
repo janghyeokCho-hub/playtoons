@@ -25,6 +25,7 @@ const RecentItems = () => {
           spaceBetween={30}
           observer={true}
           observeParents={true}
+          touchRatio={0}
           navigation={{
             nextEl: ".swiper-button-next",
             prevEl: ".swiper-button-prev",

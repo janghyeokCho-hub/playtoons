@@ -34,7 +34,7 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
     }
 
     //2022.10.20 register form 으로 이동, author 등록 허용 횟수 확인 필요
-    navigate('/author/register/form');
+    navigate("/author/register/form");
 
     // patch account
     // const params = {
@@ -82,7 +82,7 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
                       type="checkbox"
                       onChange={(e) => setAgree(e.target.checked)}
                     />
-                    <span>案内事項に同意し、退会します。</span>
+                    <span>利用規約に同意します。</span>
                   </label>
                   {isErrorShow && !agree && (
                     <p className="t_error">

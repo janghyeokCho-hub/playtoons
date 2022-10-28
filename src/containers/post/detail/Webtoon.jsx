@@ -254,6 +254,7 @@ const Webtoon = () => {
                         spaceBetween={10}
                         observer={true}
                         observeParents={true}
+                        touchRatio={0}
                         navigation={{
                           nextEl: ".swiper-button-next.myem",
                           prevEl: ".swiper-button-prev.myem",
@@ -321,6 +322,7 @@ const Webtoon = () => {
                 spaceBetween={10}
                 observer={true}
                 observeParents={true}
+                touchRatio={0}
                 navigation={{
                   nextEl: nextRef.current,
                   prevEl: prevRef.current,
