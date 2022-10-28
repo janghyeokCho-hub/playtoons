@@ -13,11 +13,11 @@ const Footer = () => {
           <p className="copy">&copy;Rocketstaff All Right Reserved.</p>
 
           <div className="rgh">
-            <Link to="#" onClick={() => setIsEulaPopupShow(!isEulaPopupShow)}>
+            <Link to="" onClick={() => setIsEulaPopupShow(!isEulaPopupShow)}>
               利用規約
             </Link>
-            <a href="#">会社情報</a>
             <a href="#">プライバシーポリシー</a>
+            <a href="#">会社情報</a>
           </div>
         </div>
       </footer>
