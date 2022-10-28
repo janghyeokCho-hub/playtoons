@@ -120,6 +120,9 @@ export default function DashboardSeries(props) {
 
   useEffect(() => {
     getSeriesListFromAPi(param?.page === undefined ? 1 : param?.page);
+    return () => {
+      setStateData(undefined);
+    }
   }, [param]);
 
   return (

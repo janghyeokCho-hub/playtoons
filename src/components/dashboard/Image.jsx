@@ -41,5 +41,5 @@ export default function Image(props) {
     }
   }, [hash]);
 
-  return <img className={className} src={stateImage} alt={alt} />;
+  return <img className={className} src={stateImage} alt={alt} loading="lazy" />;
 }

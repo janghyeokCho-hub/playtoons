@@ -50,7 +50,7 @@ const searchList = [
 ];
 
 export default function DashboardPostList(props) {
-  const [stateData, setStateData] = useState();
+  const [stateData, setStateData] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const params = useParams('page');
   const dispatch = useDispatch();
@@ -115,7 +115,7 @@ export default function DashboardPostList(props) {
         <tr key={index} onClick={() => moveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb"><span><Image hash={item.thumbnailImage} alt="thumbnail" /></span></div>
+            <div className="cx_thumb"><Image hash={item.thumbnailImage} alt="thumbnail" /></div>
           </td>
           <td className="td_subject">{item.title}</td>
           <td className="td_number1"><FontAwesomeIcon icon={faEye} className='view-m' />{item.viewCount}<em className="hide-m">{text.count}</em></td>
@@ -135,6 +135,9 @@ export default function DashboardPostList(props) {
   useEffect(() => {
     //리스트 불러오기
     getPostList( params.page === undefined ? 1 : params.page );
+    return () => {
+      setStateData(undefined);
+    }
   }, [params]);
 
   //header back callback 현재 로케이션 보내느걸로
