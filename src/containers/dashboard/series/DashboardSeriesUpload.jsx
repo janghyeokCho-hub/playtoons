@@ -302,7 +302,12 @@ export default function DashboardUploadSeries(props) {
               </div>
 
               <div className="col">
-                <h3 className="tit1">{text.setting_tag}</h3>
+                <h3 className="tit1">{text.setting_tag} <button type="button" className="btn_help" title="ヘルプ">
+									<ToolTip
+										title={text.setting_tag}
+										text={'タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。'} />
+									</button>
+                </h3>
                 <Tag 
                   ref={refTags}
                   name={"tagIds"}

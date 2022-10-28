@@ -14,7 +14,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import { getDateYYYYMMDD } from "@/common/common";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { useWindowSize } from "@/hook/useWindowSize";
@@ -87,13 +87,13 @@ export default function DashboardPostList(props) {
     }
     else{
       //error 처리
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={String(result)} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, result);
     }
   };
 
   const handleClickPost = (event) => {
     if( reduxAuthors === undefined || reduxAuthors.length === 0 ){
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'クリエイターとして登録してください。'} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, 'クリエイターとして登録してください。');
     }
     else{
       navigate('/post/upload');

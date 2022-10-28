@@ -451,7 +451,12 @@ export default function PostEdit(props) {
               </div>
 
               <div className="col">
-                <h3 className="tit1">{text.tag}</h3>
+                <h3 className="tit1">{text.tag} <button type="button" className="btn_help" title="ヘルプ">
+									<ToolTip
+										title={text.setting_tag}
+										text={'タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。'} />
+									</button>
+                </h3>
                 <Tag 
                   ref={refTag}
                   name={"tagIds"}
