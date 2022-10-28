@@ -7,6 +7,7 @@ import useSideMenu from "@/hook/useSideMenu";
 import { useWindowSize } from "@/hook/useWindowSize";
 import Header from "../Header";
 import Footer from "../Footer";
+import { useSelector } from "react-redux";
 
 const SideBar = ({ menus, handleChange }) => {
   const location = useLocation();
@@ -80,6 +81,8 @@ const SideBar = ({ menus, handleChange }) => {
   );
 };
 const Container = ({ menus, children, type, activeMenu }) => {
+  //wrap_tophd
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const { isSideMenuShow, handleChange } = useSideMenu();
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
@@ -96,18 +99,27 @@ const Container = ({ menus, children, type, activeMenu }) => {
   }, [windowSize]);
 
   return (
-    <div id="wrap" className={`${isSideMenuShow ? "open" : ""}`}>
+    <div
+      id="wrap"
+      className={`${isLogined ? "wrap_tophd" : ""} ${
+        isSideMenuShow ? "open" : ""
+      }`}
+    >
       <Header
         // type="post"          //author는 header type이 없어도 되도록 변경
         isMenus={!isRegister}
         onSideMenu={() => handleChange()}
       />
       <div id="container" className={className}>
-        {(isSideMenuShow && isMobile && (
-          <div className="popup_dim" onClick={() => handleChange()}>
-            <SideBar menus={menus} handleChange={handleChange} />
-          </div>
-        )) || <SideBar menus={menus} handleChange={handleChange} />}
+        {!isRegister && (
+          <>
+            {(isSideMenuShow && isMobile && (
+              <div className="popup_dim" onClick={() => handleChange()}>
+                <SideBar menus={menus} handleChange={handleChange} />
+              </div>
+            )) || <SideBar menus={menus} handleChange={handleChange} />}
+          </>
+        )}
 
         {children}
         {isRegister === true && <Footer />}

@@ -12,20 +12,86 @@ import {
 import { faCartCirclePlus } from "@fortawesome/pro-regular-svg-icons";
 import { faXmarkLarge, faGlobe } from "@fortawesome/pro-solid-svg-icons";
 import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
-import tempProfile from "@IMAGES/img_profile.png";
 import { getAccount } from "@API/accountService";
 import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
 import { logoutRequest } from "@/modules/redux/ducks/login";
 import { clearUserData } from "@/utils/localStorageUtil";
 import { setPostLike } from "@API/postService";
 import useFilePath from "@/hook/useFilePath";
+import { useWindowSize } from "@/hook/useWindowSize";
+import { setDim } from "@/modules/redux/ducks/dim";
+
+const SearchComponent = () => {
+  const dispatch = useDispatch();
+  const { isShow } = useSelector(({ dim }) => dim);
+  const [isMobile, setIsMobile] = useState(false);
+  const windowSize = useWindowSize();
+
+  const handleChange = useCallback(() => {
+    dispatch(setDim({ dimType: "SEARCH", isShow: !isShow }));
+  }, [dispatch, isShow]);
+
+  useEffect(() => {
+    setIsMobile(windowSize.width < 961);
+  }, [windowSize]);
+
+  return (
+    <>
+      {(isMobile && (
+        <>
+          {isShow && (
+            <div className={`box_hd_sch ${isShow ? "open" : ""}`}>
+              <input
+                type="text"
+                className="inp_txt"
+                placeholder="検索キーワードを入力"
+              />
+              <button type="button" className="btn_hd_del">
+                <span>
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                </span>
+              </button>
+              {/*<!-- 삭제버튼 추가 -->*/}
+              <button type="button" className="btns">
+                <span>
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
+                </span>
+              </button>
+            </div>
+          )}
+        </>
+      )) || (
+        <div className="box_hd_sch">
+          <input
+            type="text"
+            className="inp_txt"
+            placeholder="検索キーワードを入力"
+          />
+          <button type="button" className="btn_hd_del">
+            <span>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </span>
+          </button>
+          {/*<!-- 삭제버튼 추가 -->*/}
+          <button type="button" className="btns">
+            <span>
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
+            </span>
+          </button>
+        </div>
+      )}
+
+      <button type="button" className="mo_btns view-m" onClick={handleChange}>
+        <FontAwesomeIcon icon={faMagnifyingGlass} />
+      </button>
+    </>
+  );
+};
 
 const Header = ({
   type,
   className,
-  handleLeftMenu,
   backTitle,
-  handleBack,
   isMenus = true,
   onSideMenu,
   isDetailView,
@@ -115,21 +181,8 @@ const Header = ({
             </h1>
 
             <div className="rgh">
-              <div className="box_hd_sch">
-                <input
-                  type="text"
-                  className="inp_txt"
-                  placeholder="検索キーワードを入力"
-                />
-                <button type="button" className="btns">
-                  <span>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                  </span>
-                </button>
-              </div>
-              <button type="button" className="mo_btns view-m">
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </button>
+              <SearchComponent />
+              {/*<!-- 모바일 검색 버튼 -->*/}
 
               <div
                 className="pos_to"
@@ -249,21 +302,7 @@ const Header = ({
             </h1>
 
             <div className="rgh">
-              <div className="box_hd_sch">
-                <input
-                  type="text"
-                  className="inp_txt"
-                  placeholder="検索キーワードを入力"
-                />
-                <button type="button" className="btns">
-                  <span>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} />
-                  </span>
-                </button>
-              </div>
-              <button type="button" className="mo_btns view-m">
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </button>
+              <SearchComponent />
 
               <Link to="/account" className="btn_log btn-pk n blue bdrs">
                 <span>ログイン</span>

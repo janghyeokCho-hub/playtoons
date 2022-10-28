@@ -8,6 +8,7 @@ import author from "./author";
 import post from "./post";
 import alertModal from "./modal";
 import dashboard from "./dashboard";
+import dim from "./dim";
 
 const persistConfig = {
   key: "root",
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
   author,
   post,
   dashboard,
+  dim,
 });
 
 const rootReducer = (state, action) => {

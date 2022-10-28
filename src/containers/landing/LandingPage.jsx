@@ -9,10 +9,14 @@ import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
 import { Link } from "react-router-dom";
 import { getEmergencyNotice } from "@/services/noticeService";
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { setDim } from "@/modules/redux/ducks/dim";
 
 const LandingPage = () => {
+  const dispatch = useDispatch();
   const [notice, setNotice] = useState(null);
   const [isNoticeShow, setIsNoticeShow] = useState(false);
+  const { dimType, isShow } = useSelector(({ dim }) => dim);
 
   const getNotice = useCallback(async () => {
     const response = await getEmergencyNotice();
@@ -27,11 +31,16 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
     getNotice();
-  }, []);
+  }, [dispatch]);
+
+  const handleDimClose = useCallback(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, [dispatch]);
 
   return (
-    <>
+    <div id="wrap" className="wrap_tophd">
       <Header isMenus={false} />
       <div id="container" className="container landing">
         {notice && isNoticeShow && (
@@ -140,8 +149,11 @@ const LandingPage = () => {
           </div>
         </div>
       </div>
+      {isShow && dimType === "SEARCH" && (
+        <div className="sch_dim" onClick={handleDimClose}></div>
+      )}
       <Footer />
-    </>
+    </div>
   );
 };
 

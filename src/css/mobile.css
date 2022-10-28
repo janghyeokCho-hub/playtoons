@@ -354,7 +354,7 @@
     margin-left: 10px;
   }
   .header .box_hd_sch {
-    display: none;
+    /* 2022-10-29 display: none; 제거 */
     margin-right: 0px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
