@@ -1,29 +1,56 @@
 import React, { useCallback, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
-import ToastPopup from "@COMPONENTS/ToastPopup";
+import {
+  faXmarkLarge,
+  faCircleCheck,
+  faCircleXmark,
+  faCircleInfo,
+} from "@fortawesome/pro-solid-svg-icons";
+import { useEffect } from "react";
+
+const active = {
+  opacity: "1",
+  transition: "opacity 500ms",
+};
+
+const hidden = {
+  opacity: "0",
+  visibility: "hidden",
+  transition: "opacity 500ms , visibility 500ms",
+};
 
 const SharePopup = ({ onClose }) => {
   const url = window.location.href;
-  const [isToastShow, setIsToastShow] = useState(false);
-  const [toastType, setToastType] = useState("");
-  const [toastMessage, setToastMessage] = useState("");
+  const [isShow, setIsShow] = useState(false);
+  const [toastData, setToastData] = useState();
 
   const handleCopy = useCallback(() => {
     navigator.clipboard
       .writeText(url)
       .then(() => {
-        setToastType("success");
-        setToastMessage("コピーされました。");
-        setIsToastShow(true);
+        const param = {
+          type: "success",
+          message: "コピーされました。",
+          timeout: 1500,
+        };
+        setToastData(param);
+        setIsShow(true);
         setTimeout(() => {
-          setIsToastShow(false);
+          setIsShow(false);
         }, 1500);
       })
       .catch((e) => {
         console.log("error : ", e);
       });
   }, [url]);
+
+  useEffect(() => {
+    if (!isShow) {
+      setTimeout(() => {
+        setToastData(null);
+      }, 500);
+    }
+  }, [isShow]);
   return (
     <>
       <div className="popup_dim">
@@ -36,7 +63,7 @@ const SharePopup = ({ onClose }) => {
                 className="btn_pop_close b-close"
                 onClick={onClose}
               >
-                <FontAwesomeIcon icon={faXmarkLarge} />
+                <FontAwesomeIcon className="fa-solid" icon={faXmarkLarge} />
               </button>
             </div>
             <div className="pop_cont">
@@ -66,11 +93,21 @@ const SharePopup = ({ onClose }) => {
         </div>
       </div>
 
-      <ToastPopup
-        type={toastType}
-        message={toastMessage}
-        visible={isToastShow}
-      />
+      <div
+        className={`toast_msg ${toastData?.type}`}
+        style={isShow ? active : hidden}
+      >
+        {toastData?.type === "success" && (
+          <FontAwesomeIcon icon={faCircleCheck} />
+        )}
+        {toastData?.type === "error" && (
+          <FontAwesomeIcon icon={faCircleXmark} />
+        )}
+        {toastData?.type === "information" && (
+          <FontAwesomeIcon icon={faCircleInfo} />
+        )}
+        <span>{toastData?.message}</span>
+      </div>
     </>
   );
 };

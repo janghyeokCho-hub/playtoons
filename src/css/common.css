@@ -6129,8 +6129,8 @@ body {
   max-width: none;
 }
 .layerPopup {
+  /* 2022-10-28 display: none; 제거 */
   z-index: 1000;
-  display: none;
   position: fixed;
   left: 50%;
   top: 50%;
