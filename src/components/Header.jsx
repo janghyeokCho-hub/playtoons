@@ -83,7 +83,11 @@ const Header = ({
   }, [dispatch]);
 
   useEffect(() => {
-    setRenderType(isLogined ? type : "logout");
+    let tempType = type;
+    if (type !== "post") {
+      tempType = isLogined ? type : "logout";
+    }
+    setRenderType(tempType);
   }, [isLogined, type]);
 
   return (
