@@ -160,7 +160,7 @@ const Header = ({
     <div className="open">
       <header id="header" className={`header ${className}`}>
         {/* logout, login, author, webtoon, novel */}
-        {renderType === undefined && ( //post detail, post upload 에서 중복되도록 나오기때문에 변경
+        {(isLogined && ( //post detail, post upload 에서 중복되도록 나오기때문에 변경
           <div className="inr-c view-m">
             {isMenus && (
               <button
@@ -290,10 +290,7 @@ const Header = ({
               </div>
             </div>
           </div>
-        )}
-
-        {/* logout */}
-        {renderType === "logout" && (
+        )) || (
           <div className="inr-c">
             <h1 className="logo">
               <Link to="/">
@@ -310,6 +307,25 @@ const Header = ({
             </div>
           </div>
         )}
+
+        {/* logout */}
+        {/*renderType === "logout" && (
+          <div className="inr-c">
+            <h1 className="logo">
+              <Link to="/">
+                <span className="ico_logo">PlayToons</span>
+              </Link>
+            </h1>
+
+            <div className="rgh">
+              <SearchComponent />
+
+              <Link to="/account" className="btn_log btn-pk n blue bdrs">
+                <span>ログイン</span>
+              </Link>
+            </div>
+          </div>
+        )*/}
 
         {renderType === "post" && (
           <>
