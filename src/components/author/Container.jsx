@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +8,7 @@ import useSideMenu from "@/hook/useSideMenu";
 import { useWindowSize } from "@/hook/useWindowSize";
 import Header from "../Header";
 import Footer from "../Footer";
-import { useSelector } from "react-redux";
+import { setDim } from "@/modules/redux/ducks/dim";
 
 const SideBar = ({ menus, handleChange }) => {
   const location = useLocation();
@@ -81,7 +82,8 @@ const SideBar = ({ menus, handleChange }) => {
   );
 };
 const Container = ({ menus, children, type, activeMenu }) => {
-  //wrap_tophd
+  const dispatch = useDispatch();
+  const { dimType, isShow } = useSelector(({ dim }) => dim);
   const isLogined = useSelector(({ login }) => login.isLogined);
   const { isSideMenuShow, handleChange } = useSideMenu();
   const windowSize = useWindowSize();
@@ -95,16 +97,19 @@ const Container = ({ menus, children, type, activeMenu }) => {
   }
 
   useEffect(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, []);
+
+  useEffect(() => {
     setIsMobile(windowSize.width < 961);
   }, [windowSize]);
 
+  const handleDimClose = useCallback(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, [dispatch]);
+
   return (
-    <div
-      id="wrap"
-      className={`${isLogined ? "wrap_tophd" : ""} ${
-        isSideMenuShow ? "open" : ""
-      }`}
-    >
+    <div id="wrap" className="wrap_tophd">
       <Header
         // type="post"          //author는 header type이 없어도 되도록 변경
         isMenus={!isRegister}
@@ -124,6 +129,9 @@ const Container = ({ menus, children, type, activeMenu }) => {
         {children}
         {isRegister === true && <Footer />}
       </div>
+      {isShow && dimType === "SEARCH" && (
+        <div className="sch_dim" onClick={handleDimClose}></div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import Header from "@COMPONENTS/Header";
 
 const App = () => {
   return (
-    <>
+    <div id="wrap">
       <Header className="ty1 mdetail" type="post" isDetailView={true} />
       <div id="container" className="container sub mpost bg">
         <div className="inr-c">
@@ -16,7 +16,7 @@ const App = () => {
           </Routes>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

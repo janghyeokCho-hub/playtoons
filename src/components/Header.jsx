@@ -161,7 +161,7 @@ const Header = ({
       <header id="header" className={`header ${className}`}>
         {/* logout, login, author, webtoon, novel */}
         {renderType === undefined && ( //post detail, post upload 에서 중복되도록 나오기때문에 변경
-          <div className="inr-c">
+          <div className="inr-c view-m">
             {isMenus && (
               <button
                 type="button"

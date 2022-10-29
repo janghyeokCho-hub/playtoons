@@ -14,6 +14,7 @@ import { setDim } from "@/modules/redux/ducks/dim";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const [notice, setNotice] = useState(null);
   const [isNoticeShow, setIsNoticeShow] = useState(false);
   const { dimType, isShow } = useSelector(({ dim }) => dim);
@@ -33,7 +34,7 @@ const LandingPage = () => {
   useEffect(() => {
     dispatch(setDim({ dimType: null, isShow: false }));
     getNotice();
-  }, [dispatch]);
+  }, []);
 
   const handleDimClose = useCallback(() => {
     dispatch(setDim({ dimType: null, isShow: false }));

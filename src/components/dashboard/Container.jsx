@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import NavBarDashboard from "./NavBarDashboard";
 import Header from "@/components/Header";
-import { useState } from "react";
 import { useWindowSize } from "@/hook/useWindowSize";
+import { setDim } from "@/modules/redux/ducks/dim";
 
 /**
 *
@@ -20,62 +21,70 @@ import { useWindowSize } from "@/hook/useWindowSize";
 * @return
 */
 export default function Container(props) {
-  const [ stateIsOpen, setStateIsOpen ] = useState(false);
+  const dispatch = useDispatch();
+  const [stateIsOpen, setStateIsOpen] = useState(false);
   const { type, backTitle, children } = props;
   const windowSize = useWindowSize();
-  const [ stateIsMobile, setStateIsMobile ] = useState(false);
+  const [stateIsMobile, setStateIsMobile] = useState(false);
+  const { dimType, isShow } = useSelector(({ dim }) => dim);
 
   const getWrapClassName = () => {
-    return stateIsOpen ? 'open' : '';
+    return stateIsOpen ? "open" : "";
   };
 
   const getNavClassName = () => {
-    return stateIsOpen ? 'w100p' : 'w0';
+    return stateIsOpen ? "w100p" : "w0";
   };
-  
+
   const handleClickMenu = (event) => {
-    setStateIsOpen( !stateIsOpen );
+    setStateIsOpen(!stateIsOpen);
   };
+
+  const handleDimClose = useCallback(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, [dispatch]);
 
   useEffect(() => {
     setStateIsMobile(windowSize.width < 961);
   }, [windowSize]);
 
   useEffect(() => {
-    if(stateIsMobile && stateIsOpen){
-      document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+    if (stateIsMobile && stateIsOpen) {
+      document.getElementsByTagName("body")[0].style.overflow = "hidden";
+    } else {
+      document.getElementsByTagName("body")[0].style.overflow = "auto";
     }
-    else{
-      document.getElementsByTagName('body')[0].style.overflow = 'auto';
-    }
+  }, [stateIsOpen, stateIsMobile]);
 
-  }, [stateIsOpen]);
+  return stateIsMobile ? (
+    <>
+      <div id="wrap" className={`wrap_tophd ${getWrapClassName()}`}>
+        <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()} />
+        <div id="container" className={`container ${type}`}>
+          <div className="contents">{children}</div>
+        </div>
 
-  return (
-      stateIsMobile ? (
-        <>
-          <div id="wrap" className={getWrapClassName()} >
-            <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()}/>
-            <div id="container" className={`container ${type}`}>
-              <div className="contents">{children}</div>
-            </div>
+        <div
+          className={`popup_dim ${getNavClassName()}`}
+          onClick={() => handleClickMenu()}
+        >
+          <NavBarDashboard className={`transition ${getNavClassName()}`} />
+        </div>
+        {isShow && dimType === "SEARCH" && (
+          <div className="sch_dim" onClick={handleDimClose}></div>
+        )}
+      </div>
+    </>
+  ) : (
+    <>
+      <div id="wrap" className={getWrapClassName()}>
+        <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()} />
 
-                <div className={`popup_dim ${getNavClassName()}`} onClick={() => handleClickMenu()}>
-                  <NavBarDashboard className={`transition ${getNavClassName()}`} />
-                </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div id="wrap" className={getWrapClassName()}>
-            <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()}/>
-
-            <div id="container" className={`container ${type}`}>
-              <NavBarDashboard />
-              <div className="contents">{children}</div>
-            </div>
-          </div>
-        </>
-      )
+        <div id="container" className={`container ${type}`}>
+          <NavBarDashboard />
+          <div className="contents">{children}</div>
+        </div>
+      </div>
+    </>
   );
 }

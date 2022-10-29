@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/pro-solid-svg-icons";
 import useSideMenu from "@/hook/useSideMenu";
 import { useWindowSize } from "@/hook/useWindowSize";
 import Header from "../Header";
+import { setDim } from "@/modules/redux/ducks/dim";
 
 const SideBar = ({ menus, handleChange }) => {
   return (
@@ -60,17 +62,27 @@ const SideBar = ({ menus, handleChange }) => {
 };
 
 const Container = ({ menus, children }) => {
+  const dispatch = useDispatch();
+  const { dimType, isShow } = useSelector(({ dim }) => dim);
   const { isSideMenuShow, handleChange } = useSideMenu();
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, []);
+
+  useEffect(() => {
     setIsMobile(windowSize.width < 961);
   }, [windowSize]);
 
+  const handleDimClose = useCallback(() => {
+    dispatch(setDim({ dimType: null, isShow: false }));
+  }, [dispatch]);
   return (
-    <div id="wrap" className={`${isSideMenuShow ? "open" : ""}`}>
-      <Header isMenus={true} onSideMenu={() => handleChange()} />         {/* type 제거 */}
+    <div id="wrap" className="wrap_tophd">
+      <Header isMenus={true} onSideMenu={() => handleChange()} />{" "}
+      {/* type 제거 */}
       <div id="container" className="container dashboard webtoon">
         {(isSideMenuShow && isMobile && (
           <div className="popup_dim" onClick={() => handleChange()}>
@@ -80,6 +92,9 @@ const Container = ({ menus, children }) => {
 
         {children}
       </div>
+      {isShow && dimType === "SEARCH" && (
+        <div className="sch_dim" onClick={handleDimClose}></div>
+      )}
     </div>
   );
 };
