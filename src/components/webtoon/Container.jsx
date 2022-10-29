@@ -61,7 +61,7 @@ const SideBar = ({ menus, handleChange }) => {
   );
 };
 
-const Container = ({ menus, children }) => {
+const Container = ({ menus, children, headerOptions }) => {
   const dispatch = useDispatch();
   const { dimType, isShow } = useSelector(({ dim }) => dim);
   const { isSideMenuShow, handleChange } = useSideMenu();
@@ -81,8 +81,15 @@ const Container = ({ menus, children }) => {
   }, [dispatch]);
 
   return (
-    <div id="wrap" className="wrap_tophd">
-      <Header isMenus={true} onSideMenu={() => handleChange()} />{" "}
+    <div
+      id="wrap"
+      className={`${isMobile && "wrap_tophd"} ${isSideMenuShow && "open"}`}
+    >
+      <Header
+        isMenus={true}
+        onSideMenu={() => handleChange()}
+        {...headerOptions}
+      />{" "}
       {/* type 제거 */}
       <div id="container" className="container dashboard webtoon">
         {(isSideMenuShow && isMobile && (

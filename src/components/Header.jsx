@@ -21,19 +21,13 @@ import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setDim } from "@/modules/redux/ducks/dim";
 
-const SearchComponent = () => {
+const SearchComponent = ({ isMobile }) => {
   const dispatch = useDispatch();
   const { isShow } = useSelector(({ dim }) => dim);
-  const [isMobile, setIsMobile] = useState(false);
-  const windowSize = useWindowSize();
 
   const handleChange = useCallback(() => {
     dispatch(setDim({ dimType: "SEARCH", isShow: !isShow }));
   }, [dispatch, isShow]);
-
-  useEffect(() => {
-    setIsMobile(windowSize.width < 961);
-  }, [windowSize]);
 
   return (
     <>
@@ -94,7 +88,7 @@ const Header = ({
   backTitle,
   isMenus = true,
   onSideMenu,
-  isDetailView,
+  isDetailView = false,
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -108,6 +102,8 @@ const Header = ({
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
   const profileImgURL = useFilePath(userInfo?.profileImage);
+  const windowSize = useWindowSize();
+  const [isMobile, setIsMobile] = useState(false);
 
   /**
    * 게시글 좋아요 관련이 헤더에 있기 때문에, post는 꼭 리덕스 사용해야함.
@@ -116,6 +112,10 @@ const Header = ({
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
+
+  useEffect(() => {
+    setIsMobile(windowSize.width < 961);
+  }, [windowSize]);
 
   useEffect(() => {
     if (!accessToken && code) {
@@ -160,8 +160,9 @@ const Header = ({
     <div className="open">
       <header id="header" className={`header ${className}`}>
         {/* logout, login, author, webtoon, novel */}
-        {(isLogined && ( //post detail, post upload 에서 중복되도록 나오기때문에 변경
-          <div className="inr-c">
+
+        {isLogined && !isDetailView && (
+          <div className={`inr-c ${isMobile && "view-m"}`}>
             {isMenus && (
               <button
                 type="button"
@@ -181,7 +182,7 @@ const Header = ({
             </h1>
 
             <div className="rgh">
-              <SearchComponent />
+              <SearchComponent isMobile={isMobile} windowSize={windowSize} />
               {/*<!-- 모바일 검색 버튼 -->*/}
 
               <div
@@ -290,8 +291,9 @@ const Header = ({
               </div>
             </div>
           </div>
-        )) || (
-          <div className="inr-c">
+        )}
+        {!isLogined && !isDetailView && (
+          <div className={`inr-c ${isMobile && "view-m"}`}>
             <h1 className="logo">
               <Link to="/">
                 <span className="ico_logo">PlayToons</span>

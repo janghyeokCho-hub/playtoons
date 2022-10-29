@@ -14,10 +14,10 @@ import { setDim } from "@/modules/redux/ducks/dim";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
-  const isLogined = useSelector(({ login }) => login.isLogined);
   const [notice, setNotice] = useState(null);
   const [isNoticeShow, setIsNoticeShow] = useState(false);
   const { dimType, isShow } = useSelector(({ dim }) => dim);
+  const isLogined = useSelector(({ login }) => login.isLogined);
 
   const getNotice = useCallback(async () => {
     const response = await getEmergencyNotice();
@@ -41,7 +41,7 @@ const LandingPage = () => {
   }, [dispatch]);
 
   return (
-    <div id="wrap" className="wrap_tophd">
+    <div id="wrap" className={`${isLogined && "wrap_tophd"}`}>
       <Header isMenus={false} />
       <div id="container" className="container landing">
         {notice && isNoticeShow && (

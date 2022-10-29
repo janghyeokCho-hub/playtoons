@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Webtoon from "./Webtoon";
 import Container from "@COMPONENTS/webtoon/Container";
 import {
@@ -16,7 +16,6 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 
 const App = () => {
-  const navigate = useNavigate();
   const menus = {
     探索: [
       {

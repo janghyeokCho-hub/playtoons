@@ -22,6 +22,7 @@ import { setDim } from "@/modules/redux/ducks/dim";
 */
 export default function Container(props) {
   const dispatch = useDispatch();
+  const isLogined = useSelector(({ login }) => login.isLogined);
   const [stateIsOpen, setStateIsOpen] = useState(false);
   const { type, backTitle, children } = props;
   const windowSize = useWindowSize();
@@ -29,7 +30,14 @@ export default function Container(props) {
   const { dimType, isShow } = useSelector(({ dim }) => dim);
 
   const getWrapClassName = () => {
-    return stateIsOpen ? "open" : "";
+    const classList = [];
+    if (stateIsOpen) {
+      classList.push("open");
+    }
+    if (isLogined) {
+      classList.push("wrap_tophd");
+    }
+    return classList;
   };
 
   const getNavClassName = () => {
@@ -58,7 +66,7 @@ export default function Container(props) {
 
   return stateIsMobile ? (
     <>
-      <div id="wrap" className={`wrap_tophd ${getWrapClassName()}`}>
+      <div id="wrap" className={getWrapClassName().join(" ")}>
         <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()} />
         <div id="container" className={`container ${type}`}>
           <div className="contents">{children}</div>

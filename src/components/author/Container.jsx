@@ -109,7 +109,10 @@ const Container = ({ menus, children, type, activeMenu }) => {
   }, [dispatch]);
 
   return (
-    <div id="wrap" className="wrap_tophd">
+    <div
+      id="wrap"
+      className={`${isLogined && "wrap_tophd"} ${isSideMenuShow && "open"}`}
+    >
       <Header
         // type="post"          //author는 header type이 없어도 되도록 변경
         isMenus={!isRegister}
