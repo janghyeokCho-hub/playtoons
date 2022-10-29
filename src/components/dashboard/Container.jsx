@@ -30,14 +30,14 @@ export default function Container(props) {
   const { dimType, isShow } = useSelector(({ dim }) => dim);
 
   const getWrapClassName = () => {
-    const classList = [];
+    let classNames = [];
     if (stateIsOpen) {
-      classList.push("open");
+      classNames.push("open");
     }
     if (isLogined) {
-      classList.push("wrap_tophd");
+      classNames.push("wrap_tophd");
     }
-    return classList;
+    return classNames.join(" ");
   };
 
   const getNavClassName = () => {
@@ -66,7 +66,7 @@ export default function Container(props) {
 
   return stateIsMobile ? (
     <>
-      <div id="wrap" className={getWrapClassName().join(" ")}>
+      <div id="wrap" className={getWrapClassName()}>
         <Header backTitle={backTitle} onSideMenu={() => handleClickMenu()} />
         <div id="container" className={`container ${type}`}>
           <div className="contents">{children}</div>
