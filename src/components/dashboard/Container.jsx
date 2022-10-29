@@ -70,6 +70,7 @@ export default function Container(props) {
         >
           <NavBarDashboard className={`transition ${getNavClassName()}`} />
         </div>
+        {/* 모바일에서 헤더 검색시 dim */}
         {isShow && dimType === "SEARCH" && (
           <div className="sch_dim" onClick={handleDimClose}></div>
         )}

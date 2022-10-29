@@ -79,13 +79,14 @@ const Container = ({ menus, children }) => {
   const handleDimClose = useCallback(() => {
     dispatch(setDim({ dimType: null, isShow: false }));
   }, [dispatch]);
+
   return (
     <div id="wrap" className="wrap_tophd">
       <Header isMenus={true} onSideMenu={() => handleChange()} />{" "}
       {/* type 제거 */}
       <div id="container" className="container dashboard webtoon">
         {(isSideMenuShow && isMobile && (
-          <div className="popup_dim" onClick={() => handleChange()}>
+          <div className="popup_dim" onClick={handleChange}>
             <SideBar menus={menus} handleChange={handleChange} />
           </div>
         )) || <SideBar menus={menus} handleChange={handleChange} />}
