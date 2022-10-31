@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 import Editor from "@/components/dashboard/Editor";
@@ -9,8 +9,13 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
-import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer } from "@/services/dashboardService";
-
+import {
+  getPostCategoryListFromServer,
+  getPostTypeListFromServer,
+  setFileToServer,
+} from "@/services/dashboardService";
+import { useDispatch } from "react-redux";
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
   series_management: "シリーズ詳細",
@@ -35,11 +40,29 @@ const text = {
 };
 
 export default function DashboardPostEdit(props) {
+  const dispatch = useDispatch();
   const refIsAdult = useRef();
   const refCoverImage = useRef();
-  const [ stateTypeList, setStateTypeList ] = useState(undefined);
-  const [ stateCategoryList, setStateCategoryList ] = useState(undefined);
+  const [stateTypeList, setStateTypeList] = useState(undefined);
+  const [stateCategoryList, setStateCategoryList] = useState(undefined);
   const navigate = useNavigate();
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header ty1",
+      containerClass: "container sub series bg moty1",
+      isHeaderShow: true,
+      isMenuShow: false,
+      headerType: "postUpload",
+      menuType: null,
+      isDetailView: true,
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   /**
   *
@@ -49,33 +72,31 @@ export default function DashboardPostEdit(props) {
   * @author 2hyunkook
   * @param {file} 
   */
-  const setCoverImage = async(file) => {
+  const setCoverImage = async (file) => {
     // 폼데이터 구성
     const params = new FormData();
-    
-    // params.append("authorId", "");               
-    // params.append("subscribeTierId", "");        
+
+    // params.append("authorId", "");
+    // params.append("subscribeTierId", "");
     // params.append("productId", "");
-    params.append("type", "image");                 //image, video, binary
-    params.append("usage", "cover");                //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("type", "image"); //image, video, binary
+    params.append("usage", "cover"); //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("loginRequired", true);
-    params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", "G");                   //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+    params.append("rating", "G"); //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", file);
-    
+
     console.log("set file params", params);
 
-    const {status, data: resultData} = await setFileToServer(params);
-    
+    const { status, data: resultData } = await setFileToServer(params);
+
     //create sccuess
-    if( status === 201 ){
-      //set hash value to input tag 
+    if (status === 201) {
+      //set hash value to input tag
       refCoverImage.current.setImageHash(resultData?.hash);
-      
+
       //다음 timeline이 있다면 timeline 업로드
-      
-    }
-    else{
+    } else {
       //error 처리
     }
 
@@ -83,29 +104,25 @@ export default function DashboardPostEdit(props) {
   };
 
   const setTypeList = async () => {
-    const {status, data: result} = await getPostTypeListFromServer();
+    const { status, data: result } = await getPostTypeListFromServer();
 
-    if( status === 200 ){
+    if (status === 200) {
       setStateTypeList(result?.types);
-    }
-    else{
-
+    } else {
     }
 
     console.log("setTypeList", status, result);
   };
 
   const setCategoryList = async (type) => {
-    const {status, data: result} = await getPostCategoryListFromServer(type);
-    
-    if( status === 200 ){
+    const { status, data: result } = await getPostCategoryListFromServer(type);
+
+    if (status === 200) {
       setStateCategoryList(result?.categories);
+    } else {
     }
-    else{
-      
-    }
-    
-    console.log('setCategoryList', status, result);
+
+    console.log("setCategoryList", status, result);
   };
 
   const handleItemClickType = (item) => {
@@ -121,7 +138,6 @@ export default function DashboardPostEdit(props) {
     //timeline 이미지 업로드
     //timeline 이미지 hash 값 저장
     //series 업로드
-
   };
 
   const handlePreview = (e) => {
@@ -136,116 +152,113 @@ export default function DashboardPostEdit(props) {
   }, []);
 
   return (
-    <Container
-      type={"sub series bg moty1"}
-      backTitle={text.register_series}
-      >
-
-      <div className="inr-c">
-        <div className="box_area">
-          
-          <section className="bbs_write">
-            <div className="hd_titbox hide-m">
-              <h2 className="h_tit1">{text.register_series}</h2>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.title}</h3>
-              <input name="title" type="text" className="inp_txt w100p" />
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.type}</h3>
-              <Select 
-                name={"typeId"}
-                className={"select1 wid1"}
-                dataList={stateTypeList}
-                handleItemClick={handleItemClickType}
-                />
-              
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.category}</h3>
-              <Select 
-                name={"categoryId"}
-                className={"select1 wid1"}
-                dataList={stateCategoryList}
-                // handleItemClick={handleItemClickCategory}
-                />
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.setting_adult}</h3>
-              <label className="inp_chktx"><input name="rating" type="checkbox" /><span>{text.r_19}</span></label>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.summary}</h3>
-              <textarea name="description" id="description" className="textarea1"></textarea>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.setting_tag}</h3>
-              <div className="inp_txt sch">
-                <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-                <input type="text" className="" placeholder={text.tag_name} />
-              </div>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.post_image}
-                <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip 
-                    title={text.post_image} 
-                    text={"text something123142"} />
-                </button>
-              </h3>
-              <ImageUpload
-                ref={refCoverImage}
-                id={"filebox1"}
-                className={"box_drag small"}
-                name={"coverImage"}                     
-                text={text.drag_drop}    
-                />
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">{text.timeline} 
-                <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip 
-                      title={text.timeline} 
-                      text={"text something123142"} />
-                </button>
-              </h3>
-              <ImageUpload
-                id={"filebox2"}
-                className={"box_drag"}
-                name={"thumbnailImage"}                     
-                text={text.drag_drop}    
-                />
-            </div>
-          </section>
-
-          <div className="bbs_write_botm">
-            <a className="btn-pk n blue2">
-              <div className="pull_width" onClick={handlePreview}>
-                <span>{text.preview}</span>
-              </div>
-            </a>
-            <a className="btn-pk n blue">
-              <div className="pull_width" onClick={handleRegister}>
-                <span>{text.register}</span>
-              </div>
-            </a>
+    <div className="inr-c">
+      <div className="box_area">
+        <section className="bbs_write">
+          <div className="hd_titbox hide-m">
+            <h2 className="h_tit1">{text.register_series}</h2>
           </div>
-        
+
+          <div className="col">
+            <h3 className="tit1">{text.title}</h3>
+            <input name="title" type="text" className="inp_txt w100p" />
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">{text.type}</h3>
+            <Select
+              name={"typeId"}
+              className={"select1 wid1"}
+              dataList={stateTypeList}
+              handleItemClick={handleItemClickType}
+            />
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">{text.category}</h3>
+            <Select
+              name={"categoryId"}
+              className={"select1 wid1"}
+              dataList={stateCategoryList}
+              // handleItemClick={handleItemClickCategory}
+            />
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">{text.setting_adult}</h3>
+            <label className="inp_chktx">
+              <input name="rating" type="checkbox" />
+              <span>{text.r_19}</span>
+            </label>
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">{text.summary}</h3>
+            <textarea
+              name="description"
+              id="description"
+              className="textarea1"
+            ></textarea>
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">{text.setting_tag}</h3>
+            <div className="inp_txt sch">
+              <button type="button" className="btns" title="検索">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </button>
+              <input type="text" className="" placeholder={text.tag_name} />
+            </div>
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">
+              {text.post_image}
+              <button type="button" className="btn_help" title="ヘルプ">
+                <ToolTip
+                  title={text.post_image}
+                  text={"text something123142"}
+                />
+              </button>
+            </h3>
+            <ImageUpload
+              ref={refCoverImage}
+              id={"filebox1"}
+              className={"box_drag small"}
+              name={"coverImage"}
+              text={text.drag_drop}
+            />
+          </div>
+
+          <div className="col">
+            <h3 className="tit1">
+              {text.timeline}
+              <button type="button" className="btn_help" title="ヘルプ">
+                <ToolTip title={text.timeline} text={"text something123142"} />
+              </button>
+            </h3>
+            <ImageUpload
+              id={"filebox2"}
+              className={"box_drag"}
+              name={"thumbnailImage"}
+              text={text.drag_drop}
+            />
+          </div>
+        </section>
+
+        <div className="bbs_write_botm">
+          <a className="btn-pk n blue2">
+            <div className="pull_width" onClick={handlePreview}>
+              <span>{text.preview}</span>
+            </div>
+          </a>
+          <a className="btn-pk n blue">
+            <div className="pull_width" onClick={handleRegister}>
+              <span>{text.register}</span>
+            </div>
+          </a>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
-
-
-
-

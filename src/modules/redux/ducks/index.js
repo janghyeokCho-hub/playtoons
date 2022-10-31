@@ -9,6 +9,7 @@ import post from "./post";
 import alertModal from "./modal";
 import dashboard from "./dashboard";
 import dim from "./dim";
+import container from "./container";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +24,7 @@ const appReducer = combineReducers({
   post,
   dashboard,
   dim,
+  container,
 });
 
 const rootReducer = (state, action) => {

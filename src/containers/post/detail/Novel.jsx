@@ -48,6 +48,7 @@ const Novel = () => {
   const [replyLimit, setReplyLimit] = useState(
     currentPost?.reactions?.length || 0
   );
+  const [replyInput, setReplyInput] = useState("");
 
   useEffect(() => {
     dispatch(getCurrentPost({ id: id }));
@@ -90,14 +91,13 @@ const Novel = () => {
   ];
 
   const handleReply = useCallback(async () => {
-    const value = document.getElementById("replyInput").innerText;
-    if (!value) {
+    if (!replyInput) {
       alert("댓글 내용 없음");
       return;
     }
 
     const params = {
-      content: value,
+      content: replyInput,
       iconImage: selectEmoticon,
       type: "reply",
       postId: id,
@@ -107,11 +107,11 @@ const Novel = () => {
     if (response?.status === 201) {
       alert("댓글 작성 성공");
       dispatch(getPostReaction({ postId: id, limit: replyLimit }));
-      document.getElementById("replyInput").innerText = "";
+      setReplyInput("");
     } else {
-      alert("댓글 작성 실패");
+      alert(`댓글 작성 실패 : ${response.status}`);
     }
-  }, [dispatch, selectEmoticon, id, replyLimit, currentPost]);
+  }, [dispatch, selectEmoticon, id, replyLimit, currentPost, replyInput]);
 
   useEffect(() => {
     if (replyLimit > 0) {
@@ -201,6 +201,7 @@ const Novel = () => {
                   <textarea
                     className="textarea1"
                     placeholder="ログインして投稿する"
+                    onChange={(e) => setReplyInput(e.target.value)}
                   ></textarea>
 
                   {/*<!-- 삽입된 이모티콘 -->*/}

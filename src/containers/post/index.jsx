@@ -6,13 +6,11 @@ import Edit from "@CONTAINERS/post/PostEdit";
 
 const App = () => {
   return (
-    <div id="wrap">
-      <Routes>
-        <Route path={"detail/*"} element={<Detail />} />
-        <Route path={"upload/*"} element={<Upload />} />
-        <Route path={"edit/:id"} element={<Edit />} />
-      </Routes>
-    </div>
+    <Routes>
+      <Route path={"detail/*"} element={<Detail />} />
+      <Route path={"upload/*"} element={<Upload />} />
+      <Route path={"edit/:id"} element={<Edit />} />
+    </Routes>
   );
 };
 

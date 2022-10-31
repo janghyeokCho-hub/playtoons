@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { PersistGate } from "redux-persist/integration/react";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 import "./css/swiper.min.css";
 // import "./css/swiper.css";
 import "./css/font.css";
@@ -8,13 +11,25 @@ import "./css/common.css";
 import "./css/mobile.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import configureStore, { sagaMiddleware } from "@REDUX/store";
+import rootSaga from "@REDUX/saga";
+
+export const store = configureStore();
+sagaMiddleware.run(rootSaga);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   //   <App />
   // </React.StrictMode>
-  <App />
+
+  <Provider store={store}>
+    <PersistGate persistor={store.persistor}>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

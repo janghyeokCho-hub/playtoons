@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from '@/components/Header';
+import React from "react";
+import Header from "@/components/Header";
 
 /**
 *
@@ -17,19 +17,19 @@ import Header from '@/components/Header';
 * @return
 */
 export default function PostContainer(props) {
-  const {className, headerType, headerClassName,  children} = props;
-
+  const { className, headerType, headerClassName, children } = props;
+  console.log(headerType);
   return (
-    <div id="wrap">
-      <Header 
+    <>
+      <Header
         type={headerType}
+        isDetailView={true}
         className={headerClassName}
-        />
+      />
 
       <div id="container" className={`container ${className}`}>
-
         {children}
       </div>
-    </div>
-  )
+    </>
+  );
 }

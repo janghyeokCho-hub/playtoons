@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
@@ -12,6 +12,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
   page_title: "シリーズリスト",
@@ -27,12 +28,29 @@ const text = {
 };
 
 export default function DashboardSeries(props) {
-  const [stateData, setStateData] = useState(undefined);
-  const myAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const param = useParams("page");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const param = useParams("page");
   const windowSize = useWindowSize();
+  const [stateData, setStateData] = useState(undefined);
+  const myAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "container series",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   const moveDetailPage = (item) => {
     if (windowSize.width > 960) {
@@ -122,11 +140,11 @@ export default function DashboardSeries(props) {
     getSeriesListFromAPi(param?.page === undefined ? 1 : param?.page);
     return () => {
       setStateData(undefined);
-    }
+    };
   }, [param]);
 
   return (
-    <Container type={"series"}>
+    <div className="contents">
       <div className="inr-c">
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0">
@@ -178,6 +196,6 @@ export default function DashboardSeries(props) {
           callback={(page) => navigate(`/dashboard/series/${page}`)}
         />
       </div>
-    </Container>
+    </div>
   );
 }

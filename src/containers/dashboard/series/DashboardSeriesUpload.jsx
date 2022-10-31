@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Container from "@/components/dashboard/Container";
@@ -6,8 +6,18 @@ import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 
-import { getPostCategoryListFromServer, getPostTypeListFromServer, setFileToServer, setSeriesToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus, } from "@/common/common";
+import {
+  getPostCategoryListFromServer,
+  getPostTypeListFromServer,
+  setFileToServer,
+  setSeriesToServer,
+} from "@/services/dashboardService";
+import {
+  getErrorMessageFromResultCode,
+  getFromDataJson,
+  getRatingToChecked,
+  initButtonInStatus,
+} from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
@@ -19,7 +29,7 @@ import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import Button from "@/components/dashboard/Button";
-
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
   series_management: "シリーズ詳細",
@@ -41,18 +51,18 @@ const text = {
   tag_name: "タグ名",
   input_image: "置いてください。",
   select_timeline: "サムネイル選択",
-  please_input_cover: '表紙を入力してください。',
-  please_input_thumbnail: 'サムネイルを入力してください。',
-  please_input_title: 'タイトルを入力してください。',
-  please_input_description: '説明を入力してください。',
-  error_title: 'お知らせ',
+  please_input_cover: "表紙を入力してください。",
+  please_input_thumbnail: "サムネイルを入力してください。",
+  please_input_title: "タイトルを入力してください。",
+  please_input_description: "説明を入力してください。",
+  error_title: "お知らせ",
 };
 
 export default function DashboardUploadSeries(props) {
-  const navigate = useNavigate();
-  const [ stateType, setStateType ] = useState(undefined);
-  const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const [stateType, setStateType] = useState(undefined);
   const refTitle = useRef();
   const refDescription = useRef();
   const refR19 = useRef();
@@ -62,9 +72,23 @@ export default function DashboardUploadSeries(props) {
   const refTags = useRef();
   const refRegister = useRef();
 
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "container sub series bg moty1",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+      backTitle: "シリーズ登録",
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
 
- 
-
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   /**
   *
@@ -76,22 +100,21 @@ export default function DashboardUploadSeries(props) {
   * @return
   */
   const callbackTimeline = () => {
-
-    //필드 확인 
-    if( refTitle.current.isEmpty() ){
+    //필드 확인
+    if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
-			refTitle.current.setError( text.please_input_title );
-			return;
-		}
+      refTitle.current.setError(text.please_input_title);
+      return;
+    }
 
-    if( refDescription.current.isEmpty() ){
+    if (refDescription.current.isEmpty()) {
       initButtonInStatus(refRegister);
-			refDescription.current.setError( text.please_input_description );
-			return;
-		}
+      refDescription.current.setError(text.please_input_description);
+      return;
+    }
 
-    //call series 작성 api 
-    // "title": "string",               
+    //call series 작성 api
+    // "title": "string",
     // "typeId": "string",
     // "categoryId": "string",
     // "rating": "string",
@@ -117,7 +140,7 @@ export default function DashboardUploadSeries(props) {
       tagIds: refTags.current.getTagsJsonObject(),
       rating: getRatingToChecked(refR19),
       status: "enabled",
-      authorId: reduxAuthors[0].id     //author 가 아니면 못옴
+      authorId: reduxAuthors[0].id, //author 가 아니면 못옴
     };
 
     console.log("post/series", json);
@@ -126,19 +149,17 @@ export default function DashboardUploadSeries(props) {
 
   const callbackCoverImage = () => {
     //upload 할 이미지가 있다면
-    if( refTimelineImage.current.getImageFile() === undefined ){
+    if (refTimelineImage.current.getImageFile() === undefined) {
       initButtonInStatus(refRegister);
-      refTimelineImage.current.setError( text.please_input_thumbnail );
-    }
-    else{
-      refTimelineImage.current.setError( undefined );
-      setImageToServer(refTimelineImage, 'thumbnail');
+      refTimelineImage.current.setError(text.please_input_thumbnail);
+    } else {
+      refTimelineImage.current.setError(undefined);
+      setImageToServer(refTimelineImage, "thumbnail");
     }
   };
 
-
   //==============================================================================
-  // api function 
+  // api function
   //==============================================================================
   /**
   *
@@ -148,67 +169,77 @@ export default function DashboardUploadSeries(props) {
   * @author 2hyunkook
   * @param {file} 
   */
-  const setImageToServer = async(ref, usage) => {
+  const setImageToServer = async (ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);               
-    params.append("subscribeTierId", "");        
+    params.append("authorId", reduxAuthors[0].id);
+    params.append("subscribeTierId", "");
     params.append("productId", "");
-    params.append("type", "image");                 //image, video, binary
-    params.append("usage", usage);                  //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false);          //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRatingToChecked(refR19));    
+    params.append("type", "image"); //image, video, binary
+    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("loginRequired", false); //언제 체크해서 보내는건지?
+    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+    params.append("rating", getRatingToChecked(refR19));
     params.append("file", ref.current.getImageFile());
-    
+
     console.log("set file params", params);
 
-    const {status, data: resultData} = await setFileToServer(params);
+    const { status, data: resultData } = await setFileToServer(params);
     console.log("setFile result", status, resultData);
-    
+
     //create sccuess
-    if( status === 201 ){
+    if (status === 201) {
       ref.current.setImageValueToInputTag(resultData?.hash);
-    }
-    else{
+    } else {
       //error 처리
       initButtonInStatus(refRegister);
       dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(resultData)} buttonTitle={'確認'} />, 
-          }
-        )
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup
+              message={getErrorMessageFromResultCode(resultData)}
+              buttonTitle={"確認"}
+            />
+          ),
+        })
       );
     }
   };
 
-
   const setSeries = async (params) => {
-    const {status, data: result} = await setSeriesToServer(JSON.stringify(params));
-    console.log('setSeries', status, result);
-    
-    if( status === 201 ){
+    const { status, data: result } = await setSeriesToServer(
+      JSON.stringify(params)
+    );
+    console.log("setSeries", status, result);
+
+    if (status === 201) {
       dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={'シリーズ登録しました。'} buttonTitle={'確認'} />, 
-            callback: ()=> {navigate('/dashboard/series')}
-          }
-        )
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup
+              message={"シリーズ登録しました。"}
+              buttonTitle={"確認"}
+            />
+          ),
+          callback: () => {
+            navigate("/dashboard/series");
+          },
+        })
       );
-    }
-    else{
+    } else {
       //error 처리
       dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(result)} buttonTitle={'確認'} />, 
-          }
-        )
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup
+              message={getErrorMessageFromResultCode(result)}
+              buttonTitle={"確認"}
+            />
+          ),
+        })
       );
     }
 
@@ -219,7 +250,6 @@ export default function DashboardUploadSeries(props) {
   // handler
   //==============================================================================
 
-  
   const handleItemClickType = (item) => {
     setStateType(item);
   };
@@ -228,15 +258,14 @@ export default function DashboardUploadSeries(props) {
     e.preventDefault();
 
     //cover 이미지 업로드, thumbnail 업로드, series 업로드
-    //upload 할 이미지가 없다면 
-    if( refCoverImage.current.getImageFile() === undefined ){
+    //upload 할 이미지가 없다면
+    if (refCoverImage.current.getImageFile() === undefined) {
       initButtonInStatus(refRegister);
-      refCoverImage.current.setError( text.please_input_cover );
-    }
-    else{
-      //이미지 업로드 후 image url 
-      refCoverImage.current.setError( undefined );
-      setImageToServer(refCoverImage, 'cover');
+      refCoverImage.current.setError(text.please_input_cover);
+    } else {
+      //이미지 업로드 후 image url
+      refCoverImage.current.setError(undefined);
+      setImageToServer(refCoverImage, "cover");
     }
   };
 
@@ -244,26 +273,15 @@ export default function DashboardUploadSeries(props) {
     console.log("handlePreview", refR19);
   };
 
-
   //==============================================================================
   // render
   //==============================================================================
 
-  useEffect(() => {
-    
-  }, []);
-
-
   return (
-    <Container
-      type={"sub series bg moty1"}
-      backTitle={text.register_series}
-      >
-
+    <div className="contents">
       <div className="inr-c">
         <div className="box_area">
-          <form ref={refForm} >
-          
+          <form ref={refForm}>
             <section className="bbs_write">
               <div className="hd_titbox hide-m">
                 <h2 className="h_tit1">{text.register_series}</h2>
@@ -271,84 +289,108 @@ export default function DashboardUploadSeries(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.title}</h3>
-                <Input ref={refTitle} name="title" type="text" className="inp_txt w100p" />
+                <Input
+                  ref={refTitle}
+                  name="title"
+                  type="text"
+                  className="inp_txt w100p"
+                />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.type}</h3>
                 <Type
-                  name={'typeId'}
-                  className={'select1 wid1'}
+                  name={"typeId"}
+                  className={"select1 wid1"}
                   callback={handleItemClickType}
-                  />
+                />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.category}</h3>
-                <Category 
-                  name={'categoryId'}
-                  className={'select1 wid1'}
-                  typeId={stateType?.id} />
+                <Category
+                  name={"categoryId"}
+                  className={"select1 wid1"}
+                  typeId={stateType?.id}
+                />
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.setting_adult}</h3>
-                <label className="inp_chktx"><input ref={refR19} name="rating" type="checkbox" /><span>{text.r_19}</span></label>
+                <label className="inp_chktx">
+                  <input ref={refR19} name="rating" type="checkbox" />
+                  <span>{text.r_19}</span>
+                </label>
               </div>
 
               <div className="col">
                 <h3 className="tit1">{text.summary}</h3>
-                <Textarea ref={refDescription} name="description" id="description" className="textarea1"></Textarea>
+                <Textarea
+                  ref={refDescription}
+                  name="description"
+                  id="description"
+                  className="textarea1"
+                ></Textarea>
               </div>
 
               <div className="col">
-                <h3 className="tit1">{text.setting_tag} <button type="button" className="btn_help" title="ヘルプ">
-									<ToolTip
-										title={text.setting_tag}
-										text={'タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。'} />
-									</button>
+                <h3 className="tit1">
+                  {text.setting_tag}{" "}
+                  <button type="button" className="btn_help" title="ヘルプ">
+                    <ToolTip
+                      title={text.setting_tag}
+                      text={
+                        "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
+                      }
+                    />
+                  </button>
                 </h3>
-                <Tag 
+                <Tag
                   ref={refTags}
                   name={"tagIds"}
                   className={"inp_txt sch"}
-                  placeholder={text.tag_name} />
+                  placeholder={text.tag_name}
+                />
               </div>
 
               <div className="col">
-                <h3 className="tit1">{text.post_image}
+                <h3 className="tit1">
+                  {text.post_image}
                   <button type="button" className="btn_help" title="ヘルプ">
-                    <ToolTip 
-                      title={text.post_image} 
-                      text={"text something123142"} />
+                    <ToolTip
+                      title={text.post_image}
+                      text={"text something123142"}
+                    />
                   </button>
                 </h3>
                 <ImageUpload
                   ref={refCoverImage}
                   id={"filebox1"}
                   className={"box_drag small"}
-                  name={"coverImage"}                     
-                  text={text.drag_drop}    
+                  name={"coverImage"}
+                  text={text.drag_drop}
                   callback={callbackCoverImage}
-                  />
+                />
               </div>
 
               <div className="col">
-                <h3 className="tit1">{text.timeline} 
+                <h3 className="tit1">
+                  {text.timeline}
                   <button type="button" className="btn_help" title="ヘルプ">
-                    <ToolTip 
-                        title={text.timeline} 
-                        text={"text something123142"} />
+                    <ToolTip
+                      title={text.timeline}
+                      text={"text something123142"}
+                    />
                   </button>
                 </h3>
                 <ImageUpload
                   ref={refTimelineImage}
                   id={"filebox2"}
                   className={"box_drag"}
-                  name={"thumbnailImage"}                     
-                  text={text.drag_drop}    
+                  name={"thumbnailImage"}
+                  text={text.drag_drop}
                   callback={callbackTimeline}
-                  />
+                />
               </div>
             </section>
           </form>
@@ -359,15 +401,15 @@ export default function DashboardUploadSeries(props) {
                 <span>{text.preview}</span>
               </div>
             </button>
-            <Button ref={refRegister} className={'btn-pk n blue'} text={text.register} onClick={handleRegister}/>
+            <Button
+              ref={refRegister}
+              className={"btn-pk n blue"}
+              text={text.register}
+              onClick={handleRegister}
+            />
           </div>
-
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
-
-
-
-

@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-} from "react";
+import { useState, useEffect, useCallback } from "react";
 
 /**
  * Side menu hook
@@ -12,6 +7,7 @@ import React, {
 export default function useSideMenu() {
   const [isSideMenuShow, setIsSideMenuShow] = useState(true);
   const handleChange = useCallback(() => {
+    console.log("isSideMenuShow : ", isSideMenuShow);
     setIsSideMenuShow(!isSideMenuShow);
   }, [isSideMenuShow]);
 

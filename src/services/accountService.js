@@ -67,6 +67,19 @@ export const getEulaVersion = async (code) => {
   }
 };
 
+/**
+ * 개인정보 보호 정책 받아오는 API
+ * @param {string} code
+ * @returns
+ */
+export const getPrivacyVersion = async (code) => {
+  try {
+    return await apiAuthServer("get", `/agreement/privacy/${code}`);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};
+
 export const updateAccount = async (params) => {
   try {
     return await apiAuthServer("patch", "/account", params);

@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useParams, } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faPlus, faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
+import React, { useState, useEffect, useCallback } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAngleRight,
+  faPlus,
+  faEye,
+  faHeart,
+} from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
-
 
 import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
@@ -18,52 +22,67 @@ import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { useWindowSize } from "@/hook/useWindowSize";
-
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
-  post_list : "投稿リスト",
-  post : "投稿する",
-  number : "番号",
-  cover_image : "表紙",
-  title : "タイトル",
-  access_count : "アクセス数",
-  good : "いいね",
-  date : "掲載日",
-  status : "状態",
-  count : "回",
+  post_list: "投稿リスト",
+  post: "投稿する",
+  number: "番号",
+  cover_image: "表紙",
+  title: "タイトル",
+  access_count: "アクセス数",
+  good: "いいね",
+  date: "掲載日",
+  status: "状態",
+  count: "回",
   empty_message: "投稿がありません。",
 };
 
 const searchList = [
   {
     id: "all",
-    name: "シリーズすべて"
+    name: "シリーズすべて",
   },
   {
     id: "all",
-    name: "シリーズすべて1"
+    name: "シリーズすべて1",
   },
   {
     id: "all",
-    name: "シリーズすべて2"
+    name: "シリーズすべて2",
   },
 ];
 
 export default function DashboardPostList(props) {
-  const [stateData, setStateData] = useState(undefined);
-  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
-  const params = useParams('page');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
+  const params = useParams("page");
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const [stateData, setStateData] = useState(undefined);
 
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "container post",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   const moveToDetailPage = (item) => {
-    if( windows.width > 960 ){
-      navigate(`/dashboard/post/detail/${item.id}`)
+    if (windows.width > 960) {
+      navigate(`/dashboard/post/detail/${item.id}`);
     }
   };
-
 
   const getPostList = async (page) => {
     const params = new FormData();
@@ -79,35 +98,32 @@ export default function DashboardPostList(props) {
     // params.append("order", "");
     // params.append("limit", "");
 
-    const {status, data: result} = await getPostListFromServer(params);
-    console.log('getPostList', status, result);
-    
-    if( status === 200 ){
-      setStateData(result)
-    }
-    else{
+    const { status, data: result } = await getPostListFromServer(params);
+    console.log("getPostList", status, result);
+
+    if (status === 200) {
+      setStateData(result);
+    } else {
       //error 처리
       showOneButtonPopup(dispatch, result);
     }
   };
 
   const handleClickPost = (event) => {
-    if( reduxAuthors === undefined || reduxAuthors.length === 0 ){
-      showOneButtonPopup(dispatch, 'クリエイターとして登録してください。');
-    }
-    else{
-      navigate('/post/upload');
+    if (reduxAuthors === undefined || reduxAuthors.length === 0) {
+      showOneButtonPopup(dispatch, "クリエイターとして登録してください。");
+    } else {
+      navigate("/post/upload");
     }
   };
 
   const handleItemClickSearch = (event) => {
-    console.log('Search', event);
-    
+    console.log("Search", event);
   };
 
   const renderPostListElements = () => {
-    if( stateData?.posts.length === 0 ){
-      return <EmptyTr text={text.empty_message} />
+    if (stateData?.posts.length === 0) {
+      return <EmptyTr text={text.empty_message} />;
     }
 
     return stateData?.posts?.map((item, index) => {
@@ -115,16 +131,39 @@ export default function DashboardPostList(props) {
         <tr key={index} onClick={() => moveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb"><Image hash={item.thumbnailImage} alt="thumbnail" /></div>
+            <div className="cx_thumb">
+              <Image hash={item.thumbnailImage} alt="thumbnail" />
+            </div>
           </td>
           <td className="td_subject">{item.title}</td>
-          <td className="td_number1"><FontAwesomeIcon icon={faEye} className='view-m' />{item.viewCount}<em className="hide-m">{text.count}</em></td>
-          <td className="td_number2"><FontAwesomeIcon icon={faHeart} className='view-m' />{item.likeCount}</td>
-          <td className="td_txt1"><span className="view-m">{text.date}：</span>{ getDateYYYYMMDD(item.startAt, '/') }</td>
-          <td className="td_txt"><span className="view-m">{text.status}</span>{item.status}</td>
+          <td className="td_number1">
+            <FontAwesomeIcon icon={faEye} className="view-m" />
+            {item.viewCount}
+            <em className="hide-m">{text.count}</em>
+          </td>
+          <td className="td_number2">
+            <FontAwesomeIcon icon={faHeart} className="view-m" />
+            {item.likeCount}
+          </td>
+          <td className="td_txt1">
+            <span className="view-m">{text.date}：</span>
+            {getDateYYYYMMDD(item.startAt, "/")}
+          </td>
+          <td className="td_txt">
+            <span className="view-m">{text.status}</span>
+            {item.status}
+          </td>
           <td className="td_btns">
-            <Link to={`/dashboard/post/detail/${item.id}`} className="btn-pk n blue2">
-              <span><i className="fa-solid fa-angle-right"><FontAwesomeIcon icon={faAngleRight} />{text.detail}</i></span>
+            <Link
+              to={`/dashboard/post/detail/${item.id}`}
+              className="btn-pk n blue2"
+            >
+              <span>
+                <i className="fa-solid fa-angle-right">
+                  <FontAwesomeIcon icon={faAngleRight} />
+                  {text.detail}
+                </i>
+              </span>
             </Link>
           </td>
         </tr>
@@ -134,38 +173,41 @@ export default function DashboardPostList(props) {
 
   useEffect(() => {
     //리스트 불러오기
-    getPostList( params.page === undefined ? 1 : params.page );
+    getPostList(params.page === undefined ? 1 : params.page);
     return () => {
       setStateData(undefined);
-    }
+    };
   }, [params]);
 
   //header back callback 현재 로케이션 보내느걸로
   return (
-    <Container
-      type={"post"} >
-      
+    <div className="contents">
       <div className="inr-c">
-			
         <div className="hd_titbox hd_mst1">
-          <h2 className="h_tit0"><span>{text.post_list}</span></h2>
+          <h2 className="h_tit0">
+            <span>{text.post_list}</span>
+          </h2>
           <div className="rgh">
-            <div onClick={handleClickPost} className="btn-pk n blue2"><span><FontAwesomeIcon icon={faPlus} /> {text.post}</span></div>
+            <div onClick={handleClickPost} className="btn-pk n blue2">
+              <span>
+                <FontAwesomeIcon icon={faPlus} /> {text.post}
+              </span>
+            </div>
           </div>
         </div>
         <div className="hd_titbox2">
-          <Select 
+          <Select
             name={"typeId"}
             className={"select1 wid1"}
             dataList={searchList}
-            handleItemClick={handleItemClickSearch} />
+            handleItemClick={handleItemClickSearch}
+          />
           {/* <Dropdown
             name={"typeId"}
             className={'select1 wid1'}
             dataList={searchList} 
             selected={'all'} 
             handleItemClick={handleItemClickSearch}/> */}
-            
         </div>
 
         <div className="tbl_basic mtbl_ty1">
@@ -173,13 +215,13 @@ export default function DashboardPostList(props) {
             <caption>list</caption>
             <colgroup>
               <col className="num" />
-              <col className="imgs"/>
-              <col className="wid1"/>
-              <col className="wid2"/>
-              <col className="wid3"/>
-              <col className="wid3"/>
-              <col className="wid3"/>
-              <col/>
+              <col className="imgs" />
+              <col className="wid1" />
+              <col className="wid2" />
+              <col className="wid3" />
+              <col className="wid3" />
+              <col className="wid3" />
+              <col />
             </colgroup>
             <thead>
               <tr>
@@ -193,28 +235,18 @@ export default function DashboardPostList(props) {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              {
-                renderPostListElements()
-              }
-            </tbody>
+            <tbody>{renderPostListElements()}</tbody>
           </table>
         </div>
-        
+
         <Pagination
-          className={''}
+          className={""}
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
           callback={(page) => navigate(`/dashboard/post/${page}`)}
-          />
-       
+        />
       </div>
-
-
-    </Container>
+    </div>
   );
 }
-
-
-

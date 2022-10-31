@@ -1,12 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
-import { Link } from "react-router-dom";
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const Novel = () => {
+  const dispatch = useDispatch();
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
 
@@ -53,6 +56,22 @@ const Novel = () => {
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
   };
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      isHeaderShow: true,
+      isMenuShow: true,
+      menuType: "MAIN",
+      headerClass: "header",
+      containerClass: "container dashboard webtoon",
+      isDetailView: false,
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
@@ -14,17 +14,22 @@ import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
 import Tag from "@/components/dashboard/Tag";
 
-import tempImage from '@IMAGES/tmp_comic2.jpg';
-import tempImage2 from '@IMAGES/tmp_comic3.png';
+import tempImage from "@IMAGES/tmp_comic2.jpg";
+import tempImage2 from "@IMAGES/tmp_comic3.png";
 import { editPostToServer, getPostSeriesMine } from "@/services/postService";
 import Series from "@/components/post/Series";
 import { getFileUrlFromServer } from "@/services/fileService";
 import { setFileToServer } from "@/services/dashboardService";
-import { getErrorMessageFromResultCode, getFromDataJson, initButtonInStatus } from "@/common/common";
+import {
+  getErrorMessageFromResultCode,
+  getFromDataJson,
+  initButtonInStatus,
+} from "@/common/common";
 import Input from "@/components/dashboard/Input";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Button from "@/components/dashboard/Button";
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
   post_edit: "投稿を修正",
@@ -33,9 +38,9 @@ const text = {
   category: "カテゴリ",
   title: "タイトル",
   episode: "話",
-  contents: "コンテンツ",  
+  contents: "コンテンツ",
   tag: "タグ",
-  support_user: "閲覧範囲（支援者）",  
+  support_user: "閲覧範囲（支援者）",
   timeline: "タイムラインのサムネイル",
   drag_drop: "ドラッグ＆ドロップ",
   edit: "編集",
@@ -49,111 +54,109 @@ const text = {
   type_movie: "映像",
   label_can_not_edit: "編集不可",
   input_image: "置いてください。",
-  please_input_content: '表紙を入力してください。',
-  please_input_thumbnail: 'サムネイルを入力してください。',
-  please_input_title: 'タイトルを入力してください。',
-  please_input_number: '話を入力してください。',
-  error_title: 'お知らせ',
+  please_input_content: "表紙を入力してください。",
+  please_input_thumbnail: "サムネイルを入力してください。",
+  please_input_title: "タイトルを入力してください。",
+  please_input_number: "話を入力してください。",
+  error_title: "お知らせ",
 };
-
 
 const supportorList = [
   {
-    name : "閲覧範囲（支援者）",
-    id : "1",
-    checked : true,
+    name: "閲覧範囲（支援者）",
+    id: "1",
+    checked: true,
   },
   {
-    name : "2hyunkook",
-    id : "2",
-    checked : false,
+    name: "2hyunkook",
+    id: "2",
+    checked: false,
   },
   {
-    name : "yoon",
-    id : "3",
-    checked : false,
-  }
+    name: "yoon",
+    id: "3",
+    checked: false,
+  },
 ];
 
 const tempData = {
-  seires : "",
+  seires: "",
   title: "シェルターアーク",
   episode: "12",
   timeline: {
-    image : {
-      preview : tempImage,
+    image: {
+      preview: tempImage,
       filename: "webtoon_shorts.mp4",
-      fileLenth: "32秒"
+      fileLenth: "32秒",
     },
     list: [
       {
         id: "1",
         preview: tempImage,
         filename: "webtoon_shorts.mp4",
-        fileLenth: "32秒"
+        fileLenth: "32秒",
       },
       {
         id: "2",
         preview: tempImage2,
         filename: "123124_shorts.mp4",
-        fileLenth: "52秒"
+        fileLenth: "52秒",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
       {
         id: "",
         preview: undefined,
         filename: "",
-        fileLenth: ""
+        fileLenth: "",
       },
-     
-    ]
+    ],
   },
 };
 
 export default function PostEdit(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const reduxPostInfo = useSelector(({ post }) => post?.post);
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
   const [stateType, setStateType] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [statePostInfo, setStatePostInfo] = useState(undefined);
-  const dispatch = useDispatch();
-  const reduxPostInfo = useSelector( ({post}) => post?.post );
-  const reduxAuthors = useSelector( ({post}) => post?.authorMine.authors );
-  const params = useParams('id');
-  const navigate = useNavigate();
+  const params = useParams("id");
   const refForm = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
@@ -162,25 +165,39 @@ export default function PostEdit(props) {
   const refTag = useRef();
   const refRegister = useRef();
 
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header ty1",
+      containerClass: "container sub post",
+      isHeaderShow: true,
+      isMenuShow: false,
+      headerType: "postUpload",
+      menuType: "DASHBOARD",
+      isDetailView: true,
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
+
   //==============================================================================
   // function
   //==============================================================================
 
   const callbackContents = () => {
-     //upload 할 이미지가 없다면
-     if( refThumbnailTimeline.current.getImageFile() === undefined ){
-        callbackTimeline();
-      }
-      else{
-        setImageToServer(refThumbnailTimeline, 'thumbnail');
-      }
+    //upload 할 이미지가 없다면
+    if (refThumbnailTimeline.current.getImageFile() === undefined) {
+      callbackTimeline();
+    } else {
+      setImageToServer(refThumbnailTimeline, "thumbnail");
+    }
   };
-
 
   const callbackTimeline = () => {
     editPost();
   };
-
 
   //==============================================================================
   // api
@@ -193,29 +210,28 @@ export default function PostEdit(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const setImageToServer = async(ref, usage) => {
+  const setImageToServer = async (ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);               
-    params.append("subscribeTierId", "");        
+    params.append("authorId", reduxAuthors[0].id);
+    params.append("subscribeTierId", "");
     params.append("productId", "");
-    params.append("type", "image");                 //image, video, binary
-    params.append("usage", usage);                //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false);          //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", reduxPostInfo?.rating);                   //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("type", "image"); //image, video, binary
+    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("loginRequired", false); //언제 체크해서 보내는건지?
+    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+    params.append("rating", reduxPostInfo?.rating); //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", ref.current.getImageFile());
-    
-    const {status, data: resultData} = await setFileToServer(params);
-    
+
+    const { status, data: resultData } = await setFileToServer(params);
+
     //create sccuess
-    if( status === 201 ){
+    if (status === 201) {
       ref.current.setImageValueToInputTag(resultData?.hash);
-    }
-    else{
+    } else {
       //error 처리
       initButtonInStatus(refRegister);
-      ref.current.setError( String(status + resultData) );
+      ref.current.setError(String(status + resultData));
     }
   };
 
@@ -227,26 +243,25 @@ export default function PostEdit(props) {
   * @author 2hyunkook
   */
   const editPost = async () => {
-
     //필드 확인
-    if( refTitle.current.isEmpty() ){
+    if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
-			refTitle.current.setError( text.please_input_title );
-			return;
-		}
-    if( refNumber.current.isEmpty() ){
-      initButtonInStatus(refRegister);
-			refNumber.current.setError( text.please_input_number );
-			return;
-		}
-    if( refContents.current.checkToEmpty() ){
-      initButtonInStatus(refRegister);
-      refContents.current.setError( text.please_input_content );
+      refTitle.current.setError(text.please_input_title);
       return;
     }
-    if( refThumbnailTimeline.current.checkToEmpty() ){
+    if (refNumber.current.isEmpty()) {
       initButtonInStatus(refRegister);
-      refThumbnailTimeline.current.setError( text.please_input_thumbnail );
+      refNumber.current.setError(text.please_input_number);
+      return;
+    }
+    if (refContents.current.checkToEmpty()) {
+      initButtonInStatus(refRegister);
+      refContents.current.setError(text.please_input_content);
+      return;
+    }
+    if (refThumbnailTimeline.current.checkToEmpty()) {
+      initButtonInStatus(refRegister);
+      refThumbnailTimeline.current.setError(text.please_input_thumbnail);
       return;
     }
 
@@ -263,40 +278,44 @@ export default function PostEdit(props) {
       // outline: '',
       // number: '',
     };
-    if( !json.content.length ){
+    if (!json.content.length) {
       json = {
         ...json,
         content: reduxPostInfo.content,
       };
     }
-    if( !json.thumbnailImage.length ){
+    if (!json.thumbnailImage.length) {
       json = {
         ...json,
         thumbnailImage: reduxPostInfo.thumbnailImage,
       };
     }
-    console.log('editPost json', json);
+    console.log("editPost json", json);
 
-    const {status, data} = await editPostToServer(json);
-    if( status === 200 ){
+    const { status, data } = await editPostToServer(json);
+    if (status === 200) {
       dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={'投稿を修正しました。'} buttonTitle={'確認'} />, 
-            callback: ()=> {navigate(`/dashboard/post/detail/${params.id}`)}
-          }
-        )
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup message={"投稿を修正しました。"} buttonTitle={"確認"} />
+          ),
+          callback: () => {
+            navigate(`/dashboard/post/detail/${params.id}`);
+          },
+        })
       );
-    }
-    else{
+    } else {
       dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
-          }
-        )
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup
+              message={getErrorMessageFromResultCode(data)}
+              buttonTitle={"確認"}
+            />
+          ),
+        })
       );
     }
 
@@ -309,33 +328,31 @@ export default function PostEdit(props) {
   const handleClickType = (typeItem) => {
     setStateType(typeItem);
   };
-  
+
   const handleClickItemTimeline = (event) => {
     const id = event.currentTarget.getAttribute("id");
     let selectedItem;
-    for( let i = 0; i < tempData.timeline.list.length; i++ ){
-      if( tempData.timeline.list[i].id === id ){
+    for (let i = 0; i < tempData.timeline.list.length; i++) {
+      if (tempData.timeline.list[i].id === id) {
         selectedItem = tempData.timeline.list[i];
         break;
       }
     }
-   
+
     refThumbnailTimeline.current.setImage(selectedItem);
   };
 
   const handleClickPreview = (event) => {
-    console.log('Preview', event);
-    
+    console.log("Preview", event);
   };
-  
+
   const handleClickRegister = (event) => {
     //check contents
     //upload 할 이미지가 없다면
-    if( refContents.current.getImageFile() === undefined ){
+    if (refContents.current.getImageFile() === undefined) {
       callbackContents();
-    }
-    else{
-      setImageToServer(refContents, 'post');
+    } else {
+      setImageToServer(refContents, "post");
     }
   };
 
@@ -343,188 +360,214 @@ export default function PostEdit(props) {
   // Hook & render
   //==============================================================================
 
-
   const renderTimelineElements = () => {
     return tempData.timeline.list.map((item, index) => {
       return (
-        <SwiperSlide key={index} className="cx swiper-slide" onClick={handleClickItemTimeline} id={item.id}>
-          <div >
+        <SwiperSlide
+          key={index}
+          className="cx swiper-slide"
+          onClick={handleClickItemTimeline}
+          id={item.id}
+        >
+          <div>
             <div className="cx_thumb">
-              {
-                item.preview !== undefined &&
-                  <span><img src={item.preview} alt="timeline"/></span>
-              }
+              {item.preview !== undefined && (
+                <span>
+                  <img src={item.preview} alt="timeline" />
+                </span>
+              )}
             </div>
           </div>
         </SwiperSlide>
       );
     });
   };
-  
+
   useEffect(() => {
     //temp
     setStateSupportorList(supportorList);
-    dispatch( getPostDetailAction(params) );
+    dispatch(getPostDetailAction(params));
   }, []);
-  
+
   useEffect(() => {
     setStatePostInfo(reduxPostInfo);
     setStateType(reduxPostInfo?.type);
   }, [dispatch, reduxPostInfo]);
 
-  useEffect(() => {
-    
-  }, [statePostInfo]);
+  useEffect(() => {}, [statePostInfo]);
 
   return (
-    <PostContainer
-      className={"sub post"}
-      headerType={"postUpload"}
-      headerClassName={"ty1"} >
-
-      <div className="inr-c">
-        <div className="box_area bdn">
-          
-          <form ref={refForm}>
-            <section className="bbs_write">
-              <div className="hd_titbox">
-                <h2 className="h_tit1">{text.post_edit}</h2>
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.series}</h3>
-                <Series
-                  name={'seriesId'}
-                  className={'select1 w100'}
-                  selected={reduxPostInfo?.seriesId}
-                  disabled={true}
-                  disabledText={reduxPostInfo?.series.title}
-                  />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.type}</h3>
-                <div className="lst_txchk">
-                  <Type
-                    name={'typeId'}
-                    callback={handleClickType}
-                    selected={reduxPostInfo?.typeId}
-                    disabled={true}   //2022.10.19 edit일때는 type이 변경되면 안된다.
-                    />
-                </div>
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.category}</h3>
-                <Category
-                  name={'categoryId'}
-                  className={'select1 wid1 '}
-                  typeId={stateType?.id} 
-                  selected={reduxPostInfo?.categoryId}
-                  disabled={true}
-                  disabledText={reduxPostInfo?.category.name}
-                  />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.title}</h3>
-                <Input ref={refTitle} type="text" className="inp_txt w100p" name={"title"} defaultValue={reduxPostInfo?.title} />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.episode}</h3>
-                <Input ref={refNumber} type="text" className="inp_txt w100p" name={"number"} defaultValue={reduxPostInfo?.number} />
-              </div>
-
-
-              <div className="col">
-                <h3 className="tit1">{text.contents} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
-                <ImageUpload
-                  ref={refContents}
-                  id={"filebox2"}
-                  className={"box_drag"}
-                  name={"content"}                     
-                  text={text.drag_drop}    
-                  previewHash={statePostInfo?.content}
-                  callback={callbackContents}
-                  />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.tag} <button type="button" className="btn_help" title="ヘルプ">
-									<ToolTip
-										title={text.setting_tag}
-										text={'タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。'} />
-									</button>
-                </h3>
-                <Tag 
-                  ref={refTag}
-                  name={"tagIds"}
-                  className={"inp_txt sch"}
-                  list={reduxPostInfo?.tags}
-                  placeholder={text.tag_name} />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.support_user}</h3>
-                <Select 
-                  name={""}
-                  className={"select1 wid1"}
-                  dataList={stateSupportorList}
-                   />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.timeline} <button type="button" className="btn_help" title="ヘルプ"><ToolTip title={"Contents"} text={"afasfasdfads"} /></button></h3>
-                <ThumbnailTimeline
-                  ref={refThumbnailTimeline}
-                  id={"filebox1"}                     
-                  name={"thumbnailImage"}
-                  previewHash={reduxPostInfo?.thumbnailImage}
-                  textDragNDrop={text.drag_drop}    
-                  textInputMessage={text.input_image}     
-                  textEdit={text.edit}
-                  callback={callbackTimeline}
-                  />
-              </div>
-
-              <div className="col">
-                <h3 className="tit1">{text.select_timeline}</h3>
-                <div className="lst_comic2 pd1">
-                  <SwiperContainer 
-                    className={"mySwiper2"}
-                    slidesPerView={4}
-                    breakpoints={{
-                        0: {
-                          slidesPerView: 4.3,
-                          spaceBetween: 12,
-                        },
-                        1000: {
-                          slidesPerView: 5,
-                          spaceBetween: 12,
-                        },
-                        1400: {
-                          slidesPerView: 6,
-                          spaceBetween: 16,
-                        },
-                      }}
-                    list={ renderTimelineElements } />
-                </div>
-              </div>
-            </section>
-
-            <div className="bbs_write_botm">
-              <div className="btn-pk n blue2" onClick={handleClickPreview}><span>{text.preview}</span></div>
-              <Button ref={refRegister} className={'btn-pk n blue'} text={text.btn_edit} onClick={handleClickRegister} />
+    <div className="inr-c">
+      <div className="box_area bdn">
+        <form ref={refForm}>
+          <section className="bbs_write">
+            <div className="hd_titbox">
+              <h2 className="h_tit1">{text.post_edit}</h2>
             </div>
-          </form>
 
-        </div>
+            <div className="col">
+              <h3 className="tit1">{text.series}</h3>
+              <Series
+                name={"seriesId"}
+                className={"select1 w100"}
+                selected={reduxPostInfo?.seriesId}
+                disabled={true}
+                disabledText={reduxPostInfo?.series.title}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.type}</h3>
+              <div className="lst_txchk">
+                <Type
+                  name={"typeId"}
+                  callback={handleClickType}
+                  selected={reduxPostInfo?.typeId}
+                  disabled={true} //2022.10.19 edit일때는 type이 변경되면 안된다.
+                />
+              </div>
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.category}</h3>
+              <Category
+                name={"categoryId"}
+                className={"select1 wid1 "}
+                typeId={stateType?.id}
+                selected={reduxPostInfo?.categoryId}
+                disabled={true}
+                disabledText={reduxPostInfo?.category.name}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.title}</h3>
+              <Input
+                ref={refTitle}
+                type="text"
+                className="inp_txt w100p"
+                name={"title"}
+                defaultValue={reduxPostInfo?.title}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.episode}</h3>
+              <Input
+                ref={refNumber}
+                type="text"
+                className="inp_txt w100p"
+                name={"number"}
+                defaultValue={reduxPostInfo?.number}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">
+                {text.contents}{" "}
+                <button type="button" className="btn_help" title="ヘルプ">
+                  <ToolTip title={"Contents"} text={"afasfasdfads"} />
+                </button>
+              </h3>
+              <ImageUpload
+                ref={refContents}
+                id={"filebox2"}
+                className={"box_drag"}
+                name={"content"}
+                text={text.drag_drop}
+                previewHash={statePostInfo?.content}
+                callback={callbackContents}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">
+                {text.tag}{" "}
+                <button type="button" className="btn_help" title="ヘルプ">
+                  <ToolTip
+                    title={text.setting_tag}
+                    text={
+                      "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
+                    }
+                  />
+                </button>
+              </h3>
+              <Tag
+                ref={refTag}
+                name={"tagIds"}
+                className={"inp_txt sch"}
+                list={reduxPostInfo?.tags}
+                placeholder={text.tag_name}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.support_user}</h3>
+              <Select
+                name={""}
+                className={"select1 wid1"}
+                dataList={stateSupportorList}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">
+                {text.timeline}{" "}
+                <button type="button" className="btn_help" title="ヘルプ">
+                  <ToolTip title={"Contents"} text={"afasfasdfads"} />
+                </button>
+              </h3>
+              <ThumbnailTimeline
+                ref={refThumbnailTimeline}
+                id={"filebox1"}
+                name={"thumbnailImage"}
+                previewHash={reduxPostInfo?.thumbnailImage}
+                textDragNDrop={text.drag_drop}
+                textInputMessage={text.input_image}
+                textEdit={text.edit}
+                callback={callbackTimeline}
+              />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.select_timeline}</h3>
+              <div className="lst_comic2 pd1">
+                <SwiperContainer
+                  className={"mySwiper2"}
+                  slidesPerView={4}
+                  breakpoints={{
+                    0: {
+                      slidesPerView: 4.3,
+                      spaceBetween: 12,
+                    },
+                    1000: {
+                      slidesPerView: 5,
+                      spaceBetween: 12,
+                    },
+                    1400: {
+                      slidesPerView: 6,
+                      spaceBetween: 16,
+                    },
+                  }}
+                  list={renderTimelineElements}
+                />
+              </div>
+            </div>
+          </section>
+
+          <div className="bbs_write_botm">
+            <div className="btn-pk n blue2" onClick={handleClickPreview}>
+              <span>{text.preview}</span>
+            </div>
+            <Button
+              ref={refRegister}
+              className={"btn-pk n blue"}
+              text={text.btn_edit}
+              onClick={handleClickRegister}
+            />
+          </div>
+        </form>
       </div>
-
-    </PostContainer>
+    </div>
   );
 }
-
-
-

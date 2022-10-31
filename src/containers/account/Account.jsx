@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setHeaderShow } from "@/modules/redux/ducks/container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/pro-solid-svg-icons";
-import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "@COMPONENTS/auth/Login";
 import Register from "@COMPONENTS/account/Register";
 import Agreement from "@COMPONENTS/account/Agreement";
@@ -16,7 +18,13 @@ import UpdatePasswordCheck from "@COMPONENTS/account/UpdatePasswordCheck";
 import UpdatePasswordConfirm from "@COMPONENTS/account/UpdatePasswordConfirm";
 
 const Account = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(setHeaderShow(false));
+  }, [dispatch]);
+
   return (
     <div id="wrap">
       <section className="wrap_login">

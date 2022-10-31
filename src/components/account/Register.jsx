@@ -251,7 +251,11 @@ const Register = () => {
           >
             <span>次へ</span>
           </button>
-          <button type="submit" className="btn-pk mem blue2">
+          <button
+            type="submit"
+            className="btn-pk mem blue2"
+            onClick={() => navigate("/account")}
+          >
             <span>戻る</span>
           </button>
         </div>

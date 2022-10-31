@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
 import Items from "@COMPONENTS/webtoon/Items";
 import CurationItems from "@COMPONENTS/webtoon/CurationItems";
 import { Link } from "react-router-dom";
+import { setHeader } from "@/modules/redux/ducks/container";
+import { useDispatch } from "react-redux";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
+  const dispatch = useDispatch();
   const [selectTab, setSelectTab] = useState("EVERY");
 
   /** ===== Post type API Start ===== */
@@ -54,6 +57,23 @@ const Webtoon = () => {
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
   };
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerClass: "header",
+      containerClass: "container dashboard webtoon",
+      headerType: "",
+      isDetailView: false,
+      menuType: "MAIN",
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   return (
     <>

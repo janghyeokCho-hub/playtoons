@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
@@ -10,16 +10,17 @@ import Pagination from "@/components/dashboard/Pagination";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";
+import { setHeader } from "@/modules/redux/ducks/container";
 
 const text = {
-  search_period : "検索期限",
-  start_date : "開始日",
-  end_date : "終了日",
-  sales_detail : "売り上げ 詳細",
-  product_name : "商品名",
-  date : "日付",
+  search_period: "検索期限",
+  start_date: "開始日",
+  end_date: "終了日",
+  sales_detail: "売り上げ 詳細",
+  product_name: "商品名",
+  date: "日付",
   title: "項目",
-  money : "金額",
+  money: "金額",
   refund: "返金",
 };
 
@@ -28,31 +29,31 @@ const tempData = {
   meta: {
     currentPage: 1,
     itemsPerPage: 10,
-    totalItems: 3
+    totalItems: 3,
   },
   list: [
     {
-      number : "1",
-      image : tempImg1,
-      title : "ロマンスファンタジーアセット１",
-      price : "1200000CP",
-      date : "2022/06/11",
+      number: "1",
+      image: tempImg1,
+      title: "ロマンスファンタジーアセット１",
+      price: "1200000CP",
+      date: "2022/06/11",
       amount: "32",
     },
     {
-      number : "2",
-      image : tempImg1,
-      title : "大学のリンゴ一個の重さで10メートルの素材",
-      price : "1200000CP",
-      date : "2022/06/11",
+      number: "2",
+      image: tempImg1,
+      title: "大学のリンゴ一個の重さで10メートルの素材",
+      price: "1200000CP",
+      date: "2022/06/11",
       amount: "33",
     },
     {
-      number : "3",
-      image : tempImg1,
-      title : "ロマンスファンタジーアセット１",
-      price : "1200000CP",
-      date : "2022/06/11",
+      number: "3",
+      image: tempImg1,
+      title: "ロマンスファンタジーアセット１",
+      price: "1200000CP",
+      date: "2022/06/11",
       amount: "23",
     },
   ],
@@ -61,23 +62,23 @@ const tempData = {
 const SEARCH_LIST = [
   {
     id: "direct",
-    name: "直接入力"
+    name: "直接入力",
   },
   {
     id: "3month",
-    name: "3月"
+    name: "3月",
   },
   {
     id: "1month",
-    name: "1月"
+    name: "1月",
   },
   {
     id: "1week",
-    name: "1週"
+    name: "1週",
   },
   {
     id: "1day",
-    name: "1日"
+    name: "1日",
   },
 ];
 
@@ -89,6 +90,24 @@ export default function DashboardSalesList(props) {
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "container series",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: "postUpload",
+      menuType: "DASHBOARD",
+      isDetailView: false,
+      backTitle: "シリーズ詳細",
+    };
+    dispatch(setHeader(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
+
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -96,24 +115,35 @@ export default function DashboardSalesList(props) {
     };
 
     // const { status, data } = await getProductListFromServer(params);
-    // 
+    //
     // if( status === 200 ){
     //   setList(handleGetSeriesStoryList(data));
     // }
-    // 
+    //
     // setData(getProductListFromResultData(data));
   };
 
   const handleClickCalendar = (name, date) => {
-    const startDate = name === 'start' ? date : refCalendarStart.current.getDate();
-    const endDate = name === 'end' ? date : refCalendarEnd.current.getDate();
-    
-    if( endDate === undefined ){
+    const startDate =
+      name === "start" ? date : refCalendarStart.current.getDate();
+    const endDate = name === "end" ? date : refCalendarEnd.current.getDate();
+
+    if (endDate === undefined) {
       return true;
     }
 
-    if( startDate.getTime() >= endDate.getTime() ){
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'시작일은 종료일보다 클 수 없습니다.'} buttonTitle={'確認'} />, }) );
+    if (startDate.getTime() >= endDate.getTime()) {
+      dispatch(
+        showModal({
+          title: text.error_title,
+          contents: (
+            <ErrorPopup
+              message={"시작일은 종료일보다 클 수 없습니다."}
+              buttonTitle={"確認"}
+            />
+          ),
+        })
+      );
       return false;
     }
 
@@ -121,19 +151,18 @@ export default function DashboardSalesList(props) {
   };
 
   const handleChange = (page) => {
-    console.log('handleChange', page);
-    
+    console.log("handleChange", page);
   };
 
   const handleItemSearch = (value) => {
-    console.log('ItemSearch', value.getAttribute('value'));
+    console.log("ItemSearch", value.getAttribute("value"));
 
-    setStateStartDate(value.getAttribute('value'));
-    setStateEndDate('none');
+    setStateStartDate(value.getAttribute("value"));
+    setStateEndDate("none");
   };
 
   const handleItemClick = (event) => {
-    console.log('handleItemClick', event);
+    console.log("handleItemClick", event);
   };
 
   const renderSalesList = () => {
@@ -144,7 +173,13 @@ export default function DashboardSalesList(props) {
           <td className="td_subject">{item.title}</td>
           <td className="td_group">{item.price}</td>
           <td className="td_txt float-right">
-            <div className="btn-pk s blue2 w124 mt10" data-id={item.number} onClick={handleItemClick}><span>{text.refund}</span></div>
+            <div
+              className="btn-pk s blue2 w124 mt10"
+              data-id={item.number}
+              onClick={handleItemClick}
+            >
+              <span>{text.refund}</span>
+            </div>
           </td>
         </tr>
       );
@@ -155,41 +190,41 @@ export default function DashboardSalesList(props) {
     //리스트 불러오기
     // getProductList();
     setStateData(tempData);
-    setStateStartDate('1month');
-    setStateEndDate('none');
+    setStateStartDate("1month");
+    setStateEndDate("none");
   }, []);
-  
-  return (
-    <Container 
-      type={"series"} >
 
+  return (
+    <div className="contents">
       <div className="inr-c">
         <div className="col flex mt2">
           <div className="dsd_search_label mr24">{text.search_period}</div>
-          <Select 
+          <Select
             name={"typeId"}
             className={"select1 dsd_search_select"}
             dataList={SEARCH_LIST}
             handleItemClick={handleItemSearch}
-            />
+          />
         </div>
 
         <div className="col mt24 saleslist-data-col">
           <div className="mr24">
             <div className="calendar-label">{text.start_date}</div>
-            <Calendar 
+            <Calendar
               ref={refCalendarStart}
               name={"start"}
-              type={stateStartDate} 
-              callback={handleClickCalendar} />
+              type={stateStartDate}
+              callback={handleClickCalendar}
+            />
           </div>
           <div className="mr24">
             <div className="calendar-label">{text.end_date}</div>
-            <Calendar 
+            <Calendar
               ref={refCalendarEnd}
               name={"end"}
-              type={stateEndDate} 
-              callback={handleClickCalendar} />
+              type={stateEndDate}
+              callback={handleClickCalendar}
+            />
           </div>
         </div>
 
@@ -216,23 +251,18 @@ export default function DashboardSalesList(props) {
                 <th></th>
               </tr>
             </thead>
-            <tbody>
-              {
-                renderSalesList()
-              }
-            </tbody>
+            <tbody>{renderSalesList()}</tbody>
           </table>
         </div>
 
         <Pagination
-          className={''}
+          className={""}
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
           callback={handleChange}
-          />
+        />
       </div>
-
-    </Container>
+    </div>
   );
 }

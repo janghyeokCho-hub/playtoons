@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useNavigate, Link } from "react-router-dom";
 import EulaPopup from "@COMPONENTS/EulaPopup";
+import { setMenuShow } from "@/modules/redux/ducks/container";
 
 const Register = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isEulaPopupShow, setIsEulaPopupShow] = useState(false);
+
+  useEffect(() => {
+    dispatch(setMenuShow(false));
+  }, [dispatch]);
 
   return (
     <>

@@ -20,6 +20,7 @@ import { setPostLike } from "@API/postService";
 import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setDim } from "@/modules/redux/ducks/dim";
+import { setMenuShow } from "@/modules/redux/ducks/container";
 
 const SearchComponent = ({ isMobile }) => {
   const dispatch = useDispatch();
@@ -75,22 +76,28 @@ const SearchComponent = ({ isMobile }) => {
         </div>
       )}
 
-      <button type="button" className="mo_btns view-m" onClick={handleChange}>
+      <button
+        type="button"
+        className="mo_btns view-m"
+        onClick={() => handleChange()}
+      >
         <FontAwesomeIcon icon={faMagnifyingGlass} />
       </button>
     </>
   );
 };
 
-const Header = ({
-  type,
-  className,
-  backTitle,
-  isMenus = true,
-  onSideMenu,
-  isDetailView = false,
-}) => {
+const Header = ({ className, onSideMenu }) => {
+  /** 헤더 통합하면서 추가됨 */
   const dispatch = useDispatch();
+  const isMenuShow = useSelector(({ container }) => container.isMenuShow);
+  const type = useSelector(({ container }) => container.headerType);
+  const isDetailView =
+    useSelector(({ container }) => container.isDetailView) || false;
+  const headerClass = useSelector(({ container }) => container.headerClass);
+  const backTitle = useSelector(({ container }) => container.backTitle);
+  /** */
+
   const location = useLocation();
   const navigate = useNavigate();
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -112,6 +119,12 @@ const Header = ({
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
+
+  useEffect(() => {
+    if (isMenuShow === undefined) {
+      dispatch(setMenuShow(true));
+    }
+  }, [dispatch, isMenuShow]);
 
   useEffect(() => {
     setIsMobile(windowSize.width < 961);
@@ -158,157 +171,178 @@ const Header = ({
 
   return (
     <div className="open">
-      <header id="header" className={`header ${className}`}>
+      <header id="header" className={headerClass}>
         {/* logout, login, author, webtoon, novel */}
 
-        {isLogined && !isDetailView && (
-          <div className={`inr-c ${isMobile && "view-m"}`}>
-            {isMenus && (
-              <button
-                type="button"
-                className="btn_gnb"
-                title="메뉴"
-                onClick={() => onSideMenu?.()}
-              >
-                <span>
-                  <FontAwesomeIcon icon={faBars} />
-                </span>
-              </button>
-            )}
-            <h1 className="logo">
-              <Link to="/">
-                <span className="ico_logo">PlayToons</span>
-              </Link>
-            </h1>
+        <>
+          {((isMobile && isDetailView && renderType === "post") ||
+            !isDetailView) && (
+            <>
+              {isLogined && (
+                <div className={`inr-c ${isMobile && "view-m"}`}>
+                  {isMenuShow && (
+                    <button
+                      type="button"
+                      className="btn_gnb"
+                      title="메뉴"
+                      onClick={() => onSideMenu?.()}
+                    >
+                      <span>
+                        <FontAwesomeIcon icon={faBars} />
+                      </span>
+                    </button>
+                  )}
+                  <h1 className="logo">
+                    <Link to="/">
+                      <span className="ico_logo">PlayToons</span>
+                    </Link>
+                  </h1>
 
-            <div className="rgh">
-              <SearchComponent isMobile={isMobile} windowSize={windowSize} />
-              {/*<!-- 모바일 검색 버튼 -->*/}
+                  <div className="rgh">
+                    <SearchComponent
+                      isMobile={isMobile}
+                      windowSize={windowSize}
+                    />
+                    {/*<!-- 모바일 검색 버튼 -->*/}
 
-              <div
-                className="pos_to"
-                onMouseEnter={() => {
-                  setIsUserBoxShow(true);
-                }}
-                onMouseLeave={() => {
-                  setIsUserBoxShow(false);
-                }}
-              >
-                <button type="button" className="btn_tugo btn-pk n blue bdrs">
-                  <span>投稿</span>
-                  <FontAwesomeIcon icon={faSquarePlus} className="view-m" />
-                </button>
-                {isUserBoxShow && (
-                  <div className="box_drop">
-                    <ul>
-                      <li>
-                        <Link to="/post/upload">
-                          <FontAwesomeIcon icon={faSquarePen} />
-                          投稿する
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="">
-                          <FontAwesomeIcon icon={faCartCirclePlus} />
-                          マケットに登録
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-
-              <div
-                className="pos_profile"
-                onMouseEnter={() => {
-                  setIsProfileShow(true);
-                }}
-                onMouseLeave={() => {
-                  setIsProfileShow(false);
-                }}
-              >
-                <button type="button" className="btn_profile">
-                  <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
-                </button>
-
-                {isProfileShow && (
-                  <div className="box_drop">
-                    <div className="top">
+                    <div
+                      className="pos_to"
+                      onMouseEnter={() => {
+                        setIsUserBoxShow(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsUserBoxShow(false);
+                      }}
+                    >
                       <button
                         type="button"
-                        className="btn_box_close"
-                        onClick={() => setIsProfileShow(false)}
+                        className="btn_tugo btn-pk n blue bdrs"
                       >
-                        <FontAwesomeIcon icon={faXmarkLarge} /> プロフィール
+                        <span>投稿</span>
+                        <FontAwesomeIcon
+                          icon={faSquarePlus}
+                          className="view-m"
+                        />
                       </button>
+                      {isUserBoxShow && (
+                        <div className="box_drop">
+                          <ul>
+                            <li>
+                              <Link to="/post/upload">
+                                <FontAwesomeIcon icon={faSquarePen} />
+                                投稿する
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="">
+                                <FontAwesomeIcon icon={faCartCirclePlus} />
+                                マケットに登録
+                              </Link>
+                            </li>
+                          </ul>
+                        </div>
+                      )}
                     </div>
-                    <div className="bt">
-                      <p className="t2">{userInfo?.name || userInfo?.email}</p>
-                      <p className="t1">保有ポイント</p>
-                      <p className="c1">
-                        <span className="c-blue">100,324,394</span>
-                        <a href="#" className="btn-pk s blue bdrs">
-                          チャージ
-                        </a>
-                      </p>
-                    </div>
-                    <ul>
-                      <li>
-                        <Link to="/author/register">クリエイター登録</Link>
-                      </li>
-                      <li>
-                        <Link to="/dashboard/main">ダッシュボード</Link>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li>
-                        <a href="#">支援中のクリエイター</a>
-                      </li>
-                      <li>
-                        <a href="#">フォロー中のクリエイター</a>
-                      </li>
-                    </ul>
-                    <ul>
-                      <li>
-                        <a href="#">設定</a>
-                      </li>
-                      <li onClick={() => handleLogout()}>
-                        <Link to="/">ログアウト</Link>
-                      </li>
-                    </ul>
-                    <div>
-                      <button
-                        type="button"
-                        className="btn-pk n gray bdrs"
-                        onClick={() => setIsLanguageShow(true)}
-                      >
-                        <FontAwesomeIcon icon={faGlobe} />
-                        日本語
+
+                    <div
+                      className="pos_profile"
+                      onMouseEnter={() => {
+                        setIsProfileShow(true);
+                      }}
+                      onMouseLeave={() => {
+                        setIsProfileShow(false);
+                      }}
+                    >
+                      <button type="button" className="btn_profile">
+                        <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
                       </button>
+
+                      {isProfileShow && (
+                        <div className="box_drop">
+                          <div className="top">
+                            <button
+                              type="button"
+                              className="btn_box_close"
+                              onClick={() => setIsProfileShow(false)}
+                            >
+                              <FontAwesomeIcon icon={faXmarkLarge} />{" "}
+                              プロフィール
+                            </button>
+                          </div>
+                          <div className="bt">
+                            <p className="t2">
+                              {userInfo?.name || userInfo?.email}
+                            </p>
+                            <p className="t1">保有ポイント</p>
+                            <p className="c1">
+                              <span className="c-blue">100,324,394</span>
+                              <a href="#" className="btn-pk s blue bdrs">
+                                チャージ
+                              </a>
+                            </p>
+                          </div>
+                          <ul>
+                            <li>
+                              <Link to="/author/register">
+                                クリエイター登録
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/dashboard/main">ダッシュボード</Link>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li>
+                              <a href="#">支援中のクリエイター</a>
+                            </li>
+                            <li>
+                              <a href="#">フォロー中のクリエイター</a>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li>
+                              <a href="#">設定</a>
+                            </li>
+                            <li onClick={() => handleLogout()}>
+                              <Link to="/">ログアウト</Link>
+                            </li>
+                          </ul>
+                          <div>
+                            <button
+                              type="button"
+                              className="btn-pk n gray bdrs"
+                              onClick={() => setIsLanguageShow(true)}
+                            >
+                              <FontAwesomeIcon icon={faGlobe} />
+                              日本語
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-        {!isLogined && !isDetailView && (
-          <div className={`inr-c ${isMobile && "view-m"}`}>
-            <h1 className="logo">
-              <Link to="/">
-                <span className="ico_logo">PlayToons</span>
-              </Link>
-            </h1>
+                </div>
+              )}
+              {!isLogined && (
+                <div className={`inr-c ${isMobile && "view-m"}`}>
+                  <h1 className="logo">
+                    <Link to="/">
+                      <span className="ico_logo">PlayToons</span>
+                    </Link>
+                  </h1>
 
-            <div className="rgh">
-              <SearchComponent />
+                  <div className="rgh">
+                    <SearchComponent />
 
-              <Link to="/account" className="btn_log btn-pk n blue bdrs">
-                <span>ログイン</span>
-              </Link>
-            </div>
-          </div>
-        )}
+                    <Link to="/account" className="btn_log btn-pk n blue bdrs">
+                      <span>ログイン</span>
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </>
 
         {renderType === "post" && (
           <>
