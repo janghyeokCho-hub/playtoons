@@ -32,9 +32,12 @@ const LandingPage = (props) => {
     const container = {
       isHeaderShow: true,
       isMenuShow: false,
-      headerClass: "header",
       containerClass: "container landing",
+      headerClass: "header",
+      headerType: null,
       menuType: "MAIN",
+      activeMenu: null,
+      isDetailView: false,
       isFooterShow: true,
     };
     dispatch(setContainer(container));

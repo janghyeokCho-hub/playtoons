@@ -61,9 +61,11 @@ const Novel = () => {
     const container = {
       isHeaderShow: true,
       isMenuShow: true,
-      menuType: "MAIN",
-      headerClass: "header",
       containerClass: "container dashboard webtoon",
+      headerClass: "header",
+      headerType: null,
+      menuType: "MAIN",
+      activeMenu: null,
       isDetailView: false,
       isFooterShow: false,
     };

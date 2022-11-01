@@ -62,11 +62,12 @@ const Webtoon = () => {
     const container = {
       isHeaderShow: true,
       isMenuShow: true,
-      headerClass: "header",
       containerClass: "container dashboard webtoon",
+      headerClass: "header",
       headerType: null,
-      isDetailView: false,
       menuType: "MAIN",
+      activeMenu: null,
+      isDetailView: false,
       isFooterShow: false,
     };
     dispatch(setContainer(container));

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setHeaderShow } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/pro-solid-svg-icons";
 import Login from "@COMPONENTS/auth/Login";
@@ -22,7 +22,18 @@ const Account = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(setHeaderShow(false));
+    const container = {
+      isHeaderShow: false,
+      isMenuShow: false,
+      containerClass: "",
+      headerClass: "head",
+      headerType: null,
+      menuType: null,
+      activeMenu: null,
+      isDetailView: false,
+      isFooterShow: false,
+    };
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   return (
