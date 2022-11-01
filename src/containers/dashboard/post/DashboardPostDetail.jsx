@@ -81,7 +81,7 @@ export default function DashboardPostDetail() {
   const handleContainer = useCallback(() => {
     const header = {
       headerClass: "header",
-      containerClass: "container dashboard",
+      containerClass: "container sub post bg",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: null,
@@ -111,7 +111,7 @@ export default function DashboardPostDetail() {
     if (status === 200) {
       setStateData(data?.post);
     } else {
-      showOneButtonPopup(dispatch, String(status + data));
+      showOneButtonPopup(dispatch, status + data);
     }
   };
 
@@ -126,7 +126,7 @@ export default function DashboardPostDetail() {
     if (status === 200) {
       setStateReactions(data);
     } else {
-      showOneButtonPopup(dispatch, String(status + data));
+      showOneButtonPopup(dispatch, status + data);
     }
   };
 
@@ -141,7 +141,7 @@ export default function DashboardPostDetail() {
     if (status === 200) {
       setStatePinnedReactions(data);
     } else {
-      showOneButtonPopup(dispatch, String(status + data));
+      showOneButtonPopup(dispatch, status + data);
     }
   };
 
@@ -208,107 +208,109 @@ export default function DashboardPostDetail() {
   }, []);
 
   return (
-    <div className="inr-c">
-      <div className="wrap_detail">
-        <div className="area_detail1">
-          <ul className="cx_list">
-            <li>
-              <span>{text.name} </span>
-              <span>{stateData?.series?.title}</span>
-            </li>
-            <li>
-              <span>{text.title} </span>
-              <span>{stateData?.title}</span>
-            </li>
-            <li>
-              <span>{text.episode_count} </span>
-              <span>{stateData?.number}</span>
-            </li>
-            <li>
-              <span>{text.public_date} </span>
-              <span>{getDateYYYYMMDD(stateData?.startAt, "/")}</span>
-            </li>
-            <li>
-              <span>{text.end_date} </span>
-              <span>{stateData?.endAt}</span>
-            </li>
-            <li>
-              <span>{text.status} </span>
-              <span>{stateData?.status}</span>
-            </li>
-          </ul>
-          <div className="icon">
-            <span>
-              <FontAwesomeIcon className="mr8" icon={faEye} />
-              {stateData?.viewCount}
-            </span>
-            <span>
-              <FontAwesomeIcon className="mr8" icon={faHeart} />
-              {stateData?.likeCount}
-            </span>
-            <span>
-              <FontAwesomeIcon className="mr8" icon={faCommentQuote} />
-              {stateData?.reactionCount}
-            </span>
+    <div className="contents">
+      <div className="inr-c">
+        <div className="wrap_detail">
+          <div className="area_detail1">
+            <ul className="cx_list">
+              <li>
+                <span>{text.name} </span>
+                <span>{stateData?.series?.title}</span>
+              </li>
+              <li>
+                <span>{text.title} </span>
+                <span>{stateData?.title}</span>
+              </li>
+              <li>
+                <span>{text.episode_count} </span>
+                <span>{stateData?.number}</span>
+              </li>
+              <li>
+                <span>{text.public_date} </span>
+                <span>{getDateYYYYMMDD(stateData?.startAt, "/")}</span>
+              </li>
+              <li>
+                <span>{text.end_date} </span>
+                <span>{stateData?.endAt}</span>
+              </li>
+              <li>
+                <span>{text.status} </span>
+                <span>{stateData?.status}</span>
+              </li>
+            </ul>
+            <div className="icon">
+              <span>
+                <FontAwesomeIcon className="mr8" icon={faEye} />
+                {stateData?.viewCount}
+              </span>
+              <span>
+                <FontAwesomeIcon className="mr8" icon={faHeart} />
+                {stateData?.likeCount}
+              </span>
+              <span>
+                <FontAwesomeIcon className="mr8" icon={faCommentQuote} />
+                {stateData?.reactionCount}
+              </span>
+            </div>
+
+            <div className="botm btn-bot">
+              <Link
+                to={`/dashboard/reaction/detail/${stateData?.id}/1`}
+                className="btn-pk n blue"
+              >
+                <span>{text.reaction_management}</span>
+              </Link>
+              <Link to={`/post/edit/${params.id}`} className="btn-pk n blue2">
+                <span>{text.modify}</span>
+              </Link>
+            </div>
           </div>
 
-          <div className="botm btn-bot">
-            <Link
-              to={`/dashboard/reaction/detail/${stateData?.id}/1`}
-              className="btn-pk n blue"
-            >
-              <span>{text.reaction_management}</span>
-            </Link>
-            <Link to={`/post/edit/${params.id}`} className="btn-pk n blue2">
-              <span>{text.modify}</span>
-            </Link>
+          <div className="area_detail2">
+            <h2 className="h1">
+              {stateData?.title} {stateData?.number}
+            </h2>
+            <p className="d1">{getDateYYYYMMDD(stateData?.startAt, ".")}</p>
+            <p className="ws_pre">{stateData?.series?.description}</p>
           </div>
-        </div>
 
-        <div className="area_detail2">
-          <h2 className="h1">
-            {stateData?.title} {stateData?.number}
-          </h2>
-          <p className="d1">{getDateYYYYMMDD(stateData?.startAt, ".")}</p>
-          <p className="ws_pre">{stateData?.series?.description}</p>
-        </div>
-
-        <div className="ta_center">
-          <Image hash={stateData?.content} alt="playtonns content" />
-        </div>
-
-        {/* <div className="area_detail2">
-        <p className="t1 c-gray">{tempData.content_next_summary}</p>
-      </div> */}
-      </div>
-
-      <div className="wrap_comment">
-        <div className="top_comm">
-          <div className="imgs">
-            <ProfileSpan hash={stateData?.author?.profileImage} />
+          <div className="ta_center">
+            <Image hash={stateData?.content} alt="playtonns content" />
           </div>
-          <IconWithText
-            postInfo={stateData}
-            text={text}
-            callback={handleClickComentRegister}
-          />
+
+          {/* <div className="area_detail2">
+          <p className="t1 c-gray">{tempData.content_next_summary}</p>
+        </div> */}
         </div>
 
-        <div className="lst_comm">
-          {/* pinned reaction */}
-          {renderReactionList(statePinnedReactions)}
-          {/* reaction */}
-          {renderReactionList(stateReactions)}
-
-          {stateReactions?.reactions?.length > 0 && (
-            <Pagination
-              className={""}
-              page={stateReactions?.meta.currentPage}
-              itemsCountPerPage={stateReactions?.meta.itemsPerPage}
-              totalItemsCount={stateReactions?.meta.totalItems}
-              callback={(page) => getReactions(page)}
+        <div className="wrap_comment">
+          <div className="top_comm">
+            <div className="imgs">
+              <ProfileSpan hash={stateData?.author?.profileImage} />
+            </div>
+            <IconWithText
+              postInfo={stateData}
+              text={text}
+              callback={handleClickComentRegister}
             />
-          )}
+          </div>
+
+          <div className="lst_comm">
+            {/* pinned reaction */}
+            {renderReactionList(statePinnedReactions)}
+            {/* reaction */}
+            {renderReactionList(stateReactions)}
+
+            {stateReactions?.reactions?.length > 0 && (
+              <Pagination
+                className={""}
+                page={stateReactions?.meta.currentPage}
+                itemsCountPerPage={stateReactions?.meta.itemsPerPage}
+                totalItemsCount={stateReactions?.meta.totalItems}
+                callback={(page) => getReactions(page)}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

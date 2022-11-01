@@ -165,7 +165,8 @@ export default function IconWithText(props, ref) {
     return stateIconData?.topIcons?.map((item, index) => {
       
       return (
-        <div className={`icon_top ${stateTopSelected === index ? 'icon_top_selected' : ''}`} key={index} >
+        // <div className={`icon_top ${stateTopSelected === index ? 'icon_top_selected' : ''}`} key={index} >
+        <div className={`icon_top`} key={index} >
           <img src={item.image} alt="top icon" data-id={index} onClick={handleClickItemTopIcon} />
         </div>
       );

@@ -23,7 +23,7 @@ import PlanSubsciber from "@/containers/dashboard/plan/DashboardPlanSubsciber";
 import Page404 from "@/components/Page404";
 
 import '@/css/test.css';
-import { useDispatch,  } from 'react-redux';
+import { useDispatch, useSelector,  } from 'react-redux';
 import { getAuthorMineAction,  } from '@/modules/redux/ducks/post';
 import { useLayoutEffect } from 'react';
 
@@ -34,11 +34,14 @@ import { useLayoutEffect } from 'react';
 * @author 이현국
 */
 export default function Dashboard() {
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const dispatch = useDispatch();
   
   useLayoutEffect(() => {
     //get author info
-    dispatch( getAuthorMineAction() );
+    if( reduxAuthors === undefined ){
+      dispatch( getAuthorMineAction() );
+    }
   }, []);
 
   return (

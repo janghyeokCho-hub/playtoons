@@ -8,14 +8,13 @@ import {
   POST_DETAIL,
   GET_CURRENT_POST,
   GET_POST_REACTION,
-  INIT_AUTHOR_MINE,
 } from "../ducks/post";
 import { finishLoading, startLoading } from "../ducks/loading";
 
 //==============================================================================
 // edit post
 //==============================================================================
-function createEditPostRequestSaga(type, func) {
+function createEditPostRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -49,7 +48,7 @@ function createEditPostRequestSaga(type, func) {
 //==============================================================================
 // get post detail
 //==============================================================================
-function createPostDetailRequestSaga(type, func) {
+function createPostDetailRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -90,10 +89,11 @@ function createPostDetailRequestSaga(type, func) {
 //==============================================================================
 // get author mine
 //==============================================================================
-function createAuthorMineRequestSaga(type, func) {
+function createAuthorMineRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
+      console.log('createAuthorMineRequestSaga')
 
       const response = yield call(postApi.getAuthorMineFromServer, );
       if (response?.status === 200) {
@@ -119,24 +119,11 @@ function createAuthorMineRequestSaga(type, func) {
     }
   };
 }
-//==============================================================================
-// get author mine
-//==============================================================================
-function createInitAuthorMineRequestSaga(type, func) {
-  return function* (action) {
-    try {
-      yield put({
-        type: `${type}_SUCCESS`,
-      });
-    } catch (e) {
-    }
-  };
-}
 
 //==============================================================================
 // get current post
 //==============================================================================
-function createCurrentPostRequestSaga(type, func) {
+function createCurrentPostRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -202,7 +189,7 @@ function createCurrentPostRequestSaga(type, func) {
 //==============================================================================
 // get current post reactions
 //==============================================================================
-function createPostReactionRequestSaga(type, func) {
+function createPostReactionRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
@@ -237,7 +224,6 @@ export default function* postSaga() {
   yield takeLatest(EDIT_POST, createEditPostRequestSaga(EDIT_POST));
   yield takeLatest(POST_DETAIL, createPostDetailRequestSaga(POST_DETAIL));
   yield takeLatest(AUTHOR_MINE, createAuthorMineRequestSaga(AUTHOR_MINE));
-  yield takeLatest(INIT_AUTHOR_MINE, createInitAuthorMineRequestSaga(INIT_AUTHOR_MINE));
   yield takeLatest(
     GET_CURRENT_POST,
     createCurrentPostRequestSaga(GET_CURRENT_POST)

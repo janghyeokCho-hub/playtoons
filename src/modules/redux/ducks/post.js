@@ -1,6 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { createRequestActionTypes } from "@REDUX/saga/createRequestSaga";
 import produce from "immer";
+import { LOGOUT_REQUEST_SUCCESS } from "./login";
 
 /* --- Action Types --- */
 export const [EDIT_POST, EDIT_POST_SUCCESS, EDIT_POST_FAILURE] =
@@ -21,17 +22,11 @@ export const [
   GET_POST_REACTION_SUCCESS,
   GET_POST_REACTION_FAILURE,
 ] = createRequestActionTypes("post/GET_POST_REACTION");
-export const [
-  INIT_AUTHOR_MINE,
-  INIT_AUTHOR_MINE_SUCCESS,
-  INIT_AUTHOR_MINE_FAILURE,
-] = createRequestActionTypes("post/GET_POST_REACTION");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
 export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
-export const initAuthorMineAction = createAction(INIT_AUTHOR_MINE);
 export const getCurrentPost = createAction(GET_CURRENT_POST);
 export const getPostReaction = createAction(GET_POST_REACTION);
 
@@ -63,6 +58,9 @@ const post = handleActions(
         draft.authorMine = action.payload;
       });
     },
+    [AUTHOR_MINE]: (state, action) => {
+      console.log("AUTHOR_MINE", action.payload);
+    },
     [GET_CURRENT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.currentPost = action.payload;
@@ -74,13 +72,11 @@ const post = handleActions(
         draft.currentPost.reactions = action.payload.reactions;
       });
     },
-    [INIT_AUTHOR_MINE_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        console.log("init author Mine", );
+    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {   //2022.11.01 lhk- logout 시 author 정보도 초기화
+      return produce(state, (_) => {
         return {
-          ...draft, 
-          authorMine : null
-        }
+          ...initialState,
+        };
       });
     },
   },

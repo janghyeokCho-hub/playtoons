@@ -20,8 +20,8 @@ import ModalContainer from "@COMPONENTS/ModalContainer";
 import Container from "@COMPONENTS/Container";
 import Page404 from "@COMPONENTS/Page404";
 
-export const store = configureStore();
-sagaMiddleware.run(rootSaga);
+// export const store = configureStore();       //2022.11.01 lhk- saga 두번 실행으로 주석처리 index.js에 이미 적용됨.
+// sagaMiddleware.run(rootSaga);
 
 function App() {
   return (

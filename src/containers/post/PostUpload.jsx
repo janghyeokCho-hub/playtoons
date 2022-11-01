@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useEffect, useState, useCallback, useLayoutEffect } from "react";
 
 import PostContainer from "@/components/post/PostContainer";
 import ToolTip from "@/components/dashboard/ToolTip";
@@ -14,10 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Series from "@/components/post/Series";
 import { useNavigate } from "react-router-dom";
 import Input from "@/components/dashboard/Input";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Button from "@/components/dashboard/Button";
 import { setHeader } from "@/modules/redux/ducks/container";
+import { getAuthorMineAction } from "@/modules/redux/ducks/post";
 
 const text = {
   upload_post: "投稿する",
@@ -70,7 +69,7 @@ export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateSeries, setStateSeries] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
-  const myAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const refForm = useRef();
@@ -142,7 +141,7 @@ export default function UploadPost(props) {
   const setImageToServer = async(ref, usage) => {
     // 폼데이터 구성
     const params = new FormData();
-    params.append('authorId', myAuthors[0].id);               
+    params.append('authorId', reduxAuthors[0].id);               
     params.append('subscribeTierId', '');        
     params.append('productId', '');
     params.append('usage', usage);                  //profile, background, cover, logo, post, product, thumbnail, attachment
@@ -204,7 +203,7 @@ export default function UploadPost(props) {
     let json = getFromDataJson(refForm);
     json = {
       ...json,
-      authorId: myAuthors[0].id,       
+      authorId: reduxAuthors[0].id,       
       rating: getRatingToSeriesInfo(),
       status: 'enabled',
       typeId: stateSeries?.type === undefined ? stateType?.id : stateSeries?.type.id,
@@ -271,6 +270,12 @@ export default function UploadPost(props) {
   //==============================================================================
   // Hook && render
   //==============================================================================
+  useLayoutEffect(() => {
+    if( reduxAuthors === undefined ){
+      console.log('useLayoutEffect ')
+      dispatch( getAuthorMineAction() );
+    }
+  }, []);
 
   useEffect(() => {
     if( stateType !== undefined ){
@@ -296,11 +301,15 @@ export default function UploadPost(props) {
 
               <div className="col">
                 <h3 className="tit1">{text.series}</h3>
-                <Series
-                  name={'seriesId'}
-                  className={'select1 w100'}
-                  callback={handleSeries}
-                  />
+                {
+                  reduxAuthors !== undefined && (
+                    <Series
+                      name={'seriesId'}
+                      className={'select1 w100'}
+                      callback={handleSeries}
+                      />
+                  )
+                }
               </div>
 
               <div className="col">

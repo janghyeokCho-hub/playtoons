@@ -112,7 +112,7 @@ function createAuthorIdRequestSaga(type) {
 }
 
 
-export default function* postSaga() {
+export default function* dashboardSaga() {
   yield takeLatest(GET_DASHBOARD_PLAN, createPostDetailRequestSaga(GET_DASHBOARD_PLAN));
   yield takeLatest(GET_DASHBOARD_SERIES_DETAIL, createSeriesDetailRequestSaga(GET_DASHBOARD_SERIES_DETAIL));
   yield takeLatest(GET_DASHBOARD_AUTHOR, createAuthorIdRequestSaga(GET_DASHBOARD_AUTHOR));
