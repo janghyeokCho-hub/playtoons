@@ -31,7 +31,7 @@ import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import { getReactionFromServer } from "@/services/dashboardService";
 import Pagination from "@/components/dashboard/Pagination";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   page_title: "投稿詳細",
@@ -79,7 +79,7 @@ export default function DashboardPostDetail() {
   const [stateData, setStateData] = useState(undefined);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container sub post bg",
       isHeaderShow: true,
@@ -89,8 +89,9 @@ export default function DashboardPostDetail() {
       isDetailView: false,
       backTitle: text.page_title,
       activeMenu: "post",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

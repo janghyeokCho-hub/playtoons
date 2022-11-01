@@ -6,11 +6,13 @@ import { setDim } from "@/modules/redux/ducks/dim";
 import Header from "@COMPONENTS/Header";
 import SideBar from "@COMPONENTS/SideBar";
 import { setHeaderShow } from "@/modules/redux/ducks/container";
+import Footer from "./Footer";
 
 const Container = ({ children }) => {
   const dispatch = useDispatch();
   const isHeaderShow = useSelector(({ container }) => container.isHeaderShow);
   const isMenuShow = useSelector(({ container }) => container.isMenuShow);
+  const isFooterShow = useSelector(({ container }) => container.isFooterShow);
   const containerClass = useSelector(
     ({ container }) => container.containerClass
   );
@@ -64,6 +66,7 @@ const Container = ({ children }) => {
         {isShow && dimType === "SEARCH" && (
           <div className="sch_dim" onClick={handleDimClose}></div>
         )}
+        {isFooterShow && <Footer />}
       </div>
     </>
   );

@@ -16,7 +16,7 @@ import Textarea from "@/components/dashboard/Textarea";
 import { getAuthorMineFromServer } from "@/services/postService";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   profile_management: "プロフィル管理",
@@ -49,7 +49,7 @@ export default function DashboardUploadProfile(props) {
   const refR19 = useRef();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container bg profile",
       isHeaderShow: true,
@@ -59,8 +59,9 @@ export default function DashboardUploadProfile(props) {
       isDetailView: false,
       backTitle: null,
       activeMenu: "profile",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

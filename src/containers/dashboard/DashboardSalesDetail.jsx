@@ -10,7 +10,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   search_period: "検索期限",
@@ -91,7 +91,7 @@ export default function DashboardSalesList(props) {
   const refCalendarEnd = useRef();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container series",
       isHeaderShow: true,
@@ -101,8 +101,9 @@ export default function DashboardSalesList(props) {
       isDetailView: false,
       backTitle: "シリーズ詳細",
       activeMenu: "dashboard",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

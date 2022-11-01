@@ -29,7 +29,7 @@ import {
 import { faTableColumns as faTableColumnsON } from "@fortawesome/pro-regular-svg-icons";
 
 /* --- Action Types --- */
-const SET_HEADER = "container/SET_HEADER";
+const SET_CONTAINER = "container/SET_CONTAINER";
 const SET_HEADER_SHOW = "container/SET_HEADER_SHOW";
 const SET_HEADER_TYPE = "container/SET_HEADER_TYPE";
 const SET_HEADER_CLASS = "container/SET_HEADER_CLASS";
@@ -39,10 +39,11 @@ const SET_MENU_SHOW = "container/SET_MENU_SHOW";
 const SET_MENUS = "container/SET_MENUS";
 const SET_ACTIVE_MENU = "container/SET_ACTIVE_MENU";
 const SET_BACK_TITLE = "container/SET_BACK_TITLE";
+const SET_FOOTER_SHOW = "container/SET_FOOTER_SHOW";
 /* -------------------- */
 
 /* ------ Actions ----- */
-export const setHeader = createAction(SET_HEADER);
+export const setContainer = createAction(SET_CONTAINER);
 export const setHeaderShow = createAction(SET_HEADER_SHOW);
 export const setHeaderType = createAction(SET_HEADER_TYPE);
 export const setHeaderClass = createAction(SET_HEADER_CLASS);
@@ -52,6 +53,7 @@ export const setMenuShow = createAction(SET_MENU_SHOW);
 export const setMenus = createAction(SET_MENUS);
 export const setActiveMenu = createAction(SET_ACTIVE_MENU);
 export const setBackTitle = createAction(SET_BACK_TITLE);
+export const setFooterShow = createAction(SET_FOOTER_SHOW);
 /* -------------------- */
 
 /* ------ Menus ------- */
@@ -182,11 +184,12 @@ const initialState = {
   menus: null,
   backTitle: null,
   activeMenu: null, // Active menu code
+  isFooterShow: true,
 };
 
 const container = handleActions(
   {
-    [SET_HEADER]: (state, action) => {
+    [SET_CONTAINER]: (state, action) => {
       return produce(state, (draft) => {
         draft.isHeaderShow = action.payload.isHeaderShow;
         draft.isMenuShow = action.payload.isMenuShow;
@@ -196,6 +199,7 @@ const container = handleActions(
         draft.headerType = action.payload.headerType;
         draft.backTitle = action.payload.backTitle;
         draft.activeMenu = action.payload.activeMenu;
+        draft.isFooterShow = action.payload.isFooterShow;
         if (action.payload.menuType === "DASHBOARD") {
           draft.menus = dashMainMenu;
         } else {
@@ -250,6 +254,11 @@ const container = handleActions(
     [SET_BACK_TITLE]: (state, action) => {
       return produce(state, (draft) => {
         draft.backTitle = action.payload;
+      });
+    },
+    [SET_FOOTER_SHOW]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.isFooterShow = action.payload;
       });
     },
   },

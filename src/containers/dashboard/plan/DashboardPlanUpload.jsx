@@ -20,7 +20,7 @@ import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import Price from "@/components/dashboard/Price";
 import Button from "@/components/dashboard/Button";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   add_plan: "支援を追加",
@@ -53,7 +53,7 @@ export default function DashboardPlanUpload(props) {
   const refRegister = useRef();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container sub series bg moty1",
       isHeaderShow: true,
@@ -63,8 +63,9 @@ export default function DashboardPlanUpload(props) {
       isDetailView: false,
       backTitle: "支援を追加",
       activeMenu: "plan",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

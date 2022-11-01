@@ -15,7 +15,7 @@ import {
   setFileToServer,
 } from "@/services/dashboardService";
 import { useDispatch } from "react-redux";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   series_management: "シリーズ詳細",
@@ -48,7 +48,7 @@ export default function DashboardPostEdit(props) {
   const navigate = useNavigate();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header ty1",
       containerClass: "container sub series bg moty1",
       isHeaderShow: true,
@@ -57,8 +57,9 @@ export default function DashboardPostEdit(props) {
       menuType: null,
       isDetailView: true,
       activeMenu: "post",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

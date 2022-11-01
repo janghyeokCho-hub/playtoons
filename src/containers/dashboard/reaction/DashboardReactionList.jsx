@@ -19,7 +19,7 @@ import {
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import Pagination from "@/components/dashboard/Pagination";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   page_title: "リアクションリスト",
@@ -72,7 +72,7 @@ export default function DashboardReactionList(props) {
   const [stateData, setStateData] = useState(undefined);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container post",
       isHeaderShow: true,
@@ -81,8 +81,9 @@ export default function DashboardReactionList(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "リアクションリスト",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

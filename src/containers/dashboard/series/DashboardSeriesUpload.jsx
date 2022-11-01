@@ -29,7 +29,7 @@ import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import Button from "@/components/dashboard/Button";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   series_management: "シリーズ詳細",
@@ -73,7 +73,7 @@ export default function DashboardUploadSeries(props) {
   const refRegister = useRef();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container sub series bg moty1",
       isHeaderShow: true,
@@ -83,8 +83,9 @@ export default function DashboardUploadSeries(props) {
       isDetailView: false,
       backTitle: "シリーズ登録",
       activeMenu: "series",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

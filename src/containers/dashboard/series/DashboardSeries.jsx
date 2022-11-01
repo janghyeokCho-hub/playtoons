@@ -12,7 +12,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch, useSelector } from "react-redux";
 import { showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   page_title: "シリーズリスト",
@@ -36,7 +36,7 @@ export default function DashboardSeries(props) {
   const myAuthors = useSelector(({ post }) => post?.authorMine?.authors);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container series",
       isHeaderShow: true,
@@ -45,8 +45,9 @@ export default function DashboardSeries(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       activeMenu: "series",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

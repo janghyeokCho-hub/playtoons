@@ -22,7 +22,7 @@ import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { useWindowSize } from "@/hook/useWindowSize";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   post_list: "投稿リスト",
@@ -62,7 +62,7 @@ export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState(undefined);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container post",
       isHeaderShow: true,
@@ -71,8 +71,9 @@ export default function DashboardPostList(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       activeMenu: "post",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

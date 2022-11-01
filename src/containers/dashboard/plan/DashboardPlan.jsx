@@ -17,7 +17,7 @@ import { SwiperSlide } from "swiper/react";
 import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   plan_management: "支援管理",
@@ -108,7 +108,7 @@ export default function DashboardPlan(props) {
   const dispatch = useDispatch();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container plan bg",
       isHeaderShow: true,
@@ -117,8 +117,9 @@ export default function DashboardPlan(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       activeMenu: "plan",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

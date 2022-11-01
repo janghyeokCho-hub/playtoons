@@ -22,7 +22,7 @@ import Price from "@/components/dashboard/Price";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Button from "@/components/dashboard/Button";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   edit_plan: "支援を編集する",
@@ -70,8 +70,9 @@ export default function DashboardPlanEdit(props) {
       isDetailView: false,
       backTitle: "支援を編集する",
       activeMenu: "plan",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(header));
   }, [dispatch]);
 
   useEffect(() => {

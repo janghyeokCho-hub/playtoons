@@ -23,7 +23,7 @@ import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { Link } from "react-router-dom";
 import Modal from "@/components/Modal";
 import { showModal } from "@/modules/redux/ducks/modal";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   today_sales: "当日の売上",
@@ -49,7 +49,7 @@ export default function DashboardMain() {
   const dispatch = useDispatch();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container dashboard",
       isHeaderShow: true,
@@ -58,8 +58,9 @@ export default function DashboardMain() {
       menuType: "DASHBOARD",
       isDetailView: false,
       activeMenu: "dashboard",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

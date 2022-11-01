@@ -7,14 +7,14 @@ import Register from "./Register";
 import RegisterForm from "./RegisterForm";
 import Store from "./Store";
 import Detail from "./Detail";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 import Page404 from "@COMPONENTS/Page404";
 
 const App = () => {
   const dispatch = useDispatch();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container dashboard author",
       isHeaderShow: true,
@@ -23,8 +23,9 @@ const App = () => {
       menuType: "MAIN",
       isDetailView: false,
       activeMenu: "creatorList",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

@@ -4,12 +4,12 @@ import { useDispatch } from "react-redux";
 import Novel from "./Novel";
 import Webtoon from "./Webtoon";
 import Page404 from "@COMPONENTS/Page404";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const App = () => {
   const dispatch = useDispatch();
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header ty1 mdetail",
       containerClass: "container sub mpost bg",
       isHeaderShow: true,
@@ -17,8 +17,9 @@ const App = () => {
       headerType: "post",
       menuType: "MAIN",
       isDetailView: true,
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

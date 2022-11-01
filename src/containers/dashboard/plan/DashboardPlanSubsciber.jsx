@@ -4,7 +4,7 @@ import tempProfile from "@IMAGES/img_profile.png";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch } from "react-redux";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   plan_management: "支援管理",
@@ -53,7 +53,7 @@ export default function DashboardPlanSubsciber(props) {
   const dispatch = useDispatch();
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container plan2",
       isHeaderShow: true,
@@ -63,8 +63,9 @@ export default function DashboardPlanSubsciber(props) {
       isDetailView: false,
       backTitle: "支援者管理",
       activeMenu: "plan",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import { getEmergencyNotice } from "@/services/noticeService";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setDim } from "@/modules/redux/ducks/dim";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer, setFooterShow } from "@/modules/redux/ducks/container";
 
 const LandingPage = (props) => {
   const dispatch = useDispatch();
@@ -29,14 +29,15 @@ const LandingPage = (props) => {
   }, []);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       isHeaderShow: true,
       isMenuShow: false,
       headerClass: "header",
       containerClass: "container landing",
       menuType: "MAIN",
+      isFooterShow: true,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
     dispatch(setDim({ dimType: null, isShow: false }));
   }, [dispatch]);
 

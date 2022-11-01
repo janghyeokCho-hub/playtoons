@@ -6,7 +6,7 @@ import { getCategorys as getCategorysAPI } from "@API/postService";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const Novel = () => {
   const dispatch = useDispatch();
@@ -58,15 +58,16 @@ const Novel = () => {
   };
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       isHeaderShow: true,
       isMenuShow: true,
       menuType: "MAIN",
       headerClass: "header",
       containerClass: "container dashboard webtoon",
       isDetailView: false,
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

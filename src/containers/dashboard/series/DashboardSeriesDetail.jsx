@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -55,7 +55,7 @@ export default function DashboardSeriesDetail(props) {
   const [stateData, setStateData] = useState(undefined);
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       headerClass: "header",
       containerClass: "container sub series bg",
       isHeaderShow: true,
@@ -65,8 +65,9 @@ export default function DashboardSeriesDetail(props) {
       isDetailView: false,
       backTitle: "シリーズ詳細",
       activeMenu: "series",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {

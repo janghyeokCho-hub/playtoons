@@ -5,7 +5,7 @@ import { getCategorys as getCategorysAPI } from "@API/postService";
 import Items from "@COMPONENTS/webtoon/Items";
 import CurationItems from "@COMPONENTS/webtoon/CurationItems";
 import { Link } from "react-router-dom";
-import { setHeader } from "@/modules/redux/ducks/container";
+import { setContainer } from "@/modules/redux/ducks/container";
 import { useDispatch } from "react-redux";
 
 const Webtoon = () => {
@@ -59,16 +59,17 @@ const Webtoon = () => {
   };
 
   const handleContainer = useCallback(() => {
-    const header = {
+    const container = {
       isHeaderShow: true,
       isMenuShow: true,
       headerClass: "header",
       containerClass: "container dashboard webtoon",
-      headerType: "",
+      headerType: null,
       isDetailView: false,
       menuType: "MAIN",
+      isFooterShow: false,
     };
-    dispatch(setHeader(header));
+    dispatch(setContainer(container));
   }, [dispatch]);
 
   useEffect(() => {
