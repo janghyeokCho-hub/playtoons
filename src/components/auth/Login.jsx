@@ -7,6 +7,7 @@ import useActions from "@/hook/useActions";
 
 import { loginRequest } from "@REDUX/ducks/login";
 import Config from "@/env/config";
+import PrivacyPopup from "../PrivacyPopup";
 
 const Login = () => {
   const AUTH_SERVER = Config.apiAuthUrl;
@@ -41,6 +42,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [onLogin] = useActions([loginRequest], []);
+  const [isPrivacyPopupShow, setIsPrivacyPopupShow] = useState(false);
 
   /**
    * email State 변경 함수
@@ -210,10 +212,16 @@ const Login = () => {
             登録する
           </Link>
         </p>
-        <Link to="#" className="t2">
+        <Link to="" className="t2" onClick={() => setIsPrivacyPopupShow(true)}>
           プライバシーポリシー
         </Link>
       </div>
+      {isPrivacyPopupShow && (
+        <PrivacyPopup
+          handleClose={() => setIsPrivacyPopupShow(false)}
+          readonly={true}
+        />
+      )}
     </>
   );
 };
