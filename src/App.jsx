@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import configureStore, { sagaMiddleware } from "@REDUX/store";
-import rootSaga from "@REDUX/saga";
 import Account from "@CONTAINERS/account/Account";
+import Home from "@CONTAINERS/home/Home";
 import LandingPage from "@CONTAINERS/landing/LandingPage";
 import Webtoon from "@CONTAINERS/webtoon/Webtoon";
 import Novel from "@CONTAINERS/novel/Novel";
@@ -20,17 +19,15 @@ import ModalContainer from "@COMPONENTS/ModalContainer";
 import Container from "@COMPONENTS/Container";
 import Page404 from "@COMPONENTS/Page404";
 
-// export const store = configureStore();       //2022.11.01 lhk- saga 두번 실행으로 주석처리 index.js에 이미 적용됨.
-// sagaMiddleware.run(rootSaga);
-
 function App() {
   return (
     <>
       <ScrollToTop />
       <Container>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
           <Route path="/*" element={<Page404 />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/webtoon/*" element={<Webtoon />} />
           <Route path="/novel/*" element={<Novel />} />
           <Route path="/account/*" element={<Account />} />

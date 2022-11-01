@@ -35,7 +35,6 @@ const SideBar = ({ handleChange }) => {
               <nav className="menu">
                 <ul>
                   {value.map((item) => {
-                    console.log(activeMenu, item.code);
                     return (
                       <li
                         className={`s1 ${activeMenu === item.code ? "on" : ""}`}

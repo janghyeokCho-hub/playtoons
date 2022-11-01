@@ -325,6 +325,18 @@ const Header = ({ className, onSideMenu }) => {
               )}
               {!isLogined && (
                 <div className={`inr-c ${isMobile && "view-m"}`}>
+                  {isMenuShow && (
+                    <button
+                      type="button"
+                      className="btn_gnb"
+                      title="메뉴"
+                      onClick={() => onSideMenu?.()}
+                    >
+                      <span>
+                        <FontAwesomeIcon icon={faBars} />
+                      </span>
+                    </button>
+                  )}
                   <h1 className="logo">
                     <Link to="/">
                       <span className="ico_logo">PlayToons</span>
