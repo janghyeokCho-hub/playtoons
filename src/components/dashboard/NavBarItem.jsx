@@ -21,7 +21,7 @@ export default function NavBarItem(props) {
     if( location.pathname.startsWith(myPath) ){
       setSelected(true);
     }
-  }, []);
+  }, [location]);
   
 
   return (

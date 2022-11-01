@@ -8,6 +8,7 @@ import {
   POST_DETAIL,
   GET_CURRENT_POST,
   GET_POST_REACTION,
+  INIT_AUTHOR_MINE,
 } from "../ducks/post";
 import { finishLoading, startLoading } from "../ducks/loading";
 
@@ -94,10 +95,7 @@ function createAuthorMineRequestSaga(type, func) {
     try {
       yield put(startLoading(type));
 
-      const params = {
-        // id: action.payload.id,
-      };
-      const response = yield call(postApi.getAuthorMineFromServer, params);
+      const response = yield call(postApi.getAuthorMineFromServer, );
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
@@ -118,6 +116,19 @@ function createAuthorMineRequestSaga(type, func) {
       });
     } finally {
       yield put(finishLoading(type));
+    }
+  };
+}
+//==============================================================================
+// get author mine
+//==============================================================================
+function createInitAuthorMineRequestSaga(type, func) {
+  return function* (action) {
+    try {
+      yield put({
+        type: `${type}_SUCCESS`,
+      });
+    } catch (e) {
     }
   };
 }
@@ -226,6 +237,7 @@ export default function* postSaga() {
   yield takeLatest(EDIT_POST, createEditPostRequestSaga(EDIT_POST));
   yield takeLatest(POST_DETAIL, createPostDetailRequestSaga(POST_DETAIL));
   yield takeLatest(AUTHOR_MINE, createAuthorMineRequestSaga(AUTHOR_MINE));
+  yield takeLatest(INIT_AUTHOR_MINE, createInitAuthorMineRequestSaga(INIT_AUTHOR_MINE));
   yield takeLatest(
     GET_CURRENT_POST,
     createCurrentPostRequestSaga(GET_CURRENT_POST)

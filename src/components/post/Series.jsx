@@ -1,11 +1,9 @@
-import { getPostTypeListFromServer } from "@/services/dashboardService";
 import { getPostSeriesMine as getPostSeriesMineFromServer } from "@/services/postService";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import Select from "@COMPONENTS/dashboard/Select";
 import ErrorMessage from "../dashboard/ErrorMessage";
-import { getErrorMessageFromResultCode } from "@/common/common";
 
 /**
 *
@@ -50,11 +48,15 @@ export default function Series(props) {
 
     const {status, data} = await getPostSeriesMineFromServer(form);
     if( status === 200 ){
-      setStateList( data?.series );
+      // setStateList( data?.series );
+      //2022.10.28 lhk- series  공란 추가 
+      const list = data?.series;
+      list.unshift({id: undefined, name: undefined, type: undefined, category: undefined});
+      setStateList( list );
       callback?.(data.series[0]);
     }
     else{
-      setStateError( String(status + getErrorMessageFromResultCode(data)) );
+      setStateError( data );
     }
   };
 

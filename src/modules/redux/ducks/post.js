@@ -21,11 +21,17 @@ export const [
   GET_POST_REACTION_SUCCESS,
   GET_POST_REACTION_FAILURE,
 ] = createRequestActionTypes("post/GET_POST_REACTION");
+export const [
+  INIT_AUTHOR_MINE,
+  INIT_AUTHOR_MINE_SUCCESS,
+  INIT_AUTHOR_MINE_FAILURE,
+] = createRequestActionTypes("post/GET_POST_REACTION");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
 export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
+export const initAuthorMineAction = createAction(INIT_AUTHOR_MINE);
 export const getCurrentPost = createAction(GET_CURRENT_POST);
 export const getPostReaction = createAction(GET_POST_REACTION);
 
@@ -66,6 +72,15 @@ const post = handleActions(
       return produce(state, (draft) => {
         console.log("action.payload.reactions : ", action.payload.reactions);
         draft.currentPost.reactions = action.payload.reactions;
+      });
+    },
+    [INIT_AUTHOR_MINE_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        console.log("init author Mine", );
+        return {
+          ...draft, 
+          authorMine : null
+        }
       });
     },
   },

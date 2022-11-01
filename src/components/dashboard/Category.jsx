@@ -17,7 +17,7 @@ import Select from './Select';
 * @return
 */
 export default function Category(props, ref) {
-  const {name, className, typeId, selected, handleClickItem, disabled, disabledText} = props;
+  const {name, className, typeId, selected: categorySelected, handleClickItem, disabled, disabledText} = props;
   const [stateTypeId, setStateTypeId] = useState(typeId);
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
@@ -30,16 +30,17 @@ export default function Category(props, ref) {
       setStateList( data?.categories );
     }
     else{
-      setStateError( String(status, data) );
+      setStateError( data );
     }
   };
 
 
   useEffect(() => {
-    if( selected !== undefined ){
-      refSelect.current.setSelected(selected);
+    if( categorySelected !== undefined ){
+      refSelect.current.setSelected(categorySelected);
     }
   }, [stateList]);
+
 
   useEffect(() => {
     setStateTypeId(typeId);
@@ -59,7 +60,7 @@ export default function Category(props, ref) {
         className={`${className}`}
         dataList={stateList}
         handleItemClick={handleClickItem} 
-        selected={selected}
+        selected={categorySelected}
         disabled={disabled}
         disabledText={disabledText}
         />

@@ -6159,7 +6159,7 @@ body {
   position: absolute;
   right: 16px;
   top: 16px;
-  font-size: 0;
+  font-size: 20;
 }
 .layerPopup .pop_head .btn_pop_close .fa-solid {
   font-size: 24px;

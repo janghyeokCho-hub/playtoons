@@ -28,12 +28,12 @@ export default forwardRef( function Select(props, ref) {
   const refSelect = useRef();
 
   const getName = (item) => {
-    return item.name === undefined ? item.title : item.name;
+    return item.name === undefined ? item?.title : item?.name;
   };
 
   const getOptionElements = () => {
     return dataList?.map((item, index) => {
-      return <option key={index} value={item.id} >{getName(item)}</option>;
+      return <option key={index} value={item?.id} >{getName(item)}</option>;
     });
   };
 
@@ -67,7 +67,7 @@ export default forwardRef( function Select(props, ref) {
 
   useEffect(() => {
     setStateDisabled(disabled);
-  }, []);
+  }, [disabled]);
 
   useEffect(() => {
     if( selected !== undefined ){

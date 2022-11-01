@@ -20,14 +20,12 @@ import Plan from "@/containers/dashboard/plan/DashboardPlan";
 import PlanUpload from "@/containers/dashboard/plan/DashboardPlanUpload";
 import PlanEdit from "@/containers/dashboard/plan/DashboardPlanEdit";
 import PlanSubsciber from "@/containers/dashboard/plan/DashboardPlanSubsciber";
-import Page404 from "@/containers/dashboard/Page404";
-import Modal from '@/components/Modal';
+import Page404 from "@/components/Page404";
 
 import '@/css/test.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAuthorMineAction } from '@/modules/redux/ducks/post';
+import { useDispatch,  } from 'react-redux';
+import { getAuthorMineAction,  } from '@/modules/redux/ducks/post';
 import { useLayoutEffect } from 'react';
-import ModalContainer from '@/components/ModalContainer';
 
 /**
 * Dashboard url 분기 처리

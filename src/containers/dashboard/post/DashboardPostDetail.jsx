@@ -80,13 +80,14 @@ export default function DashboardPostDetail() {
 
   const handleContainer = useCallback(() => {
     const header = {
-      headerClass: "header ty1",
-      containerClass: "container sub post",
+      headerClass: "header",
+      containerClass: "container dashboard",
       isHeaderShow: true,
-      isMenuShow: false,
-      headerType: "postUpload",
-      menuType: null,
-      isDetailView: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+      backTitle: text.page_title,
     };
     dispatch(setHeader(header));
   }, [dispatch]);

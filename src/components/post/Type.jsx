@@ -22,9 +22,10 @@ import ErrorMessage from "../dashboard/ErrorMessage";
 * @return
 */
 export default forwardRef( function Type(props, ref) {
-  const {name, callback, selected, disabled} = props;
+  const {name, callback, onClick, selected, disabled} = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
+  const [stateDisabled, setStateDisabled] = useState(undefined);
       
 
   //==============================================================================
@@ -50,14 +51,31 @@ export default forwardRef( function Type(props, ref) {
     } );
   };
 
+  const setCheckedInItemToTypeId = (typeId) => {
+    for( let i = 0; i < stateList.length; i++ ){
+      const item = stateList[i];
+      item.checked = typeId === stateList[i].id;
+    }
+  };
+
   const setSelectedInStateList = (typeId) => {
     const typeList = document.getElementsByName('typeId');
+    typeList.forEach((item) => {
+      item.checked = typeId === item.getAttribute('data-id');
+    });
     for( let i = 0; i < typeList.length; i++ ){
-      if( typeId === typeList[i].getAttribute('data-id') ){
-        typeList[i].checked = true;
-        break;
-      }
     }
+
+    setCheckedInItemToTypeId(typeId);
+  };
+
+  const setFristSelectedInStateList = () => {
+    const typeList = document.getElementsByName('typeId');
+    typeList.forEach((item) => {
+      item.checked = '0' === item.getAttribute('data-index');
+    });
+
+    setCheckedInItemToTypeId( typeList[0].getAttribute('data-id') );
   };
 
 
@@ -70,7 +88,6 @@ export default forwardRef( function Type(props, ref) {
     
     if( status === 200 ){
       setStateList( setCheckedToList(data?.types) );
-      callback?.(data.types[0]);
     }
     else{
       //error 처리
@@ -82,7 +99,7 @@ export default forwardRef( function Type(props, ref) {
   //==============================================================================
 
   const handleClickItem = (event) => {
-    if( disabled ){
+    if( stateDisabled ){
       event.preventDefault();
       return false;
     }
@@ -90,7 +107,7 @@ export default forwardRef( function Type(props, ref) {
     initCheckecInList();
     const item = stateList[event.target.getAttribute('data-index')];
     item.checked = true;
-    callback?.( item );
+    onClick?.( item );
   };
 
   //==============================================================================
@@ -111,7 +128,7 @@ export default forwardRef( function Type(props, ref) {
             onClick={handleClickItem}
           />
           
-          <span className={`${disabled ? 'inp_disabled' : ''}`}>{item.name}</span>
+          <span className={`${stateDisabled ? 'inp_disabled' : ''}`}>{item.name}</span>
         </label>
       );
     });
@@ -122,11 +139,28 @@ export default forwardRef( function Type(props, ref) {
       return stateList;
     },
     setSelected: (typeItem) => {
-      setSelectedInStateList(typeItem.id);
+      setStateDisabled(true);
+      setSelectedInStateList(typeItem?.id);
+    },
+    setSelectedForEmptySeries: () => {
+      setFristSelectedInStateList();
+    },
+    setDisabled: (disabled) => {
+      setStateDisabled(disabled);
     },
   }));
 
   
+
+  useEffect(() => {
+    if( stateList !== undefined ){
+      callback?.(stateList[0]);
+    }
+  }, [stateList]);
+
+  useEffect(() => {
+    setStateDisabled(disabled);
+  }, [disabled]);
 
   useEffect(() => {
     getType();

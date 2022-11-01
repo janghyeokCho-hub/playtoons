@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Page404 = () => {
   return (
@@ -8,9 +9,9 @@ const Page404 = () => {
           <p class="h1">お探しのページは見つかりませんでした。</p>
           <p class="t1">URLが間違っているか、ページが存在しません。</p>
           <div class="btn-bot">
-            <a href="#" class="btn-pk n blue2">
+            <Link to="/" class="btn-pk n blue2">
               ホームに戻る
-            </a>
+            </Link>
           </div>
         </div>
         <div class="imgs">
