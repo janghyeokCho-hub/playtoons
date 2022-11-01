@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import EulaPopup from "@COMPONENTS/EulaPopup";
+import PrivacyPopup from "./PrivacyPopup";
+
 const Footer = () => {
   const [isEulaPopupShow, setIsEulaPopupShow] = useState(false);
+  const [isPrivacyPopupShow, setIsPrivacyPopupShow] = useState(false);
 
   return (
     <>
@@ -16,7 +18,12 @@ const Footer = () => {
             <Link to="" onClick={() => setIsEulaPopupShow(!isEulaPopupShow)}>
               利用規約
             </Link>
-            <a href="#">プライバシーポリシー</a>
+            <Link
+              to=""
+              onClick={() => setIsPrivacyPopupShow(!isPrivacyPopupShow)}
+            >
+              プライバシーポリシー
+            </Link>
             <a href="#">会社情報</a>
           </div>
         </div>
@@ -24,6 +31,12 @@ const Footer = () => {
       {isEulaPopupShow && (
         <EulaPopup
           handleClose={() => setIsEulaPopupShow(false)}
+          readonly={true}
+        />
+      )}
+      {isPrivacyPopupShow && (
+        <PrivacyPopup
+          handleClose={() => setIsPrivacyPopupShow(false)}
           readonly={true}
         />
       )}

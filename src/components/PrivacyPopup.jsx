@@ -4,25 +4,27 @@ import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { getPrivacyVersion } from "@API/accountService";
 
-const PrivacyPopup = ({ handleClose, readonly = false }) => {
+const PrivacyPopup = ({ handleClose, type, readonly = false }) => {
   const [agree, setAgree] = useState(false);
   const [isErrorShow, setIsErrorShow] = useState(false);
-  const [eulaVersion, setEulaVersion] = useState(0);
+  const [privacyVersion, setPrivacyVersion] = useState(0);
   const [content, setContent] = useState(null);
 
-  useEffect(() => {
-    async function getEulaVersionFn() {
-      const { data, status } = await getPrivacyVersion("author");
-      if (status === 200) {
-        const { version, content } = data.agreement;
-        setEulaVersion(version);
-        setContent(content);
-      } else {
-        setEulaVersion(null);
-        setContent(null);
-      }
+  const getPrivacyVersionFn = useCallback(async () => {
+    const response = await getPrivacyVersion(type || "user");
+    if (response.status === 200) {
+      const data = response.data;
+      const { version, content } = data.agreement;
+      setPrivacyVersion(version);
+      setContent(content);
+    } else {
+      setPrivacyVersion(null);
+      setContent(null);
     }
-    getEulaVersionFn();
+  }, [type]);
+
+  useEffect(() => {
+    getPrivacyVersionFn();
   }, []);
 
   const handleAgree = useCallback(async () => {
@@ -30,7 +32,7 @@ const PrivacyPopup = ({ handleClose, readonly = false }) => {
       setIsErrorShow(true);
       return;
     }
-  }, [agree, eulaVersion]);
+  }, [agree]);
 
   return (
     <div className="popup_dim">
