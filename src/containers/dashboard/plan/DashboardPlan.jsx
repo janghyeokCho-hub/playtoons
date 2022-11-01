@@ -116,6 +116,7 @@ export default function DashboardPlan(props) {
       headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
+      activeMenu: "plan",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

@@ -8,6 +8,7 @@ import RegisterForm from "./RegisterForm";
 import Store from "./Store";
 import Detail from "./Detail";
 import { setHeader } from "@/modules/redux/ducks/container";
+import Page404 from "@COMPONENTS/Page404";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const App = () => {
       headerType: "",
       menuType: "MAIN",
       isDetailView: false,
+      activeMenu: "creatorList",
     };
     dispatch(setHeader(header));
   }, [dispatch]);
@@ -36,6 +38,7 @@ const App = () => {
       <Route path="register" element={<Register />} />
       <Route path="register/form" element={<RegisterForm />} />
       <Route path="detail/:type/:id" element={<Detail />} />
+      <Route path="*" element={<Page404 />} />
     </Routes>
   );
 };

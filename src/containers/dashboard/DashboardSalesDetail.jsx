@@ -100,6 +100,7 @@ export default function DashboardSalesList(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "シリーズ詳細",
+      activeMenu: "dashboard",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

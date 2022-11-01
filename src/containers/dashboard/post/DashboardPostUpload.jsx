@@ -57,6 +57,7 @@ export default function DashboardPostUpload(props) {
       menuType: null,
       isDetailView: true,
       backTitle: "シリーズ登録",
+      activeMenu: "post",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

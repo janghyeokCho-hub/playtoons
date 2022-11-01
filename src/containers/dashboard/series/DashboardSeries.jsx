@@ -44,6 +44,7 @@ export default function DashboardSeries(props) {
       headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
+      activeMenu: "series",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

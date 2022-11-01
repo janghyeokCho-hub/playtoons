@@ -58,6 +58,7 @@ export default function DashboardUploadProfile(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: null,
+      activeMenu: "profile",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

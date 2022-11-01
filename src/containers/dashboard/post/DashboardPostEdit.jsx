@@ -56,6 +56,7 @@ export default function DashboardPostEdit(props) {
       headerType: "postUpload",
       menuType: null,
       isDetailView: true,
+      activeMenu: "post",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

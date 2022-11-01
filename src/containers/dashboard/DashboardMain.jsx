@@ -57,6 +57,7 @@ export default function DashboardMain() {
       headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
+      activeMenu: "dashboard",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

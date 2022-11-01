@@ -87,6 +87,7 @@ export default function DashboardUploadSeries(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "シリーズ修正",
+      activeMenu: "series",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

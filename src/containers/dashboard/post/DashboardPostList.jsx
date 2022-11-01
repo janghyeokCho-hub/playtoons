@@ -70,6 +70,7 @@ export default function DashboardPostList(props) {
       headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
+      activeMenu: "post",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

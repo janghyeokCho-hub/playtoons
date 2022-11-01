@@ -88,6 +88,7 @@ export default function DashboardPostDetail() {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: text.page_title,
+      activeMenu: "post",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

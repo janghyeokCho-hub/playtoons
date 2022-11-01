@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Novel from "./Novel";
 import Webtoon from "./Webtoon";
+import Page404 from "@COMPONENTS/Page404";
 import { setHeader } from "@/modules/redux/ducks/container";
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
     <Routes>
       <Route path={"novel/:id"} element={<Novel />} />
       <Route path={"webtoon/:id"} element={<Webtoon />} />
+      <Route path={"*"} element={<Page404 />} />
     </Routes>
   );
 };

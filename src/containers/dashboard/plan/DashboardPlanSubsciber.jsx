@@ -62,6 +62,7 @@ export default function DashboardPlanSubsciber(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "支援者管理",
+      activeMenu: "plan",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

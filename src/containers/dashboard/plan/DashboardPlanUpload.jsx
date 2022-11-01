@@ -62,6 +62,7 @@ export default function DashboardPlanUpload(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "支援を追加",
+      activeMenu: "plan",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

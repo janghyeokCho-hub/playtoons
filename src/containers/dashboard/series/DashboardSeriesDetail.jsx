@@ -64,6 +64,7 @@ export default function DashboardSeriesDetail(props) {
       menuType: "DASHBOARD",
       isDetailView: false,
       backTitle: "シリーズ詳細",
+      activeMenu: "series",
     };
     dispatch(setHeader(header));
   }, [dispatch]);

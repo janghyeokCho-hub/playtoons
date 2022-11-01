@@ -2,40 +2,43 @@ import { createAction, handleActions } from "redux-actions";
 import produce from "immer";
 
 import {
-  faHouseChimneyWindow as faHouseChimneyWindowON,
-  faInfinity as faInfinityON,
-  faStars as faStarsON,
-  faCartShopping as faCartShoppingON,
-  faTableColumns as faTableColumnsON,
-  faDiamond as faDiamondON,
-  faUser as faUserON,
-  faObjectUnion as faObjectUnionON,
-  faSquarePen as faSquarePenON,
-  faSeal as faSealON,
-  faChartLine as faChartLineON,
-} from "@fortawesome/pro-light-svg-icons";
-import {
   faHouseChimneyWindow as faHouseChimneyWindowOFF,
   faInfinity as faInfinityOFF,
   faStars as faStarsOFF,
   faCartShopping as faCartShoppingOFF,
+  faTableColumns as faTableColumnsOFF,
   faDiamond as faDiamondOFF,
   faUser as faUserOFF,
   faObjectUnion as faObjectUnionOFF,
   faSquarePen as faSquarePenOFF,
   faSeal as faSealOFF,
   faChartLine as faChartLineOFF,
+} from "@fortawesome/pro-light-svg-icons";
+import {
+  faHouseChimneyWindow as faHouseChimneyWindowON,
+  faInfinity as faInfinityON,
+  faStars as faStarsON,
+  faCartShopping as faCartShoppingON,
+  faDiamond as faDiamondON,
+  faUser as faUserON,
+  faObjectUnion as faObjectUnionON,
+  faSquarePen as faSquarePenON,
+  faSeal as faSealON,
+  faChartLine as faChartLineONN,
 } from "@fortawesome/pro-solid-svg-icons";
-import { faTableColumns as faTableColumnsOFF } from "@fortawesome/pro-regular-svg-icons";
+import { faTableColumns as faTableColumnsON } from "@fortawesome/pro-regular-svg-icons";
 
 /* --- Action Types --- */
 const SET_HEADER = "container/SET_HEADER";
 const SET_HEADER_SHOW = "container/SET_HEADER_SHOW";
 const SET_HEADER_TYPE = "container/SET_HEADER_TYPE";
 const SET_HEADER_CLASS = "container/SET_HEADER_CLASS";
+const SET_CONTAINER_CLASS = "container/SET_CONTAINER_CLASS";
 const SET_DETAIL_VIEW = "container/SET_DETAIL_VIEW";
 const SET_MENU_SHOW = "container/SET_MENU_SHOW";
 const SET_MENUS = "container/SET_MENUS";
+const SET_ACTIVE_MENU = "container/SET_ACTIVE_MENU";
+const SET_BACK_TITLE = "container/SET_BACK_TITLE";
 /* -------------------- */
 
 /* ------ Actions ----- */
@@ -43,9 +46,12 @@ export const setHeader = createAction(SET_HEADER);
 export const setHeaderShow = createAction(SET_HEADER_SHOW);
 export const setHeaderType = createAction(SET_HEADER_TYPE);
 export const setHeaderClass = createAction(SET_HEADER_CLASS);
+export const setContainerClass = createAction(SET_CONTAINER_CLASS);
 export const setDetailView = createAction(SET_DETAIL_VIEW);
 export const setMenuShow = createAction(SET_MENU_SHOW);
 export const setMenus = createAction(SET_MENUS);
+export const setActiveMenu = createAction(SET_ACTIVE_MENU);
+export const setBackTitle = createAction(SET_BACK_TITLE);
 /* -------------------- */
 
 /* ------ Menus ------- */
@@ -76,7 +82,7 @@ const dashMainMenu = {
         on: faUserON,
         off: faUserOFF,
       },
-      link: "/dashboard/profile",
+      link: "/dashboard/profile/upload",
     },
     {
       code: "series",
@@ -175,6 +181,7 @@ const initialState = {
   isMenuShow: true, // 헤더 햄버거 메뉴 버튼 여부
   menus: null,
   backTitle: null,
+  activeMenu: null, // Active menu code
 };
 
 const container = handleActions(
@@ -188,6 +195,7 @@ const container = handleActions(
         draft.isDetailView = action.payload.isDetailView;
         draft.headerType = action.payload.headerType;
         draft.backTitle = action.payload.backTitle;
+        draft.activeMenu = action.payload.activeMenu;
         if (action.payload.menuType === "DASHBOARD") {
           draft.menus = dashMainMenu;
         } else {
@@ -210,6 +218,11 @@ const container = handleActions(
         draft.headerClass = action.payload;
       });
     },
+    [SET_CONTAINER_CLASS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.containerClass = action.payload;
+      });
+    },
     [SET_DETAIL_VIEW]: (state, action) => {
       return produce(state, (draft) => {
         draft.isDetailView = action.payload;
@@ -227,6 +240,16 @@ const container = handleActions(
         } else {
           draft.menus = mainMenus;
         }
+      });
+    },
+    [SET_ACTIVE_MENU]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.activeMenu = action.payload;
+      });
+    },
+    [SET_BACK_TITLE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.backTitle = action.payload;
       });
     },
   },

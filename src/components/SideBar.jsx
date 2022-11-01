@@ -6,7 +6,8 @@ import { faBars } from "@fortawesome/pro-solid-svg-icons";
 
 const SideBar = ({ handleChange }) => {
   const menus = useSelector(({ container }) => container.menus);
-  console.log("menus : ", menus);
+  const activeMenu = useSelector(({ container }) => container.activeMenu);
+
   return (
     <aside className="sidebar">
       <div className="top view-m">
@@ -34,8 +35,12 @@ const SideBar = ({ handleChange }) => {
               <nav className="menu">
                 <ul>
                   {value.map((item) => {
+                    console.log(activeMenu, item.code);
                     return (
-                      <li className="s1" key={item.code}>
+                      <li
+                        className={`s1 ${activeMenu === item.code ? "on" : ""}`}
+                        key={item.code}
+                      >
                         <Link
                           to={`${item.link}`}
                           onClick={() =>
@@ -44,7 +49,9 @@ const SideBar = ({ handleChange }) => {
                           }
                         >
                           <span className="ico">
-                            <FontAwesomeIcon icon={item.icon.on} />
+                            {(activeMenu === item.code && (
+                              <FontAwesomeIcon icon={item.icon.on} />
+                            )) || <FontAwesomeIcon icon={item.icon.off} />}
                           </span>
                           <span>{item.name}</span>
                         </Link>
