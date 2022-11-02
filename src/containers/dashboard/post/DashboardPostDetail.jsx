@@ -233,7 +233,7 @@ export default function DashboardPostDetail() {
               </li>
               <li>
                 <span>{text.end_date} </span>
-                <span>{stateData?.endAt}</span>
+                <span>{getDateYYYYMMDD(stateData?.endAt, '/')}</span>
               </li>
               <li>
                 <span>{text.status} </span>

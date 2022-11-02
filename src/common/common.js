@@ -191,6 +191,9 @@ export const getErrorMessageFromResultCode = (data) => {
 * @param separator 구분자
 */
 export const getDateYYYYMMDD = (date, separator) => {
+  if( date === undefined || date === null ){
+    return '';
+  }
   return moment(date).format(["YYYY", "MM", "DD"].join(separator));
 };
 

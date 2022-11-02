@@ -134,7 +134,7 @@ export default function DashboardPostList(props) {
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb">
-              <Image hash={item.thumbnailImage} alt="thumbnail" />
+              <Image hash={item.thumbnailImage} alt="" />
             </div>
           </td>
           <td className="td_subject">{item.title}</td>

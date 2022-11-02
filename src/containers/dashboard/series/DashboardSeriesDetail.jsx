@@ -3,16 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/Swiper";
-import Container from "@/components/dashboard/Container";
 
 import tempImage from "@IMAGES/tmp_comic2.jpg";
-import { getSeriesDetailFromServer } from "@/services/dashboardService";
+import { getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import { useDispatch, useSelector } from "react-redux";
 import { getSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { showOneButtonPopup } from "@/common/common";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -49,10 +47,12 @@ const tempData = {
 };
 
 export default function DashboardSeriesDetail(props) {
+  const [stateData, setStateData] = useState(undefined);
+  const [stateTimeline, setStateTimeline] = useState(undefined);
+  const reduxSeries = useSelector(({ dashboard }) => dashboard?.series);
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const dispatch = useDispatch();
   const params = useParams("id");
-  const reduxSeries = useSelector(({ dashboard }) => dashboard?.series);
-  const [stateData, setStateData] = useState(undefined);
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -74,34 +74,29 @@ export default function DashboardSeriesDetail(props) {
     handleContainer();
   }, []);
 
-  const getSeriesDetail = async () => {
-    const { status, data } = await getSeriesDetailFromServer(params);
-    console.log("getSeriesDetail", status, data);
+  const getTimeline = async () => {
+    const params = new FormData();
+    params.append('authorId', reduxAuthors[0].id);
+    params.append('reduced', true);
+
+    const { status, data } = await getTimelineFromServer(params);
+    console.log("getTimeline", status, data);
 
     if (status === 200) {
-      setStateData(data?.series);
+      setStateTimeline(data);
     } else {
-      dispatch(
-        showModal({
-          title: "お知らせ",
-          contents: (
-            <ErrorPopup message={String(status + data)} buttonTitle={"確認"} />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, data);
     }
   };
 
   const renderThumbList = () => {
-    return tempData?.thumbList?.map((item, index) => {
+    return stateTimeline?.posts?.map((item, index) => {
       return (
         <SwiperSlide className="cx  swiper-slide" key={index}>
-          <div href="#">
+          <div >
             <div className="cx_thumb">
               {item !== undefined && (
-                <span>
-                  <img src={item} alt="thumbnail" />
-                </span>
+                <Image hash={item.thumbnailImage} title={item.title} />
               )}
             </div>
           </div>
@@ -121,7 +116,8 @@ export default function DashboardSeriesDetail(props) {
   }, [dispatch, reduxSeries]);
 
   useEffect(() => {
-    dispatch(getSeriedDetailAction(params));
+    dispatch( getSeriedDetailAction(params) );
+    getTimeline();
   }, []);
 
   return (

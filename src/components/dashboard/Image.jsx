@@ -2,6 +2,7 @@ import { getFileUrlFromServer } from "@/services/dashboardService";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import errorImage from "@IMAGES/ico_error.png";
 
 /**
 *
@@ -19,7 +20,7 @@ import { useState } from "react";
 * @return
 */
 export default function Image(props) {
-  const { alt, hash, className } = props;
+  const { alt, hash, className, title } = props;
   const [stateImage, setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
@@ -29,7 +30,8 @@ export default function Image(props) {
     if (status === 200) {
       setStateImage(result?.url);
     } else {
-      console.log("image error ", result?.message);
+      console.log( String(result) );
+      // setStateImage(errorImage);
     }
   };
 
@@ -41,5 +43,5 @@ export default function Image(props) {
     }
   }, [hash]);
 
-  return <img className={className} src={stateImage} alt={alt} loading="lazy" />;
+  return <img className={className} src={stateImage} alt={alt} title={title} loading="lazy" />;
 }
