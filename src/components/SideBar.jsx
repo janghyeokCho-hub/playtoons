@@ -9,7 +9,7 @@ const SideBar = ({ handleChange }) => {
   const activeMenu = useSelector(({ container }) => container.activeMenu);
 
   return (
-    <aside className="sidebar transition">
+    <aside className="sidebar">
       <div className="top view-m">
         <button
           type="button"
