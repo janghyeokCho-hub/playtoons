@@ -9,6 +9,7 @@ import "./css/font.css";
 import "./css/default.css";
 import "./css/common.css";
 import "./css/mobile.css";
+import "./css/custom.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import configureStore, { sagaMiddleware } from "@REDUX/store";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
@@ -14,6 +14,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";
+import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {
   see_product : "商品一覧",
@@ -74,6 +75,24 @@ export default function DashboardSalesList(props) {
   const dispatch = useDispatch();
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "series",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+      activeMenu: "product",
+    };
+    dispatch(setContainer(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   const getProductList = async () => {
     // 시리즈 스토리 리스트
@@ -138,8 +157,7 @@ export default function DashboardSalesList(props) {
   }, []);
   
   return (
-    <Container 
-      type={"series"} >
+    <div className='contents' >
 
       <ProductTab 
         pathname={'/dashboard/product/sales/list'} />
@@ -210,6 +228,6 @@ export default function DashboardSalesList(props) {
 
       </div>
 
-    </Container>
+    </div>
   );
 }

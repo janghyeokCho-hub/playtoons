@@ -8,9 +8,6 @@ import { useRef } from 'react';
 import { useEffect } from 'react';
 import { DATE_FORMAT } from '@/common/constant';
 
-//temp
-import '@/css/test.css';
-
 /**
 *
    Calendar component

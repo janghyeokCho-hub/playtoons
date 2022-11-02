@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
@@ -12,6 +12,7 @@ import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch } from "react-redux";
 import { showModal } from "@/modules/redux/ducks/modal";
+import { setContainer,  } from "@/modules/redux/ducks/container";
 
 const text = {
   see_product : "商品一覧",
@@ -97,9 +98,30 @@ const STATUS_TYPE = [
 
 export default function DashboardProductList(props) {
   const [stateData, setStateData] = useState();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const refInput = useRef();
+
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "post",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+      activeMenu: "product",
+    };
+    dispatch(setContainer(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
+
 
   const getStatusColor = (status) => {
     let className = "";
@@ -159,10 +181,10 @@ export default function DashboardProductList(props) {
           <td className="td_group">{item.price}</td>
           <td className="td_gray"><span className="view-m">カテゴリ：</span>{item.date}</td>
           <td className={`td_txt ${getStatusColor(item.status)}`}><span className="view-m">状態</span>{item.status.name}</td>
-          <td className="td_txt">
-            <Link className="btn-pk s blue2 w124 mr12" to={`/dashboard/product/detail/${item.id}`}><span>{text.detail}</span></Link>
-            <Link className="btn-pk s blue2 w124 mt10 mr12"  to={`/dashboard/product/edit/${item.id}`}><span>{text.modify}</span></Link>
-            <div className="btn-pk s blue2 w124 mt10 mr12" data-id={item.id} onClick={handleItemClick}><span>{text.dont_see}</span></div>
+          <td className="td_txt dp_ig">
+            <Link className="btn-pk s blue2 w124 mr12" to={`/dashboard/product/detail/${item.id}`}>{text.detail}</Link>
+            <Link className="btn-pk s blue2 w124 mt10 mr12"  to={`/dashboard/product/edit/${item.id}`}>{text.modify}</Link>
+            <div className="btn-pk s blue2 w124 mt10 mr12" data-id={item.id} onClick={handleItemClick}>{text.dont_see}</div>
           </td>
         </tr>
       );
@@ -177,8 +199,7 @@ export default function DashboardProductList(props) {
   }, []);
 
   return (
-    <Container 
-      type={"series"} >
+    <div className="contents">
 
       <ProductTab 
         pathname={'/dashboard/product'} />
@@ -231,6 +252,6 @@ export default function DashboardProductList(props) {
           />
       </div>
 
-    </Container>
+    </div>
   );
 }

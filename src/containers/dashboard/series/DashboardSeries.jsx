@@ -104,7 +104,7 @@ export default function DashboardSeries(props) {
           <td className="td_imgs">
             <div className="cx_thumb">
               <span>
-                <Image hash={item.coverImage} alt={"cover iamge"} />
+                <Image hash={item.coverImage} alt={""} />
               </span>
             </div>
           </td>

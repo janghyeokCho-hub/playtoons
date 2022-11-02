@@ -210,11 +210,7 @@ ul.tpagination {
   text-align: left;
 }
 
-@media screen and (max-width:961px)  {
-  .tooltip-popup{
-    transform: translate(-10%, -100%);  
-  }
-}
+
 
 
 /* ============================================================================== */
@@ -249,11 +245,7 @@ li.dashboard-gnb.selected{
   border-bottom: 3px solid #394BC2;
 }
 
-@media  (max-width: 961px)  {
-  li.dashboard-gnb{
-    font-size: 13px;
-  }
-}
+
 
 /* ============================================================================== */
 /* dashboard product */
@@ -307,6 +299,10 @@ li.dashboard-gnb.selected{
 
 .status-not_for_sale{
   color: #F11C0E;
+}
+
+.dp_ig{
+  display: inline-grid;
 }
 
 /* ============================================================================== */
@@ -665,12 +661,7 @@ li.dashboard-gnb.selected{
   transform: translate(0, -20%);
 
 }
-@media (max-width: 960px) {
-  .modify{
-    font-size: 12px !important;
-    line-height: 30px !important;
-  }
-}
+
 
 /* ============================================================================== */
 /* icon with text */
@@ -934,16 +925,6 @@ li.dashboard-gnb.selected{
   position: relative;
 }
 
-@media screen and (max-width:961px)  {
-  .plan_empty{
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 4px;
-    border-color: #C3CAD2;
-    background-color: #fff;
-  }
-}
-
 
 /* ============================================================================== */
 /* temp mobile css  */
@@ -976,8 +957,9 @@ li.dashboard-gnb.selected{
 
 
 /* ============================================================================== */
-/* temp mobile css  */
+/* header back button tablet & mobile css  */
 /* ============================================================================== */
+
 @media screen and (min-width:1061px) and (max-width: 1165px) {
   /* header back title 1160 되면 겹쳐서  */
   .head_con .btn_back{
@@ -1009,3 +991,35 @@ li.dashboard-gnb.selected{
     transform: translate(0, -50%);
   }
 }
+
+/* ============================================================================== */
+/* temp mobile css  */
+/* ============================================================================== */
+
+@media (max-width: 960px)  {
+  li.dashboard-gnb{
+    font-size: 13px;
+  }
+
+  .plan_empty{
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+    border-color: #C3CAD2;
+    background-color: #fff;
+  }
+
+  .tooltip-popup{
+    transform: translate(-10%, -100%);  
+  }
+
+  .modify{
+    font-size: 12px !important;
+    line-height: 30px !important;
+  }
+
+  .dp_ig{
+    display: block;
+  }
+}
+

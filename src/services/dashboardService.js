@@ -405,5 +405,16 @@ export const deleteReactionIdToServer = async (id) => {
   }
 };
 
-
+/**
+  Dashbaord - series - detail timeline
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getTimelineFromServer = async (params) => {
+  try {
+    return await apiServer('get', `/post${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
 
