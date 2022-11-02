@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 //temp data
@@ -11,6 +11,8 @@ import ArrowRight from "@/components/dashboard/ArrowRight";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/pro-solid-svg-icons";
 import Pagination from "@/components/dashboard/Pagination";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { useDispatch } from "react-redux";
 
 const text = {
   number : "番号",
@@ -68,8 +70,26 @@ export default function DashboardSalesReview(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateAnswer, setStateAnswer] = useState(undefined);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const refArrow = useRef([]);
   const params = useParams('id');
+
+  const handleContainer = useCallback(() => {
+    const header = {
+      headerClass: "header",
+      containerClass: "series",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: null,
+      menuType: "DASHBOARD",
+      isDetailView: false,
+    };
+    dispatch(setContainer(header));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
 
   const getSelectedItem = (id) => {
     for( let i = 0; i < stateData?.list?.length; i++ ){
@@ -177,8 +197,7 @@ export default function DashboardSalesReview(props) {
   
 
   return (
-    <Container 
-      type={"series"} >
+    <div className='contents'>
 
       <ProductTab
         pathname={'/dashboard/product/sales/review'}  />
@@ -240,6 +259,6 @@ export default function DashboardSalesReview(props) {
 
       </div>
 
-    </Container>
+    </div>
   );
 }
