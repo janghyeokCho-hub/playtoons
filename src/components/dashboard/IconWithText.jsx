@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 //TODO delete test
-import '@/css/test.css';
 import temp1 from '@IMAGES/icon2.png';
 import temp2 from '@IMAGES/icon3.png';
 import temp3 from '@IMAGES/icon4.png';

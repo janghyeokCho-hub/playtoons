@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import '@/css/test.css';
 import Pagination from 'react-js-pagination';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

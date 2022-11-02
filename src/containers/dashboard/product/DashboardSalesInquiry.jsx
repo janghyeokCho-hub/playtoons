@@ -78,6 +78,7 @@ export default function DashboardSalesInquiry(props) {
       headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
+      activeMenu: "product",
     };
     dispatch(setContainer(header));
   }, [dispatch]);

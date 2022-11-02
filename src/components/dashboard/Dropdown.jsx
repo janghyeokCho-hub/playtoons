@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useImperativeHandle, forwardRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/pro-solid-svg-icons";
-import "@/css/test.css";
 import { useRef } from "react";
 
 /**

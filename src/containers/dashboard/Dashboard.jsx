@@ -22,7 +22,6 @@ import PlanEdit from "@/containers/dashboard/plan/DashboardPlanEdit";
 import PlanSubsciber from "@/containers/dashboard/plan/DashboardPlanSubsciber";
 import Page404 from "@/components/Page404";
 
-import '@/css/test.css';
 import { useDispatch, useSelector,  } from 'react-redux';
 import { getAuthorMineAction,  } from '@/modules/redux/ducks/post';
 import { useLayoutEffect } from 'react';
