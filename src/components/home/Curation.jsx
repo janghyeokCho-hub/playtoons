@@ -9,22 +9,22 @@ const Curation = ({ item }) => {
 
   return (
     <Link to="">
-      <div class="cx_thumb">
+      <div className="cx_thumb">
         <span>
           <img src={thumbnailImgURL} alt="사진" />
         </span>
-        <p class="t_like">
+        <p className="t_like">
           <FontAwesomeIcon icon={faHeart} />
           <span>1.2k</span>
         </p>
       </div>
-      <div class="cx_txt">
-        <p class="t1 c-blue">ウェブトゥーン</p>
-        <p class="h1">
+      <div className="cx_txt">
+        <p className="t1 c-blue">ウェブトゥーン</p>
+        <p className="h1">
           大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
         </p>
-        <p class="t1">Studio reBorn</p>
-        <p class="t1">43話</p>
+        <p className="t1">Studio reBorn</p>
+        <p className="t1">43話</p>
       </div>
     </Link>
   );

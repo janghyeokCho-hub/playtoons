@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +10,7 @@ import {
 import Banner from "./Banner";
 
 const BannerItems = ({ curationNum }) => {
+  SwiperCore.use([Navigation, Pagination]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
@@ -47,14 +49,14 @@ const BannerItems = ({ curationNum }) => {
         loop={true}
         observer={true}
         observeParents={true}
-        touchRatio={0}
-        pagination={{
-          el: ".swiper-pagination",
-          clickable: true,
-        }}
         navigation={{
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
+          nextEl: ".swiper-button-next.my1",
+          prevEl: ".swiper-button-prev.my1",
+        }}
+        pagination={{
+          el: ".swiper-pagination.my1",
+          clickable: true,
+          dynamicBullets: true,
         }}
         onUpdate={() => {
           nextRef?.current?.classList?.add("slide_st");
