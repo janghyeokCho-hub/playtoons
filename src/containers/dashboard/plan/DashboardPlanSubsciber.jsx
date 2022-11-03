@@ -1,10 +1,16 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import Pagination from "@/components/dashboard/Pagination";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { showOneButtonPopup } from "@/common/common";
+import { getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import Input from "@/components/dashboard/Input";
+import Search from "@/components/dashboard/Search";
+import { useNavigate, useParams } from "react-router-dom";
 
 const text = {
   plan_management: "支援管理",
@@ -15,43 +21,20 @@ const text = {
   nickname: "ニックネーム",
   plan: "プラン",
   date: "プラン開始日",
+  supportor_empty: "支援者がいません。",
 };
 
-const tempData = {
-  result: 200,
-  meta: {
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 3,
-  },
-  supporters: [
-    {
-      id: "1",
-      image: tempProfile,
-      date: "2022/04/22",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "ダイヤモンドプラン",
-    },
-    {
-      id: "43241",
-      image: tempProfile,
-      date: "2022/06/30",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "プラチナプラン",
-    },
-    {
-      id: "1231",
-      image: tempProfile,
-      date: "2022/08/01",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "VVIPプラン",
-    },
-  ],
-};
 
 export default function DashboardPlanSubsciber(props) {
+  const [stateData, setStateData] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams('page');
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -68,30 +51,55 @@ export default function DashboardPlanSubsciber(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
+  //==============================================================================
+  // fnuction
+  //==============================================================================
 
-  const [stateData, setStateData] = useState(undefined);
-
-  const handleChange = (page) => {
-    console.log("handleChange", page);
-  };
-
-  const handleClickSearchNickname = (event) => {
-    console.log("SearchNickname", event);
-  };
-
-  const handleEnter = (event) => {
-    console.log("Enter", event);
-
-    if (event.keyCode === 13) {
-      handleClickSearchNickname(event);
+  //==============================================================================
+  // api
+  //==============================================================================
+  const getSubscriber = async ( page, name ) => {
+    const params = new FormData();
+    if( name !== undefined ){
+      params.append('name', name);
     }
+    params.append('page', page);
+    const {status, data} = await getSubscribeTierInPlanFromServer( reduxAuthors[0].id, params );
+    console.log('getSubscriber', status, data);
+    
+    if( status === 200 ){
+      setStateData(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
   };
 
-  const getSupportorList = () => {
-    return stateData?.supporters.map((item, i) => {
+  //==============================================================================
+  // event
+  //==============================================================================
+  
+
+  const handleChangePage = (page) => {
+    console.log("handleChange", page);
+    navigate(`/dashboard/plan/subscriber/${page}`);
+  };
+
+  const handleClickSearchNickname = (keyword) => {
+    getSubscriber(1, keyword);
+  };
+
+  //==============================================================================
+  // hook & render
+  //==============================================================================
+
+  const renderSupportorList = () => {
+    if (stateData?.subscribers.length === 0) {
+      return <EmptyTr text={text.supportor_empty} />;
+    }
+
+    return stateData?.subscribers?.map((item, i) => {
       return (
         <tr key={i}>
           <td className="hide-m">{item.id}</td>
@@ -111,8 +119,9 @@ export default function DashboardPlanSubsciber(props) {
     });
   };
 
-  useEffect(() => {
-    setStateData(tempData);
+  useLayoutEffect(() => {
+    handleContainer();
+    getSubscriber( params.page === undefined ? 1 : params.page );
   }, []);
 
   return (
@@ -124,7 +133,8 @@ export default function DashboardPlanSubsciber(props) {
           </h2>
         </div>
         <div className="hd_titbox2">
-          <div className="inp_txt sch">
+          <Search className={'inp_txt sch'} placeholder={text.subcriber_nickname} onClick={handleClickSearchNickname}/>
+          {/* <div className="inp_txt sch">
             <button
               type="button"
               className="btns"
@@ -133,13 +143,13 @@ export default function DashboardPlanSubsciber(props) {
             >
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </button>
-            <input
+            <Input
               type="text"
               className=""
               placeholder={text.subcriber_nickname}
               onKeyDown={handleEnter}
             />
-          </div>
+          </div> */}
         </div>
 
         <div className="tbl_basic mtbl_ty2">
@@ -161,7 +171,7 @@ export default function DashboardPlanSubsciber(props) {
                 <th>{text.date}</th>
               </tr>
             </thead>
-            <tbody>{getSupportorList()}</tbody>
+            <tbody>{renderSupportorList()}</tbody>
           </table>
         </div>
 
@@ -170,7 +180,7 @@ export default function DashboardPlanSubsciber(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={handleChange}
+          callback={handleChangePage}
         />
       </div>
     </div>

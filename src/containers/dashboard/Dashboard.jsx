@@ -156,6 +156,10 @@ export default function Dashboard() {
           element={<PlanSubsciber />} 
         />
         <Route 
+          path="/plan/subscriber/:page" 
+          element={<PlanSubsciber />} 
+        />
+        <Route 
           path="/*" 
           element={<Page404 />}    //TODO 404
         />
