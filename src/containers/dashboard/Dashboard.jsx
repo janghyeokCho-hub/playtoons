@@ -10,7 +10,7 @@ import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
 import PostEdit from "@CONTAINERS/dashboard/post/DashboardPostEdit";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
-import SalesDetail from "@CONTAINERS/dashboard/DashboardSalesDetail";
+import SalesDetail from "@/containers/dashboard/product/DashboardSalesDetail";
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
 import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";

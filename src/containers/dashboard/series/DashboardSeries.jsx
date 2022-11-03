@@ -27,7 +27,7 @@ const text = {
   empty_message: "シリーズが登録されてないです。",
 };
 
-export default function DashboardSeries(props) {
+export default function DashboardSeries() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const param = useParams("page");
@@ -195,6 +195,7 @@ export default function DashboardSeries(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
+          totalPages={stateData?.meta.totalPages}
           callback={(page) => navigate(`/dashboard/series/${page}`)}
         />
       </div>

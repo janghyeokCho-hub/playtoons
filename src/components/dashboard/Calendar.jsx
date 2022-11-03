@@ -7,6 +7,8 @@ import moment from 'moment';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { DATE_FORMAT } from '@/common/constant';
+import useOutSideClick from '@/common/useOutSideClick';
+import { useCallback } from 'react';
 
 /**
 *
@@ -24,7 +26,7 @@ import { DATE_FORMAT } from '@/common/constant';
 * @return
 */
 export default forwardRef( function Calendar(props, ref) {
-  const { type, name, callback } = props;
+  const { type, name, callback, className, popupClassName } = props;
   const [stateDate, setStateDate] = useState(undefined);
   const [stateShow, setStateShow] = useState(false);
   const refContainer = useRef();
@@ -64,7 +66,7 @@ export default forwardRef( function Calendar(props, ref) {
   };
 
   const handleClickDate = (date) => {
-    setStateShow(prev => !prev);
+    setStateShow(false);
     if( callback === undefined ){
       setStateDate(date);
     }
@@ -77,6 +79,7 @@ export default forwardRef( function Calendar(props, ref) {
   };
 
   
+
   useImperativeHandle(ref, () => ({
     getDate: () => {
       return stateDate;
@@ -91,13 +94,14 @@ export default forwardRef( function Calendar(props, ref) {
   }, [type]);
 
   return (
-    <div className="relative" ref={refContainer}>
-      <div className={`btn-pk s calendar-text ${stateDate !== undefined ? 'blue2' : 'gray'}`} onClick={handleClick}>
-        <FontAwesomeIcon className="fs14 mr12" icon={faCalendarDay} />{getStateDateFormated()} 
+    <div className={`relative`} ref={refContainer} onMouseLeave={() => {setStateShow(false)}}>
+      <div className={`btn-pk s flex pl_12 ${className} ${stateDate !== undefined ? 'blue2' : 'gray'}`} onClick={handleClick}>
+        <FontAwesomeIcon className="fs18 mr12" icon={faCalendarDay} />
+        <span className='calendar-text'>{getStateDateFormated()}</span>
       </div>
       {
         stateShow &&  <ReactCalendar 
-                        className={"calendar-popup"} 
+                        className={`calendar-popup ${popupClassName}`} 
                         onChange={handleClickDate} 
                         value={stateDate} 
                         maxDate={new Date()} 

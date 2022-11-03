@@ -246,6 +246,7 @@ export default function DashboardPostList(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
+          totalPages={stateData?.meta.totalPages}
           callback={(page) => navigate(`/dashboard/post/${page}`)}
         />
       </div>

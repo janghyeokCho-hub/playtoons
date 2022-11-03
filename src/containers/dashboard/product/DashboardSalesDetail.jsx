@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
-//temp data
-import tempImg1 from "@IMAGES/temp_seller_image.png";
-
-import Container from "@/components/dashboard/Container";
 import Calendar from "@/components/dashboard/Calendar";
 import Select from "@/components/dashboard/Select";
 import Pagination from "@/components/dashboard/Pagination";
@@ -11,6 +7,7 @@ import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { showOneButtonPopup } from "@/common/common";
 
 const text = {
   search_period: "検索期限",
@@ -34,7 +31,6 @@ const tempData = {
   list: [
     {
       number: "1",
-      image: tempImg1,
       title: "ロマンスファンタジーアセット１",
       price: "1200000CP",
       date: "2022/06/11",
@@ -42,19 +38,10 @@ const tempData = {
     },
     {
       number: "2",
-      image: tempImg1,
       title: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
       date: "2022/06/11",
       amount: "33",
-    },
-    {
-      number: "3",
-      image: tempImg1,
-      title: "ロマンスファンタジーアセット１",
-      price: "1200000CP",
-      date: "2022/06/11",
-      amount: "23",
     },
   ],
 };
@@ -82,7 +69,7 @@ const SEARCH_LIST = [
   },
 ];
 
-export default function DashboardSalesList(props) {
+export default function DashboardSalesDetail() {
   const [stateData, setStateData] = useState(undefined);
   const [stateStartDate, setStateStartDate] = useState(undefined);
   const [stateEndDate, setStateEndDate] = useState(undefined);
@@ -90,17 +77,19 @@ export default function DashboardSalesList(props) {
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
-      containerClass: "container series",
+      containerClass: "container dashboard typ1",
       isHeaderShow: true,
       isMenuShow: true,
-      headerType: "postUpload",
+      headerType: null,
       menuType: "DASHBOARD",
       isDetailView: false,
-      backTitle: "シリーズ詳細",
-      activeMenu: "dashboard",
+      activeMenu: "product",
       isFooterShow: false,
     };
     dispatch(setContainer(container));
@@ -110,6 +99,13 @@ export default function DashboardSalesList(props) {
     handleContainer();
   }, []);
 
+  //==============================================================================
+  // function
+  //==============================================================================
+
+  //==============================================================================
+  // api
+  //==============================================================================
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -124,7 +120,9 @@ export default function DashboardSalesList(props) {
     //
     // setData(getProductListFromResultData(data));
   };
-
+  //==============================================================================
+  // event
+  //==============================================================================
   const handleClickCalendar = (name, date) => {
     const startDate =
       name === "start" ? date : refCalendarStart.current.getDate();
@@ -135,26 +133,13 @@ export default function DashboardSalesList(props) {
     }
 
     if (startDate.getTime() >= endDate.getTime()) {
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={"시작일은 종료일보다 클 수 없습니다."}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, '開始日は終了日より大きくできません。' );
       return false;
     }
 
     return true;
   };
 
-  const handleChange = (page) => {
-    console.log("handleChange", page);
-  };
 
   const handleItemSearch = (value) => {
     console.log("ItemSearch", value.getAttribute("value"));
@@ -166,17 +151,20 @@ export default function DashboardSalesList(props) {
   const handleItemClick = (event) => {
     console.log("handleItemClick", event);
   };
-
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   const renderSalesList = () => {
     return stateData?.list?.map((item, index) => {
       return (
         <tr key={index}>
-          <td className="hide-m">{item.date}</td>
+          <td className="td_txt1 ty1">{item.date}</td>
           <td className="td_subject">{item.title}</td>
-          <td className="td_group">{item.price}</td>
-          <td className="td_txt float-right">
+          <td className="td_number3">{item.price}</td>
+          <td className="hide-m"></td>
+          <td className="td_btns3">
             <div
-              className="btn-pk s blue2 w124 mt10"
+              className="btn-pk s blue2 w124"
               data-id={item.number}
               onClick={handleItemClick}
             >
@@ -199,57 +187,68 @@ export default function DashboardSalesList(props) {
   return (
     <div className="contents">
       <div className="inr-c">
-        <div className="col flex mt2">
-          <div className="dsd_search_label mr24">{text.search_period}</div>
-          <Select
-            name={"typeId"}
-            className={"select1 dsd_search_select"}
-            dataList={SEARCH_LIST}
-            handleItemClick={handleItemSearch}
-          />
+        {/* mobile */}
+        <div class="hd_titbox hd_mst1 bdb0 view-m">
+          <h2 class="h_tit1"><span>{text.sales_detail}</span></h2>
         </div>
 
-        <div className="col mt24 saleslist-data-col">
-          <div className="mr24">
-            <div className="calendar-label">{text.start_date}</div>
-            <Calendar
-              ref={refCalendarStart}
-              name={"start"}
-              type={stateStartDate}
-              callback={handleClickCalendar}
+        <div className="hd_titbox4 pdty1">
+          <div class="mb">
+            <p class="h_tit3 d-ib c-black">{text.search_period}</p>
+            <Select
+              name={"typeId"}
+              className={"select1 dsd_search_select"}
+              dataList={SEARCH_LIST}
+              handleItemClick={handleItemSearch}
             />
           </div>
-          <div className="mr24">
-            <div className="calendar-label">{text.end_date}</div>
-            <Calendar
-              ref={refCalendarEnd}
-              name={"end"}
-              type={stateEndDate}
-              callback={handleClickCalendar}
-            />
-          </div>
-        </div>
 
-        {/* TODO  */}
-        <div className="col mt67 ">
-          <div className="dsd_sales_detail">{text.sales_detail}</div>
-          <div className="dsd_date mt24">{stateData?.date}</div>
+          <div class="inp_cal">
+            <div>
+              <label for="calendar_first1">{text.start_date}</label>
+              <Calendar
+                ref={refCalendarStart}
+                name={"start"}
+                className={'inp_txt calendar datepicker_first'}
+                popupClassName={'l_0'}
+                type={stateStartDate}
+                callback={handleClickCalendar}
+                />
+            </div>
+            <div>
+              <label for="calendar_last1">{text.end_date}</label>
+              <Calendar
+                ref={refCalendarEnd}
+                name={"end"}
+                className={'inp_txt calendar datepicker_last'}
+                popupClassName={'r_0'}
+                type={stateEndDate}
+                callback={handleClickCalendar}
+              />
+            </div>
+          </div>
+          
+          <h2 class="h_tit1">{text.sales_detail}</h2>
+          <p class="t1">{stateData?.date}</p>
+          
         </div>
 
         <div className="tbl_basic mtbl_ty1 mt24">
           <table className="list">
             <caption>list</caption>
             <colgroup>
+              <col className="wid2" />
+              <col className="wid4" />
+              <col className="wid2" />
               <col className="" />
-              <col className="" />
-              <col className="" />
-              <col className="" />
+              <col className="wid4" />
             </colgroup>
             <thead>
               <tr>
                 <th>{text.date}</th>
                 <th>{text.title}</th>
                 <th>{text.money}</th>
+                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -262,7 +261,8 @@ export default function DashboardSalesList(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={handleChange}
+          totalPages={stateData?.meta.totalPages}
+          callback={() => {  }}
         />
       </div>
     </div>

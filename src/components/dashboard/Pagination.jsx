@@ -25,7 +25,7 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/pro-light-svg-icons';
 * @return
 */
 export default function Pagination1(props) {
-  const { className, itemsCountPerPage, totalItemsCount, callback, page } = props;
+  const { className, itemsCountPerPage, totalItemsCount, totalPages, callback, page } = props;
   const [ statePage, setStatePage] = useState(page);
 
   const handleChange = (page) => {
@@ -41,7 +41,7 @@ export default function Pagination1(props) {
   return (
     <>
       {
-        totalItemsCount > 0 &&
+        (totalPages !== undefined && totalPages > 1 ) &&
         <Pagination 
               activePage={statePage}
               itemsCountPerPage={itemsCountPerPage}

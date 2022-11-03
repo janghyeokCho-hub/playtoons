@@ -134,22 +134,6 @@ export default function DashboardPlanSubsciber(props) {
         </div>
         <div className="hd_titbox2">
           <Search className={'inp_txt sch'} placeholder={text.subcriber_nickname} onClick={handleClickSearchNickname}/>
-          {/* <div className="inp_txt sch">
-            <button
-              type="button"
-              className="btns"
-              title="検索"
-              onClick={handleClickSearchNickname}
-            >
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </button>
-            <Input
-              type="text"
-              className=""
-              placeholder={text.subcriber_nickname}
-              onKeyDown={handleEnter}
-            />
-          </div> */}
         </div>
 
         <div className="tbl_basic mtbl_ty2">
