@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +8,9 @@ import {
   faAngleRight,
   faStar,
 } from "@fortawesome/pro-solid-svg-icons";
-import Container from "@/components/dashboard/Container";
 import SwiperContainer from "@/components/dashboard/Swiper";
 
-import { getPostTypeListFromServer } from "@/services/dashboardService";
+import { getPostMineFromServer, getReactionMineAuthorIdFromServer,  } from "@/services/dashboardService";
 
 import tempImageSales from "@IMAGES/temp_seller_image.png";
 import tempImageSeries01 from "@IMAGES/temp_series_01.png";
@@ -21,9 +20,10 @@ import tempImageSeries04 from "@IMAGES/temp_series_04.png";
 import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { Link } from "react-router-dom";
-import Modal from "@/components/Modal";
-import { showModal } from "@/modules/redux/ducks/modal";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { getPostSeriesMine } from "@/services/postService";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import Image from "@/components/dashboard/Image";
 
 const text = {
   today_sales: "当日の売上",
@@ -45,8 +45,15 @@ const text = {
 };
 
 export default function DashboardMain() {
-  const [stateData, setStateData] = useState({});
+  const [stateSeries, setStateSeries] = useState(undefined);
+  const [statePosts, setStatePosts] = useState(undefined);
+  const [stateReactions, setStateReactions] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const dispatch = useDispatch();
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -67,8 +74,78 @@ export default function DashboardMain() {
     handleContainer();
   }, []);
 
+  //==============================================================================
+  // function
+  //==============================================================================
+  //==============================================================================
+  // api
+  //==============================================================================
+  /**
+    연재중의 시리즈 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getSeriesList = async () => {
+    const params = new FormData();
+    params.append('authorId', reduxAuthors[0].id);
+    params.append('limit', 30);
+    const {status, data} = await getPostSeriesMine(params);
+    console.log('getSeriesList', status, data);
+    
+    if( status === 200 ){
+      setStateSeries(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+  /**
+    최근의 투고 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getPostList = async () => {
+    const params = new FormData();
+    params.append('authorId', reduxAuthors[0].id);
+    params.append('limit', 5);
+    const {status, data} = await getPostMineFromServer(params);
+    console.log('getPostList', status, data);
+    
+    if( status === 200 ){
+      setStatePosts(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+  /**
+    최근의 투고 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getReactionList = async () => {
+    const params = new FormData();
+    params.append('authorId', reduxAuthors[0].id);
+    params.append('limit', 5);
+    const {status, data} = await getReactionMineAuthorIdFromServer(params);
+    console.log('getReactionList', status, data);
+    
+    if( status === 200 ){
+      setStateReactions(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+  //==============================================================================
+  // event
+  //==============================================================================
+  //==============================================================================
+  // hook & render
+  //==============================================================================
+
   const renderSalesProductList = () => {
-    return stateData?.sales_product_list?.map((item, i) => {
+    return tempData?.sales_product_list?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
           <Link to={`/dashboard/product/detail/${item.id}`}>
@@ -88,7 +165,7 @@ export default function DashboardMain() {
   };
 
   const renderQuestionList = () => {
-    return stateData?.question_list?.map((item, index) => {
+    return tempData?.question_list?.map((item, index) => {
       return (
         <li key={index}>
           <p className="t1">
@@ -103,7 +180,7 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
-    return stateData?.review_list?.map((item, index) => {
+    return tempData?.review_list?.map((item, index) => {
       return (
         <li key={index}>
           <div>
@@ -129,21 +206,21 @@ export default function DashboardMain() {
   };
 
   const renderSeriesList = () => {
-    return stateData?.series_list?.map((item, i) => {
+    return stateSeries?.series?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
           <Link to={`/dashboard/series/detail/${item.id}`}>
             <div className="cx_thumb">
               <span>
-                <img src={item.image} alt="사진" />
+                <Image hash={item.thumbnailImage} alt="" />
               </span>
               <p className="t_like">
                 <FontAwesomeIcon icon={faHeart} />
-                <span>{item.count}</span>
+                <span> {item.likeCount}</span>
               </p>
             </div>
             <div className="cx_txt">
-              <p className="t1 c-blue">{item.type}</p>
+              <p className="t1 c-blue">{item.type.name}</p>
               <p className="h1">{item.title}</p>
             </div>
           </Link>
@@ -153,35 +230,35 @@ export default function DashboardMain() {
   };
 
   const renderPostList = () => {
-    return stateData?.post_list?.map((item, i) => {
+    return statePosts?.posts?.map((item, i) => {
       return (
         <li key={item.id}>
           <p className="t1">
             <Link to={`/dashboard/post/detail/${item.id}`}>{item.title}</Link>
           </p>
-          <p className="t2">{item.date}</p>
+          <p className="t2">{ getDateYYYYMMDD(item.startAt, '/') }</p>
         </li>
       );
     });
   };
 
   const renderReactionList = () => {
-    return stateData?.reaction_list?.map((item, index) => {
+    return stateReactions?.reactions?.map((item, index) => {
       return (
         <li key={item.id}>
           <p className="t1">
             <Link to={`/dashboard/reaction/detail/${item.id}`}>
-              {item.title}
+              {item.content}
             </Link>
           </p>
-          <p className="t2">{item.date}</p>
+          <p className="t2">{ getDateYYYYMMDD(item.startAt, '/') }</p>
         </li>
       );
     });
   };
 
   const renderSalesListInPast = () => {
-    return stateData?.past_sales_list?.map((item, index) => {
+    return tempData?.past_sales_list?.map((item, index) => {
       return (
         <li key={index}>
           <div>
@@ -202,7 +279,7 @@ export default function DashboardMain() {
   };
 
   const renderHistoryOfDeposit = () => {
-    return stateData?.history_deposit_list?.map((item, index) => {
+    return tempData?.history_deposit_list?.map((item, index) => {
       return (
         <li key={index}>
           <div>
@@ -224,7 +301,9 @@ export default function DashboardMain() {
   };
 
   useEffect(() => {
-    setStateData(tempData);
+    getSeriesList();
+    getPostList();
+    getReactionList();
   }, []);
 
   return (
@@ -331,16 +410,14 @@ export default function DashboardMain() {
         <section className="box_area">
           <div className="hd_titbox">
             <h2 className="h_tit1">{text.follower_count}</h2>
-            <p className="rgh">{stateData.today}</p>
+            <p className="rgh">{tempData.today}</p>
           </div>
 
           <div className="b_tit">
             <div className="t1">
               <p>
-                <strong>{stateData.follower_count}</strong>
-                <span className="fz_s1 c-green">
-                  {stateData.follower_plus_count}
-                </span>
+                <strong>{reduxAuthors[0].followCount} {text.person}</strong>
+                <span className="fz_s1 c-green">{tempData.follower_plus_count}</span>
               </p>
             </div>
           </div>

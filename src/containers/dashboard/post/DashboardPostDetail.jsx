@@ -277,7 +277,7 @@ export default function DashboardPostDetail() {
           </div>
 
           <div className="ta_center">
-            <Image hash={stateData?.content} alt="playtonns content" />
+            <Image hash={stateData?.content} alt="" />
           </div>
 
           {/* <div className="area_detail2">

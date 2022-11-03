@@ -96,7 +96,7 @@ export default function DashboardSeriesDetail(props) {
           <div >
             <div className="cx_thumb">
               {item !== undefined && (
-                <Image hash={item.thumbnailImage} title={item.title} />
+                <Image hash={item.thumbnailImage}  />
               )}
             </div>
           </div>

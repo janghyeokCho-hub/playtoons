@@ -63,17 +63,14 @@ export const editPostToServer = async (params) => {
 
 /**
 *
-   post edit 
+   series list
 *
 * @version 1.0.0
 * @author 2hyunkook
 */
 export const getPostSeriesMine = async (params) => {
   try {
-    return await apiServer(
-      "get",
-      `/post/series/mine${getGetMethodUrl(params)}`
-    );
+    return await apiServer("get", `/post/series/mine${getGetMethodUrl(params)}`);
   } catch (e) {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
@@ -81,7 +78,7 @@ export const getPostSeriesMine = async (params) => {
 
 /**
 *
-   post edit 
+   작가 정보
 *
 * @version 1.0.0
 * @author 2hyunkook
@@ -96,7 +93,7 @@ export const getAuthorMineFromServer = async () => {
 
 /**
 *
-   post edit 
+   계정 정보
 *
 * @version 1.0.0
 * @author 2hyunkook

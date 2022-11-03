@@ -418,3 +418,16 @@ export const getTimelineFromServer = async (params) => {
   }
 };
 
+/**
+  Dashbaord - main - 최근의 투고
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getPostMineFromServer = async (params) => {
+  try {
+    return await apiServer('get', `/post/mine${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+

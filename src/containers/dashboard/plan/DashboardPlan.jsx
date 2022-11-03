@@ -141,7 +141,7 @@ export default function DashboardPlan(props) {
       return (
         <SwiperSlide className="col h_auto" key={i}>
           <div className="icon">
-            <Image hash={item.thumbnailImage} alt="planImage" />
+            <Image hash={item.thumbnailImage} alt="" />
           </div>
           <div className="cont">
             <h3 className="h1">{item.name}</h3>

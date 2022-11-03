@@ -2,7 +2,6 @@ import { getFileUrlFromServer } from "@/services/dashboardService";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import errorImage from "@IMAGES/ico_error.png";
 
 /**
 *
