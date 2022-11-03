@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/pro-solid-svg-icons";
 import Plan from "./Plan";
 import SeriesItems from "@COMPONENTS/author/SeriesItems";
+import StoreItems from "@COMPONENTS/author/StoreItems";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import PostItems from "@COMPONENTS/author/PostItems";
@@ -124,8 +125,8 @@ const Post = () => {
                 </Link>
               </li>
               <li
-                className={selectTab === "POST2" ? "on" : ""}
-                onClick={() => setSelectTab("POST2")}
+                className={selectTab === "STORE" ? "on" : ""}
+                onClick={() => setSelectTab("STORE")}
               >
                 <Link to="">
                   <span>ストア</span>
@@ -136,6 +137,7 @@ const Post = () => {
           {selectTab === "POST" && <PostItems />}
           {selectTab === "SERIES" && <SeriesItems />}
           {selectTab === "PLAN" && <Plan />}
+          {selectTab === "STORE" && <StoreItems />}
         </div>
       </div>
 
