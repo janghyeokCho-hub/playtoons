@@ -6366,26 +6366,11 @@ body {
   word-wrap: normal;
   overflow: hidden;
 }
-.layerPopup {
-  z-index: 1000;
-  display: none;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  background-color: #fff;
-  width: 400px;
-  max-height: 95%;
-  overflow-y: auto;
-} 
 /* 2022.11.03 추가 */
 .layerPopup {
   /* 2022-10-28 display: none; 제거 */
   z-index: 1000;
-  position: fixed;
+  position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

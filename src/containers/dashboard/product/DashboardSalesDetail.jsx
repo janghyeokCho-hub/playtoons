@@ -188,13 +188,13 @@ export default function DashboardSalesDetail() {
     <div className="contents">
       <div className="inr-c">
         {/* mobile */}
-        <div class="hd_titbox hd_mst1 bdb0 view-m">
-          <h2 class="h_tit1"><span>{text.sales_detail}</span></h2>
+        <div className="hd_titbox hd_mst1 bdb0 view-m">
+          <h2 className="h_tit1"><span>{text.sales_detail}</span></h2>
         </div>
 
         <div className="hd_titbox4 pdty1">
-          <div class="mb">
-            <p class="h_tit3 d-ib c-black">{text.search_period}</p>
+          <div className="mb">
+            <p className="h_tit3 d-ib c-black">{text.search_period}</p>
             <Select
               name={"typeId"}
               className={"select1 dsd_search_select"}
@@ -203,9 +203,9 @@ export default function DashboardSalesDetail() {
             />
           </div>
 
-          <div class="inp_cal">
+          <div className="inp_cal">
             <div>
-              <label for="calendar_first1">{text.start_date}</label>
+              <label htmlFor="calendar_first1">{text.start_date}</label>
               <Calendar
                 ref={refCalendarStart}
                 name={"start"}
@@ -216,7 +216,7 @@ export default function DashboardSalesDetail() {
                 />
             </div>
             <div>
-              <label for="calendar_last1">{text.end_date}</label>
+              <label htmlFor="calendar_last1">{text.end_date}</label>
               <Calendar
                 ref={refCalendarEnd}
                 name={"end"}
@@ -228,8 +228,8 @@ export default function DashboardSalesDetail() {
             </div>
           </div>
           
-          <h2 class="h_tit1">{text.sales_detail}</h2>
-          <p class="t1">{stateData?.date}</p>
+          <h2 className="h_tit1">{text.sales_detail}</h2>
+          <p className="t1">{stateData?.date}</p>
           
         </div>
 
