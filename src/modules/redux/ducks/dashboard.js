@@ -1,17 +1,20 @@
 import { createAction, handleActions } from "redux-actions";
 import { createRequestActionTypes } from "@REDUX/saga/createRequestSaga";
 import produce from "immer";
+import { LOGOUT_REQUEST_SUCCESS } from "./login";
 
 /* --- Action Types --- */
 export const [GET_DASHBOARD_PLAN, GET_DASHBOARD_PLAN_SUCCESS, GET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("dashboard/plan/GET");
 export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, GET_DASHBOARD_SERIES_DETAIL_FAILURE] = createRequestActionTypes("dashboard/series/detail/GET");
 export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
 export const [GET_DASHBOARD_REACTION, GET_DASHBOARD_REACTION_SUCCESS, GET_DASHBOARD_REACTION_FAILURE] = createRequestActionTypes("dashboard/reaction/GET");
+export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
 
 
 /* --- Actions --- */
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const getSeriedDetailAction = createAction(GET_DASHBOARD_SERIES_DETAIL);
+export const initSeriedDetailAction = createAction(INIT_DASHBOARD_SERIES_DETAIL);
 export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 
@@ -27,24 +30,35 @@ const post = handleActions(
   {
     [GET_DASHBOARD_PLAN_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log('GET_DASHBOARD_PLAN_SUCCESS', action.payload);
         draft.subscribeTiers = action.payload.subscribeTiers;
         draft.subscribeTiersMeta = action.payload.meta;
       });
     },
     [GET_DASHBOARD_SERIES_DETAIL_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log('GET_DASHBOARD_SERIES_DETAIL_SUCCESS', action.payload);
         draft.series = action.payload.series;
       });
     },
     [GET_DASHBOARD_AUTHOR_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log('GET_DASHBOARD_AUTHOR_SUCCESS', action.payload);
         draft.author = action.payload.author;
       });
     },
-
+    [INIT_DASHBOARD_SERIES_DETAIL]: (state, action) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          series: null,          
+        };
+      });
+    },
+    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {   //2022.11.01 lhk- logout 시 author 정보도 초기화
+      return produce(state, (_) => {
+        return {
+          ...initialState,
+        };
+      });
+    },
   },
   initialState
 );

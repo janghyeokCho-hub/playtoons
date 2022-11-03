@@ -431,3 +431,16 @@ export const getPostMineFromServer = async (params) => {
   }
 };
 
+/**
+  Dashbaord - plan - 응원자관리
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getSubscribeTierInPlanFromServer = async (authorId, params) => {
+  try {
+    return await apiServer('get', `/subscribeTier/${authorId}/subscribers${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+

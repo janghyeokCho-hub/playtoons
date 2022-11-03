@@ -10,7 +10,7 @@ import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
+import { getSubscribeTierAuthorIdFromServer, getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
@@ -18,6 +18,8 @@ import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { showOneButtonPopup } from "@/common/common";
+import { useLayoutEffect } from "react";
 
 const text = {
   plan_management: "支援管理",
@@ -105,7 +107,14 @@ const tempData = {
 };
 
 export default function DashboardPlan(props) {
+  const [stateSupporter, setStateSupporter] = useState(undefined);
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxSubscribeTiers = useSelector( ({ dashboard }) => dashboard?.subscribeTiers);
   const dispatch = useDispatch();
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -122,15 +131,28 @@ export default function DashboardPlan(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
 
-  const [stateSupporter, setStateSupporter] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxSubscribeTiers = useSelector(
-    ({ dashboard }) => dashboard?.subscribeTiers
-  );
+  //==============================================================================
+  // api
+  //==============================================================================
+  /**
+    응원자 관리 리슽 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getSurpporter = async () => {
+    const params = new FormData();
+    params.append('limit', 4);
+    
+    const {status, data} = await getSubscribeTierInPlanFromServer(reduxAuthors[0].id, params);
+    if( status === 200 ){
+      setStateSupporter(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+
 
   //==============================================================================
   // render & hook
@@ -170,7 +192,7 @@ export default function DashboardPlan(props) {
   };
 
   const renderSupporterList = () => {
-    return stateSupporter?.map((item, i) => {
+    return stateSupporter?.subscribers?.map((item, i) => {
       return (
         <li key={i}>
           <div>
@@ -189,10 +211,11 @@ export default function DashboardPlan(props) {
     });
   };
 
-  useEffect(() => {
-    //temp
-    setStateSupporter(tempData.supporters);
-    dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
+  useLayoutEffect(() => {
+    
+    handleContainer();
+    dispatch( getSubscribeTierAction({ authorId: reduxAuthors[0].id }) );
+    getSurpporter();
   }, []);
 
   return (
@@ -249,7 +272,7 @@ export default function DashboardPlan(props) {
               </span>
             </Link>
           </div>
-          {stateSupporter?.length === 0 ? (
+          {stateSupporter?.meta?.totalItems === 0 ? (
             <EmptyDiv
               className={"supportor_empty"}
               text={text.supportor_empty}

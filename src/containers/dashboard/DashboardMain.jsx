@@ -45,7 +45,7 @@ const text = {
 };
 
 export default function DashboardMain() {
-  const [stateSeries, setStateSeries] = useState(undefined);
+  const [stateSeries, setStateSeries] = useState({id: '', thumbnailImage: ''});
   const [statePosts, setStatePosts] = useState(undefined);
   const [stateReactions, setStateReactions] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
@@ -220,7 +220,7 @@ export default function DashboardMain() {
               </p>
             </div>
             <div className="cx_txt">
-              <p className="t1 c-blue">{item.type.name}</p>
+              <p className="t1 c-blue">{item?.type?.name}</p>
               <p className="h1">{item.title}</p>
             </div>
           </Link>
@@ -433,7 +433,7 @@ export default function DashboardMain() {
               </Link>
             </div>
 
-            <div className="lst_comic1 long">
+            <div className="lst_comic1 long mh_300">
               {
                 <SwiperContainer
                   className={"mySwiper2"}

@@ -3,17 +3,12 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 
-import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
 import {
   getReactionMineAuthorIdFromServer as getReactionMineFromServer,
-  setReactionReactionIdPinToServer,
 } from "@/services/dashboardService";
 import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import {
-  getErrorMessageFromResultCode,
   showOneButtonPopup,
 } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
@@ -70,7 +65,10 @@ export default function DashboardReactionList(props) {
   const reduxAuthors = useSelector(({ post }) => post.authorMine.authors);
   const [statePinnedData, setStatePinnedData] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
-
+  
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -95,7 +93,7 @@ export default function DashboardReactionList(props) {
   //==============================================================================
   const getList = () => {
     getPinnedReactionList();
-    getReactionList(params === undefined ? 1 : params.page);
+    getReactionList(params.page === undefined ? 1 : params.page);
   };
 
   //==============================================================================

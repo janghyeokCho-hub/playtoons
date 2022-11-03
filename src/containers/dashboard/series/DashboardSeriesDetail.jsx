@@ -8,7 +8,7 @@ import tempImage from "@IMAGES/tmp_comic2.jpg";
 import { getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import { useDispatch, useSelector } from "react-redux";
-import { getSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
+import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { showOneButtonPopup } from "@/common/common";
 
@@ -118,6 +118,10 @@ export default function DashboardSeriesDetail(props) {
   useEffect(() => {
     dispatch( getSeriedDetailAction(params) );
     getTimeline();
+
+    return () => {
+      dispatch( initSeriedDetailAction(params) );
+    }
   }, []);
 
   return (
@@ -141,7 +145,7 @@ export default function DashboardSeriesDetail(props) {
               </div>
               <div className="cx_thumb">
                 <span>
-                  <Image hash={stateData?.coverImage} alt="cover image" />
+                  <Image hash={stateData?.coverImage} alt="" />
                 </span>
               </div>
               <ul className="cx_list">

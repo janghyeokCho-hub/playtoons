@@ -27,9 +27,26 @@ export default function ReactionButtons(props) {
   //==============================================================================
   const checkBeforeToDeleteReaction = () => {
     if (reduxAuthors[0].id === item.authorId) {
-      showTwoButtonPopup(dispatch, text.do_you_delete, deleteReaction);
+      showTwoButtonPopup(dispatch, text.do_you_delete, checkPinnedToDeleteReaction);
     } else {
       showOneButtonPopup(dispatch, text.can_do_myself);
+    }
+  };
+
+  const checkPinnedToDeleteReaction = async () => {
+    if (item.pinned) {
+      const params = {
+        id: item.id,
+      };
+      const { status, data } = await deleteReactionIdPinToServer(params);
+      if (status === 200) {
+        deleteReaction();
+      } else {
+        showOneButtonPopup(dispatch, data);
+      }
+    }
+    else{
+      deleteReaction();
     }
   };
 
@@ -62,9 +79,8 @@ export default function ReactionButtons(props) {
       refId: item.postId,
     };
 
-    const response = await setPostReactionIdReportToServer(item.id, params);
-    const { status, data } = response;
-    // const {status, data} = await setPostReactionIdReportToServer(item.id, params);
+    const { status, data } = await setPostReactionIdReportToServer(item.id, params);
+
     if (status === 200) {
       callback?.();
       showOneButtonPopup(dispatch, text.do_report);
