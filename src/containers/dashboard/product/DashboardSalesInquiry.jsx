@@ -167,7 +167,7 @@ export default function DashboardSalesInquiry(props) {
     }
     else{
       for( let i = 0; i < refArrow.current.length; i++ ){
-        if( value.number !== refArrow.current[i].getValue().number ){
+        if( value.id !== refArrow.current[i].getValue().id ){
           refArrow.current[i].init();
         }
       }
@@ -188,7 +188,7 @@ export default function DashboardSalesInquiry(props) {
       return (
         <Fragment key={index}>
           <tr >
-            <td className="hide-m">{item.number}</td>
+            <td className="hide-m">{item.id}</td>
             <td className="td_imgs2">
               <div className="cx_thumb"><span><Image hash={item.image} /></span></div>
             </td>
@@ -197,8 +197,8 @@ export default function DashboardSalesInquiry(props) {
             <td className="td_txt0"><span className="view-m">{text.creator}：</span>{item.user}</td>
             <td className="td_btns2 ta-r et_botm1">
               <div className="d-ib">
-                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
-                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
+                <div className="btn-pk s blue2" data-id={item.id} onClick={handleItemClickAnswer}>{text.answer}</div>
+                <div className="btn-pk s blue2" data-id={item.id} onClick={handleItemClickReport}>{text.report}</div>
               </div>
             </td>
             <td className="hide-m ta-c">
