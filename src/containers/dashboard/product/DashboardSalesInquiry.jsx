@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from "react";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
-import Container from "@/components/dashboard/Container";
-import ProductTab from "@/components/dashboard/ProductTab";
-import Image from "@/components/dashboard/Image";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import Pagination from "@/components/dashboard/Pagination";
+import ProductTab from "@/components/dashboard/ProductTab";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { useDispatch } from "react-redux";
+import Image from "@/components/dashboard/Image";
 
 const text = {
   number : "番号",
@@ -22,6 +21,7 @@ const text = {
   report : "通報",
   saler: "販売者",
   time: "時",
+  startAt: "販売開始日",
 };
 
 const tempData = {
@@ -50,11 +50,11 @@ const tempData = {
     title : "大学のリンゴ一個の重さで10メートルの素材",
     date : "2022/07/11",
     user : "名前のない人間2号",
-    creator_comnent: "ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    creator_comnent: "1111111ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
     answer:{
       saler: "dfadf",
       time: "2022/06/11 23:21",
-      coment: "1リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+      coment: "11111リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
     }
   },
 ]};
@@ -66,13 +66,18 @@ export default function DashboardSalesInquiry(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const refArrow = useRef([]);
+  const refAnswer = useRef([]);
   const params = useParams('id');
   const location = useLocation();
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const header = {
       headerClass: "header",
-      containerClass: "series",
+      containerClass: "container dashboard typ1",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: null,
@@ -87,7 +92,9 @@ export default function DashboardSalesInquiry(props) {
     handleContainer();
   }, []);
 
-
+  //==============================================================================
+  // function
+  //==============================================================================
   const getSelectedItem = (id) => {
     for( let i = 0; i < stateData?.list?.length; i++ ){
       if( id === stateData.list[i].number ){
@@ -97,6 +104,9 @@ export default function DashboardSalesInquiry(props) {
     }
   };
 
+  //==============================================================================
+  // api
+  //==============================================================================
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -111,7 +121,9 @@ export default function DashboardSalesInquiry(props) {
     // 
     // setData(getProductListFromResultData(data));
   };
-
+  //==============================================================================
+  // handler
+  //==============================================================================
   const handleChange = (page) => {
     console.log('handleChange', page);
     
@@ -129,7 +141,7 @@ export default function DashboardSalesInquiry(props) {
     // navigate("/dashboard/series/detail/" + no);
   };
 
-  const handleItemArrow = (value, isSelected) => {
+  const handleItemArrow = useCallback((value, isSelected) => {
     if( isSelected === true ){
       setStateAnswer(undefined);
     }
@@ -142,30 +154,56 @@ export default function DashboardSalesInquiry(props) {
   
       setStateAnswer(value);
     }
-  };
+  }, [stateAnswer]);
 
+  const handleItemMobile = useCallback((event) => {
+    const index = parseInt( event.target.getAttribute('index') );
+    const display = refAnswer.current[index].style.display;
+    
+    refAnswer.current[index].style.display = display === 'none' ? 'block' : 'none';
+  }, []);
 
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   const renderSalesInquiryList = () => {
     return stateData?.list?.map((item, index) => {
       return (
-          <tr key={index}>
+        <Fragment key={index}>
+          <tr >
             <td className="hide-m">{item.number}</td>
-            <td className="td_imgs">
-              <div className="cx_thumb w131h81"><span><img src={item.image} alt={"cover iamge"} /></span></div>
+            <td className="td_imgs2">
+              <div className="cx_thumb"><span><Image hash={item.image} /></span></div>
             </td>
             <td className="td_subject">{item.title}</td>
-            <td className="td_group">{item.date}</td>
-            <td className="td_gray"><span className="view-m">{text.creator}：</span>{item.user}</td>
-            <td className="td_txt">
-              <div className="dsi_d_btns">
-                <div className="mr60">
-                  <div className="btn-pk s blue2 dsi_btn mr12" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
-                  <div className="btn-pk s blue2 dsi_btn mt10 mr12" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
-                </div>
-                <div className="mr30" ><ArrowRight className="fs24 pointer" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
+            <td className="td_txt0"><span className="view-m">{text.startAt}：</span>{item.date}</td>
+            <td className="td_txt0"><span className="view-m">{text.creator}：</span>{item.user}</td>
+            <td className="td_btns2 ta-r et_botm1">
+              <div className="d-ib">
+                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
+                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
               </div>
             </td>
+            <td className="hide-m ta-c">
+                <div className="arr" ><ArrowRight className="fs16 pointer" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
+            </td>
           </tr>
+          <tr class="tr_a">
+            <td class="hide-m"></td>
+            <td colspan="5" class="ta-l">
+              <div class="tx_a1" >
+                <button type="button" class="arr view-m" index={index} onClick={handleItemMobile} ></button>
+                <p class="t1">{item.creator_comnent}</p>
+              </div>
+              <div class="tx_a2 transition" ref={el => (refAnswer.current[index] = el)}>
+                <span class="re view-m"><i class="fa-solid fa-share"></i></span>
+                <p class="t2"><span class="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
+                <p class="t1">{item.answer.coment}</p>
+              </div>
+            </td>
+            <td class="hide-m ta-c"></td>
+          </tr>
+        </Fragment>
     );
     });
   };
@@ -198,11 +236,12 @@ export default function DashboardSalesInquiry(props) {
             <caption>list</caption>
             <colgroup>
               <col className="num" />
-              <col className="wid1" />
+              <col className="imgs2" />
+              <col className="" />
               <col className="wid4" />
-              <col className="wid1" />
-              <col className="wid1" />
               <col className="wid4" />
+              <col className="wid3" />
+              <col className="wid5 hide-m" />
             </colgroup>
             <thead>
               <tr>
@@ -211,7 +250,8 @@ export default function DashboardSalesInquiry(props) {
                 <th>{text.title}</th>
                 <th>{text.create_date}</th>
                 <th>{text.creator}</th>
-                <th></th>
+                <th className=""></th>
+                <th className="hide-m"></th>
               </tr>
             </thead>
             <tbody>

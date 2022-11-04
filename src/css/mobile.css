@@ -3671,8 +3671,8 @@
   .mtbl_ty1 tr.tr_a div.tx_a2 {
     display: none;
     margin-top: 15px;
-    position: relative;
     padding: 8px 16px 16px 32px;
+    position: relative;
     background-color: #F7F8F9;
   }
   .mtbl_ty1 tr.tr_a div.tx_a2 .re {

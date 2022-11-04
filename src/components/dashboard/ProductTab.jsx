@@ -27,7 +27,7 @@ export default function ProductTab(props) {
   const getTabMenuElement = () => {
     return TAB_MENU.map((item, index) => {
       return (
-        <li className={`${pathname === item.path && 'on'}`} key={index} >
+        <li className={`transition ${pathname === item.path && 'on'}`} key={index} >
           <Link to={item.path} >
             { item.name }
           </Link>
@@ -42,8 +42,8 @@ export default function ProductTab(props) {
   
 
   return (
-    <div class="hd_tabbox">
-			  <div class="tabs ty1">
+    <div className="hd_tabbox">
+			  <div className="tabs ty1">
           <ul className="">
             {
               getTabMenuElement()

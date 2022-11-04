@@ -148,7 +148,7 @@ export default function DashboardSalesList(props) {
           <td className="td_subject">{item.title}</td>
           <td className="td_number3">{item.price}</td>
           <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.date}</td>
-          <td className='td_txt mbdb0'><span className="view-m">{text.amount}</span>{convertMoneyStyleString(item.amount)}<em class="view-m">{text.count}</em></td>
+          <td className='td_txt mbdb0'><span className="view-m">{text.amount}</span>{convertMoneyStyleString(item.amount)}<em className="view-m">{text.count}</em></td>
           <td className="hide-m">
           </td>
         </tr>
@@ -172,11 +172,11 @@ export default function DashboardSalesList(props) {
       <div className="inr-c">
         <div className="hd_titbox2 pdty1">
           {/* mobile */}
-          <h2 class="h_tit0 mb15 view-m">販売内訳の期限</h2>
+          <h2 className="h_tit0 mb15 view-m">販売内訳の期限</h2>
 
           <div className="inp_cal">
             <div>
-              <label for="calendar_first1">{text.start_date}</label>
+              <label htmlFor="calendar_first1">{text.start_date}</label>
               <Calendar 
                 ref={refCalendarStart}
                 name={"start"}
@@ -185,7 +185,7 @@ export default function DashboardSalesList(props) {
                 callback={handleClickCalendar} />
             </div>
             <div>
-              <label for="calendar_last1">{text.end_date}</label>
+              <label htmlFor="calendar_last1">{text.end_date}</label>
               <Calendar 
                 ref={refCalendarEnd}
                 name={"end"}
@@ -196,8 +196,8 @@ export default function DashboardSalesList(props) {
           </div>
 
           <h2 className="h_tit1">
-            <span class="mr20">{text.during_sales}</span> 
-            <br class="view-m"/>
+            <span className="mr20">{text.during_sales}</span> 
+            <br className="view-m"/>
             <strong className="c-black mfont1">{stateData?.sales}</strong>
           </h2>
         </div>

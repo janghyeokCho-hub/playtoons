@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { faAngleRight } from "@fortawesome/pro-light-svg-icons";
+import { faAngleRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useImperativeHandle, forwardRef } from 'react';
 
@@ -28,7 +28,7 @@ export default forwardRef( function ArrowRight(props, ref) {
 
   return (
     <FontAwesomeIcon 
-      className={`${className} ${stateRotate ? 'dsi_rotate' : ''}`} 
+      className={`transition ${className} ${stateRotate ? 'dsi_rotate' : ''}`} 
       icon={faAngleRight}  
       onClick={handleClickArrow}
       />
