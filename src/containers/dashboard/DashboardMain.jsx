@@ -1,17 +1,20 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart,
-  faAngleRight,
-  faStar,
-} from "@fortawesome/pro-solid-svg-icons";
 import SwiperContainer from "@/components/dashboard/Swiper";
+import {
+  faAngleRight, faHeart, faStar
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getPostMineFromServer, getReactionMineAuthorIdFromServer,  } from "@/services/dashboardService";
+import { getPostMineFromServer, getReactionMineAuthorIdFromServer } from "@/services/dashboardService";
 
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import Image from "@/components/dashboard/Image";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { setSalesIdAction } from "@/modules/redux/ducks/dashboard";
+import { getPostSeriesMine } from "@/services/postService";
 import tempImageSales from "@IMAGES/temp_seller_image.png";
 import tempImageSeries01 from "@IMAGES/temp_series_01.png";
 import tempImageSeries02 from "@IMAGES/temp_series_02.png";
@@ -19,11 +22,7 @@ import tempImageSeries03 from "@IMAGES/temp_series_03.png";
 import tempImageSeries04 from "@IMAGES/temp_series_04.png";
 import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
-import { Link } from "react-router-dom";
-import { setContainer } from "@/modules/redux/ducks/container";
-import { getPostSeriesMine } from "@/services/postService";
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
-import Image from "@/components/dashboard/Image";
+import { Link, useNavigate } from "react-router-dom";
 
 const text = {
   today_sales: "当日の売上",
@@ -50,6 +49,7 @@ export default function DashboardMain() {
   const [stateReactions, setStateReactions] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //==============================================================================
   // header
@@ -140,6 +140,16 @@ export default function DashboardMain() {
   //==============================================================================
   // event
   //==============================================================================
+  const handleClickReview = useCallback((event) => {
+    dispatch( setSalesIdAction({salesId: event.target.getAttribute('data-id')}) );
+    navigate('/dashboard/product/sales/review');
+  }, []);
+
+
+  const handleClickQuestion = useCallback((event) => {
+    dispatch( setSalesIdAction({salesId: event.target.getAttribute('data-id')}) );
+    navigate('/dashboard/product/sales/inquiry');
+  }, []);
   //==============================================================================
   // hook & render
   //==============================================================================
@@ -169,9 +179,9 @@ export default function DashboardMain() {
       return (
         <li key={index}>
           <p className="t1">
-            <Link to={`/dashboard/product/sales/inquiry/${item.id}`}>
+            <span className="pointer" data-id={item.id} onClick={handleClickQuestion}>
               {item.title}
-            </Link>
+            </span>
           </p>
           <p className="t2">{item.date}</p>
         </li>
@@ -194,9 +204,9 @@ export default function DashboardMain() {
               </span>
             </div>
             <p className="t1">
-              <Link to={`/dashboard/product/sales/review/${item.id}`}>
+              <span className="pointer" data-id={item.id} onClick={handleClickReview}>
                 {item.title}
-              </Link>
+              </span>
             </p>
           </div>
           <p className="t2">{item.date}</p>

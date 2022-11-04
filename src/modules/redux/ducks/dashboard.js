@@ -9,12 +9,15 @@ export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, 
 export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
 export const [GET_DASHBOARD_REACTION, GET_DASHBOARD_REACTION_SUCCESS, GET_DASHBOARD_REACTION_FAILURE] = createRequestActionTypes("dashboard/reaction/GET");
 export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
+export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
 
 
 /* --- Actions --- */
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const getSeriedDetailAction = createAction(GET_DASHBOARD_SERIES_DETAIL);
 export const initSeriedDetailAction = createAction(INIT_DASHBOARD_SERIES_DETAIL);
+export const setSalesIdAction = createAction(SET_DASHBOARD_SALES);
+export const initSalesIdAction = createAction(INIT_DASHBOARD_SALES);
 export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 
@@ -24,6 +27,7 @@ const initialState = {
   series: null,
   author: null,
   reaction: null,
+  salesId: null,
 };
 
 const post = handleActions(
@@ -44,7 +48,20 @@ const post = handleActions(
         draft.author = action.payload.author;
       });
     },
-    [INIT_DASHBOARD_SERIES_DETAIL]: (state, action) => {
+    [SET_DASHBOARD_SALES]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.salesId = action.payload.salesId;
+      });
+    },
+    [INIT_DASHBOARD_SALES]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          salesId: null,          
+        };
+      });
+    },
+    [INIT_DASHBOARD_SERIES_DETAIL]: (state, _) => {
       return produce(state, (_) => {
         return {
           ...state,

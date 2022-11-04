@@ -5,11 +5,13 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import ArrowRight from "@/components/dashboard/ArrowRight";
+import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import ProductTab from "@/components/dashboard/ProductTab";
+import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { useDispatch } from "react-redux";
-import Image from "@/components/dashboard/Image";
+import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
+import { useDispatch, useSelector } from "react-redux";
 
 const text = {
   number : "番号",
@@ -32,7 +34,7 @@ const tempData = {
   },
   list: [
   {
-    number : "1",
+    id : "1",
     image : tempImg1,
     title : "大学のリンゴ一個の重さで10メートルの素材",
     date : "2022/06/11",
@@ -45,7 +47,7 @@ const tempData = {
     }
   },
   {
-    number : "2",
+    id : "2",
     image : tempImg1,
     title : "大学のリンゴ一個の重さで10メートルの素材",
     date : "2022/07/11",
@@ -63,8 +65,10 @@ const tempData = {
 export default function DashboardSalesInquiry(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateAnswer, setStateAnswer] = useState(undefined);
+  const reduxSalesId = useSelector(({dashboard}) => dashboard.salesId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const windows = useWindowSize();
   const refArrow = useRef([]);
   const refAnswer = useRef([]);
   const params = useParams('id');
@@ -97,10 +101,26 @@ export default function DashboardSalesInquiry(props) {
   //==============================================================================
   const getSelectedItem = (id) => {
     for( let i = 0; i < stateData?.list?.length; i++ ){
-      if( id === stateData.list[i].number ){
+      if( id === stateData.list[i].id ){
         refArrow.current[i].setState(true);
         return stateData.list[i];
       }
+    }
+  };
+
+  const setSelectedItem = (id) => {
+    let index = undefined;
+    for( let i = 0; i < stateData?.list.length; i++ ){
+      if( stateData.list[i].id === id ){
+        index = i;
+        break;
+      }
+    }
+
+    if( index !== undefined ){
+      const display = refAnswer.current[index].style.display;
+      refAnswer.current[index].style.display = display === '' || display === 'none' ? 'block' : 'none';
+      refAnswer.current[index].scrollIntoView();
     }
   };
 
@@ -157,11 +177,8 @@ export default function DashboardSalesInquiry(props) {
   }, [stateAnswer]);
 
   const handleItemMobile = useCallback((event) => {
-    const index = parseInt( event.target.getAttribute('index') );
-    const display = refAnswer.current[index].style.display;
-    
-    refAnswer.current[index].style.display = display === 'none' ? 'block' : 'none';
-  }, []);
+    setSelectedItem( event.target.getAttribute('id') );
+  }, [stateData]);
 
   //==============================================================================
   // hook & render
@@ -192,7 +209,7 @@ export default function DashboardSalesInquiry(props) {
             <td className="hide-m"></td>
             <td colSpan="5" className="ta-l">
               <div className="tx_a1" >
-                <button type="button" className="arr view-m" index={index} onClick={handleItemMobile} ></button>
+                <button type="button" className="arr view-m" id={item.id} onClick={handleItemMobile} ></button>
                 <p className="t1">{item.creator_comnent}</p>
               </div>
               <div className="tx_a2" ref={el => (refAnswer.current[index] = el)}>
@@ -212,16 +229,30 @@ export default function DashboardSalesInquiry(props) {
     //리스트 불러오기
     // getProductList();
     setStateData(tempData);
-    
+    return () => {
+      dispatch( initSalesIdAction() );
+    }
   }, []);
 
   useEffect(() => {
     if( params.id !== undefined ){
       //id로 아이템 찾기 
-      setStateAnswer( getSelectedItem(params.id) );
+      getProductList();
     }
   }, [params, stateData]);
 
+  useEffect(() => {
+    if( reduxSalesId !== undefined && stateData !== undefined ){
+      if( windows.width > 960 ){
+        //pc
+        setStateAnswer( getSelectedItem(reduxSalesId) );
+      }
+      else{
+        //mobile
+        setSelectedItem( reduxSalesId );
+      }
+    }
+  }, [reduxSalesId, stateData, windows]);
 
   return (
     <div className='contents'>
