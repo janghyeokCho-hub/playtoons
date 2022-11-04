@@ -1,14 +1,13 @@
 import React, { useState,  useImperativeHandle, forwardRef  } from 'react';
 import ReactCalendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 import moment from 'moment';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 import { DATE_FORMAT } from '@/common/constant';
-import useOutSideClick from '@/common/useOutSideClick';
-import { useCallback } from 'react';
+
+import 'react-calendar/dist/Calendar.css';
 
 /**
 *
@@ -94,7 +93,7 @@ export default forwardRef( function Calendar(props, ref) {
   }, [type]);
 
   return (
-    <div className={`relative`} ref={refContainer} onMouseLeave={() => {setStateShow(false)}}>
+    <div className={`relative inp_txt calendar pl_0`} ref={refContainer} onMouseLeave={() => {setStateShow(false)}}>
       <div className={`btn-pk s flex pl_12 ${className} ${stateDate !== undefined ? 'blue2' : 'gray'}`} onClick={handleClick}>
         <FontAwesomeIcon className="fs18 mr12" icon={faCalendarDay} />
         <span className='calendar-text'>{getStateDateFormated()}</span>

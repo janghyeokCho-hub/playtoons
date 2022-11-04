@@ -131,7 +131,7 @@ export default forwardRef( function Tag(props, ref) {
   };
 
   const handleEnter = (event) => {
-    if( event.keyCode === 13 ){
+    if( event.key === 'Enter' ){
       handleClickSearch?.(event);
       event.preventDefault();
     }

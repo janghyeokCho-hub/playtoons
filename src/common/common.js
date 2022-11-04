@@ -255,3 +255,13 @@ export const showTwoButtonPopup = (dispatch, message, confirmCallback, callback,
     })
   );
 };
+
+/**
+  천마다 콤마
+* @version 1.0.0
+* @author 2hyunkook
+* @param number 
+*/
+export const convertMoneyStyleString = (number) => {
+  return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};

@@ -1,9 +1,6 @@
-import React, { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-import { useState } from 'react';
-import { useRef } from 'react';
-import { useImperativeHandle, forwardRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { forwardRef, useRef, useState } from 'react';
 
 import ErrorMessage from './ErrorMessage';
 

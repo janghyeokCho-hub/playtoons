@@ -409,9 +409,11 @@ li.dashboard-gnb.selected{
 .r_0{
   right: 0;
 }
-
 .l_0{
   left: 0;
+}
+.pl_0{
+  padding-left: 0 !important;
 }
 
 .calendar-label{

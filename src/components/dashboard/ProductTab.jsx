@@ -27,7 +27,7 @@ export default function ProductTab(props) {
   const getTabMenuElement = () => {
     return TAB_MENU.map((item, index) => {
       return (
-        <li className={`dashboard-gnb ${pathname === item.path && 'selected'}`} key={index} >
+        <li className={`${pathname === item.path && 'on'}`} key={index} >
           <Link to={item.path} >
             { item.name }
           </Link>
@@ -42,10 +42,14 @@ export default function ProductTab(props) {
   
 
   return (
-    <ul className="dashboard-gnb">
-      {
-        getTabMenuElement()
-      }
-    </ul>
+    <div class="hd_tabbox">
+			  <div class="tabs ty1">
+          <ul className="">
+            {
+              getTabMenuElement()
+            }
+          </ul>
+        </div>
+      </div>
   )
 }

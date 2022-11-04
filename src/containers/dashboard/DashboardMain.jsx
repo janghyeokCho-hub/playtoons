@@ -126,7 +126,7 @@ export default function DashboardMain() {
   const getReactionList = async () => {
     const params = new FormData();
     params.append('authorId', reduxAuthors[0].id);
-    params.append('limit', 5);
+    params.append('limit', 4);
     const {status, data} = await getReactionMineAuthorIdFromServer(params);
     console.log('getReactionList', status, data);
     
@@ -251,7 +251,7 @@ export default function DashboardMain() {
               {item.content}
             </Link>
           </p>
-          <p className="t2">{ getDateYYYYMMDD(item.startAt, '/') }</p>
+          <p className="t2">{ getDateYYYYMMDD(item.createdAt, '/') }</p>
         </li>
       );
     });
@@ -304,7 +304,7 @@ export default function DashboardMain() {
     getSeriesList();
     getPostList();
     getReactionList();
-  }, []);
+  }, [reduxAuthors]);
 
   return (
     <div className="contents">
@@ -416,7 +416,7 @@ export default function DashboardMain() {
           <div className="b_tit">
             <div className="t1">
               <p>
-                <strong>{reduxAuthors[0].followCount} {text.person}</strong>
+                <strong>{reduxAuthors?.[0].followCount} {text.person}</strong>
                 <span className="fz_s1 c-green">{tempData.follower_plus_count}</span>
               </p>
             </div>

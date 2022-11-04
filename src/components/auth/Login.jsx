@@ -148,6 +148,7 @@ const Login = () => {
             id="pwd"
             className="inp_txt w100p"
             onChange={handlePasswordChange}
+            onKeyDown={(event) => {/* enter 키 로그인 */ event.key === 'Enter' && handleLogin()}}  
             value={password}
             ref={passwordRef}
           />

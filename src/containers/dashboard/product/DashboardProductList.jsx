@@ -13,6 +13,7 @@ import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch } from "react-redux";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { setContainer,  } from "@/modules/redux/ducks/container";
+import Search from "@/components/dashboard/Search";
 
 const text = {
   see_product : "商品一覧",
@@ -103,11 +104,14 @@ export default function DashboardProductList(props) {
   const location = useLocation();
   const refInput = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const header = {
       headerClass: "header",
-      containerClass: "post",
+      containerClass: "container dashboard typ1",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: null,
@@ -122,25 +126,29 @@ export default function DashboardProductList(props) {
     handleContainer();
   }, []);
 
-
+  //==============================================================================
+  // function 
+  //==============================================================================
   const getStatusColor = (status) => {
     let className = "";
 
     switch( status.code ){
       default: 
-        className = "status-sales";
+        className = "cl-sell";
         break;
         case "audit":
-          className = "status-audit";
+          className = "cl-ing";
           break;
         case "not_for_sale":
-          className = "status-not_for_sale";
+          className = "cl-non";
           break;
     }//switch
     
     return className;
   };
-
+  //==============================================================================
+  // api
+  //==============================================================================
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -155,8 +163,10 @@ export default function DashboardProductList(props) {
     // 
     // setData(getProductListFromResultData(data));
   };
-
-  const handleChange = (page) => {
+  //==============================================================================
+  // event
+  //==============================================================================
+  const handleSearch = (page) => {
     console.log('handleChange', page);
     
   };
@@ -168,23 +178,25 @@ export default function DashboardProductList(props) {
     // navigate("/dashboard/series/detail/" + no);
   };
 
-
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   const renderProductList = () => {
     return stateData?.list?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
-          <td className="td_imgs">
-            <div className="w131h81 cx_thumb "><span><img src={item.image} alt={"cover iamge"} /></span></div>
+          <td className="td_imgs2">
+            <div className="cx_thumb "><span><Image hash={item.image} alt={"cover iamge"} /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
-          <td className="td_group">{item.price}</td>
-          <td className="td_gray"><span className="view-m">カテゴリ：</span>{item.date}</td>
-          <td className={`td_txt ${getStatusColor(item.status)}`}><span className="view-m">状態</span>{item.status.name}</td>
-          <td className="td_txt dp_ig">
-            <Link className="btn-pk s blue2 w124 mr12" to={`/dashboard/product/detail/${item.id}`}>{text.detail}</Link>
-            <Link className="btn-pk s blue2 w124 mt10 mr12"  to={`/dashboard/product/edit/${item.id}`}>{text.modify}</Link>
-            <div className="btn-pk s blue2 w124 mt10 mr12" data-id={item.id} onClick={handleItemClick}>{text.dont_see}</div>
+          <td className="td_number3">{item.price}</td>
+          <td className="td_text1"><span className="view-m">カテゴリ：</span>{item.date}</td>
+          <td className={`td_txt3 cl-sell ${getStatusColor(item.status)}`}><span className="view-m">状態</span>{item.status.name}</td>
+          <td className="td_btns2 ty1">
+            <Link className="btn-pk s blue2" to={`/dashboard/product/detail/${item.id}`}>{text.detail}</Link>
+            <Link className="btn-pk s blue2"  to={`/dashboard/product/edit/${item.id}`}>{text.modify}</Link>
+            <div className="btn-pk s blue2" data-id={item.id} onClick={handleItemClick}>{text.dont_see}</div>
           </td>
         </tr>
       );
@@ -200,28 +212,26 @@ export default function DashboardProductList(props) {
 
   return (
     <div className="contents">
-
+      
       <ProductTab 
         pathname={'/dashboard/product'} />
+  
 
       <div className="inr-c">
-        <div className="col mt23">
-          <div className="inp_txt sch w300">
-            <button type="button" className="btns" title="検索"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
-            <input type="text" className="" placeholder={text.product_name} />
-          </div>
+        <div className="hd_titbox2">
+          <Search className={'inp_txt sch'} placeholder={text.product_name} onClick={handleSearch}/>
         </div>
 
-        <div className="tbl_basic mtbl_ty1 mt39">
+        <div className="tbl_basic mtbl_ty1">
           <table className="list">
             <caption>list</caption>
             <colgroup>
               <col className="num" />
-              <col className="wid1" />
+              <col className="imgs2" />
+              <col className="" />
+              <col className="wid2" />
               <col className="wid4" />
-              <col className="wid1" />
-              <col className="wid1" />
-              <col className="wid1" />
+              <col className="wid4" />
               <col className="wid4" />
             </colgroup>
             <thead>
@@ -248,7 +258,7 @@ export default function DashboardProductList(props) {
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}
-          callback={handleChange}
+          callback={() => {  }}
           />
       </div>
 

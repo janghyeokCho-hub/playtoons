@@ -894,6 +894,15 @@ textarea:focus {
 .c-green {
   color: #3ac837 !important;
 }
+.cl-sell {
+  color: #2B9429 !important;
+}
+.cl-ing {
+  color: #ED8812 !important;
+}
+.cl-non {
+  color: #F11C0E !important;
+}
 /* 2: Common Setting
 =========================================================================================== */
 /* 2-1: Basic
@@ -2410,11 +2419,20 @@ body {
 .tbl_basic col.num {
   width: 100px;
 }
+.tbl_basic col.imgs {
+  width: 110px;
+}
+.tbl_basic col.imgs2 {
+  width: 150px;
+}
 .tbl_basic col.wid1 {
   width: 140px;
 }
 .tbl_basic col.wid4 {
   width: 180px;
+}
+.tbl_basic col.wid5 {
+  width: 100px;
 }
 .tbl_basic table.list {
   text-align: center;
@@ -2448,25 +2466,13 @@ body {
   width: 100%;
   /* height: 100%; */ /* 2022.10.28 lhk- 7010 종횡비 수정사항 적용  */
 }
-.tbl_basic .cx_thumb img:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
+.tbl_basic td.td_imgs .cx_thumb {
+  width: 88px;
   height: 134px;
-  background: -moz-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    #000000 100%
-  );
-  background: -webkit-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    #000000 100%
-  );
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#000000", GradientType=1);
+}
+.tbl_basic td.td_imgs2 .cx_thumb {
+  width: 130px;
+  height: 80px;
 }
 .tbl_basic td.td_btns2 .btn-pk {
   display: block;
@@ -2477,8 +2483,28 @@ body {
 .tbl_basic td.td_btns2 .btn-pk:first-child {
   margin-top: 0;
 }
+.tbl_basic td.td_btns3 .btn-pk {
+  width: 120px;
+}
+.tbl_basic td.td_number3 {
+  color: #394BC2;
+}
 .tbl_basic tr:hover {
-  background-color: #f7f8f9;
+  background-color: #F7F8F9;
+}
+.tbl_basic .i-txt {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 3px 13px;
+  margin-right: 8px;
+  font-size: 12px;
+  color: #394BC2;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #394BC2;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
 }
 .bbs_view {
   max-width: 640px;

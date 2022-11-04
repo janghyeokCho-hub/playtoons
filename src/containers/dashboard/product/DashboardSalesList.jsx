@@ -1,20 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
-import Container from "@/components/dashboard/Container";
-import ProductTab from "@/components/dashboard/ProductTab";
-import Image from "@/components/dashboard/Image";
+import { convertMoneyStyleString, showOneButtonPopup } from "@/common/common";
 import Calendar from "@/components/dashboard/Calendar";
 import Pagination from "@/components/dashboard/Pagination";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { showModal } from "@/modules/redux/ducks/modal";
-import { useDispatch } from "react-redux";
+import ProductTab from "@/components/dashboard/ProductTab";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { useDispatch } from "react-redux";
+import Image from "@/components/dashboard/Image";
 
 const text = {
   see_product : "商品一覧",
@@ -30,7 +25,9 @@ const text = {
   amount : "数量",
   start_date : "開始日",
   end_date: "終了日",
-  during_sales : "期間内の売上総額"
+  during_sales : "期間内の売上総額",
+  count : "個",
+  
 };
 
 const tempData = {
@@ -55,7 +52,7 @@ const tempData = {
       title : "大学のリンゴ一個の重さで10メートルの素材",
       price : "1200000CP",
       date : "2022/06/11",
-      amount: "33",
+      amount: "330000",
     },
     {
       number : "3",
@@ -63,7 +60,7 @@ const tempData = {
       title : "大学のリンゴ一個の重さで10メートルの素材",
       price : "1200000CP",
       date : "2022/06/11",
-      amount: "23",
+      amount: "2300",
     },
   ]
 };
@@ -76,10 +73,13 @@ export default function DashboardSalesList(props) {
   const refCalendarStart = useRef();
   const refCalendarEnd = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const header = {
       headerClass: "header",
-      containerClass: "series",
+      containerClass: "container dashboard typ1",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: null,
@@ -93,6 +93,9 @@ export default function DashboardSalesList(props) {
   useEffect(() => {
     handleContainer();
   }, []);
+  //==============================================================================
+  // api
+  //==============================================================================
 
   const getProductList = async () => {
     // 시리즈 스토리 리스트
@@ -108,7 +111,9 @@ export default function DashboardSalesList(props) {
     // 
     // setData(getProductListFromResultData(data));
   };
-
+  //==============================================================================
+  // event
+  //==============================================================================
   const handleChange = (page) => {
     console.log('handleChange', page);
     
@@ -123,26 +128,28 @@ export default function DashboardSalesList(props) {
     }
 
     if( startDate.getTime() >= endDate.getTime() ){
-      dispatch( showModal({title: text.error_title, contents: <ErrorPopup message={'시작일은 종료일보다 클 수 없습니다.'} buttonTitle={'確認'} />, }) );
+      showOneButtonPopup(dispatch, '시작일은 종료일보다 클 수 없습니다.');
       return false;
     }
 
     return true;
   };
-
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   const renderSalesList = () => {
     return stateData?.list?.map((item, index) => {
       return (
         <tr key={index}>
           <td className="hide-m">{item.number}</td>
-          <td className="td_imgs">
-            <div className="cx_thumb w131h81"><span><img src={item.image} alt={"cover iamge"} /></span></div>
+          <td className="td_imgs2">
+            <div className="cx_thumb"><span><Image hash={item.image} /></span></div>
           </td>
           <td className="td_subject">{item.title}</td>
-          <td className="td_group">{item.price}</td>
-          <td className="td_gray"><span className="view-m">{text.date}：</span>{item.date}</td>
-          <td className={`td_txt`}><span className="view-m">{text.amount}</span>{item.amount}</td>
-          <td className="td_txt float-right">
+          <td className="td_number3">{item.price}</td>
+          <td className="td_txt1"><span className="view-m">{text.date}：</span>{item.date}</td>
+          <td className='td_txt mbdb0'><span className="view-m">{text.amount}</span>{convertMoneyStyleString(item.amount)}<em class="view-m">{text.count}</em></td>
+          <td className="hide-m">
           </td>
         </tr>
       );
@@ -163,41 +170,50 @@ export default function DashboardSalesList(props) {
         pathname={'/dashboard/product/sales/list'} />
 
       <div className="inr-c">
-        <div className="col mt2 saleslist-data-col">
-          <div className="mr24">
-            <div className="calendar-label">{text.start_date}</div>
-            <Calendar 
-              ref={refCalendarStart}
-              name={"start"}
-              type={"1month"} 
-              callback={handleClickCalendar} />
+        <div className="hd_titbox2 pdty1">
+          {/* mobile */}
+          <h2 class="h_tit0 mb15 view-m">販売内訳の期限</h2>
+
+          <div className="inp_cal">
+            <div>
+              <label for="calendar_first1">{text.start_date}</label>
+              <Calendar 
+                ref={refCalendarStart}
+                name={"start"}
+                className={''}
+                type={"1month"} 
+                callback={handleClickCalendar} />
+            </div>
+            <div>
+              <label for="calendar_last1">{text.end_date}</label>
+              <Calendar 
+                ref={refCalendarEnd}
+                name={"end"}
+                className={''}
+                type={"none"} 
+                callback={handleClickCalendar} />
+            </div>
           </div>
-          <div className="mr24">
-            <div className="calendar-label">{text.end_date}</div>
-            <Calendar 
-              ref={refCalendarEnd}
-              name={"end"}
-              type={"none"} 
-              callback={handleClickCalendar} />
-          </div>
+
+          <h2 className="h_tit1">
+            <span class="mr20">{text.during_sales}</span> 
+            <br class="view-m"/>
+            <strong className="c-black mfont1">{stateData?.sales}</strong>
+          </h2>
         </div>
 
-        <div className="col mt41 saleslist-data-col">
-          <div className="saleslist-during-label mr50">{text.during_sales}</div>
-          <div className="saleslist-during-text">{stateData?.sales}</div>
-        </div>
 
-        <div className="tbl_basic mtbl_ty1 mt50">
+        <div className="tbl_basic mtbl_ty1">
           <table className="list">
             <caption>list</caption>
             <colgroup>
               <col className="num" />
-              <col className="wid1" />
+              <col className="imgs2" />
+              <col className="" />
+              <col className="wid2" />
               <col className="wid4" />
-              <col className="wid1" />
-              <col className="wid1" />
-              <col className="wid1" />
               <col className="wid4" />
+              <col className="wid4 hide-m" />
             </colgroup>
             <thead>
               <tr>
@@ -207,7 +223,7 @@ export default function DashboardSalesList(props) {
                 <th>{text.price}</th>
                 <th>{text.date}</th>
                 <th>{text.amount}</th>
-                <th></th>
+                <th className="hide-m"></th>
               </tr>
             </thead>
             <tbody>

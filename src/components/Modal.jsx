@@ -44,6 +44,12 @@ export default forwardRef( function Modal(props, ref) {
     dispatch(hideModal());
   }
 
+  const handleKeydown = (event) => {
+    if( event.key === 'Esc' || event.key === 'Escape' ){
+      handleClose();
+    }
+  };
+
   
   useImperativeHandle(ref, () => ({
     setContent: (title, content) => {
@@ -80,13 +86,13 @@ export default forwardRef( function Modal(props, ref) {
   }, [title]);
 
   useEffect(() => {
-    window.addEventListener("beforeunload", (e) => handleClose());  //창닫기, 주소창을 통항 이동시 
-    window.addEventListener("keydown", (e) => handleClose());       //키 이벤트작동시
+    window.addEventListener("beforeunload", (e) => handleClose());     //창닫기, 주소창을 통항 이동시 
+    window.addEventListener("keydown", (e) => handleKeydown(e));       //키 이벤트작동시
     
     return () => {
       handleClose();
       window.removeEventListener("beforeunload", (e) => handleClose());
-      window.removeEventListener("keydown", (e) => handleClose());
+      window.removeEventListener("keydown", (e) => handleKeydown(e));
     }
   }, []);
 
