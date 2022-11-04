@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, Fragment } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 //temp data
@@ -20,6 +20,7 @@ const text = {
   title: "タイトル",
   create_date : "作成日",
   creator : "作成者",
+  startAt : "販売開始日：",
   rating : "評価",
   answer : "回答",
   report : "通報",
@@ -72,12 +73,17 @@ export default function DashboardSalesReview(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const refArrow = useRef([]);
+  const refAnswer = useRef([]);
   const params = useParams('id');
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const header = {
       headerClass: "header",
-      containerClass: "series",
+      containerClass: "container dashboard typ1",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: null,
@@ -91,7 +97,9 @@ export default function DashboardSalesReview(props) {
   useEffect(() => {
     handleContainer();
   }, []);
-
+  //==============================================================================
+  // function
+  //==============================================================================
   const getSelectedItem = (id) => {
     for( let i = 0; i < stateData?.list?.length; i++ ){
       if( id === stateData.list[i].number ){
@@ -100,7 +108,9 @@ export default function DashboardSalesReview(props) {
       }  
     }
   };
-
+  //==============================================================================
+  // api
+  //==============================================================================
   const getProductList = async () => {
     // 시리즈 스토리 리스트
     const params = {
@@ -115,7 +125,9 @@ export default function DashboardSalesReview(props) {
     // 
     // setData(getProductListFromResultData(data));
   };
-
+  //==============================================================================
+  // event
+  //==============================================================================
   const handleChange = (page) => {
     console.log('handleChange', page);
     
@@ -148,35 +160,61 @@ export default function DashboardSalesReview(props) {
     }
   };
 
+  const handleItemMobile = useCallback((event) => {
+    const index = parseInt( event.target.getAttribute('index') );
+    const display = refAnswer.current[index].style.display;
+    
+    refAnswer.current[index].style.display = display === 'none' ? 'block' : 'none';
+  }, []);
+  //==============================================================================
+  // hook & render
+  //==============================================================================
 
   const renderSalesInquiryList = () => {
     return stateData?.list?.map((item, index) => {
       return (
-          <tr key={index}>
+        <Fragment  key={index}>
+          <tr className="tr-q">
             <td className="hide-m">{item.number}</td>
-            <td className="td_imgs">
-              <div className="cx_thumb w131h81"><span><img src={item.image} alt={"cover iamge"} /></span></div>
+            <td className="td_imgs2">
+              <div className="cx_thumb"><span><img src={item.image} alt={"cover iamge"} /></span></div>
             </td>
             <td className="td_subject">{item.title}</td>
-            <td className="td_group">{item.date}</td>
-            <td className="td_gray"><span className="view-m">{text.creator}：</span>{item.user}</td>
-            <td className="td_group">
+            <td className="td_txt0"><span className="view-m">{text.startAt}：</span>{item.date}</td>
+            <td className="td_txt0"><span className="view-m">{text.creator}：</span>{item.user}</td>
+            <td className="td_star">
               <div className="t_star">
                 <span className={`s${item.review_count}`}>
                   <FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/><FontAwesomeIcon icon={faStar}/>
                 </span>
               </div>
             </td>
-            <td className="td_txt">
-              <div className="dsi_d_btns">
-                <div className="mr60">
-                  <div className="btn-pk s blue2 dsi_btn mr12" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
-                  <div className="btn-pk s blue2 dsi_btn mt10 mr12" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
-                </div>
-                <div className="mr30" ><ArrowRight className="fs24" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}   /></div>
+            <td className="td_btns2 ta-r et_botm1">
+              <div className="d-ib">
+                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickAnswer}>{text.answer}</div>
+                <div className="btn-pk s blue2" data-id={item.number} onClick={handleItemClickReport}>{text.report}</div>
               </div>
             </td>
+            <td className="hide-m ta-c">
+              <div className="arr" ><ArrowRight className="fs16" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}   /></div>
+            </td>
           </tr>
+          <tr className="tr_a" >
+							<td className="hide-m"></td>
+							<td colSpan="6" className="ta-l">
+								<div className="tx_a1">
+									<button type="button" className="arr view-m" index={index}  onClick={handleItemMobile}></button>
+									<p className="t1">{item.creator_comnent}</p>
+								</div>
+								<div className="tx_a2" ref={el => (refAnswer.current[index] = el)}>
+									<span className="re view-m"><i className="fa-solid fa-share"></i></span>
+									<p className="t2"><span className="i-txt">{text.creator}</span><span>{item.answer.time}時</span></p>
+									<p className="t1">{item.answer.coment}</p>
+								</div>
+							</td>
+							<td className="hide-m ta-c"></td>
+						</tr>
+        </Fragment>
     );
     });
   };
@@ -188,11 +226,9 @@ export default function DashboardSalesReview(props) {
   }, []);
 
   useEffect(() => {
-    //
     if( params.id !== undefined ){
       setStateAnswer( getSelectedItem(params.id) );
     }
-
   }, [params, stateData]);
 
   
@@ -210,12 +246,13 @@ export default function DashboardSalesReview(props) {
             <caption>list</caption>
             <colgroup>
               <col className="num" />
-              <col className="num" />
+              <col className="imgs2" />
+              <col className="" />
               <col className="wid4" />
-              <col className="num" />
-              <col className="num" />
-              <col className="num" />
               <col className="wid4" />
+              <col className="wid4" />
+              <col className="wid4" />
+              <col className="wid5 hide-m" />
             </colgroup>
             <thead>
               <tr>
@@ -226,6 +263,7 @@ export default function DashboardSalesReview(props) {
                 <th>{text.creator}</th>
                 <th>{text.rating}</th>
                 <th></th>
+                <th className="hide-m"></th>
               </tr>
             </thead>
             <tbody>

@@ -188,20 +188,20 @@ export default function DashboardSalesInquiry(props) {
                 <div className="arr" ><ArrowRight className="fs16 pointer" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}/></div>
             </td>
           </tr>
-          <tr class="tr_a">
-            <td class="hide-m"></td>
-            <td colspan="5" class="ta-l">
-              <div class="tx_a1" >
-                <button type="button" class="arr view-m" index={index} onClick={handleItemMobile} ></button>
-                <p class="t1">{item.creator_comnent}</p>
+          <tr className="tr_a">
+            <td className="hide-m"></td>
+            <td colSpan="5" className="ta-l">
+              <div className="tx_a1" >
+                <button type="button" className="arr view-m" index={index} onClick={handleItemMobile} ></button>
+                <p className="t1">{item.creator_comnent}</p>
               </div>
-              <div class="tx_a2 transition" ref={el => (refAnswer.current[index] = el)}>
-                <span class="re view-m"><i class="fa-solid fa-share"></i></span>
-                <p class="t2"><span class="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
-                <p class="t1">{item.answer.coment}</p>
+              <div className="tx_a2" ref={el => (refAnswer.current[index] = el)}>
+                <span className="re view-m"><i className="fa-solid fa-share"></i></span>
+                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
+                <p className="t1">{item.answer.coment}</p>
               </div>
             </td>
-            <td class="hide-m ta-c"></td>
+            <td className="hide-m ta-c"></td>
           </tr>
         </Fragment>
     );
