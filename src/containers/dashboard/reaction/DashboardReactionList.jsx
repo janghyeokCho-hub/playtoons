@@ -273,9 +273,7 @@ export default function DashboardReactionList(props) {
         {stateData?.reactions?.length > 0 && (
           <Pagination
             className={""}
-            page={stateData?.meta.currentPage}
-            itemsCountPerPage={stateData?.meta.itemsPerPage}
-            totalItemsCount={stateData?.meta.totalItems}
+            meta={stateData?.meta}
             callback={(page) => getReactionList(page)}
           />
         )}

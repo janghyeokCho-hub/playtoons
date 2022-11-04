@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Pagination from 'react-js-pagination';
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,7 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/pro-light-svg-icons';
 
   <Pagination
     className={''}
-    page={stateData?.meta.currentPage}
+    page={stateData?.meta.page}
     itemsCountPerPage={stateData?.meta.itemsPerPage}
     totalItemsCount={stateData?.meta.totalItems}
     callback={handleChange}
@@ -25,8 +25,76 @@ import { faAngleRight, faAngleLeft } from '@fortawesome/pro-light-svg-icons';
 * @return
 */
 export default function Pagination1(props) {
-  const { className, itemsCountPerPage, totalItemsCount, totalPages, callback, page } = props;
+  const { className, meta, callback, page } = props;
   const [ statePage, setStatePage] = useState(page);
+
+
+  const pagination = useMemo(() => {
+    if (meta) {
+      const { currentPage, totalPages, itemCount } = meta;
+      let pageList = [];
+      for (let i = 1; i <= totalPages; i++) {
+        pageList.push(i);
+      }
+
+      const prev = currentPage - 1;
+      const prevPage = prev - 1;
+      const next = currentPage + 1;
+      const nextPage = next + 1;
+
+      let showPages;
+      if (currentPage === 1) {
+        if (totalPages === 0) {
+          showPages = [1];
+        } else {
+          showPages = pageList.splice(prev, 3);
+        }
+      } else if (currentPage === totalPages) {
+        showPages = pageList.splice(currentPage - 3, 3);
+      } else {
+        showPages = pageList.splice(currentPage - 2, 3);
+      }
+
+      return (
+        <>
+          {prevPage > 0 && (
+            <li
+              className="prev"
+              onClick={() => callback?.(prevPage)}
+            >
+              <a href="#">
+                <FontAwesomeIcon icon={faAngleLeft} />
+              </a>
+            </li>
+          )}
+          {showPages &&
+            showPages.map((page, index) => (
+              <li
+                key={`page_${index}`}
+                className={`${page === currentPage ? "on" : ""}`}
+                onClick={() => callback?.( page)}
+              >
+                <a href="#">{page}</a>
+              </li>
+            ))}
+
+          {itemCount > 0 && totalPages - nextPage > 0 && (
+            <li
+              className="next"
+              onClick={() => callback?.( nextPage)}
+            >
+              <a href="#">
+                <FontAwesomeIcon icon={faAngleRight} />
+              </a>
+            </li>
+          )}
+        </>
+      );
+    } else {
+      return <></>;
+    }
+  }, [meta]);
+
 
   const handleChange = (page) => {
     setStatePage(page);
@@ -36,11 +104,12 @@ export default function Pagination1(props) {
   useEffect(() => {
     setStatePage(page);
   }, [page]);
+
   
 
   return (
     <>
-      {
+      {/* {
         (totalPages !== undefined && totalPages > 1 ) &&
         <Pagination 
               activePage={statePage}
@@ -57,7 +126,10 @@ export default function Pagination1(props) {
               onChange={handleChange}
               />
 
-      }
+      } */}
+      <div className="pagenation">
+        <ul>{pagination}</ul>
+      </div>
     </>
   )
 }

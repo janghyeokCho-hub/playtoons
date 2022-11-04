@@ -161,6 +161,7 @@ export default function DashboardPlanSubsciber(props) {
 
         <Pagination
           className={""}
+          meta={stateData?.meta}
           page={stateData?.meta.currentPage}
           itemsCountPerPage={stateData?.meta.itemsPerPage}
           totalItemsCount={stateData?.meta.totalItems}

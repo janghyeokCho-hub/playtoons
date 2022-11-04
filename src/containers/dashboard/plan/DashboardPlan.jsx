@@ -18,7 +18,7 @@ import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { useLayoutEffect } from "react";
 
 const text = {
@@ -199,13 +199,13 @@ export default function DashboardPlan(props) {
             <p className="t_profile">
               <span
                 className="im"
-                style={{ backgroundImage: `url(${item.image})` }}
+                style={{ backgroundImage: `url(${item.account.profileImage})` }}
               ></span>
-              <span>{item.title}</span>
+              <span>{item.account.id}</span>  
             </p>
-            <p className="t2">{item.date}</p>
+            <p className="t2">{ getDateYYYYMMDD(item.updatedAt, '/') }</p>
           </div>
-          <p className="t1 c-black">{item.plan}</p>
+          <p className="t1 c-black">{item.subscribeTier.name}</p>
         </li>
       );
     });

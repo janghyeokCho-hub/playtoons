@@ -192,10 +192,7 @@ export default function DashboardSeries() {
 
         <Pagination
           className={""}
-          page={stateData?.meta.currentPage}
-          itemsCountPerPage={stateData?.meta.itemsPerPage}
-          totalItemsCount={stateData?.meta.totalItems}
-          totalPages={stateData?.meta.totalPages}
+          meta={stateData?.meta}
           callback={(page) => navigate(`/dashboard/series/${page}`)}
         />
       </div>

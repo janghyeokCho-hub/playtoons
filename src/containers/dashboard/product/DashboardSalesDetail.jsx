@@ -258,10 +258,7 @@ export default function DashboardSalesDetail() {
 
         <Pagination
           className={""}
-          page={stateData?.meta.currentPage}
-          itemsCountPerPage={stateData?.meta.itemsPerPage}
-          totalItemsCount={stateData?.meta.totalItems}
-          totalPages={stateData?.meta.totalPages}
+          meta={stateData?.meta}
           callback={() => {  }}
         />
       </div>

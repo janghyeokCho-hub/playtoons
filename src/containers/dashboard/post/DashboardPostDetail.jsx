@@ -306,6 +306,7 @@ export default function DashboardPostDetail() {
             {stateReactions?.reactions?.length > 0 && (
               <Pagination
                 className={""}
+                meta={stateReactions?.meta}
                 page={stateReactions?.meta.currentPage}
                 itemsCountPerPage={stateReactions?.meta.itemsPerPage}
                 totalItemsCount={stateReactions?.meta.totalItems}

@@ -255,9 +255,7 @@ export default function DashboardProductList(props) {
 
         <Pagination
           className={''}
-          page={stateData?.meta.currentPage}
-          itemsCountPerPage={stateData?.meta.itemsPerPage}
-          totalItemsCount={stateData?.meta.totalItems}
+          meta={stateData?.meta}
           callback={() => {  }}
           />
       </div>
