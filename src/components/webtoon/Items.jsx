@@ -11,7 +11,7 @@ import {
 import { getPostList as getPostListAPI } from "@API/postService";
 import { getTags as getTagsAPI } from "@API/webtoonService";
 import Item from "./Item";
-import SearchPopup from "@COMPONENTS/webtoon/SearchPopup";
+import SearchPopup from "@COMPONENTS/SearchPopup";
 
 const Items = ({ tab, typeId }) => {
   const orderByMenus = [

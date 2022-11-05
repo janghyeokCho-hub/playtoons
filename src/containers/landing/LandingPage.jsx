@@ -89,11 +89,7 @@ const LandingPage = (props) => {
               数えきれない作品をご覧にいただけます。
             </p>
             <div className="btn-bot">
-              <Link
-                to=""
-                onClick={() => alert("/home 으로 페이지 이동 예정")}
-                className="btn-pk b blue2 bdrs"
-              >
+              <Link to="/home" className="btn-pk b blue2 bdrs">
                 <span>はじめる</span>
               </Link>
             </div>

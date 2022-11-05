@@ -1,5 +1,9 @@
 import { apiServer } from "./api";
-import { getErrorMessageFromResultCode, getGetMethodUrl, getParamsToQuery } from "@/common/common";
+import {
+  getErrorMessageFromResultCode,
+  getGetMethodUrl,
+  getParamsToQuery,
+} from "@/common/common";
 
 /**
 *
@@ -12,7 +16,10 @@ export const setPostToServer = async (params) => {
   try {
     return await apiServer("post", "/post", params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -27,7 +34,10 @@ export const getPostDetailFromServer = async (params) => {
   try {
     return await apiServer("get", `/post/${params.id}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -42,7 +52,10 @@ export const getPostIdMineFromServer = async (params) => {
   try {
     return await apiServer("get", `/post/${params.id}/mine`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -57,7 +70,10 @@ export const editPostToServer = async (params) => {
   try {
     return await apiServer("patch", "/post", params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -70,9 +86,15 @@ export const editPostToServer = async (params) => {
 */
 export const getPostSeriesMine = async (params) => {
   try {
-    return await apiServer("get", `/post/series/mine${getGetMethodUrl(params)}`);
+    return await apiServer(
+      "get",
+      `/post/series/mine${getGetMethodUrl(params)}`
+    );
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -87,7 +109,10 @@ export const getAuthorMineFromServer = async () => {
   try {
     return await apiServer("get", "/author/mine");
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -102,7 +127,10 @@ export const getAccountsFromServer = async () => {
   try {
     return await apiServer("get", "/accounts");
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -249,6 +277,27 @@ export const setPostReactionToServer = async (params) => {
   try {
     return await apiServer("post", `/reaction`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+ * 해당 작가를 구독중인지 확인하는 API
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {number} authorId
+ * @returns
+ */
+export const getSubscribeTierCheck = async (authorId) => {
+  try {
+    return await apiServer("get", `/subscribeTier/${authorId}/check`);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };

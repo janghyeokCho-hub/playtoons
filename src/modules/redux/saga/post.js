@@ -20,7 +20,6 @@ function createEditPostRequestSaga(type) {
       yield put(startLoading(type));
 
       const response = yield call(postApi.editPostToServer);
-      console.log("createEditPostRequestSaga response : ", response);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
@@ -93,9 +92,7 @@ function createAuthorMineRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
-      console.log('createAuthorMineRequestSaga')
-
-      const response = yield call(postApi.getAuthorMineFromServer, );
+      const response = yield call(postApi.getAuthorMineFromServer);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
@@ -127,32 +124,45 @@ function createCurrentPostRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
-
       /** 게시글 상세 조회 */
       const response = yield call(
         postApi.getPostDetailFromServer,
         action.payload
       );
+
       if (response?.status === 200) {
-        const payload = response.data?.post;
+        const subscribeTierResponse = yield call(
+          postApi.getSubscribeTierCheck,
+          response.data?.post?.authorId
+        );
 
-        /** 게시글 조회 수 증가 */
-        const viewResponse = yield call(postApi.setPostView, payload.id);
-        console.log("viewResponse : ", viewResponse);
-
-        /** 게시글의 content 조회 */
-        const contentResponse = yield call(postApi.getPostContent, payload.id);
-        if (contentResponse?.status === 200) {
-          payload.content = response.data?.content;
-          payload.isLock = false;
-        } else {
-          payload.content = null;
+        let payload;
+        if (
+          subscribeTierResponse.data?.subscriptionStatus === "NOT_SUBSCRIBED"
+        ) {
+          // 해당 작가를 구독중이지 않음
           payload.isLock = true;
-        }
+        } else {
+          /** 게시글 조회 수 증가 */
+          payload = response.data?.post;
+          yield call(postApi.setPostView, payload.id);
 
+          /** 게시글의 content 조회 */
+          const contentResponse = yield call(
+            postApi.getPostContent,
+            payload.id
+          );
+          if (contentResponse?.status === 200) {
+            payload.content = response.data?.content;
+            payload.isLock = false;
+          } else {
+            payload.content = null;
+            payload.isLock = true;
+          }
+        }
         /** 게시글의 댓글 목록 조회 (최초 3개만) */
         const reactionResponse = yield call(reactionApi.getReaction, {
-          postId: payload.id,
+          postId: action.payload.id,
           limit: 3,
         });
 
@@ -161,7 +171,6 @@ function createCurrentPostRequestSaga(type) {
         } else {
           payload.reactions = [];
         }
-
         yield put({
           type: `${type}_SUCCESS`,
           payload: payload,

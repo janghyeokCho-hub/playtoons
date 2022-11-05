@@ -43,7 +43,7 @@ const Home = (props) => {
         <div className="inr-c">
           <div className="lst_card2">
             <div className="col">
-              <Link to="">
+              <Link to="/webtoon">
                 <div className="thumb wid1">
                   <img
                     src={require("@IMAGES/img_landing_main1_log.png")}
@@ -56,7 +56,7 @@ const Home = (props) => {
               </Link>
             </div>
             <div className="col">
-              <Link to="">
+              <Link to="/novel">
                 <div className="thumb wid2">
                   <img
                     src={require("@IMAGES/img_landing_main2_log.png")}
@@ -332,9 +332,9 @@ const Home = (props) => {
             <div className="txt">
               <p className="h1">クリエイターになる</p>
               <p className="t1">自分の作品を世界に届けよう！</p>
-              <a href="#" className="btn-pk bdrs">
+              <Link to="/author/register" className="btn-pk bdrs">
                 詳しくみる
-              </a>
+              </Link>
             </div>
           </div>
         </div>

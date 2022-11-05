@@ -32,8 +32,8 @@ const Novel = () => {
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
-  const [isLock, setIsLock] = useState(currentPost?.isLock);
-  const [content, setContent] = useState(currentPost?.content);
+  const isLock = currentPost?.isLock;
+  const content = currentPost?.content;
   const contentURL = useFilePath(content);
   // 로그인 한 사용자
   const userInfo = useSelector(({ login }) => login.userInfo);
@@ -41,6 +41,9 @@ const Novel = () => {
   // 이전회차 / 다음회차 버튼 Ref
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+  // 이모티콘 Ref
+  const prevEmoticonRef = useRef(null);
+  const nextEmoticonRef = useRef(null);
   // 댓글 이모티콘 창 활성 플래그
   const [isEmoticonShow, setIsEmoticonShow] = useState(false);
   // 이모티콘 선택
@@ -249,8 +252,8 @@ const Novel = () => {
                         observeParents={true}
                         touchRatio={0}
                         navigation={{
-                          nextEl: ".swiper-button-next.myem",
-                          prevEl: ".swiper-button-prev.myem",
+                          prevEl: prevEmoticonRef?.current,
+                          nextEl: nextEmoticonRef?.current,
                         }}
                         onSlideChange={() => {}}
                         onInit={(swiper) => {}}
@@ -264,13 +267,21 @@ const Novel = () => {
                           </SwiperSlide>
                         </div>
                       </Swiper>
-                      <button type="button" className="swiper-button-prev myem">
+                      <button
+                        ref={prevEmoticonRef}
+                        type="button"
+                        className="swiper-button-prev myem"
+                      >
                         <FontAwesomeIcon
                           className="fa-regular fa-angle-left"
                           icon={faAngleLeft}
                         />
                       </button>
-                      <button type="button" className="swiper-button-next myem">
+                      <button
+                        ref={nextEmoticonRef}
+                        type="button"
+                        className="swiper-button-next myem"
+                      >
                         <FontAwesomeIcon
                           className="fa-regular fa-angle-right"
                           icon={faAngleRight}

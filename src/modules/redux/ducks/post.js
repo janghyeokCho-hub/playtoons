@@ -42,19 +42,16 @@ const post = handleActions(
   {
     [EDIT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("post edit", action.payload);
         draft.post = action.payload.post;
       });
     },
     [POST_DETAIL_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("post detail : ", action.payload);
         draft.post = action.payload.post;
       });
     },
     [AUTHOR_MINE_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("author mine", action.payload);
         draft.authorMine = action.payload;
       });
     },
@@ -68,11 +65,11 @@ const post = handleActions(
     },
     [GET_POST_REACTION_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("action.payload.reactions : ", action.payload.reactions);
         draft.currentPost.reactions = action.payload.reactions;
       });
     },
-    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {   //2022.11.01 lhk- logout 시 author 정보도 초기화
+    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {
+      //2022.11.01 lhk- logout 시 author 정보도 초기화
       return produce(state, (_) => {
         return {
           ...initialState,

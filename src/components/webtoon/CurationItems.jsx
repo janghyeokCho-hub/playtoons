@@ -57,8 +57,8 @@ const CurationItems = ({ curationNum }) => {
             clickable: true,
           }}
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            prevEl: prevRef?.current,
+            nextEl: nextRef?.current,
           }}
           breakpoints={{
             0: {

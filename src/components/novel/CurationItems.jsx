@@ -54,8 +54,8 @@ const CurationItems = ({ curationNum }) => {
             clickable: true,
           }}
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            prevEl: prevRef?.current,
+            nextEl: nextRef?.current,
           }}
           onUpdate={(swiper) => {
             nextRef?.current?.classList?.add("slide_st");

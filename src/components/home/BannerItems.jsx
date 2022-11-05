@@ -50,8 +50,8 @@ const BannerItems = ({ curationNum }) => {
         observer={true}
         observeParents={true}
         navigation={{
-          nextEl: ".swiper-button-next.my1",
-          prevEl: ".swiper-button-prev.my1",
+          prevEl: prevRef?.current,
+          nextEl: nextRef?.current,
         }}
         pagination={{
           el: ".swiper-pagination.my1",

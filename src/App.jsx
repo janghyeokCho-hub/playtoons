@@ -7,6 +7,7 @@ import Webtoon from "@CONTAINERS/webtoon/Webtoon";
 import Novel from "@CONTAINERS/novel/Novel";
 import Post from "@CONTAINERS/post";
 import Author from "@CONTAINERS/author";
+import Store from "@CONTAINERS/store";
 import Payment from "@CONTAINERS/payment";
 import Product from "@CONTAINERS/product";
 import Purchase from "@CONTAINERS/purchase";
@@ -33,6 +34,7 @@ function App() {
           <Route path="/account/*" element={<Account />} />
           <Route path="/post/*" element={<Post />} />
           <Route path="/author/*" element={<Author />} />
+          <Route path="/store/*" element={<Store />} />
           <Route path="/payment/*" element={<Payment />} />
           <Route path="/product/*" element={<Product />} />
           <Route path="/purchase/*" element={<Purchase />} />

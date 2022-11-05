@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation } from "swiper";
 import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,6 +10,7 @@ import {
 import Curation from "./Curation";
 
 const CurationItems = ({ curationNum }) => {
+  SwiperCore.use([Navigation]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
@@ -47,8 +49,8 @@ const CurationItems = ({ curationNum }) => {
           observer={true}
           observeParents={true}
           navigation={{
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
+            prevEl: prevRef?.current,
+            nextEl: nextRef?.current,
           }}
           breakpoints={{
             0: {

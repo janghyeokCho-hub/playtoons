@@ -43,7 +43,8 @@
 .fl-r {
   float: right;
 }
-.d-ib {     /* 2022.11.03 추가 */
+.d-ib {
+  /* 2022.11.03 추가 */
   display: inline-block;
 }
 .blind {
@@ -895,13 +896,13 @@ textarea:focus {
   color: #3ac837 !important;
 }
 .cl-sell {
-  color: #2B9429 !important;
+  color: #2b9429 !important;
 }
 .cl-ing {
-  color: #ED8812 !important;
+  color: #ed8812 !important;
 }
 .cl-non {
-  color: #F11C0E !important;
+  color: #f11c0e !important;
 }
 /* 2: Common Setting
 =========================================================================================== */
@@ -2487,10 +2488,10 @@ body {
   width: 120px;
 }
 .tbl_basic td.td_number3 {
-  color: #394BC2;
+  color: #394bc2;
 }
 .tbl_basic tr:hover {
-  background-color: #F7F8F9;
+  background-color: #f7f8f9;
 }
 .tbl_basic .i-txt {
   display: inline-block;
@@ -2498,10 +2499,10 @@ body {
   padding: 3px 13px;
   margin-right: 8px;
   font-size: 12px;
-  color: #394BC2;
+  color: #394bc2;
   border-width: 1px;
   border-style: solid;
-  border-color: #394BC2;
+  border-color: #394bc2;
   -webkit-border-radius: 30px;
   -moz-border-radius: 30px;
   border-radius: 30px;
@@ -4315,7 +4316,7 @@ body {
   background-size: 12px;
 }
 .btn_select1 .select_list {
-  display: none;
+  /* 2022-11-06 display: none; 제거 */
   padding: 12px 0px;
   min-width: 140px;
   z-index: 1;
@@ -6168,7 +6169,7 @@ body {
   padding: 0px 50px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #DDE1E5;
+  border-bottom-color: #dde1e5;
 }
 .hd_tabbox .tabs.ty1 li {
   margin-bottom: -1px;
@@ -6179,7 +6180,7 @@ body {
   color: #617080;
 }
 .hd_tabbox .tabs.ty1 li.on a {
-  color: #394BC2;
+  color: #394bc2;
 }
 .ui-datepicker {
   display: none;
@@ -6291,7 +6292,7 @@ body {
 }
 .inp_cal .inp_txt.calendar:focus {
   background-color: rgba(57, 75, 194, 0.05);
-  color: #394BC2;
+  color: #394bc2;
   /* background-image: url(../images/common/ico_calender_on.svg); */
 }
 .tr_q {
@@ -6310,24 +6311,24 @@ body {
 }
 .tr_a {
   display: none;
-  background-color: #F7F8F9;
+  background-color: #f7f8f9;
 }
 .tr_a div.tx_a1 {
   padding-bottom: 30px;
   margin-bottom: 16px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #DDE1E5;
+  border-bottom-color: #dde1e5;
 }
 .tr_a .t1 {
   font-weight: 500;
   font-size: 14px;
-  color: #4D5A67;
+  color: #4d5a67;
 }
 .tr_a .t2 {
   margin-bottom: 10px;
   font-size: 12px;
-  color: #394BC2;
+  color: #394bc2;
 }
 .tr_a .t2 > span {
   display: inline-block;
@@ -6336,7 +6337,7 @@ body {
 .tr_a .i-txt {
   margin-right: 10px;
   padding: 4px 16px;
-  background-color: #394BC2;
+  background-color: #394bc2;
   color: #fff;
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
@@ -6361,7 +6362,7 @@ body {
   margin-bottom: 20px;
   font-weight: 700;
   font-size: 32px;
-  color: #13161A;
+  color: #13161a;
 }
 .hd_titbox4 .t1 {
   font-size: 24px;
@@ -6384,7 +6385,7 @@ body {
   height: 7px;
 }
 #container.list .hd_tabbox .tabs li.on a {
-  color: #394BC2;
+  color: #394bc2;
 }
 .t-dot {
   text-overflow: ellipsis;
