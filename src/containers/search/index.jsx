@@ -1,22 +1,59 @@
-import React from "react";
-import styled from "styled-components";
-import { Route, Routes } from "react-router-dom";
-import All from "./All";
-import Author from "./Author";
-import HashTag from "./HashTag";
-import Series from "./Series";
-import Store from "./Store";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import { setContainer } from "@/modules/redux/ducks/container";
+import Search from "@COMPONENTS/search/Search";
+import Store from "@COMPONENTS/search/Store";
 
 const App = () => {
+  const dispatch = useDispatch();
+  const [selectTab, setSelectTab] = useState("SEARCH");
+
+  const handleContainer = useCallback(() => {
+    const container = {
+      headerClass: "header",
+      containerClass: "container search",
+      isHeaderShow: true,
+      isMenuShow: true,
+      headerType: "post",
+      menuType: "MAIN",
+      isDetailView: false,
+      activeMenu: null,
+      isFooterShow: false,
+    };
+    dispatch(setContainer(container));
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
   return (
     <>
-      <Routes>
-        <Route path={"all"} element={<All />} />
-        <Route path={"author"} element={<Author />} />
-        <Route path={"hash-tag"} element={<HashTag />} />
-        <Route path={"series"} element={<Series />} />
-        <Route path={"store"} element={<Store />} />
-      </Routes>
+      <div className="hd_tabbox">
+        <div className="tabs ty1">
+          <ul className="inr-c">
+            <li
+              className={selectTab === "SEARCH" ? "on" : ""}
+              onClick={() => setSelectTab("SEARCH")}
+            >
+              <Link to="">
+                <span>探索</span>
+              </Link>
+            </li>
+            <li
+              className={selectTab === "STORE" ? "on" : ""}
+              onClick={() => setSelectTab("STORE")}
+            >
+              <Link to="">
+                <span>マケットプレイス</span>
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {selectTab === "SEARCH" && <Search />}
+      {selectTab === "STORE" && <Store />}
     </>
   );
 };
