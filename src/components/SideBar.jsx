@@ -28,10 +28,10 @@ const SideBar = ({ handleChange }) => {
         </h1>
       </div>
       {menus &&
-        Object.entries(menus).map(([key, value]) => {
+        Object.entries(menus).map(([key, value], index) => {
           return (
             <div key={key}>
-              <h2 className="tit">{key}</h2>
+              <h2 className={`tit ${index > 0 ? "bdt" : ""}`}>{key}</h2>
               <nav className="menu">
                 <ul>
                   {value.map((item) => {
