@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect } from "react";
-
-import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import { useRef } from "react";
 import {

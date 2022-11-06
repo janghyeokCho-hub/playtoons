@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import Container from "@/components/dashboard/Container";
-
 import tempPlanImage1 from "@IMAGES/img_mainplan1.jpg";
 import tempPlanImage2 from "@IMAGES/img_mainplan2.jpg";
 import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getSubscribeTierAuthorIdFromServer, getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
+import {
+  getSubscribeTierAuthorIdFromServer,
+  getSubscribeTierInPlanFromServer,
+} from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
@@ -109,7 +109,9 @@ const tempData = {
 export default function DashboardPlan(props) {
   const [stateSupporter, setStateSupporter] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxSubscribeTiers = useSelector( ({ dashboard }) => dashboard?.subscribeTiers);
+  const reduxSubscribeTiers = useSelector(
+    ({ dashboard }) => dashboard?.subscribeTiers
+  );
   const dispatch = useDispatch();
 
   //==============================================================================
@@ -131,7 +133,6 @@ export default function DashboardPlan(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-
   //==============================================================================
   // api
   //==============================================================================
@@ -142,17 +143,18 @@ export default function DashboardPlan(props) {
   */
   const getSurpporter = async () => {
     const params = new FormData();
-    params.append('limit', 4);
-    
-    const {status, data} = await getSubscribeTierInPlanFromServer(reduxAuthors[0].id, params);
-    if( status === 200 ){
+    params.append("limit", 4);
+
+    const { status, data } = await getSubscribeTierInPlanFromServer(
+      reduxAuthors[0].id,
+      params
+    );
+    if (status === 200) {
       setStateSupporter(data);
-    }
-    else{
+    } else {
       showOneButtonPopup(dispatch, data);
     }
   };
-
 
   //==============================================================================
   // render & hook
@@ -201,9 +203,9 @@ export default function DashboardPlan(props) {
                 className="im"
                 style={{ backgroundImage: `url(${item.account.profileImage})` }}
               ></span>
-              <span>{item.account.id}</span>  
+              <span>{item.account.id}</span>
             </p>
-            <p className="t2">{ getDateYYYYMMDD(item.updatedAt, '/') }</p>
+            <p className="t2">{getDateYYYYMMDD(item.updatedAt, "/")}</p>
           </div>
           <p className="t1 c-black">{item.subscribeTier.name}</p>
         </li>
@@ -212,9 +214,8 @@ export default function DashboardPlan(props) {
   };
 
   useLayoutEffect(() => {
-    
     handleContainer();
-    dispatch( getSubscribeTierAction({ authorId: reduxAuthors[0].id }) );
+    dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
     getSurpporter();
   }, []);
 

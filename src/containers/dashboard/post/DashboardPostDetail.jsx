@@ -6,28 +6,13 @@ import {
   faHeart,
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
-
-import Container from "@/components/dashboard/Container";
-
 import { Link, useNavigate, useParams } from "react-router-dom";
 import IconWithText from "@/components/dashboard/IconWithText";
-import {
-  getPostDetailFromServer,
-  getPostIdMineFromServer,
-} from "@/services/postService";
-import { useDispatch, useSelector } from "react-redux";
-import { getPostDetailAction } from "@/modules/redux/ducks/post";
-import useActions from "@/hook/useActions";
+import { getPostIdMineFromServer } from "@/services/postService";
+import { useDispatch } from "react-redux";
 import Image from "@/components/dashboard/Image";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
-import {
-  getDateYYYYMMDD,
-  getDescriptionToHtml,
-  getErrorMessageFromResultCode,
-  showOneButtonPopup,
-} from "@/common/common";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import { getReactionFromServer } from "@/services/dashboardService";
 import Pagination from "@/components/dashboard/Pagination";
@@ -233,7 +218,7 @@ export default function DashboardPostDetail() {
               </li>
               <li>
                 <span>{text.end_date} </span>
-                <span>{getDateYYYYMMDD(stateData?.endAt, '/')}</span>
+                <span>{getDateYYYYMMDD(stateData?.endAt, "/")}</span>
               </li>
               <li>
                 <span>{text.status} </span>

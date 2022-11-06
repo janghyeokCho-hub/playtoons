@@ -1,21 +1,10 @@
 import React, { useRef, useEffect, useCallback } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-
-import Container from "@/components/dashboard/Container";
-import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
-
 import {
   editPostSeriesToServer,
-  getPostCategoryListFromServer,
-  getPostTypeListFromServer,
   setFileToServer,
 } from "@/services/dashboardService";
-
-import tempCoverImage from "@IMAGES/tmp_comic2.jpg";
-import tempTimelineImage from "@IMAGES/temp_seller_image.png";
 import { useDispatch, useSelector } from "react-redux";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
@@ -27,7 +16,6 @@ import {
   initButtonInStatus,
 } from "@/common/common";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPostIdMineFromServer } from "@/services/postService";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";

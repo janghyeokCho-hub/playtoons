@@ -2,13 +2,9 @@ import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-
-import Editor from "@/components/dashboard/Editor";
-import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
-
 import {
   getPostCategoryListFromServer,
   getPostTypeListFromServer,

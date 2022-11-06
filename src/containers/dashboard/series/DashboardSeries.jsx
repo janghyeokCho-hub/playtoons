@@ -2,10 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
-
 import { getSeriesStoryList } from "@/services/dashboardService";
-
-import Container from "@/components/dashboard/Container";
 import Image from "@/components/dashboard/Image";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Pagination from "@/components/dashboard/Pagination";

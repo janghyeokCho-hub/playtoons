@@ -5,7 +5,6 @@ import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import SwiperContainer from "@/components/dashboard/Swiper";
 import { SwiperSlide } from "swiper/react";
 
-import PostContainer from "@/components/post/PostContainer";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";

@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
-
-import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
@@ -13,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuthorIdAction } from "@/modules/redux/ducks/dashboard";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
-import { getAuthorMineFromServer } from "@/services/postService";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { setContainer } from "@/modules/redux/ducks/container";

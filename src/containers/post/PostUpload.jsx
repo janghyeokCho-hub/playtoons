@@ -6,7 +6,6 @@ import React, {
   useLayoutEffect,
 } from "react";
 
-import PostContainer from "@/components/post/PostContainer";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";

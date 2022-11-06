@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-
-import Container from "@/components/dashboard/Container";
 import ImageUpload from "@/components/dashboard/ImageUpload";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRef } from "react";

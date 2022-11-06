@@ -8,19 +8,13 @@ import {
   faHeart,
 } from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
-
-import Container from "@/components/dashboard/Container";
 import Select from "@/components/dashboard/Select";
-
 //temp data
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/Pagination";
 import { useDispatch, useSelector } from "react-redux";
-import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 

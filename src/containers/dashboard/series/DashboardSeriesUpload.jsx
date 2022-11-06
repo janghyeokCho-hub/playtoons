@@ -1,14 +1,8 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
-import Container from "@/components/dashboard/Container";
-import Select from "@/components/dashboard/Select";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
-
 import {
-  getPostCategoryListFromServer,
-  getPostTypeListFromServer,
   setFileToServer,
   setSeriesToServer,
 } from "@/services/dashboardService";
@@ -21,9 +15,7 @@ import {
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
 import Category from "@/components/dashboard/Category";
-import { getAuthorMineFromServer } from "@/services/postService";
 import { useDispatch, useSelector } from "react-redux";
-import { result } from "lodash";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Input from "@/components/dashboard/Input";
