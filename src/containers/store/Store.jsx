@@ -1,14 +1,11 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
-import SwiperCore, { Navigation, Pagination } from "swiper";
 import All from "@COMPONENTS/store/All";
 import AssetSchool from "@COMPONENTS/store/AssetSchool";
 import API from "@COMPONENTS/store/API";
 import SearchPopup from "@COMPONENTS/SearchPopup";
 
 const Store = () => {
-  SwiperCore.use([Navigation, Pagination]);
-
   const [selectTab, setSelectTab] = useState("TAB1");
   const [searchText, setSearchText] = useState(null);
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);

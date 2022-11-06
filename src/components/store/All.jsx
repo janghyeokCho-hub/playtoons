@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +14,8 @@ import {
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 
 const All = ({ openSearch }) => {
+  SwiperCore.use([Navigation, Pagination]);
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   return (

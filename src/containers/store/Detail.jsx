@@ -1,24 +1,20 @@
 import React, { useCallback, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
-import Page404 from "@COMPONENTS/Page404";
-import Store from "./Store";
-import Detail from "./Detail";
+import Store from "@COMPONENTS/store/detail/Store";
 
-const App = () => {
+const Detail = () => {
   const dispatch = useDispatch();
-
   const handleContainer = useCallback(() => {
     const container = {
-      headerClass: "header",
-      containerClass: "container store_main",
       isHeaderShow: true,
       isMenuShow: true,
-      headerType: "post",
+      containerClass: "container store_detail",
+      headerClass: "header",
+      headerType: null,
       menuType: "MAIN",
-      isDetailView: false,
       activeMenu: "maquettePlace",
+      isDetailView: false,
       isFooterShow: false,
     };
     dispatch(setContainer(container));
@@ -27,13 +23,7 @@ const App = () => {
   useEffect(() => {
     handleContainer();
   }, []);
-  return (
-    <Routes>
-      <Route index element={<Store />} />
-      <Route path="*" element={<Page404 />} />
-      <Route path="detail/:id" element={<Detail />} />
-    </Routes>
-  );
+  return <Store />;
 };
 
-export default App;
+export default Detail;

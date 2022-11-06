@@ -169,7 +169,7 @@ export const getParamsToQuery = (params, tags) => {
 * @return 에러메세지
 */
 export const getErrorMessageFromResultCode = (data) => {
-  let returnMessage = 'Error';
+  let returnMessage = "Error";
 
   for (let i = 0; i < RESULT_CODE_LIST.length; i++) {
     if (RESULT_CODE_LIST[i].code === data?.result) {
@@ -191,8 +191,8 @@ export const getErrorMessageFromResultCode = (data) => {
 * @param separator 구분자
 */
 export const getDateYYYYMMDD = (date, separator) => {
-  if( date === undefined || date === null ){
-    return '';
+  if (date === undefined || date === null) {
+    return "";
   }
   return moment(date).format(["YYYY", "MM", "DD"].join(separator));
 };
@@ -232,7 +232,7 @@ export const showOneButtonPopup = (dispatch, message, callback) => {
     showModal({
       title: "お知らせ",
       contents: <ErrorPopup message={message} buttonTitle={"確認"} />,
-      callback: callback
+      callback: callback,
     })
   );
 };
@@ -246,12 +246,23 @@ export const showOneButtonPopup = (dispatch, message, callback) => {
 * @param confirmCallback 확인 버튼 callback
 * @param callback popup이 사라질때 callback
 */
-export const showTwoButtonPopup = (dispatch, message, confirmCallback, callback,) => {
+export const showTwoButtonPopup = (
+  dispatch,
+  message,
+  confirmCallback,
+  callback
+) => {
   dispatch(
     showModal({
       title: "お知らせ",
-      contents: <ConfirmPopup message={message} buttonTitle={"確認"} callback={confirmCallback} />,
-      callback: callback
+      contents: (
+        <ConfirmPopup
+          message={message}
+          buttonTitle={"確認"}
+          callback={confirmCallback}
+        />
+      ),
+      callback: callback,
     })
   );
 };
@@ -263,5 +274,38 @@ export const showTwoButtonPopup = (dispatch, message, confirmCallback, callback,
 * @param number 
 */
 export const convertMoneyStyleString = (number) => {
-  return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+/**
+ * 축약
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {number} num
+ */
+export const convertContraction = (num) => {
+  if (num > 1000) {
+    let tempNum = 0;
+    let unit = "";
+    if (num > 1000000000000) {
+      // 1조
+      tempNum = num / 1000000000000;
+      unit = "t";
+    } else if (num > 1000000000) {
+      // 10억
+      tempNum = num / 1000000000;
+      unit = "b";
+    } else if (num > 1000000) {
+      // 100만
+      tempNum = num / 1000000;
+      unit = "m";
+    } else {
+      // 1000
+      tempNum = num / 1000;
+      unit = "k";
+    }
+    return `${tempNum.toFixed(1) * 1}${unit}`;
+  } else {
+    return num;
+  }
 };
