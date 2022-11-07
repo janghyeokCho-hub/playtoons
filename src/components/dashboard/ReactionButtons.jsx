@@ -76,12 +76,12 @@ export default function ReactionButtons(props) {
     let params = {
       type: "sexual",
       content: item.content,
-      refId: item.postId,
+      // refId: item.postId,
     };
 
     const { status, data } = await setPostReactionIdReportToServer(item.id, params);
 
-    if (status === 200) {
+    if (status === 201) {
       callback?.();
       showOneButtonPopup(dispatch, text.do_report);
     } else {

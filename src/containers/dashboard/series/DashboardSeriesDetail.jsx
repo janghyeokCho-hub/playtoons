@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/Swiper";
 
-import tempImage from "@IMAGES/tmp_comic2.jpg";
-import { getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
-import Image from "@/components/dashboard/Image";
-import { useDispatch, useSelector } from "react-redux";
-import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
-import { setContainer } from "@/modules/redux/ducks/container";
 import { showOneButtonPopup } from "@/common/common";
+import Image from "@/components/dashboard/Image";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
+import { getTimelineFromServer } from "@/services/dashboardService";
+import { useDispatch, useSelector } from "react-redux";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -24,27 +23,6 @@ const text = {
   modify: "修正する",
 };
 
-const tempData = {
-  thumbList: [
-    tempImage,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ],
-  tagList: ["#アクション", "#異世界"],
-  summary:
-    "No.13の災害後、人類はシェルターにバラバラに散った。<br />そして、奇妙なロボット”クモ”の出現によりシェルター周辺に防壁が張り<br />巡らされた。クモと戦う為、特殊チームレンジャーを創設したが、<br />クモの圧倒的な力には勝てず。そこで、レンジャーたちは人間と機械を融合する<br />アダマ手術を施し、クモに挑むが…果たしてレンジャーたちの行く末は..? <br />クモの正体、そして突如現れた謎の組織カンパニーヌルの正体とは…?!",
-  title: "シェルターアーク・世界を滅ぼすものたち",
-  category: "アクション",
-  grade: "R18",
-  status: "連載中",
-  type: "マンガ",
-  main_image: tempImage,
-};
 
 export default function DashboardSeriesDetail(props) {
   const [stateData, setStateData] = useState(undefined);

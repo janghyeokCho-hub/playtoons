@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo } from 'react';
-import Pagination from 'react-js-pagination';
-import { useState } from 'react';
+import { faAngleLeft, faAngleRight } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleRight, faAngleLeft } from '@fortawesome/pro-light-svg-icons';
+import { useEffect, useMemo, useState } from 'react';
 
 /**
 *

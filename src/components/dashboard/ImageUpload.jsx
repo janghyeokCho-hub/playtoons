@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
+import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
 import { getFileUrlFromServer } from '@/services/dashboardService';
 import ErrorMessage from './ErrorMessage';
 import { FILE_MAX_SIZE } from '@/common/constant';
@@ -36,16 +36,17 @@ import { FILE_MAX_SIZE } from '@/common/constant';
  * @param callback image value 설정 후 callback func
  */
 export default forwardRef(function ImageUpload(props, ref) {
-  const { className, preview, text, name, id, callback, previewHash } = props;
+  const { className, preview, text, textEdit, name, id, callback, handleEdit, previewHash, renderType, multiple = false } = props;
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
-  const initImageObject = {file: undefined, preview: undefined, value: undefined};
+  const initImageObject = {file: undefined, preview: undefined, value: undefined, filename: "", fileLenth: "", mode: undefined};
   const [stateImage, setStateImage] = useState(initImageObject);
   const [stateError, setStateError] = useState(undefined);
-  
+
+  //==============================================================================
+  // function 
+  //==============================================================================
   /**
-  *
      업로드 전 preview 생성
-  *
   * @version 1.0.0
   * @author 2hyunkook
   * @param {*} file
@@ -76,43 +77,57 @@ export default forwardRef(function ImageUpload(props, ref) {
     if( status === 200 ){
       setStateImage({
         ...stateImage,
-        preview: data?.url
+        preview: data?.url,
+        mode: undefined,
       });
     }
     else{
-      setStateError( String(status, data) );
-      // setStateError( undefined );
+      setStateError( status + ' : ' + data );
+      setStateImage({
+        ...stateImage,
+        mode: undefined,
+      });
     }
   };
 
-  //=============== file drag n drop 설정 =========================================
+  //==============================================================================
+  // file drag n drop 설정
+  //==============================================================================
   const onDrop = useCallback(async (acceptedFiles) => {
     setPreviewImage(acceptedFiles[0]);
   }, []);
+
   const { 
     getRootProps, 
     getInputProps, 
+    open ,
   } = useDropzone({ 
     onDrop,
     accept: {
       'image/jpeg': [],
-      'image/png': []
+      'image/png': [],
+      'image/jpg': [],
     },
     noDragEventsBubbling: true,
     noKeyboard: true,
     maxSize: FILE_MAX_SIZE,
     onDropAccepted: (accept) => setStateError(undefined),
     onDropRejected: (reject) => handleRejected(reject),
+    multiple: multiple,          //TODO multi로 변경 예정
   }); //isDragActive
+
   const InputProps = {
     ...getInputProps(),
-    multiple: false,
     accept: "image/gif, image/jpg, image/jpeg, image/png",
     type: "file"
   };
+
   const RootProps = {
     ...getRootProps(),
   };
+
+  //==============================================================================
+  // event
   //==============================================================================
 
   const handleRejected = (reject) => {
@@ -132,15 +147,27 @@ export default forwardRef(function ImageUpload(props, ref) {
     setStateImage(initImageObject);
   };
 
+  const handleClickEdit = () => {
+    open();
+    handleEdit?.();
+  };
+
+  //==============================================================================
+  // hook & render
+  //==============================================================================
+
   useImperativeHandle(ref, () => ({
-    setImageValueToInputTag: (v) => {
-      setStateImage({...stateImage, value: v});
+    setImageValueToInputTag: (hash) => {
+      setStateImage({...stateImage, value: hash});
     },
-    setImage: (fileUrl, v) => {
-      setStateImage({...stateImage, preview: fileUrl, value: v});
+    setImage: (fileUrl, hash) => {
+      setStateImage({...stateImage, preview: fileUrl, value: hash});
     },
     getImageFile: () => {
       return stateImage.file;
+    },
+    setThumbnailImage: (hash) => {
+      setStateImage({...stateImage, value: hash, mode: 'input'});
     },
     getImageInfo: () => {
       return stateImage;
@@ -174,7 +201,14 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   useEffect(() => {
     if( stateImage.value !== undefined ){
-      callback?.(stateImage);
+      if( stateImage.mode === undefined ){
+        //upload
+        callback?.();
+      }
+      else{
+        //get thumbnail
+        getImageUrl(stateImage.value);
+      }
     }
   }, [stateImage.value]);
 
@@ -193,8 +227,6 @@ export default forwardRef(function ImageUpload(props, ref) {
             <label htmlFor={id} className="filetxt" >
               <div 
                 {...RootProps} 
-                maxsize={100} 
-                multiple={false} 
                 className={`wh100`} >
                   {
                     text === undefined ? 
@@ -209,15 +241,42 @@ export default forwardRef(function ImageUpload(props, ref) {
               </div>
             </label>
           ) : (
-            <div className={"fileview"}>
-              <div><img src={stateImage?.preview} alt="preview" /></div>
-              <button type="button" className="btn_del" title="削除">
-                <FontAwesomeIcon 
-                      icon={faCircleXmark}
-                      onClick={handlePreviewClose}
-                      />
-                </button>
-            </div>
+            <>
+              {/* render preview  */}
+              {/* //==============================================================================
+                  // normal style
+                  //============================================================================== */}
+                    {
+                      renderType === undefined && (
+                        <div className={"fileview"}>
+                          <div><img src={stateImage?.preview} alt="preview" /></div>
+                          <button type="button" className="btn_del" title="削除">
+                            <FontAwesomeIcon 
+                                  icon={faCircleXmark}
+                                  onClick={handlePreviewClose}
+                                  />
+                            </button>
+                        </div>
+                      )
+                    }
+
+
+              {/* //==============================================================================
+                  // thumbnail style
+                  //============================================================================== */}
+                    {
+                      renderType === 'thumbnail' && (
+                        <div className={"fileview2"}>
+                          <div><img src={stateImage?.preview} alt="preview" /></div>
+                          <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
+                            <button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
+                            <button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>
+                        </div>
+                      )
+                    }
+
+              
+            </>
           )
         }
       </div>

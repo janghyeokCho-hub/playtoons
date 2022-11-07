@@ -1,35 +1,31 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import SwiperContainer from "@/components/dashboard/Swiper";
+import { getPostDetailAction } from "@/modules/redux/ducks/post";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
-import ToolTip from "@/components/dashboard/ToolTip";
-import Select from "@/components/dashboard/Select";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import ThumbnailTimeline from "@/components/post/ThumbnailTimeline";
-import Type from "@/components/post/Type";
 import Category from "@/components/dashboard/Category";
+import ImageUpload from "@/components/dashboard/ImageUpload";
+import Select from "@/components/dashboard/Select";
 import Tag from "@/components/dashboard/Tag";
+import ToolTip from "@/components/dashboard/ToolTip";
+import Type from "@/components/post/Type";
 
-import tempImage from "@IMAGES/tmp_comic2.jpg";
-import tempImage2 from "@IMAGES/tmp_comic3.png";
-import { editPostToServer, getPostSeriesMine } from "@/services/postService";
-import Series from "@/components/post/Series";
-import { getFileUrlFromServer } from "@/services/fileService";
-import { setFileToServer } from "@/services/dashboardService";
 import {
-  getErrorMessageFromResultCode,
   getFromDataJson,
   initButtonInStatus,
-  showOneButtonPopup,
+  showOneButtonPopup
 } from "@/common/common";
-import Input from "@/components/dashboard/Input";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Button from "@/components/dashboard/Button";
+import Image from "@/components/dashboard/Image";
+import Input from "@/components/dashboard/Input";
+import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
+import { editPostToServer } from "@/services/postService";
+import tempImage from "@IMAGES/tmp_comic2.jpg";
+import tempImage2 from "@IMAGES/tmp_comic3.png";
 
 const text = {
   post_edit: "投稿を修正",
@@ -150,6 +146,7 @@ const tempData = {
 
 export default function PostEdit(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
+  const [stateTimeline, setStateTimeline] = useState(undefined);
   const reduxPostInfo = useSelector(({ post }) => post?.post);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
   const params = useParams("id");
@@ -304,21 +301,37 @@ export default function PostEdit(props) {
 
     initButtonInStatus(refRegister);
   };
+
+  const getTimeline = async () => {
+    const params = new FormData();
+    params.append('authorId', reduxAuthors[0].id);
+    params.append('reduced', true);
+
+    const { status, data } = await getTimelineFromServer(params);
+    console.log("getTimeline", status, data);
+
+    if (status === 200) {
+      setStateTimeline(data);
+    } else {
+      showOneButtonPopup(dispatch, data);
+    }
+  };
   //==============================================================================
   // event
   //==============================================================================
 
   const handleClickItemTimeline = (event) => {
+    //
     const id = event.currentTarget.getAttribute("id");
-    let selectedItem;
-    for (let i = 0; i < tempData.timeline.list.length; i++) {
-      if (tempData.timeline.list[i].id === id) {
-        selectedItem = tempData.timeline.list[i];
+    let selectedItem = undefined;
+    for( let i = 0; i < stateTimeline.posts.length; i++ ){
+      if(  id === stateTimeline.posts[i].id ){
+        selectedItem = stateTimeline.posts[i]
         break;
       }
     }
 
-    refThumbnailTimeline.current.setImage(selectedItem);
+    refThumbnailTimeline.current.setThumbnailImage(selectedItem?.thumbnailImage);
   };
 
   const handleClickPreview = (event) => {
@@ -340,7 +353,7 @@ export default function PostEdit(props) {
   //==============================================================================
 
   const renderTimelineElements = () => {
-    return tempData.timeline.list.map((item, index) => {
+    return stateTimeline?.posts?.map((item, index) => {
       return (
         <SwiperSlide
           key={index}
@@ -350,9 +363,9 @@ export default function PostEdit(props) {
         >
           <div>
             <div className="cx_thumb">
-              {item.preview !== undefined && (
+              {item !== undefined && (
                 <span>
-                  <img src={item.preview} alt="timeline" />
+                  <Image hash={item.thumbnailImage}  />
                 </span>
               )}
             </div>
@@ -365,10 +378,13 @@ export default function PostEdit(props) {
   useEffect(() => {
     //temp
     setStateSupportorList(supportorList);
+    getTimeline();
     dispatch(getPostDetailAction(params));
   }, []);
 
-  useEffect(() => {}, [dispatch, reduxPostInfo]);
+  useEffect(() => {
+    // console.log('first', reduxPostInfo);
+  }, [dispatch, reduxPostInfo]);
 
   return (
     <div className="inr-c">
@@ -447,6 +463,7 @@ export default function PostEdit(props) {
                 id={"filebox2"}
                 className={"box_drag"}
                 name={"content"}
+                multiple={true}
                 text={text.drag_drop}
                 previewHash={reduxPostInfo?.content}
                 callback={callbackContents}
@@ -490,13 +507,15 @@ export default function PostEdit(props) {
                   <ToolTip title={"Contents"} text={"afasfasdfads"} />
                 </button>
               </h3>
-              <ThumbnailTimeline
+              <ImageUpload
                 ref={refThumbnailTimeline}
                 id={"filebox1"}
                 name={"thumbnailImage"}
+                className={'box_drag'}
+                renderType={'thumbnail'}
+                
                 previewHash={reduxPostInfo?.thumbnailImage}
-                textDragNDrop={text.drag_drop}
-                textInputMessage={text.input_image}
+                text={text.drag_drop}
                 textEdit={text.edit}
                 callback={callbackTimeline}
               />
