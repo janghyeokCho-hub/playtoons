@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Reply from "./Reply";
 
-const ReplyItems = ({ currentPost }) => {
+const ReplyItems = () => {
   const [reactions, setReactions] = useState(null);
+  const currentPost = useSelector(({ post }) => post.currentPost);
 
   useEffect(() => {
     if (currentPost?.reactions) {

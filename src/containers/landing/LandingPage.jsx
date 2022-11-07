@@ -118,7 +118,6 @@ const LandingPage = (props) => {
       <div className="main_area">
         <div className="inr-c">
           <h2 className="m_tit1">🎨クリエーター</h2>
-
           <div className="slider_profile">
             <AuthorItems />
           </div>
@@ -128,7 +127,6 @@ const LandingPage = (props) => {
       <div className="main_area">
         <div className="inr-c">
           <h2 className="m_tit1">カテゴリー</h2>
-
           <div className="lst_card">
             <PostTypeItems />
           </div>

@@ -10,10 +10,8 @@ import Author from "@CONTAINERS/author";
 import Store from "@CONTAINERS/store";
 import Payment from "@CONTAINERS/payment";
 import Product from "@CONTAINERS/product";
-import Purchase from "@CONTAINERS/purchase";
-import Review from "@CONTAINERS/review";
+import Mypage from "@CONTAINERS/mypage";
 import Search from "@CONTAINERS/search";
-import Inquiry from "@CONTAINERS/inquiry";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import ScrollToTop from "@COMPONENTS/ScrollToTop";
 import ModalContainer from "@COMPONENTS/ModalContainer";
@@ -37,10 +35,9 @@ function App() {
           <Route path="/store/*" element={<Store />} />
           <Route path="/payment/*" element={<Payment />} />
           <Route path="/product/*" element={<Product />} />
-          <Route path="/purchase/*" element={<Purchase />} />
-          <Route path="/review/*" element={<Review />} />
+          <Route path="/mypage/*" element={<Mypage />} />
+
           <Route path="/search/*" element={<Search />} />
-          <Route path="/inquiry/*" element={<Inquiry />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Routes>
       </Container>
