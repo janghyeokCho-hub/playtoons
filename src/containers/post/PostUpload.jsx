@@ -27,6 +27,7 @@ import Input from "@/components/dashboard/Input";
 import Button from "@/components/dashboard/Button";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import DraftEditor from "@/components/post/DraftEditor";
 
 const text = {
   upload_post: "投稿する",
@@ -374,6 +375,13 @@ export default function UploadPost(props) {
               />
             </div>
 
+            {/* TODO test to Editor  */}
+            {/* <div className="col">
+              <div className="box_drag">
+                <DraftEditor />
+              </div>
+            </div> */}
+
             <div className="col">
               <h3 className="tit1">
                 {text.tag}{" "}
@@ -420,6 +428,8 @@ export default function UploadPost(props) {
                 callback={callbackThumbnailImageAfterUpload}
               />
             </div>
+
+
           </section>
 
           <div className="bbs_write_botm">

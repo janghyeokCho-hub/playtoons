@@ -98,7 +98,7 @@ export default function DashboardSeriesDetail(props) {
     getTimeline();
 
     return () => {
-      dispatch( initSeriedDetailAction(params) );
+      // dispatch( initSeriedDetailAction(params) );
     }
   }, []);
 
