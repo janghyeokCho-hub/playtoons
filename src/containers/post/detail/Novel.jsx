@@ -308,7 +308,7 @@ const Novel = () => {
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              <ReplyItems postId={id} />
+              <ReplyItems />
               <div
                 className="botm"
                 onClick={() => setReplyLimit(replyLimit + 3)}

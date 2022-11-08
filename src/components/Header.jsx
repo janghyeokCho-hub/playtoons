@@ -301,6 +301,26 @@ const Header = ({ className, onSideMenu }) => {
                           </ul>
                           <ul>
                             <li>
+                              {/* 구매 목록 */}
+                              <Link to="/mypage" state={{ type: "PURCHASE" }}>
+                                購入一覧
+                              </Link>
+                            </li>
+                            <li>
+                              {/* 리뷰 목록 */}
+                              <Link to="/mypage" state={{ type: "REVIEW" }}>
+                                レビューリスト
+                              </Link>
+                            </li>
+                            <li>
+                              {/* 문의 목록 */}
+                              <Link to="/mypage" state={{ type: "INQUIRY" }}>
+                                お問合せ一覧
+                              </Link>
+                            </li>
+                          </ul>
+                          <ul>
+                            <li>
                               <a href="#">設定</a>
                             </li>
                             <li onClick={() => handleLogout()}>
@@ -464,7 +484,7 @@ const Header = ({ className, onSideMenu }) => {
 
         {/* 다국어 팝업 */}
         {isLanguageShow && (
-          <div className="popup_dim">
+          <div className="popup_dim" onClick={() => setIsLanguageShow(false)}>
             <div id="popGlobal" className="layerPopup pop_global">
               <div className="popup">
                 <div className="pop_head">

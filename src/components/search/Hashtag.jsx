@@ -9,48 +9,48 @@ import { Link } from "react-router-dom";
 
 const Hashtag = () => {
   return (
-    <div class="area_schmain2 inr-c">
-      <div class="lst_detail">
+    <div className="area_schmain2 inr-c">
+      <div className="lst_detail">
         <ul>
-          <li class="item">
+          <li className="item">
             <Link to="">
-              <div class="thumb">
+              <div className="thumb">
                 <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
               </div>
-              <div class="txt">
-                <p class="h1">
+              <div className="txt">
+                <p className="h1">
                   2話 :
                   シェルターアークシェルターアークシェルターアークシェルターアークシェルターアーク
                 </p>
-                <p class="t1">
+                <p className="t1">
                   モと戦う為、特殊チームレンジャーを創設したが、
                   <br />
                   クモの圧倒的な力には勝てず。
                 </p>
               </div>
-              <div class="botm">
-                <div class="lst_tag">
-                  <div class="i_tag">#アクション</div>
-                  <div class="i_tag">#異世界</div>
+              <div className="botm">
+                <div className="lst_tag">
+                  <div className="i_tag">#アクション</div>
+                  <div className="i_tag">#異世界</div>
                 </div>
 
-                <p class="d1">2022/09/12 12:00</p>
-                <button type="button" class="btn01">
+                <p className="d1">2022/09/12 12:00</p>
+                <button type="button" className="btn01">
                   <FontAwesomeIcon icon={faHeart} />
                   1.2k
                 </button>
-                <button type="button" class="btn01">
+                <button type="button" className="btn01">
                   <FontAwesomeIcon icon={faCommentQuote} />
                   966
                 </button>
               </div>
             </Link>
           </li>
-          <li class="item">
+          <li className="item">
             <Link to="">
-              <div class="thumb">
+              <div className="thumb">
                 <img src={require("@IMAGES/tmp_comic1.jpg")} alt="" />
-                <div class="area_lock">
+                <div className="area_lock">
                   {/*<!-- 잠금 -->*/}
                   <div>
                     <p>
@@ -59,28 +59,28 @@ const Hashtag = () => {
                   </div>
                 </div>
               </div>
-              <div class="txt">
-                <p class="h1">
-                  <span class="i-txt">支援</span>3話 : シェルターアーク
+              <div className="txt">
+                <p className="h1">
+                  <span className="i-txt">支援</span>3話 : シェルターアーク
                 </p>
-                <p class="t1">
+                <p className="t1">
                   モと戦う為、特殊チームレンジャーを創設したが、
                   <br />
                   クモの圧倒的な力には勝てず。
                 </p>
               </div>
-              <div class="botm">
-                <div class="lst_tag">
-                  <div class="i_tag">#アクション</div>
-                  <div class="i_tag">#異世界</div>
+              <div className="botm">
+                <div className="lst_tag">
+                  <div className="i_tag">#アクション</div>
+                  <div className="i_tag">#異世界</div>
                 </div>
 
-                <p class="d1">2022/09/12 12:00</p>
-                <button type="button" class="btn01">
+                <p className="d1">2022/09/12 12:00</p>
+                <button type="button" className="btn01">
                   <FontAwesomeIcon icon={faHeart} />
                   1.2k
                 </button>
-                <button type="button" class="btn01">
+                <button type="button" className="btn01">
                   <FontAwesomeIcon icon={faCommentQuote} />
                   966
                 </button>

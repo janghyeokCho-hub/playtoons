@@ -15,7 +15,6 @@ import {
 } from "@API/reactionService";
 
 const Reply = ({ item }) => {
-  console.log(item);
   const currentPost = useSelector(({ post }) => post.currentPost);
   // 댓글 수정 시 입력폼으로 변경하기 위한 Flag
   const [content, setContent] = useState(item?.content);
@@ -34,7 +33,6 @@ const Reply = ({ item }) => {
       return;
     }
     const response = await updateReaction({ content });
-    console.log(response);
     if (response.status === 200) {
       alert("수정 완료");
     } else {
@@ -46,7 +44,6 @@ const Reply = ({ item }) => {
     const reactionId = 0;
     if (isLikeShow) {
       const response = await deleteLikeReaction(reactionId);
-      console.log(response);
       if (response?.status === 200) {
         alert("좋아요 성공");
         setIsLikeShow(true);
@@ -56,7 +53,6 @@ const Reply = ({ item }) => {
       }
     } else {
       const response = await insertLikeReaction(reactionId);
-      console.log(response);
       if (response?.status === 200) {
         alert("좋아요 삭제 성공");
         setIsLikeShow(false);
@@ -78,23 +74,30 @@ const Reply = ({ item }) => {
             {/* 댓글 내용 */}
 
             <p className="h1">
-              {currentPost?.author?.id === item?.userId && (
+              {currentPost?.author?.id === item?.accountId && (
                 <span className="i-writer">作成者</span>
               )}
-              {item?.author?.nickname}
+              {item?.account?.nickname}
             </p>
 
-            <p className="h1">{item?.nickname}</p>
+            <p className="h1">{item?.account?.name}</p>
             <p className="d1">
               {/*<span>3日前</span>*/}
-              <span>{item?.date}</span>
+              <span>{item?.createdAt}</span>
               <span>コメント</span>
             </p>
             {/* 삭제시 className 에 c-gray 추가 */}
             {item?.status === "disabled" ? (
               <p className="t1 c-gray">削除されたコメントです。</p>
             ) : (
-              <p className="t1">{item?.content}</p>
+              <>
+                <p className="t1">{item?.content}</p>
+                {item?.iconImage && (
+                  <p className="icon_image">
+                    <img src={"/temp/" + item?.iconImage} alt="icon" />
+                  </p>
+                )}
+              </>
             )}
             <div className="rgh">
               <button type="button" className="btn01" onClick={handleLike}>
