@@ -12,6 +12,7 @@ import Payment from "@CONTAINERS/payment";
 import Product from "@CONTAINERS/product";
 import Mypage from "@CONTAINERS/mypage";
 import Search from "@CONTAINERS/search";
+import Timeline from "@CONTAINERS/timeline";
 import Dashboard from "@CONTAINERS/dashboard/Dashboard";
 import ScrollToTop from "@COMPONENTS/ScrollToTop";
 import ModalContainer from "@COMPONENTS/ModalContainer";
@@ -36,8 +37,8 @@ function App() {
           <Route path="/payment/*" element={<Payment />} />
           <Route path="/product/*" element={<Product />} />
           <Route path="/mypage/*" element={<Mypage />} />
-
           <Route path="/search/*" element={<Search />} />
+          <Route path="/timeline/*" element={<Timeline />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
         </Routes>
       </Container>

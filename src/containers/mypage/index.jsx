@@ -11,6 +11,7 @@ import { setContainer } from "@/modules/redux/ducks/container";
 import PurchaseItems from "@COMPONENTS/mypage/purchase/PurchaseItems";
 import ReviewItems from "@COMPONENTS/mypage/review/ReviewItems";
 import InquiryItems from "@COMPONENTS/mypage/inquiry/InquiryItems";
+import Page404 from "@COMPONENTS/Page404";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ const App = () => {
         <Route path="purchase" element={<PurchaseItems />} />
         <Route path="review" element={<ReviewItems />} />
         <Route path="inquiry" element={<InquiryItems />} />
+        <Route path="*" element={<Page404 />} />
       </Routes>
     </>
   );
