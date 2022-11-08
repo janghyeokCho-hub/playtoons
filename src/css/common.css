@@ -264,6 +264,7 @@ select.select1 {
   height: 45px;
   padding-right: 30px;
   padding-left: 12px;
+  font-size: 14px;
   line-height: 43px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -6220,44 +6221,52 @@ body {
 .hd_tabbox .tabs.ty1 li.on a {
   color: #394bc2;
 }
+/*달력*/
 .ui-datepicker {
   display: none;
-  padding: 10px;
-  margin-top: 0;
-  border: 1px solid #cfcfcf;
+  padding: 15px 10px;
+  margin-top: 10px;
+  border: 1px solid #cbcbcb;
   background-color: #fff;
   text-align: center;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 12px;
   color: #999;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
 }
 .ui-datepicker th {
-  width: 28px;
-  height: 26px;
+  width: 38px;
+  height: 45px;
   font-weight: 300;
   color: #333;
   text-align: center;
+  border-bottom: 1px solid #eee;
 }
 .ui-datepicker td {
-  width: 28px;
-  height: 26px;
+  width: 38px;
+  height: 40px;
   font-weight: 300;
 }
 .ui-datepicker td.ui-datepicker-unselectable {
   color: #ccc;
 }
-.ui-datepicker td a.ui-state-highlight {
-  font-weight: 700;
-  color: #000;
-}
 .ui-datepicker td a.ui-state-active {
-  color: #0078fa;
+  color: #fff;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  background-color: #4664ff;
+  border-radius: 50%;
+}
+.ui-datepicker td a.ui-state-highlight {
+  color: #fff;
   font-weight: 700;
 }
 .ui-datepicker-header {
   position: relative;
-  margin-bottom: 10px;
-  background-color: #08146d;
 }
 .ui-datepicker-title {
   overflow: hidden;
@@ -6267,7 +6276,7 @@ body {
   font-weight: 700;
   font-size: 16px;
   line-height: 30px;
-  color: #fff;
+  color: #000;
 }
 .ui-datepicker-prev,
 .ui-datepicker-next {
@@ -6283,17 +6292,35 @@ body {
 }
 .ui-datepicker-prev {
   left: 0;
+  /* 2022-11-08 제거 */
   /* background-image: url('@IMAGES/ico_calendar_prev.svg'); */
 }
 .ui-datepicker-next {
   right: 0;
+  /* 2022-11-08 제거 */
   /* background-image: url('@IMAGES/ico_calendar_next.svg'); */
+}
+.ui-datepicker-title select {
+  position: relative;
+  padding: 0;
+  border: 0;
+  line-height: 30px;
+  padding-right: 10px;
+  color: #fff;
+  /*background: url("@IMAGES/ico_select_on.png") 95% center no-repeat;*/
+  background-size: 5px auto;
+}
+.ui-datepicker-title select:first-child {
+  margin-right: 5px;
+}
+.ui-datepicker-title select option {
+  padding: 0 5px;
+  color: #000;
 }
 .ui-datepicker-trigger {
   position: absolute;
-  left: 10px;
-  bottom: 6px;
-  width: 16px;
+  width: 26px;
+  margin-left: -25px;
   vertical-align: top;
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
@@ -6301,6 +6328,19 @@ body {
 }
 .ui-datepicker-trigger img {
   vertical-align: top;
+  height: 7px;
+  margin-top: 17px;
+}
+@media (max-width: 960px) {
+  .ui-datepicker {
+    padding: 10px 10px;
+  }
+  .ui-datepicker th,
+  .ui-datepicker td {
+    width: 30px;
+    height: 32px;
+    font-size: 12px;
+  }
 }
 .inp_cal {
   margin-bottom: 40px;
@@ -6937,6 +6977,22 @@ body {
 }
 #container.payment .m_tit1 {
   color: #3a434d;
+  font-size: 28px;
+}
+#container.payment .t_chk {
+  font-weight: 700;
+  font-size: 32px;
+  color: #394bc2;
+}
+#container.payment .t_chk .fa-regular,
+#container.payment .t_chk svg {
+  margin-right: 10px;
+}
+#container.payment .btn-pk.wid1 {
+  width: 340px;
+}
+#container.payment.bgw {
+  background-color: #fff;
 }
 .cont_payment {
   position: relative;
@@ -6970,6 +7026,16 @@ body {
 }
 .area_payment .col {
   margin-bottom: 16px;
+}
+.area_payment .titbox {
+  margin-bottom: 30px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #3a434d;
+}
+.area_payment .titbox .t1 {
+  margin-bottom: 8px;
+  font-size: 24px;
 }
 .area_payment .box_thumb {
   display: flex;
@@ -7009,6 +7075,7 @@ body {
   font-size: 24px;
 }
 .area_payment .box_thumb .t_profile {
+  margin-bottom: 16px;
   font-size: 14px;
   font-weight: 500;
   overflow: hidden;
@@ -7025,8 +7092,11 @@ body {
   white-space: nowrap;
   word-wrap: normal;
 }
+.area_payment .box_thumb .btns {
+  text-align: right;
+}
 .area_payment .lst_exe {
-  margin: 16px 0px;
+  margin-bottom: 16px;
 }
 .area_payment .lst_exe .ico {
   display: inline-block;
@@ -7092,9 +7162,24 @@ body {
 .area_payment.total .list1 li {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-weight: 500;
   font-size: 24px;
+}
+.area_payment.total .list2 {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #dde1e5;
+  padding-bottom: 10px;
+  margin-bottom: 26px;
+}
+.area_payment.total .list2 li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #617080;
 }
 .area_payment.total .c1 {
   margin-bottom: 30px;
@@ -7103,9 +7188,146 @@ body {
   color: #394bc2;
   text-align: center;
 }
+.area_payment.total .inp_checkbox {
+  margin-bottom: 32px;
+}
 .area_payment.total .col {
   padding-left: 5%;
   padding-right: 5%;
+}
+#container.purchase {
+  background-color: #fff;
+}
+#container.purchase .contents .inr-c {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+#container.purchase .contents .inr-c:after {
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+  content: "";
+}
+#container.purchase .contents .inr-c:after {
+  display: block;
+  visibility: hidden;
+  clear: both;
+  height: 0;
+  content: "";
+}
+#container.purchase .hd_titbox2 {
+  margin-bottom: 40px;
+}
+#container.purchase .hd_titbox2 .m_tit1 {
+  margin-bottom: 30px;
+}
+#container.purchase .hd_titbox2 .t1 {
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-size: 24px;
+  color: #3a434d;
+}
+#container.purchase .hd_titbox2 .d1 {
+  font-size: 14px;
+  color: #617080;
+}
+.lft_purch {
+  float: left;
+  width: 72.15%;
+}
+.lft_purch .area_payment {
+  padding-left: 0px;
+  padding-right: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  border-left: 0;
+  border-right: 0;
+}
+.lft_purch .box_thumb .thumb {
+  min-width: 210px;
+}
+.lft_purch .box_thumb .txt {
+  position: relative;
+}
+.lft_purch .box_thumb .t1 {
+  max-width: 70%;
+  margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #617080;
+}
+.lft_purch .box_thumb .btns {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+.rgh_purch {
+  width: 25.85%;
+  margin-left: 74.15%;
+}
+.box_license {
+  display: flex;
+  align-items: center;
+  padding: 24px 32px;
+  margin-bottom: 14px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #eaeaea;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.box_license .t1 {
+  margin-bottom: 9px;
+  font-weight: 700;
+  color: #3b4b5b;
+}
+.box_license .t2 {
+  color: #929eaa;
+}
+.box_license .icon {
+  margin-right: 40px;
+  font-size: 43px;
+  color: #ffd800;
+}
+.box_infor {
+  padding-top: 40px;
+  padding-bottom: 48px;
+  font-size: 14px;
+  color: #909dab;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #eaeaea;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.box_infor .h_tit1 {
+  margin-bottom: 30px;
+  font-weight: 700;
+  color: #13161a;
+}
+.box_infor .tit1 {
+  margin-bottom: 12px;
+  font-weight: 700;
+  color: #3b4b5b;
+}
+.box_infor .col {
+  padding: 23px 52px;
+}
+.box_infor ul {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #eaeaea;
+}
+.box_infor li {
+  margin-bottom: 30px;
+}
+.box_infor .btn-bot {
+  margin: 0px 35px;
 }
 .layerPopup {
   z-index: 1000;
@@ -7286,6 +7508,37 @@ body {
   background: none;
   text-align: left;
   padding: 0;
+}
+.pop_inquiry {
+  top: auto;
+  bottom: 20px;
+  transform: translate(-50%, 0);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+.pop_inquiry .icon {
+  float: left;
+  margin-right: 8px;
+  font-size: 16px;
+  color: #617080;
+}
+.pop_inquiry p {
+  margin-left: 25px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #3a434d;
+}
+.pop_inquiry p.h1 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.pop_inquiry .pop_botm {
+  display: block;
+  margin-top: 12px;
+  text-align: right;
+}
+.pop_inquiry .pop_botm .btn-pk {
+  font-size: 12px;
+  line-height: 14px;
 }
 .toast_msg {
   z-index: 10000;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +13,7 @@ import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
 import { faPenToSquare, faTrash } from "@fortawesome/pro-light-svg-icons";
 
 const Timeline = () => {
+  const [isControlShow, setIsControlShow] = useState(false);
   return (
     <div className="contents">
       <div className="wrap_timeline">
@@ -63,28 +64,34 @@ const Timeline = () => {
               </span>
               <span className="hidden">prev</span>
             </button>
-            <button type="button" className="btn01" onclick="boxDrop(this);">
+            <button
+              type="button"
+              className="btn01"
+              onClick={() => setIsControlShow(!isControlShow)}
+            >
               <span className="i">
                 <FontAwesomeIcon icon={faEllipsisVertical} />
               </span>
             </button>
-            <div className="box_drop">
-              <ul>
-                <li>
-                  <a href="#" onclick="showComm(this); return false;">
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                    修正
-                  </a>
-                </li>
-                <li>
-                  <a href="#" onclick="showDrop('popDelete'); return false;">
-                    <FontAwesomeIcon icon={faTrash} />
-                    削除
-                  </a>
-                </li>
-                {/*<!-- <li><a href="#" onclick="showDrop('popReport'); return false;"><i className="fa-light fa-flag"></i>通報</a></li> -->*/}
-              </ul>
-            </div>
+            {isControlShow && (
+              <div className="box_drop">
+                <ul>
+                  <li>
+                    <a href="#" onclick="showComm(this); return false;">
+                      <FontAwesomeIcon icon={faPenToSquare} />
+                      修正
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onclick="showDrop('popDelete'); return false;">
+                      <FontAwesomeIcon icon={faTrash} />
+                      削除
+                    </a>
+                  </li>
+                  {/*<!-- <li><a href="#" onclick="showDrop('popReport'); return false;"><i className="fa-light fa-flag"></i>通報</a></li> -->*/}
+                </ul>
+              </div>
+            )}
           </div>
           <div className="bt_botm">
             <button type="button" className="btn01">

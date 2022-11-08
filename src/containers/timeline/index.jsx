@@ -17,7 +17,7 @@ const App = () => {
       headerType: "post",
       menuType: "MAIN",
       isDetailView: false,
-      activeMenu: "maquettePlace",
+      activeMenu: "timeline",
       isFooterShow: false,
     };
     dispatch(setContainer(container));
