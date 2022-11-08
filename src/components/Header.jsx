@@ -300,23 +300,17 @@ const Header = ({ className, onSideMenu }) => {
                             </li>
                           </ul>
                           <ul>
-                            <li>
+                            <li onClick={() => navigate("/mypage/purchase")}>
                               {/* 구매 목록 */}
-                              <Link to="/mypage" state={{ type: "PURCHASE" }}>
-                                購入一覧
-                              </Link>
+                              <Link to="">購入一覧</Link>
                             </li>
-                            <li>
+                            <li onClick={() => navigate("/mypage/review")}>
                               {/* 리뷰 목록 */}
-                              <Link to="/mypage" state={{ type: "REVIEW" }}>
-                                レビューリスト
-                              </Link>
+                              <Link to="">レビューリスト</Link>
                             </li>
-                            <li>
+                            <li onClick={() => navigate("/mypage/inquiry")}>
                               {/* 문의 목록 */}
-                              <Link to="/mypage" state={{ type: "INQUIRY" }}>
-                                お問合せ一覧
-                              </Link>
+                              <Link to="">お問合せ一覧</Link>
                             </li>
                           </ul>
                           <ul>
