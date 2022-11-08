@@ -28,10 +28,11 @@ export default function Image(props) {
 
     if (status === 200) {
       setStateImage(result?.url);
-    } else {
-      console.log( String(result) );
-      // setStateImage(errorImage);
-    }
+    } 
+    // else {
+    //   console.log( String(result) );
+    //   setStateImage(errorImage);
+    // }
   };
 
   useEffect(() => {

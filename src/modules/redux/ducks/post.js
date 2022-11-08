@@ -22,6 +22,9 @@ export const [
   GET_POST_REACTION_SUCCESS,
   GET_POST_REACTION_FAILURE,
 ] = createRequestActionTypes("post/GET_POST_REACTION");
+const [SET_SERIES, INIT_SERIES] = createRequestActionTypes(
+  "post/SET_SERIES"
+);
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
@@ -29,6 +32,8 @@ export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
 export const getCurrentPost = createAction(GET_CURRENT_POST);
 export const getPostReaction = createAction(GET_POST_REACTION);
+export const setSeriesAction = createAction(SET_SERIES);
+export const initSeriesAction = createAction(INIT_SERIES);
 
 const initialState = {
   post: null,
@@ -36,6 +41,7 @@ const initialState = {
   reactions: [],
   timelines: [],
   currentPost: null,
+  series: null,
 };
 
 const post = handleActions(
@@ -55,8 +61,18 @@ const post = handleActions(
         draft.authorMine = action.payload;
       });
     },
-    [AUTHOR_MINE]: (state, action) => {
-      console.log("AUTHOR_MINE", action.payload);
+    [SET_SERIES]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.series = action.payload;
+      });
+    },
+    [INIT_SERIES]: (state, action) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          series: null
+        };
+      });
     },
     [GET_CURRENT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {

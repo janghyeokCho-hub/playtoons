@@ -12,11 +12,12 @@ import { getPostIdMineFromServer } from "@/services/postService";
 import { useDispatch } from "react-redux";
 import Image from "@/components/dashboard/Image";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, getHtmlElementFromHtmlString, getShowEditor, showOneButtonPopup } from "@/common/common";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import { getReactionFromServer } from "@/services/dashboardService";
 import Pagination from "@/components/dashboard/Pagination";
 import { setContainer } from "@/modules/redux/ducks/container";
+import parse from 'html-react-parser'
 
 const text = {
   page_title: "投稿詳細",
@@ -63,6 +64,10 @@ export default function DashboardPostDetail() {
   const [stateReactions, setStateReactions] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
 
+  //==============================================================================
+  // header
+  //==============================================================================
+
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -78,10 +83,18 @@ export default function DashboardPostDetail() {
     };
     dispatch(setContainer(container));
   }, [dispatch]);
-
+  
   useEffect(() => {
     handleContainer();
   }, []);
+  //==============================================================================
+  // function 
+  //==============================================================================
+  const getHtmlElementFromHtmlString = () => {
+    if( stateData !== undefined ){
+      return parse( stateData.content );
+    }
+  };
 
   const getReactionAllList = () => {
     getPinnedReactions();
@@ -194,6 +207,8 @@ export default function DashboardPostDetail() {
     getReactionAllList();
   }, []);
 
+  
+
   return (
     <div className="contents">
       <div className="inr-c">
@@ -262,7 +277,13 @@ export default function DashboardPostDetail() {
           </div>
 
           <div className="ta_center">
-            <Image hash={stateData?.content} alt="" />
+            {
+              getShowEditor(stateData?.type) ? (
+                <>{ getHtmlElementFromHtmlString() }</>
+              ) : (
+                <Image hash={stateData?.content} alt="" />
+              )
+            }
           </div>
 
           {/* <div className="area_detail2">

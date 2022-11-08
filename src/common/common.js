@@ -209,6 +209,15 @@ export const setInputValueToNumber = (ref, value) => {
 };
 
 /**
+  에디터가 필요한 type 인지 체크 
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getShowEditor = (type) => {
+  return type?.code === undefined || type?.code === 'novel' || type?.code === 'blog';
+};
+
+/**
 *
   lottie 적용된 button 상태 초기화
 *

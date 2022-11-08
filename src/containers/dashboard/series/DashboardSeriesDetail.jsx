@@ -9,6 +9,7 @@ import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 import { getTimelineFromServer } from "@/services/dashboardService";
+import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const text = {
@@ -32,6 +33,9 @@ export default function DashboardSeriesDetail(props) {
   const dispatch = useDispatch();
   const params = useParams("id");
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -52,6 +56,9 @@ export default function DashboardSeriesDetail(props) {
     handleContainer();
   }, []);
 
+  //==============================================================================
+  // api
+  //==============================================================================
   const getTimeline = async () => {
     const params = new FormData();
     params.append('authorId', reduxAuthors[0].id);
@@ -66,6 +73,14 @@ export default function DashboardSeriesDetail(props) {
       showOneButtonPopup(dispatch, data);
     }
   };
+  //==============================================================================
+  // event
+  //==============================================================================
+  
+
+  //==============================================================================
+  // hook & render
+  //==============================================================================
 
   const renderThumbList = () => {
     return stateTimeline?.posts?.map((item, index) => {
@@ -97,9 +112,10 @@ export default function DashboardSeriesDetail(props) {
     dispatch( getSeriedDetailAction(params) );
     getTimeline();
 
-    return () => {
-      // dispatch( initSeriedDetailAction(params) );
-    }
+  }, []);
+
+  useLayoutEffect(() => {
+    dispatch( initSeriedDetailAction(params) );
   }, []);
 
   return (

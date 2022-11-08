@@ -27,7 +27,7 @@ export default function Series(props) {
   const {name, className, callback, selected, disabled, disabledText} = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
-  const myAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+  const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const refSelect = useRef();
 
   const getSelectedItem = (option) => {
@@ -44,7 +44,7 @@ export default function Series(props) {
 
   const getSeries = async () => {
     const form = new FormData();
-    form.append( 'authorId', myAuthors[0].id );
+    form.append( 'authorId', reduxAuthors[0].id );
 
     const {status, data} = await getPostSeriesMineFromServer(form);
     if( status === 200 ){
