@@ -14,6 +14,7 @@ import { setFileToServer } from "@/services/dashboardService";
 import {
   getErrorMessageFromResultCode,
   getFromDataJson,
+  getShowEditor,
   initButtonInStatus,
   showOneButtonPopup,
 } from "@/common/common";
@@ -26,7 +27,10 @@ import { useNavigate } from "react-router-dom";
 import Input from "@/components/dashboard/Input";
 import Button from "@/components/dashboard/Button";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import { getAuthorMineAction, initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/post";
+
+// const DraftEditor = dynamic(() => import('@/components/post/DraftEditor'), { ssr: false }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
+import DraftEditor from "@/components/post/DraftEditor";
 
 const text = {
   upload_post: "投稿する",
@@ -50,7 +54,7 @@ const text = {
   type_movie: "映像",
   label_can_not_edit: "編集不可",
   input_image: "置いてください。",
-  please_input_content: "表紙を入力してください。",
+  please_input_content: "コンテンツを入力してください。",
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
@@ -77,9 +81,10 @@ const supportorList = [
 
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
-  const [stateSeries, setStateSeries] = useState(undefined);
+  // const [stateSeries, setStateSeries] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxSeries = useSelector(({ post }) => post?.series);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const refForm = useRef();
@@ -87,10 +92,14 @@ export default function UploadPost(props) {
   const refTitle = useRef();
   const refNumber = useRef();
   const refContents = useRef();
+  const refEditor = useRef();
   const refThumbnail = useRef();
   const refTags = useRef();
   const refRegister = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header ty1",
@@ -113,20 +122,22 @@ export default function UploadPost(props) {
   // function
   //==============================================================================
   const initType = () => {
-    if (stateSeries?.id === undefined) {
+    if (reduxSeries?.id === undefined) {
       refType.current.setDisabled(false);
       //click event가 아닌 경우에만
       if (stateType.checked === false) {
         refType.current.setSelectedForEmptySeries();
       }
     } else {
-      refType.current.setSelected(stateSeries.type);
+      refType.current.setSelected(reduxSeries.type);
     }
   };
 
   const getRatingToSeriesInfo = () => {
-    return stateSeries?.id === undefined ? "G" : stateSeries?.rating;
+    return reduxSeries?.id === undefined ? "G" : reduxSeries?.rating;
   };
+
+  
 
   const callbackThumbnailImageAfterUpload = (imageInfo) => {
     //[post] '/post' upload
@@ -154,7 +165,7 @@ export default function UploadPost(props) {
     params.append("productId", "");
     params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("type", "image"); //image, video, binary
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
+    params.append("loginRequired", 'post' === usage); //언제 체크해서 보내는건지?
     params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
     params.append("rating", getRatingToSeriesInfo()); //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", ref.current.getImageFile());
@@ -212,11 +223,10 @@ export default function UploadPost(props) {
       authorId: reduxAuthors[0].id,
       rating: getRatingToSeriesInfo(),
       status: "enabled",
-      typeId:
-        stateSeries?.type === undefined ? stateType?.id : stateSeries?.type.id,
+      typeId: reduxSeries?.type === undefined ? stateType?.id : reduxSeries?.type.id,
       tagIds: refTags.current.getTagsJsonObject(),
-      categoryId:
-        json.categoryId === "" ? stateSeries?.category.id : json.categoryId,
+      categoryId: json.categoryId === "" ? reduxSeries?.category.id : json.categoryId,
+      content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
     };
 
     console.log("setPost josn", json);
@@ -240,12 +250,13 @@ export default function UploadPost(props) {
   //==============================================================================
   const handleSeries = (series) => {
     //series response 후 callback
-    setStateSeries(series);
+    dispatch( setSeriesAction(series) );
   };
 
   const handleType = (type) => {
     //type response 후 callback
-    setStateType(stateSeries?.type === undefined ? type : stateSeries?.type);
+    const tempType = reduxSeries?.type === undefined ? type : reduxSeries?.type;
+    setStateType(tempType);
   };
 
   const handleClickType = (type) => {
@@ -257,18 +268,33 @@ export default function UploadPost(props) {
     //閲覧範囲（支援者） item click event
     console.log("handleClickItemSubscribeTier", event);
   };
-
-  const handleClickPreview = (event) => {};
+  
+  const handleClickPreview = (event) => {
+    console.log("handleClickPreview", event);
+  };
 
   const handleClickRegister = (event) => {
-    if (refContents.current.getImageFile() === undefined) {
-      initButtonInStatus(refRegister);
-      refContents.current.setError(text.please_input_content);
-    } else {
-      //content upload
-      setImageToServer(refContents, "post");
-      //thumbnail upload  ->      execute in callbackContentImageAfterUpload
-      //[post] '/post' upload ->  execute in callbackThumbnailImageAfterUpload
+    if( getShowEditor(stateType) ){
+      //undefined(일회성 post), novel, blog 타입
+      if( refEditor.current.isEmpty() ){
+        initButtonInStatus(refRegister);
+        refEditor.current.setError(text.please_input_content);
+      }
+      else{
+        callbackContentImageAfterUpload();
+      }
+    }
+    else{
+      //webtoon, illust, photo, music 타입
+      if (refContents.current.getImageFile() === undefined) {
+        initButtonInStatus(refRegister);
+        refContents.current.setError(text.please_input_content);
+      } else {
+        //content upload
+        setImageToServer(refContents, "post");
+        //thumbnail upload  ->      execute in callbackContentImageAfterUpload
+        //[post] '/post' upload ->  execute in callbackThumbnailImageAfterUpload
+      }
     }
   };
 
@@ -277,8 +303,7 @@ export default function UploadPost(props) {
   //==============================================================================
   useLayoutEffect(() => {
     if (reduxAuthors === undefined) {
-      console.log("useLayoutEffect ");
-      dispatch(getAuthorMineAction());
+      dispatch( getAuthorMineAction() );
     }
   }, []);
 
@@ -286,11 +311,14 @@ export default function UploadPost(props) {
     if (stateType !== undefined) {
       initType();
     }
-  }, [stateSeries, stateType]);
+  }, [reduxSeries, stateType]);
 
   useEffect(() => {
     //temp
     setStateSupportorList(supportorList);
+    return () => {
+      dispatch( initSeriesAction() );
+    }
   }, []);
 
   return (
@@ -301,6 +329,7 @@ export default function UploadPost(props) {
             <div className="hd_titbox">
               <h2 className="h_tit1">{text.upload_post}</h2>
             </div>
+              
 
             <div className="col">
               <h3 className="tit1">{text.series}</h3>
@@ -331,9 +360,9 @@ export default function UploadPost(props) {
                 name={"categoryId"}
                 className={"select1 wid1 "}
                 typeId={stateType?.id}
-                selected={stateSeries?.category?.id}
-                disabled={stateSeries?.id !== undefined}
-                disabledText={stateSeries?.category?.name}
+                selected={reduxSeries?.category?.id}
+                disabled={reduxSeries?.id !== undefined}
+                disabledText={reduxSeries?.category?.name}
               />
             </div>
 
@@ -364,15 +393,22 @@ export default function UploadPost(props) {
                   <ToolTip title={"Contents"} text={"afasfasdfads"} />
                 </button>
               </h3>
-              <ImageUpload
-                ref={refContents}
-                id={"filebox2"}
-                className={"box_drag"}
-                name={"content"}
-                text={text.drag_drop}
-                callback={callbackContentImageAfterUpload}
-              />
+              {
+                ( getShowEditor(stateType) ) ? (
+                  <DraftEditor ref={refEditor} className="draft_editor_container" />
+                ) : (
+                  <ImageUpload
+                      ref={refContents}
+                      id={"filebox2"}
+                      className={"box_drag"}
+                      name={"content"}
+                      text={text.drag_drop}
+                      callback={callbackContentImageAfterUpload}
+                      />
+                )
+              }
             </div>
+
 
             <div className="col">
               <h3 className="tit1">
@@ -420,6 +456,8 @@ export default function UploadPost(props) {
                 callback={callbackThumbnailImageAfterUpload}
               />
             </div>
+
+
           </section>
 
           <div className="bbs_write_botm">

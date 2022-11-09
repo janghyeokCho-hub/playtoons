@@ -463,7 +463,6 @@ export default function PostEdit(props) {
                 id={"filebox2"}
                 className={"box_drag"}
                 name={"content"}
-                multiple={true}
                 text={text.drag_drop}
                 previewHash={reduxPostInfo?.content}
                 callback={callbackContents}
