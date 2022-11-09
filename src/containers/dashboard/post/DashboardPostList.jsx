@@ -22,7 +22,7 @@ const text = {
   post_list: "投稿リスト",
   post: "投稿する",
   number: "番号",
-  cover_image: "表紙",
+  cover_image: "サムネイル",
   title: "タイトル",
   access_count: "アクセス数",
   good: "いいね",
