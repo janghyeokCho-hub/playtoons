@@ -420,7 +420,7 @@ export default function PostEdit(props) {
               </h3>
               {
                 ( getShowEditor(reduxPostInfo?.type) ) ? (
-                  <DraftEditor ref={refEditor} className="draft_editor_container" />
+                  <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content} />
                 ) : (
                   <ImageUpload
                     ref={refContents}

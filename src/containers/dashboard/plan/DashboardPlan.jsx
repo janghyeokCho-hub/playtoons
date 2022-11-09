@@ -109,9 +109,7 @@ const tempData = {
 export default function DashboardPlan(props) {
   const [stateSupporter, setStateSupporter] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxSubscribeTiers = useSelector(
-    ({ dashboard }) => dashboard?.subscribeTiers
-  );
+  const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard?.subscribeTiers);
   const dispatch = useDispatch();
 
   //==============================================================================

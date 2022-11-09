@@ -270,7 +270,7 @@ export default function DashboardPostDetail() {
 
           <div className="area_detail2">
             <h2 className="h1">
-              {stateData?.title} {stateData?.number}
+            {stateData?.title} {stateData?.number}
             </h2>
             <p className="d1">{getDateYYYYMMDD(stateData?.startAt, ".")}</p>
             <p className="ws_pre">{stateData?.series?.description}</p>

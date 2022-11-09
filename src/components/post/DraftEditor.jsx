@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import ErrorMessage from '../dashboard/ErrorMessage';
 
 export default forwardRef(function DraftEditor(props, ref) {
-  const { className } = props;
+  const { className, placeholder = '' } = props;
   const [ stateEditor, setStateEditor ] = useState( () => EditorState.createEmpty() );
   const [ stateError, setStateError ] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
@@ -144,7 +144,7 @@ export default forwardRef(function DraftEditor(props, ref) {
                 // popupClassName: undefined,
               },
             }} 
-            placeholder="내용을 작성해주세요."
+            placeholder={placeholder}
             // 한국어 설정
             localization={{
                 locale: 'ko',

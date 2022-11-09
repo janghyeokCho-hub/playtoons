@@ -200,6 +200,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   }, [previewHash]);
 
   useEffect(() => {
+    //state로 비동기로 동작한다. 하지만 image upload 후 post등을 업로드를 차례로 실행하기 위해서 이곳에 콜백을 두었다. flag는 value
     if( stateImage.value !== undefined ){
       if( stateImage.mode === undefined ){
         //upload
