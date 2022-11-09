@@ -1,20 +1,19 @@
 import { getErrorMessageFromResultCode } from '@/common/common';
 import { setFileToServer } from '@/services/dashboardService';
 import { getFileUrlFromServer } from '@/services/fileService';
-import { convertToRaw, EditorState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+import { ContentState, convertToRaw, EditorState } from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import { useState } from 'react';
+import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useSelector } from "react-redux";
 import ErrorMessage from '../dashboard/ErrorMessage';
-import { useImperativeHandle, forwardRef } from 'react';
 
 export default forwardRef(function DraftEditor(props, ref) {
   const { className } = props;
   const [ stateEditor, setStateEditor ] = useState( () => EditorState.createEmpty() );
-  const [ stateContents, setStateContents ] = useState([]);
   const [ stateError, setStateError ] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const reduxSeries = useSelector(({ post }) => post?.series);
@@ -73,12 +72,12 @@ export default forwardRef(function DraftEditor(props, ref) {
   //==============================================================================
   const onEditorStateChange = (editorState) => {
     // editorState에 값 설정
+    if( stateError !== undefined ){
+      setStateError(undefined);
+    }
     setStateEditor(editorState);
   };
 
-  const onContentStateChange = (content) => {
-    setStateContents(content.blocks);
-  };
 
   const handleUploadImage = (file) => {
     return new Promise((resolve, reject) => {
@@ -99,13 +98,17 @@ export default forwardRef(function DraftEditor(props, ref) {
   
   useImperativeHandle(ref, () => ({
     isEmpty: () => {
-      return (stateContents.length === 0) || (stateContents.length === 1 && stateContents[0].text === '');
+      return stateEditor.getCurrentContent().hasText() === false;
     },
     setError: (text) => {
       setStateError(text);
     },
     getContent: () => {
       return draftToHtml(convertToRaw(stateEditor.getCurrentContent()));
+    },
+    setContent: (contentHtml) => {
+      const newStateEditor = EditorState.createWithContent( ContentState.createFromBlockArray(htmlToDraft(contentHtml)) );
+      setStateEditor( newStateEditor );
     },
   }));
 
@@ -150,7 +153,6 @@ export default forwardRef(function DraftEditor(props, ref) {
             editorState={stateEditor}
             // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
             onEditorStateChange={onEditorStateChange}
-            onContentStateChange={onContentStateChange}
         />
 
       </div>

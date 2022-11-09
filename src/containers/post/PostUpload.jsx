@@ -29,7 +29,6 @@ import Button from "@/components/dashboard/Button";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getAuthorMineAction, initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/post";
 
-// const DraftEditor = dynamic(() => import('@/components/post/DraftEditor'), { ssr: false }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 import DraftEditor from "@/components/post/DraftEditor";
 
 const text = {
@@ -58,6 +57,7 @@ const text = {
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
+  please_input_category: "カテゴリを入力してください。",
   error_title: "お知らせ",
 };
 
@@ -122,6 +122,7 @@ export default function UploadPost(props) {
   // function
   //==============================================================================
   const initType = () => {
+    //일회성 포스트
     if (reduxSeries?.id === undefined) {
       refType.current.setDisabled(false);
       //click event가 아닌 경우에만
@@ -130,6 +131,7 @@ export default function UploadPost(props) {
       }
     } else {
       refType.current.setSelected(reduxSeries.type);
+      setStateType(reduxSeries.type);
     }
   };
 
@@ -137,6 +139,13 @@ export default function UploadPost(props) {
     return reduxSeries?.id === undefined ? "G" : reduxSeries?.rating;
   };
 
+  const getTypeId = () => {
+    return reduxSeries?.type === undefined ? stateType?.id : reduxSeries?.type.id;
+  };
+
+  const getCategoryId = (json) => {
+    return json.categoryId === "" ? reduxSeries?.category.id : json.categoryId;
+  };
   
 
   const callbackThumbnailImageAfterUpload = (imageInfo) => {
@@ -185,17 +194,26 @@ export default function UploadPost(props) {
 
   const setPost = async () => {
     //필드 확인
+    let json = getFromDataJson(refForm);
+
     if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
       refTitle.current.setError(text.please_input_title);
       return;
     }
 
-    if (refNumber.current.isEmpty()) {
+    if( json.categoryId === '' && reduxSeries?.category === undefined ){
       initButtonInStatus(refRegister);
-      refNumber.current.setError(text.please_input_description);
+      showOneButtonPopup( dispatch, text.please_input_category );
       return;
     }
+    
+
+    // if (refNumber.current.isEmpty()) {
+    //   initButtonInStatus(refRegister);
+    //   refNumber.current.setError(text.please_input_description);
+    //   return;
+    // }
 
     /*
     {
@@ -217,15 +235,14 @@ export default function UploadPost(props) {
       "status": "pending"   //enabled, disabled, pending, suspended(사용자가 설정 못함)
     }
     */
-    let json = getFromDataJson(refForm);
     json = {
       ...json,
       authorId: reduxAuthors[0].id,
       rating: getRatingToSeriesInfo(),
       status: "enabled",
-      typeId: reduxSeries?.type === undefined ? stateType?.id : reduxSeries?.type.id,
+      typeId: getTypeId(),
       tagIds: refTags.current.getTagsJsonObject(),
-      categoryId: json.categoryId === "" ? reduxSeries?.category.id : json.categoryId,
+      categoryId: getCategoryId(json),
       content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
     };
 

@@ -14,6 +14,7 @@ import Type from "@/components/post/Type";
 
 import {
   getFromDataJson,
+  getShowEditor,
   initButtonInStatus,
   showOneButtonPopup
 } from "@/common/common";
@@ -24,8 +25,7 @@ import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
 import { editPostToServer } from "@/services/postService";
-import tempImage from "@IMAGES/tmp_comic2.jpg";
-import tempImage2 from "@IMAGES/tmp_comic3.png";
+import DraftEditor from "@/components/post/DraftEditor";
 
 const text = {
   post_edit: "投稿を修正",
@@ -50,7 +50,7 @@ const text = {
   type_movie: "映像",
   label_can_not_edit: "編集不可",
   input_image: "置いてください。",
-  please_input_content: "表紙を入力してください。",
+  please_input_content: "コンテンツを入力してください。",
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
@@ -75,74 +75,6 @@ const supportorList = [
   },
 ];
 
-const tempData = {
-  seires: "",
-  title: "シェルターアーク",
-  episode: "12",
-  timeline: {
-    image: {
-      preview: tempImage,
-      filename: "webtoon_shorts.mp4",
-      fileLenth: "32秒",
-    },
-    list: [
-      {
-        id: "1",
-        preview: tempImage,
-        filename: "webtoon_shorts.mp4",
-        fileLenth: "32秒",
-      },
-      {
-        id: "2",
-        preview: tempImage2,
-        filename: "123124_shorts.mp4",
-        fileLenth: "52秒",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-      {
-        id: "",
-        preview: undefined,
-        filename: "",
-        fileLenth: "",
-      },
-    ],
-  },
-};
 
 export default function PostEdit(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
@@ -156,6 +88,7 @@ export default function PostEdit(props) {
   const refTitle = useRef();
   const refNumber = useRef();
   const refContents = useRef();
+  const refEditor = useRef();
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
   const refRegister = useRef();
@@ -240,35 +173,42 @@ export default function PostEdit(props) {
   */
   const editPost = async () => {
     //필드 확인
+    let json = getFromDataJson(refForm);
     if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
       refTitle.current.setError(text.please_input_title);
+      refTitle.current.focus();
       return;
     }
-    if (refNumber.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refNumber.current.setError(text.please_input_number);
-      return;
+
+    if( getShowEditor(reduxPostInfo.type) ){
+      if( refEditor.current.isEmpty() ){
+        initButtonInStatus(refRegister);
+        refEditor.current.setError(text.please_input_content);
+        return;
+      }
     }
-    if (refContents.current.checkToEmpty()) {
-      initButtonInStatus(refRegister);
-      refContents.current.setError(text.please_input_content);
-      return;
+    else{
+      if (refContents.current.checkToEmpty()) {
+        initButtonInStatus(refRegister);
+        refContents.current.setError(text.please_input_content);
+        return;
+      }
     }
+
     if (refThumbnailTimeline.current.checkToEmpty()) {
       initButtonInStatus(refRegister);
       refThumbnailTimeline.current.setError(text.please_input_thumbnail);
       return;
     }
 
-    let json = getFromDataJson(refForm);
     json = {
       ...json,
       postId: params.id,
       typeId: reduxPostInfo?.type?.id,
       tagIds: refTag.current.getTagsJsonObject(),
-      categoryId:
-        json.categoryId === "" ? reduxPostInfo?.category?.id : json.categoryId,
+      categoryId: json.categoryId === "" ? reduxPostInfo?.category?.id : json.categoryId,
+      content: getShowEditor(reduxPostInfo.type) ? refEditor.current.getContent() : json.content,
       // rating: reduxPostInfo.rating,
       // status: reduxPostInfo.status,
       // issueId: '',
@@ -276,18 +216,22 @@ export default function PostEdit(props) {
       // outline: '',
       // number: '',
     };
+
+    //이미지 변경이 없는 경우 기존 정보를 넣어준다.
     if (!json.content.length) {
       json = {
         ...json,
         content: reduxPostInfo.content,
       };
     }
+
     if (!json.thumbnailImage.length) {
       json = {
         ...json,
         thumbnailImage: reduxPostInfo.thumbnailImage,
       };
     }
+    
     console.log("editPost json", json);
 
     const { status, data } = await editPostToServer(json);
@@ -338,13 +282,26 @@ export default function PostEdit(props) {
     console.log("Preview", event);
   };
 
-  const handleClickRegister = (event) => {
-    //check contents
-    //upload 할 이미지가 없다면
-    if (refContents.current.getImageFile() === undefined) {
-      callbackContents();
-    } else {
-      setImageToServer(refContents, "post");
+  const handleClickRegister = () => {
+    if( getShowEditor(reduxPostInfo?.type) ){
+      //undefined(일회성 post), novel, blog 타입
+      if( refEditor.current.isEmpty() ){
+        initButtonInStatus(refRegister);
+        refEditor.current.setError(text.please_input_content);
+      }
+      else{
+        callbackContents();
+      }
+    }
+    else{
+      //webtoon, illust, photo, music 타입
+      //check contents
+      //upload 할 이미지가 없다면
+      if (refContents.current.getImageFile() === undefined) {
+        callbackContents();
+      } else {
+        setImageToServer(refContents, "post");
+      }
     }
   };
 
@@ -384,6 +341,9 @@ export default function PostEdit(props) {
 
   useEffect(() => {
     // console.log('first', reduxPostInfo);
+    if( refEditor !== undefined ){
+      refEditor.current.setContent( reduxPostInfo.content );
+    }
   }, [dispatch, reduxPostInfo]);
 
   return (
@@ -458,15 +418,21 @@ export default function PostEdit(props) {
                   <ToolTip title={"Contents"} text={"afasfasdfads"} />
                 </button>
               </h3>
-              <ImageUpload
-                ref={refContents}
-                id={"filebox2"}
-                className={"box_drag"}
-                name={"content"}
-                text={text.drag_drop}
-                previewHash={reduxPostInfo?.content}
-                callback={callbackContents}
-              />
+              {
+                ( getShowEditor(reduxPostInfo?.type) ) ? (
+                  <DraftEditor ref={refEditor} className="draft_editor_container" />
+                ) : (
+                  <ImageUpload
+                    ref={refContents}
+                    id={"filebox2"}
+                    className={"box_drag"}
+                    name={"content"}
+                    text={text.drag_drop}
+                    previewHash={reduxPostInfo?.content}
+                    callback={callbackContents}
+                  />
+                )
+              }
             </div>
 
             <div className="col">
@@ -512,7 +478,6 @@ export default function PostEdit(props) {
                 name={"thumbnailImage"}
                 className={'box_drag'}
                 renderType={'thumbnail'}
-                
                 previewHash={reduxPostInfo?.thumbnailImage}
                 text={text.drag_drop}
                 textEdit={text.edit}

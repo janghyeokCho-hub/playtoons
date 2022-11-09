@@ -32,7 +32,12 @@ export default forwardRef( function Select(props, ref) {
   };
 
   const getOptionElements = () => {
-    return dataList?.map((item, index) => {
+    if( dataList === undefined || dataList.length === 0 ){
+      <option value={''} selected disabled  > </option>;
+      return;
+    }
+
+    return dataList.map((item, index) => {
       return <option key={index} value={item?.id} >{getName(item)}</option>;
     });
   };

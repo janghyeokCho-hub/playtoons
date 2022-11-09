@@ -276,15 +276,17 @@ export default function DashboardPostDetail() {
             <p className="ws_pre">{stateData?.series?.description}</p>
           </div>
 
-          <div className="ta_center">
             {
               getShowEditor(stateData?.type) ? (
-                <>{ getHtmlElementFromHtmlString() }</>
+                <div className="editor_p ws_pre">
+                  { getHtmlElementFromHtmlString() }
+                </div>
               ) : (
-                <Image hash={stateData?.content} alt="" />
+                <div className="ta_center">
+                  <Image hash={stateData?.content} alt="" />
+                </div>  
               )
             }
-          </div>
 
           {/* <div className="area_detail2">
           <p className="t1 c-gray">{tempData.content_next_summary}</p>

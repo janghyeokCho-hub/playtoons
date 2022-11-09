@@ -205,12 +205,18 @@ export default forwardRef(function ImageUpload(props, ref) {
         //upload
         callback?.();
       }
-      else{
+      else{   //'input' mode
         //get thumbnail
         getImageUrl(stateImage.value);
       }
     }
   }, [stateImage.value]);
+
+  useEffect(() => {
+    return () => {
+      setStateError(undefined)
+    }
+  }, []);
 
   return (
     <>
