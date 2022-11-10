@@ -53,7 +53,7 @@ export default function DashboardSeries() {
 
   const moveDetailPage = (item) => {
     if (windowSize.width > 960) {
-      navigate(`/dashboard/series/detail/${item.id}`);
+      navigate(`/dashboard/series/detail/${item.id}/1`);
     }
   };
 
@@ -121,7 +121,7 @@ export default function DashboardSeries() {
           </td>
           <td className="td_btns">
             <Link
-              to={`/dashboard/series/detail/${item.id}`}
+              to={`/dashboard/series/detail/${item.id}/1`}
               className="btn-pk n blue2"
             >
               <span>

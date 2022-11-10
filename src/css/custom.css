@@ -182,6 +182,33 @@ ul.tpagination {
   display: none !important;
 }
 
+.pagenation li div {
+  display: block;
+  padding: 5px 12px 8px 12px;
+  line-height: 25px;
+  font-size: 24px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  color: #909dab;
+  cursor: pointer;
+}
+.pagenation li.on div {
+  background-color: #edeefa;
+  color: #394bc2;
+}
+.pagenation li.prev div {
+  margin-right: 5px;
+  color: #c3cad2;
+}
+.pagenation li.next div {
+  margin-left: 5px;
+  color: #c3cad2;
+}
+.pagenation li:hover div {
+  color: #3a434d;
+}
+
 /* ============================================================================== */
 /* Tooltip */
 /* ============================================================================== */

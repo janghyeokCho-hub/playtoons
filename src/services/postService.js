@@ -78,9 +78,7 @@ export const editPostToServer = async (params) => {
 };
 
 /**
-*
    series list
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
@@ -99,9 +97,7 @@ export const getPostSeriesMine = async (params) => {
 };
 
 /**
-*
    작가 정보
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
@@ -117,15 +113,29 @@ export const getAuthorMineFromServer = async () => {
 };
 
 /**
-*
    계정 정보
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
 export const getAccountsFromServer = async () => {
   try {
     return await apiServer("get", "/accounts");
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+  post 삭제
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deletePostToServer = async (params) => {
+  try {
+    return await apiServer("delete", `/post/${params.id}`);
   } catch (e) {
     return {
       status: e.response.status,

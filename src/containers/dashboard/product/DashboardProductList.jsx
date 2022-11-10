@@ -23,6 +23,7 @@ const text = {
   status: "状態",
   detail: "詳細",
   modify: "修正",
+  category: "カテゴリ",
   dont_see: "非表示",
 };
 
@@ -187,11 +188,11 @@ export default function DashboardProductList(props) {
           <td className="td_subject">{item.title}</td>
           <td className="td_number3">{item.price}</td>
           <td className="td_text1">
-            <span className="view-m">カテゴリ：</span>
+            <span className="view-m">{text.category}：</span>
             {item.date}
           </td>
           <td className={`td_txt3 cl-sell ${getStatusColor(item.status)}`}>
-            <span className="view-m">状態</span>
+            <span className="view-m">{text.status}</span>
             {item.status.name}
           </td>
           <td className="td_btns2 ty1">

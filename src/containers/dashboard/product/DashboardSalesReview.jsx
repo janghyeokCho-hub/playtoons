@@ -154,13 +154,13 @@ export default function DashboardSalesReview(props) {
   const handleItemClickAnswer = (e) => {
     let no = e.target.getAttribute("data-id");
 
-    navigate("/dashboard/series/detail/" + no);
+    navigate(`/dashboard/series/detail/${no}/1`);
   };
 
   const handleItemClickReport = (e) => {
     let no = e.target.getAttribute("data-id");
 
-    navigate("/dashboard/series/detail/" + no);
+    navigate(`/dashboard/series/detail/${no}/1`);
   };
 
   const handleItemArrow = (value, isSelected) => {

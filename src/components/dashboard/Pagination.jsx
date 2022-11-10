@@ -30,6 +30,7 @@ export default function Pagination1(props) {
   const pagination = useMemo(() => {
     if (meta) {
       const { currentPage, totalPages, itemCount } = meta;
+      //전체 페이지 수 구하기
       let pageList = [];
       for (let i = 1; i <= totalPages; i++) {
         pageList.push(i);
@@ -39,7 +40,9 @@ export default function Pagination1(props) {
       const prevPage = prev - 1;
       const next = currentPage + 1;
       const nextPage = next + 1;
+      const SHOW_PAGE_NUMBER = 3;
 
+      //화면에 보여질 페이지 숫자 리스트 구하기
       let showPages;
       if (currentPage === 1) {
         if (totalPages === 0) {
@@ -48,9 +51,14 @@ export default function Pagination1(props) {
           showPages = pageList.splice(prev, 3);
         }
       } else if (currentPage === totalPages) {
-        showPages = pageList.splice(currentPage - 3, 3);
+        if( totalPages <= SHOW_PAGE_NUMBER ){
+          showPages = pageList;
+        }
+        else{
+          showPages = pageList.splice(currentPage - 3, SHOW_PAGE_NUMBER);
+        }
       } else {
-        showPages = pageList.splice(currentPage - 2, 3);
+        showPages = pageList.splice(currentPage - 2, SHOW_PAGE_NUMBER);
       }
 
       return (
@@ -60,9 +68,9 @@ export default function Pagination1(props) {
               className="prev"
               onClick={() => callback?.(prevPage)}
             >
-              <a href="#">
+              <div>
                 <FontAwesomeIcon icon={faAngleLeft} />
-              </a>
+              </div>
             </li>
           )}
           {showPages &&
@@ -72,7 +80,7 @@ export default function Pagination1(props) {
                 className={`${page === currentPage ? "on" : ""}`}
                 onClick={() => callback?.( page)}
               >
-                <a href="#">{page}</a>
+                <div>{page}</div>
               </li>
             ))}
 
@@ -81,9 +89,9 @@ export default function Pagination1(props) {
               className="next"
               onClick={() => callback?.( nextPage)}
             >
-              <a href="#">
+              <div>
                 <FontAwesomeIcon icon={faAngleRight} />
-              </a>
+              </div>
             </li>
           )}
         </>

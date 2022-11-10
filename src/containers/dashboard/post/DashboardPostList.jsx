@@ -154,12 +154,6 @@ export default function DashboardPostList(props) {
               to={`/dashboard/post/detail/${item.id}`}
               className="btn-pk n blue2"
             >
-              <span>
-                <i className="fa-solid fa-angle-right">
-                  <FontAwesomeIcon icon={faAngleRight} />
-                  {text.detail}
-                </i>
-              </span>
             </Link>
           </td>
         </tr>

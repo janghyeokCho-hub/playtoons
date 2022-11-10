@@ -8,7 +8,7 @@ import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
-import { getPostListFromServer, getTimelineFromServer } from "@/services/dashboardService";
+import { getPostListFromServer, getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Pagination1 from "@/components/dashboard/Pagination";
@@ -17,6 +17,7 @@ import { useWindowSize } from "@/hook/useWindowSize";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import Search from "@/components/dashboard/Search";
+import { deletePostToServer } from "@/services/postService";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -27,27 +28,32 @@ const text = {
   status: "状態",
   type: "タイプ",
   series_detail: "シリーズ詳細",
-  modify: "修正する",
+  do_modify: "修正する",
   number: "番号",
   cover_image: "サムネイル",
   title: "タイトル",
   access_count: "アクセス数",
   good: "いいね",
   date: "掲載日",
+  episode: "話",
   count: "回",
+  post_detail: "投稿詳細",
+  modify: "修正",
+  delete: "削除",
   empty_message: "投稿がありません。",
+  do_delete: "削除しました。",
 };
 
 
 export default function DashboardSeriesDetail(props) {
+  const [stateSeries, setStateSeries] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const [statePostList, setStatePostList] = useState(undefined);
-  const reduxSeries = useSelector(({ dashboard }) => dashboard?.series);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
-  const params = useParams("id");
+  const useparams = useParams();
 
   //==============================================================================
   // header
@@ -84,6 +90,28 @@ export default function DashboardSeriesDetail(props) {
   //==============================================================================
   // api
   //==============================================================================
+  /**
+     썸네일
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getSeriesDetail = async () => {
+    const { status, data } = await getSeriesDetailFromServer( {id: useparams.id} );
+    console.log("getSeriesDetail", status, data);
+
+    if (status === 200) {
+      setStateSeries(data?.series);
+    } else {
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+
+
+  /**
+     썸네일
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const getTimeline = async () => {
     const params = new FormData();
     params.append('authorId', reduxAuthors[0].id);
@@ -99,10 +127,19 @@ export default function DashboardSeriesDetail(props) {
     }
   };
 
-  const getPostList = async () => {
+  /**
+    　post list 검색
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getPostList = async (keyword, page) => {
     const params = new FormData();
     params.append('authorId', reduxAuthors[0].id);
-    params.append('seriesId', reduxSeries.id);
+    params.append('seriesId', stateSeries.id);
+    params.append('page', page === undefined ? useparams.postPage : page);
+    if( keyword !== undefined ){
+      params.append('keyword', keyword);
+    }
 
     const { status, data } = await getPostListFromServer(params);
     console.log("getPostList", status, data);
@@ -113,14 +150,35 @@ export default function DashboardSeriesDetail(props) {
       showOneButtonPopup(dispatch, data);
     }
   };
+
+  /**
+     post　삭제 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const deletePost = async (id) => {
+    const { status, data } = await deletePostToServer( {id : id} );
+    console.log("deletePost", status, data);
+
+    if (status === 200) {
+      getPostList();
+      showOneButtonPopup(dispatch, text.do_delete);
+      
+    } else {
+      showOneButtonPopup(dispatch, data);
+    }
+  };
   //==============================================================================
   // event
   //==============================================================================
-  const handleSearchTitle = (event) => {
-    console.log('SearchTitle', event);
-    
+  const handleSearchTitle = (keyword) => {
+    console.log('SearchTitle', keyword);
+    getPostList(keyword);
   };
   
+  const handleItemDelete = useCallback((event) => {
+    deletePost( event.target.getAttribute('data-id') )
+  }, []);
 
   //==============================================================================
   // hook & render
@@ -143,7 +201,7 @@ export default function DashboardSeriesDetail(props) {
   };
 
   const renderTagList = () => {
-    return reduxSeries?.tags?.map((item, index) => {
+    return stateSeries?.tags?.map((item, index) => {
       return <div className="i_tag" key={item.id}>{`#${item.name}`}</div>;
     });
   };
@@ -154,8 +212,9 @@ export default function DashboardSeriesDetail(props) {
     }
 
     return statePostList?.posts?.map((item, index) => {
+      /* <tr key={index} onClick={() => moveToDetailPage(item)}> */
       return (
-        <tr key={index} onClick={() => moveToDetailPage(item)}>
+        <tr key={index} >
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb">
@@ -177,16 +236,32 @@ export default function DashboardSeriesDetail(props) {
             {getDateYYYYMMDD(item.startAt, "/")}
           </td>
           <td className="td_txt">
+            {item.number}
+          </td>
+          <td className="td_txt">
             <span className="view-m">{text.status}</span>
             {item.status}
           </td>
-          <td className="td_btns">
+          <td className="td_btns2 ty1">
             <Link
+              className="btn-pk s blue2"
               to={`/dashboard/post/detail/${item.id}`}
-              className="btn-pk n blue2"
             >
-              
+              {text.post_detail}
             </Link>
+            <Link
+              className="btn-pk s blue2"
+              to={`/post/edit/${item.id}`}
+            >
+              {text.modify}
+            </Link>
+            <div
+              className="btn-pk s blue2"
+              data-id={item.id}
+              onClick={handleItemDelete}
+            >
+              {text.delete}
+            </div>
           </td>
         </tr>
       );
@@ -194,17 +269,14 @@ export default function DashboardSeriesDetail(props) {
   };
 
   useEffect(() => {
-    
-  }, [dispatch, reduxSeries]);
-
-  useEffect(() => {
-    dispatch( getSeriedDetailAction(params) );
-    getTimeline();
-    getPostList();
-  }, []);
-
+    if( stateSeries !== undefined ){
+      getPostList();
+    }
+  }, [stateSeries, useparams]);
+  
   useLayoutEffect(() => {
-    dispatch( initSeriedDetailAction(params) );
+    getSeriesDetail();
+    getTimeline();
   }, []);
 
   return (
@@ -218,41 +290,41 @@ export default function DashboardSeriesDetail(props) {
 
             <div className="bbs_book">
               <div className="flex relative">
-                <p className="cx_tit">{reduxSeries?.title}</p>
+                <p className="cx_tit">{stateSeries?.title}</p>
                 <Link
-                  to={`/dashboard/series/edit/${params.id}`}
+                  to={`/dashboard/series/edit/${useparams.id}`}
                   className="btn-pk n blue2 modify"
                 >
-                  <span>{text.modify}</span>
+                  <span>{text.do_modify}</span>
                 </Link>
               </div>
               <div className="cx_thumb">
                 <span>
-                  <Image hash={reduxSeries?.coverImage} alt="" />
+                  <Image hash={stateSeries?.coverImage} alt="" />
                 </span>
               </div>
               <ul className="cx_list">
                 <li>
                   <span>{text.category} </span>
-                  <span>{reduxSeries?.category.name}</span>
+                  <span>{stateSeries?.category?.name}</span>
                 </li>
                 <li>
                   <span>{text.grade} </span>
-                  <span>{reduxSeries?.rating}</span>
+                  <span>{stateSeries?.rating}</span>
                 </li>
                 <li>
                   <span>{text.status} </span>
-                  <span>{reduxSeries?.status}</span>
+                  <span>{stateSeries?.status}</span>
                 </li>
                 <li>
                   <span>{text.type} </span>
-                  <span>{reduxSeries?.type.name}</span>
+                  <span>{stateSeries?.type?.name}</span>
                 </li>
               </ul>
             </div>
 
             <h3 className="tit1">{text.summary}</h3>
-            <p className="txt1 ws_pre">{reduxSeries?.description}</p>
+            <p className="txt1 ws_pre">{stateSeries?.description}</p>
 
             <h3 className="tit1">{text.tag}</h3>
             <div className="txt1">
@@ -298,11 +370,12 @@ export default function DashboardSeriesDetail(props) {
               <colgroup>
                 <col className="num" />
                 <col className="imgs" />
-                <col className="wid1" />
+                <col className="wid3" />
                 <col className="wid2" />
-                <col className="wid3" />
-                <col className="wid3" />
-                <col className="wid3" />
+                <col className="wid2" />
+                <col className="wid1" />
+                <col className="wid1" />
+                <col className="wid1" />
                 <col />
               </colgroup>
               <thead>
@@ -313,6 +386,7 @@ export default function DashboardSeriesDetail(props) {
                   <th>{text.access_count}</th>
                   <th>{text.good}</th>
                   <th>{text.date}</th>
+                  <th>{text.episode}</th>
                   <th>{text.status}</th>
                   <th></th>
                 </tr>
@@ -324,7 +398,7 @@ export default function DashboardSeriesDetail(props) {
           <Pagination1
             className={""}
             meta={statePostList?.meta}
-            callback={(page) => navigate(`/dashboard/post/${page}`)}
+            callback={(page) => navigate(`/dashboard/series/detail/${useparams.id}/${page}`)}
           />
         </div>
       </div>

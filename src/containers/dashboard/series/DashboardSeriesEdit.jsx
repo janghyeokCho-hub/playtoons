@@ -208,7 +208,7 @@ export default function DashboardUploadSeries(props) {
             />
           ),
           callback: () => {
-            navigate(`/dashboard/series/detail/${params.id}`);
+            navigate(`/dashboard/series/detail/${params.id}/1`);
           },
         })
       );

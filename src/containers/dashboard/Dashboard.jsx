@@ -95,7 +95,7 @@ export default function Dashboard() {
           element={<Series />} 
         />
         <Route
-          path="/series/detail/:id"
+          path="/series/detail/:id/:postPage"
           element={<SeriesDetail />}
         >
         </Route>

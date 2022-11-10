@@ -219,7 +219,7 @@ export default function DashboardMain() {
     return stateSeries?.series?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
-          <Link to={`/dashboard/series/detail/${item.id}`}>
+          <Link to={`/dashboard/series/detail/${item.id}/1`}>
             <div className="cx_thumb">
               <span>
                 <Image hash={item.thumbnailImage} alt="" />
