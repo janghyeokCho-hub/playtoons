@@ -10,9 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 
   <Pagination
     className={''}
-    page={stateData?.meta.page}
-    itemsCountPerPage={stateData?.meta.itemsPerPage}
-    totalItemsCount={stateData?.meta.totalItems}
+    meta={stateData?.meta}
     callback={handleChange}
     />
 
@@ -23,9 +21,7 @@ import { useEffect, useMemo, useState } from 'react';
 * @return
 */
 export default function MyPagination(props) {
-  const { className, meta, callback, page } = props;
-  const [ statePage, setStatePage] = useState(page);
-
+  const { className, meta, callback, } = props;
 
   const pagination = useMemo(() => {
     if (meta) {
@@ -90,18 +86,6 @@ export default function MyPagination(props) {
     }
   }, [meta]);
 
-
-  const handleChange = (page) => {
-    setStatePage(page);
-    callback?.(page);
-  };
-
-  useEffect(() => {
-    setStatePage(page);
-  }, [page]);
-
-  
-
   return (
     <>
       {/* {
@@ -118,7 +102,7 @@ export default function MyPagination(props) {
               itemClassNext={'arrow'}
               itemClassFirst={'none'}
               itemClassLast={'none'}
-              onChange={handleChange}
+              onChange={(page) => callback?.(page)}
               />
 
       } */}
