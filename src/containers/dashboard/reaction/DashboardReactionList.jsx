@@ -13,7 +13,7 @@ import {
 } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { setContainer } from "@/modules/redux/ducks/container";
 
 const text = {

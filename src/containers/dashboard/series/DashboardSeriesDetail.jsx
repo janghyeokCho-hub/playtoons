@@ -11,7 +11,7 @@ import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/d
 import { getPostListFromServer, getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Pagination1 from "@/components/dashboard/Pagination";
+import MyPagination from "@/components/dashboard/MyPagination";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -395,7 +395,7 @@ export default function DashboardSeriesDetail(props) {
             </table>
           </div>
 
-          <Pagination1
+          <MyPagination
             className={""}
             meta={statePostList?.meta}
             callback={(page) => navigate(`/dashboard/series/detail/${useparams.id}/${page}`)}

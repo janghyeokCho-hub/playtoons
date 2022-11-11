@@ -15,7 +15,7 @@ import ProfileSpan from "@/components/dashboard/ProfileSpan";
 import { getDateYYYYMMDD, getHtmlElementFromHtmlString, getShowEditor, showOneButtonPopup } from "@/common/common";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import { getReactionFromServer } from "@/services/dashboardService";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { setContainer } from "@/modules/redux/ducks/container";
 import parse from 'html-react-parser'
 

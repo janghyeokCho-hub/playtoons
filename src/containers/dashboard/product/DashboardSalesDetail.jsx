@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import Calendar from "@/components/dashboard/Calendar";
 import Select from "@/components/dashboard/Select";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";

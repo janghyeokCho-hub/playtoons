@@ -311,9 +311,11 @@ export default function DashboardMain() {
   };
 
   useEffect(() => {
-    getSeriesList();
-    getPostList();
-    getReactionList();
+    if( reduxAuthors !== undefined ){
+      getSeriesList();
+      getPostList();
+      getReactionList();
+    }
   }, [reduxAuthors]);
 
   return (

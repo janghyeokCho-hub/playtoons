@@ -5,7 +5,7 @@ import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import { convertMoneyStyleString, showOneButtonPopup } from "@/common/common";
 import Calendar from "@/components/dashboard/Calendar";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import ProductTab from "@/components/dashboard/ProductTab";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { useDispatch } from "react-redux";

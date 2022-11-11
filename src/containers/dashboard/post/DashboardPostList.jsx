@@ -11,7 +11,7 @@ import { getPostListFromServer } from "@/services/dashboardService";
 import Select from "@/components/dashboard/Select";
 //temp data
 import Image from "@/components/dashboard/Image";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { useDispatch, useSelector } from "react-redux";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";

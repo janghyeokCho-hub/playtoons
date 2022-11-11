@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 import ProductTab from "@/components/dashboard/ProductTab";
 import Image from "@/components/dashboard/Image";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { useDispatch } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
 import Search from "@/components/dashboard/Search";
