@@ -207,8 +207,6 @@ export default function DashboardPostDetail() {
     getReactionAllList();
   }, []);
 
-  
-
   return (
     <div className="contents">
       <div className="inr-c">

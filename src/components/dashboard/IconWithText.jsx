@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-//TODO delete test
+//TODO  test icon
+import tempTop2 from '@IMAGES/icon0.png';
+import tempTop1 from '@IMAGES/icon1.png';
 import temp1 from '@IMAGES/icon2.png';
 import temp2 from '@IMAGES/icon3.png';
 import temp3 from '@IMAGES/icon4.png';
@@ -9,21 +11,16 @@ import temp5 from '@IMAGES/icon6.png';
 import temp6 from '@IMAGES/icon7.png';
 import temp7 from '@IMAGES/icon8.png';
 import temp8 from '@IMAGES/icon9.png';
-import tempTop1 from '@IMAGES/icon1.png';
-import tempTop2 from '@IMAGES/icon0.png';
 
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faCircleXmark, } from '@fortawesome/pro-solid-svg-icons';
+import { showOneButtonPopup } from '@/common/common';
 import useOutSideClick from '@/common/useOutSideClick';
 import { setPostReactionToServer } from '@/services/postService';
-import ErrorPopup from './ErrorPopup';
-import { showModal } from '@/modules/redux/ducks/modal';
+import { faAngleLeft, faAngleRight, faCircleXmark } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
-import { setFileToServer } from '@/services/dashboardService';
-import ErrorMessage from './ErrorMessage';
 import Button from './Button';
-import { showOneButtonPopup } from '@/common/common';
+import ErrorMessage from './ErrorMessage';
 
 
 /**

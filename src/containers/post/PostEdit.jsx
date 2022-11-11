@@ -341,8 +341,10 @@ export default function PostEdit(props) {
 
   useEffect(() => {
     // console.log('first', reduxPostInfo);
-    if( refEditor !== undefined && getShowEditor(reduxPostInfo?.type) ){
-      refEditor.current.setContent( reduxPostInfo.content );
+    if( reduxPostInfo !== undefined ){
+      if( refEditor !== undefined && getShowEditor(reduxPostInfo?.type) ){
+        refEditor.current.setContent( reduxPostInfo?.content );
+      }
     }
   }, [dispatch, reduxPostInfo]);
 
