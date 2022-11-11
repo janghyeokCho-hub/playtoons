@@ -1,4 +1,4 @@
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

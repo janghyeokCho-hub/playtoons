@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";

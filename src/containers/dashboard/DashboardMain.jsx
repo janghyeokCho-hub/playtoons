@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import {
   faAngleRight, faHeart, faStar
 } from "@fortawesome/pro-solid-svg-icons";
