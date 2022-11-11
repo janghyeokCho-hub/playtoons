@@ -48,7 +48,7 @@ export default function Pagination1(props) {
         if (totalPages === 0) {
           showPages = [1];
         } else {
-          showPages = pageList.splice(prev, 3);
+          showPages = pageList.splice(prev, SHOW_PAGE_NUMBER);
         }
       } else if (currentPage === totalPages) {
         if( totalPages <= SHOW_PAGE_NUMBER ){
