@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 import ErrorMessage from "./ErrorMessage";
 import SwiperContainer from "./SwiperContainer";
+import Button from "./Button";
 
 /**
 *
@@ -147,7 +148,7 @@ export default function IconWithText(props, ref) {
   const renderSelectedIconsElement = () => {
     return stateSelectedIcons?.map((item, index) => {
       return (
-        <div class="ico_emo" key={index}>
+        <div className="ico_emo" key={index}>
           <span>
             <img src={item.image} alt="" />
           </span>
@@ -206,7 +207,7 @@ export default function IconWithText(props, ref) {
   return (
     <>
       <div className="conts">
-        <div class={`textarea1 ${stateSelectedIcons.length > 0 && "emo"}`}>
+        <div className={`textarea1 ${stateSelectedIcons.length > 0 && "emo"}`}>
           <textarea
             ref={refTextArea}
             name="content"
@@ -221,7 +222,7 @@ export default function IconWithText(props, ref) {
         </div>
 
         {/* button */}
-        <div class="btns">
+        <div className="btns">
           <button
             type="button"
             className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
@@ -229,24 +230,24 @@ export default function IconWithText(props, ref) {
           >
             <span>{text.icon}</span>
           </button>
-          <button
+          <Button
             type="button"
             ref={refButton}
+            text={text.register}
             className="btn-pk s blue"
             onClick={handleClickRegister}
           >
-            <span>{text.register}</span>
-          </button>
+          </Button>
         </div>
 
         {/* <!-- 이모티콘 삽입 --> */}
         {stateShowIcon && (
           <div
-            class="box_emoji"
+            className="box_emoji"
             style={{ display: "block" }}
             ref={refContaienr}
           >
-            <div class="tit_emo">
+            <div className="tit_emo">
               <SwiperContainer
                 className={"myEmoji1"}
                 buttonClassName={"myem"}
@@ -270,7 +271,7 @@ export default function IconWithText(props, ref) {
                 list={renderTopIconElement}
               />
             </div>
-            <div class="cont_emo scrollY">
+            <div className="cont_emo scrollY">
               <ul>{renderIconElement()}</ul>
             </div>
           </div>

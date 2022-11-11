@@ -935,6 +935,14 @@ li.dashboard-gnb.selected{
   padding: 10px 48px;
 }
 
+.wrap_comment .lst_comm .botm div {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 14px;
+  color: #13161a;
+  cursor: pointer;
+}
+
 /* ============================================================================== */
 /* dashboard - series  */
 /* ============================================================================== */

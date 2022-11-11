@@ -5,19 +5,18 @@ import { SwiperSlide } from "swiper/react";
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
+import MyPagination from "@/components/dashboard/MyPagination";
+import Search from "@/components/dashboard/Search";
+import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 import { getPostListFromServer, getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
+import { deletePostToServer } from "@/services/postService";
+import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MyPagination from "@/components/dashboard/MyPagination";
-import EmptyTr from "@/components/dashboard/EmptyTr";
-import { useWindowSize } from "@/hook/useWindowSize";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
-import Search from "@/components/dashboard/Search";
-import { deletePostToServer } from "@/services/postService";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
