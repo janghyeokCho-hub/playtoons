@@ -35,25 +35,7 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
 
     //2022.10.20 register form 으로 이동, author 등록 허용 횟수 확인 필요
     navigate("/author/register/form");
-
-    // patch account
-    // const params = {
-    //   eulaVersion: eulaVersion,
-    // };
-    // const response = await updateAccount(params);
-
-    // const { status } = response;
-    // if (status === 200) {
-    //   //
-    //   console.log("status === 200");
-    // } else if (status === 400) {
-    //   alert("코드 참조");
-    // } else if (status === 409) {
-    //   alert("이미 사용중인 메일 주소");
-    // } else if (status === 503) {
-    //   alert("코드 참조");
-    // }
-  }, [agree, eulaVersion]);
+  }, [navigate, agree]);
 
   return (
     <div className="popup_dim">
@@ -61,11 +43,13 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
         <div className="popup">
           <div className="pop_head">
             <h2 className="title">クリエイター登録</h2>
-            <FontAwesomeIcon
-              icon={faXmarkLarge}
-              className="btn_pop_close"
+            <button
+              type="button"
+              className="btn_pop_close b-close"
               onClick={handleClose}
-            />
+            >
+              <FontAwesomeIcon icon={faXmarkLarge} fontSize={24} />
+            </button>
           </div>
           <div className="pop_cont">
             <div className="wrap_login">

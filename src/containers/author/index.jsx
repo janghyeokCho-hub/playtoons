@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import List from "./List";
 import Post from "./Post";
@@ -12,6 +12,7 @@ import Page404 from "@COMPONENTS/Page404";
 
 const App = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -25,8 +26,14 @@ const App = () => {
       activeMenu: "creatorList",
       isFooterShow: false,
     };
+
+    if (location.pathname === "/author/register") {
+      container.containerClass = "container author_main";
+      container.isMenuShow = false;
+    }
+
     dispatch(setContainer(container));
-  }, [dispatch]);
+  }, [dispatch, location]);
 
   useEffect(() => {
     handleContainer();

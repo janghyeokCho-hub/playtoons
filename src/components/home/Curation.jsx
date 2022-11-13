@@ -15,15 +15,13 @@ const Curation = ({ item }) => {
         </span>
         <p className="t_like">
           <FontAwesomeIcon icon={faHeart} />
-          <span>1.2k</span>
+          <span>{item?.likeCount}</span>
         </p>
       </div>
       <div className="cx_txt">
-        <p className="t1 c-blue">ウェブトゥーン</p>
-        <p className="h1">
-          大学のリンゴ一個の重さで10メートル大学のリンゴ一個の重さで10メートル
-        </p>
-        <p className="t1">Studio reBorn</p>
+        <p className="t1 c-blue">{item?.type?.name}</p>
+        <p className="h1">{item?.title}</p>
+        <p className="t1">{item?.author?.nickname}</p>
         <p className="t1">43話</p>
       </div>
     </Link>
