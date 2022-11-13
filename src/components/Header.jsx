@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -24,11 +24,20 @@ import { setMenuShow } from "@/modules/redux/ducks/container";
 
 const SearchComponent = ({ isMobile }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const searchRef = useRef(null);
   const { isShow } = useSelector(({ dim }) => dim);
 
   const handleChange = useCallback(() => {
     dispatch(setDim({ dimType: "SEARCH", isShow: !isShow }));
   }, [dispatch, isShow]);
+
+  const handleEnter = useCallback(() => {
+    console.log(searchRef?.current?.value);
+    navigate("/search");
+  }, [navigate, searchRef]);
+
+  useEffect(() => {}, [searchRef]);
 
   return (
     <>
@@ -37,9 +46,15 @@ const SearchComponent = ({ isMobile }) => {
           {isShow && (
             <div className={`box_hd_sch ${isShow ? "open" : ""}`}>
               <input
+                ref={searchRef}
                 type="text"
                 className="inp_txt"
                 placeholder="検索キーワードを入力"
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    handleEnter();
+                  }
+                }}
               />
               <button type="button" className="btn_hd_del">
                 <span>
@@ -47,7 +62,7 @@ const SearchComponent = ({ isMobile }) => {
                 </span>
               </button>
               {/*<!-- 삭제버튼 추가 -->*/}
-              <button type="button" className="btns">
+              <button type="button" className="btns" onClick={handleChange}>
                 <span>
                   <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </span>
@@ -58,9 +73,15 @@ const SearchComponent = ({ isMobile }) => {
       )) || (
         <div className="box_hd_sch">
           <input
+            ref={searchRef}
             type="text"
             className="inp_txt"
             placeholder="検索キーワードを入力"
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                handleEnter();
+              }
+            }}
           />
           <button type="button" className="btn_hd_del">
             <span>
@@ -68,7 +89,7 @@ const SearchComponent = ({ isMobile }) => {
             </span>
           </button>
           {/*<!-- 삭제버튼 추가 -->*/}
-          <button type="button" className="btns">
+          <button type="button" className="btns" onClick={handleChange}>
             <span>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </span>
@@ -90,6 +111,8 @@ const SearchComponent = ({ isMobile }) => {
 const Header = ({ className, onSideMenu }) => {
   /** 헤더 통합하면서 추가됨 */
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const isMenuShow = useSelector(({ container }) => container.isMenuShow);
   const type = useSelector(({ container }) => container.headerType);
   const isDetailView =
@@ -98,8 +121,6 @@ const Header = ({ className, onSideMenu }) => {
   const backTitle = useSelector(({ container }) => container.backTitle);
   /** */
 
-  const location = useLocation();
-  const navigate = useNavigate();
   const userInfo = useSelector(({ login }) => login.userInfo);
   const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
