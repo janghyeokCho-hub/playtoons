@@ -29,7 +29,6 @@ const Webtoon = () => {
   const id = params?.id;
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
-  console.log("currentPost : ", currentPost.isLock);
   const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
   const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
@@ -62,6 +61,7 @@ const Webtoon = () => {
     async (type) => {
       if (currentPost?.author?.id) {
         const response = await setAuthorFollow(type, currentPost.author.id);
+        console.log(response);
         if (type === "post") {
           if (response?.status === 201) {
             alert("SUCCESS");
