@@ -226,17 +226,17 @@ const Series = ({ id }) => {
               className={sortTab === "DESC" ? "on" : ""}
               onClick={() => setSortTab("DESC")}
             >
-              <a href="#">
+              <Link to="">
                 <span>最新話から</span>
-              </a>
+              </Link>
             </li>
             <li
               className={sortTab === "ASC" ? "on" : ""}
               onClick={() => setSortTab("ASC")}
             >
-              <a href="#">
+              <Link to="">
                 <span>1話から</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -248,7 +248,7 @@ const Series = ({ id }) => {
                 <PostComponent key={`post_${index}`} item={post} />
               ))) || (
               <li className="item">
-                <a href="#">게시글 없음</a>
+                <Link to="">게시글 없음</Link>
               </li>
             )}
           </ul>
@@ -257,17 +257,17 @@ const Series = ({ id }) => {
         <div className="pagenation">
           <ul>
             <li className="prev">
-              <a href="#">
+              <Link to="">
                 <FontAwesomeIcon icon={faAngleLeft} />
-              </a>
+              </Link>
             </li>
             <li className="on">
-              <a href="#">1</a>
+              <Link to="">1</Link>
             </li>
             <li className="next">
-              <a href="#">
+              <Link to="">
                 <FontAwesomeIcon icon={faAngleRight} />
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

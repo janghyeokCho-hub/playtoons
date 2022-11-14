@@ -80,7 +80,7 @@ const Reply = ({ item }) => {
               {item?.account?.nickname}
             </p>
 
-            <p className="h1">{item?.account?.name}</p>
+            <p className="h1">{item?.name}</p>
             <p className="d1">
               {/*<span>3日前</span>*/}
               <span>{item?.createdAt}</span>

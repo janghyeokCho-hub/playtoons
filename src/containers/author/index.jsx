@@ -30,6 +30,7 @@ const App = () => {
     if (location.pathname === "/author/register") {
       container.containerClass = "container author_main";
       container.isMenuShow = false;
+      container.isFooterShow = true;
     }
 
     dispatch(setContainer(container));
