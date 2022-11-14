@@ -136,7 +136,7 @@ const mainMenus = {
         on: faHouseChimneyWindowON,
         off: faHouseChimneyWindowOFF,
       },
-      link: "",
+      link: "/home",
     },
     {
       code: "timeline",
@@ -145,7 +145,7 @@ const mainMenus = {
         on: faInfinityON,
         off: faInfinityOFF,
       },
-      link: "",
+      link: "/timeline",
     },
   ],
   創作: [
@@ -165,7 +165,7 @@ const mainMenus = {
         on: faCartShoppingON,
         off: faCartShoppingOFF,
       },
-      link: "",
+      link: "/store",
     },
   ],
 };
