@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback, useLayoutEffect } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import tempProfile from "@IMAGES/img_profile.png";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { useDispatch, useSelector } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { showOneButtonPopup } from "@/common/common";

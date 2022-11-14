@@ -5,7 +5,7 @@ import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { getSeriesStoryList } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import { useDispatch, useSelector } from "react-redux";
 import { showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";

@@ -8,6 +8,7 @@ import {
   faCircleChevronLeft,
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
+import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 
 /**
 *
@@ -50,6 +51,7 @@ import {
 * @return
 */
 export default function SwiperContainer(props) {
+  const { className, slidesPerView, breakpoints, buttonClassName, iconLeft, iconRight, list } = props;
   SwiperCore.use([Navigation]);
 
   const prevRef = useRef(null);
@@ -58,8 +60,8 @@ export default function SwiperContainer(props) {
   return (
     <>
       <Swiper
-        className={`swiper-container ${props?.className}`}
-        slidesPerView={props?.slidesPerView}
+        className={`swiper-container ${className}`}
+        slidesPerView={slidesPerView}
         spaceBetween={10}
         observer={true}
         observeParents={true}
@@ -68,39 +70,38 @@ export default function SwiperContainer(props) {
           nextEl: nextRef.current,
           prevEl: prevRef.current,
         }}
-        breakpoints={props?.breakpoints}
+        breakpoints={breakpoints}
         onSlideChange={() => {}}
         onInit={(swiper) => {}}
         onSwiper={(swiper) => {
-          // console.log('swiper', swiper);
         }}
         onUpdate={(swiper) => {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
 
-          if (props.buttonClassName !== undefined) {
-            nextRef?.current?.classList?.add(props.buttonClassName);
-            prevRef?.current?.classList?.add(props.buttonClassName);
+          if (buttonClassName !== undefined) {
+            nextRef?.current?.classList?.add(buttonClassName);
+            prevRef?.current?.classList?.add(buttonClassName);
           }
         }}
       >
-        {props?.list?.()}
+        {list?.()}
       </Swiper>
 
       {/* .lst_comic1 .swiper-button-next 이런식으로 common.css에 정의되어 있어야 스타일이 먹음*/}
       <button
         ref={prevRef}
         type="button"
-        className={`swiper-button-prev my1 hide-m`}
+        className={`swiper-button-prev my1 hide-m ${buttonClassName}`}
       >
-        <FontAwesomeIcon icon={faCircleChevronLeft} />
+        <FontAwesomeIcon icon={iconLeft === undefined ? faCircleChevronLeft : iconLeft} />
       </button>
       <button
         ref={nextRef}
         type="button"
-        className={`swiper-button-next my1 hide-m`}
+        className={`swiper-button-next my1 hide-m ${buttonClassName}`}
       >
-        <FontAwesomeIcon icon={faCircleChevronRight} />
+        <FontAwesomeIcon icon={iconRight === undefined ? faCircleChevronRight : iconRight} />
       </button>
     </>
   );

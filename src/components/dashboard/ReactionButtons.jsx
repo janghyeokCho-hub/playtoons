@@ -126,7 +126,7 @@ export default function ReactionButtons(props) {
     const { status, data } = await setReactionIdLikeToServer(params);
     if (status === 201) {
       callback?.();
-      showOneButtonPopup(dispatch, text.do_good);
+      // showOneButtonPopup(dispatch, text.do_good);
     } else if (status === 409) {
       //like 취소
       const { status, data } = await deleteReactionLikeToServer(params);
@@ -159,10 +159,10 @@ export default function ReactionButtons(props) {
     const { status, data } = response;
 
     if (status === 201 || status === 200) {
-      showOneButtonPopup(
-        dispatch,
-        item.pinned ? text.do_off_pinned : text.do_pinned
-      );
+      // showOneButtonPopup(
+      //   dispatch,
+      //   item.pinned ? text.do_off_pinned : text.do_pinned
+      // );
       callback?.();
     } else {
       showOneButtonPopup(dispatch, data);

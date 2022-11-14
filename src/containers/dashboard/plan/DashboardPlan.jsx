@@ -12,7 +12,7 @@ import {
   getSubscribeTierInPlanFromServer,
 } from "@/services/dashboardService";
 import Image from "@/components/dashboard/Image";
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import { SwiperSlide } from "swiper/react";
 import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 import EmptyTr from "@/components/dashboard/EmptyTr";

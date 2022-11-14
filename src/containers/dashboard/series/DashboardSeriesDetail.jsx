@@ -2,22 +2,21 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
+import MyPagination from "@/components/dashboard/MyPagination";
+import Search from "@/components/dashboard/Search";
+import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getSeriedDetailAction, initSeriedDetailAction } from "@/modules/redux/ducks/dashboard";
 import { getPostListFromServer, getSeriesDetailFromServer, getTimelineFromServer } from "@/services/dashboardService";
+import { deletePostToServer } from "@/services/postService";
+import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Pagination1 from "@/components/dashboard/Pagination";
-import EmptyTr from "@/components/dashboard/EmptyTr";
-import { useWindowSize } from "@/hook/useWindowSize";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
-import Search from "@/components/dashboard/Search";
-import { deletePostToServer } from "@/services/postService";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -91,7 +90,7 @@ export default function DashboardSeriesDetail(props) {
   // api
   //==============================================================================
   /**
-     썸네일
+    series detail 
   * @version 1.0.0
   * @author 2hyunkook
   */
@@ -395,7 +394,7 @@ export default function DashboardSeriesDetail(props) {
             </table>
           </div>
 
-          <Pagination1
+          <MyPagination
             className={""}
             meta={statePostList?.meta}
             callback={(page) => navigate(`/dashboard/series/detail/${useparams.id}/${page}`)}

@@ -1,30 +1,27 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
-//TODO delete test
-import temp1 from '@IMAGES/icon2.png';
-import temp2 from '@IMAGES/icon3.png';
-import temp3 from '@IMAGES/icon4.png';
-import temp4 from '@IMAGES/icon5.png';
-import temp5 from '@IMAGES/icon6.png';
-import temp6 from '@IMAGES/icon7.png';
-import temp7 from '@IMAGES/icon8.png';
-import temp8 from '@IMAGES/icon9.png';
-import tempTop1 from '@IMAGES/icon1.png';
-import tempTop2 from '@IMAGES/icon0.png';
+//TODO  test icon
+import tempTop2 from "@IMAGES/icon0.png";
+import tempTop1 from "@IMAGES/icon1.png";
+import temp1 from "@IMAGES/icon2.png";
+import temp2 from "@IMAGES/icon3.png";
+import temp3 from "@IMAGES/icon4.png";
+import temp4 from "@IMAGES/icon5.png";
+import temp5 from "@IMAGES/icon6.png";
+import temp6 from "@IMAGES/icon7.png";
+import temp7 from "@IMAGES/icon8.png";
+import temp8 from "@IMAGES/icon9.png";
 
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight, faCircleXmark, } from '@fortawesome/pro-solid-svg-icons';
-import useOutSideClick from '@/common/useOutSideClick';
-import { setPostReactionToServer } from '@/services/postService';
-import ErrorPopup from './ErrorPopup';
-import { showModal } from '@/modules/redux/ducks/modal';
-import { useDispatch } from 'react-redux';
-import { setFileToServer } from '@/services/dashboardService';
-import ErrorMessage from './ErrorMessage';
-import Button from './Button';
-import { showOneButtonPopup } from '@/common/common';
-
+import { showOneButtonPopup } from "@/common/common";
+import { setPostReactionToServer } from "@/services/postService";
+import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
+import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch } from "react-redux";
+import { SwiperSlide } from "swiper/react";
+import ErrorMessage from "./ErrorMessage";
+import SwiperContainer from "./SwiperContainer";
+import Button from "./Button";
 
 /**
 *
@@ -45,22 +42,22 @@ import { showOneButtonPopup } from '@/common/common';
 */
 export default function IconWithText(props, ref) {
   const { text, postInfo, callback } = props;
-  const [ stateIconData, setStateIconData ] = useState(undefined);
-  const [ stateTopSelected, setStateTopSelected ] = useState(0);
-  const [ stateShowIcon, setStateShowIcon ] = useState(false);
-  const [ stateSelectedIcons, setStateSelectedIcons ] = useState([]);
-  const [ stateError, setStateError ] = useState(undefined);
+  const [stateIconData, setStateIconData] = useState(undefined);
+  const [stateTopSelected, setStateTopSelected] = useState(0);
+  const [stateShowIcon, setStateShowIcon] = useState(false);
+  const [stateSelectedIcons, setStateSelectedIcons] = useState([]);
+  const [stateError, setStateError] = useState(undefined);
   const dispatch = useDispatch();
   const refContaienr = useRef();
   const refTextArea = useRef();
   const refButton = useRef();
 
   //==============================================================================
-  //  function 
+  //  function
   //==============================================================================
   const getMarginRightOfIcon = (index) => {
     let tempIndex = index + 1;
-    return (tempIndex % 5) === 0 ? '' : 'mr16';
+    return tempIndex % 5 === 0 ? "" : "mr16";
   };
 
   const initStatus = () => {
@@ -68,7 +65,7 @@ export default function IconWithText(props, ref) {
     setStateShowIcon(false);
     setStateSelectedIcons([]);
     setStateError(undefined);
-    refTextArea.current.value = '';
+    refTextArea.current.value = "";
     refButton.current.setStatus(undefined);
   };
 
@@ -77,33 +74,31 @@ export default function IconWithText(props, ref) {
   //==============================================================================
 
   /**
-  * 리액션 작성
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
+   * 리액션 작성
+   * @version 1.0.0
+   * @author 2hyunkook
+   */
   const setReaction = async () => {
-    
     let params = {
       content: refTextArea.current.value,
-      iconImage: stateSelectedIcons.length === 0 ? '' : stateSelectedIcons[0].src,
+      iconImage:
+        stateSelectedIcons.length === 0 ? "" : stateSelectedIcons[0].src,
       type: "reply",
       postId: postInfo.id,
       authorId: postInfo.author.id,
       // reactionId: "string"
     };
 
-    const {status, data} = await setPostReactionToServer(params);
-    if( status === 201 ){
+    const { status, data } = await setPostReactionToServer(params);
+    if (status === 201) {
       callback?.();
       initStatus();
       showOneButtonPopup(dispatch, text.register_coment);
-    }
-    else{
-      setStateError( String(status + data) );
+    } else {
+      setStateError(String(status + data));
       refButton.current.setStatus(undefined);
     }
   };
-
 
   //==============================================================================
   //  event
@@ -111,10 +106,13 @@ export default function IconWithText(props, ref) {
 
   const handleClickItemDelete = (event) => {
     event.stopPropagation();
-    const index = event.target.parentElement.getAttribute('data-id') === null ? event.target.getAttribute('data-id') : event.target.parentElement.getAttribute('data-id');
-    const selectedItem = stateSelectedIcons[ index ];
+    const index =
+      event.target.parentElement.getAttribute("data-id") === null
+        ? event.target.getAttribute("data-id")
+        : event.target.parentElement.getAttribute("data-id");
+    const selectedItem = stateSelectedIcons[index];
     setStateSelectedIcons(
-      stateSelectedIcons.filter(item => item.code !== selectedItem.code)
+      stateSelectedIcons.filter((item) => item.code !== selectedItem.code)
     );
 
     return false;
@@ -122,21 +120,19 @@ export default function IconWithText(props, ref) {
 
   const handleClickItemTopIcon = (event) => {
     event.stopPropagation();
-    const index = event.target.getAttribute('data-id');
-    setStateTopSelected( index );
+    const index = event.target.getAttribute("data-id");
+    setStateTopSelected(index);
   };
-  
+
   const handleClickItemIcon = (event) => {
-    const index = event.target.getAttribute('data-id');
+    const index = event.target.getAttribute("data-id");
     const item = stateIconData?.topIcons[stateTopSelected]?.icons[index];
-    setStateSelectedIcons([
-      ...stateSelectedIcons,
-      item
-    ]);
+    // setStateSelectedIcons([...stateSelectedIcons, item]);
+    setStateSelectedIcons([item]);
   };
 
   const handleClickRegister = (event) => {
-    if( !refTextArea.current.value ){
+    if (!refTextArea.current.value) {
       setStateError(text.please_input_coment);
       refButton.current.setStatus(undefined);
       return false;
@@ -152,9 +148,18 @@ export default function IconWithText(props, ref) {
   const renderSelectedIconsElement = () => {
     return stateSelectedIcons?.map((item, index) => {
       return (
-        <div className="relative mr16 icon_sel_wrap" key={index}>
-          <FontAwesomeIcon className="icon_sel_del" icon={faCircleXmark}  data-id={index} onClick={handleClickItemDelete}  />
-          <img src={item.image} alt="selected icon" />
+        <div className="ico_emo" key={index}>
+          <span>
+            <img src={item.image} alt="" />
+          </span>
+          <button type="button">
+            <FontAwesomeIcon
+              className="fa-solid fa-circle-xmark"
+              icon={faCircleXmark}
+              data-id={index}
+              onClick={handleClickItemDelete}
+            />
+          </button>
         </div>
       );
     });
@@ -162,80 +167,120 @@ export default function IconWithText(props, ref) {
 
   const renderTopIconElement = () => {
     return stateIconData?.topIcons?.map((item, index) => {
-      
       return (
-        // <div className={`icon_top ${stateTopSelected === index ? 'icon_top_selected' : ''}`} key={index} >
-        <div className={`icon_top`} key={index} >
-          <img src={item.image} alt="top icon" data-id={index} onClick={handleClickItemTopIcon} />
-        </div>
+        <SwiperSlide className="cx  swiper-slide" key={index}>
+          <img
+            src={item.image}
+            data-id={index}
+            onClick={handleClickItemTopIcon}
+            alt=""
+          />
+        </SwiperSlide>
       );
     });
   };
 
   const renderIconElement = () => {
-    return stateIconData?.topIcons[stateTopSelected]?.icons?.map((item, index) => {
-      return (
-        <div className={`icon ${getMarginRightOfIcon(index)}`} key={index} >
-          <img src={item.image} alt="icon" data-id={index} onClick={handleClickItemIcon}/>
-        </div>
-      );
-    });
+    return stateIconData?.topIcons[stateTopSelected]?.icons?.map(
+      (item, index) => {
+        return (
+          <li>
+            <span>
+              <img
+                src={item.image}
+                alt="icon"
+                data-id={index}
+                onClick={handleClickItemIcon}
+              />
+            </span>
+          </li>
+        );
+      }
+    );
   };
-
-  useOutSideClick(refContaienr, () => setStateShowIcon(false));
 
   //component did mount
   useEffect(() => {
     setStateIconData(tempData);
-    
   }, []);
-
 
   return (
     <>
-      <div className="conts relative" ref={refContaienr}>
-        <div className="icon_textarea_container" >
-          <textarea ref={refTextArea} name="content" id="" className="icon_textarea" placeholder={text.sing_in_to_post} onChange={() => setStateError(undefined)} />
-          {
-            stateSelectedIcons.length !== 0 &&
-            <div className="flex mt27">
-              {
-                renderSelectedIconsElement()
-              }
-            </div>
-          }
+      <div className="conts">
+        <div className={`textarea1 ${stateSelectedIcons.length > 0 && "emo"}`}>
+          <textarea
+            ref={refTextArea}
+            name="content"
+            className="textarea1"
+            placeholder={text.sing_in_to_post}
+            onChange={() => setStateError(undefined)}
+            onFocus={() => setStateShowIcon(false)}
+          />
+
+          {/* <!-- 삽입된 이모티콘 --> */}
+          {stateSelectedIcons.length > 0 && renderSelectedIconsElement()}
         </div>
+
+        {/* button */}
         <div className="btns">
-          <button type="button" className={`btn-pk s ${stateShowIcon ? 'blue2' : 'gray'}`} onClick={() => setStateShowIcon(prev => !prev)}><span>{text.icon}</span></button>
-          <Button ref={refButton} text={text.register} className="btn-pk s blue"  onClick={handleClickRegister}/>
+          <button
+            type="button"
+            className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
+            onClick={() => setStateShowIcon(!stateShowIcon)}
+          >
+            <span>{text.icon}</span>
+          </button>
+          <Button
+            type="button"
+            ref={refButton}
+            text={text.register}
+            className="btn-pk s blue"
+            onClick={handleClickRegister}
+          >
+          </Button>
         </div>
 
-        {
-          stateShowIcon && 
-            <div className="icon_wrap">
-              <div className="icon_top_container">
-                <FontAwesomeIcon className="icon_arrow" icon={faAngleLeft} />
-                <div className="ml34 mr34 flex">
-                  {
-                    renderTopIconElement()
-                  }
-                </div>
-                <FontAwesomeIcon className="icon_arrow mla" icon={faAngleRight} />
-              </div>
-              <div className="icon_container">
-                  {
-                    renderIconElement()
-                  }
-              </div>
-
+        {/* <!-- 이모티콘 삽입 --> */}
+        {stateShowIcon && (
+          <div
+            className="box_emoji"
+            style={{ display: "block" }}
+            ref={refContaienr}
+          >
+            <div className="tit_emo">
+              <SwiperContainer
+                className={"myEmoji1"}
+                buttonClassName={"myem"}
+                iconLeft={faAngleLeft}
+                iconRight={faAngleRight}
+                slidesPerView={8}
+                breakpoints={{
+                  0: {
+                    slidesPerView: 4,
+                    spaceBetween: 12,
+                  },
+                  960: {
+                    slidesPerView: 6,
+                    spaceBetween: 12,
+                  },
+                  1400: {
+                    slidesPerView: 8,
+                    spaceBetween: 16,
+                  },
+                }}
+                list={renderTopIconElement}
+              />
             </div>
-        }
-        
+            <div className="cont_emo scrollY">
+              <ul>{renderIconElement()}</ul>
+            </div>
+          </div>
+        )}
+
         <ErrorMessage error={stateError} />
       </div>
-      
     </>
-  )
+  );
 }
 
 const tempData = {
@@ -246,44 +291,44 @@ const tempData = {
         {
           code: "icon1",
           image: temp1,
-          src: 'src/assets/images/icon2.png'
+          src: "src/assets/images/icon2.png",
         },
         {
           code: "icon2",
           image: temp2,
-          src: 'src/assets/images/icon3.png'
+          src: "src/assets/images/icon3.png",
         },
         {
           code: "icon3",
           image: temp3,
-          src: 'src/assets/images/icon4.png'
+          src: "src/assets/images/icon4.png",
         },
         {
           code: "icon4",
           image: temp4,
-          src: 'src/assets/images/icon5.png'
+          src: "src/assets/images/icon5.png",
         },
         {
           code: "icon5",
           image: temp5,
-          src: 'src/assets/images/icon6.png'
+          src: "src/assets/images/icon6.png",
         },
         {
           code: "icon6",
           image: temp6,
-          src: 'src/assets/images/icon7.png'
+          src: "src/assets/images/icon7.png",
         },
         {
           code: "icon7",
           image: temp7,
-          src: 'src/assets/images/icon8.png'
+          src: "src/assets/images/icon8.png",
         },
         {
           code: "icon8",
           image: temp8,
-          src: 'src/assets/images/icon9.png'
+          src: "src/assets/images/icon9.png",
         },
-      ]
+      ],
     },
     {
       image: tempTop2,
@@ -291,64 +336,64 @@ const tempData = {
         {
           code: "icon11",
           image: temp8,
-          src: 'src/assets/images/icon9.png'
+          src: "src/assets/images/icon9.png",
         },
         {
           code: "icon21",
           image: temp7,
-          src: 'src/assets/images/icon8.png'
+          src: "src/assets/images/icon8.png",
         },
         {
           code: "icon31",
           image: temp6,
-          src: 'src/assets/images/icon7.png'
+          src: "src/assets/images/icon7.png",
         },
         {
           code: "icon41",
           image: temp5,
-          src: 'src/assets/images/icon6.png'
+          src: "src/assets/images/icon6.png",
         },
         {
           code: "icon51",
           image: temp4,
-          src: 'src/assets/images/icon5.png'
+          src: "src/assets/images/icon5.png",
         },
         {
           code: "icon61",
           image: temp3,
-          src: 'src/assets/images/icon4.png'
+          src: "src/assets/images/icon4.png",
         },
         {
           code: "icon71",
           image: temp2,
-          src: 'src/assets/images/icon3.png'
+          src: "src/assets/images/icon3.png",
         },
         {
           code: "icon81",
           image: temp1,
-          src: 'src/assets/images/icon2.png'
+          src: "src/assets/images/icon2.png",
         },
         {
           code: "icon91",
           image: temp1,
-          src: 'src/assets/images/icon2.png'
+          src: "src/assets/images/icon2.png",
         },
         {
           code: "icon101",
           image: temp2,
-          src: 'src/assets/images/icon3.png'
+          src: "src/assets/images/icon3.png",
         },
         {
           code: "icon111",
           image: temp3,
-          src: 'src/assets/images/icon4.png'
+          src: "src/assets/images/icon4.png",
         },
         {
           code: "icon121",
           image: temp4,
-          src: 'src/assets/images/icon5.png'
+          src: "src/assets/images/icon5.png",
         },
-      ]
+      ],
     },
   ],
 };

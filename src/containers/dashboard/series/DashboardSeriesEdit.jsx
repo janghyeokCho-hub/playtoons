@@ -1,27 +1,27 @@
-import React, { useRef, useEffect, useCallback } from "react";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import ToolTip from "@/components/dashboard/ToolTip";
-import {
-  editPostSeriesToServer,
-  setFileToServer,
-} from "@/services/dashboardService";
-import { useDispatch, useSelector } from "react-redux";
-import Type from "@/components/dashboard/Type";
-import Category from "@/components/dashboard/Category";
-import Tag from "@/components/dashboard/Tag";
 import {
   getErrorMessageFromResultCode,
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
+  showOneButtonPopup
 } from "@/common/common";
-import { useNavigate, useParams } from "react-router-dom";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import Input from "@/components/dashboard/Input";
-import Textarea from "@/components/dashboard/Textarea";
 import Button from "@/components/dashboard/Button";
+import Category from "@/components/dashboard/Category";
+import ImageUpload from "@/components/dashboard/ImageUpload";
+import Input from "@/components/dashboard/Input";
+import Tag from "@/components/dashboard/Tag";
+import Textarea from "@/components/dashboard/Textarea";
+import ToolTip from "@/components/dashboard/ToolTip";
+import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
+import {
+  editPostSeriesToServer,
+  getSeriesDetailFromServer,
+  setFileToServer
+} from "@/services/dashboardService";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 const text = {
   series_management: "シリーズ詳細",
@@ -51,10 +51,11 @@ const text = {
 };
 
 export default function DashboardUploadSeries(props) {
+  const [ stateSeries, setStateSeries ] = useState(undefined);
+  // const reduxSeriesDetail = useSelector(({ dashboard }) => dashboard?.series);
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const reduxSeriesDetail = useSelector(({ dashboard }) => dashboard?.series);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const params = useParams("id");
   const refForm = useRef();
   const refTitle = useRef();
@@ -90,7 +91,7 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
 
   const getCheckedToSeriesDetail = () => {
-    return reduxSeriesDetail.rating === "R-18";
+    return stateSeries?.rating === "R-18";
   };
 
   const callbackCoverImage = () => {
@@ -112,6 +113,22 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
   // api
   //==============================================================================
+  /**
+    series detail 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+    const getSeriesDetail = async () => {
+      const { status, data } = await getSeriesDetailFromServer( {id: params.id} );
+      console.log("getSeriesDetail", status, data);
+  
+      if (status === 200) {
+        setStateSeries(data?.series);
+      } else {
+        showOneButtonPopup(dispatch, data);
+      }
+    };
+
 
   const setImage = async (refImage, usage) => {
     // 폼데이터 구성
@@ -180,51 +197,28 @@ export default function DashboardUploadSeries(props) {
       seriesId: params.id,
       rating: getRatingToChecked(refR19),
       tagIds: refTags.current.getTagsJsonObject(),
-      typeId: reduxSeriesDetail?.type.id,
+      typeId: stateSeries?.type.id,
     };
 
     if (!json.coverImage.length) {
       json = {
         ...json,
-        coverImage: reduxSeriesDetail?.coverImage,
+        coverImage: stateSeries?.coverImage,
       };
     }
     if (!json.thumbnailImage.length) {
       json = {
         ...json,
-        thumbnailImage: reduxSeriesDetail?.thumbnailImage,
+        thumbnailImage: stateSeries?.thumbnailImage,
       };
     }
 
     const { status, data } = await editPostSeriesToServer(json);
     if (status === 200) {
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={"シリーズ修正しました。"}
-              buttonTitle={"確認"}
-            />
-          ),
-          callback: () => {
-            navigate(`/dashboard/series/detail/${params.id}/1`);
-          },
-        })
-      );
+      showOneButtonPopup( dispatch, 'シリーズ修正しました。', () => { navigate(`/dashboard/series/detail/${params.id}/1`); });
     } else {
       //error 처리
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={getErrorMessageFromResultCode(data)}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, data);
     }
 
     initButtonInStatus(refRegister);
@@ -252,7 +246,9 @@ export default function DashboardUploadSeries(props) {
   // Hook & render
   //==============================================================================
 
-  useEffect(() => {}, [reduxSeriesDetail]);
+  useEffect(() => {
+    getSeriesDetail();
+  }, []);
 
   return (
     <div className="contents">
@@ -271,7 +267,7 @@ export default function DashboardUploadSeries(props) {
                   name="title"
                   type="text"
                   className="inp_txt w100p"
-                  defaultValue={reduxSeriesDetail?.title}
+                  defaultValue={stateSeries?.title}
                 />
               </div>
 
@@ -279,7 +275,7 @@ export default function DashboardUploadSeries(props) {
                 <h3 className="tit1">{text.type}</h3>
                 <Type
                   className={"select1 wid1"}
-                  selected={reduxSeriesDetail?.type.id}
+                  selected={stateSeries?.type.id}
                   disabled={true}
                   disabledText={text.can_not_edit}
                 />
@@ -290,8 +286,8 @@ export default function DashboardUploadSeries(props) {
                 <Category
                   name={"categoryId"}
                   className={"select1 wid1"}
-                  typeId={reduxSeriesDetail?.type.id}
-                  selected={reduxSeriesDetail?.category.id}
+                  typeId={stateSeries?.type.id}
+                  selected={stateSeries?.category.id}
                 />
               </div>
 
@@ -315,7 +311,7 @@ export default function DashboardUploadSeries(props) {
                   name="description"
                   id="description"
                   className="textarea1"
-                  defaultValue={reduxSeriesDetail?.description}
+                  defaultValue={stateSeries?.description}
                 />
               </div>
 
@@ -336,7 +332,7 @@ export default function DashboardUploadSeries(props) {
                   name={"tagIds"}
                   className={"inp_txt sch"}
                   placeholder={text.tag_name}
-                  list={reduxSeriesDetail?.tags}
+                  list={stateSeries?.tags}
                 />
               </div>
 
@@ -356,7 +352,7 @@ export default function DashboardUploadSeries(props) {
                   className={"box_drag small"}
                   name={"coverImage"}
                   text={text.drag_drop}
-                  previewHash={reduxSeriesDetail?.coverImage}
+                  previewHash={stateSeries?.coverImage}
                   callback={callbackCoverImage}
                 />
               </div>
@@ -377,7 +373,7 @@ export default function DashboardUploadSeries(props) {
                   className={"box_drag"}
                   name={"thumbnailImage"}
                   text={text.drag_drop}
-                  previewHash={reduxSeriesDetail?.thumbnailImage}
+                  previewHash={stateSeries?.thumbnailImage}
                   callback={callbackTimelineImage}
                 />
               </div>

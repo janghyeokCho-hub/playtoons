@@ -10,9 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 
   <Pagination
     className={''}
-    page={stateData?.meta.page}
-    itemsCountPerPage={stateData?.meta.itemsPerPage}
-    totalItemsCount={stateData?.meta.totalItems}
+    meta={stateData?.meta}
     callback={handleChange}
     />
 
@@ -22,47 +20,31 @@ import { useEffect, useMemo, useState } from 'react';
 * @param {*} props
 * @return
 */
-export default function Pagination1(props) {
-  const { className, meta, callback, page } = props;
-  const [ statePage, setStatePage] = useState(page);
-
+export default function MyPagination(props) {
+  const { className, meta, callback, } = props;
 
   const pagination = useMemo(() => {
     if (meta) {
       const { currentPage, totalPages, itemCount } = meta;
-      //전체 페이지 수 구하기
-      let pageList = [];
-      for (let i = 1; i <= totalPages; i++) {
-        pageList.push(i);
-      }
-
       const prev = currentPage - 1;
       const prevPage = prev - 1;
       const next = currentPage + 1;
       const nextPage = next + 1;
-      const SHOW_PAGE_NUMBER = 3;
 
       //화면에 보여질 페이지 숫자 리스트 구하기
-      let showPages;
-      if (currentPage === 1) {
-        if (totalPages === 0) {
-          showPages = [1];
-        } else {
-          showPages = pageList.splice(prev, SHOW_PAGE_NUMBER);
+      let showPages = [];
+      const start = currentPage === totalPages ? currentPage-2 : currentPage-1;
+      const end = currentPage === 1 ? currentPage+3 : currentPage+2;
+      for( let i = start; i < end; i++ ){
+        // 마이너스 제외, totalPages 보다 큰애들 제외
+        if( i > 0 && i <= totalPages ){
+          showPages.push(i);
         }
-      } else if (currentPage === totalPages) {
-        if( totalPages <= SHOW_PAGE_NUMBER ){
-          showPages = pageList;
-        }
-        else{
-          showPages = pageList.splice(currentPage - 3, SHOW_PAGE_NUMBER);
-        }
-      } else {
-        showPages = pageList.splice(currentPage - 2, SHOW_PAGE_NUMBER);
       }
 
       return (
         <>
+          {/* Arrow left */}
           {prevPage > 0 && (
             <li
               className="prev"
@@ -73,6 +55,8 @@ export default function Pagination1(props) {
               </div>
             </li>
           )}
+
+          {/* page list */}
           {showPages &&
             showPages.map((page, index) => (
               <li
@@ -84,7 +68,8 @@ export default function Pagination1(props) {
               </li>
             ))}
 
-          {itemCount > 0 && totalPages - nextPage > 0 && (
+          {/* Arrow right */}
+          {itemCount > 0 && totalPages - nextPage > -1 && (
             <li
               className="next"
               onClick={() => callback?.( nextPage)}
@@ -100,18 +85,6 @@ export default function Pagination1(props) {
       return <></>;
     }
   }, [meta]);
-
-
-  const handleChange = (page) => {
-    setStatePage(page);
-    callback?.(page);
-  };
-
-  useEffect(() => {
-    setStatePage(page);
-  }, [page]);
-
-  
 
   return (
     <>
@@ -129,7 +102,7 @@ export default function Pagination1(props) {
               itemClassNext={'arrow'}
               itemClassFirst={'none'}
               itemClassLast={'none'}
-              onChange={handleChange}
+              onChange={(page) => callback?.(page)}
               />
 
       } */}

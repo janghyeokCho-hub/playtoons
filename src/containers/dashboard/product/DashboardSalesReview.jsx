@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import ArrowRight from "@/components/dashboard/ArrowRight";
-import Pagination from "@/components/dashboard/Pagination";
+import Pagination from "@/components/dashboard/MyPagination";
 import ProductTab from "@/components/dashboard/ProductTab";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";

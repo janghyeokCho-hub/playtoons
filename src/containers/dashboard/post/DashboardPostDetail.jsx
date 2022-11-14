@@ -1,23 +1,28 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  getDateYYYYMMDD,
+  getShowEditor,
+  showOneButtonPopup,
+} from "@/common/common";
+import IconWithText from "@/components/dashboard/IconWithText";
+import Image from "@/components/dashboard/Image";
+import Pagination from "@/components/dashboard/MyPagination";
+import ProfileSpan from "@/components/dashboard/ProfileSpan";
+import ReactionButtons from "@/components/dashboard/ReactionButtons";
+import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { getReactionFromServer } from "@/services/dashboardService";
+import { getPostIdMineFromServer } from "@/services/postService";
+import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import {
   faCommentQuote,
   faEye,
   faHeart,
 } from "@fortawesome/pro-solid-svg-icons";
-import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import IconWithText from "@/components/dashboard/IconWithText";
-import { getPostIdMineFromServer } from "@/services/postService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import parse from "html-react-parser";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Image from "@/components/dashboard/Image";
-import ProfileSpan from "@/components/dashboard/ProfileSpan";
-import { getDateYYYYMMDD, getHtmlElementFromHtmlString, getShowEditor, showOneButtonPopup } from "@/common/common";
-import ReactionButtons from "@/components/dashboard/ReactionButtons";
-import { getReactionFromServer } from "@/services/dashboardService";
-import Pagination from "@/components/dashboard/Pagination";
-import { setContainer } from "@/modules/redux/ducks/container";
-import parse from 'html-react-parser'
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const text = {
   page_title: "投稿詳細",
@@ -50,18 +55,15 @@ const text = {
   can_do_myself: "本人のみ削除可能です。",
   do_you_delete: "削除しますか？",
   cancel: "キャンセル",
+  see_more_coment: "コメントをもっと見る",
 };
-
-// const tempData = {
-//   content_next_summary: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。",
-// };
 
 export default function DashboardPostDetail() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("id");
   const [statePinnedReactions, setStatePinnedReactions] = useState(undefined);
-  const [stateReactions, setStateReactions] = useState(undefined);
+  const [stateReactions, setStateReactions] = useState({meta: undefined, reactions: []});
   const [stateData, setStateData] = useState(undefined);
 
   //==============================================================================
@@ -83,16 +85,16 @@ export default function DashboardPostDetail() {
     };
     dispatch(setContainer(container));
   }, [dispatch]);
-  
+
   useEffect(() => {
     handleContainer();
   }, []);
   //==============================================================================
-  // function 
+  // function
   //==============================================================================
   const getHtmlElementFromHtmlString = () => {
-    if( stateData !== undefined ){
-      return parse( stateData.content );
+    if (stateData !== undefined) {
+      return parse(stateData.content);
     }
   };
 
@@ -115,16 +117,27 @@ export default function DashboardPostDetail() {
     }
   };
 
-  const getReactions = async (page) => {
+  const getReactions = async (page, isAdd) => {
     const formData = new FormData();
     formData.append("postId", params.id);
     formData.append("page", page);
+    formData.append("limit", 5);
 
     const { status, data } = await getReactionFromServer(formData);
     console.log("getReactions", status, data);
 
     if (status === 200) {
-      setStateReactions(data);
+      if( isAdd ){
+        let list = stateReactions.reactions;
+        list.push.apply(list, data.reactions);
+        setStateReactions({
+          meta: data.meta,
+          reactions: list
+        });
+      }
+      else{
+        setStateReactions(data);
+      }
     } else {
       showOneButtonPopup(dispatch, status + data);
     }
@@ -207,8 +220,6 @@ export default function DashboardPostDetail() {
     getReactionAllList();
   }, []);
 
-  
-
   return (
     <div className="contents">
       <div className="inr-c">
@@ -270,23 +281,21 @@ export default function DashboardPostDetail() {
 
           <div className="area_detail2">
             <h2 className="h1">
-            {stateData?.title} {stateData?.number}
+              {stateData?.title} {stateData?.number}
             </h2>
             <p className="d1">{getDateYYYYMMDD(stateData?.startAt, ".")}</p>
             <p className="ws_pre">{stateData?.series?.description}</p>
           </div>
 
-            {
-              getShowEditor(stateData?.type) ? (
-                <div className="editor_p ws_pre">
-                  { getHtmlElementFromHtmlString() }
-                </div>
-              ) : (
-                <div className="ta_center">
-                  <Image hash={stateData?.content} alt="" />
-                </div>  
-              )
-            }
+          {getShowEditor(stateData?.type) ? (
+            <div className="editor_p ws_pre">
+              {getHtmlElementFromHtmlString()}
+            </div>
+          ) : (
+            <div className="ta_center">
+              <Image hash={stateData?.content} alt="" />
+            </div>
+          )}
 
           {/* <div className="area_detail2">
           <p className="t1 c-gray">{tempData.content_next_summary}</p>
@@ -311,16 +320,20 @@ export default function DashboardPostDetail() {
             {/* reaction */}
             {renderReactionList(stateReactions)}
 
-            {stateReactions?.reactions?.length > 0 && (
-              <Pagination
-                className={""}
-                meta={stateReactions?.meta}
-                page={stateReactions?.meta.currentPage}
-                itemsCountPerPage={stateReactions?.meta.itemsPerPage}
-                totalItemsCount={stateReactions?.meta.totalItems}
-                callback={(page) => getReactions(page)}
+            {/* <Pagination
+              className={""}
+              meta={stateReactions?.meta}
+              page={stateReactions?.meta?.currentPage}
+              itemsCountPerPage={stateReactions?.meta?.itemsPerPage}
+              totalItemsCount={stateReactions?.meta?.totalItems}
+              callback={(page) => getReactions(page)}
+            /> */}
+
+            <SeeMoreComent 
+              text={text}
+              meta={stateReactions?.meta}
+              callback={(page) => getReactions(page, true)}
               />
-            )}
           </div>
         </div>
       </div>

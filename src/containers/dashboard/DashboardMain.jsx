@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 
-import SwiperContainer from "@/components/dashboard/Swiper";
+import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import {
   faAngleRight, faHeart, faStar
 } from "@fortawesome/pro-solid-svg-icons";
@@ -311,9 +311,11 @@ export default function DashboardMain() {
   };
 
   useEffect(() => {
-    getSeriesList();
-    getPostList();
-    getReactionList();
+    if( reduxAuthors !== undefined ){
+      getSeriesList();
+      getPostList();
+      getReactionList();
+    }
   }, [reduxAuthors]);
 
   return (
