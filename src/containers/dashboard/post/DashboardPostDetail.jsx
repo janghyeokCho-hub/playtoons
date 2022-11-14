@@ -1,4 +1,5 @@
 import {
+  checkLoginExpired,
   getDateYYYYMMDD,
   getShowEditor,
   showOneButtonPopup,
@@ -12,6 +13,7 @@ import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getReactionFromServer } from "@/services/dashboardService";
 import { getPostIdMineFromServer } from "@/services/postService";
+import { clearUserData } from "@/utils/localStorageUtil";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import {
   faCommentQuote,
@@ -20,7 +22,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -56,6 +58,7 @@ const text = {
   do_you_delete: "削除しますか？",
   cancel: "キャンセル",
   see_more_coment: "コメントをもっと見る",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
 export default function DashboardPostDetail() {
@@ -213,6 +216,10 @@ export default function DashboardPostDetail() {
       );
     });
   };
+
+  useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired );
+  }, []);
 
   useEffect(() => {
     //temp

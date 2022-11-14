@@ -4,7 +4,7 @@ import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import MyPagination from "@/components/dashboard/MyPagination";
@@ -41,6 +41,7 @@ const text = {
   delete: "削除",
   empty_message: "投稿がありません。",
   do_delete: "削除しました。",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
 
@@ -266,17 +267,19 @@ export default function DashboardSeriesDetail(props) {
       );
     });
   };
+  
+  useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired );
+
+    getSeriesDetail();
+    getTimeline();
+  }, []);
 
   useEffect(() => {
     if( stateSeries !== undefined ){
       getPostList();
     }
   }, [stateSeries, useparams]);
-  
-  useLayoutEffect(() => {
-    getSeriesDetail();
-    getTimeline();
-  }, []);
 
   return (
     <div className="contents">

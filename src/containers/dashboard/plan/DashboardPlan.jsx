@@ -18,7 +18,7 @@ import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { useLayoutEffect } from "react";
 
 const text = {
@@ -30,87 +30,16 @@ const text = {
   month: "月",
   plan_empty: "支援が登録されてないです。",
   supportor_empty: "支援者がいません。",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
-const tempData = {
-  result: 200,
-  plans: [
-    {
-      id: "1",
-      image: tempPlanImage1,
-      title: "ダイヤモンドプラン",
-      money: "1,000CP",
-      description:
-        "ひと月だけでも嬉しいです！タイムラプスや未統合PSD、その他限定記事が見れます。更新は不定期ですが、なるべく沢山更新できるよう頑張ります。",
-      benefits: [
-        {
-          text: "・差分が見れます",
-        },
-        {
-          text: "・ダイヤモンドプランの内容＋psdファイルを　公開しています。",
-        },
-      ],
-    },
-    {
-      id: "2",
-      image: tempPlanImage2,
-      title: "プラチナプラン",
-      money: "2,000CP",
-      description:
-        "ひと月だけでも嬉しいです！タイムラプスや未統合PSD、その他限定記事が見れます。更新は不定期ですが、なるべく沢山更新できるよう頑張ります。",
-      benefits: [
-        {
-          text: "・差分が見れます",
-        },
-        {
-          text: "・ダイヤモンドプランの内容＋psdファイルを　公開しています。",
-        },
-      ],
-    },
-    {
-      id: "3",
-      image: tempPlanImage3,
-      title: "VIPプラン",
-      money: "3,000CP",
-      description:
-        "ひと月だけでも嬉しいです！タイムラプスや未統合PSD、その他限定記事が見れます。更新は不定期ですが、なるべく沢山更新できるよう頑張ります。",
-      benefits: [
-        {
-          text: "・差分が見れます",
-        },
-        {
-          text: "・ダイヤモンドプランの内容＋psdファイルを　公開しています。",
-        },
-      ],
-    },
-  ],
-  supporters: [
-    {
-      image: tempProfile,
-      date: "2022/04/22",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "ダイヤモンドプラン",
-    },
-    {
-      image: tempProfile,
-      date: "2022/06/30",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "プラチナプラン",
-    },
-    {
-      image: tempProfile,
-      date: "2022/08/01",
-      title: "琉桔真緒 ✧◝(⁰▿⁰)◜✧",
-      plan: "VVIPプラン",
-    },
-  ],
-};
 
 export default function DashboardPlan(props) {
   const [stateSupporter, setStateSupporter] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard?.subscribeTiers);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //==============================================================================
   // header
@@ -212,6 +141,7 @@ export default function DashboardPlan(props) {
   };
 
   useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired );
     handleContainer();
     dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
     getSurpporter();

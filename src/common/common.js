@@ -1,6 +1,9 @@
 import ConfirmPopup from "@/components/dashboard/ConfirmPopup";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
+import { logoutRequest } from "@/modules/redux/ducks/login";
 import { showModal } from "@/modules/redux/ducks/modal";
+import { getAuthorMineFromServer } from "@/services/postService";
+import { clearUserData } from "@/utils/localStorageUtil";
 import { getFileUrlFromServer } from "@API/fileService";
 import moment from "moment/moment";
 import { useDispatch } from "react-redux";
@@ -215,6 +218,25 @@ export const setInputValueToNumber = (ref, value) => {
 */
 export const getShowEditor = (type) => {
   return type?.code === undefined || type?.code === 'novel' || type?.code === 'blog';
+};
+
+/**
+  login token 이 expried 되었는지 확인
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const checkLoginExpired = async (navigate, dispatch, text) => {
+  const params = new FormData();
+    
+  const {status, data} = await getAuthorMineFromServer(params);
+  console.log('getLoginExpired', status, data);
+  
+  if( status === 401 ){
+    clearUserData();
+    dispatch( logoutRequest() );
+    showOneButtonPopup(dispatch, text);
+    navigate('/');
+  }
 };
 
 /**
