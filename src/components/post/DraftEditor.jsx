@@ -107,8 +107,11 @@ export default forwardRef(function DraftEditor(props, ref) {
       return draftToHtml(convertToRaw(stateEditor.getCurrentContent()));
     },
     setContent: (contentHtml) => {
-      const newStateEditor = EditorState.createWithContent( ContentState.createFromBlockArray(htmlToDraft(contentHtml)) );
-      setStateEditor( newStateEditor );
+      const contentBlock = htmlToDraft(contentHtml);
+      if( contentBlock ){
+        const newStateEditor = EditorState.createWithContent( ContentState.createFromBlockArray(contentBlock) );
+        setStateEditor( newStateEditor );
+      }
     },
   }));
 

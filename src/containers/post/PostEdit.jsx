@@ -24,7 +24,7 @@ import Input from "@/components/dashboard/Input";
 import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
-import { editPostToServer } from "@/services/postService";
+import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
 import DraftEditor from "@/components/post/DraftEditor";
 
 const text = {
@@ -77,11 +77,11 @@ const supportorList = [
 
 
 export default function PostEdit(props) {
+  const [stateData, setStateData] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
-  const reduxPostInfo = useSelector(({ post }) => post?.post);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
-  const params = useParams("id");
+  const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const refForm = useRef();
@@ -131,11 +131,19 @@ export default function PostEdit(props) {
   //==============================================================================
   // api
   //==============================================================================
+  const getPostDetail = async () => {
+    const { status, data } = await getPostIdMineFromServer(params);
+    console.log("getPostDetail", status, data);
+
+    if (status === 200) {
+      setStateData(data?.post);
+    } else {
+      showOneButtonPopup(dispatch, status + data);
+    }
+  };
 
   /**
-  *
     파일을 서버에 업로드 
-  *
   * @version 1.0.0
   * @author 2hyunkook
   */
@@ -149,7 +157,7 @@ export default function PostEdit(props) {
     params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("loginRequired", false); //언제 체크해서 보내는건지?
     params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", reduxPostInfo?.rating); //G, PG-13, R-15, R-17, R-18, R-18G
+    params.append("rating", stateData?.rating); //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", ref.current.getImageFile());
 
     const { status, data: resultData } = await setFileToServer(params);
@@ -165,9 +173,7 @@ export default function PostEdit(props) {
   };
 
   /**
-  *
     edit post
-  *
   * @version 1.0.0
   * @author 2hyunkook
   */
@@ -181,7 +187,7 @@ export default function PostEdit(props) {
       return;
     }
 
-    if( getShowEditor(reduxPostInfo.type) ){
+    if( getShowEditor(stateData.type) ){
       if( refEditor.current.isEmpty() ){
         initButtonInStatus(refRegister);
         refEditor.current.setError(text.please_input_content);
@@ -205,12 +211,12 @@ export default function PostEdit(props) {
     json = {
       ...json,
       postId: params.id,
-      typeId: reduxPostInfo?.type?.id,
+      typeId: stateData?.type?.id,
       tagIds: refTag.current.getTagsJsonObject(),
-      categoryId: json.categoryId === "" ? reduxPostInfo?.category?.id : json.categoryId,
-      content: getShowEditor(reduxPostInfo.type) ? refEditor.current.getContent() : json.content,
-      // rating: reduxPostInfo.rating,
-      // status: reduxPostInfo.status,
+      categoryId: json.categoryId === "" ? stateData?.category?.id : json.categoryId,
+      content: getShowEditor(stateData.type) ? refEditor.current.getContent() : json.content,
+      // rating: stateData.rating,
+      // status: stateData.status,
       // issueId: '',
       // subscribeTierId: '',
       // outline: '',
@@ -221,14 +227,14 @@ export default function PostEdit(props) {
     if (!json.content.length) {
       json = {
         ...json,
-        content: reduxPostInfo.content,
+        content: stateData.content,
       };
     }
 
     if (!json.thumbnailImage.length) {
       json = {
         ...json,
-        thumbnailImage: reduxPostInfo.thumbnailImage,
+        thumbnailImage: stateData.thumbnailImage,
       };
     }
     
@@ -283,7 +289,7 @@ export default function PostEdit(props) {
   };
 
   const handleClickRegister = () => {
-    if( getShowEditor(reduxPostInfo?.type) ){
+    if( getShowEditor(stateData?.type) ){
       //undefined(일회성 post), novel, blog 타입
       if( refEditor.current.isEmpty() ){
         initButtonInStatus(refRegister);
@@ -333,20 +339,20 @@ export default function PostEdit(props) {
   };
 
   useEffect(() => {
+    getPostDetail();
+    getTimeline();
     //temp
     setStateSupportorList(supportorList);
-    getTimeline();
-    dispatch(getPostDetailAction(params));
   }, []);
 
   useEffect(() => {
-    // console.log('first', reduxPostInfo);
-    if( reduxPostInfo !== undefined ){
-      if( refEditor !== undefined && getShowEditor(reduxPostInfo?.type) ){
-        refEditor.current.setContent( reduxPostInfo?.content );
+    // 가끔 html-to-draftjs.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'trim') 오류남 확인 필요
+    if( stateData !== undefined ){
+      if( refEditor !== undefined && getShowEditor(stateData?.type) ){
+        refEditor.current.setContent( stateData?.content );
       }
     }
-  }, [dispatch, reduxPostInfo]);
+  }, [stateData]);
 
   return (
     <div className="inr-c">
@@ -362,9 +368,9 @@ export default function PostEdit(props) {
               <Series
                 name={"seriesId"}
                 className={"select1 w100"}
-                selected={reduxPostInfo?.seriesId}
+                selected={stateData?.seriesId}
                 disabled={true}
-                disabledText={reduxPostInfo?.series?.title}
+                disabledText={stateData?.series?.title}
               />
             </div>
 
@@ -373,7 +379,7 @@ export default function PostEdit(props) {
               <div className="lst_txchk">
                 <Type
                   name={"typeId"}
-                  selected={reduxPostInfo?.typeId}
+                  selected={stateData?.typeId}
                   disabled={true} //2022.10.19 edit일때는 type이 변경되면 안된다.
                 />
               </div>
@@ -384,10 +390,10 @@ export default function PostEdit(props) {
               <Category
                 name={"categoryId"}
                 className={"select1 wid1 "}
-                typeId={reduxPostInfo?.type?.id}
-                selected={reduxPostInfo?.categoryId}
-                disabled={reduxPostInfo?.seriesId !== null}
-                disabledText={reduxPostInfo?.category?.name}
+                typeId={stateData?.type?.id}
+                selected={stateData?.categoryId}
+                disabled={stateData?.seriesId !== null}
+                disabledText={stateData?.category?.name}
               />
             </div>
 
@@ -398,7 +404,7 @@ export default function PostEdit(props) {
                 type="text"
                 className="inp_txt w100p"
                 name={"title"}
-                defaultValue={reduxPostInfo?.title}
+                defaultValue={stateData?.title}
               />
             </div>
 
@@ -409,7 +415,7 @@ export default function PostEdit(props) {
                 type="text"
                 className="inp_txt w100p"
                 name={"number"}
-                defaultValue={reduxPostInfo?.number}
+                defaultValue={stateData?.number}
               />
             </div>
 
@@ -421,7 +427,7 @@ export default function PostEdit(props) {
                 </button>
               </h3>
               {
-                ( getShowEditor(reduxPostInfo?.type) ) ? (
+                ( getShowEditor(stateData?.type) ) ? (
                   <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content} />
                 ) : (
                   <ImageUpload
@@ -430,7 +436,7 @@ export default function PostEdit(props) {
                     className={"box_drag"}
                     name={"content"}
                     text={text.drag_drop}
-                    previewHash={reduxPostInfo?.content}
+                    previewHash={stateData?.content}
                     callback={callbackContents}
                   />
                 )
@@ -453,7 +459,7 @@ export default function PostEdit(props) {
                 ref={refTag}
                 name={"tagIds"}
                 className={"inp_txt sch"}
-                list={reduxPostInfo?.tags}
+                list={stateData?.tags}
                 placeholder={text.tag_name}
               />
             </div>
@@ -480,7 +486,7 @@ export default function PostEdit(props) {
                 name={"thumbnailImage"}
                 className={'box_drag'}
                 renderType={'thumbnail'}
-                previewHash={reduxPostInfo?.thumbnailImage}
+                previewHash={stateData?.thumbnailImage}
                 text={text.drag_drop}
                 textEdit={text.edit}
                 callback={callbackTimeline}

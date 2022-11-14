@@ -90,7 +90,7 @@ export default function DashboardSeriesDetail(props) {
   // api
   //==============================================================================
   /**
-     썸네일
+    series detail 
   * @version 1.0.0
   * @author 2hyunkook
   */
