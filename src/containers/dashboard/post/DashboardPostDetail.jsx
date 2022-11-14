@@ -175,11 +175,11 @@ export default function DashboardPostDetail() {
       return (
         <div className="col" key={index}>
           <div className="imgs">
-            <ProfileSpan hash={stateData?.author?.profileImage} />
+            <ProfileSpan hash={item?.author?.profileImage} />
           </div>{" "}
           {/* item.profileImage 데이터 없음*/}
           <div className="conts">
-            <p className="h1">{item.account.email}</p>{" "}
+            <p className="h1">{item?.author?.nickname}</p>{" "}
             {/* item.account.name 데이터 없음*/}
             <p className="d1">
               <span>{item.date || "1日前"}</span>
