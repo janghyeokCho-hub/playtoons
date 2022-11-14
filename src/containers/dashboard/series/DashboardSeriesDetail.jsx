@@ -50,6 +50,7 @@ export default function DashboardSeriesDetail(props) {
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const [statePostList, setStatePostList] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
@@ -269,7 +270,7 @@ export default function DashboardSeriesDetail(props) {
   };
   
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired );
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
 
     getSeriesDetail();
     getTimeline();

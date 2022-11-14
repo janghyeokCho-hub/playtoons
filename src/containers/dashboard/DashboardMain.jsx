@@ -51,6 +51,7 @@ export default function DashboardMain() {
   const [statePosts, setStatePosts] = useState(undefined);
   const [stateReactions, setStateReactions] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -314,7 +315,7 @@ export default function DashboardMain() {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired );
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
   }, []);
 
   useEffect(() => {

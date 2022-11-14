@@ -23,7 +23,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const text = {
@@ -62,12 +62,13 @@ const text = {
 };
 
 export default function DashboardPostDetail() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const params = useParams("id");
   const [statePinnedReactions, setStatePinnedReactions] = useState(undefined);
   const [stateReactions, setStateReactions] = useState({meta: undefined, reactions: []});
   const [stateData, setStateData] = useState(undefined);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams("");
 
   //==============================================================================
   // header
@@ -218,7 +219,7 @@ export default function DashboardPostDetail() {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired );
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
   }, []);
 
   useEffect(() => {

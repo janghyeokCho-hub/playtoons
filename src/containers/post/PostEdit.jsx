@@ -84,6 +84,7 @@ export default function PostEdit(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -342,7 +343,7 @@ export default function PostEdit(props) {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired );
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
   }, []);
 
   useEffect(() => {

@@ -1,25 +1,20 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import tempPlanImage1 from "@IMAGES/img_mainplan1.jpg";
-import tempPlanImage2 from "@IMAGES/img_mainplan2.jpg";
-import tempPlanImage3 from "@IMAGES/img_mainplan3.jpg";
-import tempProfile from "@IMAGES/img_profile.png";
-import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getSubscribeTierAuthorIdFromServer,
-  getSubscribeTierInPlanFromServer,
-} from "@/services/dashboardService";
+import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
-import { SwiperSlide } from "swiper/react";
-import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
-import EmptyTr from "@/components/dashboard/EmptyTr";
-import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
-import { useLayoutEffect } from "react";
+import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
+import {
+  getSubscribeTierInPlanFromServer
+} from "@/services/dashboardService";
+import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
+
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { SwiperSlide } from "swiper/react";
 
 const text = {
   plan_management: "支援管理",
@@ -38,6 +33,7 @@ export default function DashboardPlan(props) {
   const [stateSupporter, setStateSupporter] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard?.subscribeTiers);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -141,10 +137,11 @@ export default function DashboardPlan(props) {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired );
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
     handleContainer();
     dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
     getSurpporter();
+
   }, []);
 
   return (

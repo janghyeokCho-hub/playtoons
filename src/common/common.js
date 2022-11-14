@@ -4,10 +4,9 @@ import { logoutRequest } from "@/modules/redux/ducks/login";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { getAuthorMineFromServer } from "@/services/postService";
 import { clearUserData } from "@/utils/localStorageUtil";
-import { getFileUrlFromServer } from "@API/fileService";
-import moment from "moment/moment";
-import { useDispatch } from "react-redux";
-import { DATE_FORMAT, RESULT_CODE_LIST } from "./constant";
+import moment from "moment";
+import { useSelector } from "react-redux";
+import { RESULT_CODE_LIST } from "./constant";
 /**
  * Email validation
  * @param {string} text
@@ -225,18 +224,29 @@ export const getShowEditor = (type) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const checkLoginExpired = async (navigate, dispatch, text) => {
-  const params = new FormData();
-    
-  const {status, data} = await getAuthorMineFromServer(params);
-  console.log('getLoginExpired', status, data);
-  
-  if( status === 401 ){
-    clearUserData();
-    dispatch( logoutRequest() );
-    showOneButtonPopup(dispatch, text);
-    navigate('/');
+export const checkLoginExpired = async (navigate, dispatch, text, loginTime) => {
+  if( loginTime !== undefined  ){
+    //1일이 지나면 token 이 expired
+    const loginMoment = moment(loginTime);
+    const afterTime = loginMoment.clone().add(1, 'days');
+
+    if( loginMoment.isAfter(afterTime) ){
+      clearUserData();
+      dispatch( logoutRequest() );
+      showOneButtonPopup(dispatch, text);
+      navigate('/');
+    }
   }
+  // const params = new FormData();
+  // const {status, data} = await getAuthorMineFromServer(params);
+  // console.log('getLoginExpired', status, data);
+  
+  // if( status === 401 ){
+  //   clearUserData();
+  //   dispatch( logoutRequest() );
+  //   showOneButtonPopup(dispatch, text);
+  //   navigate('/');
+  // }
 };
 
 /**
