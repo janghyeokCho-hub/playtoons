@@ -10,11 +10,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { getPostMineFromServer, getReactionMineAuthorIdFromServer } from "@/services/dashboardService";
 
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { setSalesIdAction } from "@/modules/redux/ducks/dashboard";
-import { getPostSeriesMine } from "@/services/postService";
+import { getAuthorMineFromServer, getPostSeriesMine } from "@/services/postService";
 import tempImageSales from "@IMAGES/temp_seller_image.png";
 import tempImageSeries01 from "@IMAGES/temp_series_01.png";
 import tempImageSeries02 from "@IMAGES/temp_series_02.png";
@@ -23,6 +23,8 @@ import tempImageSeries04 from "@IMAGES/temp_series_04.png";
 import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { Link, useNavigate } from "react-router-dom";
+import { useLayoutEffect } from "react";
+import { clearUserData } from "@/utils/localStorageUtil";
 
 const text = {
   today_sales: "当日の売上",
@@ -41,6 +43,7 @@ const text = {
   past_sales: "過去の売り上げ",
   history_deposit: "振込履歴",
   before_yesterday: "前日より",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
 export default function DashboardMain() {
@@ -48,6 +51,7 @@ export default function DashboardMain() {
   const [statePosts, setStatePosts] = useState(undefined);
   const [stateReactions, setStateReactions] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -309,6 +313,10 @@ export default function DashboardMain() {
       );
     });
   };
+
+  useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
+  }, []);
 
   useEffect(() => {
     if( reduxAuthors !== undefined ){

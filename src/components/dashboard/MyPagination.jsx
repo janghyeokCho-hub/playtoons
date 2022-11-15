@@ -1,6 +1,6 @@
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 /**
 *

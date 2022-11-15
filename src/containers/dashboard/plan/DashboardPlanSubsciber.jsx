@@ -5,7 +5,7 @@ import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import Pagination from "@/components/dashboard/MyPagination";
 import { useDispatch, useSelector } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Input from "@/components/dashboard/Input";
@@ -102,18 +102,18 @@ export default function DashboardPlanSubsciber(props) {
     return stateData?.subscribers?.map((item, i) => {
       return (
         <tr key={i}>
-          <td className="hide-m">{item.id}</td>
+          <td className="hide-m">{i}</td>
           <td className="td_profile1">
             <p className="t_profile">
               <span
                 className="im mr0"
-                style={{ backgroundImage: `url(${item.image})` }}
+                style={{ backgroundImage: `url(${item?.account?.profileImage})` }}
               ></span>
             </p>
           </td>
-          <td className="td_profile2">{item.title}</td>
-          <td className="td_type1">{item.plan}</td>
-          <td className="td_day1">{item.date}</td>
+          <td className="td_profile2">{item?.account?.id || item?.account?.name}</td>
+          <td className="td_type1">{item?.subscribeTier?.name}</td>
+          <td className="td_day1">{ getDateYYYYMMDD(item.createdAt, '/') }</td>
         </tr>
       );
     });

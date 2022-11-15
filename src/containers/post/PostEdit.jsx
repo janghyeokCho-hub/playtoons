@@ -1,6 +1,6 @@
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import { getPostDetailAction } from "@/modules/redux/ducks/post";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
@@ -13,6 +13,7 @@ import ToolTip from "@/components/dashboard/ToolTip";
 import Type from "@/components/post/Type";
 
 import {
+  checkLoginExpired,
   getFromDataJson,
   getShowEditor,
   initButtonInStatus,
@@ -26,6 +27,7 @@ import { setContainer } from "@/modules/redux/ducks/container";
 import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
 import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
 import DraftEditor from "@/components/post/DraftEditor";
+import { clearUserData } from "@/utils/localStorageUtil";
 
 const text = {
   post_edit: "投稿を修正",
@@ -55,6 +57,7 @@ const text = {
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
   error_title: "お知らせ",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
 const supportorList = [
@@ -81,6 +84,7 @@ export default function PostEdit(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -337,6 +341,10 @@ export default function PostEdit(props) {
       );
     });
   };
+
+  useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
+  }, []);
 
   useEffect(() => {
     getPostDetail();

@@ -1,4 +1,5 @@
 import {
+  checkLoginExpired,
   getDateYYYYMMDD,
   getShowEditor,
   showOneButtonPopup,
@@ -12,6 +13,7 @@ import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getReactionFromServer } from "@/services/dashboardService";
 import { getPostIdMineFromServer } from "@/services/postService";
+import { clearUserData } from "@/utils/localStorageUtil";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import {
   faCommentQuote,
@@ -20,8 +22,8 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
-import { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const text = {
@@ -56,15 +58,17 @@ const text = {
   do_you_delete: "削除しますか？",
   cancel: "キャンセル",
   see_more_coment: "コメントをもっと見る",
+  login_expired: '自動ログイン時間が過ぎました。',
 };
 
 export default function DashboardPostDetail() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const params = useParams("id");
   const [statePinnedReactions, setStatePinnedReactions] = useState(undefined);
   const [stateReactions, setStateReactions] = useState({meta: undefined, reactions: []});
   const [stateData, setStateData] = useState(undefined);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams("");
 
   //==============================================================================
   // header
@@ -175,11 +179,11 @@ export default function DashboardPostDetail() {
       return (
         <div className="col" key={index}>
           <div className="imgs">
-            <ProfileSpan hash={stateData?.author?.profileImage} />
+            <ProfileSpan hash={item?.author?.profileImage} />
           </div>{" "}
           {/* item.profileImage 데이터 없음*/}
           <div className="conts">
-            <p className="h1">{item.account.email}</p>{" "}
+            <p className="h1">{item?.author?.nickname}</p>{" "}
             {/* item.account.name 데이터 없음*/}
             <p className="d1">
               <span>{item.date || "1日前"}</span>
@@ -213,6 +217,10 @@ export default function DashboardPostDetail() {
       );
     });
   };
+
+  useLayoutEffect(() => {
+    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
+  }, []);
 
   useEffect(() => {
     //temp
