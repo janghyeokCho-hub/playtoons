@@ -15,6 +15,7 @@ import EmptyTr from "@/components/dashboard/EmptyTr";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import Pagination from "@/components/dashboard/MyPagination";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { useLayoutEffect } from "react";
 
 const text = {
   page_title: "リアクションリスト",
@@ -60,11 +61,11 @@ const searchList = [
 ];
 
 export default function DashboardReactionList(props) {
-  const dispatch = useDispatch();
-  const params = useParams("page");
   const reduxAuthors = useSelector(({ post }) => post.authorMine.authors);
   const [statePinnedData, setStatePinnedData] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
+  const dispatch = useDispatch();
+  const params = useParams("");
   
   //==============================================================================
   // header
@@ -184,7 +185,7 @@ export default function DashboardReactionList(props) {
   const getPinnedReactionListElements = () => {
     return statePinnedData?.reactions?.map((item, index) => {
       return (
-        <tr key={index}>
+        <tr key={index} id={item.id}>
           <td className="hide-m">{item.id}</td>
           <td className="td_subject2">{item.content}</td>
           <td className="td_txt2">
@@ -211,7 +212,7 @@ export default function DashboardReactionList(props) {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     //리스트 불러오기
     getList();
   }, [params]);

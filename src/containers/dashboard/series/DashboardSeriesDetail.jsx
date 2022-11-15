@@ -4,7 +4,7 @@ import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
-import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import MyPagination from "@/components/dashboard/MyPagination";
@@ -42,6 +42,7 @@ const text = {
   empty_message: "投稿がありません。",
   do_delete: "削除しました。",
   login_expired: '自動ログイン時間が過ぎました。',
+  do_you_delete: "投稿を削除しますか？",
 };
 
 
@@ -178,7 +179,7 @@ export default function DashboardSeriesDetail(props) {
   };
   
   const handleItemDelete = useCallback((event) => {
-    deletePost( event.target.getAttribute('data-id') )
+    showTwoButtonPopup( dispatch, text.do_you_delete, ()=>{deletePost( event.target.getAttribute('data-id'))} );
   }, []);
 
   //==============================================================================

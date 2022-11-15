@@ -216,7 +216,7 @@ export const setInputValueToNumber = (ref, value) => {
 * @author 2hyunkook
 */
 export const getShowEditor = (type) => {
-  return type?.code === undefined || type?.code === 'novel' || type?.code === 'blog';
+  return type?.code === undefined || type?.code === 'novel' || type?.code === 'illust' || type?.code === 'blog' || type?.code === 'photo' || type?.code === 'music';
 };
 
 /**

@@ -128,7 +128,7 @@ export default forwardRef( function Type(props, ref) {
             onClick={handleClickItem}
           />
           
-          <span className={`${stateDisabled ? 'inp_disabled' : ''}`}>{item.name}</span>
+          <span className={`${stateDisabled ? 'inp_disabled' : ''} ${item.checked ? 'inp_checked' : ''}`}>{item.name}</span>
         </label>
       );
     });

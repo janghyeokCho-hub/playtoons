@@ -6,11 +6,11 @@ import { useImperativeHandle, forwardRef } from 'react';
 
 
 export default forwardRef( function ArrowRight(props, ref) {
-  const { className, callback, value, } = props;
+  const { className, callback, value, index } = props;
   const [stateRotate , setStateRotate] = useState(false);
   
   const handleClickArrow = (event) => {
-    callback?.(value, stateRotate);
+    callback?.(value, !stateRotate, index);
     setStateRotate(prev => !prev);
   };
 
@@ -18,7 +18,7 @@ export default forwardRef( function ArrowRight(props, ref) {
     init: () => {
       setStateRotate(false);
     },
-    setState: (isRotate) => {
+    setRotate: (isRotate) => {
       setStateRotate(isRotate);
     },
     getValue: () => {
