@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { reportReaction } from "@API/reactionService";
-import { useCallback } from "@storybook/addons";
 
 const ReportPopup = ({ onClose, postId }) => {
   const handleReport = useCallback(async () => {
@@ -12,14 +11,15 @@ const ReportPopup = ({ onClose, postId }) => {
       content: "string",
       id: postId,
     };
+
     const response = await reportReaction(params);
-    console.log(response);
     if (response.status === 200) {
       alert("신고 완료");
     } else {
       alert("신고 실패");
     }
   }, [postId]);
+
   return (
     <div className="popup_dim">
       <div className="layerPopup pop_report">
@@ -31,7 +31,7 @@ const ReportPopup = ({ onClose, postId }) => {
               className="btn_pop_close b-close"
               onClick={onClose}
             >
-              <FontAwesomeIcon icon={faXmarkLarge} />
+              <FontAwesomeIcon icon={faXmarkLarge} fontSize={24} />
             </button>
           </div>
           <div className="pop_cont">

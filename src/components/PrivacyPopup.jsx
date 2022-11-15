@@ -40,11 +40,13 @@ const PrivacyPopup = ({ handleClose, type, readonly = false }) => {
         <div className="popup">
           <div className="pop_head">
             <h2 className="title">プライバシーポリシー</h2>
-            <FontAwesomeIcon
-              icon={faXmarkLarge}
-              className="btn_pop_close"
+            <button
+              type="button"
+              className="btn_pop_close b-close"
               onClick={handleClose}
-            />
+            >
+              <FontAwesomeIcon icon={faXmarkLarge} fontSize={24} />
+            </button>
           </div>
           <div className="pop_cont">
             <div className="wrap_login">
