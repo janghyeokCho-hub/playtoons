@@ -29,52 +29,13 @@ const text = {
   startAt: "販売開始日",
 };
 
-const tempData = {
-  meta: {
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 3
-  },
-  list: [
-  {
-    id : "1",
-    image : tempImg1,
-    title : "大学のリンゴ一個の重さで10メートルの素材",
-    date : "2022/06/11",
-    user : "名前のない人間232号",
-    creator_comnent: "ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
-    answer:{
-      saler: "dfadf",
-      time: "2022/05/11 23:21",
-      coment: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
-    }
-  },
-  {
-    id : "2",
-    image : tempImg1,
-    title : "大学のリンゴ一個の重さで10メートルの素材",
-    date : "2022/07/11",
-    user : "名前のない人間2号",
-    creator_comnent: "1111111ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
-    answer:{
-      saler: "dfadf",
-      time: "2022/06/11 23:21",
-      coment: "11111リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
-    }
-  },
-]};
-
-
 export default function DashboardSalesInquiry(props) {
   const [stateData, setStateData] = useState(undefined);
   const reduxSalesId = useSelector(({dashboard}) => dashboard.salesId);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const windows = useWindowSize();
   const refArrow = useRef([]);
   const refAnswer = useRef([]);
   const params = useParams('id');
-  const location = useLocation();
 
   //==============================================================================
   // header
@@ -164,11 +125,20 @@ export default function DashboardSalesInquiry(props) {
 
   };
 
+  /**
+     화살표 이벤트
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const handleItemArrow = useCallback((value, isSelected, index) => {
     refAnswer.current[index].setShow(isSelected);
   }, [stateData]);
 
-  
+  /**
+     모바일 클릭이벤트
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const handleItemMobile = useCallback((index) => {
     refArrow.current[index].setRotate(true);
   }, [stateData]);
@@ -205,21 +175,6 @@ export default function DashboardSalesInquiry(props) {
             index={index}
             callback={handleItemMobile}
           />
-          {/* <tr className={`tr_a ${item.isSelected ? 'on h_auto' : 'h_0'}`} >
-            <td className="hide-m"></td>
-            <td colSpan="5" className="ta-l">
-              <div className="tx_a1" >
-                <button type="button" className="arr view-m" id={item.id} onClick={handleItemMobile} ></button>
-                <p className="t1">{item.creator_comnent}</p>
-              </div>
-              <div className="tx_a2">
-                <span className="re view-m"><i className="fa-solid fa-share"></i></span>
-                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
-                <p className="t1">{item.answer.coment}</p>
-              </div>
-            </td>
-            <td className="hide-m ta-c"></td>
-          </tr> */}
         </Fragment>
     );
     });
@@ -228,7 +183,6 @@ export default function DashboardSalesInquiry(props) {
   useEffect(() => {
     //리스트 불러오기
     getSalesInquiryList();
-    // setStateData(tempData);
     return () => {
       dispatch( initSalesIdAction() );
     }
@@ -236,15 +190,7 @@ export default function DashboardSalesInquiry(props) {
 
   useEffect(() => {
     if( reduxSalesId !== undefined && stateData !== undefined ){
-      if( windows.width > 960 ){
-        //pc
-        setSelectedItem( reduxSalesId );
-        // setStateAnswer( getSelectedItem(reduxSalesId) );
-      }
-      else{
-        //mobile
-        // setSelectedItem( reduxSalesId );
-      }
+      setSelectedItem( reduxSalesId );
     }
   }, [refArrow, refAnswer, stateData]);
 
@@ -312,3 +258,79 @@ export default function DashboardSalesInquiry(props) {
     </div>
   );
 }
+
+
+
+const tempData = {
+  meta: {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: 3
+  },
+  list: [
+  {
+    id : "1",
+    image : tempImg1,
+    title : "大学のリンゴ一個の重さで10メートルの素材",
+    date : "2022/06/11",
+    user : "名前のない人間232号",
+    creator_comnent: "ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    answer:{
+      saler: "dfadf",
+      time: "2022/05/11 23:21",
+      coment: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+    }
+  },
+  {
+    id : "2",
+    image : tempImg1,
+    title : "大学のリンゴ一個の重さで10メートルの素材 2",
+    date : "2022/07/11",
+    user : "名前のない人間2号",
+    creator_comnent: "1111111ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    answer:{
+      saler: "dfadf",
+      time: "2022/06/11 23:21",
+      coment: "11111リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+    }
+  },
+  {
+    id : "3",
+    image : tempImg1,
+    title : "大学のリンゴ一個の重さで10メートルの素材 3",
+    date : "2022/08/11",
+    user : "名前のない人間2号",
+    creator_comnent: "222222ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    answer:{
+      saler: "dfadf",
+      time: "2022/06/11 23:21",
+      coment: "2222リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+    }
+  },
+  {
+    id : "4",
+    image : tempImg1,
+    title : "大学のリンゴ一個の重さで10メートルの素材",
+    date : "2022/07/11",
+    user : "名前のない人間2号",
+    creator_comnent: "44444ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    answer:{
+      saler: "dfadf",
+      time: "2022/06/11 23:21",
+      coment: "44444リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+    }
+  },
+  {
+    id : "5",
+    image : tempImg1,
+    title : "大学のリンゴ一個の重さで10メートルの素材 5",
+    date : "2022/07/11",
+    user : "名前のない人間2号",
+    creator_comnent: "55555ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
+    answer:{
+      saler: "dfadf",
+      time: "2022/06/11 23:21",
+      coment: "5555リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ"
+    }
+  },
+]};

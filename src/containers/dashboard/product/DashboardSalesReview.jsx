@@ -1,15 +1,17 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
+import { showOneButtonPopup } from "@/common/common";
+import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import Pagination from "@/components/dashboard/MyPagination";
 import ProductTab from "@/components/dashboard/ProductTab";
-import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
+import { getAuthorMineFromServer } from "@/services/postService";
 import { faStar } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,14 +71,11 @@ const tempData ={
 
 export default function DashboardSalesReview(props) {
   const [stateData, setStateData] = useState(undefined);
-  const [stateAnswer, setStateAnswer] = useState(undefined);
   const reduxSalesId = useSelector(({dashboard}) => dashboard.salesId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const windows = useWindowSize();
   const refArrow = useRef([]);
   const refAnswer = useRef([]);
-  const params = useParams('id');
 
   //==============================================================================
   // header
@@ -102,14 +101,6 @@ export default function DashboardSalesReview(props) {
   //==============================================================================
   // function
   //==============================================================================
-  const getSelectedItem = (id) => {
-    for( let i = 0; i < stateData?.list?.length; i++ ){
-      if( id === stateData.list[i].id ){
-        refArrow.current[i].setState(true);
-        return stateData.list[i];
-      }  
-    }
-  };
 
   const setSelectedItem = (id) => {
     let index = undefined;
@@ -121,65 +112,80 @@ export default function DashboardSalesReview(props) {
     }
 
     if( index !== undefined ){
-      const display = refAnswer.current[index].style.display;
-      refAnswer.current[index].style.display = display === '' || display === 'none' ? 'block' : 'none';
+      refArrow.current[index].setRotate(true);
+      refAnswer.current[index].setShow(true);
       refAnswer.current[index].scrollIntoView();
     }
   };
   //==============================================================================
   // api
   //==============================================================================
-  const getProductList = async () => {
-    // 시리즈 스토리 리스트
-    const params = {
-      email: "",
-    };
-
-    // const { status, data } = await getProductListFromServer(params);
-    // 
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-    // 
-    // setData(getProductListFromResultData(data));
+  const getSalesReview = async () => {
+    const params = new FormData();
+    
+    const {status, data} = await getAuthorMineFromServer(params);
+    console.log('getSalesReview', status, data);
+    
+    if( status === 200 ){
+      setStateData(tempData);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
   };
+
   //==============================================================================
   // event
   //==============================================================================
+  /**
+    pagination 이벤트 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const handleChange = (page) => {
     console.log('handleChange', page);
     
   };
 
+  /**
+    회답 이벤트 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const handleItemClickAnswer = (e) => {
     let no = e.target.getAttribute("data-id");
 
     navigate(`/dashboard/series/detail/${no}/1`);
   };
 
+  /**
+    통보(신고) 이벤트 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const handleItemClickReport = (e) => {
     let no = e.target.getAttribute("data-id");
 
     navigate(`/dashboard/series/detail/${no}/1`);
   };
 
-  const handleItemArrow = (value, isSelected) => {
-    if( isSelected === true ){
-      setStateAnswer(undefined);
-    }
-    else{
-      for( let i = 0; i < refArrow.current.length; i++ ){
-        if( value.id !== refArrow.current[i].getValue().id ){
-          refArrow.current[i].init();
-        }
-      }
-  
-      setStateAnswer(value);
-    }
+  /**
+    화살표 이벤트  
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleItemArrow = (value, isSelected, index) => {
+    refAnswer.current[index].setShow(isSelected);
   };
 
-  const handleItemMobile = useCallback((event) => {
-    setSelectedItem( event.target.getAttribute('idindex') );
+  /**
+    모바일 클릭 이벤트 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleItemMobile = useCallback((index) => {
+    refArrow.current[index].setRotate(true);
   }, []);
   //==============================================================================
   // hook & render
@@ -211,57 +217,36 @@ export default function DashboardSalesReview(props) {
               </div>
             </td>
             <td className="hide-m ta-c">
-              <div className="arr" ><ArrowRight className="fs16" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item}   /></div>
+              <div className="arr" ><ArrowRight className="fs16 pointer" ref={el => (refArrow.current[index] = el)} callback={handleItemArrow} value={item} index={index}  /></div>
             </td>
           </tr>
-          <tr className="tr_a" >
-							<td className="hide-m"></td>
-							<td colSpan="6" className="ta-l">
-								<div className="tx_a1">
-									<button type="button" className="arr view-m" id={item.id}  onClick={handleItemMobile}></button>
-									<p className="t1">{item.creator_comnent}</p>
-								</div>
-								<div className="tx_a2" ref={el => (refAnswer.current[index] = el)}>
-									<span className="re view-m"><i className="fa-solid fa-share"></i></span>
-									<p className="t2"><span className="i-txt">{text.creator}</span><span>{item.answer.time}時</span></p>
-									<p className="t1">{item.answer.coment}</p>
-								</div>
-							</td>
-							<td className="hide-m ta-c"></td>
-						</tr>
+          <AnswerTr 
+            ref={el => (refAnswer.current[index] = el)}
+            type={'salesReview'}
+            item={item}
+            text={text}
+            index={index}
+            callback={handleItemMobile}
+          />
         </Fragment>
     );
     });
   };
 
   useEffect(() => {
-    //리스트 불러오기
-    // getProductList();
-    setStateData(tempData);
+    getSalesReview();
+
     return () => {
       dispatch( initSalesIdAction() );
     }
   }, []);
 
-  useEffect(() => {
-    if( params.id !== undefined ){
-      getProductList();
-    }
-  }, [params, stateData]);
   
   useEffect(() => {
     if( reduxSalesId !== undefined && stateData !== undefined ){
-      console.log('first')
-      if( windows.width > 960 ){
-        //pc
-        setStateAnswer( getSelectedItem(reduxSalesId) );
-      }
-      else{
-        //mobile
-        setSelectedItem( reduxSalesId );
-      }
+      setSelectedItem( reduxSalesId );
     }
-  }, [reduxSalesId, stateData, windows]);
+  }, [reduxSalesId, stateData,]);
 
   return (
     <div className='contents'>
@@ -302,20 +287,6 @@ export default function DashboardSalesReview(props) {
               }
             </tbody>
           </table>
-          
-          {
-            stateAnswer && 
-              <div className="col dsi_answer">
-                <div className="dsi_answer_text mb32">{stateAnswer?.creator_comnent}</div>
-                <div className="dsi_answer_line mb19"></div>
-                <div className="flex mb8">
-                  <div className="dsi_answer_blue mr10">{text.saler}</div>
-                  <div className="dsi_answer_time">{stateAnswer?.answer.time}{text.time}</div>
-                </div>
-                <div className="dsi_answer_text">{stateAnswer?.answer.coment}</div>
-              </div>
-          }
-              
         </div>
 
         <Pagination
