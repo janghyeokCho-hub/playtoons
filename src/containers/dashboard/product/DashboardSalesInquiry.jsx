@@ -4,6 +4,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
+import { showOneButtonPopup } from "@/common/common";
+import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
@@ -11,11 +13,8 @@ import ProductTab from "@/components/dashboard/ProductTab";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
-import { useDispatch, useSelector } from "react-redux";
 import { getAuthorMineFromServer } from "@/services/postService";
-import { showOneButtonPopup } from "@/common/common";
-import { forEach } from "lodash";
-import AnswerTr from "@/components/dashboard/AnswerTr";
+import { useDispatch, useSelector } from "react-redux";
 
 const text = {
   number : "番号",
