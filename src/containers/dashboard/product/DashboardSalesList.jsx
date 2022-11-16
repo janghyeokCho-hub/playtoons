@@ -74,26 +74,6 @@ export default function DashboardSalesList(props) {
   const refCalendarEnd = useRef();
 
   //==============================================================================
-  // header
-  //==============================================================================
-  const handleContainer = useCallback(() => {
-    const header = {
-      headerClass: "header",
-      containerClass: "container dashboard typ1",
-      isHeaderShow: true,
-      isMenuShow: true,
-      headerType: null,
-      menuType: "DASHBOARD",
-      isDetailView: false,
-      activeMenu: "product",
-    };
-    dispatch(setContainer(header));
-  }, [dispatch]);
-
-  useEffect(() => {
-    handleContainer();
-  }, []);
-  //==============================================================================
   // api
   //==============================================================================
 
@@ -128,7 +108,7 @@ export default function DashboardSalesList(props) {
     }
 
     if( startDate.getTime() >= endDate.getTime() ){
-      showOneButtonPopup(dispatch, '시작일은 종료일보다 클 수 없습니다.');
+      showOneButtonPopup(dispatch, '開始日は終了日より大きくできません。');
       return false;
     }
 
@@ -164,10 +144,7 @@ export default function DashboardSalesList(props) {
   }, []);
   
   return (
-    <div className='contents' >
-
-      <ProductTab 
-        pathname={'/dashboard/product/sales/list'} />
+    <>
 
       <div className="inr-c">
         <div className="hd_titbox2 pdty1">
@@ -235,13 +212,12 @@ export default function DashboardSalesList(props) {
         </div>
         
         <Pagination
-          className={''}
           meta={stateData?.meta}
           callback={handleChange}
           />
 
       </div>
 
-    </div>
+    </>
   );
 }

@@ -229,24 +229,13 @@ export const checkLoginExpired = async (navigate, dispatch, text, loginTime) => 
     //1일이 지나면 token 이 expired
     const loginMoment = moment(loginTime);
     const afterTime = loginMoment.clone().add(1, 'days');
+    const nowTime = moment();
 
-    if( loginMoment.isAfter(afterTime) ){
-      clearUserData();
+    if( nowTime.isAfter(afterTime) ){
       dispatch( logoutRequest() );
-      showOneButtonPopup(dispatch, text);
-      navigate('/');
+      showOneButtonPopup(dispatch, text, () => navigate('/account'));
     }
   }
-  // const params = new FormData();
-  // const {status, data} = await getAuthorMineFromServer(params);
-  // console.log('getLoginExpired', status, data);
-  
-  // if( status === 401 ){
-  //   clearUserData();
-  //   dispatch( logoutRequest() );
-  //   showOneButtonPopup(dispatch, text);
-  //   navigate('/');
-  // }
 };
 
 /**

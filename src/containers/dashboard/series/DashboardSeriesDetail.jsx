@@ -361,11 +361,11 @@ export default function DashboardSeriesDetail(props) {
         </div>
       </div>
 
-      <div className="inr-c">
+      <div className="inr-c m_mt24">
         <div className="box_area">
           
           <div className="hd_titbox2">
-            <Search className={'inp_txt sch'} placeholder={text.title} onClick={handleSearchTitle}/>
+            <Search className={'inp_txt sch m_ml16 m_mt16'} placeholder={text.title} onClick={handleSearchTitle}/>
           </div>
 
           <div className="tbl_basic mtbl_ty1">

@@ -37,27 +37,6 @@ export default function DashboardSalesInquiry(props) {
   const refAnswer = useRef([]);
   const params = useParams('id');
 
-  //==============================================================================
-  // header
-  //==============================================================================
-
-  const handleContainer = useCallback(() => {
-    const header = {
-      headerClass: "header",
-      containerClass: "container dashboard typ1",
-      isHeaderShow: true,
-      isMenuShow: true,
-      headerType: null,
-      menuType: "DASHBOARD",
-      isDetailView: false,
-      activeMenu: "product",
-    };
-    dispatch(setContainer(header));
-  }, [dispatch]);
-
-  useEffect(() => {
-    handleContainer();
-  }, []);
 
   //==============================================================================
   // function
@@ -195,10 +174,7 @@ export default function DashboardSalesInquiry(props) {
   }, [refArrow, refAnswer, stateData]);
 
   return (
-    <div className='contents'>
-
-      <ProductTab
-        pathname={'/dashboard/product/sales/inquiry'} />
+    <>
 
       <div className="inr-c">
 
@@ -248,14 +224,13 @@ export default function DashboardSalesInquiry(props) {
         </div>
 
         <Pagination
-          className={''}
           meta={stateData?.meta}
           callback={handleChange}
           />
 
       </div>
 
-    </div>
+    </>
   );
 }
 

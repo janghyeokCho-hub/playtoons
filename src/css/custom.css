@@ -284,6 +284,16 @@ li.dashboard-gnb.selected{
 }
 
 
+.tabs li.blue a {
+  color: #394bc2 !important;
+}
+
+.product_bar{
+  position: absolute;
+  height: 3px;
+  background-color: #394bc2;
+}
+
 
 /* ============================================================================== */
 /* dashboard main */
@@ -356,6 +366,8 @@ li.dashboard-gnb.selected{
 .pl_12{
   padding-left: 12px !important;
 }
+
+
 
 /* ============================================================================== */
 /* dashboard product - sales list */
@@ -1106,6 +1118,18 @@ li.dashboard-gnb.selected{
 
   .dp_ig{
     display: block;
+  }
+
+  .m_mt24{
+    margin-top: 24px !important;
+  }
+
+  .m_mt16{
+    margin-top: 16px;
+  }
+
+  .m_ml16{
+    margin-left: 16px;
   }
 }
 

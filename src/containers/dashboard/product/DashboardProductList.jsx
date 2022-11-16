@@ -1,13 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 //temp data
-import tempImg1 from "@IMAGES/temp_seller_image.png";
-import ProductTab from "@/components/dashboard/ProductTab";
+import { showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import { useDispatch } from "react-redux";
-import { setContainer } from "@/modules/redux/ducks/container";
+import ProductTab from "@/components/dashboard/ProductTab";
 import Search from "@/components/dashboard/Search";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { getAuthorMineFromServer } from "@/services/postService";
+import tempImg1 from "@IMAGES/temp_seller_image.png";
+import { useDispatch } from "react-redux";
 
 const text = {
   see_product: "商品一覧",
@@ -73,52 +75,11 @@ const tempData = {
   ],
 };
 
-const STATUS_TYPE = [
-  {
-    code: "sales",
-    name: "販売中",
-    color: "#2B9429",
-  },
-  {
-    code: "audit",
-    name: "審査中",
-    color: "#ED8812",
-  },
-  {
-    code: "not_for_sale",
-    name: "販売不可",
-    color: "#F11C0E",
-  },
-];
 
 export default function DashboardProductList(props) {
   const [stateData, setStateData] = useState();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const refInput = useRef();
 
-  //==============================================================================
-  // header
-  //==============================================================================
-
-  const handleContainer = useCallback(() => {
-    const header = {
-      headerClass: "header",
-      containerClass: "container dashboard typ1",
-      isHeaderShow: true,
-      isMenuShow: true,
-      headerType: null,
-      menuType: "DASHBOARD",
-      isDetailView: false,
-      activeMenu: "product",
-    };
-    dispatch(setContainer(header));
-  }, [dispatch]);
-
-  useEffect(() => {
-    handleContainer();
-  }, []);
 
   //==============================================================================
   // function
@@ -143,31 +104,52 @@ export default function DashboardProductList(props) {
   //==============================================================================
   // api
   //==============================================================================
-  const getProductList = async () => {
-    // 시리즈 스토리 리스트
-    const params = {
-      email: "",
-    };
-
-    // const { status, data } = await getProductListFromServer(params);
-    //
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-    //
-    // setData(getProductListFromResultData(data));
+  const getProductList = async (keyword) => {
+    const params = new FormData();
+    if( keyword !== undefined ){
+      params.append('keyword', keyword);
+    }
+    
+    const {status, data} = await getAuthorMineFromServer(params);
+    console.log('getProductList', status, data);
+    
+    if( status === 200 ){
+      setStateData(tempData);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
   };
   //==============================================================================
   // event
   //==============================================================================
-  const handleSearch = (page) => {
-    console.log("handleChange", page);
+  /**
+     키워드 검색
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleSearch = (keyword) => {
+    getProductList(keyword);
   };
 
-  const handleItemClick = (e) => {
-    const no = e.target.getAttribute("data-id");
+  /**
+    pagination
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handlePagination = (page) => {
+    
+  };
 
-    // navigate("/dashboard/series/detail/" + no);
+  /**
+     비표시 이벤트
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleItemClick = (e) => {
+    const id = e.target.getAttribute("data-id");
+
+    
   };
 
   //==============================================================================
@@ -223,15 +205,11 @@ export default function DashboardProductList(props) {
 
   useEffect(() => {
     //리스트 불러오기
-    // getProductList();
-    setStateData(tempData);
-    // refInput.current.setStatusInInput({type: INPUT_STATUS.DEFAULT, error: "error"});
+    getProductList();
   }, []);
 
   return (
-    <div className="contents">
-      <ProductTab pathname={"/dashboard/product"} />
-
+    <>
       <div className="inr-c">
         <div className="hd_titbox2">
           <Search
@@ -268,8 +246,10 @@ export default function DashboardProductList(props) {
           </table>
         </div>
 
-        <Pagination className={""} meta={stateData?.meta} callback={() => {}} />
+        <Pagination 
+          meta={stateData?.meta} 
+          callback={handlePagination} />
       </div>
-    </div>
+    </>
   );
 }
