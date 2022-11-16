@@ -420,6 +420,7 @@ export default function UploadPost(props) {
                       className={"box_drag"}
                       name={"content"}
                       text={text.drag_drop}
+                      // multiple={true}     //TODO mutlti 설정 
                       callback={callbackContentImageAfterUpload}
                       />
                 )

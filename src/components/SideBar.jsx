@@ -3,10 +3,12 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/pro-solid-svg-icons";
+import { useWindowSize } from "@/hook/useWindowSize";
 
 const SideBar = ({ handleChange }) => {
   const menus = useSelector(({ container }) => container.menus);
   const activeMenu = useSelector(({ container }) => container.activeMenu);
+  const windowsSize = useWindowSize();
 
   return (
     <aside className="sidebar">
@@ -42,9 +44,16 @@ const SideBar = ({ handleChange }) => {
                       >
                         <Link
                           to={`${item.link}`}
-                          onClick={() =>
-                            !item?.link &&
-                            alert(`${item?.link} 링크 준비중입니다.`)
+                          onClick={() => {
+                              if(!item?.link){
+                                alert(`${item?.link} 링크 준비중입니다.`)
+                              }
+                              else{
+                                if( windowsSize.width < 961 ){
+                                  handleChange();
+                                }
+                              }
+                            }
                           }
                         >
                           <span className="ico">

@@ -979,6 +979,49 @@ li.dashboard-gnb.selected{
   cursor: pointer;
 }
 
+.pb_43p{
+  padding-bottom: 43%;
+}
+
+.box_drag_multi {
+  position: relative;
+  height: auto;
+  text-align: center;
+  color: #4d5a67;
+  font-size: 16px;
+}
+
+.box_drag_multi .fileview {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.box_drag_multi .fileview div {
+  border-radius: 5px;
+  height: 100%;
+  overflow: hidden;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #394bc2;
+  box-sizing: border-box;
+}
+
+.box_drag_multi .fileview .btn_del {
+    position: absolute;
+    right: -16px;
+    top: -16px;
+    border-radius: 32px;
+    color: #fff;
+    font-size: 32px;
+    line-height: 0;
+    background-color: #4d5a67;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #4d5a67;
+}
 
 /* ============================================================================== */
 /* dashboard - series  */
@@ -1104,6 +1147,13 @@ li.dashboard-gnb.selected{
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .box_drag_multi .fileview .btn_del {
+    font-size: 24px;
+    border-width: 1px;
+    right: -10px;
+    top: -10px;
+  }
+
   li.dashboard-gnb{
     font-size: 13px;
   }
