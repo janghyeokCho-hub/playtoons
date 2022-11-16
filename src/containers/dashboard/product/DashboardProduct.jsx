@@ -9,6 +9,15 @@ import { useDispatch } from 'react-redux';
 import { setContainer } from '@/modules/redux/ducks/container';
 import ProductTab from '@/components/dashboard/ProductTab';
 
+
+const TEXT = {
+  see_product : '商品一覧',
+  sales_list : '販売内訳',
+  product_qna : '商品のお問い合せ',
+  see_review : 'レビュ一覧',
+};
+
+
 export default function DashboardProduct() {
   const dispatch = useDispatch();
 
@@ -30,16 +39,17 @@ export default function DashboardProduct() {
     dispatch(setContainer(header));
   }, [dispatch]);
 
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   useEffect(() => {
     handleContainer();
   }, []);
 
-
-
   return (
     <div className='contents'>
 
-      <ProductTab />
+      <ProductTab text={TEXT} />
 
       <Routes>    
         <Route 
@@ -86,3 +96,4 @@ export default function DashboardProduct() {
     </div>
   )
 }
+
