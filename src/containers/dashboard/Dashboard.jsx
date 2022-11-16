@@ -138,7 +138,7 @@ export default function Dashboard() {
         />
         <Route 
           path="/*" 
-          element={<Page404 />}    //TODO 404
+          element={<Page404 />}   
         />
       </Routes>
       

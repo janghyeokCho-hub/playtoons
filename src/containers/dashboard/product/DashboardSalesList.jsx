@@ -1,15 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
 import { convertMoneyStyleString, showOneButtonPopup } from "@/common/common";
 import Calendar from "@/components/dashboard/Calendar";
-import Pagination from "@/components/dashboard/MyPagination";
-import ProductTab from "@/components/dashboard/ProductTab";
-import { setContainer } from "@/modules/redux/ducks/container";
-import { useDispatch } from "react-redux";
 import Image from "@/components/dashboard/Image";
+import Pagination from "@/components/dashboard/MyPagination";
+import { getAuthorIdFromServer } from "@/services/dashboardService";
+import { useLayoutEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const text = {
   see_product : "商品一覧",
@@ -77,26 +77,34 @@ export default function DashboardSalesList(props) {
   // api
   //==============================================================================
 
-  const getProductList = async () => {
-    // 시리즈 스토리 리스트
-    const params = {
-      email: "",
-    };
-
-    // const { status, data } = await getProductListFromServer(params);
-    // 
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-    // 
-    // setData(getProductListFromResultData(data));
+  const getSaleList = async (page, startAt, endAt) => {
+    const params = new FormData();
+    if( page !== undefined ){
+      params.append('page', page);
+    }
+    if( startAt !== undefined ){
+      params.append('startAt', startAt);
+    }
+    if( endAt !== undefined ){
+      params.append('endAt', endAt);
+    }
+    
+    const {status, data} = await getAuthorIdFromServer(params);
+    console.log('getSaleList', status, data);
+    
+    if( status === 200 ){
+      setStateData(tempData);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
   };
   //==============================================================================
   // event
   //==============================================================================
   const handleChange = (page) => {
-    console.log('handleChange', page);
-    
+    getSaleList(page);
   };
 
   const handleClickCalendar = (name, date) => {
@@ -112,6 +120,7 @@ export default function DashboardSalesList(props) {
       return false;
     }
 
+    getSaleList(1, startDate, endDate);
     return true;
   };
   //==============================================================================
@@ -136,11 +145,8 @@ export default function DashboardSalesList(props) {
     });
   };
 
-  useEffect(() => {
-    //리스트 불러오기
-    // getProductList();
-    setStateData(tempData);
-
+  useLayoutEffect(() => {
+    getSaleList();
   }, []);
   
   return (

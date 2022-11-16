@@ -5,6 +5,7 @@ import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
 import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
 import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";
 import SalesReview from "@CONTAINERS/dashboard/product/DashboardSalesReview";
+import Page404 from "@/components/Page404";
 import { useDispatch } from 'react-redux';
 import { setContainer } from '@/modules/redux/ducks/container';
 import ProductTab from '@/components/dashboard/ProductTab';
@@ -91,6 +92,11 @@ export default function DashboardProduct() {
         <Route 
           path="/sales/review/:page/:id" 
           element={<SalesReview />} 
+        />
+
+        <Route 
+          path="/*" 
+          element={<Page404 />}    
         />
       </Routes>
     </div>

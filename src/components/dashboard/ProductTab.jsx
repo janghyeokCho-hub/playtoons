@@ -13,6 +13,7 @@ export default function ProductTab(props) {
   const navigate = useNavigate();
   const refMenu = useRef([]);
   const refContainer = useRef();
+  const refParent = useRef();
   const refBar = useRef();
 
   let tabMenu = [
@@ -47,6 +48,11 @@ export default function ProductTab(props) {
     setPosition(  refMenu.current[entries[0].target.getAttribute('data-index')]  );
   });
 
+  const resizeObserverParnet = new ResizeObserver((entries) => {
+    console.log('resizeObserverParnet');
+    // setPosition(  refMenu.current[entries[0].target.getAttribute('data-index')]  );
+  });
+
   /**
      url로 현재 메뉴 index 구하기
   * @version 1.0.0
@@ -75,6 +81,8 @@ export default function ProductTab(props) {
       refBar.current.style.top = `${ window.innerWidth < 960 ? MOBILE_TOP : PC_TOP }px`;
     }
   };
+
+  
   
   //==============================================================================
   // event
@@ -83,6 +91,15 @@ export default function ProductTab(props) {
   const handleClickMenu = (event) => {
     setStateSelected( event.target.getAttribute("index") );
     navigate(event.target.getAttribute("data-path"));
+  };
+
+  /**
+    scroll 후 position 설정
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleScroll = (event) => {
+    setPosition( refMenu.current[stateSelected] );
   };
 
   //==============================================================================
@@ -110,6 +127,8 @@ export default function ProductTab(props) {
     });
   };
 
+
+
   /**
      엘리먼트 변화 감지 listener 등록 및 해제 
   * @version 1.0.0
@@ -118,7 +137,7 @@ export default function ProductTab(props) {
   useLayoutEffect(() => {
     getSelected();
     resizeObserver.observe(refContainer.current);
-
+    
     return () => {
       resizeObserver.unobserve(refContainer.current);
     }
@@ -136,8 +155,8 @@ export default function ProductTab(props) {
   }, [stateSelected]);
 
   return (
-    <div className="hd_tabbox">
-      <div className="tabs ty1" ref={refContainer} data-index={stateSelected}>
+    <div className="hd_tabbox" >
+      <div className="tabs ty1" ref={refContainer} data-index={stateSelected} onScroll={handleScroll}>
         <ul className="">{renderTabMenuElement()}</ul>
 
         <div ref={refBar} className={"product_bar transition"}></div>

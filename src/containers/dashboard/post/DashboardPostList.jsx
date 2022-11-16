@@ -18,7 +18,7 @@ import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 
-const text = {
+const TEXT = {
   post_list: "投稿リスト",
   post: "投稿する",
   number: "番号",
@@ -30,6 +30,7 @@ const text = {
   status: "状態",
   count: "回",
   empty_message: "投稿がありません。",
+  detail: "詳細",
 };
 
 const searchList = [
@@ -74,11 +75,6 @@ export default function DashboardPostList(props) {
     handleContainer();
   }, []);
 
-  const moveToDetailPage = (item) => {
-    if (windows.width > 960) {
-      navigate(`/dashboard/post/detail/${item.id}`);
-    }
-  };
 
   const getPostList = async (page) => {
     const params = new FormData();
@@ -113,18 +109,24 @@ export default function DashboardPostList(props) {
     }
   };
 
+  const handleMoveToDetailPage = (item) => {
+    if (windows.width > 960) {
+      navigate(`/dashboard/post/detail/${item.id}`);
+    }
+  };
+
   const handleItemClickSearch = (event) => {
     console.log("Search", event);
   };
 
   const renderPostListElements = () => {
     if (stateData?.posts.length === 0) {
-      return <EmptyTr text={text.empty_message} />;
+      return <EmptyTr text={TEXT.empty_message} />;
     }
 
     return stateData?.posts?.map((item, index) => {
       return (
-        <tr key={index} onClick={() => moveToDetailPage(item)}>
+        <tr key={index} onClick={() => handleMoveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb">
@@ -135,18 +137,18 @@ export default function DashboardPostList(props) {
           <td className="td_number1">
             <FontAwesomeIcon icon={faEye} className="view-m" />
             {item.viewCount}
-            <em className="hide-m">{text.count}</em>
+            <em className="hide-m">{TEXT.count}</em>
           </td>
           <td className="td_number2">
             <FontAwesomeIcon icon={faHeart} className="view-m" />
             {item.likeCount}
           </td>
           <td className="td_txt1">
-            <span className="view-m">{text.date}：</span>
+            <span className="view-m">{TEXT.date}：</span>
             {getDateYYYYMMDD(item.startAt, "/")}
           </td>
           <td className="td_txt">
-            <span className="view-m">{text.status}</span>
+            <span className="view-m">{TEXT.status}</span>
             {item.status}
           </td>
           <td className="td_btns">
@@ -154,6 +156,7 @@ export default function DashboardPostList(props) {
               to={`/dashboard/post/detail/${item.id}`}
               className="btn-pk n blue2"
             >
+              {TEXT.detail}
             </Link>
           </td>
         </tr>
@@ -175,12 +178,12 @@ export default function DashboardPostList(props) {
       <div className="inr-c">
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0">
-            <span>{text.post_list}</span>
+            <span>{TEXT.post_list}</span>
           </h2>
           <div className="rgh">
             <div onClick={handleClickPost} className="btn-pk n blue2">
               <span>
-                <FontAwesomeIcon icon={faPlus} /> {text.post}
+                <FontAwesomeIcon icon={faPlus} /> {TEXT.post}
               </span>
             </div>
           </div>
@@ -215,13 +218,13 @@ export default function DashboardPostList(props) {
             </colgroup>
             <thead>
               <tr>
-                <th className="hide-m">{text.number}</th>
-                <th>{text.cover_image}</th>
-                <th>{text.title}</th>
-                <th>{text.access_count}</th>
-                <th>{text.good}</th>
-                <th>{text.date}</th>
-                <th>{text.status}</th>
+                <th className="hide-m">{TEXT.number}</th>
+                <th>{TEXT.cover_image}</th>
+                <th>{TEXT.title}</th>
+                <th>{TEXT.access_count}</th>
+                <th>{TEXT.good}</th>
+                <th>{TEXT.date}</th>
+                <th>{TEXT.status}</th>
                 <th></th>
               </tr>
             </thead>
