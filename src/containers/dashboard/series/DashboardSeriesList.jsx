@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
-import { getSeriesStoryList } from "@/services/dashboardService";
-import Image from "@/components/dashboard/Image";
+import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
+import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import { useDispatch, useSelector } from "react-redux";
-import { showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { getSeriesStoryList } from "@/services/dashboardService";
+import { getAuthorMineFromServer } from "@/services/postService";
+import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-const text = {
+const TEXT = {
   page_title: "シリーズリスト",
   add_series: "シリーズを追加",
   number: "番号",
@@ -21,7 +22,12 @@ const text = {
   category: "カテゴリ",
   date: "掲載日",
   status: "状態",
+  detail: "詳細",
+  modify: "修正",
+  delete: "削除",
   empty_message: "シリーズが登録されてないです。",
+  delete_series: "シリーズを削除しましょうか？",
+  do_delete_series: "シリーズが削除しまた。",
 };
 
 export default function DashboardSeries() {
@@ -31,6 +37,10 @@ export default function DashboardSeries() {
   const windowSize = useWindowSize();
   const [stateData, setStateData] = useState(undefined);
   const myAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -51,18 +61,21 @@ export default function DashboardSeries() {
     handleContainer();
   }, []);
 
-  const moveDetailPage = (item) => {
-    if (windowSize.width > 960) {
-      navigate(`/dashboard/series/detail/${item.id}/1`);
-    }
-  };
+  //==============================================================================
+  // function
+  //==============================================================================
+
+
+  //==============================================================================
+  // api
+  //==============================================================================
 
   /**
      시리즈 목록을 가져온다.
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const getSeriesListFromAPi = async (pageNumber) => {
+  const getSeriesListFromServer = async (pageNumber) => {
     const params = new FormData();
     params.append("authorId", myAuthors[0].id);
     params.append("page", pageNumber);
@@ -82,21 +95,72 @@ export default function DashboardSeries() {
     }
   };
 
+
+  const deleteSeries = async (item) => {
+    const params = new FormData();
+    params.append('id', item.id);
+
+    //TODO 삭제 api로 변경 필요 
+    const {status, data} = await getAuthorMineFromServer(params);
+    console.log('deleteSeries', status, data);
+    
+    if( status === 200 ){
+      getSeriesListFromServer(1);
+      showOneButtonPopup(dispatch, TEXT.do_delete_series);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  };
+  //==============================================================================
+  // event
+  //==============================================================================
+
+  const handleMoveDetailPage = (e, item) => {
+    console.log('e', e);
+    if (windowSize.width > 960) {
+      navigate(`/dashboard/series/detail/${item.id}/1`);
+    }
+
+    return false;
+  };
+
   /**
-  *
+     삭제 event
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleItemClick = (e, item) => {
+    e.stopPropagation();
+    showTwoButtonPopup( dispatch, TEXT.delete_series, () => deleteSeries(item));
+  };
+
+  /**
+    버블링 방지
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const handleClick = (e) => {
+    e.stopPropagation();
+  };
+
+  //==============================================================================
+  // hook && render
+  //==============================================================================
+  /**
      시리즈 리스트 dom 생성
-  *
   * @version 1.0.0
   * @author 2hyunkook
   */
   const renderSeriesList = () => {
     if (stateData?.series.length === 0) {
-      return <EmptyTr text={text.empty_message} />;
+      return <EmptyTr text={TEXT.empty_message} />;
     }
 
     return stateData?.series.map((item, index) => {
       return (
-        <tr key={index} onClick={() => moveDetailPage(item)}>
+        <tr key={index} onClick={(e) => handleMoveDetailPage(e, item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb">
@@ -108,27 +172,41 @@ export default function DashboardSeries() {
           <td className="td_subject">{item.title}</td>
           <td className="td_group c-blue">{item.type?.name}</td>
           <td className="td_gray">
-            <span className="view-m">カテゴリ：</span>
+            <span className="view-m">{TEXT.category}：</span>
             {item.category?.name}
           </td>
           <td>
-            <span className="view-m">掲載日：</span>
+            <span className="view-m">{TEXT.date}：</span>
             {item.startAt}
           </td>
           <td className="td_txt">
-            <span className="view-m">状態</span>
+            <span className="view-m">{TEXT.status}</span>
             {item.paused}
           </td>
-          <td className="td_btns">
+          {/* series_btns custom.css mobile에서 강제적으로 top, border 없앴음. */}
+          <td className="td_btns2 ty1 series_btns">
+
             <Link
+              className="btn-pk s blue2"
               to={`/dashboard/series/detail/${item.id}/1`}
-              className="btn-pk n blue2"
+              onClick={handleClick}
             >
-              <span>
-                <FontAwesomeIcon icon={faAngleRight} />
-                {text.detail}
-              </span>
+              {TEXT.detail}
             </Link>
+            <Link
+              className="btn-pk s blue2"
+              to={`/dashboard/series/edit/${item.id}`}
+              onClick={handleClick}
+            >
+              {TEXT.modify}
+            </Link>
+            <div
+              className="btn-pk s blue2"
+              data-id={item.id}
+              onClick={(e) => handleItemClick(e, item)}
+            >
+              {TEXT.delete}
+            </div>
           </td>
         </tr>
       );
@@ -136,7 +214,7 @@ export default function DashboardSeries() {
   };
 
   useEffect(() => {
-    getSeriesListFromAPi(param?.page === undefined ? 1 : param?.page);
+    getSeriesListFromServer(param?.page === undefined ? 1 : param?.page);
     return () => {
       setStateData(undefined);
     };
@@ -147,12 +225,12 @@ export default function DashboardSeries() {
       <div className="inr-c">
         <div className="hd_titbox hd_mst1">
           <h2 className="h_tit0">
-            <span>{text.page_title}</span>
+            <span>{TEXT.page_title}</span>
           </h2>
           <div className="rgh">
             <Link to={"/dashboard/series/upload"} className="btn-pk n blue2">
               <span>
-                <FontAwesomeIcon icon={faPlus} /> {text.add_series}
+                <FontAwesomeIcon icon={faPlus} /> {TEXT.add_series}
               </span>
             </Link>
           </div>
@@ -173,13 +251,13 @@ export default function DashboardSeries() {
             </colgroup>
             <thead>
               <tr>
-                <th className="hide-m">{text.number}</th>
-                <th>{text.post_image}</th>
-                <th>{text.title}</th>
-                <th>{text.type}</th>
-                <th>{text.category}</th>
-                <th>{text.date}</th>
-                <th>{text.status}</th>
+                <th className="hide-m">{TEXT.number}</th>
+                <th>{TEXT.post_image}</th>
+                <th>{TEXT.title}</th>
+                <th>{TEXT.type}</th>
+                <th>{TEXT.category}</th>
+                <th>{TEXT.date}</th>
+                <th>{TEXT.status}</th>
                 <th></th>
               </tr>
             </thead>

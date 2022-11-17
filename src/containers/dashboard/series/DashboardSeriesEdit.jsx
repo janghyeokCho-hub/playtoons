@@ -53,7 +53,7 @@ const text = {
 export default function DashboardUploadSeries(props) {
   const [ stateSeries, setStateSeries ] = useState(undefined);
   // const reduxSeriesDetail = useSelector(({ dashboard }) => dashboard?.series);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("id");

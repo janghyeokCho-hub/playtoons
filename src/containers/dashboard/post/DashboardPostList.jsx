@@ -165,8 +165,9 @@ export default function DashboardPostList(props) {
   };
 
   useEffect(() => {
-    //리스트 불러오기
-    getPostList(params.page === undefined ? 1 : params.page);
+    if( reduxAuthors !== undefined ){
+      getPostList(params.page === undefined ? 1 : params.page);
+    }
     return () => {
       setStateData(undefined);
     };

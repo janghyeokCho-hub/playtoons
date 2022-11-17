@@ -224,17 +224,25 @@ export const getShowEditor = (type) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const checkLoginExpired = async (navigate, dispatch, text, loginTime) => {
-  if( loginTime !== undefined  ){
+export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
+  if( loginTime !== undefined && loginTime !== null ){
     //1일이 지나면 token 이 expired
     const loginMoment = moment(loginTime);
     const afterTime = loginMoment.clone().add(1, 'days');
     const nowTime = moment();
 
     if( nowTime.isAfter(afterTime) ){
+      clearUserData();
       dispatch( logoutRequest() );
       showOneButtonPopup(dispatch, text, () => navigate('/account'));
+      return false;
     }
+    else{
+      return true;
+    }
+  }
+  else{
+    return false;
   }
 };
 

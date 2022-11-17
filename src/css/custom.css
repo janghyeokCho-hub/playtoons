@@ -1044,6 +1044,8 @@ li.dashboard-gnb.selected{
   white-space: pre-line;
 }
 
+
+
 /* ============================================================================== */
 /* Lottie  */
 /* ============================================================================== */
@@ -1168,6 +1170,11 @@ li.dashboard-gnb.selected{
     top: -10px;
   }
 
+  .series_btns{
+    margin-top: 0 !important;
+    border-top-style: none !important;
+  }
+
   .cal_ico{
     font-size: 14px;
   }
@@ -1185,7 +1192,17 @@ li.dashboard-gnb.selected{
   }
 
   .tooltip-popup{
+    width: 200px;
+    padding: 12px 12px 12px 12px;
     transform: translate(-10%, -100%);  
+  }
+
+  .tooltip-title{
+    font-size: 12px;
+  }
+  
+  .tooltip-text{
+    font-size: 12px;
   }
 
   .modify{
@@ -1207,6 +1224,13 @@ li.dashboard-gnb.selected{
 
   .m_ml16{
     margin-left: 16px;
+  }
+}
+
+@media (max-width: 470px)  {
+  .lst_txchk{
+    overflow-y: hidden;
+    overflow-x: auto;
   }
 }
 

@@ -83,8 +83,8 @@ export default function PostEdit(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -343,18 +343,17 @@ export default function PostEdit(props) {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      getPostDetail();
+      getTimeline();
+
+      //temp
+      setStateSupportorList(supportorList);
+    }
   }, []);
 
-  useEffect(() => {
-    getPostDetail();
-    getTimeline();
-    //temp
-    setStateSupportorList(supportorList);
-  }, []);
 
   useEffect(() => {
-    // 가끔 html-to-draftjs.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'trim') 오류남 확인 필요
     if( stateData !== undefined ){
       if( refEditor !== undefined && getShowEditor(stateData?.type) ){
         refEditor.current.setContent( stateData?.content );

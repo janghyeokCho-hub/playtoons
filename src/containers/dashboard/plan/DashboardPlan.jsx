@@ -9,7 +9,6 @@ import {
 } from "@/services/dashboardService";
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import moment from "moment";
 
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -137,11 +136,11 @@ export default function DashboardPlan(props) {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
     handleContainer();
-    dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
-    getSurpporter();
-
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
+      getSurpporter();
+    }
   }, []);
 
   return (

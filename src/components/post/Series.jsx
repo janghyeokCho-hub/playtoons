@@ -69,7 +69,9 @@ export default function Series(props) {
   }, [stateList]);
 
   useEffect(() => {
-    getSeries();
+    if( reduxAuthors !== undefined ){
+      getSeries();
+    }
   }, []);
 
   return (

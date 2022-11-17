@@ -50,8 +50,8 @@ export default function DashboardSeriesDetail(props) {
   const [stateSeries, setStateSeries] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const [statePostList, setStatePostList] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
@@ -271,11 +271,12 @@ export default function DashboardSeriesDetail(props) {
   };
   
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
-
-    getSeriesDetail();
-    getTimeline();
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      getSeriesDetail();
+      getTimeline();
+    }
   }, []);
+  
 
   useEffect(() => {
     if( stateSeries !== undefined ){
@@ -295,12 +296,6 @@ export default function DashboardSeriesDetail(props) {
             <div className="bbs_book">
               <div className="flex relative">
                 <p className="cx_tit">{stateSeries?.title}</p>
-                <Link
-                  to={`/dashboard/series/edit/${useparams.id}`}
-                  className="btn-pk n blue2 modify"
-                >
-                  <span>{text.do_modify}</span>
-                </Link>
               </div>
               <div className="cx_thumb">
                 <span>

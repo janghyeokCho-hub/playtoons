@@ -315,16 +315,12 @@ export default function DashboardMain() {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
-  }, []);
-
-  useEffect(() => {
-    if( reduxAuthors !== undefined ){
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
       getSeriesList();
       getPostList();
       getReactionList();
     }
-  }, [reduxAuthors]);
+  }, []);
 
   return (
     <div className="contents">
