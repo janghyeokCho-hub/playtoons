@@ -1,5 +1,4 @@
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
-import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,12 +21,12 @@ import {
 import Button from "@/components/dashboard/Button";
 import Image from "@/components/dashboard/Image";
 import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
+import DraftEditor from "@/components/post/DraftEditor";
 import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
 import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
-import DraftEditor from "@/components/post/DraftEditor";
-import { clearUserData } from "@/utils/localStorageUtil";
 
 const text = {
   post_edit: "投稿を修正",
@@ -36,6 +35,7 @@ const text = {
   category: "カテゴリ",
   title: "タイトル",
   episode: "話",
+  outline: "あらすじ",
   contents: "コンテンツ",
   tag: "タグ",
   support_user: "閲覧範囲（支援者）",
@@ -56,8 +56,10 @@ const text = {
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
+  please_input_outline: "あらすじを入力してください。",
   error_title: "お知らせ",
   login_expired: '自動ログイン時間が過ぎました。',
+  dont_edit: '投稿を修正しました。',
 };
 
 const supportorList = [
@@ -91,6 +93,7 @@ export default function PostEdit(props) {
   const refForm = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
+  const refOutline = useRef();
   const refContents = useRef();
   const refEditor = useRef();
   const refThumbnailTimeline = useRef();
@@ -191,6 +194,12 @@ export default function PostEdit(props) {
       return;
     }
 
+    if (refOutline.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refOutline.current.setError(text.please_input_outline);
+      return;
+    }
+
     if( getShowEditor(stateData.type) ){
       if( refEditor.current.isEmpty() ){
         initButtonInStatus(refRegister);
@@ -246,7 +255,7 @@ export default function PostEdit(props) {
 
     const { status, data } = await editPostToServer(json);
     if (status === 200) {
-      showOneButtonPopup(dispatch, "投稿を修正しました。", () => {
+      showOneButtonPopup(dispatch, text.dont_edit, () => {
         navigate(`/dashboard/post/detail/${params.id}`);
       });
     } else {
@@ -424,6 +433,17 @@ export default function PostEdit(props) {
                 name={"number"}
                 defaultValue={stateData?.number}
               />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.outline}</h3>
+              <Textarea
+                  ref={refOutline}
+                  name="outline"
+                  id="outline"
+                  className="textarea1"
+                  defaultValue={stateData?.outline}
+                ></Textarea>
             </div>
 
             <div className="col">
