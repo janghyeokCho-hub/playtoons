@@ -376,7 +376,21 @@ li.dashboard-gnb.selected{
   padding-left: 12px !important;
 }
 
+.cal_ico{
+  position: absolute;
+  z-index: 1;
+  font-size: 19px;
+  left: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
 
+.cal_blue{
+  color: #394bc2;
+}
+.cal_gray{
+  color: #c3cad2;
+}
 
 /* ============================================================================== */
 /* dashboard product - sales list */
@@ -1152,6 +1166,10 @@ li.dashboard-gnb.selected{
     border-width: 1px;
     right: -10px;
     top: -10px;
+  }
+
+  .cal_ico{
+    font-size: 14px;
   }
 
   li.dashboard-gnb{
