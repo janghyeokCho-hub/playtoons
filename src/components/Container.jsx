@@ -56,11 +56,9 @@ const Container = ({ children }) => {
               {/*  2022.11.02 lhk- 애니메이션 효과를 위해서 변경 popup_dim은 없어져야하지만 sidebar는 css로 자동 사라짐. */}
               {(isMobile && (
                 <>
-                  {
-                    isSideMenuShow && 
-                    <div className="popup_dim" onClick={handleChange}>
-                    </div>
-                  }
+                  {isSideMenuShow && (
+                    <div className="popup_dim" onClick={handleChange}></div>
+                  )}
                   <SideBar handleChange={handleChange} />
                 </>
               )) || <SideBar handleChange={handleChange} />}
@@ -76,7 +74,7 @@ const Container = ({ children }) => {
 
           {children}
         </div>
-        {isShow && dimType === "SEARCH" && (
+        {isShow && dimType === "SEARCH" && isMobile && (
           <div className="sch_dim" onClick={handleDimClose}></div>
         )}
         {isFooterShow && <Footer />}
