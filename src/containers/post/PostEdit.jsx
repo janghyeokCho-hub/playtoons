@@ -140,7 +140,6 @@ export default function PostEdit(props) {
   //==============================================================================
   const getPostDetail = async () => {
     const { status, data } = await getPostIdMineFromServer(params);
-    console.log("getPostDetail", status, data);
 
     if (status === 200) {
       setStateData(data?.post);
@@ -251,7 +250,6 @@ export default function PostEdit(props) {
       };
     }
     
-    console.log("editPost json", json);
 
     const { status, data } = await editPostToServer(json);
     if (status === 200) {
@@ -271,7 +269,6 @@ export default function PostEdit(props) {
     params.append('reduced', true);
 
     const { status, data } = await getTimelineFromServer(params);
-    console.log("getTimeline", status, data);
 
     if (status === 200) {
       setStateTimeline(data);

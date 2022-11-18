@@ -164,6 +164,19 @@ export const setSeriesToServer = async (params) => {
 };
 
 /**
+  Dashbaord - series 시리즈 삭제
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deleteSeriesToServer = async (params) => {
+  try {
+    return await apiServer("delete", `/post/series/${params.id}`);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+
+/**
 *
   Dashbaord - series - detail 시리즈 상세
 *

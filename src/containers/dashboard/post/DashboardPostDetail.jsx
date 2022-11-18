@@ -113,7 +113,6 @@ export default function DashboardPostDetail() {
   //==============================================================================
   const getPostDetail = async () => {
     const { status, data } = await getPostIdMineFromServer(params);
-    console.log("getPostDetail", status, data);
 
     if (status === 200) {
       setStateData(data?.post);
@@ -129,7 +128,6 @@ export default function DashboardPostDetail() {
     formData.append("limit", 5);
 
     const { status, data } = await getReactionFromServer(formData);
-    console.log("getReactions", status, data);
 
     if (status === 200) {
       if( isAdd ){
@@ -154,7 +152,6 @@ export default function DashboardPostDetail() {
     formData.append("pinned", true);
 
     const { status, data } = await getReactionFromServer(formData);
-    console.log("getPinnedReactions", status, data);
 
     if (status === 200) {
       setStatePinnedReactions(data);

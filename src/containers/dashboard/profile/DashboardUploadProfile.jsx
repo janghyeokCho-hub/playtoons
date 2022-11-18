@@ -135,7 +135,6 @@ export default function DashboardUploadProfile(props) {
       tagIds: refTags.current.getTagsJsonObject(),
     };
 
-    console.log("setAccounts", json, id);
     const { status, data } = await setAuthorIdToServer(id, json);
 
     if (status === 200) {

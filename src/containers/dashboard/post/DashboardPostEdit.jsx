@@ -62,44 +62,6 @@ export default function DashboardPostEdit(props) {
     handleContainer();
   }, []);
 
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
-  const setCoverImage = async (file) => {
-    // 폼데이터 구성
-    const params = new FormData();
-
-    // params.append("authorId", "");
-    // params.append("subscribeTierId", "");
-    // params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", "cover"); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", true);
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", "G"); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", file);
-
-    console.log("set file params", params);
-
-    const { status, data: resultData } = await setFileToServer(params);
-
-    //create sccuess
-    if (status === 201) {
-      //set hash value to input tag
-      refCoverImage.current.setImageHash(resultData?.hash);
-
-      //다음 timeline이 있다면 timeline 업로드
-    } else {
-      //error 처리
-    }
-
-    console.log("setFile result", status, resultData);
-  };
 
   const setTypeList = async () => {
     const { status, data: result } = await getPostTypeListFromServer();
@@ -109,7 +71,6 @@ export default function DashboardPostEdit(props) {
     } else {
     }
 
-    console.log("setTypeList", status, result);
   };
 
   const setCategoryList = async (type) => {
@@ -120,7 +81,6 @@ export default function DashboardPostEdit(props) {
     } else {
     }
 
-    console.log("setCategoryList", status, result);
   };
 
   const handleItemClickType = (item) => {

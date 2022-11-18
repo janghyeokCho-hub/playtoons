@@ -91,7 +91,6 @@ export default function DashboardPostList(props) {
     // params.append("limit", "");
 
     const { status, data: result } = await getPostListFromServer(params);
-    console.log("getPostList", status, result);
 
     if (status === 200) {
       setStateData(result);

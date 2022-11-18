@@ -43,7 +43,6 @@ export default forwardRef(function DraftEditor(props, ref) {
     params.append("file", file);
 
     const { status, data: resultData } = await setFileToServer(params);
-    console.log("setFile result", status, resultData);
 
     //create sccuess
     if (status === 201) {

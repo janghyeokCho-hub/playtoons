@@ -257,10 +257,7 @@ export default function UploadPost(props) {
       content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
     };
 
-    console.log("setPost josn", json);
-
     const { status, data } = await setPostToServer(json);
-    console.log("setPost", status, data);
 
     if (status === 201) {
       showOneButtonPopup(dispatch, text.done_upload, () =>

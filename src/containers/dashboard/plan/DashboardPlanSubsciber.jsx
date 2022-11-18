@@ -65,7 +65,6 @@ export default function DashboardPlanSubsciber(props) {
     }
     params.append('page', page);
     const {status, data} = await getSubscribeTierInPlanFromServer( reduxAuthors[0].id, params );
-    console.log('getSubscriber', status, data);
     
     if( status === 200 ){
       setStateData(data);
@@ -82,7 +81,6 @@ export default function DashboardPlanSubsciber(props) {
   
 
   const handleChangePage = (page) => {
-    console.log("handleChange", page);
     navigate(`/dashboard/plan/subscriber/${page}`);
   };
 

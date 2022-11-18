@@ -4,7 +4,7 @@ import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getSeriesStoryList } from "@/services/dashboardService";
+import { deleteSeriesToServer, getSeriesStoryList } from "@/services/dashboardService";
 import { getAuthorMineFromServer } from "@/services/postService";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -97,12 +97,7 @@ export default function DashboardSeries() {
 
 
   const deleteSeries = async (item) => {
-    const params = new FormData();
-    params.append('id', item.id);
-
-    //TODO 삭제 api로 변경 필요 
-    const {status, data} = await getAuthorMineFromServer(params);
-    console.log('deleteSeries', status, data);
+    const {status, data} = await deleteSeriesToServer(item);
     
     if( status === 200 ){
       getSeriesListFromServer(1);
@@ -118,7 +113,6 @@ export default function DashboardSeries() {
   //==============================================================================
 
   const handleMoveDetailPage = (e, item) => {
-    console.log('e', e);
     if (windowSize.width > 960) {
       navigate(`/dashboard/series/detail/${item.id}/1`);
     }

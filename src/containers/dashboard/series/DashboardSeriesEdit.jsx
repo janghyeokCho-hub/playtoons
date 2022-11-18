@@ -120,7 +120,6 @@ export default function DashboardUploadSeries(props) {
   */
     const getSeriesDetail = async () => {
       const { status, data } = await getSeriesDetailFromServer( {id: params.id} );
-      console.log("getSeriesDetail", status, data);
   
       if (status === 200) {
         setStateSeries(data?.series);

@@ -99,7 +99,6 @@ export default function DashboardSeriesDetail(props) {
   */
   const getSeriesDetail = async () => {
     const { status, data } = await getSeriesDetailFromServer( {id: useparams.id} );
-    console.log("getSeriesDetail", status, data);
 
     if (status === 200) {
       setStateSeries(data?.series);
@@ -120,7 +119,6 @@ export default function DashboardSeriesDetail(props) {
     params.append('reduced', true);
 
     const { status, data } = await getTimelineFromServer(params);
-    console.log("getTimeline", status, data);
 
     if (status === 200) {
       setStateTimeline(data);
@@ -144,7 +142,6 @@ export default function DashboardSeriesDetail(props) {
     }
 
     const { status, data } = await getPostListFromServer(params);
-    console.log("getPostList", status, data);
 
     if (status === 200) {
       setStatePostList(data);
@@ -160,7 +157,6 @@ export default function DashboardSeriesDetail(props) {
   */
   const deletePost = async (id) => {
     const { status, data } = await deletePostToServer( {id : id} );
-    console.log("deletePost", status, data);
 
     if (status === 200) {
       getPostList();
@@ -174,7 +170,6 @@ export default function DashboardSeriesDetail(props) {
   // event
   //==============================================================================
   const handleSearchTitle = (keyword) => {
-    console.log('SearchTitle', keyword);
     getPostList(keyword);
   };
   

@@ -137,7 +137,6 @@ export default function DashboardUploadSeries(props) {
       authorId: reduxAuthors[0].id, //author 가 아니면 못옴
     };
 
-    console.log("post/series", json);
     setSeries(json);
   };
 
@@ -176,10 +175,7 @@ export default function DashboardUploadSeries(props) {
     params.append("rating", getRatingToChecked(refR19));
     params.append("file", ref.current.getImageFile());
 
-    console.log("set file params", params);
-
     const { status, data: resultData } = await setFileToServer(params);
-    console.log("setFile result", status, resultData);
 
     //create sccuess
     if (status === 201) {
@@ -205,7 +201,6 @@ export default function DashboardUploadSeries(props) {
     const { status, data: result } = await setSeriesToServer(
       JSON.stringify(params)
     );
-    console.log("setSeries", status, result);
 
     if (status === 201) {
       dispatch(
