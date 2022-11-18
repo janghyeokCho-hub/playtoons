@@ -106,11 +106,13 @@ export default forwardRef( function Modal(props, ref) {
               <div className="popup">
                 <div className="pop_head">
                   <h2 className="title">{stateTitle}</h2>
-                  <FontAwesomeIcon
-                    icon={faXmarkLarge}
-                    className="btn_pop_close"
-                    onClick={handleClose}
-                  />
+                  <div className='btn_pop_close'>
+                    <FontAwesomeIcon
+                      icon={faXmarkLarge}
+                      className="fa-solid"
+                      onClick={handleClose}
+                    />
+                  </div>
                 </div>
                 <div className="pop_cont ta_center">
                   {stateContent || ''}

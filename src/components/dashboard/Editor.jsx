@@ -21,8 +21,8 @@ export default function Editor(props) {
     // params.append("subscribeTierId", "");        
     // params.append("productId", "");
     params.append("type", "image");                 //image, video, binary
-    params.append("usage", "cover");                //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", true);
+    params.append("usage", "post");                //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("loginRequired", false);
     params.append("licenseRequired", false);        //product 에 관련된 항목 추후 확인 필요
     params.append("rating", "G");                   //G, PG-13, R-15, R-17, R-18, R-18G
     params.append("file", file);

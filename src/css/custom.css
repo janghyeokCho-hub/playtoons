@@ -133,12 +133,34 @@
 /* draft editor */
 /* ============================================================================== */
 .draft_editor{
-  height: 300px;
+  height: 550px;
 }
 
 .draft_editor_container{
-  height: 364px;
+  height: 601px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c3cad2;
+  border-radius: 5px;
 }
+
+.draft_editor_container.on{
+  border-color: #394bc2;
+}
+
+.draft_contents{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.draft_contents .DraftEditor-root{
+  height: auto;
+}
+
+.draft_image_popup{
+  font-size: 13px;
+}
+
 
 /* ============================================================================== */
 /* pagination */
@@ -1179,6 +1201,22 @@ li.dashboard-gnb.selected{
   .series_btns{
     margin-top: 0 !important;
     border-top-style: none !important;
+  }
+
+  .draft_editor{
+    height: 300px;
+  }
+  
+  .draft_editor_container{
+    height: 364px;
+  }
+
+  .draft_image_popup{
+    transform: translate(-50%, 0);
+  }
+
+  .markdown{
+    font-size: 12px !important;
   }
 
   .cal_ico{

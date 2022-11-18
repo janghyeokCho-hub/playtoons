@@ -10,7 +10,7 @@ import { apiServer } from "./api";
 */
 export const getSeriesStoryList = async (params) => {
   try {
-    return await apiServer("get", "/post/series" + getGetMethodUrl(params));
+    return await apiServer("get", "/post/series/mine" + getGetMethodUrl(params));
   } catch (e) {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
