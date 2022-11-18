@@ -15,7 +15,7 @@ const Login = () => {
   // 로그인 컴포넌트로 이동 시 이전 페이지의 라우터 네임을 가져와야함
   // 절대경로로 받아 올 것
   const location = useLocation();
-  const next = location?.state?.next || "";
+  const next = location?.state?.next || "/home";
   const googleUrl = `${AUTH_SERVER}/auth/google?${next ? `next=${next}` : ""}`;
   const twitterUrl = `${AUTH_SERVER}/auth/twitter?${
     next ? `next=${next}` : ""
@@ -100,7 +100,7 @@ const Login = () => {
   useEffect(() => {
     if (isLogined) {
       // 로그인 성공으로 라우터 변경
-      navigate(next || "/");
+      navigate(next || "/home");
     }
   }, [isLogined, navigate, next]);
 
@@ -148,7 +148,9 @@ const Login = () => {
             id="pwd"
             className="inp_txt w100p"
             onChange={handlePasswordChange}
-            onKeyDown={(event) => {/* enter 키 로그인 */ event.key === 'Enter' && handleLogin()}}  
+            onKeyDown={(event) => {
+              /* enter 키 로그인 */ event.key === "Enter" && handleLogin();
+            }}
             value={password}
             ref={passwordRef}
           />

@@ -165,6 +165,7 @@ const Header = ({ className, onSideMenu }) => {
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
+  const homeURL = isLogined ? "/home" : "/";
 
   useEffect(() => {
     if (isMenuShow === undefined) {
@@ -239,7 +240,7 @@ const Header = ({ className, onSideMenu }) => {
                     </button>
                   )}
                   <h1 className="logo">
-                    <Link to="/">
+                    <Link to={homeURL}>
                       <span className="ico_logo">PlayToons</span>
                     </Link>
                   </h1>
@@ -364,7 +365,7 @@ const Header = ({ className, onSideMenu }) => {
                               <a href="#">設定</a>
                             </li>
                             <li onClick={() => handleLogout()}>
-                              <Link to="/">ログアウト</Link>
+                              <Link to={homeURL}>ログアウト</Link>
                             </li>
                           </ul>
                           <div>
@@ -398,7 +399,7 @@ const Header = ({ className, onSideMenu }) => {
                     </button>
                   )}
                   <h1 className="logo">
-                    <Link to="/">
+                    <Link to={homeURL}>
                       <span className="ico_logo">PlayToons</span>
                     </Link>
                   </h1>

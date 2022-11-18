@@ -9,7 +9,8 @@ const SideBar = ({ handleChange }) => {
   const menus = useSelector(({ container }) => container.menus);
   const activeMenu = useSelector(({ container }) => container.activeMenu);
   const windowsSize = useWindowSize();
-
+  const isLogined = useSelector(({ login }) => login.isLogined);
+  const homeURL = isLogined ? "/home" : "/";
   return (
     <aside className="sidebar">
       <div className="top view-m">
@@ -24,7 +25,7 @@ const SideBar = ({ handleChange }) => {
           </span>
         </button>
         <h1 className="logo">
-          <Link to="/">
+          <Link to={homeURL}>
             <span className="ico_logo">PlayToons</span>
           </Link>
         </h1>
@@ -45,16 +46,14 @@ const SideBar = ({ handleChange }) => {
                         <Link
                           to={`${item.link}`}
                           onClick={() => {
-                              if(!item?.link){
-                                alert(`${item?.link} 링크 준비중입니다.`)
-                              }
-                              else{
-                                if( windowsSize.width < 961 ){
-                                  handleChange();
-                                }
+                            if (!item?.link) {
+                              alert(`${item?.link} 링크 준비중입니다.`);
+                            } else {
+                              if (windowsSize.width < 961) {
+                                handleChange();
                               }
                             }
-                          }
+                          }}
                         >
                           <span className="ico">
                             {(activeMenu === item.code && (

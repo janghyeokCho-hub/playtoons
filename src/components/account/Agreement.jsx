@@ -40,7 +40,7 @@ const Agreement = () => {
 
     const { status } = response;
     if (status === 200) {
-      navigate("/");
+      navigate("/home");
     } else if (status === 400) {
       alert("코드 참조");
     } else if (status === 409) {
