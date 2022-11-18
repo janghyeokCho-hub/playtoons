@@ -276,6 +276,16 @@ export const showOneButtonPopup = (dispatch, message, callback) => {
 };
 
 /**
+  버블링 방지
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export  const handleClickStopPropagation = (e, onClick) => {
+  e.stopPropagation();
+  onClick?.(e);
+};
+
+/**
   show confirm popup 
 * @version 1.0.0
 * @author 2hyunkook

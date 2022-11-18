@@ -2472,6 +2472,7 @@ body {
   top: 0;
   width: 100%;
   /* height: 100%; */ /* 2022.10.28 lhk- 7010 종횡비 수정사항 적용  */
+  z-index: 1;
 }
 .tbl_basic td.td_imgs .cx_thumb {
   width: 88px;
