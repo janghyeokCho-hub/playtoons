@@ -22,9 +22,7 @@ export const [
   GET_POST_REACTION_SUCCESS,
   GET_POST_REACTION_FAILURE,
 ] = createRequestActionTypes("post/GET_POST_REACTION");
-const [SET_SERIES, INIT_SERIES] = createRequestActionTypes(
-  "post/SET_SERIES"
-);
+const [SET_SERIES, INIT_SERIES] = createRequestActionTypes("post/SET_SERIES");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
@@ -70,7 +68,7 @@ const post = handleActions(
       return produce(state, (_) => {
         return {
           ...state,
-          series: null
+          series: null,
         };
       });
     },

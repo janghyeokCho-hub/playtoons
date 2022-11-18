@@ -152,8 +152,9 @@ function createCurrentPostRequestSaga(type) {
             postApi.getPostContent,
             payload.id
           );
+
           if (contentResponse?.status === 200) {
-            payload.content = response.data?.content;
+            payload.content = contentResponse.data?.content;
             payload.isLock = false;
           } else {
             payload.content = null;
