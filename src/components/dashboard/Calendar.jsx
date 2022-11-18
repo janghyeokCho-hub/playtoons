@@ -7,8 +7,6 @@ import DatePicker from "react-datepicker";
 import { ko, ja, es } from "date-fns/esm/locale";
 import { DATE_FORMAT } from '@/common/constant';
 
-import 'react-calendar/dist/Calendar.css';
-
 /**
 *
    Calendar component
