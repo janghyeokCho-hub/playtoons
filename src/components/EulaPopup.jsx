@@ -55,7 +55,7 @@ const EulaPopup = ({ handleClose, readonly = false }) => {
             <div className="wrap_login">
               <div className="area_terms">
                 <div className="in scrollY">
-                  <MarkdownPreview source={content} />
+                  <MarkdownPreview source={content} className='markdown' />
                 </div>
               </div>
 

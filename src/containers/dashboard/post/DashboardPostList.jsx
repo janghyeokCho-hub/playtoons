@@ -91,7 +91,6 @@ export default function DashboardPostList(props) {
     // params.append("limit", "");
 
     const { status, data: result } = await getPostListFromServer(params);
-    console.log("getPostList", status, result);
 
     if (status === 200) {
       setStateData(result);
@@ -165,8 +164,9 @@ export default function DashboardPostList(props) {
   };
 
   useEffect(() => {
-    //리스트 불러오기
-    getPostList(params.page === undefined ? 1 : params.page);
+    if( reduxAuthors !== undefined ){
+      getPostList(params.page === undefined ? 1 : params.page);
+    }
     return () => {
       setStateData(undefined);
     };

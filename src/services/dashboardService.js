@@ -10,7 +10,7 @@ import { apiServer } from "./api";
 */
 export const getSeriesStoryList = async (params) => {
   try {
-    return await apiServer("get", "/post/series" + getGetMethodUrl(params));
+    return await apiServer("get", "/post/series/mine" + getGetMethodUrl(params));
   } catch (e) {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }
@@ -158,6 +158,19 @@ export const setTagToServer = async (params) => {
 export const setSeriesToServer = async (params) => {
   try {
     return await apiServer("post", "/post/series", params);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+  }
+};
+
+/**
+  Dashbaord - series 시리즈 삭제
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deleteSeriesToServer = async (params) => {
+  try {
+    return await apiServer("delete", `/post/series/${params.id}`);
   } catch (e) {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
   }

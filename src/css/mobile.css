@@ -3060,7 +3060,8 @@
     -moz-border-radius: 8px;
     border-radius: 8px;
     width: calc(100% - 32px);
-    max-width: 400px;
+    /* max-width: 400px; */
+    max-width: 350px;
   }
   .layerPopup .popup {
     padding: 20px 16px;
@@ -3074,6 +3075,7 @@
   .layerPopup .pop_head .btn_pop_close {
     right: 10px;
     top: 10px;
+    font-size: 16px;
   }
   .layerPopup .pop_head .btn_pop_close .fa-solid {
     font-size: 18px;

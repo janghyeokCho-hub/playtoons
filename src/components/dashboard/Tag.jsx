@@ -56,7 +56,6 @@ export default forwardRef( function Tag(props, ref) {
     };
     
     const {status, data} = await setTagToServer(JSON.stringify(params));
-    console.log('setTag', status, data);
     
     //409 이미 태그가 존재함.
     if( status === 201){
@@ -80,7 +79,6 @@ export default forwardRef( function Tag(props, ref) {
     const formData = new FormData();
     formData.append('order', 'ASC');
     const {status, data} = await getTagFromServer(tagName, formData);
-    console.log('getTagId', status, data);
     
     if( status === 200 ){
       //find my id from list of result
@@ -111,7 +109,6 @@ export default forwardRef( function Tag(props, ref) {
   };
 
   const handleClickItem = (event) => {
-    console.log('Item', event);
     const tagId = event.target.getAttribute('data-id');
     setStateList( removeItemInList(stateList, tagId) );
   };
@@ -126,7 +123,7 @@ export default forwardRef( function Tag(props, ref) {
       setTag(keyword);
     }
     else{
-      console.log("동일한 태그가 있습니다.");
+      // console.log("동일한 태그가 있습니다.");
     }
   };
 

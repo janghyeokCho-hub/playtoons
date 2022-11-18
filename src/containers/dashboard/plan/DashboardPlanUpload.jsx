@@ -101,7 +101,6 @@ export default function DashboardPlanUpload(props) {
     params.append("file", ref.current.getImageFile());
 
     const { status, data: resultData } = await setFileToServer(params);
-    console.log("setFile result", status, resultData);
     //create sccuess
     if (status === 201) {
       ref.current.setImageValueToInputTag(resultData?.hash);
@@ -147,7 +146,6 @@ export default function DashboardPlanUpload(props) {
     };
 
     const { status, data } = await setSubscribeTierToServer(json);
-    console.log("setSubscribeTier", status, data);
     if (status === 201) {
       dispatch(
         showModal({

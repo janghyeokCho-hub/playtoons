@@ -50,8 +50,8 @@ export default function DashboardSeriesDetail(props) {
   const [stateSeries, setStateSeries] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const [statePostList, setStatePostList] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
@@ -99,7 +99,6 @@ export default function DashboardSeriesDetail(props) {
   */
   const getSeriesDetail = async () => {
     const { status, data } = await getSeriesDetailFromServer( {id: useparams.id} );
-    console.log("getSeriesDetail", status, data);
 
     if (status === 200) {
       setStateSeries(data?.series);
@@ -120,7 +119,6 @@ export default function DashboardSeriesDetail(props) {
     params.append('reduced', true);
 
     const { status, data } = await getTimelineFromServer(params);
-    console.log("getTimeline", status, data);
 
     if (status === 200) {
       setStateTimeline(data);
@@ -144,7 +142,6 @@ export default function DashboardSeriesDetail(props) {
     }
 
     const { status, data } = await getPostListFromServer(params);
-    console.log("getPostList", status, data);
 
     if (status === 200) {
       setStatePostList(data);
@@ -160,7 +157,6 @@ export default function DashboardSeriesDetail(props) {
   */
   const deletePost = async (id) => {
     const { status, data } = await deletePostToServer( {id : id} );
-    console.log("deletePost", status, data);
 
     if (status === 200) {
       getPostList();
@@ -174,7 +170,6 @@ export default function DashboardSeriesDetail(props) {
   // event
   //==============================================================================
   const handleSearchTitle = (keyword) => {
-    console.log('SearchTitle', keyword);
     getPostList(keyword);
   };
   
@@ -271,11 +266,12 @@ export default function DashboardSeriesDetail(props) {
   };
   
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
-
-    getSeriesDetail();
-    getTimeline();
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      getSeriesDetail();
+      getTimeline();
+    }
   }, []);
+  
 
   useEffect(() => {
     if( stateSeries !== undefined ){
@@ -295,12 +291,6 @@ export default function DashboardSeriesDetail(props) {
             <div className="bbs_book">
               <div className="flex relative">
                 <p className="cx_tit">{stateSeries?.title}</p>
-                <Link
-                  to={`/dashboard/series/edit/${useparams.id}`}
-                  className="btn-pk n blue2 modify"
-                >
-                  <span>{text.do_modify}</span>
-                </Link>
               </div>
               <div className="cx_thumb">
                 <span>

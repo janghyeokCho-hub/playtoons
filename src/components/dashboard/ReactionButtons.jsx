@@ -56,7 +56,6 @@ export default function ReactionButtons(props) {
 
   const deleteReaction = async () => {
     const { status, data } = await deleteReactionIdToServer(item.id);
-    console.log("deleteReaction", status, data);
 
     if (status === 200) {
       callback?.();

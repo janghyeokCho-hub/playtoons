@@ -53,7 +53,7 @@ const text = {
 export default function DashboardUploadSeries(props) {
   const [ stateSeries, setStateSeries ] = useState(undefined);
   // const reduxSeriesDetail = useSelector(({ dashboard }) => dashboard?.series);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("id");
@@ -120,7 +120,6 @@ export default function DashboardUploadSeries(props) {
   */
     const getSeriesDetail = async () => {
       const { status, data } = await getSeriesDetailFromServer( {id: params.id} );
-      console.log("getSeriesDetail", status, data);
   
       if (status === 200) {
         setStateSeries(data?.series);

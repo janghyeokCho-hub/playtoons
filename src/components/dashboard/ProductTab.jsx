@@ -48,11 +48,6 @@ export default function ProductTab(props) {
     setPosition(  refMenu.current[entries[0].target.getAttribute('data-index')]  );
   });
 
-  const resizeObserverParnet = new ResizeObserver((entries) => {
-    console.log('resizeObserverParnet');
-    // setPosition(  refMenu.current[entries[0].target.getAttribute('data-index')]  );
-  });
-
   /**
      url로 현재 메뉴 index 구하기
   * @version 1.0.0

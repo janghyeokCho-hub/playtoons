@@ -28,8 +28,6 @@ export default function ProfileSpan(props) {
 
     if (status === 200) {
       setStateImage(result?.url);
-    } else {
-      console.log("image error ", result?.message);
     }
   };
 

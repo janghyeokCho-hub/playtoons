@@ -1,5 +1,4 @@
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
-import { getPostDetailAction } from "@/modules/redux/ducks/post";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,12 +21,12 @@ import {
 import Button from "@/components/dashboard/Button";
 import Image from "@/components/dashboard/Image";
 import Input from "@/components/dashboard/Input";
+import Textarea from "@/components/dashboard/Textarea";
+import DraftEditor from "@/components/post/DraftEditor";
 import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
 import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
-import DraftEditor from "@/components/post/DraftEditor";
-import { clearUserData } from "@/utils/localStorageUtil";
 
 const text = {
   post_edit: "投稿を修正",
@@ -36,6 +35,7 @@ const text = {
   category: "カテゴリ",
   title: "タイトル",
   episode: "話",
+  outline: "あらすじ",
   contents: "コンテンツ",
   tag: "タグ",
   support_user: "閲覧範囲（支援者）",
@@ -56,8 +56,10 @@ const text = {
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
+  please_input_outline: "あらすじを入力してください。",
   error_title: "お知らせ",
   login_expired: '自動ログイン時間が過ぎました。',
+  dont_edit: '投稿を修正しました。',
 };
 
 const supportorList = [
@@ -83,14 +85,15 @@ export default function PostEdit(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine.authors);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const refForm = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
+  const refOutline = useRef();
   const refContents = useRef();
   const refEditor = useRef();
   const refThumbnailTimeline = useRef();
@@ -137,7 +140,6 @@ export default function PostEdit(props) {
   //==============================================================================
   const getPostDetail = async () => {
     const { status, data } = await getPostIdMineFromServer(params);
-    console.log("getPostDetail", status, data);
 
     if (status === 200) {
       setStateData(data?.post);
@@ -188,6 +190,12 @@ export default function PostEdit(props) {
       initButtonInStatus(refRegister);
       refTitle.current.setError(text.please_input_title);
       refTitle.current.focus();
+      return;
+    }
+
+    if (refOutline.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refOutline.current.setError(text.please_input_outline);
       return;
     }
 
@@ -242,11 +250,10 @@ export default function PostEdit(props) {
       };
     }
     
-    console.log("editPost json", json);
 
     const { status, data } = await editPostToServer(json);
     if (status === 200) {
-      showOneButtonPopup(dispatch, "投稿を修正しました。", () => {
+      showOneButtonPopup(dispatch, text.dont_edit, () => {
         navigate(`/dashboard/post/detail/${params.id}`);
       });
     } else {
@@ -262,7 +269,6 @@ export default function PostEdit(props) {
     params.append('reduced', true);
 
     const { status, data } = await getTimelineFromServer(params);
-    console.log("getTimeline", status, data);
 
     if (status === 200) {
       setStateTimeline(data);
@@ -343,18 +349,17 @@ export default function PostEdit(props) {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      getPostDetail();
+      getTimeline();
+
+      //temp
+      setStateSupportorList(supportorList);
+    }
   }, []);
 
-  useEffect(() => {
-    getPostDetail();
-    getTimeline();
-    //temp
-    setStateSupportorList(supportorList);
-  }, []);
 
   useEffect(() => {
-    // 가끔 html-to-draftjs.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'trim') 오류남 확인 필요
     if( stateData !== undefined ){
       if( refEditor !== undefined && getShowEditor(stateData?.type) ){
         refEditor.current.setContent( stateData?.content );
@@ -425,6 +430,17 @@ export default function PostEdit(props) {
                 name={"number"}
                 defaultValue={stateData?.number}
               />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.outline}</h3>
+              <Textarea
+                  ref={refOutline}
+                  name="outline"
+                  id="outline"
+                  className="textarea1"
+                  defaultValue={stateData?.outline}
+                ></Textarea>
             </div>
 
             <div className="col">

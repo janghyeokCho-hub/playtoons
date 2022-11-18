@@ -1,13 +1,11 @@
 import React, { useState,  useImperativeHandle, forwardRef  } from 'react';
-import ReactCalendar from 'react-calendar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 import moment from 'moment';
-import { useRef } from 'react';
 import { useEffect } from 'react';
+import DatePicker from "react-datepicker";
+import { ko, ja, es } from "date-fns/esm/locale";
 import { DATE_FORMAT } from '@/common/constant';
-
-import 'react-calendar/dist/Calendar.css';
 
 /**
 *
@@ -27,8 +25,11 @@ import 'react-calendar/dist/Calendar.css';
 export default forwardRef( function Calendar(props, ref) {
   const { type, name, callback, className, popupClassName } = props;
   const [stateDate, setStateDate] = useState(undefined);
-  const [stateShow, setStateShow] = useState(false);
-  const refContainer = useRef();
+  const [stateOpen, setStateOpen] = useState(false);
+
+  //==============================================================================
+  // function
+  //==============================================================================
 
   const getInitDate = () => {
     const now = new Date();
@@ -60,12 +61,10 @@ export default forwardRef( function Calendar(props, ref) {
     return moment(stateDate).format(DATE_FORMAT);
   };
 
-  const handleClick = (event) => {
-    setStateShow(prev => !prev);
-  };
-
+  //==============================================================================
+  // event
+  //==============================================================================
   const handleClickDate = (date) => {
-    setStateShow(false);
     if( callback === undefined ){
       setStateDate(date);
     }
@@ -77,8 +76,9 @@ export default forwardRef( function Calendar(props, ref) {
 
   };
 
-  
-
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   useImperativeHandle(ref, () => ({
     getDate: () => {
       return stateDate;
@@ -89,25 +89,24 @@ export default forwardRef( function Calendar(props, ref) {
   }));
 
   useEffect(() => {
-    setStateDate(getInitDate());
+    setStateDate( getInitDate() );
   }, [type]);
 
   return (
-    <div className={`relative inp_txt calendar pl_0`} ref={refContainer} onMouseLeave={() => {setStateShow(false)}}>
-      <div className={`btn-pk s flex pl_12 ${className} ${stateDate !== undefined ? 'blue2' : 'gray'}`} onClick={handleClick}>
-        <FontAwesomeIcon className="fs18 mr12" icon={faCalendarDay} />
-        <span className='calendar-text'>{getStateDateFormated()}</span>
+    <div className={`inp_cal`}>
+      <div className='relative' >
+        <FontAwesomeIcon className={`cal_ico ${stateOpen ? 'cal_blue' : ''}`} icon={faCalendarDay} />
+        <DatePicker
+          locale={ja}
+          className="inp_txt calendar datepicker_last"
+          selected={stateDate}
+          maxDate={new Date()} 
+          onCalendarOpen={() => setStateOpen(true)}
+          onCalendarClose={() => setStateOpen(false)}
+          onChange={(date) => handleClickDate(date)}
+          dateFormat="yyyy-MM-dd"
+        />
       </div>
-      {
-        stateShow &&  <ReactCalendar 
-                        className={`calendar-popup ${popupClassName}`} 
-                        onChange={handleClickDate} 
-                        value={stateDate} 
-                        maxDate={new Date()} 
-                        formatDay={(locale, date) => moment(date).format("DD")} // 날'일' 제외하고 숫자만 보이도록 설정
-                        showNeighboringMonth={false} //  이전, 이후 달의 날짜는 보이지 않도록 설정
-                        />
-      }
     </div>
   )
 })

@@ -74,7 +74,6 @@ export default forwardRef(function ImageUpload(props, ref) {
       const results = await Promise.all(files.map(async (file) => {
         return await handleFileChosen(file);
       }));
-      console.log('result', results);
 
       setStateImage({
         ...stateImage,

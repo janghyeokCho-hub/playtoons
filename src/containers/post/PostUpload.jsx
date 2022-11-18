@@ -30,6 +30,7 @@ import { setContainer } from "@/modules/redux/ducks/container";
 import { getAuthorMineAction, initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/post";
 
 import DraftEditor from "@/components/post/DraftEditor";
+import Textarea from "@/components/dashboard/Textarea";
 
 const text = {
   upload_post: "投稿する",
@@ -39,6 +40,7 @@ const text = {
   category: "カテゴリ",
   title: "タイトル",
   episode: "話",
+  outline: "あらすじ",
   contents: "コンテンツ",
   tag: "タグ",
   support_user: "閲覧範囲（支援者）",
@@ -57,8 +59,10 @@ const text = {
   please_input_thumbnail: "サムネイルを入力してください。",
   please_input_title: "タイトルを入力してください。",
   please_input_number: "話を入力してください。",
+  please_input_outline: "あらすじを入力してください。",
   please_input_category: "カテゴリを入力してください。",
   error_title: "お知らせ",
+  done_upload: "投稿登録しました。",
 };
 
 const supportorList = [
@@ -91,6 +95,7 @@ export default function UploadPost(props) {
   const refType = useRef();
   const refTitle = useRef();
   const refNumber = useRef();
+  const refOutline = useRef();
   const refContents = useRef();
   const refEditor = useRef();
   const refThumbnail = useRef();
@@ -207,6 +212,12 @@ export default function UploadPost(props) {
       showOneButtonPopup( dispatch, text.please_input_category );
       return;
     }
+
+    if (refOutline.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refOutline.current.setError(text.please_input_outline);
+      return;
+    }
     
 
     // if (refNumber.current.isEmpty()) {
@@ -246,13 +257,10 @@ export default function UploadPost(props) {
       content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
     };
 
-    console.log("setPost josn", json);
-
     const { status, data } = await setPostToServer(json);
-    console.log("setPost", status, data);
 
     if (status === 201) {
-      showOneButtonPopup(dispatch, "投稿登録しました。", () =>
+      showOneButtonPopup(dispatch, text.done_upload, () =>
         navigate(`/dashboard/post`)
       );
     } else {
@@ -401,6 +409,16 @@ export default function UploadPost(props) {
                 className="inp_txt w100p"
                 name={"number"}
               />
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">{text.outline}</h3>
+              <Textarea
+                  ref={refOutline}
+                  name="outline"
+                  id="outline"
+                  className="textarea1"
+                ></Textarea>
             </div>
 
             <div className="col">

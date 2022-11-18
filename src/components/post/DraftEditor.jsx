@@ -14,9 +14,10 @@ import ErrorMessage from '../dashboard/ErrorMessage';
 export default forwardRef(function DraftEditor(props, ref) {
   const { className, placeholder = '' } = props;
   const [ stateEditor, setStateEditor ] = useState( () => EditorState.createEmpty() );
+  const [ stateIsFocus, setStateIsFocus ] = useState(false);
   const [ stateError, setStateError ] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxSeries = useSelector(({ post }) => post?.series);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxSeries = useSelector(({ post }) => post.series);
 
   //==============================================================================
   // function 
@@ -34,7 +35,7 @@ export default forwardRef(function DraftEditor(props, ref) {
     params.append("authorId", reduxAuthors[0].id);
     params.append("subscribeTierId", "");
     params.append("productId", "");
-    params.append("usage", 'attachment'); //profile, background, cover, logo, post, product, thumbnail, attachment
+    params.append("usage", 'post'); //profile, background, cover, logo, post, product, thumbnail, attachment
     params.append("type", "image"); //image, video, binary
     params.append("loginRequired", false); //언제 체크해서 보내는건지?
     params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
@@ -42,7 +43,6 @@ export default forwardRef(function DraftEditor(props, ref) {
     params.append("file", file);
 
     const { status, data: resultData } = await setFileToServer(params);
-    console.log("setFile result", status, resultData);
 
     //create sccuess
     if (status === 201) {
@@ -118,10 +118,10 @@ export default forwardRef(function DraftEditor(props, ref) {
 
   return (
     <>
-      <div className={className}>
+      <div className={`${className} ${stateIsFocus ? 'on' : ''}`}>
         <Editor
             wrapperClassName="draft_editor"
-            editorClassName="editor"
+            editorClassName="draft_contents"
             toolbarClassName="toolbar-class"
             toolbar={{    //2022.11.08 lhk- 
               options: ['inline', 'image'],
@@ -130,9 +130,10 @@ export default forwardRef(function DraftEditor(props, ref) {
                 options: ['bold', 'italic', 'underline', 'strikethrough',],
               },
               image: {
-                urlEnabled: false,
+                popupClassName: 'draft_image_popup',
+                urlEnabled: true,
                 uploadEnabled: true,
-                alignmentEnabled: true,
+                alignmentEnabled: true,   // LEFT, RIGHT, CENTER
                 uploadCallback: handleUploadImage,
                 previewImage: true,
                 inputAccept: 'image/gif, image/jpeg, image/jpg, image/png, image/svg',
@@ -144,18 +145,37 @@ export default forwardRef(function DraftEditor(props, ref) {
                 // icon: image,
                 // className: undefined,
                 // component: undefined,
-                // popupClassName: undefined,
               },
+              // emoji: {
+              //   icon: emoji,
+              //   className: undefined,
+              //   component: undefined,
+              //   popupClassName: undefined,
+              //   emojis: [
+              //     '😀', '😁', '😂', '😃', '😉', '😋', '😎', '😍', '😗', '🤗', '🤔', '😣', '😫', '😴', '😌', '🤓',
+              //     '😛', '😜', '😠', '😇', '😷', '😈', '👻', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '🙈',
+              //     '🙉', '🙊', '👼', '👮', '🕵', '💂', '👳', '🎅', '👸', '👰', '👲', '🙍', '🙇', '🚶', '🏃', '💃',
+              //     '⛷', '🏂', '🏌', '🏄', '🚣', '🏊', '⛹', '🏋', '🚴', '👫', '💪', '👈', '👉', '👉', '👆', '🖕',
+              //     '👇', '🖖', '🤘', '🖐', '👌', '👍', '👎', '✊', '👊', '👏', '🙌', '🙏', '🐵', '🐶', '🐇', '🐥',
+              //     '🐸', '🐌', '🐛', '🐜', '🐝', '🍉', '🍄', '🍔', '🍤', '🍨', '🍪', '🎂', '🍰', '🍾', '🍷', '🍸',
+              //     '🍺', '🌍', '🚑', '⏰', '🌙', '🌝', '🌞', '⭐', '🌟', '🌠', '🌨', '🌩', '⛄', '🔥', '🎄', '🎈',
+              //     '🎉', '🎊', '🎁', '🎗', '🏀', '🏈', '🎲', '🔇', '🔈', '📣', '🔔', '🎵', '🎷', '💰', '🖊', '📅',
+              //     '✅', '❎', '💯',
+              //   ],
+              // },
             }} 
             placeholder={placeholder}
-            // 한국어 설정
+            // language 설정
             localization={{
-                locale: 'ko',
+                locale: 'en',
+                // locale: 'ja',
             }}
             // 초기값 설정
             editorState={stateEditor}
             // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
             onEditorStateChange={onEditorStateChange}
+            onBlur={() => setStateIsFocus(false)}
+            onFocus={() => setStateIsFocus(true)}
         />
 
       </div>

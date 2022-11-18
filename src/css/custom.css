@@ -133,12 +133,34 @@
 /* draft editor */
 /* ============================================================================== */
 .draft_editor{
-  height: 300px;
+  height: 550px;
 }
 
 .draft_editor_container{
-  height: 364px;
+  height: 601px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #c3cad2;
+  border-radius: 5px;
 }
+
+.draft_editor_container.on{
+  border-color: #394bc2;
+}
+
+.draft_contents{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.draft_contents .DraftEditor-root{
+  height: auto;
+}
+
+.draft_image_popup{
+  font-size: 13px;
+}
+
 
 /* ============================================================================== */
 /* pagination */
@@ -376,7 +398,21 @@ li.dashboard-gnb.selected{
   padding-left: 12px !important;
 }
 
+.cal_ico{
+  position: absolute;
+  z-index: 1;
+  font-size: 19px;
+  left: 10px;
+  top: 50%;
+  transform: translate(0, -50%);
+}
 
+.cal_blue{
+  color: #394bc2;
+}
+.cal_gray{
+  color: #c3cad2;
+}
 
 /* ============================================================================== */
 /* dashboard product - sales list */
@@ -1030,6 +1066,8 @@ li.dashboard-gnb.selected{
   white-space: pre-line;
 }
 
+
+
 /* ============================================================================== */
 /* Lottie  */
 /* ============================================================================== */
@@ -1077,7 +1115,7 @@ li.dashboard-gnb.selected{
 
 
 /* ============================================================================== */
-/* temp mobile css  */
+/* popup   */
 /* ============================================================================== */
 .error_popup_title{
   margin-bottom: 40px;
@@ -1104,7 +1142,13 @@ li.dashboard-gnb.selected{
 .w336{
   width: 336px;
 }
-
+/* ============================================================================== */
+/* markdown  */
+/* ============================================================================== */
+.markdown{
+  color:#13161a !important;
+  background-color: #fff !important;
+}
 
 /* ============================================================================== */
 /* header back button tablet & mobile css  */
@@ -1154,6 +1198,31 @@ li.dashboard-gnb.selected{
     top: -10px;
   }
 
+  .series_btns{
+    margin-top: 0 !important;
+    border-top-style: none !important;
+  }
+
+  .draft_editor{
+    height: 300px;
+  }
+  
+  .draft_editor_container{
+    height: 364px;
+  }
+
+  .draft_image_popup{
+    transform: translate(-50%, 0);
+  }
+
+  .markdown{
+    font-size: 12px !important;
+  }
+
+  .cal_ico{
+    font-size: 14px;
+  }
+
   li.dashboard-gnb{
     font-size: 13px;
   }
@@ -1167,7 +1236,17 @@ li.dashboard-gnb.selected{
   }
 
   .tooltip-popup{
+    width: 200px;
+    padding: 12px 12px 12px 12px;
     transform: translate(-10%, -100%);  
+  }
+
+  .tooltip-title{
+    font-size: 12px;
+  }
+  
+  .tooltip-text{
+    font-size: 12px;
   }
 
   .modify{
@@ -1189,6 +1268,13 @@ li.dashboard-gnb.selected{
 
   .m_ml16{
     margin-left: 16px;
+  }
+}
+
+@media (max-width: 470px)  {
+  .lst_txchk{
+    overflow-y: hidden;
+    overflow-x: auto;
   }
 }
 

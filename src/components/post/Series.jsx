@@ -45,6 +45,7 @@ export default function Series(props) {
   const getSeries = async () => {
     const form = new FormData();
     form.append( 'authorId', reduxAuthors[0].id );
+    form.append( 'limit', 50 );
 
     const {status, data} = await getPostSeriesMineFromServer(form);
     if( status === 200 ){
@@ -69,7 +70,9 @@ export default function Series(props) {
   }, [stateList]);
 
   useEffect(() => {
-    getSeries();
+    if( reduxAuthors !== undefined ){
+      getSeries();
+    }
   }, []);
 
   return (

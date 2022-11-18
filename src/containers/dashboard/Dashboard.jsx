@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
-import Series from "@/containers/dashboard/series/DashboardSeries";
+import Series from "@/containers/dashboard/series/DashboardSeriesList";
 import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
 import SeriesUpload from "@/containers/dashboard/series/DashboardSeriesUpload";
 import SeriesEdit from "@/containers/dashboard/series/DashboardSeriesEdit";

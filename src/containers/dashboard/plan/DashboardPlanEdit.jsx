@@ -169,7 +169,6 @@ export default function DashboardPlanEdit(props) {
     }
 
     const { status, data } = await editSubscribeTierToServer(json);
-    console.log("updateSubscribeTier", status, data);
 
     if (status === 200) {
       dispatch(

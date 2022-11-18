@@ -94,7 +94,6 @@ export default function DashboardMain() {
     params.append('authorId', reduxAuthors[0].id);
     params.append('limit', 30);
     const {status, data} = await getPostSeriesMine(params);
-    console.log('getSeriesList', status, data);
     
     if( status === 200 ){
       setStateSeries(data);
@@ -113,7 +112,6 @@ export default function DashboardMain() {
     params.append('authorId', reduxAuthors[0].id);
     params.append('limit', 5);
     const {status, data} = await getPostMineFromServer(params);
-    console.log('getPostList', status, data);
     
     if( status === 200 ){
       setStatePosts(data);
@@ -132,7 +130,6 @@ export default function DashboardMain() {
     params.append('authorId', reduxAuthors[0].id);
     params.append('limit', 4);
     const {status, data} = await getReactionMineAuthorIdFromServer(params);
-    console.log('getReactionList', status, data);
     
     if( status === 200 ){
       setStateReactions(data);
@@ -315,16 +312,12 @@ export default function DashboardMain() {
   };
 
   useLayoutEffect(() => {
-    checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime );
-  }, []);
-
-  useEffect(() => {
-    if( reduxAuthors !== undefined ){
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
       getSeriesList();
       getPostList();
       getReactionList();
     }
-  }, [reduxAuthors]);
+  }, []);
 
   return (
     <div className="contents">
