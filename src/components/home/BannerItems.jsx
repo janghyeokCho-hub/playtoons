@@ -8,6 +8,7 @@ import {
   faChevronRight,
 } from "@fortawesome/pro-regular-svg-icons";
 import Banner from "./Banner";
+import { getHomeTop as getHomeTopAPI } from "@API/homrService";
 
 const BannerItems = ({ curationNum }) => {
   SwiperCore.use([Navigation, Pagination]);
@@ -15,16 +16,16 @@ const BannerItems = ({ curationNum }) => {
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
 
-  const getCurationList = async (curationNum) => {
-    const response = await getCurationListAPI(curationNum);
+  const getHomeTop = async () => {
+    const response = await getHomeTopAPI("home");
     if (response.status === 200) {
-      setItems(response.data.posts);
+      setItems(response.data?.contents);
     }
   };
 
   useEffect(() => {
     if (!items?.length) {
-      getCurationList(curationNum);
+      getHomeTop();
     }
   }, [items, curationNum]);
 
@@ -32,7 +33,7 @@ const BannerItems = ({ curationNum }) => {
     return items.map((item, index) => {
       return (
         <SwiperSlide key={index} className="item swiper-slide">
-          <Banner item={item} />
+          <Banner item={item?.banner} />
         </SwiperSlide>
       );
     });

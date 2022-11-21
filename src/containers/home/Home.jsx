@@ -1,8 +1,5 @@
-import React, { useEffect, useCallback } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { setDim } from "@/modules/redux/ducks/dim";
-import { setContainer } from "@/modules/redux/ducks/container";
 import CurationItems from "@COMPONENTS/home/CurationItems";
 import BannerItems from "@COMPONENTS/home/BannerItems";
 import { Link } from "react-router-dom";
@@ -12,28 +9,6 @@ import TypeItems from "@/components/home/TypeItems";
 import BestWebtoonItems from "@/components/home/webtoon/BestWebtoonItems";
 
 const Home = (props) => {
-  const dispatch = useDispatch();
-
-  const handleContainer = useCallback(() => {
-    const container = {
-      isHeaderShow: true,
-      isMenuShow: true,
-      containerClass: "container dashboard landing log_landing",
-      headerClass: "header",
-      headerType: null,
-      menuType: "MAIN",
-      activeMenu: "search",
-      isDetailView: false,
-      isFooterShow: false,
-    };
-    dispatch(setContainer(container));
-    dispatch(setDim({ dimType: null, isShow: false }));
-  }, [dispatch]);
-
-  useEffect(() => {
-    handleContainer();
-  }, []);
-
   return (
     <div className="contents">
       <div className="lst_banner long">

@@ -4,11 +4,9 @@ import List from "./List";
 
 const App = () => {
   return (
-    <>
-      <Routes>
-        <Route path={"list"} element={<List />} />
-      </Routes>
-    </>
+    <Routes>
+      <Route path={"list"} element={<List />} />
+    </Routes>
   );
 };
 
