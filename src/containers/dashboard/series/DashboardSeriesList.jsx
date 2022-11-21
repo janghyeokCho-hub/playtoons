@@ -1,4 +1,4 @@
-import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
@@ -130,15 +130,6 @@ export default function DashboardSeries() {
     showTwoButtonPopup( dispatch, TEXT.delete_series, () => deleteSeries(item));
   };
 
-  /**
-    버블링 방지
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  const handleClick = (e) => {
-    e.stopPropagation();
-  };
-
   //==============================================================================
   // hook && render
   //==============================================================================
@@ -183,14 +174,14 @@ export default function DashboardSeries() {
             <Link
               className="btn-pk s blue2"
               to={`/dashboard/series/detail/${item.id}/1`}
-              onClick={handleClick}
+              onClick={handleClickStopPropagation}
             >
               {TEXT.detail}
             </Link>
             <Link
               className="btn-pk s blue2"
               to={`/dashboard/series/edit/${item.id}`}
-              onClick={handleClick}
+              onClick={handleClickStopPropagation}
             >
               {TEXT.modify}
             </Link>

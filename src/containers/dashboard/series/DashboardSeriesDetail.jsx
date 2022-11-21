@@ -4,7 +4,7 @@ import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
-import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import MyPagination from "@/components/dashboard/MyPagination";
@@ -174,8 +174,15 @@ export default function DashboardSeriesDetail(props) {
   };
   
   const handleItemDelete = useCallback((event) => {
+    event.stopPropagation();
     showTwoButtonPopup( dispatch, text.do_you_delete, ()=>{deletePost( event.target.getAttribute('data-id'))} );
   }, []);
+
+  const handleMoveToDetailPage = (item) => {
+    if (windows.width > 960) {
+      navigate(`/dashboard/post/detail/${item.id}`);
+    }
+  };
 
   //==============================================================================
   // hook & render
@@ -211,7 +218,7 @@ export default function DashboardSeriesDetail(props) {
     return statePostList?.posts?.map((item, index) => {
       /* <tr key={index} onClick={() => moveToDetailPage(item)}> */
       return (
-        <tr key={index} >
+        <tr key={index} onClick={() => handleMoveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb">
@@ -243,12 +250,14 @@ export default function DashboardSeriesDetail(props) {
             <Link
               className="btn-pk s blue2"
               to={`/dashboard/post/detail/${item.id}`}
+              onClick={handleClickStopPropagation}
             >
               {text.post_detail}
             </Link>
             <Link
               className="btn-pk s blue2"
               to={`/post/edit/${item.id}`}
+              onClick={handleClickStopPropagation}
             >
               {text.modify}
             </Link>
