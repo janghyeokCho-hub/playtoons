@@ -8,6 +8,7 @@ import BannerItems from "@COMPONENTS/home/BannerItems";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/pro-solid-svg-icons";
+import TypeItems from "@/components/home/TypeItems";
 import BestWebtoonItems from "@/components/home/webtoon/BestWebtoonItems";
 
 const Home = (props) => {
@@ -39,64 +40,7 @@ const Home = (props) => {
         <BannerItems curationNum={5} />
       </div>
 
-      <div className="main_area">
-        <div className="inr-c">
-          <div className="lst_card2">
-            <div className="col">
-              <Link to="/webtoon">
-                <div className="thumb wid1">
-                  <img
-                    src={require("@IMAGES/img_landing_main1_log.png")}
-                    alt=""
-                  />
-                </div>
-                <div className="txt" style={{ backgroundColor: "#fff" }}>
-                  <p className="c-black">ウェブトゥーン</p>
-                </div>
-              </Link>
-            </div>
-            <div className="col">
-              <Link to="/novel">
-                <div className="thumb wid2">
-                  <img
-                    src={require("@IMAGES/img_landing_main2_log.png")}
-                    alt=""
-                  />
-                </div>
-                <div className="txt" style={{ backgroundColor: "#13161A" }}>
-                  <p>ウェブ小説</p>
-                </div>
-              </Link>
-            </div>
-            <div className="col">
-              <Link to="">
-                <div className="thumb wid3">
-                  <img
-                    src={require("@IMAGES/img_landing_main3_log.png")}
-                    alt=""
-                  />
-                </div>
-                <div className="txt" style={{ backgroundColor: "#424F58" }}>
-                  <p>텍스트확인</p>
-                </div>
-              </Link>
-            </div>
-            <div className="col">
-              <Link to="">
-                <div className="thumb wid4">
-                  <img
-                    src={require("@IMAGES/img_landing_main4_log.png")}
-                    alt=""
-                  />
-                </div>
-                <div className="txt" style={{ backgroundColor: "#596470" }}>
-                  <p>텍스트확인</p>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      <TypeItems />
 
       <div className="main_area">
         <div className="inr-c">
