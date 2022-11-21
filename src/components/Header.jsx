@@ -37,6 +37,19 @@ const SearchComponent = ({ isMobile }) => {
     navigate("/search");
   }, [navigate, searchRef]);
 
+  const handleSearchTextClear = useCallback(() => {
+    if (searchRef?.current) {
+      searchRef.current.value = "";
+      handleSearchTextFocus();
+    }
+  }, [searchRef]);
+
+  const handleSearchTextFocus = useCallback(() => {
+    if (searchRef?.current) {
+      searchRef.current.focus();
+    }
+  }, [searchRef]);
+
   useEffect(() => {}, [searchRef]);
 
   return (
@@ -56,7 +69,11 @@ const SearchComponent = ({ isMobile }) => {
                   }
                 }}
               />
-              <button type="button" className="btn_hd_del">
+              <button
+                type="button"
+                className="btn_hd_del"
+                onClick={handleSearchTextClear}
+              >
                 <span>
                   <FontAwesomeIcon icon={faCircleXmark} />
                 </span>
@@ -83,13 +100,21 @@ const SearchComponent = ({ isMobile }) => {
               }
             }}
           />
-          <button type="button" className="btn_hd_del">
+          <button
+            type="button"
+            className="btn_hd_del"
+            onClick={handleSearchTextClear}
+          >
             <span>
               <FontAwesomeIcon icon={faCircleXmark} />
             </span>
           </button>
           {/*<!-- 삭제버튼 추가 -->*/}
-          <button type="button" className="btns" onClick={handleChange}>
+          <button
+            type="button"
+            className="btns"
+            onClick={handleSearchTextFocus}
+          >
             <span>
               <FontAwesomeIcon icon={faMagnifyingGlass} />
             </span>
