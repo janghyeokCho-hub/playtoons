@@ -357,7 +357,7 @@ export default function UploadPost(props) {
             </div>
               
 
-            <div className="col">
+            <div className="col series">
               <h3 className="tit1">{text.series}</h3>
               {reduxAuthors !== undefined && (
                 <Series
@@ -370,7 +370,7 @@ export default function UploadPost(props) {
 
             <div className="col">
               <h3 className="tit1">{text.type}</h3>
-              <div className="lst_txchk">
+              <div className="lst_txchk lst_post">
                 <Type
                   ref={refType}
                   name={"typeId"}
@@ -380,7 +380,7 @@ export default function UploadPost(props) {
               </div>
             </div>
 
-            <div className="col">
+            <div className="col category">
               <h3 className="tit1">{text.category}</h3>
               <Category
                 name={"categoryId"}

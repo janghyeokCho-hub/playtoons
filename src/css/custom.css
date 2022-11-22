@@ -563,6 +563,9 @@ li.dashboard-gnb.selected{
 .saleslist-data-col{
   display: flex;
 }
+.inp_cal .react-datepicker-popper{
+  z-index: 10;
+}
 
 /* ============================================================================== */
 /* react calendar */
@@ -1081,6 +1084,20 @@ li.dashboard-gnb.selected{
   color: #4d5a67;
 }
 
+.lst_post .inp_txchk:last-child {
+  margin-right: 0;
+}
+.lst_post .inp_txchk {
+  margin-left: 0;
+  margin-right: 16px;
+}
+.bbs_write .series .btn_select1{
+  z-index: 12;
+}
+.bbs_write .category .btn_select1{
+  z-index: 11;
+}
+
 /* ============================================================================== */
 /* dashboard - series  */
 /* ============================================================================== */
@@ -1330,6 +1347,14 @@ li.dashboard-gnb.selected{
     width: 170px;
     height: 32px;
     line-height: 30px;
+  }
+  .btn_select_drop .select_list {
+    padding: 6px 0px;
+    min-width: 100px;
+    top: 34px;
+  }
+  .lst_post .inp_txchk {
+    margin-right: 8px;
   }
 }
 /* 

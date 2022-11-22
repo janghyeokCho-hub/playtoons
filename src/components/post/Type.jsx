@@ -1,5 +1,6 @@
+import { useWindowSize } from "@/hook/useWindowSize";
 import { getPostTypeListFromServer } from "@/services/dashboardService";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from "react";
 import ErrorMessage from "../dashboard/ErrorMessage";
 
 /**
@@ -24,6 +25,7 @@ export default forwardRef( function Type(props, ref) {
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
   const [stateDisabled, setStateDisabled] = useState(undefined);
+  const windowSize = useWindowSize();
       
 
   //==============================================================================
@@ -114,20 +116,27 @@ export default forwardRef( function Type(props, ref) {
 
   const renderTypeListElements = () => {
     return stateList?.map((item, index) => {
+      let isFirstLine = false;
+      if( windowSize.width < 468 ){
+        isFirstLine = index < (stateList.length / 2);
+      }
+
       return (
-        <label className="inp_txchk" key={index}>
-          <input
-            type="radio"
-            name={name}
-            data-id={item.id}
-            data-index={index}
-            defaultValue={item.id}      //code or id
-            defaultChecked={item.checked}
-            onClick={handleClickItem}
-          />
-          
-          <span className={`${stateDisabled ? 'inp_disabled' : ''} ${item.checked ? 'inp_checked' : ''}`}>{item.name}</span>
-        </label>
+        <Fragment key={index}>
+          <label className={`inp_txchk`} >
+            <input
+              type="radio"
+              name={name}
+              data-id={item.id}
+              data-index={index}
+              defaultValue={item.id}      //code or id
+              defaultChecked={item.checked}
+              onClick={handleClickItem}
+            />
+            
+            <span className={`${stateDisabled ? 'inp_disabled' : ''} ${item.checked ? 'inp_checked' : ''}  ${isFirstLine && 'mb8'}`}>{item.name}</span>
+          </label>
+        </Fragment>
       );
     });
   };
