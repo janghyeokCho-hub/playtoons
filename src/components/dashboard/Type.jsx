@@ -2,6 +2,7 @@ import { getPostTypeListFromServer } from "@/services/dashboardService";
 import React, { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
+import Dropdown from "./Dropdown";
 import ErrorMessage from "./ErrorMessage";
 import Select from "./Select";
 
@@ -65,7 +66,8 @@ export default function Type(props, ref) {
   // event
   //==============================================================================
   const handleClickItem = (option) => {
-    callback?.( getSelectedItem(option) );
+    callback?.(option);
+    // callback?.( getSelectedItem(option) );
   };
 
   //==============================================================================
@@ -83,10 +85,10 @@ export default function Type(props, ref) {
 
   return (
     <>
-      <Select 
+      <Dropdown 
         ref={refSelect}
         name={name}
-        className={`${className}`}
+        className={`fw400 ${className}`}
         dataList={stateList}
         handleItemClick={handleClickItem}
         disabled={disabled}

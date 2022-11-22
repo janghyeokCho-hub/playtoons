@@ -4,7 +4,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import "./css/swiper.min.css";
-// import "./css/swiper.css";
 import "./css/font.css";
 import "./css/default.css";
 import "./css/common.css";

@@ -1,6 +1,7 @@
 import { getPostCategoryListFromServer } from '@/services/dashboardService';
 import React, { useEffect, useRef } from 'react';
 import { useState } from 'react';
+import Dropdown from './Dropdown';
 import ErrorMessage from './ErrorMessage';
 import Select from './Select';
 
@@ -54,16 +55,16 @@ export default function Category(props, ref) {
 
   return (
     <>
-      <Select
+
+      <Dropdown
         ref={refSelect}
         name={name}
-        className={`${className}`}
-        dataList={stateList}
-        handleItemClick={handleClickItem} 
+        className={`fw400 ${className}`}
+        dataList={stateList} 
         selected={categorySelected}
         disabled={disabled}
         disabledText={disabledText}
-        />
+        handleItemClick={handleClickItem}/>
 
       <ErrorMessage error={stateError} />
     </>
