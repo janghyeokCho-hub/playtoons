@@ -17,6 +17,8 @@ import EmptyTr from "@/components/dashboard/EmptyTr";
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
+import Dropdown from "@/components/dashboard/Dropdown";
+import { useLayoutEffect } from "react";
 
 const TEXT = {
   post_list: "投稿リスト",
@@ -35,27 +37,31 @@ const TEXT = {
 
 const searchList = [
   {
-    id: "all",
+    id: "1",
     name: "シリーズすべて",
   },
   {
-    id: "all",
+    id: "2",
     name: "シリーズすべて1",
   },
   {
-    id: "all",
+    id: "3",
     name: "シリーズすべて2",
   },
 ];
 
 export default function DashboardPostList(props) {
+  const [stateData, setStateData] = useState(undefined);
+  const [stateSeletectItem, setStateSeletectItem] = useState(undefined);
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
   const params = useParams("page");
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const [stateData, setStateData] = useState(undefined);
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -74,12 +80,17 @@ export default function DashboardPostList(props) {
   useEffect(() => {
     handleContainer();
   }, []);
+  //==============================================================================
+  // function
+  //==============================================================================
 
-
-  const getPostList = async (page) => {
-    const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);
-    params.append("page", page);
+  const getPostList = async () => {
+    const formData = new FormData();
+    formData.append("authorId", reduxAuthors[0].id);
+    formData.append("page", params.page === undefined ? 1 : params.page);
+    if( params.search !== undefined ){
+      // params.append("search", params.search);
+    }
     // params.append("typeId", "");
     // params.append("categoryId", "");
     // params.append("seriesId", "");
@@ -90,7 +101,7 @@ export default function DashboardPostList(props) {
     // params.append("order", "");
     // params.append("limit", "");
 
-    const { status, data: result } = await getPostListFromServer(params);
+    const { status, data: result } = await getPostListFromServer(formData);
 
     if (status === 200) {
       setStateData(result);
@@ -100,6 +111,9 @@ export default function DashboardPostList(props) {
     }
   };
 
+  //==============================================================================
+  // event
+  //==============================================================================
   const handleClickPost = (event) => {
     if (reduxAuthors === undefined || reduxAuthors.length === 0) {
       showOneButtonPopup(dispatch, "クリエイターとして登録してください。");
@@ -114,10 +128,15 @@ export default function DashboardPostList(props) {
     }
   };
 
-  const handleItemClickSearch = (event) => {
-    console.log("Search", event);
+  const handleItemClickSearch = (item) => {
+    console.log("Search", item);
+    setStateSeletectItem(item);
+    navigate(`/dashboard/post/1&${item.id}`);
   };
 
+  //==============================================================================
+  // hook & render
+  //==============================================================================
   const renderPostListElements = () => {
     if (stateData?.posts.length === 0) {
       return <EmptyTr text={TEXT.empty_message} />;
@@ -163,9 +182,9 @@ export default function DashboardPostList(props) {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if( reduxAuthors !== undefined ){
-      getPostList(params.page === undefined ? 1 : params.page);
+      getPostList();
     }
     return () => {
       setStateData(undefined);
@@ -189,18 +208,12 @@ export default function DashboardPostList(props) {
           </div>
         </div>
         <div className="hd_titbox2">
-          <Select
+          <Dropdown
             name={"typeId"}
-            className={"select1 wid1"}
-            dataList={searchList}
-            handleItemClick={handleItemClickSearch}
-          />
-          {/* <Dropdown
-            name={"typeId"}
-            className={'select1 wid1'}
+            className={''}
             dataList={searchList} 
-            selected={'all'} 
-            handleItemClick={handleItemClickSearch}/> */}
+            selected={params.search} 
+            handleItemClick={handleItemClickSearch}/>
         </div>
 
         <div className="tbl_basic mtbl_ty1">
@@ -235,7 +248,7 @@ export default function DashboardPostList(props) {
         <Pagination
           className={""}
           meta={stateData?.meta}
-          callback={(page) => navigate(`/dashboard/post/${page}`)}
+          callback={(page) => navigate(`/dashboard/post/${page}${params.search === undefined ? '' : '&'+params.search}`)}
         />
       </div>
     </div>

@@ -31,6 +31,7 @@ import { getAuthorMineAction, initSeriesAction, setSeriesAction } from "@/module
 
 import DraftEditor from "@/components/post/DraftEditor";
 import Textarea from "@/components/dashboard/Textarea";
+import Dropdown from "@/components/dashboard/Dropdown";
 
 const text = {
   upload_post: "投稿する",
@@ -468,12 +469,11 @@ export default function UploadPost(props) {
 
             <div className="col">
               <h3 className="tit1">{text.support_user}</h3>
-              <Select
+              <Dropdown
                 name={"subscribeTierId"}
-                className={"select1 wid1"}
+                className={"fw400"}
                 dataList={stateSupportorList}
-                handleItemClick={handleClickItemSubscribeTier}
-              />
+                handleItemClick={handleClickItemSubscribeTier}/>
             </div>
 
             <div className="col">

@@ -110,7 +110,7 @@ export default function DashboardMain() {
   const getPostList = async () => {
     const params = new FormData();
     params.append('authorId', reduxAuthors[0].id);
-    params.append('limit', 5);
+    params.append('limit', 4);
     const {status, data} = await getPostMineFromServer(params);
     
     if( status === 200 ){
@@ -317,7 +317,7 @@ export default function DashboardMain() {
       getPostList();
       getReactionList();
     }
-  }, []);
+  }, [reduxAuthors]);
 
   return (
     <div className="contents">

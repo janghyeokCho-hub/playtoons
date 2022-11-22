@@ -11,6 +11,7 @@ import {
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
+  showOneButtonPopup,
 } from "@/common/common";
 import Tag from "@/components/dashboard/Tag";
 import Type from "@/components/dashboard/Type";
@@ -48,6 +49,7 @@ const text = {
   please_input_title: "タイトルを入力してください。",
   please_input_description: "説明を入力してください。",
   error_title: "お知らせ",
+  done_upload: 'シリーズ登録しました。',
 };
 
 export default function DashboardUploadSeries(props) {
@@ -64,6 +66,9 @@ export default function DashboardUploadSeries(props) {
   const refTags = useRef();
   const refRegister = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -84,10 +89,12 @@ export default function DashboardUploadSeries(props) {
     handleContainer();
   }, []);
 
+  //==============================================================================
+  // function
+  //==============================================================================
+
   /**
-  *
      cover, timeline 이미지 업로드 완료 후 series 작성
-  *
   * @version 1.0.0
   * @author 2hyunkook
   * @param {*} props
@@ -183,17 +190,7 @@ export default function DashboardUploadSeries(props) {
     } else {
       //error 처리
       initButtonInStatus(refRegister);
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={getErrorMessageFromResultCode(resultData)}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, resultData );
     }
   };
 
@@ -203,33 +200,10 @@ export default function DashboardUploadSeries(props) {
     );
 
     if (status === 201) {
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={"シリーズ登録しました。"}
-              buttonTitle={"確認"}
-            />
-          ),
-          callback: () => {
-            navigate("/dashboard/series");
-          },
-        })
-      );
+      showOneButtonPopup(dispatch, text.done_upload, () => navigate("/dashboard/series"));
     } else {
       //error 처리
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={getErrorMessageFromResultCode(result)}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, result );
     }
 
     initButtonInStatus(refRegister);
@@ -286,7 +260,7 @@ export default function DashboardUploadSeries(props) {
                 />
               </div>
 
-              <div className="col">
+              <div className="col type">
                 <h3 className="tit1">{text.type}</h3>
                 <Type
                   name={"typeId"}

@@ -8,6 +8,7 @@ import { deleteSeriesToServer, getSeriesStoryList } from "@/services/dashboardSe
 import { getAuthorMineFromServer } from "@/services/postService";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLayoutEffect } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -198,7 +199,7 @@ export default function DashboardSeries() {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     getSeriesListFromServer(param?.page === undefined ? 1 : param?.page);
     return () => {
       setStateData(undefined);

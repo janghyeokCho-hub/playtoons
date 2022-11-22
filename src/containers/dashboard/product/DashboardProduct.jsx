@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
@@ -43,7 +43,7 @@ export default function DashboardProduct() {
   //==============================================================================
   // hook & render
   //==============================================================================
-  useEffect(() => {
+  useLayoutEffect(() => {
     handleContainer();
   }, []);
 

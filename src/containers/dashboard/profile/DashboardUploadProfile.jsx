@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
-import { getFromDataJson, getRatingToChecked } from "@/common/common";
+import { getFromDataJson, getRatingToChecked, showOneButtonPopup } from "@/common/common";
 import {
   setAuthorIdToServer,
   setFileToServer,
@@ -14,6 +14,7 @@ import Textarea from "@/components/dashboard/Textarea";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { useNavigate } from "react-router-dom";
 
 const text = {
   profile_management: "プロフィル管理",
@@ -30,12 +31,15 @@ const text = {
   register: "登録する",
   drag_n_drop: "ドラッグ＆ドロップ",
   r_19: "R-19",
+  not_creator: 'クリエーターじゃないんです。',
+  done_modify: 'プロフィルを変更しました。',
 };
 
 export default function DashboardUploadProfile(props) {
   const reduxAuthor = useSelector(({ dashboard }) => dashboard.author);
   const reduxAuthors = useSelector(({ post }) => post.authorMine.authors);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const refNickname = useRef();
   const refName = useRef();
   const refDescription = useRef();
@@ -45,6 +49,9 @@ export default function DashboardUploadProfile(props) {
   const refForm = useRef();
   const refR19 = useRef();
 
+  //==============================================================================
+  // haeader
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -139,27 +146,10 @@ export default function DashboardUploadProfile(props) {
 
     if (status === 200) {
       getAuthor();
-      dispatch(
-        showModal({
-          title: "お知らせ",
-          contents: (
-            <ErrorPopup
-              message={"profile 変更しました。"}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, text.done_modify);
     } else {
       //error
-      dispatch(
-        showModal({
-          title: "お知らせ",
-          contents: (
-            <ErrorPopup message={String(status + data)} buttonTitle={"確認"} />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, status + data);
     }
   };
 
@@ -214,17 +204,7 @@ export default function DashboardUploadProfile(props) {
       reduxAuthors === null ||
       reduxAuthors.length === 0
     ) {
-      dispatch(
-        showModal({
-          title: "お知らせ",
-          contents: (
-            <ErrorPopup
-              message={"クリエーターじゃないんです。"}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
     } else {
       //get accounts info
       getAuthor();
