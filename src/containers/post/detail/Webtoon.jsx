@@ -61,7 +61,7 @@ const Webtoon = () => {
     async (type) => {
       if (currentPost?.author?.id) {
         const response = await setAuthorFollow(type, currentPost.author.id);
-        console.log(response);
+
         if (type === "post") {
           if (response?.status === 201) {
             alert("SUCCESS");
