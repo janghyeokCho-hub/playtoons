@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+} from "react";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,33 +13,29 @@ import {
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import BestWebtoon from "./BestWebtoon";
+import { getCurationList as getCurationListAPI } from "@/services/curationService";
 
-const BestWebtoonItems = () => {
+const BestWebtoonItems = ({ curationNum }) => {
   SwiperCore.use([Navigation]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
 
+  const getCurationList = async (curationNum) => {
+    const response = await getCurationListAPI(curationNum);
+    if (response.status === 200) {
+      setItems(response.data.posts);
+    }
+  };
+
+  useEffect(() => {
+    if (!items?.length) {
+      getCurationList(curationNum);
+    }
+  }, [items, curationNum]);
+
   const renderItems = useMemo(() => {
-    const tempItems = [
-      {
-        thumbnailImage: "tmp_landing_log1_1.png",
-        backgroundColor: "#F8E323",
-      },
-      {
-        thumbnailImage: "tmp_landing_log1_2.png",
-        backgroundColor: "#38AADE",
-      },
-      {
-        thumbnailImage: "tmp_landing_log1_3.png",
-        backgroundColor: "#7CDB62",
-      },
-      {
-        thumbnailImage: "tmp_landing_log1_3.png",
-        backgroundColor: "#7CDB62",
-      },
-    ];
-    return tempItems.map((item, index) => {
+    return items.map((item, index) => {
       return (
         <SwiperSlide key={index} className="cx swiper-slide">
           <BestWebtoon item={item} />
