@@ -99,13 +99,13 @@ const Webtoon = () => {
       alert("댓글 내용 없음");
       return;
     }
-
+    const authorId = currentPost?.myAuthor?.id;
     const params = {
       content: replyInput,
       iconImage: selectEmoticon,
       type: "reply",
       postId: id,
-      authorId: currentPost.author.id,
+      authorId: authorId,
     };
     const response = await insertReaction(params);
     if (response?.status === 201) {

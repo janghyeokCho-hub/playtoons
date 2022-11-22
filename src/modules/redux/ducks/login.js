@@ -52,7 +52,7 @@ const login = handleActions(
         draft.errMessage = null;
         draft.errStatus = null;
         draft.isLogined = true;
-        draft.loginSuccessTime = moment();    //1일 지나면 login token expired 되므로 확인을 위해서 저장
+        draft.loginSuccessTime = moment(); //1일 지나면 login token expired 되므로 확인을 위해서 저장
       });
     },
     [LOGIN_REQUEST_FAILURE]: (state, action) => {

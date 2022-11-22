@@ -131,9 +131,10 @@ function createCurrentPostRequestSaga(type) {
       );
 
       if (response?.status === 200) {
+        const currentPost = response.data;
         const subscribeTierResponse = yield call(
           postApi.getSubscribeTierCheck,
-          response.data?.post?.authorId
+          currentPost?.post?.authorId
         );
 
         let payload;
@@ -144,7 +145,7 @@ function createCurrentPostRequestSaga(type) {
           payload.isLock = true;
         } else {
           /** 게시글 조회 수 증가 */
-          payload = response.data?.post;
+          payload = currentPost?.post;
           yield call(postApi.setPostView, payload.id);
 
           /** 게시글의 content 조회 */
@@ -159,6 +160,17 @@ function createCurrentPostRequestSaga(type) {
           } else {
             payload.content = null;
             payload.isLock = true;
+          }
+
+          const myAuthorsResp = yield call(postApi.getAuthorMineFromServer);
+          if (myAuthorsResp?.status === 200) {
+            if (myAuthorsResp.data?.authors?.length) {
+              const authors = myAuthorsResp.data?.authors;
+              const myAuthor = authors.find(
+                (author) => author.id === currentPost?.post?.authorId
+              );
+              payload.myAuthor = myAuthor;
+            }
           }
         }
         /** 게시글의 댓글 목록 조회 (최초 3개만) */
