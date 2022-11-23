@@ -6,8 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-//temp data
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from "@/common/common";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
@@ -116,9 +115,7 @@ export default function DashboardPostList(props) {
   };
 
   const handleItemClickSearch = (item) => {
-    console.log("Search", item);
-    
-    navigate(`/dashboard/post/1&${item.id}`);
+    navigate(`/dashboard/post/1${item.id === undefined ? '' : '&'+item.id}`);
   };
 
   //==============================================================================
@@ -142,7 +139,7 @@ export default function DashboardPostList(props) {
           <td className="td_number1">
             <FontAwesomeIcon icon={faEye} className="view-m" />
             {item.viewCount}
-            <em className="hide-m">{TEXT.count}</em>
+            <em className="hide-m"> {TEXT.count}</em>
           </td>
           <td className="td_number2">
             <FontAwesomeIcon icon={faHeart} className="view-m" />
@@ -154,7 +151,7 @@ export default function DashboardPostList(props) {
           </td>
           <td className="td_txt">
             <span className="view-m">{TEXT.status}</span>
-            {item.status}
+            {getStatusText(item.status)}
           </td>
           <td className="td_btns">
             <Link
@@ -210,7 +207,6 @@ export default function DashboardPostList(props) {
           <Dropdown
             name={"typeId"}
             className={''}
-            // dataList={searchList} 
             dataList={stateTypes} 
             selected={params.search} 
             handleItemClick={handleItemClickSearch}/>
@@ -222,12 +218,12 @@ export default function DashboardPostList(props) {
             <colgroup>
               <col className="num" />
               <col className="imgs" />
-              <col className="wid1" />
+              <col className="wid3" />
               <col className="wid2" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
             </colgroup>
             <thead>
               <tr>

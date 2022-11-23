@@ -200,14 +200,49 @@ export const getDateYYYYMMDD = (date, separator) => {
 };
 
 /**
-*
   input에 숫자만
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
 export const setInputValueToNumber = (ref, value) => {
   ref.current.value = value.replace(/[^0-9]/g, "");
+};
+
+/**
+  status 
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getStatusText = (status, text) => {
+  switch(status){
+    default:
+      return '連載中';
+      // return text.enabled;
+    case 'disabled':
+      return text.disabled;
+  }
+};
+
+/**
+  reaction date 
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getReactionDate = (date, formatDay, formatMonth, formatYear) => {
+  const now = moment();
+  const createdAt = moment(date);
+  const year = moment.duration(now.diff(createdAt)).asYears();
+  const month = moment.duration(now.diff(createdAt)).asMonths();
+  const day = moment.duration(now.diff(createdAt)).asDays();
+
+  if( year > 1 ){
+    return parseInt(year) + formatYear;
+  }
+  if( month > 1 ){
+    return parseInt(month) + formatMonth;
+  }
+
+  return parseInt(day) + formatDay;
 };
 
 /**

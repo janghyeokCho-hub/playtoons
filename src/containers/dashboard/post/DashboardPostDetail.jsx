@@ -1,7 +1,9 @@
 import {
   checkLoginExpired,
   getDateYYYYMMDD,
+  getReactionDate,
   getShowEditor,
+  getStatusText,
   showOneButtonPopup,
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
@@ -22,6 +24,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
+import moment from "moment";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -59,6 +62,9 @@ const text = {
   cancel: "キャンセル",
   see_more_coment: "コメントをもっと見る",
   login_expired: '自動ログイン時間が過ぎました。',
+  before_day: '日前',
+  before_month: '月前',
+  before_year: '年前',
 };
 
 export default function DashboardPostDetail() {
@@ -108,6 +114,8 @@ export default function DashboardPostDetail() {
     getReactions(1);
   };
 
+  
+
   //==============================================================================
   // api
   //==============================================================================
@@ -117,7 +125,7 @@ export default function DashboardPostDetail() {
     if (status === 200) {
       setStateData(data?.post);
     } else {
-      showOneButtonPopup(dispatch, status + data);
+      showOneButtonPopup(dispatch, data);
     }
   };
 
@@ -142,7 +150,7 @@ export default function DashboardPostDetail() {
         setStateReactions(data);
       }
     } else {
-      showOneButtonPopup(dispatch, status + data);
+      showOneButtonPopup(dispatch, data);
     }
   };
 
@@ -156,7 +164,7 @@ export default function DashboardPostDetail() {
     if (status === 200) {
       setStatePinnedReactions(data);
     } else {
-      showOneButtonPopup(dispatch, status + data);
+      showOneButtonPopup(dispatch, data);
     }
   };
 
@@ -164,7 +172,7 @@ export default function DashboardPostDetail() {
   // event
   //==============================================================================
 
-  const handleClickComentRegister = (event) => {
+  const handleComentRegister = (event) => {
     getReactionAllList();
   };
 
@@ -179,15 +187,14 @@ export default function DashboardPostDetail() {
           <div className="imgs">
             <ProfileSpan hash={item?.author?.profileImage} />
           </div>{" "}
-          {/* item.profileImage 데이터 없음*/}
           <div className="conts">
             <p className="h1">{item?.author?.nickname}</p>{" "}
-            {/* item.account.name 데이터 없음*/}
             <p className="d1">
-              <span>{item.date || "1日前"}</span>
+              {/* date 항목 없음 */}
+              <span>{getReactionDate(item.createdAt, text.before_day, text.before_month, text.before_year)}</span>
+              {/* comment 항목 없음 */}
               <span>コメント</span>
             </p>{" "}
-            {/* date 항목 없음 */}
             <p className="t1">{item.content}</p>
             {item.iconImage !== "" && (
               <p className="icon_image">
@@ -252,7 +259,7 @@ export default function DashboardPostDetail() {
               </li>
               <li>
                 <span>{text.status} </span>
-                <span>{stateData?.status}</span>
+                <span>{getStatusText(stateData?.status)}</span>
               </li>
             </ul>
             <div className="icon">
@@ -314,7 +321,7 @@ export default function DashboardPostDetail() {
             <IconWithText
               postInfo={stateData}
               text={text}
-              callback={handleClickComentRegister}
+              callback={handleComentRegister}
             />
           </div>
 

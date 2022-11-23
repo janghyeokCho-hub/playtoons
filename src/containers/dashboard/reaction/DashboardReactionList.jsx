@@ -5,6 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 
 import {
   checkLoginExpired,
+  getDateYYYYMMDD,
   showOneButtonPopup
 } from "@/common/common";
 import Dropdown from "@/components/dashboard/Dropdown";
@@ -178,7 +179,7 @@ export default function DashboardReactionList() {
           </td>
           <td className="td_txt2 mb">
             <span className="view-m">{text.date}：</span>
-            {item.date}
+            {getDateYYYYMMDD(item.createdAt, '/')}
           </td>
           <td className="td_txt">
             <span className="view-m">{text.money}</span>
@@ -208,7 +209,7 @@ export default function DashboardReactionList() {
           </td>
           <td className="td_txt2 mb">
             <span className="view-m">{text.date}：</span>
-            {item.date}
+            {getDateYYYYMMDD(item.createdAt, '/')}
           </td>
           <td className="td_txt">
             <span className="view-m">{text.money}</span>
