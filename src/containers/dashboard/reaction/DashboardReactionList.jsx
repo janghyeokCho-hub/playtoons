@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import Select from "@/components/dashboard/Select";
 import {
-  getReactionMineAuthorIdFromServer as getReactionMineFromServer,
-} from "@/services/dashboardService";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  showOneButtonPopup,
+  checkLoginExpired,
+  showOneButtonPopup
 } from "@/common/common";
+import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import Pagination from "@/components/dashboard/MyPagination";
+import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import { setContainer } from "@/modules/redux/ducks/container";
+import {
+  getReactionMineAuthorIdFromServer as getReactionMineFromServer
+} from "@/services/dashboardService";
 import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const text = {
   page_title: "リアクションリスト",
@@ -47,25 +48,27 @@ const text = {
 
 const searchList = [
   {
-    code: "all",
+    id: "all",
     name: "シリーズすべて",
   },
   {
-    code: "all1",
-    name: "シリーズすべて1",
+    id: "pinned",
+    name: "固定",
   },
   {
-    code: "all2",
-    name: "シリーズすべて2",
+    id: "normal",
+    name: "一般",
   },
 ];
 
-export default function DashboardReactionList(props) {
+export default function DashboardReactionList() {
   const reduxAuthors = useSelector(({ post }) => post.authorMine.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const [statePinnedData, setStatePinnedData] = useState(undefined);
   const [stateData, setStateData] = useState(undefined);
   const dispatch = useDispatch();
-  const params = useParams("");
+  const navigate = useNavigate();
+  const params = useParams();
   
   //==============================================================================
   // header
@@ -92,12 +95,21 @@ export default function DashboardReactionList(props) {
   //==============================================================================
   // function
   //==============================================================================
-  const getList = () => {
-    getPinnedReactionList();
-    getReactionList(params.page === undefined ? 1 : params.page);
+  const getList = (flag) => {
+    switch(flag){
+      default: 
+        getPinnedReactionList();
+        getReactionList(params.page === undefined ? 1 : params.page);
+        return;
+      case 'pinned':
+        getPinnedReactionList();
+        return;
+      case 'normal':
+        getReactionList(params.page === undefined ? 1 : params.page);
+        return;  
+    }//switch
   };
-
-  //==============================================================================
+  //============================================================================== 
   // api
   //==============================================================================
 
@@ -138,14 +150,16 @@ export default function DashboardReactionList(props) {
   //==============================================================================
   // event
   //==============================================================================
-  const handleClickSearch = (event) => {
-    console.log("Search", event);
+  const handleClickSearch = (item) => {
+    setStatePinnedData(undefined);
+    setStateData(undefined);
+    getList(item?.id);
   };
   //==============================================================================
   // hook & render
   //==============================================================================
 
-  const getReactionListElements = () => {
+  const renderReactionListElements = () => {
     if (
       stateData?.reactions?.length === 0 &&
       statePinnedData?.reactions?.length === 0
@@ -182,7 +196,7 @@ export default function DashboardReactionList(props) {
     });
   };
 
-  const getPinnedReactionListElements = () => {
+  const renderPinnedReactionListElements = () => {
     return statePinnedData?.reactions?.map((item, index) => {
       return (
         <tr key={index} id={item.id}>
@@ -213,8 +227,9 @@ export default function DashboardReactionList(props) {
   };
 
   useLayoutEffect(() => {
-    //리스트 불러오기
-    getList();
+    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
+      getList();
+    }
   }, [params]);
 
   return (
@@ -233,7 +248,7 @@ export default function DashboardReactionList(props) {
           </div>
         </div>
         <div className="hd_titbox2">
-          <Select
+          <Dropdown
             name={"typeId"}
             className={"select1"}
             dataList={searchList}
@@ -264,9 +279,9 @@ export default function DashboardReactionList(props) {
             </thead>
             <tbody>
               {/* pinned list */}
-              {getPinnedReactionListElements()}
+              {renderPinnedReactionListElements()}
               {/* reaction list */}
-              {getReactionListElements()}
+              {renderReactionListElements()}
             </tbody>
           </table>
         </div>
