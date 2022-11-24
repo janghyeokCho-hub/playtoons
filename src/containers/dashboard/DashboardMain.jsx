@@ -258,7 +258,7 @@ export default function DashboardMain() {
       return (
         <li key={item.id}>
           <p className="t1">
-            <Link to={`/dashboard/reaction/detail/${item.id}`}>
+            <Link to={`/dashboard/reaction/detail/${item.postId}/1`}>
               {item.content}
             </Link>
           </p>
@@ -490,7 +490,7 @@ export default function DashboardMain() {
             <div className="item">
               <div className="hd_titbox">
                 <h3 className="h_tit1">{text.recently_reaction}</h3>
-                <Link to="/dashboard/reaction" className="rgh c-blue">
+                <Link to="/dashboard/reaction/1" className="rgh c-blue">
                   <span className="ico_arr_link">
                     {text.see_all}
                     <FontAwesomeIcon icon={faAngleRight} />

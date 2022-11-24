@@ -1,24 +1,21 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleRight,
-  faPlus,
-  faEye,
-  faHeart,
-} from "@fortawesome/pro-solid-svg-icons";
 import { getPostListFromServer } from "@/services/dashboardService";
-import Select from "@/components/dashboard/Select";
-//temp data
+import {
+  faEye,
+  faHeart, faPlus
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from "@/common/common";
+import Dropdown from "@/components/dashboard/Dropdown";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import { useDispatch, useSelector } from "react-redux";
-import EmptyTr from "@/components/dashboard/EmptyTr";
-import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
-import Dropdown from "@/components/dashboard/Dropdown";
+import { getTypeAction } from "@/modules/redux/ducks/dashboard";
 import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const TEXT = {
   post_list: "投稿リスト",
@@ -33,27 +30,16 @@ const TEXT = {
   count: "回",
   empty_message: "投稿がありません。",
   detail: "詳細",
+  register_creator: 'クリエイターとして登録してください。',
+  all: 'シリーズすべて',
 };
 
-const searchList = [
-  {
-    id: "1",
-    name: "シリーズすべて",
-  },
-  {
-    id: "2",
-    name: "シリーズすべて1",
-  },
-  {
-    id: "3",
-    name: "シリーズすべて2",
-  },
-];
 
 export default function DashboardPostList(props) {
   const [stateData, setStateData] = useState(undefined);
-  const [stateSeletectItem, setStateSeletectItem] = useState(undefined);
+  const [stateTypes, setStateTypes] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const reduxTypes = useSelector(({ dashboard }) => dashboard.types);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
@@ -89,7 +75,7 @@ export default function DashboardPostList(props) {
     formData.append("authorId", reduxAuthors[0].id);
     formData.append("page", params.page === undefined ? 1 : params.page);
     if( params.search !== undefined ){
-      // params.append("search", params.search);
+      formData.append("typeId", params.search);
     }
     // params.append("typeId", "");
     // params.append("categoryId", "");
@@ -116,7 +102,7 @@ export default function DashboardPostList(props) {
   //==============================================================================
   const handleClickPost = (event) => {
     if (reduxAuthors === undefined || reduxAuthors.length === 0) {
-      showOneButtonPopup(dispatch, "クリエイターとして登録してください。");
+      showOneButtonPopup(dispatch, TEXT.register_creator);
     } else {
       navigate("/post/upload");
     }
@@ -129,9 +115,7 @@ export default function DashboardPostList(props) {
   };
 
   const handleItemClickSearch = (item) => {
-    console.log("Search", item);
-    setStateSeletectItem(item);
-    navigate(`/dashboard/post/1&${item.id}`);
+    navigate(`/dashboard/post/1${item.id === undefined ? '' : '&'+item.id}`);
   };
 
   //==============================================================================
@@ -155,7 +139,7 @@ export default function DashboardPostList(props) {
           <td className="td_number1">
             <FontAwesomeIcon icon={faEye} className="view-m" />
             {item.viewCount}
-            <em className="hide-m">{TEXT.count}</em>
+            <em className="hide-m"> {TEXT.count}</em>
           </td>
           <td className="td_number2">
             <FontAwesomeIcon icon={faHeart} className="view-m" />
@@ -167,7 +151,7 @@ export default function DashboardPostList(props) {
           </td>
           <td className="td_txt">
             <span className="view-m">{TEXT.status}</span>
-            {item.status}
+            {getStatusText(item.status)}
           </td>
           <td className="td_btns">
             <Link
@@ -183,6 +167,10 @@ export default function DashboardPostList(props) {
   };
 
   useLayoutEffect(() => {
+    if( !reduxTypes ){
+      dispatch( getTypeAction() );
+    }
+
     if( reduxAuthors !== undefined ){
       getPostList();
     }
@@ -190,6 +178,14 @@ export default function DashboardPostList(props) {
       setStateData(undefined);
     };
   }, [params]);
+
+  useLayoutEffect(() => {
+    if( reduxTypes !== null && reduxTypes !== undefined ){
+      const list = Array.from(reduxTypes);
+      list.unshift({id: undefined, name: TEXT.all, code: undefined, iconImage: undefined});
+      setStateTypes(list);
+    }
+  }, [reduxTypes]);
 
   //header back callback 현재 로케이션 보내느걸로
   return (
@@ -211,7 +207,7 @@ export default function DashboardPostList(props) {
           <Dropdown
             name={"typeId"}
             className={''}
-            dataList={searchList} 
+            dataList={stateTypes} 
             selected={params.search} 
             handleItemClick={handleItemClickSearch}/>
         </div>
@@ -222,12 +218,12 @@ export default function DashboardPostList(props) {
             <colgroup>
               <col className="num" />
               <col className="imgs" />
-              <col className="wid1" />
+              <col className="wid3" />
               <col className="wid2" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
             </colgroup>
             <thead>
               <tr>
