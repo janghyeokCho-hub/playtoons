@@ -4,27 +4,24 @@ import {
   getReactionDate,
   getShowEditor,
   getStatusText,
-  showOneButtonPopup,
+  showOneButtonPopup
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
-import Pagination from "@/components/dashboard/MyPagination";
 import ProfileSpan from "@/components/dashboard/ProfileSpan";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getReactionFromServer } from "@/services/dashboardService";
 import { getPostIdMineFromServer } from "@/services/postService";
-import { clearUserData } from "@/utils/localStorageUtil";
 import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import {
   faCommentQuote,
   faEye,
-  faHeart,
+  faHeart
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
-import moment from "moment";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -62,9 +59,12 @@ const text = {
   cancel: "キャンセル",
   see_more_coment: "コメントをもっと見る",
   login_expired: '自動ログイン時間が過ぎました。',
-  before_day: '日前',
-  before_month: '月前',
   before_year: '年前',
+  before_month: '月前',
+  before_day: '日前',
+  before_hour: '時前',
+  before_minute: '分前',
+  before_second: '秒前',
 };
 
 export default function DashboardPostDetail() {
@@ -191,7 +191,7 @@ export default function DashboardPostDetail() {
             <p className="h1">{item?.author?.nickname}</p>{" "}
             <p className="d1">
               {/* date 항목 없음 */}
-              <span>{getReactionDate(item.createdAt, text.before_day, text.before_month, text.before_year)}</span>
+              <span>{getReactionDate(item.createdAt, text)}</span>
               {/* comment 항목 없음 */}
               <span>コメント</span>
             </p>{" "}

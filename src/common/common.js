@@ -228,21 +228,35 @@ export const getStatusText = (status, text) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getReactionDate = (date, formatDay, formatMonth, formatYear) => {
+export const getReactionDate = (date, text) => {
   const now = moment();
   const createdAt = moment(date);
   const year = moment.duration(now.diff(createdAt)).asYears();
   const month = moment.duration(now.diff(createdAt)).asMonths();
   const day = moment.duration(now.diff(createdAt)).asDays();
+  const hour = moment.duration(now.diff(createdAt)).asHours();
+  const minute = moment.duration(now.diff(createdAt)).asMinutes();
+  const second = moment.duration(now.diff(createdAt)).asSeconds();
 
   if( year > 1 ){
-    return parseInt(year) + formatYear;
+    return parseInt(year) + text.before_year;
   }
-  if( month > 1 ){
-    return parseInt(month) + formatMonth;
+  else if( month > 1 ){
+    return parseInt(month) + text.before_month;
+  }
+  else if( day > 1 ){
+    return parseInt(day) + text.before_day;
+  }
+  else if( hour > 1 ){
+    return parseInt(hour) + text.before_hour;
+  }
+  else if( minute > 1 ){
+    return parseInt(minute) + text.before_minute;
+  }
+  else if( second > 1 ){
+    return parseInt(second) + text.before_second;
   }
 
-  return parseInt(day) + formatDay;
 };
 
 /**
