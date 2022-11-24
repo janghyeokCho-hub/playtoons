@@ -131,7 +131,7 @@ export default function DashboardPostList(props) {
         <tr key={index} onClick={() => handleMoveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb">
+            <div className="cx_thumb post">
               <Image hash={item.thumbnailImage} alt="" />
             </div>
           </td>

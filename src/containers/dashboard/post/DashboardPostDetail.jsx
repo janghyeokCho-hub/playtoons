@@ -47,6 +47,7 @@ const text = {
   modal_title: "お知らせ",
   register_coment: "コメントを登録しました。",
   please_input_coment: "コメントを入力してください。",
+  do_u_report: "通報しますか？",
   do_pinned: "固定しました。",
   do_off_pinned: "固定解除しました。",
   do_good: "いいねしました。",
@@ -62,7 +63,7 @@ const text = {
   before_year: '年前',
   before_month: '月前',
   before_day: '日前',
-  before_hour: '時前',
+  before_hour: '時間前',
   before_minute: '分前',
   before_second: '秒前',
 };
@@ -210,11 +211,8 @@ export default function DashboardPostDetail() {
               />
             </div>
             <div className="rgh">
-              <button type="button" className="btn01">
+              <button type="button" className="btn01 c_default">
                 <FontAwesomeIcon icon={faHeart} /> {item.likeCount}
-              </button>
-              <button type="button" className="btn02">
-                <FontAwesomeIcon icon={faEllipsisVertical} />
               </button>
             </div>
           </div>

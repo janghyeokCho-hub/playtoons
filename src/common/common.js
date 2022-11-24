@@ -253,10 +253,8 @@ export const getReactionDate = (date, text) => {
   else if( minute > 1 ){
     return parseInt(minute) + text.before_minute;
   }
-  else if( second > 1 ){
-    return parseInt(second) + text.before_second;
-  }
 
+  return parseInt(second) + text.before_second;
 };
 
 /**

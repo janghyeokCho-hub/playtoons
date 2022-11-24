@@ -35,6 +35,7 @@ const text = {
   delete: "削除",
   empty_message: "リアクションがありません。",
   modal_title: "お知らせ",
+  do_u_report: "通報しますか？",
   do_pinned: "固定しました。",
   do_off_pinned: "固定解除しました。",
   do_good: "いいねしました。",

@@ -147,7 +147,7 @@ export default function DashboardSeries() {
         <tr key={index} onClick={(e) => handleMoveDetailPage(e, item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb">
+            <div className="cx_thumb series">
               <span>
                 <Image hash={item.coverImage} alt={""} />
               </span>
