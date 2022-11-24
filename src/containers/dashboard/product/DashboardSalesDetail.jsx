@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useLayoutEffect } from "react";
 
 import Calendar from "@/components/dashboard/Calendar";
 import Select from "@/components/dashboard/Select";
@@ -8,6 +8,8 @@ import { showModal } from "@/modules/redux/ducks/modal";
 import { useDispatch } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { showOneButtonPopup } from "@/common/common";
+import Dropdown from "@/components/dashboard/Dropdown";
+import { getAuthorIdFromServer } from "@/services/dashboardService";
 
 const text = {
   search_period: "検索期限",
@@ -106,19 +108,23 @@ export default function DashboardSalesDetail() {
   //==============================================================================
   // api
   //==============================================================================
-  const getProductList = async () => {
-    // 시리즈 스토리 리스트
-    const params = {
-      email: "",
-    };
-
-    // const { status, data } = await getProductListFromServer(params);
-    //
-    // if( status === 200 ){
-    //   setList(handleGetSeriesStoryList(data));
-    // }
-    //
-    // setData(getProductListFromResultData(data));
+  const getSalesList = async (page) => {
+    const formData = new FormData();//get url 
+    formData.append('startAt', stateStartDate);
+    if( page !== undefined ){
+      formData.append('page', page);
+    }
+    
+    const {status, data} = await getAuthorIdFromServer(formData);
+    console.log('getSalesList', status, data);
+    
+    if( status === 200 ){
+      setStateData(tempData);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
   };
   //==============================================================================
   // event
@@ -129,6 +135,7 @@ export default function DashboardSalesDetail() {
     const endDate = name === "end" ? date : refCalendarEnd.current.getDate();
 
     if (endDate === undefined) {
+      getSalesList();
       return true;
     }
 
@@ -137,19 +144,20 @@ export default function DashboardSalesDetail() {
       return false;
     }
 
+    getSalesList();
     return true;
   };
 
 
   const handleItemSearch = (value) => {
-    console.log("ItemSearch", value.getAttribute("value"));
+    console.log("ItemSearch", value);
 
-    setStateStartDate(value.getAttribute("value"));
+    setStateStartDate(value.id);
     setStateEndDate("none");
   };
 
-  const handleItemClick = (event) => {
-    console.log("handleItemClick", event);
+  const handleItemClick = (item) => {
+    console.log("handleItemClick", item);
   };
   //==============================================================================
   // hook & render
@@ -165,8 +173,7 @@ export default function DashboardSalesDetail() {
           <td className="td_btns3">
             <div
               className="btn-pk s blue2 w124"
-              data-id={item.number}
-              onClick={handleItemClick}
+              onClick={() => handleItemClick(item)}
             >
               <span>{text.refund}</span>
             </div>
@@ -176,13 +183,18 @@ export default function DashboardSalesDetail() {
     });
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     //리스트 불러오기
-    // getProductList();
-    setStateData(tempData);
     setStateStartDate("1month");
     setStateEndDate("none");
   }, []);
+
+  useLayoutEffect(() => {
+    //리스트 불러오기
+    if( stateStartDate !== undefined && stateEndDate !== undefined ){
+      getSalesList();
+    }
+  }, [stateStartDate, stateEndDate]);
 
   return (
     <div className="contents">
@@ -193,11 +205,11 @@ export default function DashboardSalesDetail() {
         </div>
 
         <div className="hd_titbox4 pdty1">
-          <div className="mb">
+          <div className="mb sd">
             <p className="h_tit3 d-ib c-black">{text.search_period}</p>
-            <Select
+            <Dropdown
               name={"typeId"}
-              className={"select1 dsd_search_select"}
+              className={"select1 dsd_search_select fw400"}
               dataList={SEARCH_LIST}
               handleItemClick={handleItemSearch}
             />
@@ -259,7 +271,7 @@ export default function DashboardSalesDetail() {
         <Pagination
           className={""}
           meta={stateData?.meta}
-          callback={() => {  }}
+          callback={(page) => { getSalesList(page) }}
         />
       </div>
     </div>

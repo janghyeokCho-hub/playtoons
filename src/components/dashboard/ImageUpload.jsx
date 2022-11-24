@@ -51,7 +51,7 @@ export default forwardRef(function ImageUpload(props, ref) {
     return Array.isArray(stateImage?.preview);
   };
 
-  const handleFileChosen = async (file) => {
+  const getFileDataUrl = async (file) => {
     return new Promise((resolve, reject) => {
       let fileReader = new FileReader();
       fileReader.onload = () => {
@@ -72,7 +72,7 @@ export default forwardRef(function ImageUpload(props, ref) {
     if( multiple ){
 
       const results = await Promise.all(files.map(async (file) => {
-        return await handleFileChosen(file);
+        return await getFileDataUrl(file);
       }));
 
       setStateImage({

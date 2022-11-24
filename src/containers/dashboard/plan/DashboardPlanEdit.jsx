@@ -1,25 +1,22 @@
-import React, { useEffect, useState, useCallback } from "react";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { useRef } from "react";
 import {
-  editSubscribeTierToServer,
-  setFileToServer,
-} from "@/services/dashboardService";
-import {
-  getErrorMessageFromResultCode,
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
+  showOneButtonPopup
 } from "@/common/common";
-import Input from "@/components/dashboard/Input";
-import Textarea from "@/components/dashboard/Textarea";
-import Price from "@/components/dashboard/Price";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import Button from "@/components/dashboard/Button";
+import ImageUpload from "@/components/dashboard/ImageUpload";
+import Input from "@/components/dashboard/Input";
+import Price from "@/components/dashboard/Price";
+import Textarea from "@/components/dashboard/Textarea";
 import { setContainer } from "@/modules/redux/ducks/container";
+import {
+  editSubscribeTierToServer,
+  setFileToServer
+} from "@/services/dashboardService";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
 const text = {
   edit_plan: "支援を編集する",
@@ -37,6 +34,7 @@ const text = {
   please_input_description: "説明を入力してください。",
   please_input_price: "価格を入力してください。",
   error_title: "お知らせ",
+  done_edit_plan: '支援を編集しました。',
 };
 
 export default function DashboardPlanEdit(props) {
@@ -171,30 +169,10 @@ export default function DashboardPlanEdit(props) {
     const { status, data } = await editSubscribeTierToServer(json);
 
     if (status === 200) {
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup message={"支援を編集しました。"} buttonTitle={"確認"} />
-          ),
-          callback: () => {
-            navigate(`/dashboard/plan`);
-          },
-        })
-      );
+      showOneButtonPopup(dispatch, text.done_edit_plan, () => navigate(`/dashboard/plan`));
     } else {
       //error 처리
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={getErrorMessageFromResultCode(data)}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
+      showOneButtonPopup(dispatch, data);
     }
 
     initButtonInStatus(refRegister);
@@ -219,8 +197,13 @@ export default function DashboardPlanEdit(props) {
   // Hook & render
   //==============================================================================
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     findPlan();
+  }, []);
+  
+  useMemo(() => {
+    // findPlan();
+
   }, []);
 
   return (

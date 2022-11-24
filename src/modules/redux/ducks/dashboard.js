@@ -8,6 +8,7 @@ export const [GET_DASHBOARD_PLAN, GET_DASHBOARD_PLAN_SUCCESS, GET_DASHBOARD_PLAN
 export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, GET_DASHBOARD_SERIES_DETAIL_FAILURE] = createRequestActionTypes("dashboard/series/detail/GET");
 export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
 export const [GET_DASHBOARD_REACTION, GET_DASHBOARD_REACTION_SUCCESS, GET_DASHBOARD_REACTION_FAILURE] = createRequestActionTypes("dashboard/reaction/GET");
+export const [GET_DASHBOARD_TYPE, GET_DASHBOARD_TYPE_SUCCESS, GET_DASHBOARD_TYPE_FAILURE] = createRequestActionTypes("GET_dashboardType");
 export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
 export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
 
@@ -20,6 +21,7 @@ export const setSalesIdAction = createAction(SET_DASHBOARD_SALES);
 export const initSalesIdAction = createAction(INIT_DASHBOARD_SALES);
 export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
+export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
 
 const initialState = {
   subscribeTiers: null,
@@ -28,6 +30,7 @@ const initialState = {
   author: null,
   reaction: null,
   salesId: null,
+  types: null,
 };
 
 const post = handleActions(
@@ -46,6 +49,11 @@ const post = handleActions(
     [GET_DASHBOARD_AUTHOR_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.author = action.payload.author;
+      });
+    },
+    [GET_DASHBOARD_TYPE_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.types = action.payload.types;
       });
     },
     [SET_DASHBOARD_SALES]: (state, action) => {

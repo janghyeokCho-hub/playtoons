@@ -348,7 +348,17 @@ li.dashboard-gnb.selected{
 
 .page404{
   margin: 0;
+}
+.mpost .page404{
   border-left-width: 0;
+}
+.post .page404{
+  border-left-width: 0;
+}
+
+.page404 .btn-bot{
+  position: relative;
+  z-index: 10;
 }
 
 .zi_b{
@@ -754,10 +764,17 @@ li.dashboard-gnb.selected{
   line-height: 20px;
 }
 
-.dsd_search_select{
-  width: 114px;
-  height: 44px;
+.mb.sd .btn_select1  {
+  display: inline;
+}
+
+.mb.sd .btn_select1 .btn_select_drop{
+  width: 114px ;
+  height: 44px ;
   line-height: 44px;
+}
+.mb.sd .btn_select1 .select_list {
+  min-width: 114px;
 }
 
 .dsd_sales_detail{

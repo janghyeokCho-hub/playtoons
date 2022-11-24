@@ -5,11 +5,9 @@ import Pagination from "@/components/dashboard/MyPagination";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { deleteSeriesToServer, getSeriesStoryList } from "@/services/dashboardService";
-import { getAuthorMineFromServer } from "@/services/postService";
 import { faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useLayoutEffect } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -228,12 +226,12 @@ export default function DashboardSeries() {
             <colgroup>
               <col className="num" />
               <col className="imgs" />
+              <col className="wid3" />
               <col className="wid1" />
               <col className="wid2" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col className="wid3" />
-              <col />
+              <col className="wid1" />
+              <col className="wid1" />
+              <col className="wid1" />
             </colgroup>
             <thead>
               <tr>

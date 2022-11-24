@@ -66,12 +66,12 @@ export default forwardRef(function Dropdown(props, ref) {
     }
   };
 
-  const handleOptionClicked = useCallback((item) => () => {
+  const handleOptionClicked = (item) => () => {
     if( refInput.current.value !== item.id ){
       setSelectedItem(item);
       handleItemClick?.(item);
     }
-  }, []);
+  };
 
   //==============================================================================
   // hook & render

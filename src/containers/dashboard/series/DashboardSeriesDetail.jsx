@@ -4,7 +4,7 @@ import { SwiperSlide } from "swiper/react";
 
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 
-import { checkLoginExpired, getDateYYYYMMDD, handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, getStatusText, handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import MyPagination from "@/components/dashboard/MyPagination";
@@ -244,7 +244,7 @@ export default function DashboardSeriesDetail(props) {
           </td>
           <td className="td_txt">
             <span className="view-m">{text.status}</span>
-            {item.status}
+            {getStatusText(item.status)}
           </td>
           <td className="td_btns2 ty1">
             <Link
