@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 
 const BestWebtoon = ({ item }) => {
-  // const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  const thumbnailImage = useFilePath(item?.thumbnailImage);
   return (
     <Link to="">
       <div
@@ -11,11 +11,11 @@ const BestWebtoon = ({ item }) => {
         style={{ backgroundColor: item?.backgroundColor }}
       >
         <span>
-          <img src={require(`@IMAGES/${item?.thumbnailImage}`)} alt="" />
+          <img src={thumbnailImage} alt="" />
         </span>
       </div>
       <div className="cx_txt">
-        <p className="h1">新人さんは事故処理系</p>
+        <p className="h1">{item?.title}</p>
         <p className="t1">
           『神』と名乗る人が現れ任命されたのは『事故処理係』！？
         </p>

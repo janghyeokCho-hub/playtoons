@@ -22,6 +22,7 @@ function createLoginRequestSaga(loginType, syncType) {
         // 로그인 성공 시 로컬스토리지에 token 값 저장
         if (response?.status === 200) {
           const { accessToken } = response.data;
+
           yield put({
             type: SUCCESS,
             payload: { ...action.payload, accessToken: accessToken },

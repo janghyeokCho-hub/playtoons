@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -11,9 +11,24 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
 import { faPenToSquare, faTrash } from "@fortawesome/pro-light-svg-icons";
+import { getTimeline as getTimelineAPI } from "@API/timelineService";
+import TimelineItems from "@COMPONENTS/timeline/TimelineItems";
 
 const Timeline = () => {
   const [isControlShow, setIsControlShow] = useState(false);
+  const [timelines, setTimelines] = useState([]);
+
+  const getTimeline = useCallback(async () => {
+    const response = await getTimelineAPI();
+    if (response?.status === 200) {
+      setTimelines(response.data?.timeline);
+    }
+  }, []);
+
+  useEffect(() => {
+    getTimeline();
+  }, []);
+
   return (
     <div className="contents">
       <div className="wrap_timeline">
