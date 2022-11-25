@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-import Lottie from 'react-lottie';
 import * as LoadingData from '@/assets/loading.json';
-import { useImperativeHandle, forwardRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import Lottie from 'react-lottie';
 
 /**
 *
@@ -29,7 +27,7 @@ export default forwardRef( function Button(props, ref) {
   const handleClick = (event) => {
     if( stateStatus === undefined ){
       setStateStatus('loading');
-      onClick?.(event);
+      onClick?.(event, setStateStatus);
     }
   };
   

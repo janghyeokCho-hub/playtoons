@@ -457,3 +457,36 @@ export const getSubscribeTierInPlanFromServer = async (authorId, params) => {
   }
 };
 
+/**
+   product list 
+* @version 1.0.0
+* @author 2hyunkook
+* @param {number} authorId
+*/
+export const getProductListFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/shop/product/mine${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+   product list - 상품 수정
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const editShopProductToServer = async (params) => {
+  try {
+    return await apiServer('patch', `/shop/product`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};

@@ -1,15 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-//temp data
 import { showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import ProductTab from "@/components/dashboard/ProductTab";
 import Search from "@/components/dashboard/Search";
-import { setContainer } from "@/modules/redux/ducks/container";
-import { getAuthorMineFromServer } from "@/services/postService";
+import Button from "@/components/dashboard/Button";
+import { getProductListFromServer } from "@/services/postService";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { editShopProductToServer, getAuthorIdFromServer } from "@/services/dashboardService";
+import { cloneDeep } from "lodash";
+import { useCallback } from "react";
 
 const text = {
   see_product: "商品一覧",
@@ -44,7 +45,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "sales",
+        code: "enabled",
         name: "販売中",
       },
     },
@@ -56,7 +57,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "audit",
+        code: "pending",
         name: "審査中",
       },
     },
@@ -68,7 +69,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "not_for_sale",
+        code: "suspended",
         name: "販売不可",
       },
     },
@@ -77,7 +78,9 @@ const tempData = {
 
 
 export default function DashboardProductList(props) {
-  const [stateData, setStateData] = useState();
+  const [stateData, setStateData] = useState(undefined);
+  const [stateKeyword, setStateKeyword] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
 
 
@@ -91,10 +94,10 @@ export default function DashboardProductList(props) {
       default:
         className = "cl-sell";
         break;
-      case "audit":
+      case "pending":
         className = "cl-ing";
         break;
-      case "not_for_sale":
+      case "suspended":
         className = "cl-non";
         break;
     } //switch
@@ -104,13 +107,18 @@ export default function DashboardProductList(props) {
   //==============================================================================
   // api
   //==============================================================================
-  const getProductList = async (keyword) => {
-    const params = new FormData();
+  const getProductList = async (keyword, page) => {
+    const formData = new FormData();
+    formData.append('authorId', reduxAuthors[0].id);
     if( keyword !== undefined ){
-      params.append('keyword', keyword);
+      formData.append('keyword', keyword);
+    }
+    if( page !== undefined ){
+      formData.append('page', page);
     }
     
-    const {status, data} = await getAuthorMineFromServer(params);
+    const {status, data} = await getAuthorIdFromServer(formData);
+    // const {status, data} = await getProductListFromServer(formData);
     console.log('getProductList', status, data);
     
     if( status === 200 ){
@@ -120,6 +128,21 @@ export default function DashboardProductList(props) {
       showOneButtonPopup(dispatch, data);
     }
   };
+
+  const editProductInStatus = async (item, funSetButtonStatus) => {
+    const {status, data} = await editShopProductToServer(item);
+    console.log('editProductInStatus', status, data);
+    
+    if( status === 200 ){
+      
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+    funSetButtonStatus(undefined);
+  };
+
   //==============================================================================
   // event
   //==============================================================================
@@ -129,16 +152,17 @@ export default function DashboardProductList(props) {
   * @author 2hyunkook
   */
   const handleSearch = (keyword) => {
+    setStateKeyword(keyword);
     getProductList(keyword);
   };
-
+  
   /**
-    pagination
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
+   pagination
+   * @version 1.0.0
+   * @author 2hyunkook
+   */
   const handlePagination = (page) => {
-    
+    getProductList(stateKeyword, page);
   };
 
   /**
@@ -146,11 +170,11 @@ export default function DashboardProductList(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const handleItemClick = (e) => {
-    const id = e.target.getAttribute("data-id");
-
-    
-  };
+  const handleItemClick = useCallback((item, funSetButtonStatus) => {
+    let lodashItem = cloneDeep(item);
+    lodashItem.status = 'pending';
+    editProductInStatus(lodashItem, funSetButtonStatus);
+  }, []);
 
   //==============================================================================
   // hook & render
@@ -190,13 +214,13 @@ export default function DashboardProductList(props) {
             >
               {text.modify}
             </Link>
-            <div
+            <Button
               className="btn-pk s blue2"
-              data-id={item.id}
-              onClick={handleItemClick}
+              text={text.dont_see}
+              onClick={(e, funSetButtonStatus) => handleItemClick(item, funSetButtonStatus)}
             >
-              {text.dont_see}
-            </div>
+              {}
+            </Button>
           </td>
         </tr>
       );
