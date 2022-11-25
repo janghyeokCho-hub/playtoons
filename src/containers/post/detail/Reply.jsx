@@ -87,7 +87,7 @@ const Reply = ({ item }) => {
               <span>コメント</span>
             </p>
             {/* 삭제시 className 에 c-gray 추가 */}
-            {item?.status === "disabled" ? (
+            {item?.deleted ? (
               <p className="t1 c-gray">削除されたコメントです。</p>
             ) : (
               <>
