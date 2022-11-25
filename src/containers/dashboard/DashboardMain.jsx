@@ -158,7 +158,7 @@ export default function DashboardMain() {
   //==============================================================================
 
   const renderSalesProductList = () => {
-    if( tempData?.sales_product_list.length === 0 ){
+    if( tempData?.sales_product_list?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -187,7 +187,7 @@ export default function DashboardMain() {
   };
 
   const renderQuestionList = () => {
-    if( tempData?.question_list.length === 0 ){
+    if( tempData?.question_list?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -211,7 +211,7 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
-      if( tempData?.review_list.length === 0 ){
+      if( tempData?.review_list?.length === 0 ){
         return (
           <EmptyDiv
             className={"relative empty"}
@@ -246,7 +246,7 @@ export default function DashboardMain() {
   };
 
   const renderSeriesList = () => {
-    if( stateSeries?.series.length === 0 ){
+    if( stateSeries?.series?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -279,7 +279,7 @@ export default function DashboardMain() {
   };
 
   const renderPostList = () => {
-    if( statePosts?.posts.length === 0 ){
+    if( statePosts?.posts?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -301,7 +301,7 @@ export default function DashboardMain() {
   };
 
   const renderReactionList = () => {
-    if( stateReactions?.reactions.length === 0 ){
+    if( stateReactions?.reactions?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -325,7 +325,7 @@ export default function DashboardMain() {
   };
 
   const renderSalesListInPast = () => {
-    if( tempData?.past_sales_list.length === 0 ){
+    if( tempData?.past_sales_list?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -355,7 +355,7 @@ export default function DashboardMain() {
   };
 
   const renderHistoryOfDeposit = () => {
-    if( tempData?.history_deposit_list.length === 0 ){
+    if( tempData?.history_deposit_list?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
