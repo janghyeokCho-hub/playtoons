@@ -1,6 +1,8 @@
 import { useWindowSize } from "@/hook/useWindowSize";
+import { getTypeAction } from "@/modules/redux/ducks/dashboard";
 import { getPostTypeListFromServer } from "@/services/dashboardService";
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ErrorMessage from "../dashboard/ErrorMessage";
 
 /**
@@ -25,8 +27,9 @@ export default forwardRef( function Type(props, ref) {
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
   const [stateDisabled, setStateDisabled] = useState(undefined);
+  const reduxType = useSelector(({dashboard}) => dashboard.types);
   const windowSize = useWindowSize();
-      
+  const dispatch = useDispatch();
 
   //==============================================================================
   // function
@@ -51,31 +54,22 @@ export default forwardRef( function Type(props, ref) {
     } );
   };
 
-  const setCheckedInItemToTypeId = (typeId) => {
-    for( let i = 0; i < stateList.length; i++ ){
-      const item = stateList[i];
-      item.checked = typeId === stateList[i].id;
-    }
-  };
-
   const setSelectedInStateList = (typeId) => {
-    const typeList = document.getElementsByName('typeId');
-    typeList.forEach((item) => {
-      item.checked = typeId === item.getAttribute('data-id');
-    });
-    for( let i = 0; i < typeList.length; i++ ){
-    }
-
-    setCheckedInItemToTypeId(typeId);
+    setStateList( stateList?.map((item) => {
+      return {
+        ...item,
+        checked: item.checked = typeId === item.id
+      }
+    }) );
   };
-
+  
   const setFristSelectedInStateList = () => {
-    const typeList = document.getElementsByName('typeId');
-    typeList.forEach((item) => {
-      item.checked = '0' === item.getAttribute('data-index');
-    });
-
-    setCheckedInItemToTypeId( typeList[0].getAttribute('data-id') );
+    setStateList( stateList?.map((item, index) => {
+      return {
+        ...item,
+        checked: item.checked = 0 === index
+      }
+    }) );
   };
 
 
@@ -83,29 +77,17 @@ export default forwardRef( function Type(props, ref) {
   // api
   //==============================================================================
 
-  const getType = async () => {
-    const {status, data} = await getPostTypeListFromServer();
-    
-    if( status === 200 ){
-      setStateList( setCheckedToList(data?.types) );
-    }
-    else{
-      //error 처리
-      setStateError(data);
-    }
-  };
   //==============================================================================
   // event
   //==============================================================================
 
-  const handleClickItem = (event) => {
+  const handleClickItem = (event, item) => {
     if( stateDisabled ){
       event.preventDefault();
       return false;
     }
 
     initCheckecInList();
-    const item = stateList[event.target.getAttribute('data-index')];
     item.checked = true;
     onClick?.( item );
   };
@@ -131,7 +113,7 @@ export default forwardRef( function Type(props, ref) {
               data-index={index}
               defaultValue={item.id}      //code or id
               defaultChecked={item.checked}
-              onClick={handleClickItem}
+              onClick={(e) => handleClickItem(e, item)}
             />
             
             <span className={`${stateDisabled ? 'inp_disabled' : ''} ${item.checked ? 'inp_checked' : ''}  ${isFirstLine && 'mb8'}`}>{item.name}</span>
@@ -160,7 +142,7 @@ export default forwardRef( function Type(props, ref) {
   
 
   useEffect(() => {
-    if( stateList !== undefined ){
+    if( stateList ){
       callback?.(stateList[0]);
     }
   }, [stateList]);
@@ -170,7 +152,17 @@ export default forwardRef( function Type(props, ref) {
   }, [disabled]);
 
   useEffect(() => {
-    getType();
+    if( reduxType ){
+      if( reduxType.result === 0 ){
+        setStateList( setCheckedToList(reduxType?.types) );
+      }
+      else{
+        setStateError(reduxType);
+      }
+    }
+    else{
+      dispatch( getTypeAction() );
+    }
   }, [selected]);
 
 

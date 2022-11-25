@@ -25,6 +25,7 @@ const text = {
   plan_empty: "支援が登録されてないです。",
   supportor_empty: "支援者がいません。",
   login_expired: '自動ログイン時間が過ぎました。',
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 
@@ -137,11 +138,18 @@ export default function DashboardPlan(props) {
 
   useLayoutEffect(() => {
     handleContainer();
-    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
-      dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
-      getSurpporter();
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //check login expire time
+      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+        dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
+        getSurpporter();
+      }
     }
-  }, []);
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
 
   return (
     <div className="contents">
@@ -199,7 +207,7 @@ export default function DashboardPlan(props) {
           </div>
           {stateSupporter?.meta?.totalItems === 0 ? (
             <EmptyDiv
-              className={"supportor_empty"}
+              className={"relative empty"}
               text={text.supportor_empty}
             />
           ) : (

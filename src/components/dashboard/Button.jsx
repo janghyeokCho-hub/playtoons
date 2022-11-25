@@ -33,6 +33,7 @@ export default forwardRef( function Button(props, ref) {
   };
 
   const handleClick = (event) => {
+    event.preventDefault();
     if( stateStatus === undefined ){
       setStateStatus('loading');
       onClick?.(event, setStateStatus);

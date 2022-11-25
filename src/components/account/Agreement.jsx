@@ -59,7 +59,7 @@ const Agreement = () => {
 
       <div className="area_terms">
         <div className="in">
-          <MarkdownPreview source={content} />
+          <MarkdownPreview source={content} className='markdown' />
         </div>
       </div>
 

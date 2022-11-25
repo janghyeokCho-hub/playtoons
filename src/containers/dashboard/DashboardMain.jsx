@@ -11,10 +11,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { getPostMineFromServer, getReactionMineAuthorIdFromServer } from "@/services/dashboardService";
 
 import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { setSalesIdAction } from "@/modules/redux/ducks/dashboard";
-import { getAuthorMineFromServer, getPostSeriesMine } from "@/services/postService";
+import { getPostSeriesMine } from "@/services/postService";
 import tempImageSales from "@IMAGES/temp_seller_image.png";
 import tempImageSeries01 from "@IMAGES/temp_series_01.png";
 import tempImageSeries02 from "@IMAGES/temp_series_02.png";
@@ -22,10 +23,8 @@ import tempImageSeries03 from "@IMAGES/temp_series_03.png";
 import tempImageSeries04 from "@IMAGES/temp_series_04.png";
 import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
-import { Link, useNavigate } from "react-router-dom";
 import { useLayoutEffect } from "react";
-import { clearUserData } from "@/utils/localStorageUtil";
-import EmptyDiv from "@/components/dashboard/EmptyDiv";
+import { Link, useNavigate } from "react-router-dom";
 
 const text = {
   today_sales: "当日の売上",
@@ -46,6 +45,7 @@ const text = {
   before_yesterday: "前日より",
   login_expired: '自動ログイン時間が過ぎました。',
   empty_data: 'データがいません。',
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 export default function DashboardMain() {
@@ -386,10 +386,17 @@ export default function DashboardMain() {
   };
 
   useLayoutEffect(() => {
-    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
-      getSeriesList();
-      getPostList();
-      getReactionList();
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //check login expire time
+      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+        getSeriesList();
+        getPostList();
+        getReactionList();
+      }
+    }
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
     }
   }, [reduxAuthors]);
 
@@ -503,7 +510,7 @@ export default function DashboardMain() {
           <div className="b_tit">
             <div className="t1">
               <p>
-                <strong>{reduxAuthors?.[0].followCount} {text.person}</strong>
+                <strong>{reduxAuthors?.[0]?.followCount} {text.person}</strong>
                 <span className="fz_s1 c-green">{tempData.follower_plus_count}</span>
               </p>
             </div>

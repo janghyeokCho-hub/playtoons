@@ -1205,6 +1205,10 @@ li.dashboard-gnb.selected{
   height: 700px;
   position: relative;
 }
+.plan_empty{
+  height: 700px;
+  position: relative;
+}
 
 .relative.empty{
   height: 20vh;

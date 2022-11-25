@@ -1,11 +1,3 @@
-import { getPostListFromServer } from "@/services/dashboardService";
-import {
-  faEye,
-  faHeart, faPlus
-} from "@fortawesome/pro-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from "@/common/common";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
@@ -14,8 +6,15 @@ import Pagination from "@/components/dashboard/MyPagination";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getTypeAction } from "@/modules/redux/ducks/dashboard";
-import { useLayoutEffect } from "react";
+import { getPostListFromServer } from "@/services/dashboardService";
+import {
+  faEye,
+  faHeart, faPlus
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const TEXT = {
   post_list: "投稿リスト",
@@ -171,7 +170,7 @@ export default function DashboardPostList(props) {
       dispatch( getTypeAction() );
     }
 
-    if( reduxAuthors !== undefined ){
+    if( reduxAuthors ){
       getPostList();
     }
     return () => {
@@ -180,8 +179,8 @@ export default function DashboardPostList(props) {
   }, [params]);
 
   useLayoutEffect(() => {
-    if( reduxTypes !== null && reduxTypes !== undefined ){
-      const list = Array.from(reduxTypes);
+    if(reduxTypes){
+      const list = Array.from(reduxTypes?.types);
       list.unshift({id: undefined, name: TEXT.all, code: undefined, iconImage: undefined});
       setStateTypes(list);
     }

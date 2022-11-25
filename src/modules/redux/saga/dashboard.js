@@ -3,6 +3,7 @@ import { exceptionHandler, } from "@REDUX/saga/createRequestSaga";
 import * as api from '@API/dashboardService';
 import { GET_DASHBOARD_AUTHOR, GET_DASHBOARD_PLAN, GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_TYPE } from "../ducks/dashboard";
 import { finishLoading, startLoading } from "../ducks/loading";
+import { getErrorMessageFromResultCode } from "@/common/common";
 
 //==============================================================================
 // get plan list
@@ -114,6 +115,41 @@ function createAuthorIdRequestSaga(type) {
 // get post type
 //==============================================================================
 function createTypeRequestSaga(type) {
+  return function* (action) {
+    try {
+      yield put(startLoading(type));
+
+      const response = yield call(api.getPostTypeListFromServer);
+      if (response?.status === 200) {
+        yield put({
+          type: `${type}_SUCCESS`,
+          payload: response.data,
+        });
+      }
+      else{
+        yield put({
+          type: `${type}_FAILURE`,
+          payload: getErrorMessageFromResultCode(response.data),
+        });
+      }
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: `${type}_FAILURE`,
+        payload: e,
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
+//==============================================================================
+// set series 
+//==============================================================================
+function createSeriesRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));

@@ -37,7 +37,7 @@ const text = {
 
 export default function DashboardUploadProfile(props) {
   const reduxAuthor = useSelector(({ dashboard }) => dashboard.author);
-  const reduxAuthors = useSelector(({ post }) => post.authorMine.authors);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const refNickname = useRef();
@@ -94,7 +94,7 @@ export default function DashboardUploadProfile(props) {
   // api
   //==============================================================================
 
-  const getAuthor = async () => {
+  const getAuthorProfile = async () => {
     const params = {
       id: reduxAuthors[0].id,
     };
@@ -145,7 +145,7 @@ export default function DashboardUploadProfile(props) {
     const { status, data } = await setAuthorIdToServer(id, json);
 
     if (status === 200) {
-      getAuthor();
+      getAuthorProfile();
       showOneButtonPopup(dispatch, text.done_modify);
     } else {
       //error
@@ -199,17 +199,13 @@ export default function DashboardUploadProfile(props) {
 
   useLayoutEffect(() => {
     //chekc author
-    if (
-      reduxAuthors === undefined ||
-      reduxAuthors === null ||
-      reduxAuthors.length === 0
-    ) {
-      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
-    } else {
+    if ( reduxAuthors ) {
       //get accounts info
-      getAuthor();
+      getAuthorProfile();
+    } else {
+      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
     }
-  }, []);
+  }, [reduxAuthors]);
 
   return (
     <div className="contents">

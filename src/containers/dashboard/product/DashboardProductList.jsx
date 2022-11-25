@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
@@ -28,6 +28,7 @@ const text = {
   modify: "修正",
   category: "カテゴリ",
   dont_see: "非表示",
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 const tempData = {
@@ -82,7 +83,7 @@ export default function DashboardProductList(props) {
   const [stateKeyword, setStateKeyword] = useState(undefined);
   const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   //==============================================================================
   // function
@@ -226,10 +227,15 @@ export default function DashboardProductList(props) {
     });
   };
 
-  useEffect(() => {
-    //리스트 불러오기
-    getProductList();
-  }, []);
+  useLayoutEffect(() => {
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      getProductList();
+    }
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
 
   return (
     <>
