@@ -129,7 +129,7 @@ export default function DashboardProductList(props) {
     }
   };
 
-  const editProductInStatus = async (item, funSetButtonStatus) => {
+  const editProductInStatus = async (item, ftnSetButtonStatus) => {
     const {status, data} = await editShopProductToServer(item);
     console.log('editProductInStatus', status, data);
     
@@ -140,7 +140,7 @@ export default function DashboardProductList(props) {
       showOneButtonPopup(dispatch, data);
     }
     
-    funSetButtonStatus(undefined);
+    ftnSetButtonStatus(undefined);
   };
 
   //==============================================================================
@@ -170,10 +170,10 @@ export default function DashboardProductList(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const handleItemClick = useCallback((item, funSetButtonStatus) => {
+  const handleItemClick = useCallback((item, ftnSetButtonStatus) => {
     let lodashItem = cloneDeep(item);
     lodashItem.status = 'pending';
-    editProductInStatus(lodashItem, funSetButtonStatus);
+    editProductInStatus(lodashItem, ftnSetButtonStatus);
   }, []);
 
   //==============================================================================
@@ -216,10 +216,9 @@ export default function DashboardProductList(props) {
             </Link>
             <Button
               className="btn-pk s blue2"
-              text={text.dont_see}
-              onClick={(e, funSetButtonStatus) => handleItemClick(item, funSetButtonStatus)}
+              onClick={(e, ftnSetButtonStatus) => handleItemClick(item, ftnSetButtonStatus)}
             >
-              {}
+              {text.dont_see}
             </Button>
           </td>
         </tr>

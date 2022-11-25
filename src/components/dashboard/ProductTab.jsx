@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ProductTab(props) {
   const PC_TOP = 94;
-  const MOBILE_TOP = 40;
+  const MOBILE_TOP = 38;
   
   const { text } = props;
   const [ stateSelected, setStateSelected ] = useState(undefined);
@@ -13,7 +13,6 @@ export default function ProductTab(props) {
   const navigate = useNavigate();
   const refMenu = useRef([]);
   const refContainer = useRef();
-  const refParent = useRef();
   const refBar = useRef();
 
   let tabMenu = [
