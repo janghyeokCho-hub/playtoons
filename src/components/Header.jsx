@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -229,11 +229,11 @@ const Header = ({ className, onSideMenu }) => {
     }
   }, [reduxAuthors]);
 
-  useEffect(() => {
-    if( !reduxAuthors ){
+  useLayoutEffect(() => {
+    if( userInfo && !reduxAuthors ){
       dispatch( getAuthorMineAction() );
     }
-  }, [reduxAuthors]);
+  }, [userInfo, reduxAuthors]);
 
   useEffect(() => {
     let tempType = type;
