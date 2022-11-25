@@ -189,7 +189,7 @@ export default function DashboardPostDetail() {
             <ProfileSpan hash={item?.author?.profileImage} />
           </div>{" "}
           <div className="conts">
-            <p className="h1">{item?.author?.nickname}</p>{" "}
+            <p className="h1">{item?.name}</p>{" "}
             <p className="d1">
               {/* date 항목 없음 */}
               <span>{getReactionDate(item.createdAt, text)}</span>
@@ -197,7 +197,7 @@ export default function DashboardPostDetail() {
               <span>コメント</span>
             </p>{" "}
             <p className="t1">{item.content}</p>
-            {item.iconImage !== "" && (
+            {(item.iconImage !== "" && item.iconImage !== null) && (
               <p className="icon_image">
                 <img src={"/temp/" + item.iconImage} alt="icon" />
               </p>

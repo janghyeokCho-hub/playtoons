@@ -25,6 +25,7 @@ import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useLayoutEffect } from "react";
 import { clearUserData } from "@/utils/localStorageUtil";
+import EmptyDiv from "@/components/dashboard/EmptyDiv";
 
 const text = {
   today_sales: "当日の売上",
@@ -44,6 +45,7 @@ const text = {
   history_deposit: "振込履歴",
   before_yesterday: "前日より",
   login_expired: '自動ログイン時間が過ぎました。',
+  empty_data: 'データがいません。',
 };
 
 export default function DashboardMain() {
@@ -156,6 +158,15 @@ export default function DashboardMain() {
   //==============================================================================
 
   const renderSalesProductList = () => {
+    if( tempData?.sales_product_list.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return tempData?.sales_product_list?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
@@ -176,6 +187,15 @@ export default function DashboardMain() {
   };
 
   const renderQuestionList = () => {
+    if( tempData?.question_list.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return tempData?.question_list?.map((item, index) => {
       return (
         <li key={index}>
@@ -191,6 +211,15 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
+      if( tempData?.review_list.length === 0 ){
+        return (
+          <EmptyDiv
+            className={"relative empty"}
+            text={text.empty_data}
+          />
+        );
+      }
+
     return tempData?.review_list?.map((item, index) => {
       return (
         <li key={index}>
@@ -217,6 +246,15 @@ export default function DashboardMain() {
   };
 
   const renderSeriesList = () => {
+    if( stateSeries?.series.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return stateSeries?.series?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
@@ -241,6 +279,15 @@ export default function DashboardMain() {
   };
 
   const renderPostList = () => {
+    if( statePosts?.posts.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return statePosts?.posts?.map((item, i) => {
       return (
         <li key={item.id}>
@@ -254,6 +301,15 @@ export default function DashboardMain() {
   };
 
   const renderReactionList = () => {
+    if( stateReactions?.reactions.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return stateReactions?.reactions?.map((item, index) => {
       return (
         <li key={item.id}>
@@ -269,6 +325,15 @@ export default function DashboardMain() {
   };
 
   const renderSalesListInPast = () => {
+    if( tempData?.past_sales_list.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return tempData?.past_sales_list?.map((item, index) => {
       return (
         <li key={index}>
@@ -290,6 +355,15 @@ export default function DashboardMain() {
   };
 
   const renderHistoryOfDeposit = () => {
+    if( tempData?.history_deposit_list.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={text.empty_data}
+        />
+      );
+    }
+
     return tempData?.history_deposit_list?.map((item, index) => {
       return (
         <li key={index}>

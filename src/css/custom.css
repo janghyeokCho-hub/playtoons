@@ -1206,9 +1206,8 @@ li.dashboard-gnb.selected{
   position: relative;
 }
 
-.supportor_empty{
-  height: 308px;
-  position: relative;
+.relative.empty{
+  height: 20vh;
 }
 
 
