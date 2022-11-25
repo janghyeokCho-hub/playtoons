@@ -158,7 +158,7 @@ export default function DashboardMain() {
   //==============================================================================
 
   const renderSalesProductList = () => {
-    if( tempData?.sales_product_list.length === 0 ){
+    if( tempData?.sales_product_list?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
