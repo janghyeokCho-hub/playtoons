@@ -1,8 +1,9 @@
-import { takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put, all } from "redux-saga/effects";
 import { SET_STORE } from "@REDUX/ducks/store";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as storeApi from "@API/storeService";
 import { getHome, getHomeTop } from "@API/homeService";
+import { getFileUrlFromServer } from "@API/fileService";
 
 function createSetStoreRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
@@ -20,7 +21,15 @@ function createSetStoreRequestSaga(type) {
       // banner
       const bannerResp = yield call(getHomeTop, "shop");
       if (bannerResp?.status === 200) {
-        payload.banners = bannerResp.data?.contents;
+        let banners = bannerResp.data?.contents.map((item) => item?.banner);
+        const images = yield all(
+          banners.map((x) => call(getFileUrlFromServer, x.bannerImage))
+        );
+        banners.map(
+          (item, index) => (item.bannerImage = images[index].data.url)
+        );
+
+        payload.banners = banners;
       }
 
       // contents
