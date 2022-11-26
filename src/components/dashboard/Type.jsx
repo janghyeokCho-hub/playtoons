@@ -1,10 +1,8 @@
-import { getPostTypeListFromServer } from "@/services/dashboardService";
-import React, { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
+import { getTypeAction } from "@/modules/redux/ducks/dashboard";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "./Dropdown";
 import ErrorMessage from "./ErrorMessage";
-import Select from "./Select";
 
 /**
 *
@@ -28,57 +26,42 @@ export default function Type(props, ref) {
   const {name, className, callback, selected, disabled, disabledText} = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
+  const reduxTypes = useSelector(({dashboard}) => dashboard.types);
+  const dispatch = useDispatch();
   const refSelect = useRef();
 
   //==============================================================================
   // function
   //==============================================================================
 
-  const getSelectedItem = (option) => {
-    const id = option.getAttribute('value');
-    let selected = undefined;
-    for( let i = 0; i < stateList.length; i++ ){
-      if( stateList[i].id === id ){
-        selected = stateList[i];
-        break;
-      }
-    }
-    return selected;
-  };
 
-  //==============================================================================
-  // api
-  //==============================================================================
-
-  const getType = async () => {
-    const {status, data} = await getPostTypeListFromServer();
-    
-    if( status === 200 ){
-      setStateList( data?.types );
-      callback?.(data.types[0]);
-    }
-    else{
-      //error 처리
-      setStateError( String(status, data) );
-    }
-  };
   //==============================================================================
   // event
   //==============================================================================
   const handleClickItem = (option) => {
     callback?.(option);
-    // callback?.( getSelectedItem(option) );
   };
 
   //==============================================================================
   // hook & render
   //==============================================================================
   useEffect(() => {
-    getType();
-  }, []);
+    if( reduxTypes ){
+      if( reduxTypes.result === 0 ){
+        setStateList( reduxTypes?.types );
+        callback?.(reduxTypes.types[0]);
+      }
+      else{
+        setStateError( String(reduxTypes) );
+      }
+    }
+    else{
+      dispatch( getTypeAction() );
+    }
+  }, [reduxTypes]);
 
   useEffect(() => {
-    if( selected !== undefined ){
+    if( selected ){
       refSelect.current.setSelected(selected);
     }
   }, [selected, stateList]);

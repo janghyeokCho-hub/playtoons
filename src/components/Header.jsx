@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -21,6 +21,8 @@ import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setDim } from "@/modules/redux/ducks/dim";
 import { setMenuShow } from "@/modules/redux/ducks/container";
+import { showOneButtonPopup } from "@/common/common";
+import { getAuthorMineAction } from "@/modules/redux/ducks/post";
 
 const SearchComponent = ({ isMobile }) => {
   const dispatch = useDispatch();
@@ -162,6 +164,7 @@ const Header = ({ className, onSideMenu }) => {
    * 게시글 좋아요 관련이 헤더에 있기 때문에, post는 꼭 리덕스 사용해야함.
    */
   const currentPost = useSelector(({ post }) => post.currentPost);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
@@ -207,6 +210,30 @@ const Header = ({ className, onSideMenu }) => {
     clearUserData();
     dispatch(logoutRequest());
   }, [dispatch]);
+
+  const handleUploadPost = useCallback(() => {
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      navigate('/post/upload');
+    } 
+    else{
+      showOneButtonPopup( dispatch, 'クリエイターとして登録しなければ、投稿できません。', () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
+
+  const handleDashboard = useCallback(() => {
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      navigate('/dashboard/main');
+    } 
+    else{
+      showOneButtonPopup( dispatch, 'クリエイターとして登録しなければ、ダッシュボードを利用できません。', () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
+
+  useLayoutEffect(() => {
+    if( userInfo && !reduxAuthors ){
+      dispatch( getAuthorMineAction() );
+    }
+  }, [userInfo, reduxAuthors]);
 
   useEffect(() => {
     let tempType = type;
@@ -275,10 +302,10 @@ const Header = ({ className, onSideMenu }) => {
                         <div className="box_drop">
                           <ul>
                             <li>
-                              <Link to="/post/upload">
+                              <a onClick={handleUploadPost}>
                                 <FontAwesomeIcon icon={faSquarePen} />
                                 投稿する
-                              </Link>
+                              </a>
                             </li>
                             <li>
                               <Link to="">
@@ -335,7 +362,7 @@ const Header = ({ className, onSideMenu }) => {
                               </Link>
                             </li>
                             <li>
-                              <Link to="/dashboard/main">ダッシュボード</Link>
+                              <a onClick={handleDashboard} >ダッシュボード</a>
                             </li>
                           </ul>
                           <ul>

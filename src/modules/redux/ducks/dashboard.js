@@ -11,6 +11,7 @@ export const [GET_DASHBOARD_REACTION, GET_DASHBOARD_REACTION_SUCCESS, GET_DASHBO
 export const [GET_DASHBOARD_TYPE, GET_DASHBOARD_TYPE_SUCCESS, GET_DASHBOARD_TYPE_FAILURE] = createRequestActionTypes("GET_dashboardType");
 export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
 export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
+export const [SET_DASHBOARD_SERIES, SET_DASHBOARD_SERIES_SUCCESS, SET_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("POST_postSeries");
 
 
 /* --- Actions --- */
@@ -22,6 +23,7 @@ export const initSalesIdAction = createAction(INIT_DASHBOARD_SALES);
 export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
+export const setSeriesAction = createAction(SET_DASHBOARD_SERIES);
 
 const initialState = {
   subscribeTiers: null,
@@ -53,7 +55,12 @@ const post = handleActions(
     },
     [GET_DASHBOARD_TYPE_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        draft.types = action.payload.types;
+        draft.types = action.payload;
+      });
+    },
+    [SET_DASHBOARD_SERIES_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.types = action.payload;
       });
     },
     [SET_DASHBOARD_SALES]: (state, action) => {

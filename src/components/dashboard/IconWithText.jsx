@@ -93,7 +93,7 @@ export default function IconWithText(props, ref) {
     if (status === 201) {
       callback?.();
       initStatus();
-      showOneButtonPopup(dispatch, text.register_coment);
+      // showOneButtonPopup(dispatch, text.register_coment);
     } else {
       setStateError(String(status + data));
       refButton.current.setStatus(undefined);

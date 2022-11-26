@@ -29,6 +29,7 @@ import { getTimelineFromServer, setFileToServer } from "@/services/dashboardServ
 import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
 
 const text = {
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
   post_edit: "投稿を修正",
   series: "シリーズ",
   type: "タイプ",
@@ -349,14 +350,21 @@ export default function PostEdit(props) {
   };
 
   useLayoutEffect(() => {
-    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
-      getPostDetail();
-      getTimeline();
-
-      //temp
-      setStateSupportorList(supportorList);
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //check login expire time
+      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+        getPostDetail();
+        getTimeline();
+    
+        //temp
+        setStateSupportorList(supportorList);
+      }
     }
-  }, []);
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
 
 
   useEffect(() => {

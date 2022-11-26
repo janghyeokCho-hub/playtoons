@@ -50,6 +50,11 @@ export default function ReactionButtons(props) {
     }
   };
 
+  const checkReport = () => {
+    showTwoButtonPopup(dispatch, text.do_u_report, () => setReport() );
+    
+  };
+
   //==============================================================================
   // api
   //==============================================================================
@@ -195,7 +200,7 @@ export default function ReactionButtons(props) {
         break;
       case text.report:
         //POST /reaction/:reactionId/report
-        setReport();
+        checkReport();
         break;
       case text.delete:
         //현재는 내가 작성한 댓글에 대해서만 삭제 가능합니다 DELETE /reaction/:reactionId

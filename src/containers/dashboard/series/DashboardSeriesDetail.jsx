@@ -43,6 +43,7 @@ const text = {
   do_delete: "削除しました。",
   login_expired: '自動ログイン時間が過ぎました。',
   do_you_delete: "投稿を削除しますか？",
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 
@@ -275,11 +276,18 @@ export default function DashboardSeriesDetail(props) {
   };
   
   useLayoutEffect(() => {
-    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
-      getSeriesDetail();
-      getTimeline();
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //check login expire time
+      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+        getSeriesDetail();
+        getTimeline();
+      }
     }
-  }, []);
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
   
 
   useEffect(() => {

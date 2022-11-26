@@ -1,4 +1,4 @@
-import { handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, getStatusText, handleClickStopPropagation, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
@@ -147,7 +147,7 @@ export default function DashboardSeries() {
         <tr key={index} onClick={(e) => handleMoveDetailPage(e, item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb">
+            <div className="cx_thumb series">
               <span>
                 <Image hash={item.coverImage} alt={""} />
               </span>
@@ -161,11 +161,11 @@ export default function DashboardSeries() {
           </td>
           <td>
             <span className="view-m">{TEXT.date}：</span>
-            {item.startAt}
+            {getDateYYYYMMDD(item.startAt, '/')}
           </td>
           <td className="td_txt">
             <span className="view-m">{TEXT.status}</span>
-            {item.paused}
+            {getStatusText(item.status)}
           </td>
           {/* series_btns custom.css mobile에서 강제적으로 top, border 없앴음. */}
           <td className="td_btns2 ty1 series_btns">

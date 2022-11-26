@@ -1,14 +1,12 @@
-import React, { useRef } from "react";
-import { Swiper } from "swiper/react";
+import { useRef } from "react";
 import SwiperCore, { Navigation } from "swiper";
-import "@/css/swiper.css";
+import { Swiper } from "swiper/react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
-  faCircleChevronRight,
+  faCircleChevronRight
 } from "@fortawesome/pro-solid-svg-icons";
-import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
 *
@@ -65,7 +63,6 @@ export default function SwiperContainer(props) {
         spaceBetween={10}
         observer={true}
         observeParents={true}
-        touchRatio={0}
         navigation={{
           nextEl: nextRef.current,
           prevEl: prevRef.current,

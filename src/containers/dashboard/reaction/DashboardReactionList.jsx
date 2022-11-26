@@ -35,6 +35,7 @@ const text = {
   delete: "削除",
   empty_message: "リアクションがありません。",
   modal_title: "お知らせ",
+  do_u_report: "通報しますか？",
   do_pinned: "固定しました。",
   do_off_pinned: "固定解除しました。",
   do_good: "いいねしました。",
@@ -45,6 +46,7 @@ const text = {
   can_do_myself: "本人のみ削除可能です。",
   do_you_delete: "削除しますか？",
   cancel: "キャンセル",
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 const searchList = [
@@ -228,8 +230,15 @@ export default function DashboardReactionList() {
   };
 
   useLayoutEffect(() => {
-    if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime ) && reduxAuthors !== undefined){
-      getList();
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //check login expire time
+      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+        getList();
+      }
+    }
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
     }
   }, [params]);
 

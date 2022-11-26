@@ -14,7 +14,7 @@ export default ( function ErrorMessage(props) {
   };
 
   useEffect(() => {
-    if( error !== undefined ){
+    if( error ){
       window.scrollTo(0, refContainer.current.offsetTop / 2);
     }
   }, [error]);
@@ -23,7 +23,7 @@ export default ( function ErrorMessage(props) {
     <>
       {
         error !== undefined &&
-        <div ref={refContainer} className={`error_message_container ${className}`} tabIndex={0} id='error_container' onFocus={onFocus}>
+          <div ref={refContainer} className={`error_message_container ${className}`} tabIndex={0} id='error_container' onFocus={onFocus}>
             <FontAwesomeIcon 
               icon={faCircleXmark}
               className={"error_message_ico"} />

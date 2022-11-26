@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-//temp data
 import { showOneButtonPopup } from "@/common/common";
+import Button from "@/components/dashboard/Button";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import ProductTab from "@/components/dashboard/ProductTab";
 import Search from "@/components/dashboard/Search";
-import { setContainer } from "@/modules/redux/ducks/container";
-import { getAuthorMineFromServer } from "@/services/postService";
+import { editShopProductToServer, getProductListFromServer } from "@/services/dashboardService";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
-import { useDispatch } from "react-redux";
+import { cloneDeep } from "lodash";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const text = {
   see_product: "商品一覧",
@@ -27,6 +26,7 @@ const text = {
   modify: "修正",
   category: "カテゴリ",
   dont_see: "非表示",
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 const tempData = {
@@ -44,7 +44,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "sales",
+        code: "enabled",
         name: "販売中",
       },
     },
@@ -56,7 +56,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "audit",
+        code: "pending",
         name: "審査中",
       },
     },
@@ -68,7 +68,7 @@ const tempData = {
       price: "1200000CP",
       date: "2022/06/11",
       status: {
-        code: "not_for_sale",
+        code: "suspended",
         name: "販売不可",
       },
     },
@@ -77,9 +77,11 @@ const tempData = {
 
 
 export default function DashboardProductList(props) {
-  const [stateData, setStateData] = useState();
+  const [stateData, setStateData] = useState(undefined);
+  const [stateKeyword, setStateKeyword] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
 
   //==============================================================================
   // function
@@ -91,10 +93,10 @@ export default function DashboardProductList(props) {
       default:
         className = "cl-sell";
         break;
-      case "audit":
+      case "pending":
         className = "cl-ing";
         break;
-      case "not_for_sale":
+      case "suspended":
         className = "cl-non";
         break;
     } //switch
@@ -104,13 +106,18 @@ export default function DashboardProductList(props) {
   //==============================================================================
   // api
   //==============================================================================
-  const getProductList = async (keyword) => {
-    const params = new FormData();
+  const getProductList = async (keyword, page) => {
+    const formData = new FormData();
+    formData.append('authorId', reduxAuthors[0].id);
     if( keyword !== undefined ){
-      params.append('keyword', keyword);
+      formData.append('keyword', keyword);
+    }
+    if( page !== undefined ){
+      formData.append('page', page);
     }
     
-    const {status, data} = await getAuthorMineFromServer(params);
+    // const {status, data} = await getAuthorIdFromServer(formData);
+    const {status, data} = await getProductListFromServer(formData);
     console.log('getProductList', status, data);
     
     if( status === 200 ){
@@ -120,6 +127,21 @@ export default function DashboardProductList(props) {
       showOneButtonPopup(dispatch, data);
     }
   };
+
+  const editProductInStatus = async (item, ftnSetButtonStatus) => {
+    const {status, data} = await editShopProductToServer(item);
+    console.log('editProductInStatus', status, data);
+    
+    if( status === 200 ){
+      
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+    ftnSetButtonStatus(undefined);
+  };
+
   //==============================================================================
   // event
   //==============================================================================
@@ -129,16 +151,17 @@ export default function DashboardProductList(props) {
   * @author 2hyunkook
   */
   const handleSearch = (keyword) => {
+    setStateKeyword(keyword);
     getProductList(keyword);
   };
-
+  
   /**
-    pagination
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
+   pagination
+   * @version 1.0.0
+   * @author 2hyunkook
+   */
   const handlePagination = (page) => {
-    
+    getProductList(stateKeyword, page);
   };
 
   /**
@@ -146,11 +169,11 @@ export default function DashboardProductList(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const handleItemClick = (e) => {
-    const id = e.target.getAttribute("data-id");
-
-    
-  };
+  const handleItemClick = useCallback((item, ftnSetButtonStatus) => {
+    let lodashItem = cloneDeep(item);
+    lodashItem.status = 'pending';
+    editProductInStatus(lodashItem, ftnSetButtonStatus);
+  }, []);
 
   //==============================================================================
   // hook & render
@@ -190,23 +213,27 @@ export default function DashboardProductList(props) {
             >
               {text.modify}
             </Link>
-            <div
+            <Button
               className="btn-pk s blue2"
-              data-id={item.id}
-              onClick={handleItemClick}
+              onClick={(e, ftnSetButtonStatus) => handleItemClick(item, ftnSetButtonStatus)}
             >
               {text.dont_see}
-            </div>
+            </Button>
           </td>
         </tr>
       );
     });
   };
 
-  useEffect(() => {
-    //리스트 불러오기
-    getProductList();
-  }, []);
+  useLayoutEffect(() => {
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      getProductList();
+    }
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+  }, [reduxAuthors]);
 
   return (
     <>
