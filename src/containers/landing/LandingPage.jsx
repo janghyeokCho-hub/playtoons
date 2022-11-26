@@ -5,49 +5,21 @@ import CurationItems from "@COMPONENTS/landingPage/CurationItems";
 import AuthorItems from "@COMPONENTS/landingPage/AuthorItems";
 import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
 import { Link } from "react-router-dom";
-import { getEmergencyNotice } from "@/services/noticeService";
 import moment from "moment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDim } from "@/modules/redux/ducks/dim";
 import { setContainer, setFooterShow } from "@/modules/redux/ducks/container";
+import { setLanding } from "@/modules/redux/ducks/landing";
 
 const LandingPage = (props) => {
   const dispatch = useDispatch();
-  const [notice, setNotice] = useState(null);
-  const [isNoticeShow, setIsNoticeShow] = useState(false);
+  const [isNoticeShow, setIsNoticeShow] = useState(true);
+  const notice = useSelector(({ landing }) => landing.notice);
 
-  const getNotice = useCallback(async () => {
-    const response = await getEmergencyNotice();
-    if (response?.status === 200) {
-      setNotice(response.data?.notice);
-      if (response.data?.notice) {
-        setIsNoticeShow(true);
-      } else {
-        setIsNoticeShow(false);
-      }
-    }
-  }, []);
-
-  const handleContainer = useCallback(() => {
-    const container = {
-      isHeaderShow: true,
-      isMenuShow: false,
-      containerClass: "container landing",
-      headerClass: "header",
-      headerType: null,
-      menuType: "MAIN",
-      activeMenu: null,
-      isDetailView: false,
-      isFooterShow: true,
-    };
-    dispatch(setContainer(container));
-    dispatch(setDim({ dimType: null, isShow: false }));
-  }, [dispatch]);
-
+  // getNotice();
   useEffect(() => {
-    handleContainer();
-    getNotice();
-  }, []);
+    dispatch(setLanding());
+  }, [dispatch]);
 
   return (
     <>
@@ -119,7 +91,7 @@ const LandingPage = (props) => {
         <div className="inr-c">
           <h2 className="m_tit1">🎨クリエーター</h2>
           <div className="slider_profile">
-            <AuthorItems />
+            <AuthorItems curationNum={3} />
           </div>
         </div>
       </div>

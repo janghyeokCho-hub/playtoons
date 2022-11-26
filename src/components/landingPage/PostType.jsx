@@ -1,13 +1,15 @@
+import useFilePath from "@/hook/useFilePath";
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const PostType = ({ item, bgColor, bgImg }) => {
+  const iconImage = useFilePath(item?.iconImage);
   return (
     <div className="col">
       <Link to={`/${item?.code}`}>
         <div className="thumb ty_b1" style={{ backgroundColor: bgColor }}>
-          <ImgBgSpan bgImg={bgImg}></ImgBgSpan>
+          <ImgBgSpan bgImg={iconImage}></ImgBgSpan>
         </div>
         <div className="txt">
           <p>{item?.name}</p>

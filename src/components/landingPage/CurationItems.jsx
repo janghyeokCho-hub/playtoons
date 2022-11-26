@@ -1,33 +1,20 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import Curation from "./Curation";
+import { useSelector } from "react-redux";
 
 const CurationItems = ({ curationNum }) => {
   SwiperCore.use([Navigation]);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [items, setItems] = useState([]);
-
-  const getCurationList = async (curationNum) => {
-    const response = await getCurationListAPI(curationNum);
-    if (response.status === 200) {
-      setItems(response.data.posts);
-    }
-  };
-
-  useEffect(() => {
-    if (!items?.length) {
-      getCurationList(curationNum);
-    }
-  }, [items, curationNum]);
+  const items = useSelector(({ landing }) => landing.curations[curationNum]);
 
   const renderItems = useMemo(() => {
     return items.map((item, index) => {

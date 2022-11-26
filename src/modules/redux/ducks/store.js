@@ -4,7 +4,7 @@ import produce from "immer";
 
 /* --- Action Types --- */
 export const [SET_STORE, SET_STORE_SUCCESS, SET_STORE_FAILURE] =
-  createRequestActionTypes("author/SET_STORE");
+  createRequestActionTypes("store/SET_STORE");
 
 /* --- Actions --- */
 export const setStore = createAction(SET_STORE);

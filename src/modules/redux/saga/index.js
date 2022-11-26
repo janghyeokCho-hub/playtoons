@@ -3,6 +3,8 @@ import loginSaga from "./login";
 import authorSaga from "./author";
 import postSaga from "./post";
 import storeSaga from "./store";
+import homeSaga from "./home";
+import landingSaga from "./landing";
 import dashboardSaga from "./dashboard";
 
 function* rootSaga() {
@@ -12,6 +14,8 @@ function* rootSaga() {
     authorSaga(),
     postSaga(),
     storeSaga(),
+    homeSaga(),
+    landingSaga(),
     dashboardSaga(),
   ]);
 }

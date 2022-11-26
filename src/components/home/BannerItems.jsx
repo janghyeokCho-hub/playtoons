@@ -1,33 +1,19 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
-import { getCurationList as getCurationListAPI } from "@/services/curationService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/pro-regular-svg-icons";
 import Banner from "./Banner";
-import { getHomeTop as getHomeTopAPI } from "@/services/homeService";
+import { useSelector } from "react-redux";
 
 const BannerItems = ({ curationNum }) => {
   SwiperCore.use([Navigation, Pagination]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [items, setItems] = useState([]);
-
-  const getHomeTop = async () => {
-    const response = await getHomeTopAPI("home");
-    if (response.status === 200) {
-      setItems(response.data?.contents);
-    }
-  };
-
-  useEffect(() => {
-    if (!items?.length) {
-      getHomeTop();
-    }
-  }, [items, curationNum]);
+  const items = useSelector(({ home }) => home.banners);
 
   const renderItems = useMemo(() => {
     return items.map((item, index) => {
