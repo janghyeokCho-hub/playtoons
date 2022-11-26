@@ -8,7 +8,7 @@ import {
   faChevronRight,
 } from "@fortawesome/pro-regular-svg-icons";
 import Banner from "./Banner";
-import { getHomeTop as getHomeTopAPI } from "@API/homrService";
+import { getHomeTop as getHomeTopAPI } from "@/services/homeService";
 
 const BannerItems = ({ curationNum }) => {
   SwiperCore.use([Navigation, Pagination]);

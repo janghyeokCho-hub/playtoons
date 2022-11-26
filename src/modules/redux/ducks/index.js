@@ -6,6 +6,7 @@ import login from "./login";
 import loading from "./loading";
 import author from "./author";
 import post from "./post";
+import store from "./store";
 import alertModal from "./modal";
 import dashboard from "./dashboard";
 import dim from "./dim";
@@ -22,6 +23,7 @@ const appReducer = combineReducers({
   alertModal,
   author,
   post,
+  store,
   dashboard,
   dim,
   container,

@@ -10,26 +10,37 @@ const TimelineItems = ({ items }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const renderItems = useMemo(() => {
+  const renderItems = (items) => {
     return (
       <div className="swiper-wrapper">
-        {items.map((item, index) => {
+        {items?.map((item, index) => {
           return (
             <SwiperSlide
               key={`recent_${index}`}
               className="swiper-slide"
               virtualIndex={index}
             >
-              <TimelineItem item={item} />
+              {({ isActive }) => (
+                <TimelineItem item={item} isActive={isActive} />
+              )}
             </SwiperSlide>
           );
         })}
       </div>
     );
-  }, [items]);
+  };
 
   return (
-    <>
+    <Swiper
+      className="swiper-container-vertical"
+      spaceBetween={50}
+      slidesPerView={2}
+      direction="vertical"
+      navigation={{
+        prevEl: prevRef?.current,
+        nextEl: nextRef?.current,
+      }}
+    >
       <div className="rgh">
         <button ref={prevRef} type="button" className="btn01 slide_st">
           <span className="i">
@@ -42,20 +53,8 @@ const TimelineItems = ({ items }) => {
           </span>
         </button>
       </div>
-
-      <Swiper
-        className="swiper-container-vertical"
-        spaceBetween={50}
-        slidesPerView="auto"
-        direction="vertical"
-        navigation={{
-          prevEl: prevRef?.current,
-          nextEl: nextRef?.current,
-        }}
-      >
-        {renderItems}
-      </Swiper>
-    </>
+      {renderItems(items)}
+    </Swiper>
   );
 };
 

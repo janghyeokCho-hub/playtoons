@@ -125,3 +125,16 @@ export const getCurationList = async () => {
     return { status: e.response.status, data: e };
   }
 };
+
+/**
+ * 해당 작가 Store
+ * @param {number} authorId 작가 ID
+ * @returns
+ */
+export const getProduct = async (authorId) => {
+  try {
+    return await apiServer("get", `/shop/product?authorId=${authorId}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

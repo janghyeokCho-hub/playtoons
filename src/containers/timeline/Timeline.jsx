@@ -19,7 +19,7 @@ const Timeline = () => {
   return (
     <div className="contents">
       <div className="wrap_timeline">
-        <TimelineItems items={timelines} />
+        <TimelineItems items={timelines.reverse()} />
       </div>
     </div>
   );

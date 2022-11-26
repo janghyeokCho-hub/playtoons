@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { getHome as getHomeAPI } from "@API/homrService";
+import { getHome as getHomeAPI } from "@/services/homeService";
 import HomeItem from "./HomeItem";
 
 const HomeItems = () => {
