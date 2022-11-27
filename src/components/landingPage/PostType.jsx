@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const PostType = ({ item, bgColor, bgImg }) => {
-  const iconImage = useFilePath(item?.iconImage);
+  const { filePath, loading } = useFilePath(item?.iconImage);
   return (
     <div className="col">
       <Link to={`/${item?.code}`}>
         <div className="thumb ty_b1" style={{ backgroundColor: bgColor }}>
-          <ImgBgSpan bgImg={iconImage}></ImgBgSpan>
+          {!loading && <ImgBgSpan bgImg={filePath}></ImgBgSpan>}
         </div>
         <div className="txt">
           <p>{item?.name}</p>

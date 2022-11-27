@@ -13,8 +13,11 @@ import useFilePath from "@/hook/useFilePath";
 
 const TimelineItem = ({ item, isActive }) => {
   const [isControlShow, setIsControlShow] = useState(false);
-  const thumbnailImage = useFilePath(item?.thumbnailImage);
-  const profileImage = useFilePath(item?.author?.profileImage);
+  const { filePath: thumbnailImage, loading: thumbnailImgLoading } =
+    useFilePath(item?.thumbnailImage);
+  const { filePath: profileImage, loading: profileImgLoading } = useFilePath(
+    item?.author?.profileImage
+  );
 
   return (
     <div className={`col ${isActive ? "active" : ""}`}>
@@ -24,12 +27,15 @@ const TimelineItem = ({ item, isActive }) => {
         </div>
       </div>
       <div className="thumb">
-        <ImgSpan bgImg={thumbnailImage}></ImgSpan>
+        {!thumbnailImgLoading && <ImgSpan bgImg={thumbnailImage}></ImgSpan>}
       </div>
       <div className="cont">
         <p className="t1">{item?.title}</p>
         <div className="t_profile">
-          <ImgSpan className="im" bgImg={profileImage}></ImgSpan>
+          {!profileImgLoading && (
+            <ImgSpan className="im" bgImg={profileImage}></ImgSpan>
+          )}
+
           <p>{item?.nickname}</p>
         </div>
         <button type="button" className="btn-pk n blue">

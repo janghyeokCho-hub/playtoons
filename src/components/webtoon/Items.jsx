@@ -42,8 +42,11 @@ const Items = ({ tab, typeId }) => {
   const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
   const [searchText, setSearchText] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
+    setLoading(true);
+    setItems([]);
     delete params["completed"];
     delete params["series"];
     delete params["short"];
@@ -66,11 +69,11 @@ const Items = ({ tab, typeId }) => {
     }
 
     const response = await getPostListAPI(params, tags);
-    console.log("response : ", response);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -221,98 +224,102 @@ const Items = ({ tab, typeId }) => {
 
   return (
     <>
-      <div className="main_sch">
-        <div className="lft">
-          <Link
-            to="#"
-            className={`btn-pk n bdrs ${isAllCategory ? "blue" : "blue2"}`}
-            onClick={() => {
-              setSelectTags([]);
-            }}
-          >
-            すべて
-          </Link>
-          <button
-            type="button"
-            className="btn_sch_input"
-            onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
-            {searchText || "ハッシュタグ検索"}
-          </button>
-          {tags &&
-            tags.map((tag, index) => {
-              const selected =
-                selectTags.findIndex((sTag) => sTag.id === tag.id) > -1;
-              return (
-                <Link
-                  key={`tag_${index}`}
-                  to="#"
-                  className={`btn-pk n bdrs blue2 ${selected ? "on" : ""}`}
-                  onClick={() => {
-                    handleSelectTagChange(tag);
-                  }}
-                >
-                  #{tag.name}
-                  {selected && (
-                    <button
-                      type="button"
-                      className="btn_sch_del"
-                      onClick={() => handleSelectTagChange(tag)}
+      {!loading && (
+        <>
+          <div className="main_sch">
+            <div className="lft">
+              <Link
+                to="#"
+                className={`btn-pk n bdrs ${isAllCategory ? "blue" : "blue2"}`}
+                onClick={() => {
+                  setSelectTags([]);
+                }}
+              >
+                すべて
+              </Link>
+              <button
+                type="button"
+                className="btn_sch_input"
+                onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
+              >
+                <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
+                {searchText || "ハッシュタグ検索"}
+              </button>
+              {tags &&
+                tags.map((tag, index) => {
+                  const selected =
+                    selectTags.findIndex((sTag) => sTag.id === tag.id) > -1;
+                  return (
+                    <Link
+                      key={`tag_${index}`}
+                      to="#"
+                      className={`btn-pk n bdrs blue2 ${selected ? "on" : ""}`}
+                      onClick={() => {
+                        handleSelectTagChange(tag);
+                      }}
                     >
-                      <FontAwesomeIcon icon={faCircleXmark} />
-                    </button>
-                  )}
-                </Link>
-              );
-            })}
-        </div>
-        <div className="rgh">
-          <div className="btn_select1">
-            <button
-              type="button"
-              className="select_tit"
-              onClick={() => setIsOrderByShow(!isOrderByShow)}
-            >
-              {selectOrderBy.name}
-            </button>
-            <div
-              className="select_list"
-              style={{ display: isOrderByShow ? "" : "none" }}
-            >
-              <ul>
-                {orderByMenus.map((menu, index) => (
-                  <li
-                    key={`orderby_${index}`}
-                    onClick={() => {
-                      setSelectOrderBy(menu);
-                      setIsOrderByShow(!isOrderByShow);
-                    }}
-                  >
-                    <a href="#">{menu.name}</a>
-                  </li>
-                ))}
-              </ul>
+                      #{tag.name}
+                      {selected && (
+                        <button
+                          type="button"
+                          className="btn_sch_del"
+                          onClick={() => handleSelectTagChange(tag)}
+                        >
+                          <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                      )}
+                    </Link>
+                  );
+                })}
+            </div>
+            <div className="rgh">
+              <div className="btn_select1">
+                <button
+                  type="button"
+                  className="select_tit"
+                  onClick={() => setIsOrderByShow(!isOrderByShow)}
+                >
+                  {selectOrderBy.name}
+                </button>
+                <div
+                  className="select_list"
+                  style={{ display: isOrderByShow ? "" : "none" }}
+                >
+                  <ul>
+                    {orderByMenus.map((menu, index) => (
+                      <li
+                        key={`orderby_${index}`}
+                        onClick={() => {
+                          setSelectOrderBy(menu);
+                          setIsOrderByShow(!isOrderByShow);
+                        }}
+                      >
+                        <a href="#">{menu.name}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div className="lst_main_comic">
-        <ul>
-          {renderItems &&
-            renderItems.map((item, index) => (
-              <Item key={`item_${index}`} item={item} />
-            ))}
-        </ul>
-      </div>
-      <div className="pagenation">
-        <ul>{pagination}</ul>
-      </div>
-      {isSearchPopupShow && (
-        <SearchPopup
-          handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}
-          onSearch={handleSearch}
-        />
+          <div className="lst_main_comic">
+            <ul>
+              {renderItems &&
+                renderItems.map((item, index) => (
+                  <Item key={`item_${index}`} item={item} />
+                ))}
+            </ul>
+          </div>
+          <div className="pagenation">
+            <ul>{pagination}</ul>
+          </div>
+          {isSearchPopupShow && (
+            <SearchPopup
+              handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}
+              onSearch={handleSearch}
+            />
+          )}
+        </>
       )}
     </>
   );

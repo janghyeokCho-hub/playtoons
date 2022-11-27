@@ -1,7 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import useFilePath from "@/hook/useFilePath";
+import React from "react";
+import { useSelector } from "react-redux";
 import TypeItem from "./TypeItem";
 
 const TypeItems = ({ selectTab, setSelectTab }) => {

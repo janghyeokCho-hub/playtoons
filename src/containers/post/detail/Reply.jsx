@@ -23,7 +23,9 @@ const Reply = ({ item }) => {
   const [isLikeShow, setIsLikeShow] = useState(false);
   const [isDeletePopupShow, setIsDeletePopupShow] = useState(false);
   const [isReportPopupShow, setIsReportPopupShow] = useState(false);
-  const profileImgURL = useFilePath(item?.profileImage);
+  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
+    item?.profileImage
+  );
   // 댓글 제어 모달 Flag
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
 
@@ -67,7 +69,9 @@ const Reply = ({ item }) => {
     <>
       <div className={`col ${item?.level > 1 ? "col_re" : ""}`}>
         <div className="imgs">
-          <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
+          {!profileImgLoading && (
+            <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
+          )}
         </div>
         {(!isEdit && (
           <div className="conts">

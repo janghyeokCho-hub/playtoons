@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 
 const TypeItem = ({ item }) => {
-  const thumbImage = useFilePath(item?.iconImage);
+  const { filePath: thumbImage, loading } = useFilePath(item?.iconImage);
   return (
     <div className="col">
       <Link to={`/${item?.code}`}>
         <div className="thumb wid1">
-          <img src={thumbImage} alt="" />
+          {!loading && <img src={thumbImage} alt="" />}
         </div>
         <div className="txt" style={{ backgroundColor: "#fff" }}>
           <p className="c-black">{item?.name}</p>

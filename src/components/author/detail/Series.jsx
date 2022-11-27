@@ -24,6 +24,8 @@ import {
   getPostDetailFromServer as getPostDetilAPI,
   getPostContent as getPostContentAPI,
 } from "@/services/postService";
+import { currentPostInit } from "@/modules/redux/ducks/post";
+import { useDispatch } from "react-redux";
 
 const Series = ({ id }) => {
   const location = useLocation();
@@ -34,8 +36,12 @@ const Series = ({ id }) => {
   const [isUnFollowPopupShow, setIsUnFollowPopupShow] = useState(false);
   const [sortTab, setSortTab] = useState("DESC");
 
-  const coverImgURL = useFilePath(series?.coverImage);
-  const profileImgURL = useFilePath(series?.author?.profileImage);
+  const { filePath: coverImgURL, loading: coverImgLoading } = useFilePath(
+    series?.coverImage
+  );
+  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
+    series?.author?.profileImage
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -85,9 +91,11 @@ const Series = ({ id }) => {
   }, [series]);
 
   const PostComponent = ({ item }) => {
+    const dispatch = useDispatch();
     const [post, setPost] = useState(null);
     const [isLock, setIsLock] = useState(true);
-    const thumbnailImgURL = useFilePath(post?.thumbnailImage);
+    const { filePath: thumbnailImgURL, loading: thumbnailImgLoading } =
+      useFilePath(post?.thumbnailImage);
 
     const getPost = useCallback(async () => {
       const params = {
@@ -113,15 +121,19 @@ const Series = ({ id }) => {
       getPostContent();
     }, []);
 
+    const handleCurrentPostInit = useCallback(() => {
+      dispatch(currentPostInit());
+    }, [dispatch]);
     return (
       <li className="item">
         {post && (
           <Link
             to={`/post/detail/${post.type.code}/${post?.id}`}
             state={{ item: post }}
+            onClick={handleCurrentPostInit}
           >
             <div className="thumb">
-              <img src={thumbnailImgURL} alt="" />
+              {!thumbnailImgLoading && <img src={thumbnailImgURL} alt="" />}
 
               {isLock && (
                 <div className="area_lock">
@@ -162,7 +174,7 @@ const Series = ({ id }) => {
         <div className="top_detail">
           <div className="ar_view">
             <div className="thumb">
-              <img src={coverImgURL} alt="만화책" />
+              {!coverImgLoading && <img src={coverImgURL} alt="만화책" />}
             </div>
             <div className="cont">
               <div className="tit">
@@ -200,7 +212,9 @@ const Series = ({ id }) => {
           <div className="ar_name">
             <div>
               <div className="icon">
-                <SpanImg bgImg={profileImgURL}></SpanImg>
+                {!profileImgLoading && (
+                  <SpanImg bgImg={profileImgURL}></SpanImg>
+                )}
               </div>
               <p>{series?.author?.name}</p>
             </div>

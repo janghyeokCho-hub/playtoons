@@ -29,15 +29,19 @@ const Webtoon = () => {
   const id = params?.id;
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
-  const authorProfileImgURL = useFilePath(currentPost?.author?.profileImage);
-  const backgroundImgURL = useFilePath(currentPost?.author?.backgroundImage);
+  const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } =
+    useFilePath(currentPost?.author?.profileImage);
+  const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
+    useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
   const isLock = currentPost?.isLock;
   const content = currentPost?.content;
-  const contentURL = useFilePath(content);
+  const { filePath: contentURL, loading: contentLoading } =
+    useFilePath(content);
   // 로그인 한 사용자
   const userInfo = useSelector(({ login }) => login.userInfo);
-  const myProfileImgURL = useFilePath(userInfo?.profileImage);
+  const { filePath: myProfileImgURL, loading: myProfileImgLoading } =
+    useFilePath(userInfo?.profileImage);
   // 이전회차 / 다음회차 버튼 Ref
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -137,10 +141,13 @@ const Webtoon = () => {
             </div>
 
             <div className="area_webtoon">
-              <img
-                src={contentURL || require("@IMAGES/sampleImage.png")}
-                alt=""
-              />
+              {!contentLoading && (
+                <img
+                  src={contentURL || require("@IMAGES/sampleImage.png")}
+                  alt=""
+                />
+              )}
+
               {/* 잠금 시작 */}
               {isLock && (
                 <div className="area_lock">
@@ -171,10 +178,15 @@ const Webtoon = () => {
 
             <div className="area_detail3">
               <div className="box_profile">
-                <ImgTmpProfileBgDiv bgImg={backgroundImgURL} />
+                {!backgroundImgLoading && (
+                  <ImgTmpProfileBgDiv bgImg={backgroundImgURL} />
+                )}
+
                 <div className="pf_txt">
                   <div className="icon">
-                    <img src={authorProfileImgURL} alt="profile" />
+                    {!authorProfileImgLoading && (
+                      <img src={authorProfileImgURL} alt="profile" />
+                    )}
                   </div>
                   <p className="h1">{currentPost?.author?.nickname}</p>
                   <div className="btns">
@@ -204,7 +216,9 @@ const Webtoon = () => {
           <div className="wrap_comment">
             <div className="top_comm">
               <div className="imgs">
-                <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
+                {!myProfileImgLoading && (
+                  <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
+                )}
               </div>
               <div className="conts">
                 <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>

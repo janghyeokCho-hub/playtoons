@@ -8,13 +8,16 @@ import { getFileUrlFromServer } from "@API/fileService";
  * @returns {*string} filePath
  */
 export default function useFilePath(hash, params) {
+  const [loading, setLoading] = useState(false);
   const [filePath, setFilePath] = useState(null);
 
   async function getFilePath(hash, params) {
+    setLoading(true);
     const response = await getFileUrlFromServer(hash, params);
     if (response.status === 200) {
       setFilePath(response?.data?.url);
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -23,5 +26,5 @@ export default function useFilePath(hash, params) {
     }
   }, [hash, params]);
 
-  return filePath;
+  return { filePath, loading };
 }

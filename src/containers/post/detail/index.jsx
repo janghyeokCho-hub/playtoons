@@ -24,7 +24,7 @@ const App = () => {
 
   useEffect(() => {
     handleContainer();
-  }, []);
+  }, [dispatch]);
   return (
     <Routes>
       <Route path={"novel/:id"} element={<Novel />} />

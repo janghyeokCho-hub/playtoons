@@ -4,12 +4,12 @@ import { getCurationList as getCurationListAPI } from "@/services/curationServic
 import useFilePath from "@/hook/useFilePath";
 
 const WebNovelItem = ({ item }) => {
-  const thumbnailImage = useFilePath(item?.thumbnailImage);
+  const { filePath, loading } = useFilePath(item?.thumbnailImage);
   return (
     <div className="col">
       <a href="#">
         <div className="thumb">
-          <ImgBgSpan bgImg={thumbnailImage}></ImgBgSpan>
+          {!loading && <ImgBgSpan bgImg={filePath}></ImgBgSpan>}
         </div>
         <div className="txt">
           <p className="h1">{item?.title}</p>

@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import useFilePath from "@/hook/useFilePath";
 
 const PlanItem = ({ plan }) => {
-  const thumbnailImgURL = useFilePath(plan.thumbnailImage);
+  const { filePath, loading } = useFilePath(plan.thumbnailImage);
 
   return (
     <div className="col" style={{ marginBottom: "2.33%" }}>
       <div className="icon">
-        <img src={thumbnailImgURL} alt="plan" />
+        {!loading && <img src={filePath} alt="plan" />}
       </div>
       <div className="cont">
         <h3 className="h1">{plan?.name}</h3>

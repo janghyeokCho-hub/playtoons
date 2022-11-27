@@ -3,22 +3,33 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { getPostSeries as getPostSeriesAPI } from "@API/postService";
-import { setCurrentAuthor } from "@/modules/redux/ducks/author";
+import {
+  currentAuthorInit,
+  setCurrentAuthor,
+} from "@/modules/redux/ducks/author";
 import useFilePath from "@/hook/useFilePath";
 
 const SeriesImgComponent = ({ item }) => {
-  const coverImgURL = useFilePath(item?.coverImage);
-  return <ImgDiv bgImg={coverImgURL} />;
+  const { filePath: coverImgURL, loading: coverImgLoading } = useFilePath(
+    item?.coverImage
+  );
+  if (!coverImgLoading) {
+    return <ImgDiv bgImg={coverImgURL} />;
+  } else {
+    return <></>;
+  }
 };
 
 const RecommentItem = ({ item }) => {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
-  const profileImgURL = useFilePath(item?.profileImage);
+  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
+    item?.profileImage
+  );
 
   const handleCurrentAuthor = useCallback(() => {
-    dispatch(setCurrentAuthor(item.id));
-  }, [dispatch, item]);
+    dispatch(currentAuthorInit());
+  }, [dispatch]);
 
   useEffect(() => {
     async function getPostSeries(id) {
@@ -65,7 +76,7 @@ const RecommentItem = ({ item }) => {
           <div className="pf_txt">
             <div className="icon">
               {/* 이미지 default 값 필요 */}
-              <img src={profileImgURL} alt="profile" />
+              {!profileImgLoading && <img src={profileImgURL} alt="profile" />}
             </div>
             <p className="h1">{item?.nickname}</p>
             <p className="t1">{item?.description}</p>

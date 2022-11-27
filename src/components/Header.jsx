@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useLayoutEffect,
+} from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -156,7 +162,7 @@ const Header = ({ className, onSideMenu }) => {
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
-  const profileImgURL = useFilePath(userInfo?.profileImage);
+  const { filePath, loading } = useFilePath(userInfo?.profileImage);
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -209,29 +215,36 @@ const Header = ({ className, onSideMenu }) => {
   const handleLogout = useCallback(() => {
     clearUserData();
     dispatch(logoutRequest());
-  }, [dispatch]);
+    navigate("/");
+  }, [dispatch, navigate]);
 
   const handleUploadPost = useCallback(() => {
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
-      navigate('/post/upload');
-    } 
-    else{
-      showOneButtonPopup( dispatch, 'クリエイターとして登録しなければ、投稿できません。', () => navigate('/author/register') );
+    if (reduxAuthors && reduxAuthors?.length > 0) {
+      navigate("/post/upload");
+    } else {
+      showOneButtonPopup(
+        dispatch,
+        "クリエイターとして登録しなければ、投稿できません。",
+        () => navigate("/author/register")
+      );
     }
   }, [reduxAuthors]);
 
   const handleDashboard = useCallback(() => {
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
-      navigate('/dashboard/main');
-    } 
-    else{
-      showOneButtonPopup( dispatch, 'クリエイターとして登録しなければ、ダッシュボードを利用できません。', () => navigate('/author/register') );
+    if (reduxAuthors && reduxAuthors?.length > 0) {
+      navigate("/dashboard/main");
+    } else {
+      showOneButtonPopup(
+        dispatch,
+        "クリエイターとして登録しなければ、ダッシュボードを利用できません。",
+        () => navigate("/author/register")
+      );
     }
   }, [reduxAuthors]);
 
   useLayoutEffect(() => {
-    if( userInfo && !reduxAuthors ){
-      dispatch( getAuthorMineAction() );
+    if (userInfo && !reduxAuthors) {
+      dispatch(getAuthorMineAction());
     }
   }, [userInfo, reduxAuthors]);
 
@@ -328,7 +341,9 @@ const Header = ({ className, onSideMenu }) => {
                       }}
                     >
                       <button type="button" className="btn_profile">
-                        <ImgProfileSpan bgImg={profileImgURL}></ImgProfileSpan>
+                        {!loading && (
+                          <ImgProfileSpan bgImg={filePath}></ImgProfileSpan>
+                        )}
                       </button>
 
                       {isProfileShow && (
@@ -362,7 +377,7 @@ const Header = ({ className, onSideMenu }) => {
                               </Link>
                             </li>
                             <li>
-                              <a onClick={handleDashboard} >ダッシュボード</a>
+                              <a onClick={handleDashboard}>ダッシュボード</a>
                             </li>
                           </ul>
                           <ul>

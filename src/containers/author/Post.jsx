@@ -25,8 +25,11 @@ const Post = () => {
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
   const [selectTab, setSelectTab] = useState(tab ? tab : "POST");
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
-  const backgroundImgURL = useFilePath(currentAuthor?.backgroundImage);
-  const profileImgURL = useFilePath(currentAuthor?.profileImage);
+  const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
+    useFilePath(currentAuthor?.backgroundImage);
+  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
+    currentAuthor?.profileImage
+  );
 
   useEffect(() => {
     dispatch(setCurrentAuthor(id));
@@ -59,42 +62,48 @@ const Post = () => {
       <div className="wrap_author_detail">
         <div className="box_profile _longs">
           {/* 이미지 default 값 필요 */}
-          <ImgTmpProfileBgDiv
-            className="pf_thumb"
-            bgImg={backgroundImgURL}
-          ></ImgTmpProfileBgDiv>
-          <div className="pf_txt">
-            <div className="icon">
-              {/* 이미지 default 값 필요 */}
-              <img src={profileImgURL} alt="profile" />
+          {!backgroundImgLoading && (
+            <ImgTmpProfileBgDiv
+              className="pf_thumb"
+              bgImg={backgroundImgURL}
+            ></ImgTmpProfileBgDiv>
+          )}
+          {currentAuthor && (
+            <div className="pf_txt">
+              <div className="icon">
+                {/* 이미지 default 값 필요 */}
+                {!profileImgLoading && (
+                  <img src={profileImgURL} alt="profile" />
+                )}
+              </div>
+              <p className="h1">{currentAuthor?.nickname}</p>
+              <p className="t1">{currentAuthor?.description}</p>
+              <div className="btns">
+                <Link
+                  to=""
+                  className="btn-pk n blue"
+                  onClick={() => handleFollow("delete")}
+                >
+                  임시언팔
+                </Link>
+                <Link
+                  to=""
+                  className="btn-pk n blue"
+                  onClick={() => handleFollow("post")}
+                >
+                  フォロー
+                </Link>
+                <Link
+                  to=""
+                  className="btn-pk n blue2"
+                  onClick={() => setIsSharePopupShow(true)}
+                >
+                  <FontAwesomeIcon icon={faShare} />
+                  共有する
+                </Link>
+              </div>
             </div>
-            <p className="h1">{currentAuthor?.nickname}</p>
-            <p className="t1">{currentAuthor?.description}</p>
-            <div className="btns">
-              <Link
-                to=""
-                className="btn-pk n blue"
-                onClick={() => handleFollow("delete")}
-              >
-                임시언팔
-              </Link>
-              <Link
-                to=""
-                className="btn-pk n blue"
-                onClick={() => handleFollow("post")}
-              >
-                フォロー
-              </Link>
-              <Link
-                to=""
-                className="btn-pk n blue2"
-                onClick={() => setIsSharePopupShow(true)}
-              >
-                <FontAwesomeIcon icon={faShare} />
-                共有する
-              </Link>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="inr-c">
