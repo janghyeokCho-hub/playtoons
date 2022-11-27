@@ -14,7 +14,7 @@ const App = () => {
       isMenuShow: true,
       containerClass: "container dashboard landing log_landing",
       headerClass: "header",
-      headerType: null,
+      headerType: "post",
       menuType: "MAIN",
       activeMenu: "search",
       isDetailView: false,

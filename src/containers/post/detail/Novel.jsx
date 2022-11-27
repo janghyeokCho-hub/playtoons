@@ -146,7 +146,9 @@ const Novel = () => {
             </div>
 
             <div className="area_novel">
-              <div dangerouslySetInnerHTML={{ __html: content }}></div>
+              {(content && (
+                <div dangerouslySetInnerHTML={{ __html: content }}></div>
+              )) || <img src={require("@IMAGES/sampleImage.png")} alt="" />}
 
               {isLock && (
                 <div className="area_lock">

@@ -20,7 +20,7 @@ const App = () => {
       containerClass: "container dashboard author",
       isHeaderShow: true,
       isMenuShow: true,
-      headerType: "",
+      headerType: "post",
       menuType: "MAIN",
       isDetailView: false,
       activeMenu: "creatorList",

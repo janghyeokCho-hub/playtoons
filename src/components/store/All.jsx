@@ -113,9 +113,9 @@ const All = ({ openSearch }) => {
             }}
           >
             <div className="swiper-wrapper">
-              {banners?.map((item) => {
+              {banners?.map((item, index) => {
                 return (
-                  <SwiperSlide className="swiper-slide">
+                  <SwiperSlide key={`item_${index}`} className="swiper-slide">
                     <Link to={item?.link}>
                       <img src={item?.bannerImage} alt="이미지" />
                     </Link>

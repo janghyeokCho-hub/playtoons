@@ -155,7 +155,7 @@ const Items = ({ tab, typeId }) => {
 
   const pagination = useMemo(() => {
     if (meta) {
-      const { currentPage, totalPages } = meta;
+      const { currentPage, totalPages, itemCount } = meta;
       let pageList = [];
       for (let i = 1; i <= totalPages; i++) {
         pageList.push(i);
@@ -202,7 +202,7 @@ const Items = ({ tab, typeId }) => {
               </li>
             ))}
 
-          {totalPages - nextPage > 0 && (
+          {itemCount > 0 && totalPages - nextPage > 0 && (
             <li
               className="next"
               onClick={() => handleURLQueryChange("page", nextPage)}

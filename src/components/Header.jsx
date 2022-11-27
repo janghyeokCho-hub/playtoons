@@ -464,17 +464,29 @@ const Header = ({ className, onSideMenu }) => {
             <div className="inr-c view-m">
               <nav className="gnb">
                 <ul>
-                  <li>
-                    <a href="#">ホーム</a>
+                  <li
+                    className={location.pathname.includes("/home") ? "on" : ""}
+                  >
+                    <Link to="/home">ホーム</Link>
                   </li>
-                  <li>
-                    <a href="#">タイムライン</a>
+                  <li
+                    className={
+                      location.pathname.includes("/timeline") ? "on" : ""
+                    }
+                  >
+                    <Link to="/timeline">タイムライン</Link>
                   </li>
-                  <li>
-                    <a href="#">クリエイター</a>
+                  <li
+                    className={
+                      location.pathname.includes("/author/") ? "on" : ""
+                    }
+                  >
+                    <Link to="/author/list">クリエイター</Link>
                   </li>
-                  <li>
-                    <a href="#">マケット</a>
+                  <li
+                    className={location.pathname.includes("/store") ? "on" : ""}
+                  >
+                    <Link to="/store">マケット</Link>
                   </li>
                 </ul>
               </nav>
