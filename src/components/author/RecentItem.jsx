@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
-import { setCurrentAuthor } from "@/modules/redux/ducks/author";
+import { currentAuthorInit } from "@/modules/redux/ducks/author";
 
 const RecentItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -13,9 +13,9 @@ const RecentItem = ({ item }) => {
     item?.profileImage
   );
 
-  const handleCurrentAuthor = useCallback(() => {
-    dispatch(setCurrentAuthor(item.id));
-  }, [dispatch, item]);
+  const handleCurrentAuthorInit = useCallback(() => {
+    dispatch(currentAuthorInit());
+  }, [dispatch]);
 
   return (
     <div className="box_profile">
@@ -24,7 +24,7 @@ const RecentItem = ({ item }) => {
           pathname: `/author/post/${item?.id}`,
         }}
         state={{ item: item }}
-        onClick={handleCurrentAuthor}
+        onClick={handleCurrentAuthorInit}
       >
         {/* 이미지 default 값 필요 */}
         {!backgroundImgLoading && (

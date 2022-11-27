@@ -18,6 +18,7 @@ import { setAuthorFollow } from "@API/authorService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 import { insertReaction } from "@API/reactionService";
 import ReplyItems from "./ReplyItems";
+import { currentAuthorInit } from "@/modules/redux/ducks/author";
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -127,6 +128,10 @@ const Novel = () => {
     }
   }, [dispatch, id, replyLimit]);
 
+  const handleCurrentAuthorInit = useCallback(() => {
+    dispatch(currentAuthorInit());
+  }, [dispatch]);
+
   return (
     <>
       {currentPost && (
@@ -155,6 +160,7 @@ const Novel = () => {
                       to={`/author/post/${currentPost?.author?.id}`}
                       state={{ tab: "PLAN" }}
                       className="btn-pk s blue bdrs"
+                      onClick={handleCurrentAuthorInit}
                     >
                       <span>支援する</span>
                     </Link>
