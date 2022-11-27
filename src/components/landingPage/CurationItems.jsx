@@ -8,13 +8,23 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import Curation from "./Curation";
 import { useSelector } from "react-redux";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const CurationItems = ({ curationNum }) => {
   SwiperCore.use([Navigation]);
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const items = useSelector(({ landing }) => landing.curations[curationNum]);
+  console.log("curationNum : ", curationNum);
+  const curations = useSelector(({ landing }) => landing?.curations);
+
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    if (curations && curationNum) {
+      setItems(curations[curationNum]);
+    }
+  }, [curations, curationNum]);
 
   const renderItems = useMemo(() => {
     return items.map((item, index) => {

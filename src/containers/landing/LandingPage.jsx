@@ -7,8 +7,6 @@ import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { setDim } from "@/modules/redux/ducks/dim";
-import { setContainer, setFooterShow } from "@/modules/redux/ducks/container";
 import { setLanding } from "@/modules/redux/ducks/landing";
 
 const LandingPage = (props) => {

@@ -14,6 +14,8 @@ export const setLanding = createAction(SET_LANDING);
  */
 const initialState = {
   notice: [],
+  curations: [],
+  types: [],
 };
 
 const landing = handleActions(

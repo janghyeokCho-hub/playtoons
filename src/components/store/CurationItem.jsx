@@ -12,7 +12,6 @@ const CurationItem = ({ item }) => {
 
   const getCurationList = useCallback(async () => {
     const response = await getCurationListAPI(item?.curation?.id);
-    console.log(response);
     if (response?.status === 200) {
       setProducts(response?.data?.products);
     }

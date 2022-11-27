@@ -41,10 +41,11 @@ function createLoginRequestSaga(loginType, syncType) {
 
         yield put({
           type: FAILURE,
-          payload: action.payload,
-          error: true,
-          errStatus: e.response.status,
-          errMessage: e.response.data.message,
+          payload: {
+            error: true,
+            errStatus: e.response.status,
+            errMessage: e.response.data.message,
+          },
         });
       } finally {
         // loading state가 해제되지 않는 현상 수정
