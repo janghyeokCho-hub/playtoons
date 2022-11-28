@@ -138,16 +138,16 @@ export default function DashboardPlan(props) {
 
   useLayoutEffect(() => {
     handleContainer();
-    //check author
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
-      //check login expire time
-      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+    //check login expire time
+    if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+      //check author
+      if( reduxAuthors && reduxAuthors?.length > 0 ){
         dispatch(getSubscribeTierAction({ authorId: reduxAuthors[0].id }));
         getSurpporter();
       }
-    }
-    else{
-      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+      else{
+        showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+      }
     }
   }, [reduxAuthors]);
 
