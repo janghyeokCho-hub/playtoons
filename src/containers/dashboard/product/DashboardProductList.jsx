@@ -1,5 +1,6 @@
-import { showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import Button from "@/components/dashboard/Button";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
 import Search from "@/components/dashboard/Search";
@@ -27,6 +28,10 @@ const text = {
   category: "カテゴリ",
   dont_see: "非表示",
   must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
+  empty_message: '商品がありません。',
+  status_sales: '販売中',
+  status_check: '審査中',
+  status_not_for_sale: '販売不可',
 };
 
 const tempData = {
@@ -35,42 +40,38 @@ const tempData = {
     itemsPerPage: 10,
     totalItems: 3,
   },
-  list: [
+  products: [
     {
-      number: "1",
       id: 23,
-      image: tempImg1,
-      title: "大学のリンゴ一個の重さで10メートルの素材",
+      thumbnailImage: tempImg1,
+      name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
-      date: "2022/06/11",
-      status: {
-        code: "enabled",
-        name: "販売中",
-      },
+      startAt: "2022/06/11",
+      status:  "enabled",
     },
     {
-      number: "2",
-      id: 256,
-      image: tempImg1,
-      title: "大学のリンゴ一個の重さで10メートルの素材",
+      id: 1,
+      thumbnailImage: tempImg1,
+      name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
-      date: "2022/06/11",
-      status: {
-        code: "pending",
-        name: "審査中",
-      },
+      startAt: "2022/06/11",
+      status:  "enabled",
     },
     {
-      number: "3",
-      id: 2,
-      image: tempImg1,
-      title: "大学のリンゴ一個の重さで10メートルの素材",
+      id: 3,
+      thumbnailImage: tempImg1,
+      name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
-      date: "2022/06/11",
-      status: {
-        code: "suspended",
-        name: "販売不可",
-      },
+      startAt: "2022/06/11",
+      status:  "pending",
+    },
+    {
+      id: 4,
+      thumbnailImage: tempImg1,
+      name: "大学のリンゴ一個の重さで10メートルの素材",
+      price: "1200000CP",
+      startAt: "2022/06/11",
+      status:  "suspended",
     },
   ],
 };
@@ -89,7 +90,7 @@ export default function DashboardProductList(props) {
   const getStatusColor = (status) => {
     let className = "";
 
-    switch (status.code) {
+    switch (status) {
       default:
         className = "cl-sell";
         break;
@@ -102,6 +103,24 @@ export default function DashboardProductList(props) {
     } //switch
 
     return className;
+  };
+
+  const getStatusText = (status) => {
+    let statusText = "";
+
+    switch (status) {
+      default:
+        statusText = text.status_sales;
+        break;
+      case "pending":
+        statusText = text.status_check;
+        break;
+      case "suspended":
+        statusText = text.status_not_for_sale;
+        break;
+    } //switch
+
+    return statusText;
   };
   //==============================================================================
   // api
@@ -121,7 +140,7 @@ export default function DashboardProductList(props) {
     console.log('getProductList', status, data);
     
     if( status === 200 ){
-      setStateData(tempData);
+      setStateData(data);
     }
     else{
       showOneButtonPopup(dispatch, data);
@@ -129,6 +148,7 @@ export default function DashboardProductList(props) {
   };
 
   const editProductInStatus = async (item, ftnSetButtonStatus) => {
+    console.log('first', item);
     const {status, data} = await editShopProductToServer(item);
     console.log('editProductInStatus', status, data);
     
@@ -170,6 +190,7 @@ export default function DashboardProductList(props) {
   * @author 2hyunkook
   */
   const handleItemClick = useCallback((item, ftnSetButtonStatus) => {
+    // productId, name
     let lodashItem = cloneDeep(item);
     lodashItem.status = 'pending';
     editProductInStatus(lodashItem, ftnSetButtonStatus);
@@ -179,26 +200,30 @@ export default function DashboardProductList(props) {
   // hook & render
   //==============================================================================
   const renderProductList = () => {
-    return stateData?.list?.map((item, index) => {
+    if (stateData?.products?.length === 0) {
+      return <EmptyTr text={text.empty_message} />;
+    }
+
+    return stateData?.products?.map((item, index) => {
       return (
         <tr key={index}>
-          <td className="hide-m">{item.number}</td>
+          <td className="hide-m">{item.id}</td>
           <td className="td_imgs2">
             <div className="cx_thumb ">
               <span>
-                <Image hash={item.image} alt={"cover iamge"} />
+                <Image hash={item.thumbnailImage} />
               </span>
             </div>
           </td>
-          <td className="td_subject">{item.title}</td>
+          <td className="td_subject">{item.name || 'name'}</td>
           <td className="td_number3">{item.price}</td>
-          <td className="td_text1">
-            <span className="view-m">{text.category}：</span>
-            {item.date}
+          <td className="td_txt1">
+            <span className="view-m">{text.date}：</span>
+            {getDateYYYYMMDD(item.startAt, '/')}
           </td>
           <td className={`td_txt3 cl-sell ${getStatusColor(item.status)}`}>
             <span className="view-m">{text.status}</span>
-            {item.status.name}
+            {getStatusText(item.status)}
           </td>
           <td className="td_btns2 ty1">
             <Link

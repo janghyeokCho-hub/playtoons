@@ -26,25 +26,27 @@ export default forwardRef(function AnswerTr(props, ref) {
 
   return (
     <>
+      {/* sales inquirt */}
       {
         type === undefined && 
           <tr ref={refContainer} className={`tr_a ${stateShow ? 'on d_tr' : ''}`} >
             <td className="hide-m"></td>
             <td colSpan="5" className="ta-l">
               <div className="tx_a1" >
-                <button type="button" className="arr view-m" id={item.id} onClick={handleShow} ></button>
-                <p className="t1">{item.creator_comnent}</p>
+                <button type="button" className="arr view-m" onClick={handleShow} ></button>
+                <p className="t1">{item.content}</p>
               </div>
               <div className="tx_a2">
                 <span className="re view-m"><FontAwesomeIcon icon={faShare} /></span>
-                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
-                <p className="t1">{item.answer.coment}</p>
+                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item?.respondedAt}時</span></p>
+                <p className="t1">{item?.authorResponse}</p>
               </div>
             </td>
             <td className="hide-m ta-c"></td>
           </tr>
       }
 
+      {/* sales review */}
       {
         type === 'salesReview' && 
           <tr ref={refContainer} className={`tr_a ${stateShow ? 'on d_tr' : ''}`} >
@@ -56,8 +58,8 @@ export default forwardRef(function AnswerTr(props, ref) {
               </div>
               <div className="tx_a2">
                 <span className="re view-m"><FontAwesomeIcon icon={faShare} /></span>
-                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item.answer.time}時</span></p>
-                <p className="t1">{item.answer.coment}</p>
+                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item?.answer?.time}時</span></p>
+                <p className="t1">{item?.answer?.coment}</p>
               </div>
             </td>
             <td className="hide-m ta-c"></td>
