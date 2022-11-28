@@ -14,10 +14,12 @@ export const [
   SET_CURRENT_AUTHOR_SUCCESS,
   SET_CURRENT_AUTHOR_FAILURE,
 ] = createRequestActionTypes("author/SET_CURRENT_AUTHOR");
+const CURRENT_AUTHOR_INIT = "author/CURRENT_AUTHOR_INIT";
 
 /* --- Actions --- */
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
 export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
+export const currentAuthorInit = createAction(CURRENT_AUTHOR_INIT);
 
 /**
  * login reducer 초기값
@@ -35,7 +37,6 @@ const author = handleActions(
     [GET_AUTHOR_LIST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
-        console.log("GET_AUTHOR_LIST_SUCCESS : ", action.payload);
         draft.authors = action.payload.authors || [];
         draft.authorsMeta = action.payload.authorsMeta || null;
         draft.recents = action.payload.recents || [];
@@ -44,8 +45,12 @@ const author = handleActions(
     },
     [SET_CURRENT_AUTHOR_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        console.log("SET_CURRENT_AUTHOR : ", action.payload);
         draft.currentAuthor = action.payload;
+      });
+    },
+    [CURRENT_AUTHOR_INIT]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.currentAuthor = null;
       });
     },
   },

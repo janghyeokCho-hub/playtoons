@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from "react";
-
-import { getCurationList as getCurationListAPI } from "@/services/curationService";
+import React, { useState } from "react";
 import Author from "./Author";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const AuthorItems = () => {
+const AuthorItems = ({ curationNum }) => {
+  const curations = useSelector(({ landing }) => landing.curations);
   const [items, setItems] = useState([]);
-
-  const getCurationList = async () => {
-    const response = await getCurationListAPI(3);
-    if (response.status === 200) {
-      setItems(response.data.authors);
-    }
-  };
   useEffect(() => {
-    if (!items?.length) {
-      getCurationList();
+    if (curations && curationNum) {
+      setItems(curations[curationNum]);
     }
-  }, [items]);
+  }, [curations, curationNum]);
 
   return (
     <>

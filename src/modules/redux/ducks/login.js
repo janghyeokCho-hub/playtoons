@@ -56,13 +56,14 @@ const login = handleActions(
       });
     },
     [LOGIN_REQUEST_FAILURE]: (state, action) => {
-      return {
-        ...state,
-        authFail: true,
-        accessToken: initialState.accessToken,
-        ...(action.errStatus && { errStatus: action.errStatus }),
-        ...(action.errMessage && { errMessage: action.errMessage }),
-      };
+      return produce(state, (draft) => {
+        console.log("LOGIN_REQUEST_FAILURE : ", action.payload);
+        /** FAILURE 처리 */
+        draft.authFail = true;
+        draft.accessToken = initialState.accessToken;
+        draft.errStatus = action.payload.errStatus;
+        draft.errMessage = action.payload.errMessage;
+      });
     },
     [GET_TEMP_TOKEN_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {

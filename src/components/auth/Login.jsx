@@ -25,6 +25,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   const isLogined = useSelector(({ login }) => login.isLogined);
+  const errStatus = useSelector(({ login }) => login.errStatus);
+  const errMessage = useSelector(({ login }) => login.errMessage);
 
   const [email, setEmail] = useState("");
   const emailRef = useRef(null);
@@ -110,12 +112,14 @@ const Login = () => {
         <span className="icon">PlayToons</span>
       </h1>
 
-      {isLoginErrorShow && (
+      {errStatus && (
         <div className="box_error">
           <p className="t1">
             <span className="ico_error">Error Message</span>
           </p>
-          <p className="t2">{loginErrorMsg}</p>
+          <p className="t2">
+            {errMessage || "아이디 또는 패스워드가 일치하지 않습니다."}
+          </p>
         </div>
       )}
 

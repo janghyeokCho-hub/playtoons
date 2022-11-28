@@ -3,16 +3,19 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
-import { setCurrentAuthor } from "@/modules/redux/ducks/author";
+import { currentAuthorInit } from "@/modules/redux/ducks/author";
 
 const RecentItem = ({ item }) => {
   const dispatch = useDispatch();
-  const backgroundImgURL = useFilePath(item?.backgroundImage);
-  const profileImgURL = useFilePath(item?.profileImage);
+  const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
+    useFilePath(item?.backgroundImage);
+  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
+    item?.profileImage
+  );
 
-  const handleCurrentAuthor = useCallback(() => {
-    dispatch(setCurrentAuthor(item.id));
-  }, [dispatch, item]);
+  const handleCurrentAuthorInit = useCallback(() => {
+    dispatch(currentAuthorInit());
+  }, [dispatch]);
 
   return (
     <div className="box_profile">
@@ -21,14 +24,16 @@ const RecentItem = ({ item }) => {
           pathname: `/author/post/${item?.id}`,
         }}
         state={{ item: item }}
-        onClick={handleCurrentAuthor}
+        onClick={handleCurrentAuthorInit}
       >
         {/* 이미지 default 값 필요 */}
-        <ImgTmpProfileBgDiv className="pf_thumb" bgImg={backgroundImgURL} />
+        {!backgroundImgLoading && (
+          <ImgTmpProfileBgDiv className="pf_thumb" bgImg={backgroundImgURL} />
+        )}
         <div className="pf_txt">
           <div className="icon">
             {/* 이미지 default 값 필요 */}
-            <img src={profileImgURL} alt="profile" />
+            {!profileImgLoading && <img src={profileImgURL} alt="profile" />}
           </div>
           <p className="h1">{item?.nickname}</p>
           <p className="t1">{item?.description}</p>

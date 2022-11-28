@@ -20,14 +20,16 @@ const Comment = ({ item }) => {
   const [isDeleteShow, setIsDeleteShow] = useState(false);
   const [isReportShow, setIsReportShow] = useState(false);
 
-  const profileImgURL = useFilePath(item?.profileImgURL);
+  const { filePath, loading } = useFilePath(item?.profileImgURL);
 
   return (
     <div className={`col ${isReComment ? "col_re" : ""}`}>
       <div className="imgs">
-        <ImgProfileSpan
-          bgImg={profileImgURL || require("@IMAGES/img_profile.png")}
-        ></ImgProfileSpan>
+        {!loading && (
+          <ImgProfileSpan
+            bgImg={filePath || require("@IMAGES/img_profile.png")}
+          ></ImgProfileSpan>
+        )}
       </div>
       <div
         className="conts"

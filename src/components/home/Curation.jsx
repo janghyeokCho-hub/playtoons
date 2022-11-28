@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 
 const Curation = ({ item }) => {
-  const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  const { filePath: thumbnailImgURL, loading: thumbnailImgLoading } =
+    useFilePath(item?.thumbnailImage);
 
   return (
     <Link to="">
       <div className="cx_thumb">
         <span>
-          <img src={thumbnailImgURL} alt="사진" />
+          {!thumbnailImgLoading && <img src={thumbnailImgURL} alt="사진" />}
         </span>
         <p className="t_like">
           <FontAwesomeIcon icon={faHeart} />

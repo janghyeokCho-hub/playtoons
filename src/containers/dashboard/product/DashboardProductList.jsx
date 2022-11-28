@@ -1,16 +1,14 @@
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { showOneButtonPopup } from "@/common/common";
+import Button from "@/components/dashboard/Button";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
 import Search from "@/components/dashboard/Search";
-import Button from "@/components/dashboard/Button";
-import { getProductListFromServer } from "@/services/postService";
+import { editShopProductToServer, getProductListFromServer } from "@/services/dashboardService";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
-import { useDispatch, useSelector } from "react-redux";
-import { editShopProductToServer, getAuthorIdFromServer } from "@/services/dashboardService";
 import { cloneDeep } from "lodash";
-import { useCallback } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const text = {
   see_product: "商品一覧",
@@ -118,8 +116,8 @@ export default function DashboardProductList(props) {
       formData.append('page', page);
     }
     
-    const {status, data} = await getAuthorIdFromServer(formData);
-    // const {status, data} = await getProductListFromServer(formData);
+    // const {status, data} = await getAuthorIdFromServer(formData);
+    const {status, data} = await getProductListFromServer(formData);
     console.log('getProductList', status, data);
     
     if( status === 200 ){

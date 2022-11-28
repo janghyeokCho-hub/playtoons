@@ -12,11 +12,14 @@ import {
   getPostDetailFromServer as getPostDetilAPI,
   getPostContent as getPostContentAPI,
 } from "@/services/postService";
+import { useDispatch } from "react-redux";
+import { currentPostInit } from "@/modules/redux/ducks/post";
 
 const PostItem = ({ item }) => {
+  const dispatch = useDispatch();
   const [post, setPost] = useState(null);
   const [isLock, setIsLock] = useState(true);
-  const thumbnailImgURL = useFilePath(item?.thumbnailImage);
+  const { filePath, loading } = useFilePath(item?.thumbnailImage);
 
   const getPost = useCallback(async () => {
     const params = {
@@ -42,15 +45,20 @@ const PostItem = ({ item }) => {
     getPostContent();
   }, []);
 
+  const handleCurrentPostInit = useCallback(() => {
+    dispatch(currentPostInit());
+  }, [dispatch]);
+
   return (
     <li className="item">
       {post && (
         <Link
           to={`/post/detail/${post.type.code}/${post?.id}`}
           state={{ item: post }}
+          onClick={handleCurrentPostInit}
         >
           <div className="thumb">
-            <img src={thumbnailImgURL} alt="" />
+            {!loading && <img src={filePath} alt="" />}
 
             {/* 잠금 시작 */}
             {isLock && (

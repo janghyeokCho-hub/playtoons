@@ -3,22 +3,15 @@ import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 
 const BestWebtoon = ({ item }) => {
-  const thumbnailImage = useFilePath(item?.thumbnailImage);
+  const { filePath, loading } = useFilePath(item?.characterImage);
   return (
     <Link to="">
-      <div
-        className="cx_thumb"
-        style={{ backgroundColor: item?.backgroundColor }}
-      >
-        <span>
-          <img src={thumbnailImage} alt="" />
-        </span>
+      <div className="cx_thumb" style={{ backgroundColor: item?.mainColor }}>
+        <span>{!loading && <img src={filePath} alt="" />}</span>
       </div>
       <div className="cx_txt">
         <p className="h1">{item?.title}</p>
-        <p className="t1">
-          『神』と名乗る人が現れ任命されたのは『事故処理係』！？
-        </p>
+        <p className="t1">{item?.outline}</p>
       </div>
     </Link>
   );

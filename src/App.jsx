@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Account from "@CONTAINERS/account/Account";
 import Home from "@CONTAINERS/home";
-import LandingPage from "@CONTAINERS/landing/LandingPage";
+import LandingPage from "@CONTAINERS/landing";
 import Webtoon from "@CONTAINERS/webtoon/Webtoon";
 import Novel from "@CONTAINERS/novel/Novel";
 import Post from "@CONTAINERS/post";

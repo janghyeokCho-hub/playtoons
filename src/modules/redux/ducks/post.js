@@ -23,11 +23,13 @@ export const [
   GET_POST_REACTION_FAILURE,
 ] = createRequestActionTypes("post/GET_POST_REACTION");
 const [SET_SERIES, INIT_SERIES] = createRequestActionTypes("post/SET_SERIES");
+const [CURRENT_POST_INIT] = createRequestActionTypes("post/CURRENT_POST_INIT");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
 export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
+export const currentPostInit = createAction(CURRENT_POST_INIT);
 export const getCurrentPost = createAction(GET_CURRENT_POST);
 export const getPostReaction = createAction(GET_POST_REACTION);
 export const setSeriesAction = createAction(SET_SERIES);
@@ -70,6 +72,12 @@ const post = handleActions(
           ...state,
           series: null,
         };
+      });
+    },
+    [CURRENT_POST_INIT]: (state, action) => {
+      return produce(state, (draft) => {
+        console.log("CURRENT_POST_INIT");
+        draft.currentPost = null;
       });
     },
     [GET_CURRENT_POST_SUCCESS]: (state, action) => {

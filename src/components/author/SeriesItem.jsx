@@ -7,7 +7,8 @@ import useFilePath from "@/hook/useFilePath";
 import { getPostSeriesCount as getPostSeriesCountAPI } from "@API/postService";
 
 const SeriesItem = ({ item }) => {
-  const thumbnailImgURL = useFilePath(item?.coverImage);
+  const { filePath: thumbnailImgURL, loading: thumbnailImgLoading } =
+    useFilePath(item?.coverImage);
   const [seriesCount, setSeriesCount] = useState(0);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const SeriesItem = ({ item }) => {
         state={{ postType: item.type.code }}
       >
         <div className="thumb">
-          <SpanImg bgImg={thumbnailImgURL}></SpanImg>
+          {!thumbnailImgLoading && <SpanImg bgImg={thumbnailImgURL}></SpanImg>}
         </div>
         <div className="txt">
           <p className="t1">{item?.type?.name}</p>

@@ -1,20 +1,10 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { getHome as getHomeAPI } from "@API/homrService";
+import React from "react";
 import HomeItem from "./HomeItem";
+import { useSelector } from "react-redux";
 
 const HomeItems = () => {
-  const [items, setItems] = useState([]);
+  const items = useSelector(({ home }) => home.contents);
 
-  const getHome = useCallback(async () => {
-    const response = await getHomeAPI("home");
-    if (response?.status === 200) {
-      setItems(response.data?.contents);
-    }
-  }, []);
-
-  useEffect(() => {
-    getHome();
-  }, []);
   return (
     <>
       {items?.map((item, index) => (

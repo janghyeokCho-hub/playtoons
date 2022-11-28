@@ -7,8 +7,8 @@ const StoreItems = () => {
   console.log("currentAuthor : ", currentAuthor);
   return (
     <div className="lst_store1 widn">
-      {currentAuthor?.series &&
-        currentAuthor?.series?.map((item, index) => (
+      {currentAuthor?.products &&
+        currentAuthor?.products?.map((item, index) => (
           <StoreItem key={`item_${index}`} item={item} />
         ))}
     </div>

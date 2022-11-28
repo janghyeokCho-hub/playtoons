@@ -1,35 +1,36 @@
 import React, { useEffect, useCallback } from "react";
-import { Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import Novel from "./Novel";
-import Webtoon from "./Webtoon";
-import Page404 from "@COMPONENTS/Page404";
+import { Route, Routes } from "react-router-dom";
 import { setContainer } from "@/modules/redux/ducks/container";
+import LandingPage from "./LandingPage";
+import { setDim } from "@/modules/redux/ducks/dim";
 
 const App = () => {
   const dispatch = useDispatch();
+
   const handleContainer = useCallback(() => {
     const container = {
-      headerClass: "header ty1 mdetail",
-      containerClass: "container sub mpost bg",
       isHeaderShow: true,
       isMenuShow: false,
-      headerType: "post",
+      containerClass: "container landing",
+      headerClass: "header",
+      headerType: null,
       menuType: "MAIN",
-      isDetailView: true,
-      isFooterShow: false,
+      activeMenu: null,
+      isDetailView: false,
+      isFooterShow: true,
     };
     dispatch(setContainer(container));
+    dispatch(setDim({ dimType: null, isShow: false }));
   }, [dispatch]);
 
   useEffect(() => {
     handleContainer();
-  }, [dispatch]);
+  }, []);
+
   return (
     <Routes>
-      <Route path={"novel/:id"} element={<Novel />} />
-      <Route path={"webtoon/:id"} element={<Webtoon />} />
-      <Route path={"*"} element={<Page404 />} />
+      <Route index element={<LandingPage />} />
     </Routes>
   );
 };

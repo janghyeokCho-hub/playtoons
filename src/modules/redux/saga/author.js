@@ -93,6 +93,16 @@ function createSetCurrentAuthorRequestSaga(type) {
             payload.subscribeTiers = [];
           }
 
+          /** 해당 작가의 스토어 목록 */
+          const storeResponse = yield call(authorApi.getProduct, {
+            authorId: payload?.id || action.payload,
+          });
+          if (storeResponse?.status === 200) {
+            payload.products = storeResponse?.data?.products || [];
+          } else {
+            payload.subscribeTiers = [];
+          }
+
           yield put({
             type: SUCCESS,
             payload: payload,
