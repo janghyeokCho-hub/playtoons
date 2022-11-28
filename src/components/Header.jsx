@@ -231,9 +231,10 @@ const Header = ({ className, onSideMenu }) => {
 
   useEffect(() => {
     if( !reduxAuthors ){
+      //accessToken 이 없는 상태로 api 호출을 하는 경우가 있으니 userInfo 필요
       dispatch( getAuthorMineAction() );
     }
-  }, [reduxAuthors]);
+  }, [userInfo, reduxAuthors]);
 
   useEffect(() => {
     let tempType = type;

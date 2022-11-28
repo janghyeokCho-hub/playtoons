@@ -230,15 +230,15 @@ export default function DashboardReactionList() {
   };
 
   useLayoutEffect(() => {
-    //check author
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
-      //check login expire time
-      if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+    //check login expire time
+    if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+      //check author
+      if( reduxAuthors && reduxAuthors?.length > 0 ){
         getList();
       }
-    }
-    else{
-      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+      else{
+        showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+      }
     }
   }, [params]);
 
