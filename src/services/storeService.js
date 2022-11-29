@@ -15,12 +15,32 @@ export const getProduct = async (params) => {
   }
 };
 
+export const insertProduct = async (params) => {
+  try {
+    return await apiServer("post", "/shop/product", params);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
+
 /**
- * 해당 작가 Store
+ * Product Type
  */
 export const getProductType = async () => {
   try {
     return await apiServer("get", "/shop/product/type");
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
+
+/**
+ * Product Type Category
+ * @param {number} typeId type ID
+ */
+export const getProductCategory = async (typeId) => {
+  try {
+    return await apiServer("get", `/shop/product/category/${typeId}`);
   } catch (e) {
     return { status: e.response.status, data: e };
   }

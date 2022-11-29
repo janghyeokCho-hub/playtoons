@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
@@ -8,23 +8,31 @@ import {
   faXmark,
 } from "@fortawesome/pro-solid-svg-icons";
 import Dropzone from "react-dropzone";
+import {
+  getProductType as getProductTypeAPI,
+  getProductCategory as getProductCategoryAPI,
+} from "@API/storeService";
 
 const Upload = () => {
-  const typeList = [
+  const [typeList, setTypeList] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
+  const [selectType, setSelectType] = useState(null);
+  const targetList = [
     {
-      code: "asset",
-      name: "アセット",
+      code: "all",
+      name: "すべて",
     },
     {
-      code: "program",
-      name: "プログラム",
+      code: "follower",
+      name: "フォロワー",
     },
     {
-      code: "service",
-      name: "サービス",
+      code: "individual",
+      name: "個人",
     },
   ];
-  const [selectType, setSelectType] = useState("asset");
+  const [selectTarget, setSelectTarget] = useState("all");
+  const [selectAge, setSelectAge] = useState(false);
   const [files, setFiles] = useState([]);
   const handlePreviewDelete = useCallback(
     (id) => {
@@ -33,7 +41,37 @@ const Upload = () => {
     [files]
   );
   const [product, setProduct] = useState(null);
-  console.log("product : ", product);
+
+  const getProductType = useCallback(async () => {
+    const response = await getProductTypeAPI();
+    if (response?.status === 200) {
+      setTypeList(response.data?.productTypes);
+    }
+  }, []);
+
+  const getProductCategory = useCallback(async () => {
+    const response = await getProductCategoryAPI();
+    console.log("response : ", response);
+    if (response?.status === 200) {
+      setCategoryList(response.data?.productCategories);
+    }
+  }, []);
+
+  useEffect(() => {
+    getProductType();
+  }, []);
+
+  useEffect(() => {
+    if (typeList?.length && selectType === null) {
+      setSelectType(typeList[0]?.code);
+    }
+  }, [typeList, selectType]);
+
+  useEffect(() => {
+    if (selectType !== null) {
+      getProductCategory();
+    }
+  }, [selectType]);
 
   return (
     <div className="inr-c">
@@ -121,7 +159,7 @@ const Upload = () => {
                       multiple={true}
                       {...getInputProps()}
                     />
-                    <label for="filebox2" className="filetxt">
+                    <label htmlFor="filebox2" className="filetxt">
                       <div className="txt">
                         <div className="ico">
                           <FontAwesomeIcon icon={faCirclePlus} />
@@ -232,7 +270,7 @@ const Upload = () => {
                     )) || (
                       <>
                         <input type="file" id="filebox2" {...getInputProps()} />
-                        <label for="filebox2" className="filetxt">
+                        <label htmlFor="filebox2" className="filetxt">
                           <div className="txt">
                             <div className="ico">
                               <FontAwesomeIcon icon={faCirclePlus} />
@@ -250,7 +288,11 @@ const Upload = () => {
             <div className="col">
               <h3 className="tit1">年齢設定</h3>
               <label className="inp_chktx">
-                <input type="checkbox" checked="" />
+                <input
+                  type="checkbox"
+                  checked={selectAge}
+                  onClick={() => setSelectAge(!selectAge)}
+                />
                 <span>すべての年齢</span>
               </label>
             </div>
@@ -258,18 +300,22 @@ const Upload = () => {
             <div className="col">
               <h3 className="tit1">販売対象</h3>
               <div className="lst_txchk">
-                <label className="inp_txchk">
-                  <input type="radio" name="radio02" checked />
-                  <span>すべて</span>
-                </label>
-                <label className="inp_txchk">
-                  <input type="radio" name="radio02" />
-                  <span>フォロワー</span>
-                </label>
-                <label className="inp_txchk">
-                  <input type="radio" name="radio02" />
-                  <span>個人</span>
-                </label>
+                {targetList?.map((item, index) => {
+                  return (
+                    <label
+                      key={`target_${index}`}
+                      className="inp_txchk"
+                      onClick={() => setSelectTarget(item?.code)}
+                    >
+                      <input
+                        type="radio"
+                        name="radio02"
+                        checked={item?.code === selectTarget}
+                      />
+                      <span>{item?.name}</span>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 
