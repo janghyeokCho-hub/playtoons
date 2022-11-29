@@ -492,71 +492,73 @@ const Header = ({ className, onSideMenu }) => {
                 </ul>
               </nav>
             </div>
-            {isDetailView && (
-              <div className="inr-c">
+          </>
+        )}
+        {isDetailView && (renderType === "post" || renderType === "product") && (
+          <div className="inr-c">
+            <button
+              type="button"
+              className="btn_back"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <span className="icon">
+                <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
+              </span>
+            </button>
+            {renderType === "post" && (
+              <div className="rgh">
                 <button
                   type="button"
-                  className="btn_back"
-                  onClick={() => {
-                    navigate(-1);
-                  }}
+                  className="btn_top_heart on"
+                  onClick={() => setIsLikeShow(!isLikeShow)}
                 >
-                  <span className="icon">
-                    <FontAwesomeIcon icon={faAngleLeft} fontSize={24} />
-                  </span>
+                  {/*<!-- 이미 누른것엔 on 추가 -->*/}
+                  <FontAwesomeIcon icon={faHeart} fontSize={24} />
                 </button>
-                <div className="rgh">
-                  <button
-                    type="button"
-                    className="btn_top_heart on"
-                    onClick={() => setIsLikeShow(!isLikeShow)}
-                  >
-                    {/*<!-- 이미 누른것엔 on 추가 -->*/}
-                    <FontAwesomeIcon icon={faHeart} fontSize={24} />
-                  </button>
 
-                  {isLikeShow && (
-                    <div className="box_drop box_favorit">
-                      <ul>
-                        {/* <!-- 이미 누른것엔 on 추가 --> */}
-                        <li className="on">
-                          <button type="button">
-                            <span className="i_favorit1">313</span>
-                          </button>
-                        </li>
+                {isLikeShow && (
+                  <div className="box_drop box_favorit">
+                    <ul>
+                      {/* <!-- 이미 누른것엔 on 추가 --> */}
+                      <li className="on">
+                        <button type="button">
+                          <span className="i_favorit1">313</span>
+                        </button>
+                      </li>
 
-                        <li>
-                          <button type="button">
-                            <span className="i_favorit2">414</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button type="button">
-                            <span className="i_favorit3">1.2k</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button type="button">
-                            <span className="i_favorit4">512</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button type="button">
-                            <span className="i_favorit5">512</span>
-                          </button>
-                        </li>
-                        <li>
-                          <button type="button">
-                            <span className="i_favorit6">0</span>
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  )}
-                </div>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit2">414</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit3">1.2k</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit4">512</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit5">512</span>
+                        </button>
+                      </li>
+                      <li>
+                        <button type="button">
+                          <span className="i_favorit6">0</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
               </div>
             )}
-          </>
+          </div>
         )}
 
         {/* post upload */}

@@ -5,6 +5,7 @@ import NovelPreview from "./NovelPreview";
 import Register from "./Register";
 
 const HomeItem = ({ item }) => {
+  console.log("item : ", item);
   return (
     <>
       {item?.displayType === "cover" && <Cover curation={item.curation} />}

@@ -66,7 +66,6 @@ const Items = ({ tab, typeId }) => {
     }
 
     const response = await getPostListAPI(params, tags);
-    console.log("response : ", response);
     if (response.status === 200) {
       setItems(response.data.posts);
       setMeta(response.data.meta);
@@ -155,6 +154,7 @@ const Items = ({ tab, typeId }) => {
 
   const pagination = useMemo(() => {
     if (meta) {
+      console.log("meta : ", meta);
       const { currentPage, totalPages, itemCount } = meta;
       let pageList = [];
       for (let i = 1; i <= totalPages; i++) {
@@ -174,10 +174,15 @@ const Items = ({ tab, typeId }) => {
           showPages = pageList.splice(prev, 3);
         }
       } else if (currentPage === totalPages) {
-        showPages = pageList.splice(currentPage - 3, 3);
+        if (totalPages <= 3) {
+          showPages = pageList;
+        } else {
+          showPages = pageList.splice(currentPage - 3, 3);
+        }
       } else {
         showPages = pageList.splice(currentPage - 2, 3);
       }
+      console.log("showPages : ", showPages);
 
       return (
         <>

@@ -177,7 +177,11 @@ const Items = ({ tab, typeId }) => {
           showPages = pageList.splice(prev, 3);
         }
       } else if (currentPage === totalPages) {
-        showPages = pageList.splice(currentPage - 3, 3);
+        if (totalPages < 3) {
+          showPages = pageList;
+        } else {
+          showPages = pageList.splice(currentPage - 3, 3);
+        }
       } else {
         showPages = pageList.splice(currentPage - 2, 3);
       }

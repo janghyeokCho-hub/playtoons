@@ -23,7 +23,7 @@ const Curation = ({ item }) => {
         <p className="t1 c-blue">{item?.type?.name}</p>
         <p className="h1">{item?.title}</p>
         <p className="t1">{item?.author?.nickname}</p>
-        <p className="t1">43話</p>
+        <p className="t1">{item?.number || "null"}話</p>
       </div>
     </Link>
   );

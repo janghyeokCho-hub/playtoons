@@ -13,14 +13,7 @@ const WebNovelItem = ({ item }) => {
         </div>
         <div className="txt">
           <p className="h1">{item?.title}</p>
-          <p className="t1">
-            ショートショート3作目。 朝から電車で乃木坂駅まで移動したさくちゃん。
-            マスクと帽子で顔を隠していたつもりが、
-            ほんのわずかな油断で人だかりが出来てしまいショートショート3作目。
-            朝から電車で乃木坂駅まで移動したさくちゃん。
-            マスクと帽子で顔を隠していたつもりが、
-            ほんのわずかな油断で人だかりが出来てしまい
-          </p>
+          <p className="t1">{item?.outline}</p>
         </div>
       </a>
     </div>
