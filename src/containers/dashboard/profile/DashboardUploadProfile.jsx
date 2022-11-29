@@ -129,7 +129,7 @@ export default function DashboardUploadProfile(props) {
       ref.current.setImageValueToInputTag(resultData?.hash);
     } else {
       //error 처리
-      ref.current.setError(String(status, resultData));
+      ref.current.setError(String(resultData));
     }
   };
 
@@ -149,7 +149,7 @@ export default function DashboardUploadProfile(props) {
       showOneButtonPopup(dispatch, text.done_modify);
     } else {
       //error
-      showOneButtonPopup(dispatch, status + data);
+      showOneButtonPopup(dispatch, data);
     }
   };
 

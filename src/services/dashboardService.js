@@ -490,3 +490,54 @@ export const editShopProductToServer = async (params) => {
     };
   }
 };
+
+/**
+ product - sales inquiry list
+ * @version 1.0.0
+ * @author 2hyunkook
+ * @param {jsonObject} params
+ */
+export const getShopInquiryAuthorFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/shop/inquiry/author${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+   product - sales inquiry list 문의 수정
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const setShopInquiryAuthorToSerVer = async (params) => {
+  try {
+    return await apiServer('post', `/shop/inquiry/author`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+   product - sales inquiry list 문의 신고
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const setShopInquiryReportToSerVer = async (id, params) => {
+  try {
+    return await apiServer('post', `/shop/inquiry/${id}/report`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
