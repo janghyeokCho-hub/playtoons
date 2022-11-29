@@ -1,19 +1,15 @@
-import React, { useRef, useEffect, useLayoutEffect, useCallback } from "react";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import ToolTip from "@/components/dashboard/ToolTip";
-import Tag from "@/components/dashboard/Tag";
 import { getFromDataJson, getRatingToChecked, showOneButtonPopup } from "@/common/common";
-import {
-  editAuthorIdToServer,
-  setFileToServer,
-} from "@/services/dashboardService";
-import { useDispatch, useSelector } from "react-redux";
-import { getAuthorIdAction } from "@/modules/redux/ducks/dashboard";
+import Button from "@/components/dashboard/Button";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
+import Tag from "@/components/dashboard/Tag";
 import Textarea from "@/components/dashboard/Textarea";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { showModal } from "@/modules/redux/ducks/modal";
+import ToolTip from "@/components/dashboard/ToolTip";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { editProfileAction, initProfileAction } from "@/modules/redux/ducks/dashboard";
+import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import { useCallback, useLayoutEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const text = {
@@ -22,9 +18,11 @@ const text = {
   name: "名前",
   introduction: "紹介",
   register_profile_image: "プロフィル写真登録",
+  register_profile_image_message: "プロファイル写真を登録してください。",
   register_cover_image: "カバー写真登録",
   setting_age: "年齢設定",
   setting_tag: "タグ設定",
+  setting_tag_message: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   tag_name: "タグ名",
   description_policy:
     "当サイトでは、直近５年間の長崎県公報の全文を掲載しています。",
@@ -36,7 +34,7 @@ const text = {
 };
 
 export default function DashboardUploadProfile(props) {
-  const reduxAuthor = useSelector(({ dashboard }) => dashboard.author);
+  const reduxProfile = useSelector(({ dashboard }) => dashboard.profile);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -48,6 +46,7 @@ export default function DashboardUploadProfile(props) {
   const refTags = useRef();
   const refForm = useRef();
   const refR19 = useRef();
+  const refButton = useRef();
 
   //==============================================================================
   // haeader
@@ -68,27 +67,10 @@ export default function DashboardUploadProfile(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
 
   //==============================================================================
   // function
   //==============================================================================
-  const callbackProfileImage = () => {
-    //profile 이미지 업로드, background 업로드, author 업로드
-    //upload 할 이미지가 없다면
-    if (refBackground.current.getImageFile() === undefined) {
-      callbackBackgroundImage();
-    } else {
-      //이미지 업로드 후 image hash 저장
-      setImageToServer(refBackground, "background");
-    }
-  };
-
-  const callbackBackgroundImage = () => {
-    setAuthor();
-  };
 
   //==============================================================================
   // api
@@ -99,65 +81,14 @@ export default function DashboardUploadProfile(props) {
       id: reduxAuthors[0].id,
     };
 
-    dispatch(getAuthorIdAction(params));
-  };
-
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
-  const setImageToServer = async (ref, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);
-    params.append("subscribeTierId", "");
-    params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRatingToChecked(refR19)); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", ref.current.getImageFile());
-
-    const { status, data: resultData } = await setFileToServer(params);
-    if (status === 201) {
-      //ImageUpload component hash가 state 비동기적으로 저장된 뒤 props로 정의해둔 callback이 실행됨
-      ref.current.setImageValueToInputTag(resultData?.hash);
-    } else {
-      //error 처리
-      ref.current.setError(String(resultData));
-    }
-  };
-
-  const setAuthor = async () => {
-    const id = reduxAuthors[0].id;
-    let json = getFromDataJson(refForm);
-
-    json = {
-      ...json,
-      tagIds: refTags.current.getTagsJsonObject(),
-    };
-
-    const { status, data } = await editAuthorIdToServer(id, json);
-
-    if (status === 200) {
-      getAuthorProfile();
-      showOneButtonPopup(dispatch, text.done_modify);
-    } else {
-      //error
-      showOneButtonPopup(dispatch, data);
-    }
+    dispatch(getAuthorMineAction(params));
   };
 
   //==============================================================================
-  // event &
+  // event
   //==============================================================================
 
-  const handleClickRegister = (event) => {
+  const handleClickRegister = (event, fnSetButtonStatus) => {
     if (refNickname.current.isEmpty()) {
       refNickname.current.setError("ニックネームが必要です。");
       return;
@@ -183,14 +114,22 @@ export default function DashboardUploadProfile(props) {
       return false;
     }
 
-    // profile 이미지 업로드, background 업로드, author 업로드
-    // upload 할 이미지가 없다면
-    if (refProfile.current.getImageFile() === undefined) {
-      callbackProfileImage();
-    } else {
-      //이미지 업로드 후 image hash 저장
-      setImageToServer(refProfile, "profile");
-    }
+    //==============================================================================
+    // redux test
+    //==============================================================================
+    refButton.current.setStatus('loading');
+    let json = getFromDataJson(refForm);
+
+    json = {
+      ...json,
+      rating: getRatingToChecked(refR19),  
+      tagIds: refTags.current.getTagsJsonObject(),
+      authorId: reduxAuthors[0].id,
+      fileInfoProfile: refProfile.current.getImageFile(),
+      fileInfoBackground: refBackground.current.getImageFile(),
+    };
+
+    dispatch( editProfileAction(json) );
   };
 
   //==============================================================================
@@ -198,14 +137,38 @@ export default function DashboardUploadProfile(props) {
   //==============================================================================
 
   useLayoutEffect(() => {
+    handleContainer();
+
     //chekc author
-    if ( reduxAuthors ) {
+    if ( reduxAuthors && reduxAuthors?.length > 0 ) {
       //get accounts info
       getAuthorProfile();
     } else {
       showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
     }
-  }, [reduxAuthors]);
+  }, []);
+
+  useLayoutEffect(() => {
+    if( reduxProfile ){
+      if( reduxProfile?.status === 200 ){
+        getAuthorProfile();
+        showOneButtonPopup(dispatch, text.done_modify);
+      }
+      else{
+        //error 처리
+        if( reduxProfile?.type === 'profile' ){
+          refProfile.current.setError( String(reduxProfile?.data) );
+        } else if( reduxProfile?.type === 'background' ){
+          refBackground.current.setError( String(reduxProfile?.data) );
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxProfile?.data) );
+        }
+      }
+      refButton.current.setStatus(undefined);
+    } 
+
+    return () => dispatch(initProfileAction());
+  }, [reduxProfile]);
 
   return (
     <div className="contents">
@@ -220,13 +183,13 @@ export default function DashboardUploadProfile(props) {
           <div className="top_profile">
             <ImageUpload
               className={"bg_file"}
-              previewHash={reduxAuthor?.backgroundImage}
+              previewHash={reduxAuthors?.[0].backgroundImage}
               id={"filebox1"}
             />
 
             <ImageUpload
               className={"profile_file"}
-              previewHash={reduxAuthor?.profileImage}
+              previewHash={reduxAuthors?.[0].profileImage}
               id={"filebox2"}
             />
           </div>
@@ -240,7 +203,7 @@ export default function DashboardUploadProfile(props) {
                   type="text"
                   name="nickname"
                   className="inp_txt w100p"
-                  defaultValue={reduxAuthor?.nickname}
+                  defaultValue={reduxAuthors?.[0].nickname}
                 />
               </div>
 
@@ -251,7 +214,7 @@ export default function DashboardUploadProfile(props) {
                   type="text"
                   name="name"
                   className="inp_txt w100p"
-                  defaultValue={reduxAuthor?.name}
+                  defaultValue={reduxAuthors?.[0].name}
                 />
               </div>
 
@@ -261,7 +224,7 @@ export default function DashboardUploadProfile(props) {
                   ref={refDescription}
                   name="description"
                   className="textarea1"
-                  defaultValue={reduxAuthor?.description}
+                  defaultValue={reduxAuthors?.[0].description}
                 />
               </div>
 
@@ -271,17 +234,17 @@ export default function DashboardUploadProfile(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.register_profile_image}
-                      text={"teadaf"}
+                      text={text.register_profile_image_message}
                     />
                   </button>
                 </h3>
                 <ImageUpload
                   ref={refProfile}
                   className={"box_drag square"}
-                  previewHash={reduxAuthor?.profileImage}
+                  previewHash={reduxAuthors?.[0].profileImage}
                   id={"filebox1"}
                   name={"profileImage"}
-                  callback={callbackProfileImage}
+                  // callback={callbackProfileImage}
                 />
               </div>
 
@@ -290,11 +253,11 @@ export default function DashboardUploadProfile(props) {
                 <ImageUpload
                   ref={refBackground}
                   className={"box_drag"}
-                  previewHash={reduxAuthor?.backgroundImage}
+                  previewHash={reduxAuthors?.[0].backgroundImage}
                   id={"filebox2"}
                   name={"backgroundImage"}
                   text={text.drag_n_drop}
-                  callback={callbackBackgroundImage}
+                  // callback={callbackBackgroundImage}
                 />
               </div>
 
@@ -312,9 +275,7 @@ export default function DashboardUploadProfile(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.setting_tag}
-                      text={
-                        "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
-                      }
+                      text={text.setting_tag_message}
                     />
                   </button>
                 </h3>
@@ -322,7 +283,7 @@ export default function DashboardUploadProfile(props) {
                   ref={refTags}
                   name={"tagIds"}
                   className={"inp_txt sch"}
-                  list={reduxAuthor?.tags}
+                  list={reduxAuthors?.[0].tags}
                   placeholder={text.tag_name}
                 />
               </div>
@@ -337,9 +298,9 @@ export default function DashboardUploadProfile(props) {
           </form>
 
           <div className="bbs_write_botm">
-            <div onClick={handleClickRegister} className="btn-pk n blue">
+            <Button ref={refButton} onClick={handleClickRegister} className="btn-pk n blue">
               <span>{text.register}</span>
-            </div>
+            </Button>
           </div>
         </div>
       </div>
