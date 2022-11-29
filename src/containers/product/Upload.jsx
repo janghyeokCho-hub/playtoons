@@ -50,12 +50,11 @@ const Upload = () => {
   }, []);
 
   const getProductCategory = useCallback(async () => {
-    const response = await getProductCategoryAPI();
-    console.log("response : ", response);
+    const response = await getProductCategoryAPI(selectType?.id);
     if (response?.status === 200) {
       setCategoryList(response.data?.productCategories);
     }
-  }, []);
+  }, [selectType]);
 
   useEffect(() => {
     getProductType();
@@ -63,7 +62,7 @@ const Upload = () => {
 
   useEffect(() => {
     if (typeList?.length && selectType === null) {
-      setSelectType(typeList[0]?.code);
+      setSelectType(typeList[0]);
     }
   }, [typeList, selectType]);
 
@@ -73,7 +72,23 @@ const Upload = () => {
     }
   }, [selectType]);
 
+  useEffect(() => {
+    if (categoryList?.length) {
+      setCategory(categoryList[0]);
+    }
+  }, [categoryList]);
+
   const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
+  const [category, setCategory] = useState(null);
+
+  const handleCategoryChange = useCallback(
+    (code) => {
+      const selectCategory = categoryList.find((item) => item.code === code);
+      setCategory(selectCategory);
+    },
+    [categoryList]
+  );
 
   return (
     <div className="inr-c">
@@ -97,12 +112,12 @@ const Upload = () => {
                     <label
                       className="inp_txchk"
                       key={`type_${index}`}
-                      onClick={() => setSelectType(item.code)}
+                      onClick={() => setSelectType(item)}
                     >
                       <input
                         type="radio"
                         name="radio01"
-                        checked={item.code === selectType}
+                        checked={item.code === selectType?.code}
                       />
                       <span>{item.name}</span>
                     </label>
@@ -113,8 +128,15 @@ const Upload = () => {
 
             <div className="col">
               <h3 className="tit1">カテゴリ</h3>
-              <select name="" id="" className="select1 wid1">
-                <option value="">カテゴリ</option>
+              <select
+                className="select1 wid1"
+                onChange={(e) => handleCategoryChange(e.target.value)}
+              >
+                {categoryList?.map((item, index) => (
+                  <option key={`category_${index}`} value={item?.code}>
+                    {item?.name}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -132,7 +154,12 @@ const Upload = () => {
 
             <div className="col">
               <h3 className="tit1">話</h3>
-              <input type="text" className="inp_txt w100p" />
+              <input
+                type="text"
+                className="inp_txt w100p"
+                onChange={(e) => setNumber(e.target.value)}
+                value={number}
+              />
             </div>
 
             <div className="col">
