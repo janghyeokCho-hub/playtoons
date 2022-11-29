@@ -73,6 +73,8 @@ const Upload = () => {
     }
   }, [selectType]);
 
+  const [name, setName] = useState("");
+
   return (
     <div className="inr-c">
       <div className="box_area bdn">
@@ -120,7 +122,12 @@ const Upload = () => {
               <h3 className="tit1">
                 商品名 <span className="i_emp">*</span>
               </h3>
-              <input type="text" className="inp_txt w100p" />
+              <input
+                type="text"
+                className="inp_txt w100p"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
+              />
             </div>
 
             <div className="col">
