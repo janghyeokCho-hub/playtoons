@@ -398,7 +398,7 @@ export default function DashboardMain() {
         showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
       }
     }
-  }, [reduxAuthors]);
+  }, []);
 
   return (
     <div className="contents">

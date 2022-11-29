@@ -258,7 +258,7 @@ export default function DashboardProductList(props) {
     else{
       showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
     }
-  }, [reduxAuthors]);
+  }, []);
 
   return (
     <>

@@ -47,8 +47,7 @@ export default forwardRef(function Dropdown(props, ref) {
         }
       }
     }
-    setStateSelectedItem(selectedItem);
-    return selectedItem; 
+    setSelectedItem(selectedItem);
   };
 
   const setSelectedItem = (item) => {

@@ -218,15 +218,13 @@ export default function DashboardSalesInquiry(props) {
     //check author
     if( reduxAuthors && reduxAuthors?.length > 0 ){
       //리스트 불러오기
-      getSalesInquiryList();
+      getSalesInquiryList( params.page === undefined ? 1 : params.page );
     }
     else{
       showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
     }
 
-    return () => {
-      dispatch( initSalesIdAction() );
-    }
+    return () => dispatch( initSalesIdAction() );
   }, [params]);
 
   useEffect(() => {
@@ -287,7 +285,7 @@ export default function DashboardSalesInquiry(props) {
 
         <Pagination
           meta={stateData?.meta}
-          callback={handleChange}
+          callback={(page) => navigate(`/dashboard/product/sales/inquiry/${page}`)}
           />
 
       </div>

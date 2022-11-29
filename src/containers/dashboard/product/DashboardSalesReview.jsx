@@ -255,16 +255,14 @@ export default function DashboardSalesReview(props) {
     //check author
     if( reduxAuthors && reduxAuthors?.length > 0 ){
       //리스트 불러오기
-      getSalesReview();
+      getSalesReview( params.page === undefined ? 1 : params.page );
     }
     else{
       showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
     }
 
-    return () => {
-      dispatch( initSalesIdAction() );
-    }
-  }, []);
+    return () => dispatch( initSalesIdAction() );
+  }, [params]);
 
   
   useEffect(() => {

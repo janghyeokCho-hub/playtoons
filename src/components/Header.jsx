@@ -163,7 +163,7 @@ const Header = ({ className, onSideMenu }) => {
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
-  const { filePath, loading } = useFilePath(userInfo?.profileImage || reduxAuthors?.[0].profileImage);
+  const { filePath, loading } = useFilePath(userInfo?.profileImage || reduxAuthors?.[0]?.profileImage);
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
