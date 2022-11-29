@@ -372,13 +372,13 @@ const Header = ({ className, onSideMenu }) => {
                             </p>
                           </div>
                           <ul>
-                            <li>
+                            <li onClick={() => setIsProfileShow(false)}>
                               <Link to="/author/register">
                                 クリエイター登録
                               </Link>
                             </li>
-                            <li>
-                              <a onClick={handleDashboard}>ダッシュボード</a>
+                            <li onClick={() => setIsProfileShow(false)}>
+                              <a className="pointer" onClick={handleDashboard}>ダッシュボード</a>
                             </li>
                           </ul>
                           <ul>

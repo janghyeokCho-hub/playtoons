@@ -28,12 +28,15 @@ const text = {
   register_series: "シリーズ登録",
   series_edit: "シリーズ修正",
   post_image: "表紙",
+  post_image_tooltip: "表紙として使用する写真を登録してください。",
   timeline: "タイムラインのサムネイル",
+  timeline_tooltip: "サムネイルとして使用する写真を登録してください。",
   drag_drop: "ドラッグ＆ドロップ",
   title: "タイトル",
   type: "タイプ",
   category: "カテゴリ",
   setting_tag: "タグ設定",
+  setting_tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   register: "登録する",
   summary: "説明",
   setting_adult: "年齢設定",
@@ -320,9 +323,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.setting_tag}
-                      text={
-                        "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
-                      }
+                      text={text.setting_tag_tooltip}
                     />
                   </button>
                 </h3>
@@ -341,7 +342,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.post_image}
-                      text={"text something123142"}
+                      text={text.post_image_tooltip}
                     />
                   </button>
                 </h3>
@@ -362,7 +363,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.timeline}
-                      text={"text something123142"}
+                      text={text.timeline_tooltip}
                     />
                   </button>
                 </h3>
