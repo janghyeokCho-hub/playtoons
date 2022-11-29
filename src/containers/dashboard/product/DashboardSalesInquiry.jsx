@@ -1,5 +1,5 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Fragment, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
@@ -7,16 +7,12 @@ import tempImg1 from "@IMAGES/temp_seller_image.png";
 import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
 import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
-import ProductTab from "@/components/dashboard/ProductTab";
-import { useWindowSize } from "@/hook/useWindowSize";
-import { setContainer } from "@/modules/redux/ducks/container";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
-import { getAuthorMineFromServer } from "@/services/postService";
+import { getShopInquiryAuthorFromServer, editShopInquiryAuthorToServer as setShopInquiryToServer, setShopInquiryReportToServer } from "@/services/dashboardService";
 import { useDispatch, useSelector } from "react-redux";
-import { getShopInquiryAuthorFromServer, setShopInquiryAuthorToSerVer as setShopInquiryToServer, setShopInquiryReportToSerVer } from "@/services/dashboardService";
-import EmptyTr from "@/components/dashboard/EmptyTr";
 
 const text = {
   number : "番号",
@@ -31,6 +27,7 @@ const text = {
   startAt: "販売開始日",
   report_messgae: '通報しますか？',
   empty_message: '商品のお問い合わせはございません。',
+  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
 };
 
 export default function DashboardSalesInquiry(props) {
@@ -38,9 +35,10 @@ export default function DashboardSalesInquiry(props) {
   const reduxSalesId = useSelector(({dashboard}) => dashboard.salesId);
   const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const params = useParams();
   const refArrow = useRef([]);
   const refAnswer = useRef([]);
-  const params = useParams('id');
 
 
   //==============================================================================
@@ -116,7 +114,7 @@ export default function DashboardSalesInquiry(props) {
       type: 'sexual',
       content: item.content,
     };
-    const {status, data} = await setShopInquiryReportToSerVer(item.id, json);
+    const {status, data} = await setShopInquiryReportToServer(item.id, json);
     console.log('setShopInquiry', status, data);
     
     if( status === 200 ){
@@ -143,6 +141,7 @@ export default function DashboardSalesInquiry(props) {
   const handleItemClickAnswer = useCallback((item, index) => {
     console.log('handleItemClickAnswer', item, index);
     
+    // setShopInquiry();
   }, []);
   
   /**
@@ -153,7 +152,7 @@ export default function DashboardSalesInquiry(props) {
   const handleItemClickReport = useCallback((item, index) => {
     console.log('handleItemClickReport', item, index);
 
-    showTwoButtonPopup(dispatch, text.report_messgae, () => setShopInquiryReport(item));
+    showTwoButtonPopup(dispatch, `"${item?.product?.name}"${text.report_messgae}`, () => setShopInquiryReport(item));
   }, []);
 
   /**
@@ -215,9 +214,16 @@ export default function DashboardSalesInquiry(props) {
     });
   };
 
-  useEffect(() => {
-    //리스트 불러오기
-    getSalesInquiryList();
+  useLayoutEffect(() => {
+    //check author
+    if( reduxAuthors && reduxAuthors?.length > 0 ){
+      //리스트 불러오기
+      getSalesInquiryList();
+    }
+    else{
+      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    }
+
     return () => {
       dispatch( initSalesIdAction() );
     }
@@ -295,7 +301,9 @@ export default function DashboardSalesInquiry(props) {
 const tempData = {
   meta: {
     currentPage: 1,
+    itemCount: 3,
     itemsPerPage: 10,
+    totalPages: 1,
     totalItems: 3
   },
   inquiries: [

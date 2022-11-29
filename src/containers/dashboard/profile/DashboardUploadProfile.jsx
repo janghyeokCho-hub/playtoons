@@ -4,7 +4,7 @@ import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
 import { getFromDataJson, getRatingToChecked, showOneButtonPopup } from "@/common/common";
 import {
-  setAuthorIdToServer,
+  editAuthorIdToServer,
   setFileToServer,
 } from "@/services/dashboardService";
 import { useDispatch, useSelector } from "react-redux";
@@ -142,7 +142,7 @@ export default function DashboardUploadProfile(props) {
       tagIds: refTags.current.getTagsJsonObject(),
     };
 
-    const { status, data } = await setAuthorIdToServer(id, json);
+    const { status, data } = await editAuthorIdToServer(id, json);
 
     if (status === 200) {
       getAuthorProfile();

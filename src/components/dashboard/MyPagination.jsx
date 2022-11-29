@@ -88,24 +88,6 @@ export default function MyPagination(props) {
 
   return (
     <>
-      {/* {
-        (totalPages !== undefined && totalPages > 1 ) &&
-        <Pagination 
-              activePage={statePage}
-              itemsCountPerPage={itemsCountPerPage}
-              totalItemsCount={totalItemsCount}
-              pageRangeDisplayed={10}
-              prevPageText={<FontAwesomeIcon icon={faAngleLeft} />}
-              nextPageText={<FontAwesomeIcon icon={faAngleRight} />}
-              innerClass={`pagination ${className}`}
-              itemClassPrev={'arrow'}
-              itemClassNext={'arrow'}
-              itemClassFirst={'none'}
-              itemClassLast={'none'}
-              onChange={(page) => callback?.(page)}
-              />
-
-      } */}
       <div className="pagenation">
         <ul>{pagination}</ul>
       </div>
