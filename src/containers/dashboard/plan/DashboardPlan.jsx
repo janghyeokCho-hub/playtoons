@@ -31,9 +31,9 @@ const text = {
 
 export default function DashboardPlan(props) {
   const [stateSupporter, setStateSupporter] = useState(undefined);
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard?.subscribeTiers);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard.subscribeTiers);
+  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

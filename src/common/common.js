@@ -2,10 +2,8 @@ import ConfirmPopup from "@/components/dashboard/ConfirmPopup";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { logoutRequest } from "@/modules/redux/ducks/login";
 import { showModal } from "@/modules/redux/ducks/modal";
-import { getAuthorMineFromServer } from "@/services/postService";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
-import { useSelector } from "react-redux";
 import { RESULT_CODE_LIST } from "./constant";
 /**
  * Email validation
@@ -124,9 +122,7 @@ export const removeItemInList = (list, value) => {
 };
 
 /**
-*
    R-19 check 를 확인해서 code 값 리턴
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param ref R-19 input ref 객체

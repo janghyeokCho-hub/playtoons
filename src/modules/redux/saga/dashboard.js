@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import { exceptionHandler, } from "@REDUX/saga/createRequestSaga";
 import * as api from '@API/dashboardService';
-import { EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_SERIES, GET_DASHBOARD_AUTHOR, GET_DASHBOARD_PLAN, GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_TYPE, SET_DASHBOARD_SERIES } from "../ducks/dashboard";
+import { EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_SERIES, GET_DASHBOARD_AUTHOR, GET_DASHBOARD_PLAN, GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_TYPE, SET_DASHBOARD_PLAN, SET_DASHBOARD_SERIES } from "../ducks/dashboard";
 import { finishLoading, startLoading } from "../ducks/loading";
 import { getErrorMessageFromResultCode } from "@/common/common";
 
@@ -466,6 +466,82 @@ function createEditSeriesRequestSaga(type) {
     }
   };
 }
+//==============================================================================
+// set plan
+//==============================================================================
+function createSetPlanRequestSaga(type) {
+  return function* (action) {
+    try {
+      yield put(startLoading(type));
+      
+      let params = {
+        ...action.payload
+      };
+      // image upload
+      if( action.payload.fileInfoThumbnailImage !== undefined ){
+        const formData = new FormData();
+        formData.append("authorId", action.payload.authorId);
+        formData.append("subscribeTierId", "");
+        formData.append("productId", "");
+        formData.append("type", "image"); //image, video, binary
+        formData.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
+        formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+        formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+        formData.append("rating", "G"); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("file", action.payload.fileInfoThumbnailImage);
+        const reponse = yield call(api.setFileToServer, formData);
+        if (reponse?.status === 201) {
+          params.thumbnailImage = reponse?.data?.hash;
+        }
+        else{
+          yield put(finishLoading(type));
+          yield put({
+            type: `${type}_FAILURE`,
+            payload: {
+              ...reponse,
+              type: 'image'
+            }
+          });
+          return;
+        }
+      }
+
+      // set plan
+      delete params["fileInfoThumbnailImage"];
+      
+      const response = yield call(api.setSubscribeTierToServer, params);
+      if (response?.status === 201) {
+        yield put({
+          type: `${type}_SUCCESS`,
+          payload: response,
+        });
+      }
+      else{
+        yield put({
+          type: `${type}_FAILURE`,
+          payload: {
+            ...response,
+            type: 'set'
+          }
+        });
+      }
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: `${type}_FAILURE`,
+        payload: {
+          ...e,
+          type: 'set'
+        }
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
 
 
 export default function* dashboardSaga() {
@@ -476,4 +552,5 @@ export default function* dashboardSaga() {
   yield takeLatest(EDIT_DASHBOARD_PROFILE, createEditProfileRequestSaga(EDIT_DASHBOARD_PROFILE));
   yield takeLatest(SET_DASHBOARD_SERIES, createSetSeriesRequestSaga(SET_DASHBOARD_SERIES));
   yield takeLatest(EDIT_DASHBOARD_SERIES, createEditSeriesRequestSaga(EDIT_DASHBOARD_SERIES));
+  yield takeLatest(SET_DASHBOARD_PLAN, createSetPlanRequestSaga(SET_DASHBOARD_PLAN));
 }

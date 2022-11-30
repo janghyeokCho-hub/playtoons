@@ -1,24 +1,19 @@
-import React, { useCallback, useEffect } from "react";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import { useRef } from "react";
 import {
-  getErrorMessageFromResultCode,
   getFromDataJson,
+  getRatingToChecked,
   initButtonInStatus,
+  showOneButtonPopup
 } from "@/common/common";
-import {
-  setFileToServer,
-  setSubscribeTierToServer,
-} from "@/services/dashboardService";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Input from "@/components/dashboard/Input";
-import Textarea from "@/components/dashboard/Textarea";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { showModal } from "@/modules/redux/ducks/modal";
-import Price from "@/components/dashboard/Price";
 import Button from "@/components/dashboard/Button";
+import ImageUpload from "@/components/dashboard/ImageUpload";
+import Input from "@/components/dashboard/Input";
+import Price from "@/components/dashboard/Price";
+import Textarea from "@/components/dashboard/Textarea";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { initSubscribeTierAction, initSubscribeTierUploadAction, setSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
+import { useCallback, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const text = {
   add_plan: "支援を追加",
@@ -35,13 +30,14 @@ const text = {
   please_input_description: "説明を入力してください。",
   please_input_price: "価格を入力してください。",
   error_title: "お知らせ",
+  done_upload_plan: '支援を追加しました。',
 };
 
 export default function DashboardPlanUpload(props) {
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxPlanUpload = useSelector(({ dashboard }) => dashboard.subscribeTiersUpload);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const myAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const refForm = useRef();
   const refProductName = useRef();
   const refDescription = useRef();
@@ -49,6 +45,10 @@ export default function DashboardPlanUpload(props) {
   const refRating = useRef();
   const refPrice = useRef();
   const refRegister = useRef();
+
+  //==============================================================================\
+  // header
+  //==============================================================================\
 
   const handleContainer = useCallback(() => {
     const container = {
@@ -66,135 +66,90 @@ export default function DashboardPlanUpload(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
-
   //==============================================================================
   // function
   //==============================================================================
-  const callbackThumbnailImage = () => {
-    setSubscribeTier();
-  };
 
   //==============================================================================
   // api
   //==============================================================================
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  const setImageToServer = async (ref, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-    params.append("authorId", "");
-    params.append("subscribeTierId", "");
-    params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", refRating.current.checked ? "R-18" : "G"); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", ref.current.getImageFile());
-
-    const { status, data: resultData } = await setFileToServer(params);
-    //create sccuess
-    if (status === 201) {
-      ref.current.setImageValueToInputTag(resultData?.hash);
-    } else {
-      //error 처리
-      initButtonInStatus(refRegister);
-      ref.current.setError(String(status + resultData));
-    }
-  };
-
-  /**
-  *
-    plan upload 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  const setSubscribeTier = async () => {
-    //필드 확인
-    if (refProductName.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refProductName.current.setError(text.please_input_product_name);
-      return;
-    }
-    if (refDescription.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refDescription.current.setError(text.please_input_description);
-      return;
-    }
-    if (refPrice.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refPrice.current.setError(text.please_input_price);
-      return;
-    }
-
-    let json = getFromDataJson(refForm);
-    json = {
-      ...json,
-      tier: 0,
-      authorId: myAuthors[0].id,
-      status: "enabled",
-      price: parseInt(refPrice.current.getValue()),
-    };
-
-    const { status, data } = await setSubscribeTierToServer(json);
-    if (status === 201) {
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup message={"支援を追加しました。"} buttonTitle={"確認"} />
-          ),
-          callback: () => {
-            navigate(`/dashboard/plan`);
-          },
-        })
-      );
-    } else {
-      //error 처리
-      dispatch(
-        showModal({
-          title: text.error_title,
-          contents: (
-            <ErrorPopup
-              message={getErrorMessageFromResultCode(data)}
-              buttonTitle={"確認"}
-            />
-          ),
-        })
-      );
-    }
-
-    initButtonInStatus(refRegister);
-  };
 
   //==============================================================================
   // event
   //==============================================================================
 
   const handleClickRegister = useCallback((event) => {
-    //cover 이미지 업로드, thumbnail 업로드, series 업로드
-    //upload 할 이미지가 없다면
+    let json = getFromDataJson(refForm);
+    //필드 확인
+    if (refProductName.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refProductName.current.setError(text.please_input_product_name);
+      return;
+    }
+
+    if (refDescription.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refDescription.current.setError(text.please_input_description);
+      return;
+    }
+
     if (refThumbnailImage.current.getImageFile() === undefined) {
       initButtonInStatus(refRegister);
       refThumbnailImage.current.setError(text.please_input_image);
+      return;
     } else {
-      //이미지 업로드 후 image url
-      setImageToServer(refThumbnailImage, "thumbnail");
+      json = {
+        ...json,
+        fileInfoThumbnailImage: refThumbnailImage.current.getImageFile(),
+      };
     }
+
+    if (refPrice.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refPrice.current.setError(text.please_input_price);
+      return;
+    }
+
+    json = {
+      ...json,
+      tier: 0,
+      authorId: reduxAuthors[0].id,
+      status: "enabled",
+      price: parseInt(refPrice.current.getValue()),
+      // rating: getRatingToChecked(refRating),
+    };
+
+    dispatch( setSubscribeTierAction(json) );
   }, []);
 
   //==============================================================================
   // render & hook
   //==============================================================================
+  useEffect(() => {
+    handleContainer();
+
+    return () => dispatch( initSubscribeTierAction() );
+  }, []);
+
+  useEffect(() => {
+    if( reduxPlanUpload ){
+      initButtonInStatus(refRegister);
+      if( reduxPlanUpload?.status === 201 ){
+        //success
+        showOneButtonPopup(dispatch, text.done_upload_plan, () => navigate("/dashboard/plan"));
+      }
+      else{
+        //error 처리
+        if( reduxPlanUpload?.type === 'image' ){
+          refThumbnailImage.current.setError(String(reduxPlanUpload?.data));
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxPlanUpload?.data)  );
+        }
+      }
+    }
+
+    return () => dispatch( initSubscribeTierUploadAction() );
+  }, [reduxPlanUpload]);
 
   return (
     <div className="contents">
@@ -234,7 +189,6 @@ export default function DashboardPlanUpload(props) {
                   id={"filebox1"}
                   name={"thumbnailImage"}
                   text={text.drag_drop}
-                  callback={callbackThumbnailImage}
                 />
               </div>
 
