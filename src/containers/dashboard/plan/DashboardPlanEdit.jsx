@@ -1,7 +1,5 @@
 import {
-  getFromDataJson,
-  getRatingToChecked,
-  initButtonInStatus,
+  getFromDataJson, initButtonInStatus,
   showOneButtonPopup
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
@@ -10,11 +8,8 @@ import Input from "@/components/dashboard/Input";
 import Price from "@/components/dashboard/Price";
 import Textarea from "@/components/dashboard/Textarea";
 import { setContainer } from "@/modules/redux/ducks/container";
-import {
-  editSubscribeTierToServer,
-  setFileToServer
-} from "@/services/dashboardService";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { editSubscribeTierAction, initSubscribeTierAction, initSubscribeTierUploadAction } from "@/modules/redux/ducks/dashboard";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -38,14 +33,13 @@ const text = {
 };
 
 export default function DashboardPlanEdit(props) {
+  const [stateData, setStateData] = useState(undefined);
+  const reduxSubscribeTiers = useSelector(({ dashboard }) => dashboard.subscribeTiers);
+  const reduxPlanUpload = useSelector(({ dashboard }) => dashboard.subscribeTiersUpload);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams("id");
-  const [stateData, setStateData] = useState(undefined);
-  const reduxSubscribeTiers = useSelector(
-    ({ dashboard }) => dashboard?.subscribeTiers
-  );
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
+  const params = useParams();
   const refForm = useRef();
   const refProductName = useRef();
   const refDescription = useRef();
@@ -90,107 +84,70 @@ export default function DashboardPlanEdit(props) {
     }
   };
 
-  const callbackImage = () => {
-    updateSubscribeTier();
-  };
-
   //==============================================================================
   // api
   //==============================================================================
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
-  const setImageToServer = async (ref, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);
-    params.append("subscribeTierId", "");
-    params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRatingToChecked(refRating)); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", ref.current.getImageFile());
-
-    const { status, data: resultData } = await setFileToServer(params);
-
-    //create sccuess
-    if (status === 201) {
-      ref.current.setImageValueToInputTag(resultData?.hash);
-    } else {
-      //error 처리
-      initButtonInStatus(refRegister);
-      ref.current.setError(status + resultData);
-    }
-  };
-
-  const updateSubscribeTier = async () => {
-    //필드 확인
-    if (refProductName.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refProductName.current.setError(text.please_input_product_name);
-      return;
-    }
-    if (refDescription.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refDescription.current.setError(text.please_input_description);
-      return;
-    }
-    if (refImage.current.checkToEmpty()) {
-      initButtonInStatus(refRegister);
-      refImage.current.setError(text.please_input_image);
-      return false;
-    }
-    if (refPrice.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refPrice.current.setError(text.please_input_price);
-      return;
-    }
-
-    let json = getFromDataJson(refForm);
-    json = {
-      ...json,
-      price: parseInt(json.price),
-      subscribeTierId: params.id,
-    };
-    if (!json.thumbnailImage.length) {
-      json = {
-        ...json,
-        thumbnailImage: stateData.thumbnailImage,
-      };
-    }
-
-    const { status, data } = await editSubscribeTierToServer(json);
-
-    if (status === 200) {
-      showOneButtonPopup(dispatch, text.done_edit_plan, () => navigate(`/dashboard/plan`));
-    } else {
-      //error 처리
-      showOneButtonPopup(dispatch, data);
-    }
-
-    initButtonInStatus(refRegister);
-  };
 
   //==============================================================================
   // event
   //==============================================================================
 
   const handleClickRegister = (event) => {
-    //thumbnail 업로드, plan update
-    //upload 할 이미지가 없다면
-    if (refImage.current.getImageFile() === undefined) {
-      callbackImage();
-    } else {
-      //이미지 업로드 후 image url
-      setImageToServer(refImage, "cover");
+    // //thumbnail 업로드, plan update
+    // //upload 할 이미지가 없다면
+    // if (refImage.current.getImageFile() === undefined) {
+    //   callbackImage();
+    // } else {
+    //   //이미지 업로드 후 image url
+    //   setImageToServer(refImage, "cover");
+    // }
+    let json = getFromDataJson(refForm);
+    //필드 확인
+    if (refProductName.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refProductName.current.setError(text.please_input_product_name);
+      return;
     }
+
+    if (refDescription.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refDescription.current.setError(text.please_input_description);
+      return;
+    }
+
+    if (refImage.current.checkToEmpty()) {
+      initButtonInStatus(refRegister);
+      refImage.current.setError(text.please_input_image);
+      return;
+    } else{
+      //upload 할 파일이 있는지 확인 
+      if( refImage.current.getImageFile() === undefined ){
+        json = {
+          ...json,
+          thumbnailImage: stateData.thumbnailImage,
+        };
+      } else {
+        json = {
+          ...json,
+          fileInfoThumbnailImage: refImage.current.getImageFile(),
+        };
+      }
+    }
+
+    if (refPrice.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refPrice.current.setError(text.please_input_price);
+      return;
+    }
+    
+    json = {
+      ...json,
+      authorId: reduxAuthors[0].id,
+      price: parseInt(json.price),
+      subscribeTierId: params.id,
+    };
+
+    dispatch( editSubscribeTierAction(json) );
   };
 
   //==============================================================================
@@ -199,12 +156,29 @@ export default function DashboardPlanEdit(props) {
 
   useLayoutEffect(() => {
     findPlan();
-  }, []);
-  
-  useMemo(() => {
-    // findPlan();
 
+    return () => dispatch( initSubscribeTierAction() );
   }, []);
+
+  useEffect(() => {
+    if( reduxPlanUpload ){
+      initButtonInStatus(refRegister);
+      if( reduxPlanUpload?.status === 200 ){
+        //success
+        showOneButtonPopup(dispatch, text.done_edit_plan, () => navigate("/dashboard/plan"));
+      }
+      else{
+        //error 처리
+        if( reduxPlanUpload?.type === 'image' ){
+          refImage.current.setError(String(reduxPlanUpload?.data));
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxPlanUpload?.data)  );
+        }
+      }
+    }
+    
+    return () => dispatch( initSubscribeTierUploadAction() );
+  }, [reduxPlanUpload]);
 
   return (
     <div className="contents">
@@ -246,7 +220,6 @@ export default function DashboardPlanEdit(props) {
                   id={"filebox1"}
                   name={"thumbnailImage"}
                   text={text.drag_drop}
-                  callback={callbackImage}
                 />
               </div>
 

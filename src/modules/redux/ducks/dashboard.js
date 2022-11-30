@@ -7,6 +7,7 @@ import { LOGOUT_REQUEST_SUCCESS } from "./login";
 export const [GET_DASHBOARD_PLAN, GET_DASHBOARD_PLAN_SUCCESS, GET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("dashboard/plan/GET");
 export const [INIT_GET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_GET_dashboardPlan");
 export const [SET_DASHBOARD_PLAN, SET_DASHBOARD_PLAN_SUCCESS, SET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("POST_subscribeTier");
+export const [EDIT_DASHBOARD_PLAN, EDIT_DASHBOARD_PLAN_SUCCESS, EDIT_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("PATCH_subscribeTier");
 export const [INIT_SET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_POST_subscribeTier");
 export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, GET_DASHBOARD_SERIES_DETAIL_FAILURE] = createRequestActionTypes("dashboard/series/detail/GET");
 export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
@@ -25,6 +26,7 @@ export const [INIT_EDIT_DASHBOARD_PROFILE] = createRequestActionTypes("INIT_PATC
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const initSubscribeTierAction = createAction(INIT_GET_DASHBOARD_PLAN);
 export const setSubscribeTierAction = createAction(SET_DASHBOARD_PLAN);
+export const editSubscribeTierAction = createAction(EDIT_DASHBOARD_PLAN);
 export const initSubscribeTierUploadAction = createAction(INIT_SET_DASHBOARD_PLAN);
 export const getSeriedDetailAction = createAction(GET_DASHBOARD_SERIES_DETAIL);
 export const initSeriedDetailAction = createAction(INIT_DASHBOARD_SERIES_DETAIL);
@@ -121,6 +123,16 @@ const post = handleActions(
       });
     },
     [SET_DASHBOARD_PLAN_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.subscribeTiersUpload = action.payload;
+      });
+    },
+    [EDIT_DASHBOARD_PLAN_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.subscribeTiersUpload = action.payload;
+      });
+    },
+    [EDIT_DASHBOARD_PLAN_FAILURE]: (state, action) => {
       return produce(state, (draft) => {
         draft.subscribeTiersUpload = action.payload;
       });
