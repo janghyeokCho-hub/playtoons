@@ -214,7 +214,7 @@ export const setInputValueToNumber = (ref, value) => {
 * @author 2hyunkook
 */
 export const getStatusText = (status, text) => {
-  switch(status){
+  switch(status){ //enabled, disabled, pending, suspended(사용자가 설정 못함)
     default:
       return '連載中';
       // return text.enabled;

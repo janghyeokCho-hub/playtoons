@@ -8,6 +8,7 @@ export const [EDIT_POST, EDIT_POST_SUCCESS, EDIT_POST_FAILURE] =
   createRequestActionTypes("post/EDIT");
 export const [UPLOAD_POST, UPLOAD_POST_SUCCESS, UPLOAD_POST_FAILURE] =
   createRequestActionTypes("post/UPLOAD");
+export const [INIT_UPLOAD_POST] =createRequestActionTypes("INIT/post/UPLOAD");
 export const [POST_DETAIL, POST_DETAIL_SUCCESS, POST_DETAIL_FAILURE] =
   createRequestActionTypes("post/DETAIL");
 export const [AUTHOR_MINE, AUTHOR_MINE_SUCCESS, AUTHOR_MINE_FAILURE] =
@@ -27,6 +28,8 @@ const [CURRENT_POST_INIT] = createRequestActionTypes("post/CURRENT_POST_INIT");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
+export const setPostAction = createAction(UPLOAD_POST);
+export const initPostAction = createAction(INIT_UPLOAD_POST);
 export const getPostDetailAction = createAction(POST_DETAIL);
 export const getAuthorMineAction = createAction(AUTHOR_MINE);
 export const currentPostInit = createAction(CURRENT_POST_INIT);
@@ -42,10 +45,29 @@ const initialState = {
   timelines: [],
   currentPost: null,
   series: null,
+  postUpload: null,
 };
 
 const post = handleActions(
   {
+    [UPLOAD_POST_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.postUpload = action.payload;
+      });
+    },
+    [UPLOAD_POST_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.postUpload = action.payload;
+      });
+    },
+    [INIT_UPLOAD_POST]: (state, action) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          postUpload: null,
+        };
+      });
+    },
     [EDIT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.post = action.payload.post;

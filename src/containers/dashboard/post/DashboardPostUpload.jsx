@@ -36,12 +36,16 @@ const text = {
 };
 
 export default function DashboardPostUpload(props) {
+  const [stateTypeList, setStateTypeList] = useState(undefined);
+  const [stateCategoryList, setStateCategoryList] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const refIsAdult = useRef();
   const refCoverImage = useRef();
-  const [stateTypeList, setStateTypeList] = useState(undefined);
-  const [stateCategoryList, setStateCategoryList] = useState(undefined);
+
+  //==============================================================================
+  // header
+  //==============================================================================
 
   const handleContainer = useCallback(() => {
     const container = {
