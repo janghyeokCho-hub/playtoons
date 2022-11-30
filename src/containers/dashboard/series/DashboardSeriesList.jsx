@@ -78,19 +78,13 @@ export default function DashboardSeries() {
     const params = new FormData();
     params.append("authorId", myAuthors[0].id);
     params.append("page", pageNumber);
-    // params.append("typeId", );
-    // params.append("categoryId", );
-    // params.append("keyword", );
-    // params.append("orderKey", );
-    // params.append("order", );     //ASC, DESC
-    // params.append("limit", );
-    const { status, data: resultData } = await getSeriesStoryList(params);
 
+    const { status, data } = await getSeriesStoryList(params);
     if (status === 200) {
-      setStateData(resultData);
+      setStateData(data);
     } else {
       //error 처리
-      showOneButtonPopup(dispatch, resultData);
+      showOneButtonPopup(dispatch, data);
     }
   };
 
@@ -199,9 +193,7 @@ export default function DashboardSeries() {
 
   useLayoutEffect(() => {
     getSeriesListFromServer(param?.page === undefined ? 1 : param?.page);
-    return () => {
-      setStateData(undefined);
-    };
+
   }, [param]);
 
   return (

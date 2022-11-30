@@ -1,40 +1,37 @@
-import React, { useRef, useEffect, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import ImageUpload from "@/components/dashboard/ImageUpload";
-import ToolTip from "@/components/dashboard/ToolTip";
 import {
-  setFileToServer,
-  setSeriesToServer,
-} from "@/services/dashboardService";
-import {
-  getErrorMessageFromResultCode,
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
-  showOneButtonPopup,
+  showOneButtonPopup
 } from "@/common/common";
-import Tag from "@/components/dashboard/Tag";
-import Type from "@/components/dashboard/Type";
-import Category from "@/components/dashboard/Category";
-import { useDispatch, useSelector } from "react-redux";
-import { showModal } from "@/modules/redux/ducks/modal";
-import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import Input from "@/components/dashboard/Input";
-import Textarea from "@/components/dashboard/Textarea";
 import Button from "@/components/dashboard/Button";
+import Category from "@/components/dashboard/Category";
+import ImageUpload from "@/components/dashboard/ImageUpload";
+import Input from "@/components/dashboard/Input";
+import Tag from "@/components/dashboard/Tag";
+import Textarea from "@/components/dashboard/Textarea";
+import ToolTip from "@/components/dashboard/ToolTip";
+import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/dashboard";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const text = {
   series_management: "シリーズ詳細",
   register_series: "シリーズ登録",
   series_edit: "シリーズ修正",
   post_image: "表紙",
+  post_image_tooltip: "表紙として使用する写真を登録してください。",
   timeline: "タイムラインのサムネイル",
+  timeline_tooltip: "サムネイルとして使用する写真を登録してください。",
   drag_drop: "ドラッグ＆ドロップ",
   title: "タイトル",
   type: "タイプ",
   category: "カテゴリ",
   setting_tag: "タグ設定",
+  setting_tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   register: "登録する",
   summary: "説明",
   setting_adult: "年齢設定",
@@ -50,13 +47,15 @@ const text = {
   please_input_description: "説明を入力してください。",
   error_title: "お知らせ",
   done_upload: 'シリーズ登録しました。',
+  not_creator: 'クリエーターじゃないんです。',
 };
 
 export default function DashboardUploadSeries(props) {
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxSeriesUpload = useSelector(({ dashboard }) => dashboard.seriesUpload);
+  const [stateType, setStateType] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
-  const [stateType, setStateType] = useState(undefined);
   const refTitle = useRef();
   const refDescription = useRef();
   const refR19 = useRef();
@@ -85,129 +84,13 @@ export default function DashboardUploadSeries(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
-
   //==============================================================================
   // function
   //==============================================================================
 
-  /**
-     cover, timeline 이미지 업로드 완료 후 series 작성
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {*} props
-  * @return
-  */
-  const callbackTimeline = () => {
-    //필드 확인
-    if (refTitle.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refTitle.current.setError(text.please_input_title);
-      return;
-    }
-
-    if (refDescription.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refDescription.current.setError(text.please_input_description);
-      return;
-    }
-
-    //call series 작성 api
-    // "title": "string",
-    // "typeId": "string",
-    // "categoryId": "string",
-    // "rating": "string",
-    // "description": "string",
-    // "tags": [
-    //   "string"
-    // ],
-    // "coverImage": "string",
-    // "thumbnailImage": "string",
-
-    // "keyword": "string",
-    // "status": "string",          //enabled, disabled, pending, suspended(사용자가 설정 못함)
-    // "authorId": "string"
-    // "titleKana": "string",
-    // "code": "string",
-    // "labelId": "string",
-    // "publisherId": "string",
-    let json = getFromDataJson(refForm);
-    json = {
-      ...json,
-      coverImage: refCoverImage.current.getImageInfo().value,
-      thumbnailImage: refTimelineImage.current.getImageInfo().value,
-      tagIds: refTags.current.getTagsJsonObject(),
-      rating: getRatingToChecked(refR19),
-      status: "enabled",
-      authorId: reduxAuthors[0].id, //author 가 아니면 못옴
-    };
-
-    setSeries(json);
-  };
-
-  const callbackCoverImage = () => {
-    //upload 할 이미지가 있다면
-    if (refTimelineImage.current.getImageFile() === undefined) {
-      initButtonInStatus(refRegister);
-      refTimelineImage.current.setError(text.please_input_thumbnail);
-    } else {
-      refTimelineImage.current.setError(undefined);
-      setImageToServer(refTimelineImage, "thumbnail");
-    }
-  };
-
   //==============================================================================
-  // api function
+  // api 
   //==============================================================================
-  /**
-  *
-    파일을 서버에 업로드 
-  *
-  * @version 1.0.0
-  * @author 2hyunkook
-  * @param {file} 
-  */
-  const setImageToServer = async (ref, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);
-    params.append("subscribeTierId", "");
-    params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRatingToChecked(refR19));
-    params.append("file", ref.current.getImageFile());
-
-    const { status, data: resultData } = await setFileToServer(params);
-
-    //create sccuess
-    if (status === 201) {
-      ref.current.setImageValueToInputTag(resultData?.hash);
-    } else {
-      //error 처리
-      initButtonInStatus(refRegister);
-      showOneButtonPopup(dispatch, resultData );
-    }
-  };
-
-  const setSeries = async (params) => {
-    const { status, data: result } = await setSeriesToServer(
-      JSON.stringify(params)
-    );
-
-    if (status === 201) {
-      showOneButtonPopup(dispatch, text.done_upload, () => navigate("/dashboard/series"));
-    } else {
-      //error 처리
-      showOneButtonPopup(dispatch, result );
-    }
-
-    initButtonInStatus(refRegister);
-  };
 
   //==============================================================================
   // handler
@@ -220,16 +103,41 @@ export default function DashboardUploadSeries(props) {
   const handleRegister = (e) => {
     e.preventDefault();
 
-    //cover 이미지 업로드, thumbnail 업로드, series 업로드
-    //upload 할 이미지가 없다면
-    if (refCoverImage.current.getImageFile() === undefined) {
+    //필드 확인
+    if (refTitle.current.isEmpty()) {
+      refTitle.current.setError(text.please_input_title);
       initButtonInStatus(refRegister);
-      refCoverImage.current.setError(text.please_input_cover);
-    } else {
-      //이미지 업로드 후 image url
-      refCoverImage.current.setError(undefined);
-      setImageToServer(refCoverImage, "cover");
+      return;
     }
+    if (refDescription.current.isEmpty()) {
+      refDescription.current.setError(text.please_input_description);
+      initButtonInStatus(refRegister);
+      return;
+    }
+    if (refCoverImage.current.getImageFile() === undefined) {
+      refCoverImage.current.setError(text.please_input_cover);
+      initButtonInStatus(refRegister);
+      return;
+    }
+    if (refTimelineImage.current.getImageFile() === undefined) {
+      refTimelineImage.current.setError(text.please_input_thumbnail);
+      initButtonInStatus(refRegister);
+      return;
+    }
+
+    let json = getFromDataJson(refForm);
+    json = {
+      ...json,
+      fileInfoCoverImage: refCoverImage.current.getImageFile(),
+      fileInfoThumbnailImage: refTimelineImage.current.getImageFile(),
+      tagIds: refTags.current.getTagsJsonObject(),
+      rating: getRatingToChecked(refR19),
+      status: "enabled",
+      authorId: reduxAuthors[0].id, //author 가 아니면 못옴
+    };
+
+    dispatch( setSeriesAction(json) );
+
   };
 
   const handlePreview = (e) => {
@@ -237,8 +145,40 @@ export default function DashboardUploadSeries(props) {
   };
 
   //==============================================================================
-  // render
+  // Hook & render
   //==============================================================================
+
+  useLayoutEffect(() => {
+    handleContainer();
+
+    //chekc author
+    if ( !reduxAuthors || reduxAuthors?.length === 0 ) {
+      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    if( reduxSeriesUpload ){
+      initButtonInStatus(refRegister);
+      if( reduxSeriesUpload?.status === 201 ){
+        //success
+        showOneButtonPopup(dispatch, text.done_upload, () => navigate("/dashboard/series"));
+      }
+      else{
+        //error 처리
+        if( reduxSeriesUpload?.type === 'cover' ){
+          refCoverImage.current.setError(String(reduxSeriesUpload?.data));
+        } else if( reduxSeriesUpload?.type === 'thumbnail' ){
+          refTimelineImage.current.setError(String(reduxSeriesUpload?.data));
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxSeriesUpload?.data)  );
+        }
+      }
+    }
+
+    return () => dispatch( initSeriesAction() );
+  }, [reduxSeriesUpload]);
+
 
   return (
     <div className="contents">
@@ -302,9 +242,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.setting_tag}
-                      text={
-                        "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
-                      }
+                      text={text.setting_tag_tooltip}
                     />
                   </button>
                 </h3>
@@ -322,7 +260,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.post_image}
-                      text={"text something123142"}
+                      text={text.post_image_tooltip}
                     />
                   </button>
                 </h3>
@@ -332,7 +270,6 @@ export default function DashboardUploadSeries(props) {
                   className={"box_drag small"}
                   name={"coverImage"}
                   text={text.drag_drop}
-                  callback={callbackCoverImage}
                 />
               </div>
 
@@ -342,7 +279,7 @@ export default function DashboardUploadSeries(props) {
                   <button type="button" className="btn_help" title="ヘルプ">
                     <ToolTip
                       title={text.timeline}
-                      text={"text something123142"}
+                      text={text.timeline_tooltip}
                     />
                   </button>
                 </h3>
@@ -352,7 +289,6 @@ export default function DashboardUploadSeries(props) {
                   className={"box_drag"}
                   name={"thumbnailImage"}
                   text={text.drag_drop}
-                  callback={callbackTimeline}
                 />
               </div>
             </section>
@@ -367,9 +303,10 @@ export default function DashboardUploadSeries(props) {
             <Button
               ref={refRegister}
               className={"btn-pk n blue"}
-              text={text.register}
               onClick={handleRegister}
-            />
+              >
+              {text.register}
+            </Button>
           </div>
         </div>
       </div>

@@ -157,12 +157,13 @@ const Header = ({ className, onSideMenu }) => {
   const userInfo = useSelector(({ login }) => login.userInfo);
   const accessToken = useSelector(({ login }) => login.accessToken);
   const isLogined = useSelector(({ login }) => login.isLogined);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const [renderType, setRenderType] = useState(null);
   const [isLikeShow, setIsLikeShow] = useState(false);
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
-  const { filePath, loading } = useFilePath(userInfo?.profileImage);
+  const { filePath, loading } = useFilePath(userInfo?.profileImage || reduxAuthors?.[0]?.profileImage);
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -170,7 +171,6 @@ const Header = ({ className, onSideMenu }) => {
    * 게시글 좋아요 관련이 헤더에 있기 때문에, post는 꼭 리덕스 사용해야함.
    */
   const currentPost = useSelector(({ post }) => post.currentPost);
-  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
 
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
@@ -372,13 +372,13 @@ const Header = ({ className, onSideMenu }) => {
                             </p>
                           </div>
                           <ul>
-                            <li>
+                            <li onClick={() => setIsProfileShow(false)}>
                               <Link to="/author/register">
                                 クリエイター登録
                               </Link>
                             </li>
-                            <li>
-                              <a onClick={handleDashboard}>ダッシュボード</a>
+                            <li onClick={() => setIsProfileShow(false)}>
+                              <a className="pointer" onClick={handleDashboard}>ダッシュボード</a>
                             </li>
                           </ul>
                           <ul>

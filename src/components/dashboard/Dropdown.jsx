@@ -30,7 +30,6 @@ export default forwardRef(function Dropdown(props, ref) {
   const { name, dataList, selected, className, disabled, handleItemClick } = props;
   const [ isShowDropdown, setShowDropdown ] = useState(false);
   const [ stateSelectedItem, setStateSelectedItem ] = useState(undefined);
-  const refInput = useRef();
   
   //==============================================================================
   // hook & render
@@ -47,13 +46,11 @@ export default forwardRef(function Dropdown(props, ref) {
         }
       }
     }
-    setStateSelectedItem(selectedItem);
-    return selectedItem; 
+    setSelectedItem(selectedItem);
   };
 
   const setSelectedItem = (item) => {
     setShowDropdown(false);
-    refInput.current.value = item.id;
     setStateSelectedItem(item);
   };
 
@@ -67,7 +64,7 @@ export default forwardRef(function Dropdown(props, ref) {
   };
 
   const handleOptionClicked = (item) => () => {
-    if( refInput.current.value !== item.id ){
+    if( stateSelectedItem?.id !== item.id ){
       setSelectedItem(item);
       handleItemClick?.(item);
     }
@@ -127,7 +124,7 @@ export default forwardRef(function Dropdown(props, ref) {
               }
             </ul>
           </div>
-          <input ref={refInput} type='hidden' name={name} />
+          <input type='hidden' name={name} defaultValue={stateSelectedItem?.id} />
         </button>
 
       </div>

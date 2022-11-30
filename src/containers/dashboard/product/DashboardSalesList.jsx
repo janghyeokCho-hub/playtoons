@@ -34,7 +34,9 @@ const tempData = {
   sales: "144,232 PC",
   meta: {
     currentPage: 1,
+    itemCount: 3,
     itemsPerPage: 10,
+    totalPages: 1,
     totalItems: 3
   },
   list: [

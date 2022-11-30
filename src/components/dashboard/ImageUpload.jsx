@@ -329,6 +329,7 @@ export default forwardRef(function ImageUpload(props, ref) {
         <input {...InputProps} id={id}  />
         {
           (stateImage?.preview === undefined || stateImage?.preview.length === 0) ? (
+            // input 
             <label htmlFor={id} className="filetxt" >
               <div 
                 {...RootProps} 

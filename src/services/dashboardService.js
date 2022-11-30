@@ -212,7 +212,7 @@ export const setAuthorToServer = async (params) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const setAuthorIdToServer = async (id, params) => {
+export const editAuthorIdToServer = async (id, params) => {
   try {
     return await apiServer('patch', `/author/${id}`, params);
   } catch (e) {
@@ -514,9 +514,9 @@ export const getShopInquiryAuthorFromServer = async (params) => {
 * @author 2hyunkook
 * @param {jsonObject} params
 */
-export const setShopInquiryAuthorToSerVer = async (params) => {
+export const editShopInquiryAuthorToServer = async (params) => {
   try {
-    return await apiServer('post', `/shop/inquiry/author`, params);
+    return await apiServer('patch', `/shop/inquiry/author`, params);
   } catch (e) {
     return {
       status: e.response.status,
@@ -531,9 +531,61 @@ export const setShopInquiryAuthorToSerVer = async (params) => {
 * @author 2hyunkook
 * @param {jsonObject} params
 */
-export const setShopInquiryReportToSerVer = async (id, params) => {
+export const setShopInquiryReportToServer = async (id, params) => {
   try {
     return await apiServer('post', `/shop/inquiry/${id}/report`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+ product - sales review list
+ * @version 1.0.0
+ * @author 2hyunkook
+ * @param {jsonObject} params
+ */
+ export const getShopReviewAuthorFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/shop/review/author${getGetMethodUrl(params)}`);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+   product - sales review list 문의 수정
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const editShopReviewAuthorToServer = async (params) => {
+  try {
+    return await apiServer('patch', `/shop/review/author`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+
+/**
+   product - sales review list 문의 신고
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const setShopReviewReportToServer = async (id, params) => {
+  try {
+    return await apiServer('post', `/shop/review/${id}/report`, params);
   } catch (e) {
     return {
       status: e.response.status,

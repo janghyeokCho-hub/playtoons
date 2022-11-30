@@ -12,6 +12,9 @@ export const [GET_DASHBOARD_TYPE, GET_DASHBOARD_TYPE_SUCCESS, GET_DASHBOARD_TYPE
 export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
 export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
 export const [SET_DASHBOARD_SERIES, SET_DASHBOARD_SERIES_SUCCESS, SET_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("POST_postSeries");
+export const [INIT_SET_DASHBOARD_SERIES] = createRequestActionTypes("INIT_POST_postSeries");
+export const [EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_PROFILE_SUCCESS, EDIT_DASHBOARD_PROFILE_FAILURE] = createRequestActionTypes("PATCH_author");
+export const [INIT_EDIT_DASHBOARD_PROFILE] = createRequestActionTypes("INIT_PATCH_author");
 
 
 /* --- Actions --- */
@@ -24,6 +27,9 @@ export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
 export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
 export const setSeriesAction = createAction(SET_DASHBOARD_SERIES);
+export const initSeriesAction = createAction(INIT_SET_DASHBOARD_SERIES);
+export const editProfileAction = createAction(EDIT_DASHBOARD_PROFILE);
+export const initProfileAction = createAction(INIT_EDIT_DASHBOARD_PROFILE);
 
 const initialState = {
   subscribeTiers: null,
@@ -33,10 +39,48 @@ const initialState = {
   reaction: null,
   salesId: null,
   types: null,
+  profile: null,
+  seriesUpload: null,
 };
 
 const post = handleActions(
   {
+    [EDIT_DASHBOARD_PROFILE_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.profile = action.payload;
+      });
+    },
+    [EDIT_DASHBOARD_PROFILE_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.profile = action.payload;
+      });
+    },
+    [INIT_EDIT_DASHBOARD_PROFILE]: (state, action) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          profile: null,          
+        };
+      });
+    },
+    [SET_DASHBOARD_SERIES_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.seriesUpload = action.payload;
+      });
+    },
+    [SET_DASHBOARD_SERIES_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.seriesUpload = action.payload;
+      });
+    },
+    [INIT_SET_DASHBOARD_SERIES]: (state, action) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          seriesUpload: null,          
+        };
+      });
+    },
     [GET_DASHBOARD_PLAN_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.subscribeTiers = action.payload.subscribeTiers;
@@ -54,11 +98,6 @@ const post = handleActions(
       });
     },
     [GET_DASHBOARD_TYPE_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        draft.types = action.payload;
-      });
-    },
-    [SET_DASHBOARD_SERIES_FAILURE]: (state, action) => {
       return produce(state, (draft) => {
         draft.types = action.payload;
       });
