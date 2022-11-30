@@ -328,16 +328,7 @@ export default function DashboardPostDetail() {
             {renderReactionList(statePinnedReactions)}
             {/* reaction */}
             {renderReactionList(stateReactions)}
-
-            {/* <Pagination
-              className={""}
-              meta={stateReactions?.meta}
-              page={stateReactions?.meta?.currentPage}
-              itemsCountPerPage={stateReactions?.meta?.itemsPerPage}
-              totalItemsCount={stateReactions?.meta?.totalItems}
-              callback={(page) => getReactions(page)}
-            /> */}
-
+            
             <SeeMoreComent 
               text={text}
               meta={stateReactions?.meta}

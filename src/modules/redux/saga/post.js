@@ -126,12 +126,86 @@ function createEditPostRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
+      
+      let params = {
+        ...action.payload
+      };
+      // content upload
+      if( action.payload.fileInfoContent !== undefined ){
+        const formData = new FormData();
+        formData.append("authorId", action.payload.authorId);
+        formData.append("subscribeTierId", "");
+        formData.append("productId", "");
+        formData.append("type", "image"); //image, video, binary
+        formData.append("usage", "post"); //profile, background, cover, logo, post, product, thumbnail, attachment
+        formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+        formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+        formData.append("rating", action.payload.rating); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("file", action.payload.fileInfoContent);
+        const reponse = yield call(setFileToServer, formData);
+        if (reponse?.status === 201) {
+          params.content = reponse?.data?.hash;
+        }
+        else{
+          yield put(finishLoading(type));
+          yield put({
+            type: `${type}_FAILURE`,
+            payload: {
+              ...reponse,
+              type: 'content'
+            }
+          });
+          return;
+        }
+      }
 
-      const response = yield call(postApi.editPostToServer);
+      // thumbnail upload
+      if( action.payload.fileInfoThumbnailImage !== undefined ){
+        const formData = new FormData();
+        formData.append("authorId", action.payload.authorId);
+        formData.append("subscribeTierId", "");
+        formData.append("productId", "");
+        formData.append("type", "image"); //image, video, binary
+        formData.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
+        formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+        formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+        formData.append("rating", action.payload.rating); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("file", action.payload.fileInfoThumbnailImage);
+        const response = yield call(setFileToServer, formData);
+        if (response?.status === 201) {
+          params.thumbnailImage = response?.data?.hash;
+        }
+        else{
+          yield put(finishLoading(type));
+          yield put({
+            type: `${type}_FAILURE`,
+            payload: {
+              ...response,
+              type: 'thumbnail'
+            }
+          });
+          return;
+        }
+      }
+
+      // edit series
+      delete params["fileInfoContent"];
+      delete params["fileInfoThumbnailImage"];
+      
+      const response = yield call(postApi.editPostToServer, params);
       if (response?.status === 200) {
         yield put({
           type: `${type}_SUCCESS`,
-          payload: response.data,
+          payload: response,
+        });
+      }
+      else{
+        yield put({
+          type: `${type}_FAILURE`,
+          payload: {
+            ...response,
+            type: 'set'
+          }
         });
       }
 
@@ -141,10 +215,10 @@ function createEditPostRequestSaga(type) {
 
       yield put({
         type: `${type}_FAILURE`,
-        payload: action.payload,
-        error: true,
-        errStatus: e.response.status,
-        errMessage: e.response.data.message,
+        payload: {
+          ...e,
+          type: 'set'
+        }
       });
     } finally {
       yield put(finishLoading(type));

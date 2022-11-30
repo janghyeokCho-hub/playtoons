@@ -143,44 +143,8 @@ export default function UploadPost(props) {
   const getCategoryId = (json) => {
     return json.categoryId === "" ? reduxSeries?.category.id : json.categoryId;
   };
-  
-  //==============================================================================
-  // api
-  //==============================================================================
 
-  //==============================================================================
-  // event
-  //==============================================================================
-  const handleSeries = (series) => {
-    //series response 후 callback
-    dispatch( setSeriesAction(series) );
-  };
-
-  const handleType = (type) => {
-    //type response 후 callback
-    const tempType = reduxSeries?.type === undefined ? type : reduxSeries?.type;
-    setStateType(tempType);
-  };
-
-  const handleClickType = (type) => {
-    //type item click event
-    setStateType(type);
-  };
-
-  const handleClickItemSubscribeTier = (event) => {
-    //閲覧範囲（支援者） item click event
-    console.log("handleClickItemSubscribeTier", event);
-  };
-  
-  const handleClickPreview = (event) => {
-    console.log("handleClickPreview", event);
-  };
-
-  const handleClickRegister = (event) => {
-    setPost2();
-  };
-
-  const setPost2 = () => {
+  const setPost = () => {
     console.log('setPost');
     let json = getFromDataJson(refForm);
     
@@ -248,6 +212,42 @@ export default function UploadPost(props) {
     };
 
     dispatch( setPostAction(json) );
+  };
+  
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  //==============================================================================
+  // event
+  //==============================================================================
+  const handleSeries = (series) => {
+    //series response 후 callback
+    dispatch( setSeriesAction(series) );
+  };
+
+  const handleType = (type) => {
+    //type response 후 callback
+    const tempType = reduxSeries?.type === undefined ? type : reduxSeries?.type;
+    setStateType(tempType);
+  };
+
+  const handleClickType = (type) => {
+    //type item click event
+    setStateType(type);
+  };
+
+  const handleClickItemSubscribeTier = (event) => {
+    //閲覧範囲（支援者） item click event
+    console.log("handleClickItemSubscribeTier", event);
+  };
+  
+  const handleClickPreview = (event) => {
+    console.log("handleClickPreview", event);
+  };
+
+  const handleClickRegister = (event) => {
+    setPost();
   };
 
   //==============================================================================

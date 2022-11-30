@@ -32,9 +32,7 @@ export default function ProfileSpan(props) {
   };
 
   useEffect(() => {
-    if (hash?.startsWith("/static/media/")) {
-      setStateImage(hash);
-    } else {
+    if( hash ){
       getImage(hash);
     }
   }, [hash]);

@@ -70,7 +70,12 @@ const post = handleActions(
     },
     [EDIT_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        draft.post = action.payload.post;
+        draft.postUpload = action.payload;
+      });
+    },
+    [EDIT_POST_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.postUpload = action.payload;
       });
     },
     [POST_DETAIL_SUCCESS]: (state, action) => {

@@ -25,8 +25,9 @@ import Textarea from "@/components/dashboard/Textarea";
 import DraftEditor from "@/components/post/DraftEditor";
 import Series from "@/components/post/Series";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getTimelineFromServer, setFileToServer } from "@/services/dashboardService";
-import { editPostToServer, getPostIdMineFromServer } from "@/services/postService";
+import { initPostAction, setPostEditAction } from "@/modules/redux/ducks/post";
+import { getTimelineFromServer } from "@/services/dashboardService";
+import { getPostIdMineFromServer } from "@/services/postService";
 
 const text = {
   must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
@@ -38,9 +39,12 @@ const text = {
   episode: "話",
   outline: "あらすじ",
   contents: "コンテンツ",
+  contents_tooltip: "投稿するコンテンツです。",
   tag: "タグ",
+  tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   support_user: "閲覧範囲（支援者）",
   timeline: "タイムラインのサムネイル",
+  timeline_tooltip: "投稿のサムネイルです。",
   drag_drop: "ドラッグ＆ドロップ",
   edit: "編集",
   select_timeline: "サムネイル選択",
@@ -88,8 +92,9 @@ export default function PostEdit(props) {
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
-  const params = useParams();
+  const reduxPostUpload = useSelector(({ post }) => post.postUpload);
   const dispatch = useDispatch();
+  const params = useParams();
   const navigate = useNavigate();
   const refForm = useRef();
   const refTitle = useRef();
@@ -100,7 +105,10 @@ export default function PostEdit(props) {
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
   const refRegister = useRef();
-
+  
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header ty1",
@@ -115,25 +123,92 @@ export default function PostEdit(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
-
   //==============================================================================
   // function
   //==============================================================================
 
-  const callbackContents = () => {
-    //upload 할 이미지가 없다면
-    if (refThumbnailTimeline.current.getImageFile() === undefined) {
-      callbackTimeline();
-    } else {
-      setImageToServer(refThumbnailTimeline, "thumbnail");
+  const editPost = () => {
+    //필드 확인
+    let json = getFromDataJson(refForm);
+    if (refTitle.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refTitle.current.setError(text.please_input_title);
+      return;
     }
-  };
 
-  const callbackTimeline = () => {
-    editPost();
+    if (refOutline.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refOutline.current.setError(text.please_input_outline);
+      return;
+    }
+
+    if( getShowEditor(stateData.type) ){
+      //type -> novel
+      if( refEditor.current.isEmpty() ){
+        initButtonInStatus(refRegister);
+        refEditor.current.setError(text.please_input_content);
+        return;
+      } else {
+        json = {
+          ...json,
+          content: refEditor.current.getContent(),
+        }
+      }
+    }
+    else{
+      //type -> webtoon, illust, blog, photo, music
+      if (refContents.current.checkToEmpty()) {
+        initButtonInStatus(refRegister);
+        refContents.current.setError(text.please_input_content);
+        return;
+      } else {
+        //upload 할 이미지가 있는지 확인
+        if( refContents.current.getImageFile() === undefined ){
+          json = {
+            ...json,
+            content: stateData.content,
+          }
+        } else {
+          json = {
+            ...json,
+            fileInfoContent: refContents.current.getImageFile(),
+          }
+        }
+      }
+    }
+
+    if (refThumbnailTimeline.current.checkToEmpty()) {
+      initButtonInStatus(refRegister);
+      refThumbnailTimeline.current.setError(text.please_input_thumbnail);
+      return;
+    } else {
+      //upload 할 이미지가 있는지 확인 
+      if(refThumbnailTimeline.current.getImageFile() === undefined){
+        //thumbail에서 선택했는지 확인 
+        json = {
+          ...json,
+          thumbnailImage: refThumbnailTimeline.current.getImageInfo().value === undefined ? 
+                            stateData.thumbnailImage : refThumbnailTimeline.current.getImageInfo().value,
+        }
+      } else {
+        json = {
+          ...json,
+          fileInfoThumbnailImage: refThumbnailTimeline.current.getImageFile(),
+        }
+      }
+    }
+
+    json = {
+      ...json,
+      postId: params.id,
+      typeId: stateData?.type?.id,
+      tagIds: refTag.current.getTagsJsonObject(),
+      categoryId: json.categoryId === "" ? stateData?.category?.id : json.categoryId,
+      rating: stateData?.rating,
+      // subscribeTierId: '',
+    };
+
+    dispatch( setPostEditAction(json) );
   };
 
   //==============================================================================
@@ -147,121 +222,6 @@ export default function PostEdit(props) {
     } else {
       showOneButtonPopup(dispatch, status + data);
     }
-  };
-
-  /**
-    파일을 서버에 업로드 
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  const setImageToServer = async (ref, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-    params.append("authorId", reduxAuthors[0].id);
-    params.append("subscribeTierId", "");
-    params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false); //언제 체크해서 보내는건지?
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", stateData?.rating); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", ref.current.getImageFile());
-
-    const { status, data: resultData } = await setFileToServer(params);
-
-    //create sccuess
-    if (status === 201) {
-      ref.current.setImageValueToInputTag(resultData?.hash);
-    } else {
-      //error 처리
-      initButtonInStatus(refRegister);
-      ref.current.setError(String(status + resultData));
-    }
-  };
-
-  /**
-    edit post
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  const editPost = async () => {
-    //필드 확인
-    let json = getFromDataJson(refForm);
-    if (refTitle.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refTitle.current.setError(text.please_input_title);
-      refTitle.current.focus();
-      return;
-    }
-
-    if (refOutline.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refOutline.current.setError(text.please_input_outline);
-      return;
-    }
-
-    if( getShowEditor(stateData.type) ){
-      if( refEditor.current.isEmpty() ){
-        initButtonInStatus(refRegister);
-        refEditor.current.setError(text.please_input_content);
-        return;
-      }
-    }
-    else{
-      if (refContents.current.checkToEmpty()) {
-        initButtonInStatus(refRegister);
-        refContents.current.setError(text.please_input_content);
-        return;
-      }
-    }
-
-    if (refThumbnailTimeline.current.checkToEmpty()) {
-      initButtonInStatus(refRegister);
-      refThumbnailTimeline.current.setError(text.please_input_thumbnail);
-      return;
-    }
-
-    json = {
-      ...json,
-      postId: params.id,
-      typeId: stateData?.type?.id,
-      tagIds: refTag.current.getTagsJsonObject(),
-      categoryId: json.categoryId === "" ? stateData?.category?.id : json.categoryId,
-      content: getShowEditor(stateData.type) ? refEditor.current.getContent() : json.content,
-      // rating: stateData.rating,
-      // status: stateData.status,
-      // issueId: '',
-      // subscribeTierId: '',
-      // outline: '',
-      // number: '',
-    };
-
-    //이미지 변경이 없는 경우 기존 정보를 넣어준다.
-    if (!json.content.length) {
-      json = {
-        ...json,
-        content: stateData.content,
-      };
-    }
-
-    if (!json.thumbnailImage.length) {
-      json = {
-        ...json,
-        thumbnailImage: stateData.thumbnailImage,
-      };
-    }
-    
-
-    const { status, data } = await editPostToServer(json);
-    if (status === 200) {
-      showOneButtonPopup(dispatch, text.dont_edit, () => {
-        navigate(`/dashboard/post/detail/${params.id}`);
-      });
-    } else {
-      showOneButtonPopup(dispatch, data);
-    }
-
-    initButtonInStatus(refRegister);
   };
 
   const getTimeline = async () => {
@@ -300,26 +260,7 @@ export default function PostEdit(props) {
   };
 
   const handleClickRegister = () => {
-    if( getShowEditor(stateData?.type) ){
-      //undefined(일회성 post), novel, blog 타입
-      if( refEditor.current.isEmpty() ){
-        initButtonInStatus(refRegister);
-        refEditor.current.setError(text.please_input_content);
-      }
-      else{
-        callbackContents();
-      }
-    }
-    else{
-      //webtoon, illust, photo, music 타입
-      //check contents
-      //upload 할 이미지가 없다면
-      if (refContents.current.getImageFile() === undefined) {
-        callbackContents();
-      } else {
-        setImageToServer(refContents, "post");
-      }
-    }
+    editPost();
   };
 
   //==============================================================================
@@ -333,7 +274,6 @@ export default function PostEdit(props) {
           key={index}
           className="cx swiper-slide"
           onClick={handleClickItemTimeline}
-          id={item.id}
         >
           <div>
             <div className="cx_thumb">
@@ -350,6 +290,8 @@ export default function PostEdit(props) {
   };
 
   useLayoutEffect(() => {
+    handleContainer();
+
     //check login expire time
     if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
       //check author
@@ -364,16 +306,38 @@ export default function PostEdit(props) {
         showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
       }
     }
-  }, [reduxAuthors]);
-
+  }, []);
 
   useEffect(() => {
-    if( stateData !== undefined ){
+    if( stateData ){
       if( refEditor !== undefined && getShowEditor(stateData?.type) ){
         refEditor.current.setContent( stateData?.content );
       }
     }
   }, [stateData]);
+
+  useEffect(() => {
+    if (reduxPostUpload) {
+      initButtonInStatus(refRegister);
+      if( reduxPostUpload?.status === 200 ){
+        //success
+        showOneButtonPopup(dispatch, text.dont_edit, () => navigate(`/dashboard/post/detail/${params.id}`));
+      }
+      else{
+        //error 처리
+        if( reduxPostUpload?.type === 'content' ){
+          if( getShowEditor(stateData?.type) ){ refContents.current.setError(String(reduxPostUpload?.data));  }
+          else {  refEditor.current.setError(text.please_input_content);  }
+        } else if( reduxPostUpload?.type === 'thumbnail' ){
+          refThumbnailTimeline.current.setError(String(reduxPostUpload?.data));
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxPostUpload?.data)  );
+        }
+      }
+    }
+
+    return () => dispatch( initPostAction() );
+  }, [reduxPostUpload]);
 
   return (
     <div className="inr-c">
@@ -455,7 +419,7 @@ export default function PostEdit(props) {
               <h3 className="tit1">
                 {text.contents}{" "}
                 <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip title={"Contents"} text={"afasfasdfads"} />
+                  <ToolTip title={text.contents} text={text.contents_tooltip} />
                 </button>
               </h3>
               {
@@ -469,7 +433,6 @@ export default function PostEdit(props) {
                     name={"content"}
                     text={text.drag_drop}
                     previewHash={stateData?.content}
-                    callback={callbackContents}
                   />
                 )
               }
@@ -479,12 +442,7 @@ export default function PostEdit(props) {
               <h3 className="tit1">
                 {text.tag}{" "}
                 <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip
-                    title={text.tag}
-                    text={
-                      "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。"
-                    }
-                  />
+                  <ToolTip title={text.tag} text={text.tag_tooltip} />
                 </button>
               </h3>
               <Tag
@@ -509,7 +467,7 @@ export default function PostEdit(props) {
               <h3 className="tit1">
                 {text.timeline}{" "}
                 <button type="button" className="btn_help" title="ヘルプ">
-                  <ToolTip title={"Contents"} text={"afasfasdfads"} />
+                  <ToolTip title={text.timeline} text={text.timeline_tooltip} />
                 </button>
               </h3>
               <ImageUpload
@@ -521,7 +479,6 @@ export default function PostEdit(props) {
                 previewHash={stateData?.thumbnailImage}
                 text={text.drag_drop}
                 textEdit={text.edit}
-                callback={callbackTimeline}
               />
             </div>
 
