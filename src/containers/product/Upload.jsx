@@ -33,14 +33,14 @@ const Upload = () => {
   ];
   const [selectTarget, setSelectTarget] = useState("all");
   const [selectAge, setSelectAge] = useState(false);
-  const [files, setFiles] = useState([]);
+  const [products, setProducts] = useState([]);
   const handlePreviewDelete = useCallback(
     (id) => {
-      setFiles(files.filter((item) => item?.id !== id));
+      setProducts(products.filter((item) => item?.id !== id));
     },
-    [files]
+    [products]
   );
-  const [product, setProduct] = useState(null);
+  const [thumbnailImage, setThumbnailImage] = useState(null);
 
   const getProductType = useCallback(async () => {
     const response = await getProductTypeAPI();
@@ -78,9 +78,18 @@ const Upload = () => {
     }
   }, [categoryList]);
 
+  useEffect(() => {
+    if (selectAge) {
+      setRating("R-18");
+    } else {
+      setRating("G");
+    }
+  }, [selectAge]);
+
   const [name, setName] = useState("");
-  const [number, setNumber] = useState("");
   const [category, setCategory] = useState(null);
+  const [description, setDescription] = useState("");
+  const [rating, setRating] = useState("G");
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -97,11 +106,6 @@ const Upload = () => {
           <section className="bbs_write">
             <div className="hd_titbox">
               <h2 className="h_tit1">登録</h2>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">シリーズ</h3>
-              <input type="text" className="inp_txt w100p" />
             </div>
 
             <div className="col">
@@ -153,16 +157,6 @@ const Upload = () => {
             </div>
 
             <div className="col">
-              <h3 className="tit1">話</h3>
-              <input
-                type="text"
-                className="inp_txt w100p"
-                onChange={(e) => setNumber(e.target.value)}
-                value={number}
-              />
-            </div>
-
-            <div className="col">
               <h3 className="tit1">
                 サムネイル
                 <button type="button" className="btn_help" title="ヘルプ">
@@ -174,8 +168,83 @@ const Upload = () => {
 
               <Dropzone
                 onDrop={(acceptedFiles) => {
-                  setFiles([
-                    ...files,
+                  setThumbnailImage({
+                    ...acceptedFiles[0],
+                    preview: URL.createObjectURL(acceptedFiles[0]),
+                  });
+                }}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <div className="box_drag" {...getRootProps()}>
+                    {(thumbnailImage && (
+                      <div className="fileview">
+                        <div>
+                          <img src={thumbnailImage?.preview} alt="" />
+                        </div>
+                        <button
+                          type="button"
+                          className="btn_del"
+                          title="削除"
+                          onClick={() => setThumbnailImage(null)}
+                        >
+                          <FontAwesomeIcon icon={faCircleXmark} />
+                        </button>
+                      </div>
+                    )) || (
+                      <>
+                        <input type="file" id="filebox2" {...getInputProps()} />
+                        <label htmlFor="filebox2" className="filetxt">
+                          <div className="txt">
+                            <div className="ico">
+                              <FontAwesomeIcon icon={faCirclePlus} />
+                            </div>
+                            <p className="t">ドラッグ＆ドロップ</p>
+                          </div>
+                        </label>
+                      </>
+                    )}
+                  </div>
+                )}
+              </Dropzone>
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">
+                説明 <span className="i_emp">*</span>
+              </h3>
+              <textarea
+                className="textarea1"
+                onChange={(e) => setDescription(e.target.value)}
+              ></textarea>
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">価格</h3>
+              <div className="inp_txt sch">
+                <input type="text" className="" />
+                <span className="won">PC</span>
+              </div>
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">有料オプション</h3>
+              <button type="button" className="btn-pk n blue2">
+                <span>
+                  <FontAwesomeIcon icon={faPlus} className="mr10" />
+                  有料オプション追加
+                </span>
+              </button>
+            </div>
+
+            <div className="col">
+              <h3 className="tit1">
+                商品アップロード <span className="i_emp">*</span>
+              </h3>
+
+              <Dropzone
+                onDrop={(acceptedFiles) => {
+                  setProducts([
+                    ...products,
                     ...acceptedFiles.map((file, index) => {
                       return Object.assign(file, {
                         id: `${file?.name}_${index}`,
@@ -206,9 +275,9 @@ const Upload = () => {
               </Dropzone>
 
               {/*<!-- 파일 첨부 후 보여지는부분(이미지) -->*/}
-              {files?.length > 0 && (
+              {products?.length > 0 && (
                 <div className="box_multy">
-                  {files.map((item, index) => {
+                  {products.map((item, index) => {
                     return (
                       <div key={`preview_${index}`} className="fileview">
                         <div>
@@ -227,96 +296,6 @@ const Upload = () => {
                   })}
                 </div>
               )}
-
-              {/*<!-- 파일 첨부 후 보여지는부분(텍스트) -->*/}
-              {files?.length > 0 && (
-                <div className="box_multy">
-                  <div className="fileview2 scrollY">
-                    その入口を通ったとき、わたしは、昔の人の住む国に逆もどりし、過ぎ去った時代の闇やみのなかに身を没してゆくような気がした。
-                    　わたしはウェストミンスター・スクールの中庭から入り、低い円天井の長い廊下を通って行ったが、そこは巨大な壁にあけられた円形の穴でかすかに一部分が明るくなっているだけなので、あたかも地下に潜ったような感じがした。この暗い廊下を通して廻廊が遠くに見え、聖堂守の老人の黒い衣をまとった姿が、うす暗い円天井の下に動き、近くの墓地からぬけ出してきた幽霊のように見えた。
-                    　こういう陰鬱いんうつな僧院の跡を通って寺院に近づいてゆくと、おのずから厳粛な思索にふさわしい気持ちになるものである。廻廊は昔ながらの世間を遠ざかった静寂の面影をいまだにとどめている。灰色の壁は湿気のために色があせ、歳月を経て崩れおちそうになっている。白い苔こけの衣が壁にはめこんだ記念碑の碑文をおおい、髑髏されこうべや、そのほかの葬儀の表象をもかくしている。鋭く刻んだ鑿のみのあとは、精巧な彫刻をほどこしたアーチの狭間はざま飾りからすでに消え去っている。薔薇ばらの模様がかなめ石を飾っていたが、その美しく茂った姿はなくなってしまっている。あらゆるものが、幾星霜いくせいそうのおもむろな侵蝕しんしょくのあとをとどめている。だが、そのほろびのなかにこそ、何か哀愁をそそり、また心を楽しくさせるものがあるのだ。
-                    その入口を通ったとき、わたしは、昔の人の住む国に逆もどりし、過ぎ去った時代の闇やみのなかに身を没してゆくような気がした。
-                    　わたしはウェストミンスター・スクールの中庭から入り、低い円天井の長い廊下を通って行ったが、そこは巨大な壁にあけられた円形の穴でかすかに一部分が明る
-                    くなっているだけなので、あたかも地下に潜ったような感じがした。この暗い廊下を通して廻廊が遠くに見え、
-                    聖堂守の老人の黒い衣をまとった姿が、うす暗い円天井の下に動き、近くの墓地からぬけ出してきた幽霊のように見えた。
-                    　こういう陰鬱いんうつな僧院の跡を通って寺院に近づいてゆくと、おのずから厳粛な思索にふさわしい気持ちになるものである。廻廊は昔ながらの世間を遠ざかった静寂の面影をいまだにとどめている。灰色の壁は湿気のために色があせ、歳月を経て崩れおちそうになっている。白い苔こけの衣が壁にはめこんだ記念碑の碑文をおおい、
-                    髑髏されこうべや、そのほかの葬儀の表象をもかくしている。鋭く刻んだ鑿のみのあとは、精巧な彫刻をほどこしたアーチの狭間はざ
-                    ま飾りからすでに消え去っている。薔薇ばらの模様がかなめ石を飾っていたが、その美しく茂った姿はなくなってしまっている。あらゆるものが、幾星霜いく
-                    せいそうのおもむろな侵蝕しんしょくのあとをとどめている。だが、そのほろびのなかにこそ、何か哀愁をそそり、また心を楽しくさせるものがあるのだ。
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">
-                説明 <span className="i_emp">*</span>
-              </h3>
-              <textarea className="textarea1"></textarea>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">価格</h3>
-              <div className="inp_txt sch">
-                <input type="text" className="" />
-                <span className="won">PC</span>
-              </div>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">有料オプション</h3>
-              <button type="button" className="btn-pk n blue2">
-                <span>
-                  <FontAwesomeIcon icon={faPlus} className="mr10" />
-                  有料オプション追加
-                </span>
-              </button>
-            </div>
-
-            <div className="col">
-              <h3 className="tit1">
-                商品アップロード <span className="i_emp">*</span>
-              </h3>
-              <Dropzone
-                onDrop={(acceptedFiles) => {
-                  setProduct({
-                    ...acceptedFiles[0],
-                    preview: URL.createObjectURL(acceptedFiles[0]),
-                  });
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <div className="box_drag" {...getRootProps()}>
-                    {(product && (
-                      <div className="fileview">
-                        <div>
-                          <img src={product?.preview} alt="" />
-                        </div>
-                        <button
-                          type="button"
-                          className="btn_del"
-                          title="削除"
-                          onClick={() => setProduct(null)}
-                        >
-                          <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                      </div>
-                    )) || (
-                      <>
-                        <input type="file" id="filebox2" {...getInputProps()} />
-                        <label htmlFor="filebox2" className="filetxt">
-                          <div className="txt">
-                            <div className="ico">
-                              <FontAwesomeIcon icon={faCirclePlus} />
-                            </div>
-                            <p className="t">ドラッグ＆ドロップ</p>
-                          </div>
-                        </label>
-                      </>
-                    )}
-                  </div>
-                )}
-              </Dropzone>
             </div>
 
             <div className="col">

@@ -1,4 +1,7 @@
-import { getErrorMessageFromResultCode, getGetMethodUrl } from "@/common/common";
+import {
+  getErrorMessageFromResultCode,
+  getGetMethodUrl,
+} from "@/common/common";
 import { apiServer } from "./api";
 
 /**
@@ -10,9 +13,15 @@ import { apiServer } from "./api";
 */
 export const getSeriesStoryList = async (params) => {
   try {
-    return await apiServer("get", "/post/series/mine" + getGetMethodUrl(params));
+    return await apiServer(
+      "get",
+      "/post/series/mine" + getGetMethodUrl(params)
+    );
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -27,7 +36,10 @@ export const getPostTypeListFromServer = async () => {
   try {
     return await apiServer("get", "/post/type");
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -43,7 +55,10 @@ export const getPostCategoryListFromServer = async (typeId) => {
   try {
     return await apiServer("get", `/post/category/${typeId}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -69,14 +84,15 @@ export const setFileToServer = async (params) => {
   const header = {
     "content-type": "multipart/form-data",
   };
-
   try {
     return await apiServer("post", "/file", params, header);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
-
 
 /**
 *
@@ -88,7 +104,7 @@ export const setFileToServer = async (params) => {
 */
 export const getFileUrlFromServer = async (hash, params) => {
   let parameters = "";
-  if( params !== undefined ){
+  if (params !== undefined) {
     parameters = `?${getGetMethodUrl(params)}`;
   }
 
@@ -98,7 +114,6 @@ export const getFileUrlFromServer = async (hash, params) => {
     return { status: e.response.status, data: e };
   }
 };
-
 
 /**
 *
@@ -111,10 +126,12 @@ export const getPostListFromServer = async (params) => {
   try {
     return await apiServer("get", "/post" + getGetMethodUrl(params));
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
-
 
 /**
 *
@@ -127,10 +144,12 @@ export const getTagFromServer = async (query, params) => {
   try {
     return await apiServer("get", `/tag/${query}${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
-
 
 /**
 *
@@ -144,7 +163,10 @@ export const setTagToServer = async (params) => {
   try {
     return await apiServer("post", "/tag", params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -159,7 +181,10 @@ export const setSeriesToServer = async (params) => {
   try {
     return await apiServer("post", "/post/series", params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -172,7 +197,10 @@ export const deleteSeriesToServer = async (params) => {
   try {
     return await apiServer("delete", `/post/series/${params.id}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -187,7 +215,10 @@ export const getSeriesDetailFromServer = async (params) => {
   try {
     return await apiServer("get", `/post/series/${params.id}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -200,9 +231,12 @@ export const getSeriesDetailFromServer = async (params) => {
 */
 export const setAuthorToServer = async (params) => {
   try {
-    return await apiServer('post', `/author`, params);
+    return await apiServer("post", `/author`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 /**
@@ -214,9 +248,12 @@ export const setAuthorToServer = async (params) => {
 */
 export const editAuthorIdToServer = async (id, params) => {
   try {
-    return await apiServer('patch', `/author/${id}`, params);
+    return await apiServer("patch", `/author/${id}`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -229,13 +266,14 @@ export const editAuthorIdToServer = async (id, params) => {
 */
 export const getAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/author/${params.id}`, );
+    return await apiServer("get", `/author/${params.id}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
-
-
 
 /**
 *
@@ -246,10 +284,13 @@ export const getAuthorIdFromServer = async (params) => {
 */
 export const getSubscribeTierAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/subscribeTier/${params.authorId}`, );
+    return await apiServer("get", `/subscribeTier/${params.authorId}`);
     // return await apiServer('get', `/subscribeTier/${params.authorId}${getGetMethodUrl(params)}`, );
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -262,9 +303,12 @@ export const getSubscribeTierAuthorIdFromServer = async (params) => {
 */
 export const setSubscribeTierToServer = async (params) => {
   try {
-    return await apiServer('post', `/subscribeTier`, params);
+    return await apiServer("post", `/subscribeTier`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -277,9 +321,12 @@ export const setSubscribeTierToServer = async (params) => {
 */
 export const editSubscribeTierToServer = async (params) => {
   try {
-    return await apiServer('patch', `/subscribeTier`, params);
+    return await apiServer("patch", `/subscribeTier`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -292,9 +339,12 @@ export const editSubscribeTierToServer = async (params) => {
 */
 export const editPostSeriesToServer = async (params) => {
   try {
-    return await apiServer('patch', `/post/series`, params);
+    return await apiServer("patch", `/post/series`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -307,9 +357,12 @@ export const editPostSeriesToServer = async (params) => {
 */
 export const getReactionMineAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer('get', `/reaction/mine/${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/reaction/mine/${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -322,9 +375,12 @@ export const getReactionMineAuthorIdFromServer = async (params) => {
 */
 export const setReactionReactionIdPinToServer = async (params) => {
   try {
-    return await apiServer('post', `/reaction/${params.id}/pin`, );
+    return await apiServer("post", `/reaction/${params.id}/pin`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -337,9 +393,12 @@ export const setReactionReactionIdPinToServer = async (params) => {
 */
 export const deleteReactionReactionIdPinFromServer = async (params) => {
   try {
-    return await apiServer('delete', `/reaction/${params.id}/pin`, );
+    return await apiServer("delete", `/reaction/${params.id}/pin`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -352,9 +411,12 @@ export const deleteReactionReactionIdPinFromServer = async (params) => {
 */
 export const getReactionFromServer = async (params) => {
   try {
-    return await apiServer('get', `/reaction${getGetMethodUrl(params)}`, );
+    return await apiServer("get", `/reaction${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -367,9 +429,12 @@ export const getReactionFromServer = async (params) => {
 */
 export const setReactionLikeToServer = async (params) => {
   try {
-    return await apiServer('post', `/reaction/${params.id}/like`, );
+    return await apiServer("post", `/reaction/${params.id}/like`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -382,9 +447,12 @@ export const setReactionLikeToServer = async (params) => {
 */
 export const deleteReactionLikeToServer = async (params) => {
   try {
-    return await apiServer('delete', `/reaction/${params.id}/like`, );
+    return await apiServer("delete", `/reaction/${params.id}/like`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -397,9 +465,12 @@ export const deleteReactionLikeToServer = async (params) => {
 */
 export const setPostReactionIdReportToServer = async (id, params) => {
   try {
-    return await apiServer('post', `/reaction/${id}/report`, params);
+    return await apiServer("post", `/reaction/${id}/report`, params);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -412,9 +483,12 @@ export const setPostReactionIdReportToServer = async (id, params) => {
 */
 export const deleteReactionIdToServer = async (id) => {
   try {
-    return await apiServer('delete', `/reaction/${id}`, );
+    return await apiServer("delete", `/reaction/${id}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -425,9 +499,12 @@ export const deleteReactionIdToServer = async (id) => {
 */
 export const getTimelineFromServer = async (params) => {
   try {
-    return await apiServer('get', `/post${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/post${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -438,9 +515,12 @@ export const getTimelineFromServer = async (params) => {
 */
 export const getPostMineFromServer = async (params) => {
   try {
-    return await apiServer('get', `/post/mine${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/post/mine${getGetMethodUrl(params)}`);
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -451,9 +531,15 @@ export const getPostMineFromServer = async (params) => {
 */
 export const getSubscribeTierInPlanFromServer = async (authorId, params) => {
   try {
-    return await apiServer('get', `/subscribeTier/${authorId}/subscribers${getGetMethodUrl(params)}`);
+    return await apiServer(
+      "get",
+      `/subscribeTier/${authorId}/subscribers${getGetMethodUrl(params)}`
+    );
   } catch (e) {
-    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data) };
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };
 
@@ -465,7 +551,10 @@ export const getSubscribeTierInPlanFromServer = async (authorId, params) => {
 */
 export const getProductListFromServer = async (params) => {
   try {
-    return await apiServer("get", `/shop/product/mine${getGetMethodUrl(params)}`);
+    return await apiServer(
+      "get",
+      `/shop/product/mine${getGetMethodUrl(params)}`
+    );
   } catch (e) {
     return {
       status: e.response.status,
@@ -482,7 +571,7 @@ export const getProductListFromServer = async (params) => {
 */
 export const editShopProductToServer = async (params) => {
   try {
-    return await apiServer('patch', `/shop/product`, params);
+    return await apiServer("patch", `/shop/product`, params);
   } catch (e) {
     return {
       status: e.response.status,
@@ -499,7 +588,10 @@ export const editShopProductToServer = async (params) => {
  */
 export const getShopInquiryAuthorFromServer = async (params) => {
   try {
-    return await apiServer("get", `/shop/inquiry/author${getGetMethodUrl(params)}`);
+    return await apiServer(
+      "get",
+      `/shop/inquiry/author${getGetMethodUrl(params)}`
+    );
   } catch (e) {
     return {
       status: e.response.status,
@@ -516,7 +608,7 @@ export const getShopInquiryAuthorFromServer = async (params) => {
 */
 export const editShopInquiryAuthorToServer = async (params) => {
   try {
-    return await apiServer('patch', `/shop/inquiry/author`, params);
+    return await apiServer("patch", `/shop/inquiry/author`, params);
   } catch (e) {
     return {
       status: e.response.status,
@@ -533,7 +625,7 @@ export const editShopInquiryAuthorToServer = async (params) => {
 */
 export const setShopInquiryReportToServer = async (id, params) => {
   try {
-    return await apiServer('post', `/shop/inquiry/${id}/report`, params);
+    return await apiServer("post", `/shop/inquiry/${id}/report`, params);
   } catch (e) {
     return {
       status: e.response.status,
@@ -548,9 +640,12 @@ export const setShopInquiryReportToServer = async (id, params) => {
  * @author 2hyunkook
  * @param {jsonObject} params
  */
- export const getShopReviewAuthorFromServer = async (params) => {
+export const getShopReviewAuthorFromServer = async (params) => {
   try {
-    return await apiServer("get", `/shop/review/author${getGetMethodUrl(params)}`);
+    return await apiServer(
+      "get",
+      `/shop/review/author${getGetMethodUrl(params)}`
+    );
   } catch (e) {
     return {
       status: e.response.status,
@@ -567,7 +662,7 @@ export const setShopInquiryReportToServer = async (id, params) => {
 */
 export const editShopReviewAuthorToServer = async (params) => {
   try {
-    return await apiServer('patch', `/shop/review/author`, params);
+    return await apiServer("patch", `/shop/review/author`, params);
   } catch (e) {
     return {
       status: e.response.status,
@@ -575,7 +670,6 @@ export const editShopReviewAuthorToServer = async (params) => {
     };
   }
 };
-
 
 /**
    product - sales review list 문의 신고
@@ -585,7 +679,7 @@ export const editShopReviewAuthorToServer = async (params) => {
 */
 export const setShopReviewReportToServer = async (id, params) => {
   try {
-    return await apiServer('post', `/shop/review/${id}/report`, params);
+    return await apiServer("post", `/shop/review/${id}/report`, params);
   } catch (e) {
     return {
       status: e.response.status,

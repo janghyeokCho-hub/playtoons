@@ -2,7 +2,7 @@ import {
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
-  showOneButtonPopup
+  showOneButtonPopup,
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import Category from "@/components/dashboard/Category";
@@ -13,8 +13,17 @@ import Textarea from "@/components/dashboard/Textarea";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/dashboard";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  initSeriesAction,
+  setSeriesAction,
+} from "@/modules/redux/ducks/dashboard";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +40,8 @@ const text = {
   type: "タイプ",
   category: "カテゴリ",
   setting_tag: "タグ設定",
-  setting_tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
+  setting_tag_tooltip:
+    "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   register: "登録する",
   summary: "説明",
   setting_adult: "年齢設定",
@@ -46,13 +56,15 @@ const text = {
   please_input_title: "タイトルを入力してください。",
   please_input_description: "説明を入力してください。",
   error_title: "お知らせ",
-  done_upload: 'シリーズ登録しました。',
-  not_creator: 'クリエーターじゃないんです。',
+  done_upload: "シリーズ登録しました。",
+  not_creator: "クリエーターじゃないんです。",
 };
 
 export default function DashboardUploadSeries(props) {
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
-  const reduxSeriesUpload = useSelector(({ dashboard }) => dashboard.seriesUpload);
+  const reduxSeriesUpload = useSelector(
+    ({ dashboard }) => dashboard.seriesUpload
+  );
   const [stateType, setStateType] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -89,7 +101,7 @@ export default function DashboardUploadSeries(props) {
   //==============================================================================
 
   //==============================================================================
-  // api 
+  // api
   //==============================================================================
 
   //==============================================================================
@@ -136,8 +148,7 @@ export default function DashboardUploadSeries(props) {
       authorId: reduxAuthors[0].id, //author 가 아니면 못옴
     };
 
-    dispatch( setSeriesAction(json) );
-
+    dispatch(setSeriesAction(json));
   };
 
   const handlePreview = (e) => {
@@ -152,33 +163,35 @@ export default function DashboardUploadSeries(props) {
     handleContainer();
 
     //chekc author
-    if ( !reduxAuthors || reduxAuthors?.length === 0 ) {
-      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
+    if (!reduxAuthors || reduxAuthors?.length === 0) {
+      showOneButtonPopup(dispatch, text.not_creator, () =>
+        navigate("/author/register")
+      );
     }
   }, []);
 
   useEffect(() => {
-    if( reduxSeriesUpload ){
+    if (reduxSeriesUpload) {
       initButtonInStatus(refRegister);
-      if( reduxSeriesUpload?.status === 201 ){
+      if (reduxSeriesUpload?.status === 201) {
         //success
-        showOneButtonPopup(dispatch, text.done_upload, () => navigate("/dashboard/series"));
-      }
-      else{
+        showOneButtonPopup(dispatch, text.done_upload, () =>
+          navigate("/dashboard/series")
+        );
+      } else {
         //error 처리
-        if( reduxSeriesUpload?.type === 'cover' ){
+        if (reduxSeriesUpload?.type === "cover") {
           refCoverImage.current.setError(String(reduxSeriesUpload?.data));
-        } else if( reduxSeriesUpload?.type === 'thumbnail' ){
+        } else if (reduxSeriesUpload?.type === "thumbnail") {
           refTimelineImage.current.setError(String(reduxSeriesUpload?.data));
         } else {
-          showOneButtonPopup(dispatch,  String(reduxSeriesUpload?.data)  );
+          showOneButtonPopup(dispatch, String(reduxSeriesUpload?.data));
         }
       }
     }
 
-    return () => dispatch( initSeriesAction() );
+    return () => dispatch(initSeriesAction());
   }, [reduxSeriesUpload]);
-
 
   return (
     <div className="contents">
@@ -304,7 +317,7 @@ export default function DashboardUploadSeries(props) {
               ref={refRegister}
               className={"btn-pk n blue"}
               onClick={handleRegister}
-              >
+            >
               {text.register}
             </Button>
           </div>
