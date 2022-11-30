@@ -14,7 +14,7 @@ import ToolTip from "@/components/dashboard/ToolTip";
 import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { initSeriesAction, setSeriesAction } from "@/modules/redux/ducks/dashboard";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -157,7 +157,7 @@ export default function DashboardUploadSeries(props) {
     }
   }, []);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if( reduxSeriesUpload ){
       initButtonInStatus(refRegister);
       if( reduxSeriesUpload?.status === 201 ){
@@ -295,11 +295,11 @@ export default function DashboardUploadSeries(props) {
           </form>
 
           <div className="bbs_write_botm">
-            <button className="btn-pk n blue2" onClick={handlePreview}>
+            <div className="btn-pk n blue2" onClick={handlePreview}>
               <div className="pull_width">
                 <span>{text.preview}</span>
               </div>
-            </button>
+            </div>
             <Button
               ref={refRegister}
               className={"btn-pk n blue"}

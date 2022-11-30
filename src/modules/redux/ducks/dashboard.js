@@ -13,6 +13,7 @@ export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/das
 export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
 export const [SET_DASHBOARD_SERIES, SET_DASHBOARD_SERIES_SUCCESS, SET_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("POST_postSeries");
 export const [INIT_SET_DASHBOARD_SERIES] = createRequestActionTypes("INIT_POST_postSeries");
+export const [EDIT_DASHBOARD_SERIES, EDIT_DASHBOARD_SERIES_SUCCESS, EDIT_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("PATCH_postSeries");
 export const [EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_PROFILE_SUCCESS, EDIT_DASHBOARD_PROFILE_FAILURE] = createRequestActionTypes("PATCH_author");
 export const [INIT_EDIT_DASHBOARD_PROFILE] = createRequestActionTypes("INIT_PATCH_author");
 
@@ -28,6 +29,7 @@ export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
 export const setSeriesAction = createAction(SET_DASHBOARD_SERIES);
 export const initSeriesAction = createAction(INIT_SET_DASHBOARD_SERIES);
+export const editSeriesAction = createAction(EDIT_DASHBOARD_SERIES);
 export const editProfileAction = createAction(EDIT_DASHBOARD_PROFILE);
 export const initProfileAction = createAction(INIT_EDIT_DASHBOARD_PROFILE);
 
@@ -61,6 +63,16 @@ const post = handleActions(
           ...state,
           profile: null,          
         };
+      });
+    },
+    [EDIT_DASHBOARD_SERIES_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.seriesUpload = action.payload;
+      });
+    },
+    [EDIT_DASHBOARD_SERIES_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.seriesUpload = action.payload;
       });
     },
     [SET_DASHBOARD_SERIES_SUCCESS]: (state, action) => {

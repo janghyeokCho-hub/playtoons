@@ -14,12 +14,13 @@ import Textarea from "@/components/dashboard/Textarea";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { editSeriesAction, initSeriesAction } from "@/modules/redux/ducks/dashboard";
 import {
   editPostSeriesToServer,
   getSeriesDetailFromServer,
   setFileToServer
 } from "@/services/dashboardService";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -51,12 +52,13 @@ const text = {
   please_input_title: "タイトルを入力してください。",
   please_input_description: "説明を入力してください。",
   error_title: "お知らせ",
+  done_edit_series: 'シリーズ修正しました。',
 };
 
-export default function DashboardUploadSeries(props) {
+export default function DashboardEditSeries(props) {
   const [ stateSeries, setStateSeries ] = useState(undefined);
-  // const reduxSeriesDetail = useSelector(({ dashboard }) => dashboard?.series);
-  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const [ stateR19, setStateR19 ] = useState(false);
+  const reduxSeriesUpload = useSelector(({ dashboard }) => dashboard.seriesUpload);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("id");
@@ -69,6 +71,9 @@ export default function DashboardUploadSeries(props) {
   const refTimeline = useRef();
   const refRegister = useRef();
 
+  //==============================================================================
+  // header
+  //==============================================================================
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
@@ -85,33 +90,10 @@ export default function DashboardUploadSeries(props) {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
 
   //==============================================================================
   // function
   //==============================================================================
-
-  const getCheckedToSeriesDetail = () => {
-    return stateSeries?.rating === "R-18";
-  };
-
-  const callbackCoverImage = () => {
-    //timeline 이미지 업로드
-    //upload 할 이미지가 없다면
-    if (refTimeline.current.getImageFile() === undefined) {
-      callbackTimelineImage();
-    } else {
-      //이미지 업로드 후 image hash 저장
-      setImage(refTimeline, "thumbnail");
-    }
-  };
-
-  const callbackTimelineImage = () => {
-    //series 업로드
-    editSeries();
-  };
 
   //==============================================================================
   // api
@@ -121,48 +103,23 @@ export default function DashboardUploadSeries(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-    const getSeriesDetail = async () => {
-      const { status, data } = await getSeriesDetailFromServer( {id: params.id} );
-  
-      if (status === 200) {
-        setStateSeries(data?.series);
-      } else {
-        showOneButtonPopup(dispatch, data);
-      }
-    };
+  const getSeriesDetail = async () => {
+    const { status, data } = await getSeriesDetailFromServer( {id: params.id} );
 
-
-  const setImage = async (refImage, usage) => {
-    // 폼데이터 구성
-    const params = new FormData();
-
-    params.append("authorId", reduxAuthors[0].id);
-    // params.append("subscribeTierId", "");
-    // params.append("productId", "");
-    params.append("type", "image"); //image, video, binary
-    params.append("usage", usage); //profile, background, cover, logo, post, product, thumbnail, attachment
-    params.append("loginRequired", false);
-    params.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    params.append("rating", getRatingToChecked(refR19)); //G, PG-13, R-15, R-17, R-18, R-18G
-    params.append("file", refImage.current.getImageFile());
-
-    const { status, data } = await setFileToServer(params);
-
-    //create sccuess
-    if (status === 201) {
-      //set hash value to input tag
-      //imageupload 컴포넌트에서 state가 저장되면 callback함수로 다음으로 진행
-      refImage.current.setImageValueToInputTag(data?.hash);
+    if (status === 200) {
+      setStateSeries(data?.series);
+      setStateR19(data?.series?.rating === 'R-18');
     } else {
-      //error 처리
-      refImage.current.setError(
-        String(status + getErrorMessageFromResultCode(data))
-      );
-      initButtonInStatus(refRegister);
+      showOneButtonPopup(dispatch, data);
     }
   };
 
-  const editSeries = async () => {
+  //==============================================================================
+  // event
+  //==============================================================================
+  const handleRegister = (e) => {
+    let json = getFromDataJson(refForm);
+
     //필드 확인
     if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
@@ -180,64 +137,49 @@ export default function DashboardUploadSeries(props) {
       initButtonInStatus(refRegister);
       refCoverImage.current.setError(text.please_input_cover);
       return;
+    } else {
+      //upload 할 새로운 이미지가 있는지 확인 
+      if( refCoverImage.current.getImageFile() === undefined ){
+        json = {
+          ...json,
+          coverImage: stateSeries?.coverImage,
+        }
+      } else {
+        json = {
+          ...json,
+          fileInfoCoverImage: refCoverImage.current.getImageFile(),
+        }
+      }
     }
-
+    
     if (refTimeline.current.checkToEmpty()) {
       initButtonInStatus(refRegister);
       refTimeline.current.setError(text.please_input_thumbnail);
       return;
+    } else {
+      //upload 할 새로운 이미지가 있는지 확인 
+      if( refTimeline.current.getImageFile() === undefined ){
+        json = {
+          ...json,
+          thumbnailImage: stateSeries?.thumbnailImage,
+        }
+      } else {
+        json = {
+          ...json,
+          fileInfoThumbnailImage: refTimeline.current.getImageFile(),
+        }
+      }
     }
 
-    //"titleKana": "string",
-    //"code": "string",
-    //"labelId": "string",
-    //"publisherId": "string",
-    //"status": "pending",
-    let json = getFromDataJson(refForm);
     json = {
       ...json,
       seriesId: params.id,
-      rating: getRatingToChecked(refR19),
+      rating: stateR19 ? 'R-18' : 'G',
       tagIds: refTags.current.getTagsJsonObject(),
       typeId: stateSeries?.type.id,
     };
 
-    if (!json.coverImage.length) {
-      json = {
-        ...json,
-        coverImage: stateSeries?.coverImage,
-      };
-    }
-    if (!json.thumbnailImage.length) {
-      json = {
-        ...json,
-        thumbnailImage: stateSeries?.thumbnailImage,
-      };
-    }
-
-    const { status, data } = await editPostSeriesToServer(json);
-    if (status === 200) {
-      showOneButtonPopup( dispatch, 'シリーズ修正しました。', () => { navigate(`/dashboard/series/detail/${params.id}/1`); });
-    } else {
-      //error 처리
-      showOneButtonPopup(dispatch, data);
-    }
-
-    initButtonInStatus(refRegister);
-  };
-
-  //==============================================================================
-  // event
-  //==============================================================================
-  const handleRegister = (e) => {
-    //cover 이미지 업로드
-    //upload 할 이미지가 없다면
-    if (refCoverImage.current.getImageFile() === undefined) {
-      callbackCoverImage();
-    } else {
-      //이미지 업로드 후 image hash저장
-      setImage(refCoverImage, "cover");
-    }
+    dispatch( editSeriesAction(json) );
   };
 
   const handlePreview = (e) => {
@@ -248,9 +190,32 @@ export default function DashboardUploadSeries(props) {
   // Hook & render
   //==============================================================================
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    handleContainer();
     getSeriesDetail();
   }, []);
+
+  useEffect(() => {
+    if( reduxSeriesUpload ){
+      initButtonInStatus(refRegister);
+      if( reduxSeriesUpload?.status === 200 ){
+        //success
+        showOneButtonPopup( dispatch, text.done_edit_series, () => navigate(`/dashboard/series/detail/${params.id}/1`) );
+      }
+      else{
+        //error 처리
+        if( reduxSeriesUpload?.type === 'cover' ){
+          refCoverImage.current.setError(String(reduxSeriesUpload?.data));
+        } else if( reduxSeriesUpload?.type === 'thumbnail' ){
+          refTimeline.current.setError(String(reduxSeriesUpload?.data));
+        } else {
+          showOneButtonPopup(dispatch,  String(reduxSeriesUpload?.data)  );
+        }
+      }
+    }
+
+    return () => dispatch( initSeriesAction() );
+  }, [reduxSeriesUpload]);
 
   return (
     <div className="contents">
@@ -297,10 +262,10 @@ export default function DashboardUploadSeries(props) {
                 <h3 className="tit1">{text.setting_adult}</h3>
                 <label className="inp_chktx">
                   <input
-                    ref={refR19}
                     name="rating"
                     type="checkbox"
-                    defaultChecked={getCheckedToSeriesDetail()}
+                    checked={stateR19}
+                    onChange={() => setStateR19(!stateR19)}
                   />
                   <span>{text.r_19}</span>
                 </label>
@@ -353,7 +318,6 @@ export default function DashboardUploadSeries(props) {
                   name={"coverImage"}
                   text={text.drag_drop}
                   previewHash={stateSeries?.coverImage}
-                  callback={callbackCoverImage}
                 />
               </div>
 
@@ -374,7 +338,6 @@ export default function DashboardUploadSeries(props) {
                   name={"thumbnailImage"}
                   text={text.drag_drop}
                   previewHash={stateSeries?.thumbnailImage}
-                  callback={callbackTimelineImage}
                 />
               </div>
             </form>
