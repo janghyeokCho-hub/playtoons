@@ -63,6 +63,8 @@ export default function SwiperContainer(props) {
         spaceBetween={10}
         observer={true}
         observeParents={true}
+        preloadImages={false}
+        lazy={true}
         navigation={{
           nextEl: nextRef.current,
           prevEl: prevRef.current,
