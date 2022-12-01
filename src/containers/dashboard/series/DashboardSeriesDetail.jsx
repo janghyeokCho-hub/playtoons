@@ -325,7 +325,7 @@ export default function DashboardSeriesDetail(props) {
                 </li>
                 <li>
                   <span>{text.status} </span>
-                  <span>{stateSeries?.status}</span>
+                  <span>{getStatusText(stateSeries?.status)}</span>
                 </li>
                 <li>
                   <span>{text.type} </span>

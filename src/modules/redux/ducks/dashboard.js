@@ -9,11 +9,7 @@ export const [INIT_GET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_GET_dash
 export const [SET_DASHBOARD_PLAN, SET_DASHBOARD_PLAN_SUCCESS, SET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("POST_subscribeTier");
 export const [EDIT_DASHBOARD_PLAN, EDIT_DASHBOARD_PLAN_SUCCESS, EDIT_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("PATCH_subscribeTier");
 export const [INIT_SET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_POST_subscribeTier");
-export const [GET_DASHBOARD_SERIES_DETAIL, GET_DASHBOARD_SERIES_DETAIL_SUCCESS, GET_DASHBOARD_SERIES_DETAIL_FAILURE] = createRequestActionTypes("dashboard/series/detail/GET");
-export const [GET_DASHBOARD_AUTHOR, GET_DASHBOARD_AUTHOR_SUCCESS, GET_DASHBOARD_AUTHOR_FAILURE] = createRequestActionTypes("dashboard/author/GET");
-export const [GET_DASHBOARD_REACTION, GET_DASHBOARD_REACTION_SUCCESS, GET_DASHBOARD_REACTION_FAILURE] = createRequestActionTypes("dashboard/reaction/GET");
 export const [GET_DASHBOARD_TYPE, GET_DASHBOARD_TYPE_SUCCESS, GET_DASHBOARD_TYPE_FAILURE] = createRequestActionTypes("GET_dashboardType");
-export const [INIT_DASHBOARD_SERIES_DETAIL] = createRequestActionTypes("INIT/dashboard/series/detail");
 export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
 export const [SET_DASHBOARD_SERIES, SET_DASHBOARD_SERIES_SUCCESS, SET_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("POST_postSeries");
 export const [INIT_SET_DASHBOARD_SERIES] = createRequestActionTypes("INIT_POST_postSeries");
@@ -21,19 +17,14 @@ export const [EDIT_DASHBOARD_SERIES, EDIT_DASHBOARD_SERIES_SUCCESS, EDIT_DASHBOA
 export const [EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_PROFILE_SUCCESS, EDIT_DASHBOARD_PROFILE_FAILURE] = createRequestActionTypes("PATCH_author");
 export const [INIT_EDIT_DASHBOARD_PROFILE] = createRequestActionTypes("INIT_PATCH_author");
 
-
 /* --- Actions --- */
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const initSubscribeTierAction = createAction(INIT_GET_DASHBOARD_PLAN);
 export const setSubscribeTierAction = createAction(SET_DASHBOARD_PLAN);
 export const editSubscribeTierAction = createAction(EDIT_DASHBOARD_PLAN);
 export const initSubscribeTierUploadAction = createAction(INIT_SET_DASHBOARD_PLAN);
-export const getSeriedDetailAction = createAction(GET_DASHBOARD_SERIES_DETAIL);
-export const initSeriedDetailAction = createAction(INIT_DASHBOARD_SERIES_DETAIL);
 export const setSalesIdAction = createAction(SET_DASHBOARD_SALES);
 export const initSalesIdAction = createAction(INIT_DASHBOARD_SALES);
-export const getAuthorIdAction = createAction(GET_DASHBOARD_AUTHOR);
-export const getReactionMineAction = createAction(GET_DASHBOARD_REACTION);
 export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
 export const setSeriesAction = createAction(SET_DASHBOARD_SERIES);
 export const initSeriesAction = createAction(INIT_SET_DASHBOARD_SERIES);
@@ -145,16 +136,6 @@ const post = handleActions(
         };
       });
     },
-    [GET_DASHBOARD_SERIES_DETAIL_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        draft.series = action.payload.series;
-      });
-    },
-    [GET_DASHBOARD_AUTHOR_SUCCESS]: (state, action) => {
-      return produce(state, (draft) => {
-        draft.author = action.payload.author;
-      });
-    },
     [GET_DASHBOARD_TYPE_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.types = action.payload;
@@ -170,14 +151,6 @@ const post = handleActions(
         return {
           ...state,
           salesId: null,          
-        };
-      });
-    },
-    [INIT_DASHBOARD_SERIES_DETAIL]: (state, _) => {
-      return produce(state, (_) => {
-        return {
-          ...state,
-          series: null,          
         };
       });
     },
