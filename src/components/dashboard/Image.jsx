@@ -1,7 +1,5 @@
 import { getFileUrlFromServer } from "@/services/dashboardService";
-import React from "react";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 /**
 *
@@ -35,11 +33,13 @@ export default function Image(props) {
     // }
   };
 
-  useEffect(() => {
-    if (hash?.startsWith("/static/media/")) {
-      setStateImage(hash);
-    } else {
-      getImage(hash);
+  useLayoutEffect(() => {
+    if( hash ){
+      if (hash?.startsWith("/static/media/")) {
+        setStateImage(hash);
+      } else {
+        getImage(hash);
+      }
     }
   }, [hash]);
 

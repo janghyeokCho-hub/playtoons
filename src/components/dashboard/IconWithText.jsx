@@ -184,7 +184,7 @@ export default function IconWithText(props, ref) {
     return stateIconData?.topIcons[stateTopSelected]?.icons?.map(
       (item, index) => {
         return (
-          <li>
+          <li key={index}>
             <span>
               <img
                 src={item.image}

@@ -9,11 +9,14 @@ import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import Pagination from "@/components/dashboard/MyPagination";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
-import { getShopReviewAuthorFromServer, setShopReviewReportToServer } from "@/services/dashboardService";
+import { editShopReviewAuthorToServer, getShopReviewAuthorFromServer, setShopReviewReportToServer } from "@/services/dashboardService";
 import { faStar } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Image from "@/components/dashboard/Image";
+import { showModal } from "@/modules/redux/ducks/modal";
+import InquiryPopup from "@/components/dashboard/InquiryPopup";
 
 const text = {
   number : "番号",
@@ -29,6 +32,10 @@ const text = {
   time: "時",
   report_messgae: '通報しますか？',
   must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
+  responsePublic: '内容を非公開',
+  label_content: '内容',
+  content_placeHolder: '詳細(任意)',
+  confirm: '確認',
 };
 
 const tempData ={
@@ -57,6 +64,7 @@ const tempData ={
     content: "ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
     authorResponse: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
     respondedAt: "2022/05/11 23:21",
+    responsePublic: true,
   },
   {
     productId : "2",
@@ -75,6 +83,7 @@ const tempData ={
     content: "22ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
     authorResponse: "22リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
     respondedAt: "2022/05/11 23:21",
+    responsePublic: false,
   },
   {
     productId : "3",
@@ -93,6 +102,7 @@ const tempData ={
     content: "33ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
     authorResponse: "33リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
     respondedAt: "2022/05/11 23:21",
+    responsePublic: true,
   },
 ]};
 
@@ -115,7 +125,7 @@ export default function DashboardSalesReview(props) {
   const setSelectedItem = (id) => {
     let index = undefined;
     for( let i = 0; i < stateData?.reviews?.length; i++ ){
-      if( stateData.reviews[i].id === id ){
+      if( stateData.reviews[i].productId === id ){
         index = i;
         break;
       }
@@ -149,6 +159,33 @@ export default function DashboardSalesReview(props) {
     }
   };
 
+  /**
+     응답 g
+  * @version 1.0.0
+  * @author 2hyunkook
+  * @param props
+  * @return
+  */
+  const setShopReviewAuthor = async (check, text, item) => {
+    let json = {
+      authorResponse: text,
+      responsePublic: !check,
+      hiddenByAuthor: false,
+      inquiryId: item?.productId,
+    };
+    const {status, data} = await editShopReviewAuthorToServer(json);
+    console.log('setShopReviewAuthor', status, data);
+    
+    if( status === 200 ){
+      setSelectedItem(item?.productId);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+    setSelectedItem(item?.productId);
+  };
+
   const setReport = async (item) => {
     let json = {
       type: "sexual",
@@ -175,6 +212,13 @@ export default function DashboardSalesReview(props) {
   */
   const handleItemClickAnswer = (item, index) => {
     console.log('handleItemClickAnswer', item);
+
+    dispatch(
+      showModal({
+        title: text.answer,
+        contents: <InquiryPopup text={text} item={item} onClick={(check, text) => setShopReviewAuthor(check, text, item)} />,
+      })
+    );
   };
 
   /**
@@ -216,7 +260,7 @@ export default function DashboardSalesReview(props) {
           <tr className="tr-q">
             <td className="hide-m">{item.productId}</td>
             <td className="td_imgs2">
-              <div className="cx_thumb"><span><img src={item?.product?.thumbnailImage} alt={""} /></span></div>
+              <div className="cx_thumb"><span><Image hash={item?.product?.thumbnailImage} alt={""} /></span></div>
             </td>
             <td className="td_subject">{item?.product?.name}</td>
             <td className="td_txt0"><span className="view-m">{text.startAt}：</span>{item.date}</td>
