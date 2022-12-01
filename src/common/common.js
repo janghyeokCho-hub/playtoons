@@ -167,7 +167,7 @@ export const getParamsToQuery = (params, tags) => {
 * @return 에러메세지
 */
 export const getErrorMessageFromResultCode = (data) => {
-  let returnMessage = "Error";
+  let returnMessage = `Error : ${data?.message}`;
 
   for (let i = 0; i < RESULT_CODE_LIST.length; i++) {
     if (RESULT_CODE_LIST[i].code === data?.result) {

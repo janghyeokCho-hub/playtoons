@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef } from 'react';
+import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef, useLayoutEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
@@ -283,7 +283,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   }));
 
   useEffect(() => {
-    if( preview !== undefined ){
+    if( preview ){
       setStateImage({
         ...stateImage,
         preview : preview
@@ -291,15 +291,15 @@ export default forwardRef(function ImageUpload(props, ref) {
     }
   }, [preview]);
 
-  useEffect(() => {
-    if( previewHash !== undefined ){
+  useLayoutEffect(() => {
+    if( previewHash ){
       getImageUrl(previewHash);
     }
   }, [previewHash]);
 
   useEffect(() => {
     //state로 비동기로 동작한다. 하지만 image upload 후 post등을 업로드를 차례로 실행하기 위해서 이곳에 콜백을 두었다. flag는 value
-    if( stateImage.value !== undefined ){
+    if( stateImage.value ){
       if( stateImage.mode === undefined ){
         //upload
         callback?.();

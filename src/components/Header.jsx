@@ -220,6 +220,7 @@ const Header = ({ className, onSideMenu }) => {
 
   const handleUploadPost = useCallback(() => {
     if (reduxAuthors && reduxAuthors?.length > 0) {
+      setIsUserBoxShow(false);
       navigate("/post/upload");
     } else {
       showOneButtonPopup(
