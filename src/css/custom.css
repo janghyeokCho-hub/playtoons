@@ -753,6 +753,76 @@ li.dashboard-gnb.selected{
   transform: rotate(90deg);
 }
 
+.layerPopup .pop_cont .label{
+  color: rgba(97,112,128,1);
+  font-family: "NotoSansJP-Bold";
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 20px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.layerPopup .pop_cont .txt{
+  border-radius: 4px;
+  border: 1px solid rgba(195,202,210, 1);
+  padding: 16px;
+  font-family: "NotoSansJP-Regular";
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  line-height: 16px;
+  text-align: left;
+  width: 100%;
+  height: 150px;
+  margin-bottom: 12px;
+}
+.layerPopup .pop_cont .txt:focus{
+  border-color: #394bc2;
+}
+.layerPopup .pop_cont .txt::placeholder{
+  color: rgba(144,157,171,1);
+}
+
+.layerPopup .pop_cont .chkdiv{
+  text-align: left;
+}
+
+.layerPopup .pop_cont .chk{
+  margin-bottom: 40px;
+}
+
+.layerPopup .pop_cont .chk input{
+  width: 16px;
+  height: 16px;
+}
+
+.layerPopup .pop_cont .inp_checkbox input + span::after,
+.layerPopup .pop_cont .inp_checkbox input + span:after{
+  width: 16px;
+  height: 16px;
+  top: 0;
+}
+
+.layerPopup .pop_cont .chk span{
+  color: rgba(58,67,77,1);
+  font-family: "NotoSansJP-Bold";
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 16px;
+  padding-left: 24px;
+}
+
+.layerPopup .pop_cont .btn-pk{
+  color: rgba(255,255,255,1);
+  font-family: "NotoSansJP-Bold";
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.27px;
+}
+
 /* ============================================================================== */
 /* sales detail */
 /* ============================================================================== */

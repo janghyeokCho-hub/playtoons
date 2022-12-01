@@ -102,7 +102,8 @@ export default forwardRef( function Modal(props, ref) {
       {
         stateIsShow && 
           <div className="popup_dim" >
-            <div ref={refPopup}  id="popTerms" className="layerPopup pop_terms">
+            {/* popTerms */}
+            <div ref={refPopup}  id="popTerms" className="layerPopup">
               <div className="popup">
                 <div className="pop_head">
                   <h2 className="title">{stateTitle}</h2>

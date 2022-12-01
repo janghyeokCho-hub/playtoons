@@ -13,6 +13,8 @@ import Pagination from "@/components/dashboard/MyPagination";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
 import { getShopInquiryAuthorFromServer, editShopInquiryAuthorToServer as setShopInquiryToServer, setShopInquiryReportToServer } from "@/services/dashboardService";
 import { useDispatch, useSelector } from "react-redux";
+import { showModal } from "@/modules/redux/ducks/modal";
+import InquiryPopup from "@/components/dashboard/InquiryPopup";
 
 const text = {
   number : "番号",
@@ -28,6 +30,10 @@ const text = {
   report_messgae: '通報しますか？',
   empty_message: '商品のお問い合わせはございません。',
   must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
+  responsePublic: '内容を非公開',
+  label_content: '内容',
+  content_placeHolder: '詳細(任意)',
+  confirm: '確認',
 };
 
 export default function DashboardSalesInquiry(props) {
@@ -48,7 +54,7 @@ export default function DashboardSalesInquiry(props) {
     let index = undefined;
     
     for( let i = 0; i < stateData?.inquiries.length; i++ ){
-      if( stateData.inquiries[i].id === id ){
+      if( stateData.inquiries[i].productId === id ){
         index = i;
         break;
       }
@@ -84,28 +90,32 @@ export default function DashboardSalesInquiry(props) {
   };
 
   /**
-     문의 수정
+     문의 회답 回答
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const setShopInquiry = async (item) => {
-    let json = {
-
+  const setShopInquiry = async (check, text, item) => {
+    console.log('setShopInquiry', check, text, item);
+    const json = {
+      authorResponse: text,
+      responsePublic: !check,
+      hiddenByAuthor: false,
+      inquiryId: item?.productId,
     };
     const {status, data} = await setShopInquiryToServer(json);
     console.log('setShopInquiry', status, data);
     
     if( status === 200 ){
-      
+      setSelectedItem(item?.productId);
     }
     else{
       showOneButtonPopup(dispatch, data);
     }
-    
+
   };
 
   /**
-     문의 신고
+     문의 신고 通報
   * @version 1.0.0
   * @author 2hyunkook
   */
@@ -115,7 +125,7 @@ export default function DashboardSalesInquiry(props) {
       content: item.content,
     };
     const {status, data} = await setShopInquiryReportToServer(item.id, json);
-    console.log('setShopInquiry', status, data);
+    console.log('setShopInquiryReport', status, data);
     
     if( status === 200 ){
       
@@ -141,7 +151,12 @@ export default function DashboardSalesInquiry(props) {
   const handleItemClickAnswer = useCallback((item, index) => {
     console.log('handleItemClickAnswer', item, index);
     
-    // setShopInquiry();
+    dispatch(
+      showModal({
+        title: text.answer,
+        contents: <InquiryPopup text={text} item={item} onClick={(check, text) => setShopInquiry(check, text, item)} />,
+      })
+    );
   }, []);
   
   /**
@@ -323,6 +338,7 @@ const tempData = {
       content: "1ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
       respondedAt: "2022/05/11 23:21",
       authorResponse: "1リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
+      responsePublic: true,
     },
     {
       productId : "2",
@@ -342,6 +358,7 @@ const tempData = {
       content: "2ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
       respondedAt: "2022/05/11 23:21",
       authorResponse: "2リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
+      responsePublic: false,
     },
     {
       productId : "3",
@@ -361,6 +378,7 @@ const tempData = {
       content: "3ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
       respondedAt: "2022/05/11 23:21",
       authorResponse: "3リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
+      responsePublic: true,
     },
     {
       productId : "4",
@@ -380,6 +398,7 @@ const tempData = {
       content: "ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。",
       respondedAt: "2022/05/11 23:21",
       authorResponse: "リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ",
+      responsePublic: true,
     },
 
 ]};
