@@ -151,7 +151,7 @@ export default function UploadPost(props) {
     }
 
     if( getShowEditor(stateType) ){
-      //undefined(일회성 post), novel, blog 타입
+      //undefined(일회성 post), novel, blog, illust, photo, music  타입
       if( refEditor.current.isEmpty() ){
         initButtonInStatus(refRegister);
         refEditor.current.setError(text.please_input_content);
@@ -159,7 +159,7 @@ export default function UploadPost(props) {
       }
     }
     else{
-      //webtoon, illust, photo, music 타입
+      //webtoon, 타입
       if (refContents.current.getImageFile() === undefined) {
         initButtonInStatus(refRegister);
         refContents.current.setError(text.please_input_content);
@@ -169,6 +169,7 @@ export default function UploadPost(props) {
           ...json,
           fileInfoContent: refContents.current.getImageFile(),
         };
+        console.log('first', refContents.current.getImageFile());
       }
     }
 
@@ -192,10 +193,11 @@ export default function UploadPost(props) {
       tagIds: refTags.current.getTagsJsonObject(),
       categoryId: getCategoryId(json),
       content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
-      subscribeTierId: stateSubscribeTier.id,
+      subscribeTierId: stateSubscribeTier?.id,
     };
 
-    dispatch( setPostAction(json) );
+    console.log('request', json);
+     dispatch( setPostAction(json) );
   };
   
   //==============================================================================
@@ -286,8 +288,8 @@ export default function UploadPost(props) {
       else{
         //error 처리
         if( reduxPostUpload?.type === 'content' ){
-          if( getShowEditor(stateType) ){ refContents.current.setError(String(reduxPostUpload?.data));  }
-          else {  refEditor.current.setError(text.please_input_content);  }
+          if( getShowEditor(stateType) ){ refEditor.current.setError(text.please_input_content); }
+          else {   refContents.current.setError(String(reduxPostUpload?.data));  }
         } else if( reduxPostUpload?.type === 'thumbnail' ){
           refThumbnail.current.setError(String(reduxPostUpload?.data));
         } else {
@@ -391,7 +393,7 @@ export default function UploadPost(props) {
                       className={"box_drag"}
                       name={"content"}
                       text={text.drag_drop}
-                      // multiple={true}     //TODO mutlti 설정 
+                      multiple={true}     
                       />
                 )
               }

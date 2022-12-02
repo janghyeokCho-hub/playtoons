@@ -31,17 +31,6 @@ export default function Series(props) {
   const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
   const refSelect = useRef();
 
-  const getSelectedItem = (option) => {
-    const id = option.getAttribute('value');
-    let selected = undefined;
-    for( let i = 0; i < stateList.length; i++ ){
-      if( stateList[i].id === id ){
-        selected = stateList[i];
-        break;
-      }
-    }
-    return selected;
-  };
 
   const getSeries = async () => {
     const form = new FormData();

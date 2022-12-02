@@ -11,7 +11,8 @@ import {
   UPLOAD_POST,
 } from "../ducks/post";
 import { finishLoading, startLoading } from "../ducks/loading";
-import { setFileToServer } from "@/services/dashboardService";
+import { setFileMultiToServer, setFileToServer } from "@/services/dashboardService";
+import { getFileDataUrlList } from "@/common/common";
 
 //==============================================================================
 // set post
@@ -26,6 +27,8 @@ function createSetPostRequestSaga(type) {
       };
       // content upload
       if( action.payload.fileInfoContent !== undefined ){
+        console.log('fileInfo', action.payload.fileInfoContent );
+        
         const formData = new FormData();
         formData.append("authorId", action.payload.authorId);
         formData.append("subscribeTierId", "");
@@ -35,10 +38,11 @@ function createSetPostRequestSaga(type) {
         formData.append("loginRequired", false); //언제 체크해서 보내는건지?
         formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
         formData.append("rating", action.payload.rating); //G, PG-13, R-15, R-17, R-18, R-18G
-        formData.append("file", action.payload.fileInfoContent);
-        const reponse = yield call(setFileToServer, formData);
+
+        Object.values(action.payload.fileInfoContent).forEach((file) => formData.append("files[]", file));
+        const reponse = yield call(setFileMultiToServer, formData);
         if (reponse?.status === 201) {
-          params.content = reponse?.data?.hash;
+          params.content = reponse?.data?.hashses.toString(); // 구분자 ','
         }
         else{
           yield put(finishLoading(type));
@@ -132,6 +136,7 @@ function createEditPostRequestSaga(type) {
       };
       // content upload
       if( action.payload.fileInfoContent !== undefined ){
+        console.log('fileInfo',  action.payload.fileInfoContent);
         const formData = new FormData();
         formData.append("authorId", action.payload.authorId);
         formData.append("subscribeTierId", "");

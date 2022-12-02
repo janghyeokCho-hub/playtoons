@@ -4,6 +4,7 @@ import {
   getReactionDate,
   getShowEditor,
   getStatusText,
+  isArrayFromPostContent,
   showOneButtonPopup
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
@@ -14,7 +15,6 @@ import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getReactionFromServer } from "@/services/dashboardService";
 import { getPostIdMineFromServer } from "@/services/postService";
-import { faEllipsisVertical } from "@fortawesome/pro-light-svg-icons";
 import {
   faCommentQuote,
   faEye,
@@ -22,7 +22,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import parse from "html-react-parser";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -97,9 +97,6 @@ export default function DashboardPostDetail() {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
   //==============================================================================
   // function
   //==============================================================================
@@ -114,7 +111,16 @@ export default function DashboardPostDetail() {
     getReactions(1);
   };
 
-  
+  const getContent = (content) => {
+    if( isArrayFromPostContent(content) ){
+      return content.split(',').map((item, index) => {
+        return <Image hash={item} alt="" key={index} />;
+      });
+
+    } else {
+      return <Image hash={content} alt="" />;
+    }
+  };  
 
   //==============================================================================
   // api
@@ -221,6 +227,8 @@ export default function DashboardPostDetail() {
   };
 
   useLayoutEffect(() => {
+    handleContainer();
+
     if(checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
       getPostDetail();
       getReactionAllList();
@@ -301,13 +309,9 @@ export default function DashboardPostDetail() {
             </div>
           ) : (
             <div className="ta_center">
-              <Image hash={stateData?.content} alt="" />
+              {getContent(stateData?.content)}
             </div>
           )}
-
-          {/* <div className="area_detail2">
-          <p className="t1 c-gray">{tempData.content_next_summary}</p>
-        </div> */}
         </div>
 
         <div className="wrap_comment">

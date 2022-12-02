@@ -108,9 +108,8 @@ export default forwardRef( function Tag(props, ref) {
     refContainer.current.classList.remove("input_focus");
   };
 
-  const handleClickItem = (event) => {
-    const tagId = event.target.getAttribute('data-id');
-    setStateList( removeItemInList(stateList, tagId) );
+  const handleClickItem = (item) => {
+    setStateList( removeItemInList(stateList, item.id) );
   };
 
   const handleClickSearch = (event) => {
@@ -140,7 +139,7 @@ export default forwardRef( function Tag(props, ref) {
 
   const renderTagList = () => {
     return stateList?.map( (item, index) => {
-      return <div className="i_tag mt10 pointer" key={index} onClick={handleClickItem} data-id={item.id}>#{item.name}</div>
+      return <div className="i_tag mt10 pointer" key={index} onClick={() => handleClickItem(item)}>#{item.name}</div>
     });
   };
 

@@ -63,9 +63,7 @@ export const getPostCategoryListFromServer = async (typeId) => {
 };
 
 /**
-*
   파일 저장 
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @parma  const params = new FormData();
@@ -86,6 +84,26 @@ export const setFileToServer = async (params) => {
   };
   try {
     return await apiServer("post", "/file", params, header);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+  파일 list 저장 
+* @version 1.0.0
+* @author 2hyunkook
+* @return hash : [get] /file/{hash} api로 파일 경로 가져옴
+*/
+export const setFileMultiToServer = async (params) => {
+  const header = {
+    "content-type": "multipart/form-data",
+  };
+  try {
+    return await apiServer("post", "/file/multi", params, header);
   } catch (e) {
     return {
       status: e.response.status,

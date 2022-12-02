@@ -143,14 +143,14 @@ export default function DashboardMain() {
   //==============================================================================
   // event
   //==============================================================================
-  const handleClickReview = useCallback((event) => {
-    dispatch( setSalesIdAction({salesId: event.target.getAttribute('data-id')}) );
+  const handleClickReview = useCallback((item) => {
+    dispatch( setSalesIdAction({salesId: item.id}) );
     navigate('/dashboard/product/sales/review');
   }, []);
 
 
-  const handleClickQuestion = useCallback((event) => {
-    dispatch( setSalesIdAction({salesId: event.target.getAttribute('data-id')}) );
+  const handleClickQuestion = useCallback((item) => {
+    dispatch( setSalesIdAction({salesId: item.id}) );
     navigate('/dashboard/product/sales/inquiry');
   }, []);
   //==============================================================================
@@ -200,7 +200,7 @@ export default function DashboardMain() {
       return (
         <li key={index}>
           <p className="t1">
-            <span className="pointer" data-id={item.id} onClick={handleClickQuestion}>
+            <span className="pointer" onClick={() => handleClickQuestion(item)}>
               {item.title}
             </span>
           </p>
@@ -234,7 +234,7 @@ export default function DashboardMain() {
               </span>
             </div>
             <p className="t1">
-              <span className="pointer" data-id={item.id} onClick={handleClickReview}>
+              <span className="pointer" onClick={() => handleClickReview(item)}>
                 {item.title}
               </span>
             </p>

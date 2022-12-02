@@ -25,9 +25,9 @@ export default function ReactionButtons(props) {
   //==============================================================================
   // function
   //==============================================================================
-  const checkBeforeToDeleteReaction = () => {
+  const checkBeforeToDeleteReaction = (id) => {
     if (reduxAuthors[0].id === item.authorId) {
-      showTwoButtonPopup(dispatch, text.do_you_delete, checkPinnedToDeleteReaction);
+      showTwoButtonPopup(dispatch, <><div>{id}</div><div>{text.do_you_delete}</div></>, checkPinnedToDeleteReaction);
     } else {
       showOneButtonPopup(dispatch, text.can_do_myself);
     }
@@ -50,9 +50,8 @@ export default function ReactionButtons(props) {
     }
   };
 
-  const checkReport = () => {
-    showTwoButtonPopup(dispatch, text.do_u_report, () => setReport() );
-    
+  const checkReport = (id) => {
+    showTwoButtonPopup(dispatch, <><div>{id}</div><div>{text.do_u_report}</div></>, () => setReport() );
   };
 
   //==============================================================================
@@ -177,11 +176,8 @@ export default function ReactionButtons(props) {
   // event
   //==============================================================================
 
-  const handleButtonClick = (e) => {
-    const id = e.target.getAttribute("data-id");
-    const innerText = e.target.innerText;
-
-    switch (innerText) {
+  const handleButtonClick = (id, menu) => {
+    switch (menu) {
       default:
         // move
         navigate(`/dashboard/post/detail/${id}`);
@@ -200,11 +196,11 @@ export default function ReactionButtons(props) {
         break;
       case text.report:
         //POST /reaction/:reactionId/report
-        checkReport();
+        checkReport(id);
         break;
       case text.delete:
         //현재는 내가 작성한 댓글에 대해서만 삭제 가능합니다 DELETE /reaction/:reactionId
-        checkBeforeToDeleteReaction();
+        checkBeforeToDeleteReaction(id);
         break;
     }
   };
@@ -223,43 +219,37 @@ export default function ReactionButtons(props) {
       {stateType === undefined && (
         <>
           <div
-            data-id={item.postId}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.postId, text.move)}
             className="btn-pk s blue2"
           >
             {text.move}
           </div>
           <div
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.fix)}
             className={`btn-pk s ${item.pinned ? "blue" : "blue2"}`}
           >
             {text.fix}
           </div>
           <div
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.good)}
             className="btn-pk s blue2"
           >
             {text.good}
           </div>
           <div
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.coment)}
             className="btn-pk s blue2"
           >
             {text.coment}
           </div>
           <div
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.report)}
             className="btn-pk s blue2"
           >
             {text.report}
           </div>
           <div
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.delete)}
             className="btn-pk s blue2"
           >
             {text.delete}
@@ -272,36 +262,31 @@ export default function ReactionButtons(props) {
         <>
           <div
             className={`btn-pk s ${item.pinned ? "blue" : "blue2"}`}
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.fix)}
           >
             {text.fix}
           </div>
           <div
             className="btn-pk s blue2"
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.good)}
           >
             {text.good}
           </div>
           <div
             className="btn-pk s blue2"
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.coment)}
           >
             {text.coment}
           </div>
           <div
             className="btn-pk s blue2"
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.report)}
           >
             {text.report}
           </div>
           <div
             className="btn-pk s blue2"
-            data-id={item.id}
-            onClick={handleButtonClick}
+            onClick={() => handleButtonClick(item.id, text.delete)}
           >
             {text.delete}
           </div>

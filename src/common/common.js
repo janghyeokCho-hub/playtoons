@@ -205,6 +205,41 @@ export const setInputValueToNumber = (ref, value) => {
 };
 
 /**
+   convet file object to binay
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getFileDataUrl = async (file) => {
+  return new Promise((resolve, reject) => {
+    let fileReader = new FileReader();
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+    fileReader.onerror = reject;
+    fileReader.readAsDataURL(file);
+  });
+}
+
+/**
+   convet file object list to binay list
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getFileDataUrlList = async (files) => {
+  return await Promise.all(files.map(async (file) => {
+    return await getFileDataUrl(file);
+  }));
+};
+/**
+   convet file object list to binay list
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const isArrayFromPostContent =  (content) => {
+  return content.includes(',');
+};
+
+/**
   status 
 * @version 1.0.0
 * @author 2hyunkook

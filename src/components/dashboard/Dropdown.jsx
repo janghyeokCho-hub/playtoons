@@ -98,7 +98,7 @@ export default forwardRef(function Dropdown(props, ref) {
 
   useEffect(() => {
     //select 아이템 
-    if( dataList !== undefined ){
+    if( dataList ){
       setInitItem(selected);
     }
   }, [selected, dataList]);

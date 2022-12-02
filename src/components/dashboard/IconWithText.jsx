@@ -104,13 +104,7 @@ export default function IconWithText(props, ref) {
   //  event
   //==============================================================================
 
-  const handleClickItemDelete = (event) => {
-    event.stopPropagation();
-    const index =
-      event.target.parentElement.getAttribute("data-id") === null
-        ? event.target.getAttribute("data-id")
-        : event.target.parentElement.getAttribute("data-id");
-    const selectedItem = stateSelectedIcons[index];
+  const handleClickItemDelete = (selectedItem) => {
     setStateSelectedIcons(
       stateSelectedIcons.filter((item) => item.code !== selectedItem.code)
     );
@@ -118,14 +112,11 @@ export default function IconWithText(props, ref) {
     return false;
   };
 
-  const handleClickItemTopIcon = (event) => {
-    event.stopPropagation();
-    const index = event.target.getAttribute("data-id");
+  const handleClickItemTopIcon = (index) => {
     setStateTopSelected(index);
   };
 
-  const handleClickItemIcon = (event) => {
-    const index = event.target.getAttribute("data-id");
+  const handleClickItemIcon = (index) => {
     const item = stateIconData?.topIcons[stateTopSelected]?.icons[index];
     // setStateSelectedIcons([...stateSelectedIcons, item]);
     setStateSelectedIcons([item]);
@@ -157,7 +148,7 @@ export default function IconWithText(props, ref) {
               className="fa-solid fa-circle-xmark"
               icon={faCircleXmark}
               data-id={index}
-              onClick={handleClickItemDelete}
+              onClick={() => handleClickItemDelete(item)}
             />
           </button>
         </div>
@@ -172,7 +163,7 @@ export default function IconWithText(props, ref) {
           <img
             src={item.image}
             data-id={index}
-            onClick={handleClickItemTopIcon}
+            onClick={() => handleClickItemTopIcon(index)}
             alt=""
           />
         </SwiperSlide>
@@ -190,7 +181,7 @@ export default function IconWithText(props, ref) {
                 src={item.image}
                 alt="icon"
                 data-id={index}
-                onClick={handleClickItemIcon}
+                onClick={() => handleClickItemIcon(index)}
               />
             </span>
           </li>

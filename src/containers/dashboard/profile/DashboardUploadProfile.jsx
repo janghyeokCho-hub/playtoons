@@ -244,7 +244,6 @@ export default function DashboardUploadProfile(props) {
                   previewHash={reduxAuthors?.[0].profileImage}
                   id={"filebox1"}
                   name={"profileImage"}
-                  // callback={callbackProfileImage}
                 />
               </div>
 
@@ -257,7 +256,6 @@ export default function DashboardUploadProfile(props) {
                   id={"filebox2"}
                   name={"backgroundImage"}
                   text={text.drag_n_drop}
-                  // callback={callbackBackgroundImage}
                 />
               </div>
 

@@ -174,9 +174,8 @@ export default function DashboardSeriesDetail(props) {
     getPostList(keyword);
   };
   
-  const handleItemDelete = useCallback((event) => {
-    event.stopPropagation();
-    showTwoButtonPopup( dispatch, text.do_you_delete, ()=>{deletePost( event.target.getAttribute('data-id'))} );
+  const handleItemDelete = useCallback((item) => {
+    showTwoButtonPopup( dispatch, text.do_you_delete, ()=>{deletePost(item.id)} );
   }, []);
 
   const handleMoveToDetailPage = (item) => {
@@ -264,8 +263,7 @@ export default function DashboardSeriesDetail(props) {
             </Link>
             <div
               className="btn-pk s blue2"
-              data-id={item.id}
-              onClick={handleItemDelete}
+              onClick={() => handleItemDelete(item)}
             >
               {text.delete}
             </div>

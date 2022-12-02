@@ -1,11 +1,11 @@
-import React, { useCallback, useState, useEffect, useImperativeHandle, forwardRef, useLayoutEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
-import { getFileUrlFromServer } from '@/services/dashboardService';
-import ErrorMessage from './ErrorMessage';
+import { getFileDataUrl, isArrayFromPostContent } from '@/common/common';
 import { FILE_MAX_SIZE } from '@/common/constant';
-import { forEach } from 'lodash';
+import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import ErrorMessage from './ErrorMessage';
+import Image from './Image';
 
 /**
  * 
@@ -46,21 +46,9 @@ export default forwardRef(function ImageUpload(props, ref) {
   //==============================================================================
   // function 
   //==============================================================================
-
   const isMultiple = () => {
     return Array.isArray(stateImage?.preview);
   };
-
-  const getFileDataUrl = async (file) => {
-    return new Promise((resolve, reject) => {
-      let fileReader = new FileReader();
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.onerror = reject;
-      fileReader.readAsDataURL(file);
-    });
-  }
 
   /**
      업로드 전 preview 생성
@@ -97,48 +85,10 @@ export default forwardRef(function ImageUpload(props, ref) {
     }
   };
 
-  
-
-  const setPreviewFromFileReader = (file, result) => {
-    setStateImage({
-      ...stateImage,
-      file: file,
-      preview: getPreview(result)
-    });
-  };
-
-  const getPreview = (file) => {
-    const reader = new FileReader();
-    if(file){
-      reader.readAsDataURL(file);
-    }
-    reader.onload = () => {
-      setPreviewFromFileReader( file, reader.result );
-    };
-  };
-
 
   //==============================================================================
   // api
   //==============================================================================
-  const getImageUrl = async (hash) => {
-    const {status, data} = await getFileUrlFromServer(hash);
-    
-    if( status === 200 ){
-      setStateImage({
-        ...stateImage,
-        preview: data?.url,
-        mode: undefined,
-      });
-    }
-    else{
-      setStateError( status + ' : ' + data );
-      setStateImage({
-        ...stateImage,
-        mode: undefined,
-      });
-    }
-  };
 
   //==============================================================================
   // file drag n drop 설정
@@ -228,7 +178,7 @@ export default forwardRef(function ImageUpload(props, ref) {
           stateImage?.preview?.map((item, index) => {
             return (
               <div className={`fileview ${index < stateImage.preview.length-1 && 'mb20' }`} key={index}>
-                <div><img src={item} alt="" /></div>
+                <div><Image hash={item} alt="" /></div>
                 <button type="button" className="btn_del" title="削除" onClick={() => handlePreviewClose(index)}>
                   <FontAwesomeIcon 
                     icon={faCircleXmark}
@@ -239,11 +189,10 @@ export default forwardRef(function ImageUpload(props, ref) {
           })
         }
       </div>
-    }
-    else{
+    } else {
       return (
         <div className={"fileview"}>
-          <div><img src={stateImage?.preview} alt="" /></div>
+          <div><Image hash={stateImage?.preview} alt="" /></div>
           <button type="button" className="btn_del" title="削除" onClick={handlePreviewClose}>
             <FontAwesomeIcon 
               icon={faCircleXmark}
@@ -265,7 +214,7 @@ export default forwardRef(function ImageUpload(props, ref) {
       return stateImage.file;
     },
     setThumbnailImage: (hash) => {
-      setStateImage({...stateImage, value: hash, mode: 'input'});
+      setStateImage({...stateImage, value: hash, preview: hash, mode: 'thumbnail'});
     },
     getImageInfo: () => {
       return stateImage;
@@ -293,21 +242,25 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   useLayoutEffect(() => {
     if( previewHash ){
-      getImageUrl(previewHash);
+      if( isArrayFromPostContent(previewHash) ){
+        setStateImage({
+          ...stateImage,
+          preview: previewHash.split(',')
+        });
+         
+      } else {
+        setStateImage({
+          ...stateImage,
+          preview: previewHash
+        });
+        // getImageUrl(previewHash);
+      }
     }
   }, [previewHash]);
 
   useEffect(() => {
-    //state로 비동기로 동작한다. 하지만 image upload 후 post등을 업로드를 차례로 실행하기 위해서 이곳에 콜백을 두었다. flag는 value
     if( stateImage.value ){
-      if( stateImage.mode === undefined ){
-        //upload
-        callback?.();
-      }
-      else{   //'input' mode
-        //get thumbnail
-        getImageUrl(stateImage.value);
-      }
+      callback?.();
     }
   }, [stateImage.value]);
 
@@ -367,7 +320,7 @@ export default forwardRef(function ImageUpload(props, ref) {
               { 
                 renderType === 'thumbnail' && (
                   <div className={"fileview2"}>
-                    <div><img src={stateImage?.preview} alt="preview" /></div>
+                    <div><Image hash={stateImage?.preview} alt="preview" /></div>
                     <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
                       <button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
                       <button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>

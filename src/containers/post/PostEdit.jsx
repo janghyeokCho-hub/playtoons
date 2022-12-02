@@ -241,18 +241,9 @@ export default function PostEdit(props) {
   // event
   //==============================================================================
 
-  const handleClickItemTimeline = (event) => {
-    //
-    const id = event.currentTarget.getAttribute("id");
-    let selectedItem = undefined;
-    for( let i = 0; i < stateTimeline.posts.length; i++ ){
-      if(  id === stateTimeline.posts[i].id ){
-        selectedItem = stateTimeline.posts[i]
-        break;
-      }
-    }
-
-    refThumbnailTimeline.current.setThumbnailImage(selectedItem?.thumbnailImage);
+  const handleClickItemTimeline = (item) => {
+    console.log('first', item);
+    refThumbnailTimeline.current.setThumbnailImage(item?.thumbnailImage);
   };
 
   const handleClickPreview = (event) => {
@@ -273,7 +264,7 @@ export default function PostEdit(props) {
         <SwiperSlide
           key={index}
           className="cx swiper-slide"
-          onClick={handleClickItemTimeline}
+          onClick={() => handleClickItemTimeline(item)}
         >
           <div>
             <div className="cx_thumb">
@@ -326,8 +317,8 @@ export default function PostEdit(props) {
       else{
         //error 처리
         if( reduxPostUpload?.type === 'content' ){
-          if( getShowEditor(stateData?.type) ){ refContents.current.setError(String(reduxPostUpload?.data));  }
-          else {  refEditor.current.setError(text.please_input_content);  }
+          if( getShowEditor(stateData?.type) ){  refEditor.current.setError(text.please_input_content); }
+          else {  refContents.current.setError(String(reduxPostUpload?.data));  }
         } else if( reduxPostUpload?.type === 'thumbnail' ){
           refThumbnailTimeline.current.setError(String(reduxPostUpload?.data));
         } else {
@@ -433,6 +424,7 @@ export default function PostEdit(props) {
                     name={"content"}
                     text={text.drag_drop}
                     previewHash={stateData?.content}
+                    multiple={true}
                   />
                 )
               }

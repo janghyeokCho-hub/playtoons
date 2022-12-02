@@ -82,9 +82,9 @@ export default function ProductTab(props) {
   // event
   //==============================================================================
 
-  const handleClickMenu = (event) => {
-    setStateSelected( event.target.getAttribute("index") );
-    navigate(event.target.getAttribute("data-path"));
+  const handleClickMenu = (item, index) => {
+    setStateSelected( index );
+    navigate(item.path);
   };
 
   /**
@@ -110,9 +110,7 @@ export default function ProductTab(props) {
         >
           <a
             className="pointer"
-            onClick={handleClickMenu}
-            data-path={item.path}
-            index={index}
+            onClick={() => handleClickMenu(item, index)}
           >
             {item.name}
           </a>
