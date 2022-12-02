@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import Dropdown from "@/components/dashboard/Dropdown";
 import Textarea from "@/components/dashboard/Textarea";
 import DraftEditor from "@/components/post/DraftEditor";
+import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
 
 const text = {
   upload_post: "投稿する",
@@ -61,27 +62,10 @@ const text = {
   done_upload: "投稿登録しました。",
 };
 
-const supportorList = [
-  {
-    name: "閲覧範囲（支援者）",
-    id: "1",
-    checked: true,
-  },
-  {
-    name: "2hyunkook",
-    id: "2",
-    checked: false,
-  },
-  {
-    name: "yoon",
-    id: "3",
-    checked: false,
-  },
-];
-
 export default function UploadPost(props) {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
+  const [stateSubscribeTier, setStateSubscribeTier] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const reduxSeries = useSelector(({ post }) => post.series);
   const reduxPostUpload = useSelector(({ post }) => post.postUpload);
@@ -145,7 +129,6 @@ export default function UploadPost(props) {
   };
 
   const setPost = () => {
-    console.log('setPost');
     let json = getFromDataJson(refForm);
     
     //필드 확인
@@ -209,6 +192,7 @@ export default function UploadPost(props) {
       tagIds: refTags.current.getTagsJsonObject(),
       categoryId: getCategoryId(json),
       content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
+      subscribeTierId: stateSubscribeTier.id,
     };
 
     dispatch( setPostAction(json) );
@@ -217,6 +201,22 @@ export default function UploadPost(props) {
   //==============================================================================
   // api
   //==============================================================================
+  const getSubscribeTier = async () => {
+    let json = {
+      authorId: reduxAuthors[0].id
+    }
+    const {status, data} = await getSubscribeTierAuthorIdFromServer(json);
+    console.log('getSubscribeTier', status, data);
+    
+    if( status === 200 ){
+      const list = Array.from(data?.subscribeTiers);
+      list.unshift({id: '', name: text.support_user });
+      setStateSupportorList(list);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
 
   //==============================================================================
   // event
@@ -237,9 +237,10 @@ export default function UploadPost(props) {
     setStateType(type);
   };
 
-  const handleClickItemSubscribeTier = (event) => {
+  const handleClickItemSubscribeTier = (item) => {
     //閲覧範囲（支援者） item click event
-    console.log("handleClickItemSubscribeTier", event);
+    console.log("handleClickItemSubscribeTier", item);
+    setStateSubscribeTier(item);
   };
   
   const handleClickPreview = (event) => {
@@ -256,15 +257,18 @@ export default function UploadPost(props) {
   useLayoutEffect(() => {
     handleContainer();
 
-    //temp
-    setStateSupportorList(supportorList);
-
     if ( !reduxAuthors || reduxAuthors?.length === 0 ) {
       dispatch( getAuthorMineAction() );
     }
 
     return () =>  dispatch( initSeriesAction() );
   }, []);
+
+  useEffect(() => {
+    if( reduxAuthors ){
+      getSubscribeTier();
+    }
+  }, [reduxAuthors]);
 
   useEffect(() => {
     if (stateType) {

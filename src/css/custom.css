@@ -75,6 +75,13 @@
   left: 0;
 }
 
+.btn_select_drop .select_list ul li{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
 .w100{
   width: 100% !important;
 }

@@ -73,7 +73,6 @@ export default function DashboardPostDetail() {
   const [stateReactions, setStateReactions] = useState({meta: undefined, reactions: []});
   const [stateData, setStateData] = useState(undefined);
   const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
-  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("");

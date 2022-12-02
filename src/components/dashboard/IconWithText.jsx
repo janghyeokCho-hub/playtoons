@@ -12,16 +12,15 @@ import temp6 from "@IMAGES/icon7.png";
 import temp7 from "@IMAGES/icon8.png";
 import temp8 from "@IMAGES/icon9.png";
 
-import { showOneButtonPopup } from "@/common/common";
 import { setPostReactionToServer } from "@/services/postService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
+import Button from "./Button";
 import ErrorMessage from "./ErrorMessage";
 import SwiperContainer from "./SwiperContainer";
-import Button from "./Button";
 
 /**
 *
@@ -47,6 +46,7 @@ export default function IconWithText(props, ref) {
   const [stateShowIcon, setStateShowIcon] = useState(false);
   const [stateSelectedIcons, setStateSelectedIcons] = useState([]);
   const [stateError, setStateError] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const refContaienr = useRef();
   const refTextArea = useRef();
@@ -55,10 +55,6 @@ export default function IconWithText(props, ref) {
   //==============================================================================
   //  function
   //==============================================================================
-  const getMarginRightOfIcon = (index) => {
-    let tempIndex = index + 1;
-    return tempIndex % 5 === 0 ? "" : "mr16";
-  };
 
   const initStatus = () => {
     setStateTopSelected(0);
@@ -67,6 +63,10 @@ export default function IconWithText(props, ref) {
     setStateError(undefined);
     refTextArea.current.value = "";
     refButton.current.setStatus(undefined);
+  };
+
+  const isAuthors = () => {
+    return reduxAuthors && reduxAuthors?.length > 0;
   };
 
   //==============================================================================
@@ -85,7 +85,7 @@ export default function IconWithText(props, ref) {
         stateSelectedIcons.length === 0 ? "" : stateSelectedIcons[0].src,
       type: "reply",
       postId: postInfo.id,
-      authorId: postInfo.author.id,
+      authorId: isAuthors() ? reduxAuthors[0].id : null,
       // reactionId: "string"
     };
 

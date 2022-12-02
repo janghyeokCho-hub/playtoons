@@ -229,7 +229,7 @@ export default function DashboardSalesReview(props) {
   const handleItemClickReport = (item, index) => {
     console.log('handleItemClickReport', item);
 
-    showTwoButtonPopup(dispatch, `"${item?.product?.name}"${text.report_messgae}`, () => setReport(item));
+    showTwoButtonPopup(dispatch, <><div>"{item?.product?.name}"</div><div>{text.report_messgae}</div></>, () => setReport(item));
   };
 
   /**

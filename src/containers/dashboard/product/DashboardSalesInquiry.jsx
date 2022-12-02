@@ -167,7 +167,7 @@ export default function DashboardSalesInquiry(props) {
   const handleItemClickReport = useCallback((item, index) => {
     console.log('handleItemClickReport', item, index);
 
-    showTwoButtonPopup(dispatch, `"${item?.product?.name}"${text.report_messgae}`, () => setShopInquiryReport(item));
+    showTwoButtonPopup(dispatch, <><div>"{item?.product?.name}"</div><div>{text.report_messgae}</div></>, () => setShopInquiryReport(item));
   }, []);
 
   /**
@@ -344,7 +344,7 @@ const tempData = {
       productId : "2",
       product : {
         thumbnailImage: tempImg1,
-        name : "大学のリンゴ一個の重さで10メートルの素材",
+        name : "1大学のリンゴ一個の重さで10メートルの素材",
         startAt : "2022/07/11",
         author:{
           nickname: '名前のない人間232号',
@@ -364,7 +364,7 @@ const tempData = {
       productId : "3",
       product : {
         thumbnailImage: tempImg1,
-        name : "大学のリンゴ一個の重さで10メートルの素材",
+        name : "2大学のリンゴ一個の重さで10メートルの素材",
         startAt : "2022/06/11",
         author:{
           nickname: '名前のない人間232号',
@@ -384,7 +384,7 @@ const tempData = {
       productId : "4",
       product : {
         thumbnailImage: tempImg1,
-        name : "大学のリンゴ一個の重さで10メートルの素材",
+        name : "3大学のリンゴ一個の重さで10メートルの素材",
         startAt : "2022/06/11",
         author:{
           nickname: '名前のない人間232号',
