@@ -138,19 +138,17 @@ export default function DashboardSalesInquiry(props) {
   //==============================================================================
   // handler
   //==============================================================================
-  const handleChange = (page) => {
-    console.log('handleChange', page);
-    
-  };
-
   /**
     응답 이벤트 
   * @version 1.0.0
   * @author 2hyunkook
   */
   const handleItemClickAnswer = useCallback((item, index) => {
-    console.log('handleItemClickAnswer', item, index);
-    
+    console.log('handleItemClickAnswer',  index, item,);
+
+    refAnswer.current[index].setShow(true);
+    refArrow.current[index].setRotate(true);
+
     dispatch(
       showModal({
         title: text.answer,
@@ -243,7 +241,7 @@ export default function DashboardSalesInquiry(props) {
   }, [params]);
 
   useEffect(() => {
-    if( reduxSalesId !== undefined && stateData !== undefined ){
+    if( reduxSalesId && stateData ){
       setSelectedItem( reduxSalesId );
     }
   }, [stateData]);
@@ -282,20 +280,6 @@ export default function DashboardSalesInquiry(props) {
               }
             </tbody>
           </table>
-          
-          {/* {
-            stateAnswer && 
-              <div className="col dsi_answer">
-                <div className="dsi_answer_text mb32">{stateAnswer?.creator_comnent}</div>
-                <div className="dsi_answer_line mb19"></div>
-                <div className="flex mb8">
-                  <div className="dsi_answer_blue mr10">{text.saler}</div>
-                  <div className="dsi_answer_time">{stateAnswer?.answer.time}{text.time}</div>
-                </div>
-                <div className="dsi_answer_text">{stateAnswer?.answer.coment}</div>
-              </div>
-          } */}
-              
         </div>
 
         <Pagination
