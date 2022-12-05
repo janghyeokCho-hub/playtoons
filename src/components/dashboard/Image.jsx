@@ -17,12 +17,17 @@ import { useLayoutEffect, useState } from "react";
 * @return
 */
 export default function Image(props) {
-  const { alt, hash, className, title } = props;
+  const { alt, hash, className, title, params } = props;
   const [stateImage, setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
-    const params = new FormData();
-    const { status, data: result } = await getFileUrlFromServer(hash, params);
+    const formData = new FormData();
+    if( params ){
+      if( params.w ){ formData.append('w', params.w); }
+      if( params.mw ){ formData.append('mw', params.mw); }
+      if( params.q ){ formData.append('q', params.q); }
+    }
+    const { status, data: result } = await getFileUrlFromServer(hash, formData);
 
     if (status === 200) {
       setStateImage(result?.url);

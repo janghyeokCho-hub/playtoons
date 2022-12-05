@@ -319,7 +319,7 @@ export default forwardRef(function ImageUpload(props, ref) {
               { 
                 renderType === 'thumbnail' && (
                   <div className={"fileview2"}>
-                    <div><Image hash={stateImage?.preview} alt="preview" /></div>
+                    <div><Image hash={stateImage?.preview} alt="" /></div>
                     <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
                       <button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
                       <button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>

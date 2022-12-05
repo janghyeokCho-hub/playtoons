@@ -143,7 +143,7 @@ export default function DashboardSeries() {
           <td className="td_imgs">
             <div className="cx_thumb series">
               <span>
-                <Image hash={item.coverImage} alt={""} />
+                <Image hash={item.coverImage} alt={""} params={{ q: 10 }} />
               </span>
             </div>
           </td>
