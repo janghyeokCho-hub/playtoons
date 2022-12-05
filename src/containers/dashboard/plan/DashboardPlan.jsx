@@ -10,7 +10,7 @@ import {
 import { faAngleRight, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
@@ -83,7 +83,7 @@ export default function DashboardPlan(props) {
   // render & hook
   //==============================================================================
 
-  const renderPlanList = () => {
+  const renderPlanList = useMemo(() => {
     return reduxSubscribeTiers?.map((item, i) => {
       return (
         <SwiperSlide className="col h_auto" key={i}>
@@ -108,7 +108,7 @@ export default function DashboardPlan(props) {
         </SwiperSlide>
       );
     });
-  };
+  }, [reduxSubscribeTiers]);
 
   const renderBenefitList = (list) => {
     return list.map((item, i) => {

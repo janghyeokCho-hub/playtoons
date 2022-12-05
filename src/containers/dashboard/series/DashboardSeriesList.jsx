@@ -194,6 +194,7 @@ export default function DashboardSeries() {
   useLayoutEffect(() => {
     getSeriesListFromServer(param?.page === undefined ? 1 : param?.page);
 
+    return () => setStateData(undefined);
   }, [param]);
 
   return (

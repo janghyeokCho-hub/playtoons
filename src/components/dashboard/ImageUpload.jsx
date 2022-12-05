@@ -247,7 +247,6 @@ export default forwardRef(function ImageUpload(props, ref) {
           ...stateImage,
           preview: previewHash.split(',')
         });
-         
       } else {
         setStateImage({
           ...stateImage,

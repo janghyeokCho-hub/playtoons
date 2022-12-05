@@ -1,5 +1,5 @@
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
@@ -258,7 +258,7 @@ export default function PostEdit(props) {
   // Hook & render
   //==============================================================================
 
-  const renderTimelineElements = () => {
+  const renderTimelineElements = useMemo(() => {
     return stateTimeline?.posts?.map((item, index) => {
       return (
         <SwiperSlide
@@ -278,7 +278,7 @@ export default function PostEdit(props) {
         </SwiperSlide>
       );
     });
-  };
+  }, [stateTimeline]);
 
   useLayoutEffect(() => {
     handleContainer();
