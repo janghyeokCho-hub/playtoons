@@ -10,6 +10,13 @@ export const [
 ] = createRequestActionTypes("author/GET_AUTHOR_LIST");
 
 export const [
+  SET_AUTHOR,
+  SET_AUTHOR_SUCCESS,
+  SET_AUTHOR_FAILURE,
+] = createRequestActionTypes("author/POST_AUTHOR");
+const INIT_AUTHOR = "author/POST_AUTHOR_INIT";
+
+export const [
   SET_CURRENT_AUTHOR,
   SET_CURRENT_AUTHOR_SUCCESS,
   SET_CURRENT_AUTHOR_FAILURE,
@@ -20,6 +27,8 @@ const CURRENT_AUTHOR_INIT = "author/CURRENT_AUTHOR_INIT";
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
 export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
 export const currentAuthorInit = createAction(CURRENT_AUTHOR_INIT);
+export const setAuthorAction = createAction(SET_AUTHOR);
+export const initAuthorAction = createAction(INIT_AUTHOR);
 
 /**
  * login reducer 초기값
@@ -30,6 +39,7 @@ const initialState = {
   recents: [],
   recentsMeta: null,
   currentAuthor: null,
+  authorUpload: null,
 };
 
 const author = handleActions(
@@ -51,6 +61,24 @@ const author = handleActions(
     [CURRENT_AUTHOR_INIT]: (state, action) => {
       return produce(state, (draft) => {
         draft.currentAuthor = null;
+      });
+    },
+    [SET_AUTHOR_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.authorUpload = action.payload;
+      });
+    },
+    [SET_AUTHOR_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.authorUpload = action.payload;
+      });
+    },
+    [INIT_AUTHOR]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          authorUpload: null,
+        }
       });
     },
   },

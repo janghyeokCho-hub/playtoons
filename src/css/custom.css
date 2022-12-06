@@ -1369,6 +1369,11 @@ li.dashboard-gnb.selected{
 
 @media (max-width: 960px)  {
 
+  .author_main .hd_mst1.reg_author{
+    border-bottom-width: 0;
+    border-bottom-style: none;
+  }
+
   .box_drag_multi .fileview .btn_del {
     font-size: 24px;
     border-width: 1px;

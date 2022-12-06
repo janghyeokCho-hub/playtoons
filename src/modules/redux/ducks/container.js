@@ -202,6 +202,8 @@ const container = handleActions(
         draft.isFooterShow = action.payload.isFooterShow;
         if (action.payload.menuType === "DASHBOARD") {
           draft.menus = dashMainMenu;
+        } else if( action.payload.menuType === null ) {
+          draft.menus = null;
         } else {
           draft.menus = mainMenus;
         }
@@ -241,6 +243,8 @@ const container = handleActions(
       return produce(state, (draft) => {
         if (action.payload.type === "DASHBOARD") {
           draft.menus = dashMainMenu;
+        } else if( action.payload.menuType === null ) {
+          draft.menus = null;
         } else {
           draft.menus = mainMenus;
         }

@@ -1,10 +1,10 @@
-import React, { useRef, useLayoutEffect,  } from "react";
+import React, { useRef, useLayoutEffect, useCallback,  } from "react";
 
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Tag from "@/components/dashboard/Tag";
-import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus } from "@/common/common";
-import {  setAuthorToServer, setFileToServer } from "@/services/dashboardService";
+import { getErrorMessageFromResultCode, getFromDataJson, getRatingToChecked, initButtonInStatus, showOneButtonPopup } from "@/common/common";
+import {   setFileToServer } from "@/services/dashboardService";
 import Input from "@/components/dashboard/Input";
 import Textarea from "@/components/dashboard/Textarea";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +13,12 @@ import { useState } from "react";
 import Button from "@/components/dashboard/Button";
 import { showModal } from "@/modules/redux/ducks/modal";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuthorToServer } from "@/services/authorService";
+import { initAuthorAction, setAuthorAction } from "@/modules/redux/ducks/author";
+import { useEffect } from "react";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { getAuthorMineAction } from "@/modules/redux/ducks/post";
 
 
 
@@ -24,19 +29,28 @@ const text = {
   name: "名前",
   introduction: "クリエイターの説明",
   register_profile_image: "プロフィル写真登録",
+  register_profile_image_tooltip: "プロファイルとして使用する写真をアップロードしてください。",
   register_cover_image: "カバー写真登録",
   setting_age: "年齢設定",
   setting_tag: "タグ設定",
+  setting_tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   tag_name: "タグ名",
   description_policy: "当サイトでは、直近５年間の長崎県公報の全文を掲載しています。",
   register: "登録する",
   drag_n_drop: "ドラッグ＆ドロップ",
-	r_19: "R-19"
+	r_19: "R-19",
+	input_nickname: 'ニックネームが必要です。',
+	input_name: '名前が必要です。',
+	input_description: '紹介が必要です。',
+	input_profile: 'プロフィル写真が必要です。',
+	input_background: 'カバー写真が必要です。',
+	done_register: 'クリエイター登録しました。',
 };
 
 
 export default function RegisterForm(props) {
 	const [stateAgreement, setStateAgreement] = useState(undefined);
+	const reduxAuthorUpload = useSelector(({author}) => author.authorUpload);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const refForm = useRef();
@@ -50,23 +64,26 @@ export default function RegisterForm(props) {
 	const refRegister = useRef();
 
 	//==============================================================================
+  // header
+  //==============================================================================
+  const handleContainer = useCallback(() => {
+    const container = {
+      headerClass: "header",
+      containerClass: "container author_main",
+      isHeaderShow: true,
+      isMenuShow: false,
+      headerType: "post",
+      menuType: null,
+      isDetailView: false,
+      activeMenu: null,
+      isFooterShow: false,
+    };
+    dispatch(setContainer(container));
+  }, [dispatch]);
+
+	//==============================================================================
 	// function
 	//==============================================================================
-	const callbackProfileImage = () => {
-		//profile 이미지 업로드, background 업로드, author 업로드
-    //upload 할 이미지가 없다면 
-    if( refBackground.current.getImageFile() === undefined ){
-      callbackBackgroundImage();
-    }
-    else{
-      //이미지 업로드 후 image hash 저장 
-      setImage(refBackground, 'background');
-    }
-	};
-
-	const callbackBackgroundImage = () => {
-		setAuthor();
-	};
 
 	//==============================================================================
 	// api
@@ -80,122 +97,57 @@ export default function RegisterForm(props) {
 			setStateAgreement(data?.agreement);
 		}
 		else{
-			dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
-          }
-        )
-      );
+			showOneButtonPopup(dispatch,  data?.data );
 		}
-	};
-
-	const setImage = async(ref, usage) => {
-		// 폼데이터 구성
-		const params = new FormData();
-		// params.append("authorId", '');               
-		// params.append("subscribeTierId", "");        
-		// params.append("productId", "");
-		params.append("type", "image");             					    //image, video, binary
-		params.append("usage", usage);              						  //profile, background, cover, logo, post, product, thumbnail, attachment
-		params.append("loginRequired", false);        					  //언제 체크해서 보내는건지?
-		params.append("licenseRequired", false);        					//product 에 관련된 항목 추후 확인 필요
-		params.append("rating", getRatingToChecked(refR19));                   //G, PG-13, R-15, R-17, R-18, R-18G
-		params.append("file", ref.current.getImageFile());
-		
-		const {status, data: resultData} = await setFileToServer(params);
-		if( status === 201 ){
-			//ImageUpload component hash가 state 비동기적으로 저장된 뒤 props로 정의해둔 callback이 실행됨
-			ref.current.setImageValueToInputTag(resultData?.hash);
-		}
-		else{
-			//error 처리
-			initButtonInStatus(refRegister);
-			ref.current.setError( String(status + resultData) );
-		}
-	};
-
-	const setAuthor = async () => {
-		let json = getFromDataJson(refForm);
-
-		json = {
-			...json,
-			tagIds: refTags.current.getTagsJsonObject(),
-			eulaVersion: stateAgreement?.version
-		};
-
-		const {status, data} = await setAuthorToServer(json);
-		if( status === 201 ){
-			dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={'クリエイター登録しました。'} buttonTitle={'確認'} />, 
-            callback: ()=> {navigate(`/dashboard/profile/upload`)}
-          }
-        )
-      );
-		}
-		else{
-			//error 
-			dispatch(
-        showModal(
-          {
-            title: text.error_title, 
-            contents: <ErrorPopup message={getErrorMessageFromResultCode(data)} buttonTitle={'確認'} />, 
-          }
-        )
-      );
-		}
-
-		initButtonInStatus(refRegister);
 	};
 
 	//==============================================================================
-	// event & 
+	// event
 	//==============================================================================
   
 	const handleClickRegister = (event) => {
 		if( refNickname.current.isEmpty() ){
 			initButtonInStatus(refRegister);
-			refNickname.current.setError( 'ニックネームが必要です。' );
+			refNickname.current.setError( text.input_nickname );
 			return;
 		}
 
 		if( refName.current.isEmpty() ){
 			initButtonInStatus(refRegister);
-			refName.current.setError( '名前が必要です。' );
+			refName.current.setError( text.input_name );
 			return;
 		}
 
 		if( refDescription.current.isEmpty() ){
 			initButtonInStatus(refRegister);
-			refDescription.current.setError( '紹介が必要です。' );
+			refDescription.current.setError( text.input_description );
 			return;
 		}
 
 		if( refProfile.current.checkToEmpty() ){
 			initButtonInStatus(refRegister);
-      refProfile.current.setError('プロフィル写真が必要です。');
+      refProfile.current.setError( text.input_profile );
       return false;
     }
 
 		if( refBackground.current.checkToEmpty() ){
 			initButtonInStatus(refRegister);
-      refBackground.current.setError('カバー写真が必要です。');
+      refBackground.current.setError( text.input_background );
       return false;
     }
-		
-		// profile 이미지 업로드, background 업로드, author 업로드
-    // upload 할 이미지가 없다면 
-    if( refProfile.current.getImageFile() === undefined ){
-      callbackProfileImage();
-    }
-    else{
-      //이미지 업로드 후 image hash 저장
-      setImage(refProfile, 'profile');
-    }
+
+		//set author
+		let json = getFromDataJson(refForm);
+		json = {
+			...json,
+			fileInfoProfile: refProfile.current.getImageFile(),
+      fileInfoBackground: refBackground.current.getImageFile(),
+			rating: getRatingToChecked(refR19),
+			tagIds: refTags.current.getTagsJsonObject(),
+			eulaVersion: stateAgreement?.version
+		};
+
+		dispatch( setAuthorAction(json) );
 	};
 
 	//==============================================================================
@@ -203,20 +155,43 @@ export default function RegisterForm(props) {
 	//==============================================================================
 
   useLayoutEffect(() => {
+		handleContainer();
 		//get eulaVersion
 		getAgreementInfo();
   }, []);
 
+	useEffect(() => {
+		if(reduxAuthorUpload){
+			initButtonInStatus(refRegister);
+      if (reduxAuthorUpload?.status === 201) {
+        //success
+				dispatch(getAuthorMineAction());
+        showOneButtonPopup( dispatch, text.done_register, () => navigate("/dashboard/profile/upload") );
+      } else {
+        //error 처리
+        if (reduxAuthorUpload?.type === "profile") {
+          refProfile.current.setError( String(reduxAuthorUpload?.data) );
+        } else if (reduxAuthorUpload?.type === "background") {
+          refBackground.current.setError( String(reduxAuthorUpload?.data) );
+        } else {
+          showOneButtonPopup( dispatch, String(reduxAuthorUpload?.data) );
+        }
+      }
+		}
+
+		return () => dispatch( initAuthorAction() );
+	}, [reduxAuthorUpload]);
+
   return (
-    <div className="container sub mpost bg" style={{padding: '55px 16px'}}>
+    <div className="container sub bg" style={{padding: '55px 16px'}}>
 
 				<div className="inr-c">
-					<div className="hd_titbox hd_mst1">
-						<h2 className="h_tit1"><span>{text.register_creator}</span></h2>
-					</div>
-
 					<form ref={refForm}>
 						<section className="bbs_write">
+							<div className="hd_titbox hd_mst1 reg_author">
+								<h2 className="h_tit1"><span>{text.register_creator}</span></h2>
+							</div>
+
 							<div className="col" >
 								<h3 className="tit1">{text.nickname}</h3>
 								<Input ref={refNickname} type="text" name='nickname' className="inp_txt w100p"/>
@@ -237,14 +212,13 @@ export default function RegisterForm(props) {
 								<h3 className="tit1">{text.register_profile_image} <button type="button" className="btn_help" title="ヘルプ">
 									<ToolTip
 										title={text.register_profile_image}
-										text={"teadaf"} />
+										text={text.register_profile_image_tooltip} />
 								</button></h3>
 								<ImageUpload
 									ref={refProfile}
 									className={"box_drag square"}
 									id={"filebox1"}
 									name={"profileImage"} 
-									callback={callbackProfileImage}
 									/>
 							</div>
 
@@ -256,7 +230,6 @@ export default function RegisterForm(props) {
 									id={"filebox2"}
 									name={"backgroundImage"} 
 									text={text.drag_n_drop}
-									callback={callbackBackgroundImage}
 									/>
 							</div>
 
@@ -269,7 +242,7 @@ export default function RegisterForm(props) {
 								<h3 className="tit1">{text.setting_tag} <button type="button" className="btn_help" title="ヘルプ">
 									<ToolTip
 										title={text.setting_tag}
-										text={'タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。'} />
+										text={text.setting_tag_tooltip} />
 									</button>
 								</h3>
 								<Tag 
