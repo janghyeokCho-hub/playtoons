@@ -84,7 +84,7 @@ export default function SwiperContainer(props) {
           }
         }}
       >
-        {list?.()}
+        {list}
       </Swiper>
 
       {/* .lst_comic1 .swiper-button-next 이런식으로 common.css에 정의되어 있어야 스타일이 먹음*/}

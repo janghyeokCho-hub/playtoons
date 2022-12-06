@@ -25,6 +25,7 @@ import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { useLayoutEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useMemo } from "react";
 
 const text = {
   today_sales: "当日の売上",
@@ -157,7 +158,7 @@ export default function DashboardMain() {
   // hook & render
   //==============================================================================
 
-  const renderSalesProductList = () => {
+  const renderSalesProductList = useMemo(() => {
     if( tempData?.sales_product_list?.length === 0 ){
       return (
         <EmptyDiv
@@ -184,7 +185,7 @@ export default function DashboardMain() {
         </SwiperSlide>
       );
     });
-  };
+  }, [tempData]);
 
   const renderQuestionList = () => {
     if( tempData?.question_list?.length === 0 ){
@@ -245,7 +246,7 @@ export default function DashboardMain() {
     });
   };
 
-  const renderSeriesList = () => {
+  const renderSeriesList = useMemo(() => {
     if( stateSeries?.series?.length === 0 ){
       return (
         <EmptyDiv
@@ -276,7 +277,7 @@ export default function DashboardMain() {
         </SwiperSlide>
       );
     });
-  };
+  }, [stateSeries]);
 
   const renderPostList = () => {
     if( statePosts?.posts?.length === 0 ){

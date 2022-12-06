@@ -213,6 +213,9 @@ export default function DashboardSalesReview(props) {
   const handleItemClickAnswer = (item, index) => {
     console.log('handleItemClickAnswer', item);
 
+    refAnswer.current[index].setShow(true);
+    refArrow.current[index].setRotate(true);
+
     dispatch(
       showModal({
         title: text.answer,

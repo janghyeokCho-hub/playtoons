@@ -317,7 +317,7 @@ const Header = ({ className, onSideMenu }) => {
                         <div className="box_drop">
                           <ul>
                             <li>
-                              <a onClick={handleUploadPost}>
+                              <a className="pointer" onClick={handleUploadPost}>
                                 <FontAwesomeIcon icon={faSquarePen} />
                                 投稿する
                               </a>

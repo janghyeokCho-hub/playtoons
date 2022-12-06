@@ -21,6 +21,7 @@ import { SwiperSlide } from "swiper/react";
 import Button from "./Button";
 import ErrorMessage from "./ErrorMessage";
 import SwiperContainer from "./SwiperContainer";
+import { useMemo } from "react";
 
 /**
 *
@@ -156,7 +157,7 @@ export default function IconWithText(props, ref) {
     });
   };
 
-  const renderTopIconElement = () => {
+  const renderTopIconElement = useMemo(() => {
     return stateIconData?.topIcons?.map((item, index) => {
       return (
         <SwiperSlide className="cx  swiper-slide" key={index}>
@@ -169,7 +170,7 @@ export default function IconWithText(props, ref) {
         </SwiperSlide>
       );
     });
-  };
+  }, [stateIconData]);
 
   const renderIconElement = () => {
     return stateIconData?.topIcons[stateTopSelected]?.icons?.map(

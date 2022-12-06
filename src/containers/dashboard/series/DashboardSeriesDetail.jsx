@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
 
@@ -188,7 +188,7 @@ export default function DashboardSeriesDetail(props) {
   // hook & render
   //==============================================================================
 
-  const renderThumbList = () => {
+  const renderThumbList = useMemo(() => {
     return stateTimeline?.posts?.map((item, index) => {
       return (
         <SwiperSlide className="cx  swiper-slide" key={index}>
@@ -202,7 +202,7 @@ export default function DashboardSeriesDetail(props) {
         </SwiperSlide>
       );
     });
-  };
+  }, [stateTimeline]);
 
   const renderTagList = () => {
     return stateSeries?.tags?.map((item, index) => {

@@ -122,10 +122,10 @@ export const setFileMultiToServer = async (params) => {
 */
 export const getFileUrlFromServer = async (hash, params) => {
   let parameters = "";
-  if (params !== undefined) {
+  if (params) {
     parameters = `?${getGetMethodUrl(params)}`;
   }
-
+  
   try {
     return await apiServer("get", `/file/${hash}${parameters}`);
   } catch (e) {
