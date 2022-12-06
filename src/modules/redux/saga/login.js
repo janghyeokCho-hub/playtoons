@@ -5,6 +5,7 @@ import {
   LOGOUT_REQUEST,
   SYNC,
 } from "@REDUX/ducks/login";
+import { AUTHOR_MINE } from "../ducks/post";
 import { startLoading, finishLoading } from "@REDUX/ducks/loading";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as loginApi from "@API/loginService";
@@ -23,6 +24,10 @@ function createLoginRequestSaga(loginType, syncType) {
         if (response?.status === 200) {
           const { accessToken } = response.data;
 
+          // 로그인 한 사용자의 작가 정보 불러오기
+          yield put({
+            type: AUTHOR_MINE,
+          });
           yield put({
             type: SUCCESS,
             payload: { ...action.payload, accessToken: accessToken },

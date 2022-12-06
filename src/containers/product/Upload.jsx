@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
@@ -11,9 +11,17 @@ import Dropzone from "react-dropzone";
 import {
   getProductType as getProductTypeAPI,
   getProductCategory as getProductCategoryAPI,
+  insertProduct,
 } from "@API/storeService";
+import Calendar from "@COMPONENTS/dashboard/Calendar";
+import { showOneButtonPopup } from "@/common/common";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { setFileToServer, setFileMultiToServer } from "@API/dashboardService";
 
 const Upload = () => {
+  const dispatch = useDispatch();
+  const authorMine = useSelector(({ post }) => post.authorMine);
   const [typeList, setTypeList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [selectType, setSelectType] = useState(null);
@@ -90,6 +98,11 @@ const Upload = () => {
   const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState("G");
+  const [saleRatio, setSaleRatio] = useState(0);
+  const calendarStartRef = useRef(null);
+  const calendarEndRef = useRef(null);
+  const saleStartRef = useRef(null);
+  const saleEndRef = useRef(null);
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -98,6 +111,99 @@ const Upload = () => {
     },
     [categoryList]
   );
+
+  const handleClickCalendar = (name, date) => {
+    const startDate =
+      name === "start" ? date : calendarStartRef.current.getDate();
+    const endDate = name === "end" ? date : calendarEndRef.current.getDate();
+
+    if (endDate === undefined) {
+      return true;
+    }
+
+    if (startDate.getTime() >= endDate.getTime()) {
+      showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSaleDate = (name, date) => {
+    const startDate = name === "start" ? date : saleStartRef.current.getDate();
+    const endDate = name === "end" ? date : saleEndRef.current.getDate();
+
+    if (endDate === undefined) {
+      return true;
+    }
+
+    if (startDate.getTime() >= endDate.getTime()) {
+      showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSaleRatio = useCallback((value) => {
+    if (value <= 100 && value >= 0) {
+      setSaleRatio(value);
+    } else {
+      if (value > 100) {
+        setSaleRatio(100);
+      } else if (value < 0) {
+        setSaleRatio(0);
+      }
+    }
+  }, []);
+
+  const handleUpload = useCallback(async () => {
+    const authorId = authorMine.authors?.[0].id;
+    const params = {
+      name,
+      thumbnailImage: "",
+      description,
+      authorId: authorId,
+      typeId: selectType.id,
+      categoryId: category.id,
+      startAt: calendarStartRef.current.getDate(),
+      endAt: calendarEndRef.current.getDate(),
+      saleStartAt: saleStartRef.current.getDate(),
+      saleEndAt: saleEndRef.current.getDate(),
+      saleRatio: saleRatio,
+      rating: rating,
+      imageHashes: [],
+    };
+    console.log(params);
+    insertProduct(params).then(async (response) => {
+      console.log("response : ", response);
+      const formData = new FormData();
+      formData.append("authorId", authorId);
+      formData.append("subscribeTierId", "");
+      formData.append("productId", "");
+      formData.append("type", "image"); //image, video, binary
+      formData.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
+      formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+      formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+      formData.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
+      formData.append("file", thumbnailImage);
+      const thumbnailResp = await setFileToServer(formData);
+      console.log("thumbnailResp : ", thumbnailResp);
+      // const productsResp = await setFileMultiToServer(products)
+    });
+  }, [
+    name,
+    category,
+    selectType,
+    description,
+    rating,
+    saleRatio,
+    thumbnailImage,
+    // products,
+    authorMine,
+    calendarStartRef,
+    calendarEndRef,
+  ]);
 
   return (
     <div className="inr-c">
@@ -122,6 +228,7 @@ const Upload = () => {
                         type="radio"
                         name="radio01"
                         checked={item.code === selectType?.code}
+                        readOnly
                       />
                       <span>{item.name}</span>
                     </label>
@@ -305,6 +412,7 @@ const Upload = () => {
                   type="checkbox"
                   checked={selectAge}
                   onClick={() => setSelectAge(!selectAge)}
+                  readOnly
                 />
                 <span>すべての年齢</span>
               </label>
@@ -324,6 +432,7 @@ const Upload = () => {
                         type="radio"
                         name="radio02"
                         checked={item?.code === selectTarget}
+                        readOnly
                       />
                       <span>{item?.name}</span>
                     </label>
@@ -334,22 +443,79 @@ const Upload = () => {
 
             <div className="col">
               <h3 className="tit1">販売期限</h3>
+              {/*
               <button type="button" className="btn-pk n blue2">
                 <span>
                   <FontAwesomeIcon icon={faPlus} className="mr10" />
                   販売期限を追加
                 </span>
               </button>
+              */}
+              <div className="inp_cal">
+                <div>
+                  <label htmlFor="calendar_first1">開始日</label>
+                  <Calendar
+                    ref={calendarStartRef}
+                    name={"start"}
+                    className={""}
+                    type={"1month"}
+                    callback={handleClickCalendar}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="calendar_last1">終了日</label>
+                  <Calendar
+                    ref={calendarEndRef}
+                    name={"end"}
+                    className={""}
+                    type={"none"}
+                    callback={handleClickCalendar}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="col">
               <h3 className="tit1">セール設定</h3>
+              {/*
               <button type="button" className="btn-pk n blue2">
                 <span>
                   <FontAwesomeIcon icon={faPlus} className="mr10" />
                   セールを追加
                 </span>
               </button>
+              */}
+              <div className="inp_txt sch mw100">
+                <input
+                  type="number"
+                  className="ta-c"
+                  onChange={(e) => handleSaleRatio(e.target.value)}
+                  value={saleRatio}
+                />
+                <span className="won">%</span>
+              </div>
+              <div className="inp_cal">
+                <div>
+                  <label htmlFor="calendar_first1">開始日</label>
+                  <Calendar
+                    ref={saleStartRef}
+                    name={"start"}
+                    className={""}
+                    type={"1month"}
+                    callback={handleSaleDate}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="calendar_last1">終了日</label>
+                  <Calendar
+                    ref={saleEndRef}
+                    name={"end"}
+                    className={""}
+                    type={"none"}
+                    callback={handleSaleDate}
+                  />
+                </div>
+              </div>
             </div>
           </section>
 
@@ -361,9 +527,9 @@ const Upload = () => {
                 全文を掲載しています。
               </p>
             </div>
-            <a href="#" className="btn-pk n blue">
+            <Link to="" className="btn-pk n blue" onClick={handleUpload}>
               <span>登録する</span>
-            </a>
+            </Link>
           </div>
         </form>
       </div>
