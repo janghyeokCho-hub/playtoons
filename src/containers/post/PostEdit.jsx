@@ -13,6 +13,7 @@ import Type from "@/components/post/Type";
 
 import {
   checkLoginExpired,
+  getDateYYYYMMDD,
   getFromDataJson,
   getShowEditor,
   initButtonInStatus,
@@ -28,6 +29,9 @@ import { setContainer } from "@/modules/redux/ducks/container";
 import { initPostAction, setPostEditAction } from "@/modules/redux/ducks/post";
 import { getTimelineFromServer } from "@/services/dashboardService";
 import { getPostIdMineFromServer } from "@/services/postService";
+import { showModal } from "@/modules/redux/ducks/modal";
+import PreviewPost from "@/components/dashboard/PreviewPost";
+import moment from "moment";
 
 const text = {
   must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
@@ -242,12 +246,31 @@ export default function PostEdit(props) {
   //==============================================================================
 
   const handleClickItemTimeline = (item) => {
-    console.log('first', item);
+    
     refThumbnailTimeline.current.setThumbnailImage(item?.thumbnailImage);
   };
 
   const handleClickPreview = (event) => {
-    console.log("Preview", event);
+    const data = {
+      title: stateData?.title,
+      startAt: moment(stateData?.startAt).format('YYYY/MM/DD HH:mm'),
+      outline: stateData?.outline,
+      isEditor: getShowEditor(stateData?.type),
+      content: getShowEditor(stateData?.type) ? stateData?.content : stateData?.content.split(','),
+      author: {
+        profileImage: stateData?.author?.profileImage,
+        backgroundImage: stateData?.author?.backgroundImage,
+        nickname: stateData?.author?.nickname,
+      }
+    };
+
+    
+    dispatch(
+      showModal({
+        title: text.preview,
+        contents: <PreviewPost data={data} text={text} />,
+      })
+    );
   };
 
   const handleClickRegister = () => {

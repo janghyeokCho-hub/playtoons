@@ -5,6 +5,7 @@ import { showModal } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
+import parse from "html-react-parser";
 /**
  * Email validation
  * @param {string} text
@@ -193,6 +194,17 @@ export const getDateYYYYMMDD = (date, separator) => {
     return "";
   }
   return moment(date).format(["YYYY", "MM", "DD"].join(separator));
+};
+
+/**
+   html string 을 html 태그로 변환
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getHtmlElementFromHtmlString = (content) => {
+  if (content) {
+    return parse(content);
+  }
 };
 
 /**

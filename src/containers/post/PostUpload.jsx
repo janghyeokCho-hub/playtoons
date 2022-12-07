@@ -13,6 +13,7 @@ import Category from "@/components/dashboard/Category";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
 import Tag from "@/components/dashboard/Tag";
+import PreviewPost from "@/components/dashboard/PreviewPost";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Series from "@/components/post/Series";
 import Type from "@/components/post/Type";
@@ -25,6 +26,8 @@ import Dropdown from "@/components/dashboard/Dropdown";
 import Textarea from "@/components/dashboard/Textarea";
 import DraftEditor from "@/components/post/DraftEditor";
 import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
+import moment from "moment";
+import { showModal } from "@/modules/redux/ducks/modal";
 
 const text = {
   upload_post: "投稿する",
@@ -169,7 +172,6 @@ export default function UploadPost(props) {
           ...json,
           fileInfoContent: refContents.current.getImageFile(),
         };
-        console.log('first', refContents.current.getImageFile());
       }
     }
 
@@ -246,8 +248,59 @@ export default function UploadPost(props) {
   };
   
   const handleClickPreview = (event) => {
-    console.log("handleClickPreview", event);
+     //필드 확인
+     if (refTitle.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refTitle.current.setError(text.please_input_title);
+      return;
+    }
+
+    if (refOutline.current.isEmpty()) {
+      initButtonInStatus(refRegister);
+      refOutline.current.setError(text.please_input_outline);
+      return;
+    }
+
+    if( getShowEditor(stateType) ){
+      //undefined(일회성 post), novel, blog, illust, photo, music  타입
+      if( refEditor.current.isEmpty() ){
+        initButtonInStatus(refRegister);
+        refEditor.current.setError(text.please_input_content);
+        return;
+      }
+    }
+    else{
+      //webtoon, 타입
+      if (refContents.current.getImageFile() === undefined) {
+        initButtonInStatus(refRegister);
+        refContents.current.setError(text.please_input_content);
+        return;
+      } 
+    }
+
+    const data = {
+      title: refTitle.current.getValue(),
+      startAt: moment().format('YYYY/MM/DD HH:mm'),
+      outline: refOutline.current.getValue(),
+      isEditor: getShowEditor(stateType),
+      content: getShowEditor(stateType) ? refEditor.current.getContent() : refContents.current.getImageInfo()?.preview,
+      author: {
+        profileImage: reduxAuthors?.[0]?.profileImage,
+        backgroundImage: reduxAuthors?.[0]?.backgroundImage,
+        nickname: reduxAuthors?.[0]?.nickname,
+      }
+    };
+
+    
+    dispatch(
+      showModal({
+        title: text.preview,
+        contents: <PreviewPost data={data} text={text} />,
+      })
+    );
   };
+
+
 
   const handleClickRegister = (event) => {
     setPost();
