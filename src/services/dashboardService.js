@@ -240,27 +240,10 @@ export const getSeriesDetailFromServer = async (params) => {
   }
 };
 
+
+
 /**
-*
   Dashbaord - profile 작가 정보 업데이트
-*
-* @version 1.0.0
-* @author 2hyunkook
-*/
-export const setAuthorToServer = async (params) => {
-  try {
-    return await apiServer("post", `/author`, params);
-  } catch (e) {
-    return {
-      status: e.response.status,
-      data: getErrorMessageFromResultCode(e.response.data),
-    };
-  }
-};
-/**
-*
-  Dashbaord - profile 작가 정보 업데이트
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
@@ -276,9 +259,7 @@ export const editAuthorIdToServer = async (id, params) => {
 };
 
 /**
-*
   Dashbaord - profile 작가 정보 가져오기
-*
 * @version 1.0.0
 * @author 2hyunkook
 */
@@ -294,9 +275,7 @@ export const getAuthorIdFromServer = async (params) => {
 };
 
 /**
-*
   Dashbaord - plan 플랜 관리 목록 
-*
 * @version 1.0.0
 * @author 2hyunkook
 */

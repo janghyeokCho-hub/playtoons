@@ -17,6 +17,7 @@ import { faEye, faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import EmptyDiv from "@/components/dashboard/EmptyDiv";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -40,6 +41,7 @@ const text = {
   modify: "修正",
   delete: "削除",
   empty_message: "投稿がありません。",
+  empty_thumbnail_message: "サムネイルがありません。",
   do_delete: "削除しました。",
   login_expired: '自動ログイン時間が過ぎました。',
   do_you_delete: "投稿を削除しますか？",
@@ -189,6 +191,10 @@ export default function DashboardSeriesDetail(props) {
   //==============================================================================
 
   const renderThumbList = useMemo(() => {
+    if( stateTimeline?.posts?.length === 0 ){
+      return <EmptyDiv className={"relative empty"} text={text.empty_thumbnail_message} />;;
+    }
+
     return stateTimeline?.posts?.map((item, index) => {
       return (
         <SwiperSlide className="cx  swiper-slide" key={index}>

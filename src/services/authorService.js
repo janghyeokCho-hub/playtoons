@@ -2,6 +2,7 @@
  * Account 관련 API
  */
 
+import { getErrorMessageFromResultCode } from "@/common/common";
 import { apiServer } from "./api";
 
 export const getAuthorList = async () => {
@@ -136,5 +137,20 @@ export const getProduct = async (authorId) => {
     return await apiServer("get", `/shop/product?authorId=${authorId}`);
   } catch (e) {
     return { status: e.response.status, data: e };
+  }
+};
+/**
+  작가 등록
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const setAuthorToServer = async (params) => {
+  try {
+    return await apiServer("post", `/author`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
   }
 };

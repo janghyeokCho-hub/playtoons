@@ -5,6 +5,7 @@ import { showModal } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
+import parse from "html-react-parser";
 /**
  * Email validation
  * @param {string} text
@@ -167,11 +168,11 @@ export const getParamsToQuery = (params, tags) => {
 * @return 에러메세지
 */
 export const getErrorMessageFromResultCode = (data) => {
-  let returnMessage = `Error : ${data?.message}`;
+  let returnMessage = `Error${data?.message ? ' : '+data?.message : ''}`;
 
   for (let i = 0; i < RESULT_CODE_LIST.length; i++) {
     if (RESULT_CODE_LIST[i].code === data?.result) {
-      returnMessage = RESULT_CODE_LIST[i].name + " " + data?.message;
+      returnMessage = `${RESULT_CODE_LIST[i].name}${data?.message ? ' : '+data?.message : ''}`;
       break;
     }
   }
@@ -193,6 +194,17 @@ export const getDateYYYYMMDD = (date, separator) => {
     return "";
   }
   return moment(date).format(["YYYY", "MM", "DD"].join(separator));
+};
+
+/**
+   html string 을 html 태그로 변환
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const getHtmlElementFromHtmlString = (content) => {
+  if (content) {
+    return parse(content);
+  }
 };
 
 /**

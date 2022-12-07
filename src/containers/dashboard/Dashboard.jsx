@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import Series from "@/containers/dashboard/series/DashboardSeriesList";
 import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
@@ -30,15 +30,15 @@ import { useLayoutEffect } from 'react';
 * @author 이현국
 */
 export default function Dashboard() {
-  const reduxAuthors = useSelector(({post}) => post?.authorMine?.authors);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
   
   useLayoutEffect(() => {
     //get author info
-    if( reduxAuthors === undefined ){
+    if( !reduxAuthors || reduxAuthors?.length === 0 ){
       dispatch( getAuthorMineAction() );
     }
-  }, []);
+  }, [reduxAuthors]);
 
   return (
     <>

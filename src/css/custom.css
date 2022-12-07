@@ -1203,6 +1203,31 @@ li.dashboard-gnb.selected{
   z-index: 11;
 }
 
+.popup .wrap_detail{
+  width: calc(100vw - 20vw);
+  
+}
+
+.popup .wrap_detail .bg{
+  height: 80px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.popup .wrap_detail .area_detail2{
+  text-align: left;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background-color: #2f3542;
+  border-radius: 10px;
+}
+.modal::-webkit-scrollbar-track {
+  background-color: grey;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 5px white;
+}
 /* ============================================================================== */
 /* dashboard - series  */
 /* ============================================================================== */
@@ -1219,27 +1244,24 @@ li.dashboard-gnb.selected{
   z-index: 1;
 }
 
-/* .tbl_basic .cx_thumb:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
-  background: -moz-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    #000000 100%
-  );
-  background: -webkit-linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0) 0%,
-    #000000 100%
-  );
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000000 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#000000", GradientType=1);
-} */
+.popup_dim .modal{
+  width: auto;
+  min-width: 400px;
+}
+
+.popup .preview{
+  width: calc(100vw - 20vw);
+}
+
+.preview .ar_view .t1{
+  max-width: fit-content;
+}
+
+.preview .ar_view .h1,
+.preview .ar_view .t1,
+.preview .lst_tag {
+  text-align: left;
+}
 
 
 /* ============================================================================== */
@@ -1368,6 +1390,19 @@ li.dashboard-gnb.selected{
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+
+  .popup .preview{
+    width: auto;
+  }
+
+  .preview .ar_view .rgh{
+    text-align: left;
+  }
+
+  .author_main .hd_mst1.reg_author{
+    border-bottom-width: 0;
+    border-bottom-style: none;
+  }
 
   .box_drag_multi .fileview .btn_del {
     font-size: 24px;

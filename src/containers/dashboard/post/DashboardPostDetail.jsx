@@ -1,6 +1,7 @@
 import {
   checkLoginExpired,
   getDateYYYYMMDD,
+  getHtmlElementFromHtmlString,
   getReactionDate,
   getShowEditor,
   getStatusText,
@@ -21,7 +22,6 @@ import {
   faHeart
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import parse from "html-react-parser";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -100,11 +100,6 @@ export default function DashboardPostDetail() {
   //==============================================================================
   // function
   //==============================================================================
-  const getHtmlElementFromHtmlString = () => {
-    if (stateData !== undefined) {
-      return parse(stateData.content);
-    }
-  };
 
   const getReactionAllList = () => {
     getPinnedReactions();
@@ -305,7 +300,7 @@ export default function DashboardPostDetail() {
 
           {getShowEditor(stateData?.type) ? (
             <div className="editor_p ws_pre">
-              {getHtmlElementFromHtmlString()}
+              {getHtmlElementFromHtmlString(stateData?.content)}
             </div>
           ) : (
             <div className="ta_center">

@@ -8,6 +8,7 @@ import Button from "@/components/dashboard/Button";
 import Category from "@/components/dashboard/Category";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
+import PreviewSeries from "@/components/dashboard/PreviewSeries";
 import Tag from "@/components/dashboard/Tag";
 import Textarea from "@/components/dashboard/Textarea";
 import ToolTip from "@/components/dashboard/ToolTip";
@@ -17,6 +18,7 @@ import {
   initSeriesAction,
   setSeriesAction,
 } from "@/modules/redux/ducks/dashboard";
+import { showModal } from "@/modules/redux/ducks/modal";
 import {
   useCallback,
   useEffect,
@@ -58,6 +60,9 @@ const text = {
   error_title: "お知らせ",
   done_upload: "シリーズ登録しました。",
   not_creator: "クリエーターじゃないんです。",
+  preview_share: '共有する',
+  preview_surpport: '支援する',
+  preview_follow: 'フォロー',
 };
 
 export default function DashboardUploadSeries(props) {
@@ -152,7 +157,42 @@ export default function DashboardUploadSeries(props) {
   };
 
   const handlePreview = (e) => {
-    console.log("handlePreview", refR19);
+    //필드 확인
+    if (refTitle.current.isEmpty()) {
+      refTitle.current.setError(text.please_input_title);
+      initButtonInStatus(refRegister);
+      return;
+    }
+    if (refDescription.current.isEmpty()) {
+      refDescription.current.setError(text.please_input_description);
+      initButtonInStatus(refRegister);
+      return;
+    }
+    if (refCoverImage.current.getImageFile() === undefined) {
+      refCoverImage.current.setError(text.please_input_cover);
+      initButtonInStatus(refRegister);
+      return;
+    }
+
+    const data = {
+      coverImage: refCoverImage.current.getImageInfo()?.preview,
+      title: refTitle.current.getValue(),
+      likeCount: '0',
+      reactionCount: '0',
+      description: refDescription.current.getValue(),
+      tags:refTags.current.getTagList(),
+      author: {
+        profileImage: reduxAuthors?.[0]?.profileImage,
+        name: reduxAuthors?.[0]?.name,
+      }
+    };
+
+    dispatch(
+      showModal({
+        title: text.preview,
+        contents: <PreviewSeries data={data} text={text} />,
+      })
+    );
   };
 
   //==============================================================================
@@ -306,6 +346,7 @@ export default function DashboardUploadSeries(props) {
               </div>
             </section>
           </form>
+
 
           <div className="bbs_write_botm">
             <div className="btn-pk n blue2" onClick={handlePreview}>

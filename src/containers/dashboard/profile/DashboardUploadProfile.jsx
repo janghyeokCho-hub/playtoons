@@ -183,13 +183,13 @@ export default function DashboardUploadProfile(props) {
           <div className="top_profile">
             <ImageUpload
               className={"bg_file"}
-              previewHash={reduxAuthors?.[0].backgroundImage}
+              previewHash={reduxAuthors?.[0]?.backgroundImage}
               id={"filebox1"}
             />
 
             <ImageUpload
               className={"profile_file"}
-              previewHash={reduxAuthors?.[0].profileImage}
+              previewHash={reduxAuthors?.[0]?.profileImage}
               id={"filebox2"}
             />
           </div>
@@ -199,11 +199,11 @@ export default function DashboardUploadProfile(props) {
               <div className="col">
                 <h3 className="tit1">{text.nickname}</h3>
                 <Input
-                  ref={refNickname}
+                ref={refNickname}
                   type="text"
                   name="nickname"
                   className="inp_txt w100p"
-                  defaultValue={reduxAuthors?.[0].nickname}
+                  defaultValue={reduxAuthors?.[0]?.nickname}
                 />
               </div>
 
@@ -214,7 +214,7 @@ export default function DashboardUploadProfile(props) {
                   type="text"
                   name="name"
                   className="inp_txt w100p"
-                  defaultValue={reduxAuthors?.[0].name}
+                  defaultValue={reduxAuthors?.[0]?.name}
                 />
               </div>
 
@@ -224,7 +224,7 @@ export default function DashboardUploadProfile(props) {
                   ref={refDescription}
                   name="description"
                   className="textarea1"
-                  defaultValue={reduxAuthors?.[0].description}
+                  defaultValue={reduxAuthors?.[0]?.description}
                 />
               </div>
 
@@ -241,7 +241,7 @@ export default function DashboardUploadProfile(props) {
                 <ImageUpload
                   ref={refProfile}
                   className={"box_drag square"}
-                  previewHash={reduxAuthors?.[0].profileImage}
+                  previewHash={reduxAuthors?.[0]?.profileImage}
                   id={"filebox1"}
                   name={"profileImage"}
                 />
@@ -252,7 +252,7 @@ export default function DashboardUploadProfile(props) {
                 <ImageUpload
                   ref={refBackground}
                   className={"box_drag"}
-                  previewHash={reduxAuthors?.[0].backgroundImage}
+                  previewHash={reduxAuthors?.[0]?.backgroundImage}
                   id={"filebox2"}
                   name={"backgroundImage"}
                   text={text.drag_n_drop}
@@ -281,7 +281,7 @@ export default function DashboardUploadProfile(props) {
                   ref={refTags}
                   name={"tagIds"}
                   className={"inp_txt sch"}
-                  list={reduxAuthors?.[0].tags}
+                  list={reduxAuthors?.[0]?.tags}
                   placeholder={text.tag_name}
                 />
               </div>

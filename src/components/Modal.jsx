@@ -86,11 +86,13 @@ export default forwardRef( function Modal(props, ref) {
   }, [title]);
 
   useEffect(() => {
+    document.body.style= `overflow: hidden`;
     window.addEventListener("beforeunload", (e) => handleClose());     //창닫기, 주소창을 통항 이동시 
     window.addEventListener("keydown", (e) => handleKeydown(e));       //키 이벤트작동시
     
     return () => {
       handleClose();
+      document.body.style = `overflow: auto`
       window.removeEventListener("beforeunload", (e) => handleClose());
       window.removeEventListener("keydown", (e) => handleKeydown(e));
     }
@@ -103,7 +105,7 @@ export default forwardRef( function Modal(props, ref) {
         stateIsShow && 
           <div className="popup_dim" >
             {/* popTerms */}
-            <div ref={refPopup}  id="popTerms" className="layerPopup">
+            <div ref={refPopup}  id="popTerms" className="layerPopup modal">
               <div className="popup">
                 <div className="pop_head">
                   <h2 className="title">{stateTitle}</h2>

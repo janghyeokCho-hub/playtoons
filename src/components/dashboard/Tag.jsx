@@ -148,7 +148,16 @@ export default forwardRef( function Tag(props, ref) {
       setStateList(list);
     },
     getTagList: () => {
-      return stateList;
+      let json = [];
+
+      stateList.forEach((item) => {
+        json.push({
+          id: item.id,
+          name: item.name,
+        });
+      });
+
+      return json;
     },
     getTagsJsonObject: () => {
       let json = [];

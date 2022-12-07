@@ -1,24 +1,21 @@
 import {
-  getErrorMessageFromResultCode,
-  getFromDataJson,
-  getRatingToChecked,
-  initButtonInStatus,
+  getFromDataJson, initButtonInStatus,
   showOneButtonPopup
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import Category from "@/components/dashboard/Category";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
+import PreviewSeries from "@/components/dashboard/PreviewSeries";
 import Tag from "@/components/dashboard/Tag";
 import Textarea from "@/components/dashboard/Textarea";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Type from "@/components/dashboard/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { editSeriesAction, initSeriesAction } from "@/modules/redux/ducks/dashboard";
+import { showModal } from "@/modules/redux/ducks/modal";
 import {
-  editPostSeriesToServer,
-  getSeriesDetailFromServer,
-  setFileToServer
+  getSeriesDetailFromServer
 } from "@/services/dashboardService";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -53,6 +50,9 @@ const text = {
   please_input_description: "説明を入力してください。",
   error_title: "お知らせ",
   done_edit_series: 'シリーズ修正しました。',
+  preview_share: '共有する',
+  preview_surpport: '支援する',
+  preview_follow: 'フォロー',
 };
 
 export default function DashboardEditSeries(props) {
@@ -183,7 +183,12 @@ export default function DashboardEditSeries(props) {
   };
 
   const handlePreview = (e) => {
-    console.log("handlePreview", refR19);
+    dispatch(
+      showModal({
+        title: text.preview,
+        contents: <PreviewSeries data={stateSeries} text={text} />,
+      })
+    );
   };
 
   //==============================================================================
@@ -342,6 +347,8 @@ export default function DashboardEditSeries(props) {
               </div>
             </form>
           </section>
+
+          
 
           <div className="bbs_write_botm">
             <div className="btn-pk n blue2" onClick={handlePreview}>

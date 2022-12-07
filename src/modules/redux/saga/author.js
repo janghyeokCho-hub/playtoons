@@ -1,9 +1,10 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { GET_AUTHOR_LIST, SET_CURRENT_AUTHOR } from "@REDUX/ducks/author";
+import { GET_AUTHOR_LIST, SET_AUTHOR, SET_CURRENT_AUTHOR } from "@REDUX/ducks/author";
 import { startLoading, finishLoading } from "@REDUX/ducks/loading";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as authorApi from "@API/authorService";
 import * as postApi from "@API/postService";
+import { setFileToServer } from "@/services/dashboardService";
 
 function createGetAuthorListRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
@@ -126,11 +127,113 @@ function createSetCurrentAuthorRequestSaga(type) {
     }
   };
 }
-
 const setCurrentAuthorSaga =
   createSetCurrentAuthorRequestSaga(SET_CURRENT_AUTHOR);
+
+function createSetAuthorRequestSaga(type) {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+
+  return function* (action) {
+    try {
+      yield put(startLoading(type));
+      
+      let params = {
+        ...action.payload
+      };
+      // profile upload
+      if( action.payload.fileInfoProfile !== undefined ){
+        const formData = new FormData();
+        formData.append("type", "image"); //image, video, binary
+        formData.append("usage", "profile"); //profile, background, cover, logo, post, product, thumbnail, attachment
+        formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+        formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+        formData.append("rating", 'G'); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("file", action.payload.fileInfoProfile);
+        const reponse = yield call(setFileToServer, formData);
+        if (reponse?.status === 201) {
+          params.profileImage = reponse?.data?.hash;
+        }
+        else{
+          yield put(finishLoading(type));
+          yield put({
+            type: FAILURE,
+            payload: {
+              ...reponse,
+              type: 'profile'
+            }
+          });
+          return;
+        }
+      }
+
+      // background cover upload
+      if( action.payload.fileInfoBackground !== undefined ){
+        const formData = new FormData();
+        formData.append("type", "image"); //image, video, binary
+        formData.append("usage", "background"); //profile, background, cover, logo, post, product, thumbnail, attachment
+        formData.append("loginRequired", false); //언제 체크해서 보내는건지?
+        formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+        formData.append("rating", 'G'); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("file", action.payload.fileInfoBackground);
+        const response = yield call(setFileToServer, formData);
+        if (response?.status === 201) {
+          params.backgroundImage = response?.data?.hash;
+        }
+        else{
+          yield put(finishLoading(type));
+          yield put({
+            type: FAILURE,
+            payload: {
+              ...response,
+              type: 'background'
+            }
+          });
+          return;
+        }
+      }
+
+      // set author
+      delete params["rating"];
+      delete params["fileInfoProfile"];
+      delete params["fileInfoBackground"];
+      
+      const response = yield call(authorApi.setAuthorToServer, params);
+      if (response?.status === 201) {
+        yield put({
+          type: SUCCESS,
+          payload: response,
+        });
+      }
+      else{
+        yield put({
+          type: FAILURE,
+          payload: {
+            ...response,
+            type: 'set'
+          }
+        });
+      }
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: FAILURE,
+        payload: {
+          ...e,
+          type: 'set'
+        }
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
 
 export default function* authorSaga() {
   yield takeLatest(GET_AUTHOR_LIST, getAuthorListSaga);
   yield takeLatest(SET_CURRENT_AUTHOR, setCurrentAuthorSaga);
+  yield takeLatest(SET_AUTHOR, createSetAuthorRequestSaga(SET_AUTHOR));
 }
