@@ -11,11 +11,11 @@ export default function ProductTab(props) {
   const [ stateSelected, setStateSelected ] = useState(undefined);
   const location = useLocation();
   const navigate = useNavigate();
-  const refMenu = useRef([]);
+  const refMenus = useRef([]);
   const refContainer = useRef();
   const refBar = useRef();
 
-  let tabMenu = [
+  const tabMenu = [
     {
       name: text.see_product,
       path: "/dashboard/product",
@@ -44,8 +44,13 @@ export default function ProductTab(props) {
   * @author 2hyunkook
   */
   const resizeObserver = new ResizeObserver((entries) => {
-    setPosition(  refMenu.current[entries[0].target.getAttribute('data-index')]  );
+    setPosition(  refMenus.current[entries[0].target.getAttribute('data-index')]  );
   });
+
+  const isMenuPath = (path, menuPath) => {
+    const regex = /[\/0-9]|[\/[0-9]\/$/g;
+    return path.replace(regex, '') === menuPath.replace(regex, '')
+  };
 
   /**
      url로 현재 메뉴 index 구하기
@@ -54,7 +59,7 @@ export default function ProductTab(props) {
   */
   const getSelected = () => {
     for( let i = 0; i < tabMenu.length; i++ ){
-      if( location.pathname === tabMenu[i].path ){
+      if( isMenuPath (location.pathname, tabMenu[i].path) ){
         setStateSelected(i);
         break;
       }
@@ -93,7 +98,7 @@ export default function ProductTab(props) {
   * @author 2hyunkook
   */
   const handleScroll = (event) => {
-    setPosition( refMenu.current[stateSelected] );
+    setPosition( refMenus.current[stateSelected] );
   };
 
   //==============================================================================
@@ -104,9 +109,9 @@ export default function ProductTab(props) {
     return tabMenu.map((item, index) => {
       return (
         <li
-          ref={(el) => (refMenu.current[index] = el)}
+          ref={(el) => (refMenus.current[index] = el)}
           key={index}
-          className={`${location.pathname === item.path ? 'blue' : ''}`}
+          className={`${isMenuPath(location.pathname, item.path) ? 'blue' : ''}`}
         >
           <a
             className="pointer"
@@ -142,7 +147,7 @@ export default function ProductTab(props) {
   */
   useEffect(() => {
     if( stateSelected !== undefined ){
-      setPosition(refMenu.current[stateSelected]);
+      setPosition(refMenus.current[stateSelected]);
     }
   }, [stateSelected]);
 
