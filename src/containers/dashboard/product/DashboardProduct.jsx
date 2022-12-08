@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
-import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
-import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";
-import SalesReview from "@CONTAINERS/dashboard/product/DashboardSalesReview";
-import Page404 from "@/components/Page404";
-import { useDispatch } from 'react-redux';
-import { setContainer } from '@/modules/redux/ducks/container';
 import MenuTabs from '@/components/dashboard/MenuTabs';
+import Page404 from "@/components/Page404";
+import { setContainer } from '@/modules/redux/ducks/container';
+import ProductList from "@CONTAINERS/dashboard/product/DashboardProductList";
+import SalesInquiry from "@CONTAINERS/dashboard/product/DashboardSalesInquiry";
+import SalesList from "@CONTAINERS/dashboard/product/DashboardSalesList";
+import SalesReview from "@CONTAINERS/dashboard/product/DashboardSalesReview";
+import { useDispatch } from 'react-redux';
 
 
 const TEXT = {
