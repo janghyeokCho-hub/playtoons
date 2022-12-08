@@ -1,38 +1,20 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
 
-export default function ProductTab(props) {
+export default function MenuTabs(props) {
   const PC_TOP = 94;
   const MOBILE_TOP = 38;
   
-  const { text } = props;
+  const { tabMenu } = props;
   const [ stateSelected, setStateSelected ] = useState(undefined);
   const location = useLocation();
   const navigate = useNavigate();
   const refMenus = useRef([]);
   const refContainer = useRef();
   const refBar = useRef();
-
-  const tabMenu = [
-    {
-      name: text.see_product,
-      path: "/dashboard/product",
-    },
-    {
-      name: text.sales_list,
-      path: "/dashboard/product/sales/list",
-    },
-    {
-      name: text.product_qna,
-      path: "/dashboard/product/sales/inquiry",
-    },
-    {
-      name: text.see_review,
-      path: "/dashboard/product/sales/review",
-    },
-  ];
+  
 
   //==============================================================================
   // function
@@ -48,9 +30,7 @@ export default function ProductTab(props) {
   });
 
   const isMenuPath = (path, menuPath) => {
-    // const regex = /\/\d+|\/\d+\/$/g;
-    const regex = /[\/\d]|[\/\d\/]$/g;
-    console.log('tab', path, path.replace(regex, ''));
+    const regex = /(\/\d+|\/\d+\/)$/g;
     return path.replace(regex, '') === menuPath.replace(regex, '');
   };
 
@@ -89,10 +69,10 @@ export default function ProductTab(props) {
   // event
   //==============================================================================
 
-  const handleClickMenu = (item, index) => {
+  const handleClickMenu = useCallback((item, index) => {
     setStateSelected( index );
     navigate(item.path);
-  };
+  }, [tabMenu]);
 
   /**
     scroll 후 position 설정

@@ -77,10 +77,6 @@ export default function DashboardMain() {
     dispatch(setContainer(container));
   }, [dispatch]);
 
-  useEffect(() => {
-    handleContainer();
-  }, []);
-
   //==============================================================================
   // function
   //==============================================================================
@@ -387,6 +383,8 @@ export default function DashboardMain() {
   };
 
   useLayoutEffect(() => {
+    handleContainer();
+
     //check login expire time
     if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
       //check author

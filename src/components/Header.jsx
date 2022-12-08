@@ -323,7 +323,7 @@ const Header = ({ className, onSideMenu }) => {
                               </a>
                             </li>
                             <li>
-                              <Link to="">
+                              <Link to="/product/upload">
                                 <FontAwesomeIcon icon={faCartCirclePlus} />
                                 マケットに登録
                               </Link>

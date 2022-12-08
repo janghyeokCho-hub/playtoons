@@ -170,19 +170,11 @@ export default function DashboardProductList(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const handleSearch = (keyword) => {
+  const handleSearch = useCallback((keyword) => {
     setStateKeyword(keyword);
     getProductList(keyword);
-  };
+  }, []);
   
-  /**
-   pagination
-   * @version 1.0.0
-   * @author 2hyunkook
-   */
-  const handlePagination = (page) => {
-    getProductList(stateKeyword, page);
-  };
 
   /**
      비표시 이벤트
@@ -300,7 +292,7 @@ export default function DashboardProductList(props) {
 
         <Pagination 
           meta={stateData?.meta} 
-          callback={handlePagination} />
+          callback={(page) => getProductList(stateKeyword, page)} />
       </div>
     </>
   );

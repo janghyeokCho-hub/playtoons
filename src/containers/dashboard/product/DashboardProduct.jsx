@@ -8,7 +8,7 @@ import SalesReview from "@CONTAINERS/dashboard/product/DashboardSalesReview";
 import Page404 from "@/components/Page404";
 import { useDispatch } from 'react-redux';
 import { setContainer } from '@/modules/redux/ducks/container';
-import ProductTab from '@/components/dashboard/ProductTab';
+import MenuTabs from '@/components/dashboard/MenuTabs';
 
 
 const TEXT = {
@@ -17,6 +17,25 @@ const TEXT = {
   product_qna : '商品のお問い合せ',
   see_review : 'レビュ一覧',
 };
+
+const tabMenu = [
+  {
+    name: TEXT.see_product,
+    path: "/dashboard/product",
+  },
+  {
+    name: TEXT.sales_list,
+    path: "/dashboard/product/sales/list",
+  },
+  {
+    name: TEXT.product_qna,
+    path: "/dashboard/product/sales/inquiry",
+  },
+  {
+    name: TEXT.see_review,
+    path: "/dashboard/product/sales/review",
+  },
+];
 
 
 export default function DashboardProduct() {
@@ -50,7 +69,7 @@ export default function DashboardProduct() {
   return (
     <div className='contents'>
 
-      <ProductTab text={TEXT} />
+      <MenuTabs tabMenu={tabMenu} />
 
       <Routes>    
         <Route 

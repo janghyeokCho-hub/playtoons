@@ -65,9 +65,7 @@ export const isJSONStr = (str) => {
 };
 
 /**
-*
    get request를 위해서 params로 url 생성
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param formData formData 객체
@@ -86,9 +84,7 @@ export const getGetMethodUrl = (formData) => {
 };
 
 /**
-*
    form 태그 안의 값을 json object 로 반환해준다.
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param refForm form ref 객체
@@ -107,9 +103,7 @@ export const getFromDataJson = (refForm) => {
 };
 
 /**
-*
    list 에서 value 를 제거해준다.
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param list list object
@@ -159,9 +153,7 @@ export const getParamsToQuery = (params, tags) => {
 };
 
 /**
-*
    response 의 result code로 에러메세지를 리턴받는다.
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param data api response
@@ -181,9 +173,7 @@ export const getErrorMessageFromResultCode = (data) => {
 };
 
 /**
-*
    date format
-*
 * @version 1.0.0
 * @author 2hyunkook
 * @param date date 정보

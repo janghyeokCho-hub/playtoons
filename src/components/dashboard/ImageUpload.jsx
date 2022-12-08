@@ -2,7 +2,7 @@ import { getFileDataUrl, isArrayFromPostContent } from '@/common/common';
 import { FILE_MAX_SIZE } from '@/common/constant';
 import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import ErrorMessage from './ErrorMessage';
 import Image from './Image';
@@ -307,13 +307,13 @@ export default forwardRef(function ImageUpload(props, ref) {
               }
               {
                 renderType === undefined && (
-                  renderPreview() 
+                  renderPreview()
                 )
               }
 
 
               {/* //==============================================================================
-                  // thumbnail style
+                  // thumbnail timeline style
                   //============================================================================== */
               }
               { 

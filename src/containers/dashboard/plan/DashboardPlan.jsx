@@ -86,11 +86,11 @@ export default function DashboardPlan(props) {
   const renderPlanList = useMemo(() => {
     return reduxSubscribeTiers?.map((item, i) => {
       return (
-        <SwiperSlide className="col h_auto" key={i}>
+        <SwiperSlide className="col" key={i}>
           <div className="icon">
             <Image hash={item.thumbnailImage} alt="" />
           </div>
-          <div className="cont">
+          <div className="cont" >
             <h3 className="h1">{item.name}</h3>
             <p className="t1">
               <span className="c-blue">{parseInt(item.price)}</span> /
@@ -98,9 +98,10 @@ export default function DashboardPlan(props) {
             </p>
             <p className="t2">{item.description}</p>
             <div className="t_dot1">{/* <p>{item.description}</p> */}</div>
+            
             <Link
               to={`/dashboard/plan/edit/${item.id}`}
-              className="btn-pk b blue w100p bottom"
+              className="btn-pk b blue"
             >
               <span>{text.edit}</span>
             </Link>
