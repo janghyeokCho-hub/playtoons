@@ -17,9 +17,14 @@ import Calendar from "@COMPONENTS/dashboard/Calendar";
 import { showOneButtonPopup } from "@/common/common";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { setFileToServer, setFileMultiToServer } from "@API/dashboardService";
+import {
+  setFileMultiToServer,
+  setFileToServer,
+} from "@/services/dashboardService";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const authorMine = useSelector(({ post }) => post.authorMine);
   const [typeList, setTypeList] = useState([]);
@@ -42,6 +47,7 @@ const Upload = () => {
   const [selectTarget, setSelectTarget] = useState("all");
   const [selectAge, setSelectAge] = useState(false);
   const [products, setProducts] = useState([]);
+  const [productFiles, setProductFiles] = useState([]);
   const handlePreviewDelete = useCallback(
     (id) => {
       setProducts(products.filter((item) => item?.id !== id));
@@ -97,6 +103,7 @@ const Upload = () => {
   const [name, setName] = useState("");
   const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(null);
   const [rating, setRating] = useState("G");
   const [saleRatio, setSaleRatio] = useState(0);
   const calendarStartRef = useRef(null);
@@ -159,50 +166,69 @@ const Upload = () => {
 
   const handleUpload = useCallback(async () => {
     const authorId = authorMine.authors?.[0].id;
-    const params = {
-      name,
-      thumbnailImage: "",
-      description,
-      authorId: authorId,
-      typeId: selectType.id,
-      categoryId: category.id,
-      startAt: calendarStartRef.current.getDate(),
-      endAt: calendarEndRef.current.getDate(),
-      saleStartAt: saleStartRef.current.getDate(),
-      saleEndAt: saleEndRef.current.getDate(),
-      saleRatio: saleRatio,
-      rating: rating,
-      imageHashes: [],
-    };
-    console.log(params);
-    insertProduct(params).then(async (response) => {
-      console.log("response : ", response);
-      const formData = new FormData();
-      formData.append("authorId", authorId);
-      formData.append("subscribeTierId", "");
-      formData.append("productId", "");
-      formData.append("type", "image"); //image, video, binary
-      formData.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
-      formData.append("loginRequired", false); //언제 체크해서 보내는건지?
-      formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-      formData.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
-      formData.append("file", thumbnailImage);
-      const thumbnailResp = await setFileToServer(formData);
-      console.log("thumbnailResp : ", thumbnailResp);
-      // const productsResp = await setFileMultiToServer(products)
+    const thumbnailFD = new FormData();
+    thumbnailFD.append("authorId", authorId);
+    thumbnailFD.append("type", "any"); //image, video, binary, any
+    thumbnailFD.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
+    thumbnailFD.append("loginRequired", false); //언제 체크해서 보내는건지?
+    thumbnailFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+    thumbnailFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
+    thumbnailFD.append("file", thumbnailImage.file);
+    const thumbnailResp = await setFileToServer(thumbnailFD);
+
+    const productFD = new FormData();
+    productFD.append("authorId", authorId);
+    productFD.append("type", "any"); //image, video, binary, any
+    productFD.append("usage", "product"); //profile, background, cover, logo, post, product, thumbnail, attachment
+    productFD.append("loginRequired", false); //언제 체크해서 보내는건지?
+    productFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
+    productFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
+    Object.values(productFiles).forEach((file) => {
+      productFD.append("files[]", file);
     });
+    const productResp = await setFileMultiToServer(productFD);
+
+    if (thumbnailResp?.status === 201 && productResp?.status === 201) {
+      const params = {
+        name,
+        thumbnailImage: thumbnailResp?.data?.hash,
+        description,
+        price: Number(price),
+        authorId: authorId,
+        typeId: selectType.id,
+        categoryId: category.id,
+        status: "enabled",
+        /*
+        startAt: calendarStartRef.current.getDate(),
+        endAt: calendarEndRef.current.getDate(),
+        saleStartAt: saleStartRef.current.getDate(),
+        saleEndAt: saleEndRef.current.getDate(),
+        */
+        rating: rating,
+        contentHashes: productResp?.data?.hashses,
+      };
+      const response = await insertProduct(params);
+      console.log("response : ", response);
+      if (response?.status === 200) {
+        alert("등록완료");
+        navigate(-1);
+      }
+      await insertProduct(params);
+    }
   }, [
     name,
     category,
     selectType,
     description,
+    price,
     rating,
-    saleRatio,
+    // saleRatio,
     thumbnailImage,
-    // products,
+    productFiles,
     authorMine,
     calendarStartRef,
     calendarEndRef,
+    navigate,
   ]);
 
   return (
@@ -271,12 +297,11 @@ const Upload = () => {
                 </button>
               </h3>
 
-              {/*<!-- 멀티드레그 -->*/}
-
               <Dropzone
                 onDrop={(acceptedFiles) => {
                   setThumbnailImage({
                     ...acceptedFiles[0],
+                    file: acceptedFiles[0],
                     preview: URL.createObjectURL(acceptedFiles[0]),
                   });
                 }}
@@ -328,7 +353,11 @@ const Upload = () => {
             <div className="col">
               <h3 className="tit1">価格</h3>
               <div className="inp_txt sch">
-                <input type="text" className="" />
+                <input
+                  type="number"
+                  className=""
+                  onChange={(e) => setPrice(e.target.value)}
+                />
                 <span className="won">PC</span>
               </div>
             </div>
@@ -350,6 +379,7 @@ const Upload = () => {
 
               <Dropzone
                 onDrop={(acceptedFiles) => {
+                  setProductFiles(acceptedFiles);
                   setProducts([
                     ...products,
                     ...acceptedFiles.map((file, index) => {
@@ -380,6 +410,16 @@ const Upload = () => {
                   </div>
                 )}
               </Dropzone>
+              {/*
+
+              <ImageUpload
+                ref={productRef}
+                name={"productImage"}
+                className="box_drag"
+                text="ドラッグ＆ドロップ"
+                multiple={true}
+              />
+*/}
 
               {/*<!-- 파일 첨부 후 보여지는부분(이미지) -->*/}
               {products?.length > 0 && (
