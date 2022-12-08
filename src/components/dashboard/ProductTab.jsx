@@ -48,8 +48,10 @@ export default function ProductTab(props) {
   });
 
   const isMenuPath = (path, menuPath) => {
-    const regex = /[\/0-9]|[\/[0-9]\/$/g;
-    return path.replace(regex, '') === menuPath.replace(regex, '')
+    // const regex = /\/\d+|\/\d+\/$/g;
+    const regex = /[\/\d]|[\/\d\/]$/g;
+    console.log('tab', path, path.replace(regex, ''));
+    return path.replace(regex, '') === menuPath.replace(regex, '');
   };
 
   /**
