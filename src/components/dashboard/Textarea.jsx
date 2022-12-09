@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useImperativeHandle, forwardRef } from 'react';
 import { useRef } from 'react';
 
-export default forwardRef( function Textarea(props, ref) {
+export default React.memo(forwardRef( function Textarea(props, ref) {
   const {type, name, className, defaultValue} = props;
   const [stateError, setStateError] = useState(undefined);
   const [stateValue, setStateValue] = useState(undefined);
@@ -38,4 +38,4 @@ export default forwardRef( function Textarea(props, ref) {
       <ErrorMessage error={stateError} />
     </>
   )
-})
+}))

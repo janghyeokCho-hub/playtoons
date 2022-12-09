@@ -40,7 +40,7 @@ export default function Image(props) {
 
   useLayoutEffect(() => {
     if( hash ){
-      if (hash?.startsWith("/static/media/") || hash?.startsWith("data:image")  ) {
+      if ( hash?.startsWith("/static/media/") || hash?.startsWith("data:image") ) {
         setStateImage(hash);
       } else {
         getImage(hash);

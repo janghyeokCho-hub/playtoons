@@ -1,10 +1,10 @@
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { forwardRef, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from "react";
 
 import ErrorMessage from './ErrorMessage';
 
-export default forwardRef( function Search(props, ref) {
+export default React.memo(forwardRef( function Search(props, ref) {
   const { placeholder, className, name, onClick } = props;
   const [ stateError, setStateError ] = useState(undefined);
   const refInput = useRef();
@@ -51,4 +51,4 @@ export default forwardRef( function Search(props, ref) {
       <ErrorMessage error={stateError} />
     </>
   );
-})
+}));

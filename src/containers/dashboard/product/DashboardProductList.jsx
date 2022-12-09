@@ -208,7 +208,7 @@ export default function DashboardProductList(props) {
             </div>
           </td>
           <td className="td_subject">{item.name || 'name'}</td>
-          <td className="td_number3">{item.price}</td>
+          <td className="td_number3">{`${Number(item.price)} PC`}</td>
           <td className="td_txt1">
             <span className="view-m">{text.date}：</span>
             {getDateYYYYMMDD(item.startAt, '/')}
@@ -263,7 +263,7 @@ export default function DashboardProductList(props) {
           />
         </div>
 
-        <div className="tbl_basic mtbl_ty1">
+        <div className="tbl_basic mtbl_ty1 product">
           <table className="list">
             <caption>list</caption>
             <colgroup>

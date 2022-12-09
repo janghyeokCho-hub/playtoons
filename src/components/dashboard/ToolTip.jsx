@@ -20,7 +20,7 @@ import useOutSideClick from '@/common/useOutSideClick';
 * @param handleClick icon 클릭시 수행하고 싶은 event
 * @return
 */
-export default function ToolTip(props) {
+export default React.memo(function ToolTip(props) {
   const {title, text, handleClick} = props;
   const [isShow, setShow] = useState(false);
   const refPopup = useRef();
@@ -52,4 +52,4 @@ export default function ToolTip(props) {
         />
     </div>
   )
-}
+});

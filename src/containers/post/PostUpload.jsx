@@ -26,8 +26,9 @@ import Dropdown from "@/components/dashboard/Dropdown";
 import Textarea from "@/components/dashboard/Textarea";
 import DraftEditor from "@/components/post/DraftEditor";
 import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
-import moment from "moment";
+import moment from "moment/moment";
 import { showModal } from "@/modules/redux/ducks/modal";
+import { useMemo } from "react";
 
 const text = {
   upload_post: "投稿する",
@@ -105,6 +106,21 @@ export default function UploadPost(props) {
   //==============================================================================
   // function
   //==============================================================================
+  const getContent = useMemo(() => {
+    return ( getShowEditor(stateType) ) ? (
+              <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content}  />
+            ) : (
+              <ImageUpload
+                  ref={refContents}
+                  id={"filebox2"}
+                  className={"box_drag"}
+                  name={"content"}
+                  text={text.drag_drop}
+                  multiple={true}     
+                  />
+            )
+  }, [stateType]);
+
   const initType = () => {
     //일회성 포스트
     if (reduxSeries?.id === undefined) {
@@ -118,7 +134,7 @@ export default function UploadPost(props) {
       setStateType(reduxSeries.type);
     }
   };
-
+  
   const getRatingFromSeriesInfo = () => {
     return reduxSeries?.id === undefined ? "G" : reduxSeries?.rating;
   };
@@ -225,29 +241,27 @@ export default function UploadPost(props) {
   //==============================================================================
   // event
   //==============================================================================
-  const handleSeries = (series) => {
-    //series response 후 callback
+  const handleSeries = useCallback((series) => {
+    //series api response 후 
     dispatch( setSeriesAction(series) );
-  };
+  }, []);
 
   const handleType = (type) => {
-    //type response 후 callback
-    const tempType = reduxSeries?.type === undefined ? type : reduxSeries?.type;
-    setStateType(tempType);
+    //type api response 후 
+    setStateType( reduxSeries?.type === undefined ? type : reduxSeries?.type );
   };
 
-  const handleClickType = (type) => {
+  const handleClickType = useCallback((type) => {
     //type item click event
     setStateType(type);
-  };
+  }, []);
 
-  const handleClickItemSubscribeTier = (item) => {
+  const handleClickItemSubscribeTier = useCallback((item) => {
     //閲覧範囲（支援者） item click event
-    console.log("handleClickItemSubscribeTier", item);
     setStateSubscribeTier(item);
-  };
+  }, []);
   
-  const handleClickPreview = (event) => {
+  const handleClickPreview = useCallback((event) => {
      //필드 확인
      if (refTitle.current.isEmpty()) {
       initButtonInStatus(refRegister);
@@ -298,13 +312,13 @@ export default function UploadPost(props) {
         contents: <PreviewPost data={data} text={text} />,
       })
     );
-  };
+  }, []);
 
 
 
-  const handleClickRegister = (event) => {
+  const handleClickRegister = useCallback((event) => {
     setPost();
-  };
+  }, []);
 
   //==============================================================================
   // Hook && render
@@ -436,22 +450,8 @@ export default function UploadPost(props) {
                   <ToolTip title={text.contents} text={text.contents_tooltip} />
                 </button>
               </h3>
-              {
-                ( getShowEditor(stateType) ) ? (
-                  <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content}  />
-                ) : (
-                  <ImageUpload
-                      ref={refContents}
-                      id={"filebox2"}
-                      className={"box_drag"}
-                      name={"content"}
-                      text={text.drag_drop}
-                      multiple={true}     
-                      />
-                )
-              }
+              {getContent}
             </div>
-
 
             <div className="col">
               <h3 className="tit1">

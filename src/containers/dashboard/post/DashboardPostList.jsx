@@ -131,7 +131,7 @@ export default function DashboardPostList(props) {
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
             <div className="cx_thumb post">
-              <Image hash={item.thumbnailImage} alt="" params={{ q: 10 }} />
+              <Image hash={item.thumbnailImage} alt="" params={{ w: 88 }} />
             </div>
           </td>
           <td className="td_subject">{item.title}</td>
@@ -196,9 +196,7 @@ export default function DashboardPostList(props) {
           </h2>
           <div className="rgh">
             <div onClick={handleClickPost} className="btn-pk n blue2">
-              <span>
-                <FontAwesomeIcon icon={faPlus} /> {TEXT.post}
-              </span>
+              <span><FontAwesomeIcon icon={faPlus} /> {TEXT.post}</span>
             </div>
           </div>
         </div>

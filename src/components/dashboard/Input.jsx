@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useImperativeHandle, forwardRef } from 'react';
 import { useRef } from 'react';
 
-export default forwardRef( function Input(props, ref) {
+export default React.memo(forwardRef( function Input(props, ref) {
   const {type, name, className, defaultValue, onChange, onFocus, onBlur, placeholder} = props;
   const [stateError, setStateError] = useState(undefined);
   const [stateValue, setStateValue] = useState(undefined);
@@ -52,4 +52,4 @@ export default forwardRef( function Input(props, ref) {
       <ErrorMessage error={stateError} />
     </>
   )
-})
+}))

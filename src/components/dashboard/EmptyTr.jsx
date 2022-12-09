@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function EmptyTr(props) {
   const {trClassName, tdClassName, text} = props;
 
