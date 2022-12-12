@@ -27,10 +27,10 @@ export default function Image(props) {
       if( params.mw ){ formData.append('mw', params.mw); }
       if( params.q ){ formData.append('q', params.q); }
     }
-    const { status, data: result } = await getFileUrlFromServer(hash, formData);
+    const { status, data } = await getFileUrlFromServer(hash, formData);
 
     if (status === 200) {
-      setStateImage(result?.url);
+      setStateImage(data?.url);
     } 
     // else {
     //   console.log( String(result) );

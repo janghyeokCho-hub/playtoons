@@ -258,7 +258,7 @@ export default function DashboardMain() {
           <Link to={`/dashboard/series/detail/${item.id}/1`}>
             <div className="cx_thumb">
               <span>
-                <Image hash={item.thumbnailImage} alt="" />
+                <Image hash={item.thumbnailImage} params={{w:250}} />
               </span>
               <p className="t_like">
                 <FontAwesomeIcon icon={faHeart} />

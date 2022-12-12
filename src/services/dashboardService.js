@@ -123,7 +123,7 @@ export const setFileMultiToServer = async (params) => {
 export const getFileUrlFromServer = async (hash, params) => {
   let parameters = "";
   if (params) {
-    parameters = `?${getGetMethodUrl(params)}`;
+    parameters = `${getGetMethodUrl(params)}`;
   }
   
   try {
