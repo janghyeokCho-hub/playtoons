@@ -201,7 +201,7 @@ export default function DashboardSeriesDetail(props) {
           <div >
             <div className="cx_thumb">
               {item !== undefined && (
-                <Image hash={item.thumbnailImage}  />
+                <Image hash={item.thumbnailImage} params={{w: 90}}  />
               )}
             </div>
           </div>
@@ -227,8 +227,8 @@ export default function DashboardSeriesDetail(props) {
         <tr key={index} onClick={() => handleMoveToDetailPage(item)}>
           <td className="hide-m">{item.id}</td>
           <td className="td_imgs">
-            <div className="cx_thumb">
-              <Image hash={item.thumbnailImage} alt="" />
+            <div className="cx_thumb sd">
+              <Image hash={item.thumbnailImage} params={{w: 88}} />
             </div>
           </td>
           <td className="td_subject">{item.title}</td>
@@ -315,7 +315,7 @@ export default function DashboardSeriesDetail(props) {
               </div>
               <div className="cx_thumb">
                 <span>
-                  <Image hash={stateSeries?.coverImage} alt="" />
+                  <Image hash={stateSeries?.coverImage} params={{w: 200}} />
                 </span>
               </div>
               <ul className="cx_list">

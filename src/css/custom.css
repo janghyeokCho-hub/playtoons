@@ -588,7 +588,8 @@
 /* ============================================================================== */
 /* dashboard - post  */
 /* ============================================================================== */
-.tbl_basic .cx_thumb.post img {
+.tbl_basic .cx_thumb.post img,
+.tbl_basic .cx_thumb.sd img{
   position: absolute;
   left: 0;
   top: 50%;
