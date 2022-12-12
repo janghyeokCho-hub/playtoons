@@ -24,6 +24,20 @@ export const insertProduct = async (params) => {
 };
 
 /**
+ * Get Product detail
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {number} 조회할 product id
+ */
+export const getProductDetail = async (id) => {
+  try {
+    return await apiServer("get", `/shop/product/${id}/mine`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
+
+/**
  * Product Type
  */
 export const getProductType = async () => {

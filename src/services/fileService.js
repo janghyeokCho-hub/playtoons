@@ -18,3 +18,19 @@ export const getFileUrlFromServer = async (hash, query) => {
     return { status: e.response.status, data: e };
   }
 };
+
+/**
+ * 파일 정보 수정
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {string} hash
+ * @param {json} params
+ * @return 파일경로
+ */
+export const updateFileInfo = async (hash, params) => {
+  try {
+    return await apiServer("patch", `/file/${hash}`, params);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

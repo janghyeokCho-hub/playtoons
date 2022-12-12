@@ -13,6 +13,7 @@ import alertModal from "./modal";
 import dashboard from "./dashboard";
 import dim from "./dim";
 import container from "./container";
+import product from "./product";
 
 const persistConfig = {
   key: "root",
@@ -31,6 +32,7 @@ const appReducer = combineReducers({
   dashboard,
   dim,
   container,
+  product,
 });
 
 const rootReducer = (state, action) => {

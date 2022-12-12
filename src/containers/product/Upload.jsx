@@ -14,13 +14,11 @@ import {
   insertProduct,
 } from "@API/storeService";
 import Calendar from "@COMPONENTS/dashboard/Calendar";
-import { showOneButtonPopup } from "@/common/common";
+import { getFileDataUrl, showOneButtonPopup } from "@/common/common";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  setFileMultiToServer,
-  setFileToServer,
-} from "@/services/dashboardService";
+import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
+import { updateFileInfo } from "@API/fileService";
 import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
@@ -165,6 +163,7 @@ const Upload = () => {
   }, []);
 
   const handleUpload = useCallback(async () => {
+    console.log("thumbnailImage.file : ", thumbnailImage.file?.value);
     const authorId = authorMine.authors?.[0].id;
     const thumbnailFD = new FormData();
     thumbnailFD.append("authorId", authorId);
@@ -189,9 +188,11 @@ const Upload = () => {
     const productResp = await setFileMultiToServer(productFD);
 
     if (thumbnailResp?.status === 201 && productResp?.status === 201) {
-      const params = {
+      const thumbnailHash = thumbnailResp?.data?.hash;
+      const mediaHashes = productResp?.data?.hashses;
+      const insertProductParams = {
         name,
-        thumbnailImage: thumbnailResp?.data?.hash,
+        thumbnailImage: thumbnailHash,
         description,
         price: Number(price),
         authorId: authorId,
@@ -203,17 +204,24 @@ const Upload = () => {
         endAt: calendarEndRef.current.getDate(),
         saleStartAt: saleStartRef.current.getDate(),
         saleEndAt: saleEndRef.current.getDate(),
+        saleRatio: saleRatio / 100,
         */
         rating: rating,
-        contentHashes: productResp?.data?.hashses,
+        mediaHashes: mediaHashes,
       };
-      const response = await insertProduct(params);
-      console.log("response : ", response);
-      if (response?.status === 200) {
-        alert("등록완료");
-        navigate(-1);
+      const response = await insertProduct(insertProductParams);
+      if (response?.status === 201) {
+        const productId = response.data?.id;
+        const params = {
+          productId: productId,
+        };
+        await updateFileInfo(thumbnailHash, params);
+        for await (const hash of mediaHashes) {
+          await updateFileInfo(hash, params);
+        }
+        alert("123");
+        navigate("/dashboard/product");
       }
-      await insertProduct(params);
     }
   }, [
     name,
@@ -222,14 +230,32 @@ const Upload = () => {
     description,
     price,
     rating,
-    // saleRatio,
+    saleRatio,
     thumbnailImage,
     productFiles,
     authorMine,
     calendarStartRef,
     calendarEndRef,
+    saleStartRef,
+    saleEndRef,
     navigate,
   ]);
+
+  const handleMediaFiles = useCallback(async (acceptedFiles) => {
+    if (acceptedFiles?.length) {
+      console.log("Promise Start -- ");
+      const results = await Promise.all(
+        acceptedFiles.map(async (file) => {
+          return await getFileDataUrl(file);
+        })
+      );
+      acceptedFiles.forEach((file, index) => {
+        file.file = results[index];
+        file.value = results[index];
+      });
+      setProductFiles(acceptedFiles);
+    }
+  }, []);
 
   return (
     <div className="inr-c">
@@ -298,12 +324,25 @@ const Upload = () => {
               </h3>
 
               <Dropzone
-                onDrop={(acceptedFiles) => {
-                  setThumbnailImage({
-                    ...acceptedFiles[0],
-                    file: acceptedFiles[0],
-                    preview: URL.createObjectURL(acceptedFiles[0]),
-                  });
+                accept={{
+                  "image/jpeg": [],
+                  "image/png": [],
+                  "image/jpg": [],
+                }}
+                onDrop={(files) => {
+                  const reader = new FileReader();
+                  if (files[0]) {
+                    reader.readAsDataURL(files[0]);
+                  }
+
+                  reader.onload = () => {
+                    setThumbnailImage({
+                      ...files[0],
+                      file: files[0],
+                      preview: reader.result,
+                      value: reader.result,
+                    });
+                  };
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -378,17 +417,19 @@ const Upload = () => {
               </h3>
 
               <Dropzone
+                accept={{
+                  "image/jpeg": [],
+                  "image/png": [],
+                  "image/jpg": [],
+                }}
                 onDrop={(acceptedFiles) => {
-                  setProductFiles(acceptedFiles);
-                  setProducts([
-                    ...products,
-                    ...acceptedFiles.map((file, index) => {
-                      return Object.assign(file, {
-                        id: `${file?.name}_${index}`,
-                        preview: URL.createObjectURL(file),
-                      });
-                    }),
-                  ]);
+                  handleMediaFiles(acceptedFiles);
+                  acceptedFiles.map((file) =>
+                    Object.assign(file, {
+                      preview: URL.createObjectURL(file),
+                    })
+                  );
+                  setProducts(acceptedFiles);
                 }}
               >
                 {({ getRootProps, getInputProps }) => (
@@ -410,18 +451,6 @@ const Upload = () => {
                   </div>
                 )}
               </Dropzone>
-              {/*
-
-              <ImageUpload
-                ref={productRef}
-                name={"productImage"}
-                className="box_drag"
-                text="ドラッグ＆ドロップ"
-                multiple={true}
-              />
-*/}
-
-              {/*<!-- 파일 첨부 후 보여지는부분(이미지) -->*/}
               {products?.length > 0 && (
                 <div className="box_multy">
                   {products.map((item, index) => {

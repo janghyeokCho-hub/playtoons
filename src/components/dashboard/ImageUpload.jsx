@@ -1,11 +1,23 @@
-import { getFileDataUrl, isArrayFromPostContent } from '@/common/common';
-import { FILE_MAX_SIZE } from '@/common/constant';
-import { faCirclePlus, faCircleXmark, faTrashXmark } from "@fortawesome/pro-solid-svg-icons";
+import { getFileDataUrl, isArrayFromPostContent } from "@/common/common";
+import { FILE_MAX_SIZE } from "@/common/constant";
+import {
+  faCirclePlus,
+  faCircleXmark,
+  faTrashXmark,
+} from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
-import ErrorMessage from './ErrorMessage';
-import Image from './Image';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useDropzone } from "react-dropzone";
+import ErrorMessage from "./ErrorMessage";
+import Image from "./Image";
 
 /**
  * 
@@ -37,14 +49,33 @@ import Image from './Image';
  * @param callback image value 설정 후 callback func
  */
 export default forwardRef(function ImageUpload(props, ref) {
-  const { className, preview, text, textEdit, name, id, callback, handleEdit, previewHash, renderType, multiple = false } = props;
+  const {
+    className,
+    preview,
+    text,
+    textEdit,
+    name,
+    id,
+    callback,
+    handleEdit,
+    previewHash,
+    renderType,
+    multiple = false,
+  } = props;
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
-  const initImageObject = {file: undefined, preview: undefined, value: undefined, filename: "", fileLenth: "", mode: undefined};
+  const initImageObject = {
+    file: undefined,
+    preview: undefined,
+    value: undefined,
+    filename: "",
+    fileLenth: "",
+    mode: undefined,
+  };
   const [stateImage, setStateImage] = useState(initImageObject);
   const [stateError, setStateError] = useState(undefined);
 
   //==============================================================================
-  // function 
+  // function
   //==============================================================================
   const isMultiple = () => {
     return Array.isArray(stateImage?.preview);
@@ -57,34 +88,33 @@ export default forwardRef(function ImageUpload(props, ref) {
   * @param {*} file
   */
   const setPreviewImage = async (files) => {
-    if( multiple ){
-
-      const results = await Promise.all(files.map(async (file) => {
-        return await getFileDataUrl(file);
-      }));
+    if (multiple) {
+      const results = await Promise.all(
+        files.map(async (file) => {
+          return await getFileDataUrl(file);
+        })
+      );
 
       setStateImage({
         ...stateImage,
         file: files,
-        preview: results
+        preview: results,
       });
-    }
-    else{
+    } else {
       const reader = new FileReader();
-      if(files[0]){
+      if (files[0]) {
         reader.readAsDataURL(files[0]);
       }
-      
+
       reader.onload = () => {
         setStateImage({
           ...stateImage,
           file: files[0],
-          preview: reader.result
+          preview: reader.result,
         });
       };
     }
   };
-
 
   //==============================================================================
   // api
@@ -97,29 +127,25 @@ export default forwardRef(function ImageUpload(props, ref) {
     setPreviewImage(acceptedFiles);
   }, []);
 
-  const { 
-    getRootProps, 
-    getInputProps, 
-    open ,
-  } = useDropzone({ 
+  const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
     accept: {
-      'image/jpeg': [],
-      'image/png': [],
-      'image/jpg': [],
+      "image/jpeg": [],
+      "image/png": [],
+      "image/jpg": [],
     },
     noDragEventsBubbling: true,
     noKeyboard: true,
     maxSize: FILE_MAX_SIZE,
     onDropAccepted: (accept) => setStateError(undefined),
     onDropRejected: (reject) => handleRejected(reject),
-    multiple: multiple,          
+    multiple: multiple,
   }); //isDragActive
 
   const InputProps = {
     ...getInputProps(),
     accept: "image/gif, image/jpg, image/jpeg, image/png",
-    type: "file"
+    type: "file",
   };
 
   const RootProps = {
@@ -131,34 +157,33 @@ export default forwardRef(function ImageUpload(props, ref) {
   //==============================================================================
 
   const handleRejected = (reject) => {
-    let message = '';
-    for( let i = 0; i < reject[0].errors.length; i++ ){
+    let message = "";
+    for (let i = 0; i < reject[0].errors.length; i++) {
       message += reject[0].errors[i].message;
 
-      if( i !== reject[0].errors.length - 1 ){
-        message += ' and ';
+      if (i !== reject[0].errors.length - 1) {
+        message += " and ";
       }
     }
-    
+
     setStateError(message);
   };
 
   const handlePreviewClose = (index) => {
-    if( multiple ){
+    if (multiple) {
       const files = stateImage.file.filter((item, i) => index !== i);
       const previews = stateImage.preview.filter((item, i) => index !== i);
 
-      if( previews.length === 0 ){
+      if (previews.length === 0) {
         setStateImage(initImageObject);
-      }
-      else{
+      } else {
         setStateImage({
           ...stateImage,
           file: files,
-          preview: previews
+          preview: previews,
         });
       }
-    } else{
+    } else {
       setStateImage(initImageObject);
     }
   };
@@ -172,49 +197,69 @@ export default forwardRef(function ImageUpload(props, ref) {
   // hook & render
   //==============================================================================
   const renderPreview = () => {
-    if( isMultiple() ){
-      return <div>
-        {
-          stateImage?.preview?.map((item, index) => {
+    if (isMultiple()) {
+      return (
+        <div>
+          {stateImage?.preview?.map((item, index) => {
             return (
-              <div className={`fileview ${index < stateImage.preview.length-1 && 'mb20' }`} key={index}>
-                <div><Image hash={item} alt="" /></div>
-                <button type="button" className="btn_del" title="削除" onClick={() => handlePreviewClose(index)}>
-                  <FontAwesomeIcon 
-                    icon={faCircleXmark}
-                    />
-                  </button>
+              <div
+                className={`fileview ${
+                  index < stateImage.preview.length - 1 && "mb20"
+                }`}
+                key={index}
+              >
+                <div>
+                  <Image hash={item} alt="" />
+                </div>
+                <button
+                  type="button"
+                  className="btn_del"
+                  title="削除"
+                  onClick={() => handlePreviewClose(index)}
+                >
+                  <FontAwesomeIcon icon={faCircleXmark} />
+                </button>
               </div>
-            )
-          })
-        }
-      </div>
+            );
+          })}
+        </div>
+      );
     } else {
       return (
         <div className={"fileview"}>
-          <div><Image hash={stateImage?.preview} alt="" /></div>
-          <button type="button" className="btn_del" title="削除" onClick={handlePreviewClose}>
-            <FontAwesomeIcon 
-              icon={faCircleXmark}
-              />
-            </button>
+          <div>
+            <Image hash={stateImage?.preview} alt="" />
+          </div>
+          <button
+            type="button"
+            className="btn_del"
+            title="削除"
+            onClick={handlePreviewClose}
+          >
+            <FontAwesomeIcon icon={faCircleXmark} />
+          </button>
         </div>
-      )
+      );
     }
   };
 
   useImperativeHandle(ref, () => ({
     setImageValueToInputTag: (hash) => {
-      setStateImage({...stateImage, value: hash});
+      setStateImage({ ...stateImage, value: hash });
     },
     setImage: (fileUrl, hash) => {
-      setStateImage({...stateImage, preview: fileUrl, value: hash});
+      setStateImage({ ...stateImage, preview: fileUrl, value: hash });
     },
     getImageFile: () => {
       return stateImage.file;
     },
     setThumbnailImage: (hash) => {
-      setStateImage({...stateImage, value: hash, preview: hash, mode: 'thumbnail'});
+      setStateImage({
+        ...stateImage,
+        value: hash,
+        preview: hash,
+        mode: "thumbnail",
+      });
     },
     getImageInfo: () => {
       return stateImage;
@@ -223,7 +268,7 @@ export default forwardRef(function ImageUpload(props, ref) {
       setStateError(msg);
     },
     checkToEmpty: () => {
-      if( JSON.stringify(stateImage) === JSON.stringify(initImageObject) ){
+      if (JSON.stringify(stateImage) === JSON.stringify(initImageObject)) {
         return true;
       }
 
@@ -232,25 +277,25 @@ export default forwardRef(function ImageUpload(props, ref) {
   }));
 
   useEffect(() => {
-    if( preview ){
+    if (preview) {
       setStateImage({
         ...stateImage,
-        preview : preview
+        preview: preview,
       });
     }
   }, [preview]);
 
   useLayoutEffect(() => {
-    if( previewHash ){
-      if( isArrayFromPostContent(previewHash) ){
+    if (previewHash) {
+      if (isArrayFromPostContent(previewHash)) {
         setStateImage({
           ...stateImage,
-          preview: previewHash.split(',')
+          preview: previewHash.split(","),
         });
       } else {
         setStateImage({
           ...stateImage,
-          preview: previewHash
+          preview: previewHash,
         });
         // getImageUrl(previewHash);
       }
@@ -258,79 +303,90 @@ export default forwardRef(function ImageUpload(props, ref) {
   }, [previewHash]);
 
   useEffect(() => {
-    if( stateImage.value ){
+    if (stateImage.value) {
       callback?.();
     }
   }, [stateImage.value]);
 
   useEffect(() => {
     return () => {
-      setStateError(undefined)
-    }
+      setStateError(undefined);
+    };
   }, []);
 
   return (
     <>
-      <div 
-        className={`${className}${isMultiple() ? '_multi' : ''}`}
-        onClick={e => e.preventDefault()} 
-        >
-          {/* upload에 쓰일 값  저장 */}
-        <input type={"text"} name={name} defaultValue={stateImage?.value} style={{display: "none"}} />  
-          {/* file input tag */}
-        <input {...InputProps} id={id}  />
-        {
-          (stateImage?.preview === undefined || stateImage?.preview.length === 0) ? (
-            // input 
-            <label htmlFor={id} className="filetxt" >
-              <div 
-                {...RootProps} 
-                className={`wh100`} >
-                  {
-                    text === undefined ? 
-                      <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                      :
-                      <div className="txt">
-                        <div className="ico fa-solid"><FontAwesomeIcon icon={faCirclePlus} /></div>
-                        <p className="t">{text}</p>
-                      </div>
-                  }
-                  
-              </div>
-            </label>
-          ) : (
-            <>
-              {/* render preview  */}
-              {/* //==============================================================================
-                  // normal style
-                  //============================================================================== */
-              }
-              {
-                renderType === undefined && (
-                  renderPreview()
-                )
-              }
-
-
-              {/* //==============================================================================
-                  // thumbnail timeline style
-                  //============================================================================== */
-              }
-              { 
-                renderType === 'thumbnail' && (
-                  <div className={"fileview2"}>
-                    <div><Image hash={stateImage?.preview} alt="" /></div>
-                    <span className="f_tx">{stateImage?.filename}<em>{stateImage?.fileLenth}</em></span>
-                      <button type="button" className="btn_del" title="削除"><FontAwesomeIcon icon={faTrashXmark} onClick={handlePreviewClose} /></button>
-                      <button type="button" className="btn-pk n blue" onClick={handleClickEdit}><span>{textEdit}</span></button>
+      <div
+        className={`${className}${isMultiple() ? "_multi" : ""}`}
+        onClick={(e) => e.preventDefault()}
+      >
+        {/* upload에 쓰일 값  저장 */}
+        <input
+          type={"text"}
+          name={name}
+          defaultValue={stateImage?.value}
+          style={{ display: "none" }}
+        />
+        {/* file input tag */}
+        <input {...InputProps} id={id} />
+        {stateImage?.preview === undefined ||
+        stateImage?.preview.length === 0 ? (
+          // input
+          <label htmlFor={id} className="filetxt">
+            <div {...RootProps} className={`wh100`}>
+              {text === undefined ? (
+                <div className="ico fa-solid">
+                  <FontAwesomeIcon icon={faCirclePlus} />
+                </div>
+              ) : (
+                <div className="txt">
+                  <div className="ico fa-solid">
+                    <FontAwesomeIcon icon={faCirclePlus} />
                   </div>
-                )
-              }
-            </>
-          )
-        }
+                  <p className="t">{text}</p>
+                </div>
+              )}
+            </div>
+          </label>
+        ) : (
+          <>
+            {/* render preview  */}
+            {/* //==============================================================================
+                  // normal style
+                  //============================================================================== */}
+            {renderType === undefined && renderPreview()}
+
+            {/* //==============================================================================
+                  // thumbnail timeline style
+                  //============================================================================== */}
+            {renderType === "thumbnail" && (
+              <div className={"fileview2"}>
+                <div>
+                  <Image hash={stateImage?.preview} alt="" />
+                </div>
+                <span className="f_tx">
+                  {stateImage?.filename}
+                  <em>{stateImage?.fileLenth}</em>
+                </span>
+                <button type="button" className="btn_del" title="削除">
+                  <FontAwesomeIcon
+                    icon={faTrashXmark}
+                    onClick={handlePreviewClose}
+                  />
+                </button>
+                <button
+                  type="button"
+                  className="btn-pk n blue"
+                  onClick={handleClickEdit}
+                >
+                  <span>{textEdit}</span>
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
-      
+
       <ErrorMessage error={stateError} />
     </>
   );

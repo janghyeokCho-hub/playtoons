@@ -4,7 +4,10 @@ import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
 import Search from "@/components/dashboard/Search";
-import { editShopProductToServer, getProductListFromServer } from "@/services/dashboardService";
+import {
+  editShopProductToServer,
+  getProductListFromServer,
+} from "@/services/dashboardService";
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 import { cloneDeep } from "lodash";
 import { useCallback, useLayoutEffect, useState } from "react";
@@ -27,11 +30,12 @@ const text = {
   modify: "修正",
   category: "カテゴリ",
   dont_see: "非表示",
-  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
-  empty_message: '商品がありません。',
-  status_sales: '販売中',
-  status_check: '審査中',
-  status_not_for_sale: '販売不可',
+  must_register_creator:
+    "クリエイターとして登録しなければ、ダッシュボードを利用できません。",
+  empty_message: "商品がありません。",
+  status_sales: "販売中",
+  status_check: "審査中",
+  status_not_for_sale: "販売不可",
 };
 
 const tempData = {
@@ -47,7 +51,7 @@ const tempData = {
       name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
       startAt: "2022/06/11",
-      status:  "enabled",
+      status: "enabled",
     },
     {
       id: 1,
@@ -55,7 +59,7 @@ const tempData = {
       name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
       startAt: "2022/06/11",
-      status:  "enabled",
+      status: "enabled",
     },
     {
       id: 3,
@@ -63,7 +67,7 @@ const tempData = {
       name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
       startAt: "2022/06/11",
-      status:  "pending",
+      status: "pending",
     },
     {
       id: 4,
@@ -71,16 +75,15 @@ const tempData = {
       name: "大学のリンゴ一個の重さで10メートルの素材",
       price: "1200000CP",
       startAt: "2022/06/11",
-      status:  "suspended",
+      status: "suspended",
     },
   ],
 };
 
-
 export default function DashboardProductList(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateKeyword, setStateKeyword] = useState(undefined);
-  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -127,38 +130,35 @@ export default function DashboardProductList(props) {
   //==============================================================================
   const getProductList = async (keyword, page) => {
     const formData = new FormData();
-    formData.append('authorId', reduxAuthors[0].id);
-    if( keyword !== undefined ){
-      formData.append('keyword', keyword);
+    formData.append("authorId", reduxAuthors[0].id);
+    if (keyword !== undefined) {
+      formData.append("keyword", keyword);
     }
-    if( page !== undefined ){
-      formData.append('page', page);
+    if (page !== undefined) {
+      formData.append("page", page);
     }
-    
+
     // const {status, data} = await getAuthorIdFromServer(formData);
-    const {status, data} = await getProductListFromServer(formData);
-    console.log('getProductList', status, data);
-    
-    if( status === 200 ){
+    const { status, data } = await getProductListFromServer(formData);
+    console.log("getProductList", status, data);
+
+    if (status === 200) {
       setStateData(data);
-    }
-    else{
+    } else {
       showOneButtonPopup(dispatch, data);
     }
   };
 
   const editProductInStatus = async (item, ftnSetButtonStatus) => {
-    console.log('first', item);
-    const {status, data} = await editShopProductToServer(item);
-    console.log('editProductInStatus', status, data);
-    
-    if( status === 200 ){
-      
-    }
-    else{
+    console.log("first", item);
+    const { status, data } = await editShopProductToServer(item);
+    console.log("editProductInStatus", status, data);
+
+    if (status === 200) {
+    } else {
       showOneButtonPopup(dispatch, data);
     }
-    
+
     ftnSetButtonStatus(undefined);
   };
 
@@ -174,7 +174,6 @@ export default function DashboardProductList(props) {
     setStateKeyword(keyword);
     getProductList(keyword);
   }, []);
-  
 
   /**
      비표시 이벤트
@@ -184,7 +183,7 @@ export default function DashboardProductList(props) {
   const handleItemClick = useCallback((item, ftnSetButtonStatus) => {
     // productId, name
     let lodashItem = cloneDeep(item);
-    lodashItem.status = 'pending';
+    lodashItem.status = "pending";
     editProductInStatus(lodashItem, ftnSetButtonStatus);
   }, []);
 
@@ -207,11 +206,11 @@ export default function DashboardProductList(props) {
               </span>
             </div>
           </td>
-          <td className="td_subject">{item.name || 'name'}</td>
+          <td className="td_subject">{item.name || "name"}</td>
           <td className="td_number3">{`${Number(item.price)} PC`}</td>
           <td className="td_txt1">
             <span className="view-m">{text.date}：</span>
-            {getDateYYYYMMDD(item.startAt, '/')}
+            {getDateYYYYMMDD(item.startAt, "/")}
           </td>
           <td className={`td_txt3 cl-sell ${getStatusColor(item.status)}`}>
             <span className="view-m">{text.status}</span>
@@ -224,15 +223,14 @@ export default function DashboardProductList(props) {
             >
               {text.detail}
             </Link>
-            <Link
-              className="btn-pk s blue2"
-              to={`/dashboard/product/edit/${item.id}`}
-            >
+            <Link className="btn-pk s blue2" to={`/product/edit/${item.id}`}>
               {text.modify}
             </Link>
             <Button
               className="btn-pk s blue2"
-              onClick={(e, ftnSetButtonStatus) => handleItemClick(item, ftnSetButtonStatus)}
+              onClick={(e, ftnSetButtonStatus) =>
+                handleItemClick(item, ftnSetButtonStatus)
+              }
             >
               {text.dont_see}
             </Button>
@@ -244,11 +242,12 @@ export default function DashboardProductList(props) {
 
   useLayoutEffect(() => {
     //check author
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
+    if (reduxAuthors && reduxAuthors?.length > 0) {
       getProductList();
-    }
-    else{
-      showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+    } else {
+      showOneButtonPopup(dispatch, text.must_register_creator, () =>
+        navigate("/author/register")
+      );
     }
   }, []);
 
@@ -290,9 +289,10 @@ export default function DashboardProductList(props) {
           </table>
         </div>
 
-        <Pagination 
-          meta={stateData?.meta} 
-          callback={(page) => getProductList(stateKeyword, page)} />
+        <Pagination
+          meta={stateData?.meta}
+          callback={(page) => getProductList(stateKeyword, page)}
+        />
       </div>
     </>
   );
