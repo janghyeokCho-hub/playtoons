@@ -32,9 +32,7 @@
     "react-dom": "^18.2.0",
     "react-draft-wysiwyg": "^1.15.0",
     "react-dropzone": "^14.2.2",
-    "react-fade-in": "2.0.1",
-    "react-js-pagination": "3.0.3",
-    "react-lottie": "1.2.3",
+    "react-lottie": "^1.2.3",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -45,7 +43,6 @@
     "redux-saga": "^1.1.3",
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.6",
-    "slick-carousel": "^1.8.1",
     "styled-components": "5.3.5",
     "swiper": "8.4.2",
     "web-vitals": "2.1.4"
@@ -59,7 +56,8 @@
     "predeploy": "npm run build",
     "predeploy-storybook": "build-storybook -s public",
     "deploy": "gh-pages -d build",
-    "deploy-storybook": "npm run predeploy-storybook && storybook-to-ghpages"
+    "deploy-storybook": "npm run predeploy-storybook && storybook-to-ghpages",
+    "analyze": "yarn build -- --stats && webpack-bundle-analyzer build/bundle-stats.json"
   },
   "eslintConfig": {
     "extends": [
@@ -112,6 +110,7 @@
     "prop-types": "^15.8.1",
     "react-app-rewired": "^2.2.1",
     "sass-loader": "^13.0.2",
-    "webpack": "^5.74.0"
+    "webpack": "^5.74.0",
+    "webpack-bundle-analyzer": "^4.7.0"
   }
 }
