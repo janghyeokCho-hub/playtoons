@@ -19,6 +19,7 @@ import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 import { insertReaction } from "@API/reactionService";
 import ReplyItems from "./ReplyItems";
 import { currentAuthorInit } from "@/modules/redux/ducks/author";
+import { getContentOfPost } from "@/common/common";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation]);
@@ -147,10 +148,7 @@ const Webtoon = () => {
 
             <div className="area_webtoon">
               {!contentLoading && (
-                <img
-                  src={contentURL || require("@IMAGES/sampleImage.png")}
-                  alt=""
-                />
+                getContentOfPost( currentPost?.content || require("@IMAGES/sampleImage.png") )
               )}
 
               {/* 잠금 시작 */}

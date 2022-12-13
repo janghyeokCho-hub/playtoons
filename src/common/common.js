@@ -6,6 +6,7 @@ import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
 import parse from "html-react-parser";
+import Image from "@/components/dashboard/Image";
 /**
  * Email validation
  * @param {string} text
@@ -239,6 +240,23 @@ export const getFileDataUrlList = async (files) => {
 */
 export const isArrayFromPostContent =  (content) => {
   return content.includes(',');
+};
+
+/**
+   post 이미지, 배열 이미지를 가져온다. 
+* @version 1.0.0
+* @author 2hyunkook
+* @return image 객체
+*/
+export const getContentOfPost = (content) => {
+  if( isArrayFromPostContent(content) ){
+    return content.split(',').map((item, index) => {
+      return <Image hash={item} alt="" key={index} />;
+    });
+
+  } else {
+    return <Image hash={content} alt="" />;
+  }
 };
 
 /**
