@@ -8,7 +8,9 @@ const HomeItem = ({ item }) => {
   console.log("item : ", item);
   return (
     <>
-      {item?.displayType === "cover" && <Cover curation={item.curation} />}
+      {item?.displayType === "cover" && ( 
+        <Cover curation={item.curation} />
+      )}
       {item?.displayType === "character" && (
         <Character curation={item.curation} />
       )}

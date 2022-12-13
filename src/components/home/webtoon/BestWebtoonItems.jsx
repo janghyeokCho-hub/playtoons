@@ -21,6 +21,17 @@ const BestWebtoonItems = ({ curationNum }) => {
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
 
+  const getBackgroundColor = (index) => {
+    const num = index % 3;
+    if( num === 0 ){
+      return '#F8E323';
+    } else if( num === 1 ) {
+      return '#38AADE';
+    } else {
+      return '#7CDB62';
+    }
+  };
+
   const getCurationList = async (curationNum) => {
     const response = await getCurationListAPI(curationNum);
     if (response.status === 200) {
@@ -38,7 +49,7 @@ const BestWebtoonItems = ({ curationNum }) => {
     return items.map((item, index) => {
       return (
         <SwiperSlide key={index} className="cx swiper-slide">
-          <BestWebtoon item={item} />
+          <BestWebtoon item={item} color={getBackgroundColor(index)} />
         </SwiperSlide>
       );
     });

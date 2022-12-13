@@ -4,8 +4,10 @@ import { setHome } from "@/modules/redux/ducks/home";
 import BannerItems from "@COMPONENTS/home/BannerItems";
 import TypeItems from "@COMPONENTS/home/TypeItems";
 import HomeItems from "@COMPONENTS/home/HomeItems";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const Home = () => {
+  SwiperCore.use([Navigation, Pagination]);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation, Pagination } from "swiper";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
-  faChevronRight,
+  faChevronRight
 } from "@fortawesome/pro-regular-svg-icons";
-import Banner from "./Banner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
+import SwiperCore, { Navigation, Pagination } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import Banner from "./Banner";
 
 const BannerItems = ({ curationNum }) => {
-  SwiperCore.use([Navigation, Pagination]);
+  
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const items = useSelector(({ home }) => home.banners);
@@ -28,7 +28,7 @@ const BannerItems = ({ curationNum }) => {
   return (
     <>
       <Swiper
-        className="swiper-container mySwiper0"
+        className="swiper-container mySwiper0 home"
         slidesPerView={1}
         slidesPerGroup={1}
         spaceBetween={0}
@@ -41,9 +41,9 @@ const BannerItems = ({ curationNum }) => {
           nextEl: nextRef?.current,
         }}
         pagination={{
-          el: ".swiper-pagination.my1",
+          el: '.swiper-pagination.my1',
           clickable: true,
-          dynamicBullets: true,
+          // dynamicBullets: true,
         }}
         onUpdate={() => {
           nextRef?.current?.classList?.add("slide_st");

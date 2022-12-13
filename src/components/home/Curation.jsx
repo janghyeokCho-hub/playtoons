@@ -9,10 +9,10 @@ const Curation = ({ item }) => {
     useFilePath(item?.thumbnailImage);
 
   return (
-    <Link to="">
+    <Link to={`/post/detail/${item?.type?.code}/${item?.id}`}>
       <div className="cx_thumb">
         <span>
-          {!thumbnailImgLoading && <img src={thumbnailImgURL} alt="사진" />}
+          {!thumbnailImgLoading && <img src={thumbnailImgURL} alt="" />}
         </span>
         <p className="t_like">
           <FontAwesomeIcon icon={faHeart} />

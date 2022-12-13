@@ -47,7 +47,6 @@ const CurationItems = ({ curationNum }) => {
           slidesPerView={3}
           slidesPerGroup={1}
           spaceBetween={12}
-          centeredSlides={true}
           loop={true}
           observer={true}
           observeParents={true}

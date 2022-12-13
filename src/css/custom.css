@@ -815,6 +815,31 @@
 }
 
 /* ============================================================================== */
+/* home  */
+/* ============================================================================== */
+.lst_banner .swiper.home{
+  height: 500px;
+}
+
+.lst_banner .swiper.home img{
+  width: 100%;
+  transform: translateY(-10%);
+}
+
+.lst_card2 .col.mb{
+  margin-bottom: 80px;
+}
+
+.lst_banner.long{
+  margin-bottom: 80px;
+}
+
+.ico_arr_link .fa-solid > * {
+    margin-left: 6px;
+    font-size: 16px;
+}
+
+/* ============================================================================== */
 /* header back button tablet & mobile css  */
 /* ============================================================================== */
 
@@ -849,6 +874,14 @@
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+
+  .lst_banner .swiper.home{
+    height: 160px;
+  }
+  
+  .lst_card2 .col.mb{
+    margin-bottom: 30px;
+  }
 
   .popup .preview{
     width: auto;

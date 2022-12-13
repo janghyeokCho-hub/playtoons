@@ -82,8 +82,9 @@ const CurationItems = ({ curationNum }) => {
         >
           <div className="swiper-wrapper">{renderItems}</div>
         </Swiper>
-
-        <div className="swiper-pagination my1"></div>
+        
+        {/* top 과 겹치는 이름이므로 pagination이 안나왔으므로 삭제 */}
+        {/* <div className="swiper-pagination my1"></div> */}
 
         <button
           ref={prevRef}
