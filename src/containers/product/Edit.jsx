@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "@/modules/redux/ducks/product";
@@ -10,6 +10,8 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import Dropzone from "react-dropzone";
 import useFilePath from "@/hook/useFilePath";
+import Calendar from "@COMPONENTS/dashboard/Calendar";
+import { getFileDataUrl, showOneButtonPopup } from "@/common/common";
 
 const Edit = () => {
   const dispatch = useDispatch();
@@ -23,14 +25,33 @@ const Edit = () => {
   const [title, setTitle] = useState(currentProduct?.name);
   const [description, setDescription] = useState(currentProduct?.description);
   const [price, setPrice] = useState(currentProduct?.price);
-  const [saleRatio, setSaleRatio] = useState(currentProduct?.saleRatio);
+  const [saleRatio, setSaleRatio] = useState(currentProduct?.saleRatio * 100);
   const [selectType, setSelectType] = useState(null);
   const [category, setCategory] = useState(null);
   const [thumbnailImage, setThumbnailImage] = useState(null);
   const { filePath: thumbnailPreview } = useFilePath(
     currentProduct?.thumbnailImage
   );
-  console.log("thumbnailPreview : ", thumbnailPreview);
+  const [selectTarget, setSelectTarget] = useState(currentProduct?.target);
+  const calendarStartRef = useRef(null);
+  const calendarEndRef = useRef(null);
+  const saleStartRef = useRef(null);
+  const saleEndRef = useRef(null);
+
+  const targetList = [
+    {
+      code: "all",
+      name: "すべて",
+    },
+    {
+      code: "follower",
+      name: "フォロワー",
+    },
+    {
+      code: "indivisual",
+      name: "個人",
+    },
+  ];
 
   useEffect(() => {
     if (params?.id) {
@@ -53,6 +74,39 @@ const Edit = () => {
     },
     [productCategories]
   );
+
+  const handleClickCalendar = (name, date) => {
+    const startDate =
+      name === "start" ? date : calendarStartRef.current.getDate();
+    const endDate = name === "end" ? date : calendarEndRef.current.getDate();
+
+    if (endDate === undefined) {
+      return true;
+    }
+
+    if (startDate.getTime() >= endDate.getTime()) {
+      showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSaleDate = (name, date) => {
+    const startDate = name === "start" ? date : saleStartRef.current.getDate();
+    const endDate = name === "end" ? date : saleEndRef.current.getDate();
+
+    if (endDate === undefined) {
+      return true;
+    }
+
+    if (startDate.getTime() >= endDate.getTime()) {
+      showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSaleRatio = useCallback((value) => {
     if (value <= 100 && value >= 0) {
@@ -416,18 +470,23 @@ const Edit = () => {
                 <div className="col">
                   <h3 className="tit1">販売対象</h3>
                   <div className="lst_txchk">
-                    <label className="inp_txchk">
-                      <input type="radio" name="radio02" checked />
-                      <span>すべて</span>
-                    </label>
-                    <label className="inp_txchk">
-                      <input type="radio" name="radio02" />
-                      <span>フォロワー</span>
-                    </label>
-                    <label className="inp_txchk">
-                      <input type="radio" name="radio02" />
-                      <span>個人</span>
-                    </label>
+                    {targetList?.map((item, index) => {
+                      return (
+                        <label
+                          key={`target_${index}`}
+                          className="inp_txchk"
+                          onClick={() => setSelectTarget(item?.code)}
+                        >
+                          <input
+                            type="radio"
+                            name="radio02"
+                            checked={item?.code === selectTarget}
+                            readOnly
+                          />
+                          <span>{item?.name}</span>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -436,18 +495,22 @@ const Edit = () => {
                   <div className="inp_cal">
                     <div>
                       <label htmlFor="calendar_first1">開始日</label>
-                      <input
-                        type="text"
-                        id="calendar_first1"
-                        className="inp_txt calendar datepicker_first"
+                      <Calendar
+                        ref={calendarStartRef}
+                        name={"start"}
+                        callback={handleClickCalendar}
+                        type="none"
+                        value={currentProduct?.startAt}
                       />
                     </div>
                     <div>
                       <label htmlFor="calendar_last1">終了日</label>
-                      <input
-                        type="text"
-                        id="calendar_last1"
-                        className="inp_txt calendar datepicker_last"
+                      <Calendar
+                        ref={calendarEndRef}
+                        name={"end"}
+                        callback={handleClickCalendar}
+                        type="none"
+                        value={currentProduct?.endAt}
                       />
                     </div>
                   </div>
@@ -467,19 +530,23 @@ const Edit = () => {
                   </div>
                   <div className="inp_cal">
                     <div>
-                      <label htmlFor="calendar_first2">開始日</label>
-                      <input
-                        type="text"
-                        id="calendar_first2"
-                        className="inp_txt calendar datepicker_first"
+                      <label htmlFor="calendar_first1">開始日</label>
+                      <Calendar
+                        ref={saleStartRef}
+                        name={"start"}
+                        callback={handleSaleDate}
+                        type="none"
+                        value={currentProduct?.saleStartAt}
                       />
                     </div>
                     <div>
-                      <label htmlFor="calendar_last2">終了日</label>
-                      <input
-                        type="text"
-                        id="calendar_last2"
-                        className="inp_txt calendar datepicker_last"
+                      <label htmlFor="calendar_last1">終了日</label>
+                      <Calendar
+                        ref={saleEndRef}
+                        name={"end"}
+                        callback={handleSaleDate}
+                        type="none"
+                        value={currentProduct?.saleEndAt}
                       />
                     </div>
                   </div>

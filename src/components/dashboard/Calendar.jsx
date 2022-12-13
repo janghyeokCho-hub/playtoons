@@ -1,11 +1,11 @@
-import React, { useState,  useImperativeHandle, forwardRef  } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useImperativeHandle, forwardRef } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
-import moment from 'moment';
-import { useEffect } from 'react';
+import moment from "moment";
+import { useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { ko, ja, es } from "date-fns/esm/locale";
-import { DATE_FORMAT } from '@/common/constant';
+import { DATE_FORMAT } from "@/common/constant";
 
 /**
 *
@@ -22,8 +22,16 @@ import { DATE_FORMAT } from '@/common/constant';
 * @param callback 날짜를 선택했을 경우 callback
 * @return
 */
-export default forwardRef( function Calendar(props, ref) {
-  const { type, name, callback, className, popupClassName } = props;
+export default forwardRef(function Calendar(props, ref) {
+  const {
+    type,
+    name,
+    callback,
+    className,
+    popupClassName,
+    value,
+    isMaxDate = true,
+  } = props;
   const [stateDate, setStateDate] = useState(undefined);
   const [stateOpen, setStateOpen] = useState(false);
 
@@ -33,29 +41,25 @@ export default forwardRef( function Calendar(props, ref) {
 
   const getInitDate = () => {
     const now = new Date();
-    if(type === 'now'){
+    if (type === "now") {
       return now;
-    }
-    else if( type === '3month' ){
-      return  new Date(now.setMonth(now.getMonth() - 3)) ;
-    }
-    else if( type === '1month' ){
-      return  new Date(now.setMonth(now.getMonth() - 1)) ;
-    }
-    else if( type === '1week' ){
-      return  new Date(now.setDate(now.getDate() - 7)) ;
-    }
-    else if( type === '1day' ){
-      return  new Date(now.setDate(now.getDate() - 1)) ;
+    } else if (type === "3month") {
+      return new Date(now.setMonth(now.getMonth() - 3));
+    } else if (type === "1month") {
+      return new Date(now.setMonth(now.getMonth() - 1));
+    } else if (type === "1week") {
+      return new Date(now.setDate(now.getDate() - 7));
+    } else if (type === "1day") {
+      return new Date(now.setDate(now.getDate() - 1));
     }
 
     //none
     return undefined;
   };
-  
+
   const getStateDateFormated = () => {
-    if( stateDate === undefined ){
-      return '';
+    if (stateDate === undefined) {
+      return "";
     }
 
     return moment(stateDate).format(DATE_FORMAT);
@@ -65,15 +69,13 @@ export default forwardRef( function Calendar(props, ref) {
   // event
   //==============================================================================
   const handleClickDate = (date) => {
-    if( callback === undefined ){
+    if (callback === undefined) {
       setStateDate(date);
-    }
-    else{
-      if( callback?.(name, date) ){
+    } else {
+      if (callback?.(name, date)) {
         setStateDate(date);
       }
     }
-
   };
 
   //==============================================================================
@@ -85,22 +87,25 @@ export default forwardRef( function Calendar(props, ref) {
     },
     getDateFormatted: () => {
       return getStateDateFormated();
-    }
+    },
   }));
 
   useEffect(() => {
-    setStateDate( getInitDate() );
-  }, [type]);
+    setStateDate(value || getInitDate());
+  }, [value]);
 
   return (
     <div className={`inp_cal`}>
-      <div className='relative' >
-        <FontAwesomeIcon className={`cal_ico ${stateOpen ? 'cal_blue' : ''}`} icon={faCalendarDay} />
+      <div className="relative">
+        <FontAwesomeIcon
+          className={`cal_ico ${stateOpen ? "cal_blue" : ""}`}
+          icon={faCalendarDay}
+        />
         <DatePicker
           locale={ja}
           className="inp_txt calendar datepicker_last"
           selected={stateDate}
-          maxDate={new Date()} 
+          maxDate={isMaxDate ? new Date() : undefined}
           onCalendarOpen={() => setStateOpen(true)}
           onCalendarClose={() => setStateOpen(false)}
           onChange={(date) => handleClickDate(date)}
@@ -108,5 +113,5 @@ export default forwardRef( function Calendar(props, ref) {
         />
       </div>
     </div>
-  )
-})
+  );
+});
