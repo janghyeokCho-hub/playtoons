@@ -1,5 +1,6 @@
 import {
   checkLoginExpired,
+  getContentOfPost,
   getDateYYYYMMDD,
   getHtmlElementFromHtmlString,
   getReactionDate,
@@ -106,16 +107,6 @@ export default function DashboardPostDetail() {
     getReactions(1);
   };
 
-  const getContent = (content) => {
-    if( isArrayFromPostContent(content) ){
-      return content.split(',').map((item, index) => {
-        return <Image hash={item} alt="" key={index} />;
-      });
-
-    } else {
-      return <Image hash={content} alt="" />;
-    }
-  };  
 
   //==============================================================================
   // api
@@ -304,7 +295,7 @@ export default function DashboardPostDetail() {
             </div>
           ) : (
             <div className="ta_center">
-              {getContent(stateData?.content)}
+              {getContentOfPost(stateData?.content)}
             </div>
           )}
         </div>
