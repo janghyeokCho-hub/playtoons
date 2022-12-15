@@ -35,7 +35,7 @@ const Payment = () => {
 
             <div className="box_thumb">
               <div className="thumb">
-                <ImgSpan bgImg={require("@IMAGES/tmp_comic1.jpg")}></ImgSpan>
+                <ImgSpan bgImg={require("@IMAGES/tmp_comic1.jpg")} />
               </div>
               <div className="txt">
                 <p className="h1">
@@ -45,7 +45,7 @@ const Payment = () => {
                   <ImgSpan
                     className="im"
                     bgImg={require("@IMAGES/img_profile.png")}
-                  ></ImgSpan>
+                  />
                   <p>七語つきみ@TFO7</p>
                 </div>
                 <div className="lst_exe">
@@ -158,6 +158,16 @@ const Payment = () => {
               </div>
             </div>
           </div>
+          {/*<script>
+          function radioChk(e) {
+            var obj = $(e).attr("data-name");
+
+            $(".lst_radio > div").removeClass("on");
+            $(e).parents("div").addClass("on");
+            $(".col_view").hide();
+            $("#" + obj).show();
+          }
+        </script>*/}
 
           <div className="btn-bot view-m">
             {/*<!-- 1. 모바일에서 위치변경 -->*/}

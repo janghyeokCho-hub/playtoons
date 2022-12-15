@@ -7,6 +7,9 @@ import {
   faCircleInfo,
   faCirclePlus,
   faCircleXmark,
+  faMinus,
+  faPlus,
+  faTrashXmark,
 } from "@fortawesome/pro-solid-svg-icons";
 import Dropzone from "react-dropzone";
 import useFilePath from "@/hook/useFilePath";
@@ -33,6 +36,8 @@ const Edit = () => {
     currentProduct?.thumbnailImage
   );
   const [selectTarget, setSelectTarget] = useState(currentProduct?.target);
+  const [selectAge, setSelectAge] = useState(false);
+  const [rating, setRating] = useState(null);
   const calendarStartRef = useRef(null);
   const calendarEndRef = useRef(null);
   const saleStartRef = useRef(null);
@@ -64,6 +69,22 @@ const Edit = () => {
       setSelectType(currentProduct.type);
     }
   }, [currentProduct]);
+
+  useEffect(() => {
+    if (currentProduct.rating === "R-18") {
+      setSelectAge(true);
+    } else {
+      setSelectAge(false);
+    }
+  }, [currentProduct.rating]);
+
+  useEffect(() => {
+    if (selectAge) {
+      setRating("R-18");
+    } else {
+      setRating("G");
+    }
+  }, [selectAge]);
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -260,9 +281,8 @@ const Edit = () => {
                   <textarea
                     className="textarea1"
                     onChange={(e) => setDescription(e.target.value)}
-                  >
-                    {description}
-                  </textarea>
+                    defaultValue={description}
+                  ></textarea>
                 </div>
 
                 <div className="col">
@@ -325,7 +345,7 @@ const Edit = () => {
                             className="btns btn_subtraction"
                           >
                             <span>
-                              <i className="fa-solid fa-minus"></i>
+                              <FontAwesomeIcon icon={faMinus} />
                             </span>
                           </button>
                         </div>
@@ -345,7 +365,7 @@ const Edit = () => {
                             className="btns btn_subtraction"
                           >
                             <span>
-                              <i className="fa-solid fa-minus"></i>
+                              <FontAwesomeIcon icon={faMinus} />
                             </span>
                           </button>
                         </div>
@@ -355,7 +375,7 @@ const Edit = () => {
                             className="btn-pk gray2 n w100p"
                           >
                             <span>
-                              <i className="fa-solid fa-plus"></i>
+                              <FontAwesomeIcon icon={faPlus} />
                             </span>
                           </button>
                         </div>
@@ -363,7 +383,7 @@ const Edit = () => {
 
                       <button type="button" className="btn_option">
                         <span>
-                          <i className="fa-solid fa-trash-xmark"></i>
+                          <FontAwesomeIcon icon={faTrashXmark} />
                           オプション削除
                         </span>
                       </button>
@@ -410,7 +430,7 @@ const Edit = () => {
                             className="btns btn_subtraction"
                           >
                             <span>
-                              <i className="fa-solid fa-minus"></i>
+                              <FontAwesomeIcon icon={faMinus} />
                             </span>
                           </button>
                         </div>
@@ -420,7 +440,7 @@ const Edit = () => {
                             className="btn-pk gray2 n w100p"
                           >
                             <span>
-                              <i className="fa-solid fa-plus"></i>
+                              <FontAwesomeIcon icon={faPlus} />
                             </span>
                           </button>
                         </div>
@@ -428,7 +448,7 @@ const Edit = () => {
 
                       <button type="button" className="btn_option">
                         <span>
-                          <i className="fa-solid fa-trash-xmark"></i>
+                          <FontAwesomeIcon icon={faTrashXmark} />
                           オプション削除
                         </span>
                       </button>
@@ -437,7 +457,8 @@ const Edit = () => {
 
                   <button type="button" className="btn-pk n blue2 options">
                     <span>
-                      <i className="fa-solid fa-plus"></i>有料オプション追加
+                      <FontAwesomeIcon icon={faPlus} />
+                      有料オプション追加
                     </span>
                   </button>
                 </div>
@@ -451,7 +472,7 @@ const Edit = () => {
                     <label htmlFor="filebox1" className="filetxt">
                       <div className="txt">
                         <div className="ico">
-                          <i className="fa-solid fa-circle-plus"></i>
+                          <FontAwesomeIcon icon={faCirclePlus} />
                         </div>
                         <p className="t">ドラッグ＆ドロップ</p>
                       </div>
@@ -462,7 +483,12 @@ const Edit = () => {
                 <div className="col">
                   <h3 className="tit1">年齢設定</h3>
                   <label className="inp_chktx">
-                    <input type="checkbox" checked="" />
+                    <input
+                      type="checkbox"
+                      checked={selectAge}
+                      onClick={() => setSelectAge(!selectAge)}
+                      readOnly
+                    />
                     <span>すべての年齢</span>
                   </label>
                 </div>
@@ -500,7 +526,7 @@ const Edit = () => {
                         name={"start"}
                         callback={handleClickCalendar}
                         type="none"
-                        value={currentProduct?.startAt}
+                        value={new Date(currentProduct?.startAt) || null}
                       />
                     </div>
                     <div>
@@ -510,7 +536,7 @@ const Edit = () => {
                         name={"end"}
                         callback={handleClickCalendar}
                         type="none"
-                        value={currentProduct?.endAt}
+                        value={new Date(currentProduct?.endAt) || null}
                       />
                     </div>
                   </div>
@@ -536,7 +562,7 @@ const Edit = () => {
                         name={"start"}
                         callback={handleSaleDate}
                         type="none"
-                        value={currentProduct?.saleStartAt}
+                        value={new Date(currentProduct?.saleStartAt) || null}
                       />
                     </div>
                     <div>
@@ -546,7 +572,7 @@ const Edit = () => {
                         name={"end"}
                         callback={handleSaleDate}
                         type="none"
-                        value={currentProduct?.saleEndAt}
+                        value={new Date(currentProduct?.saleEndAt) || null}
                       />
                     </div>
                   </div>

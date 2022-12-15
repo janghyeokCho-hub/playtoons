@@ -1115,8 +1115,8 @@
     padding-left: 17px;
     color: #4d5a67;
   }
-  .mtbl_ty1 td.td_number1 > svg {
-    /* 2022.10.21 lhk- icon 수정 */
+  .mtbl_ty1 td.td_number1:after {
+    content: "\f06e";
     position: absolute;
     left: 0;
     bottom: -1px;
@@ -1132,7 +1132,8 @@
     padding-left: 17px;
     color: #4d5a67;
   }
-  .mtbl_ty1 td.td_number2 > svg {
+  .mtbl_ty1 td.td_number2:after {
+    content: "\f004";
     position: absolute;
     left: 0;
     bottom: -1px;
@@ -1141,16 +1142,16 @@
     font-size: 12px;
     color: #4d5a67;
   }
-  .mtbl_ty1 td.td_number3 {   /* 2022.11.03 추가 */ 
+  .mtbl_ty1 td.td_number3 {
     position: relative;
     display: inline-block;
     margin-right: 12px;
     padding-top: 22px;
     font-weight: 500;
-    color: #394BC2;
+    color: #394bc2;
     font-size: 16px;
   }
-  .mtbl_ty1 .i-txt {    /* 2022.11.03 추가 */ 
+  .mtbl_ty1 .i-txt {
     padding: 1px 8px;
     margin-right: 4px;
     font-size: 10px;
@@ -3075,7 +3076,6 @@
   .layerPopup .pop_head .btn_pop_close {
     right: 10px;
     top: 10px;
-    font-size: 16px;
   }
   .layerPopup .pop_head .btn_pop_close .fa-solid {
     font-size: 18px;
