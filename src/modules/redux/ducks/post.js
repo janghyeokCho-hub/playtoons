@@ -114,7 +114,7 @@ const post = handleActions(
     },
     [GET_POST_REACTION_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
-        draft.currentPost.reactions = action.payload.reactions;
+        draft.currentPost.reactions = action.payload;
       });
     },
     [LOGOUT_REQUEST_SUCCESS]: (state, _) => {

@@ -326,7 +326,8 @@ function createCurrentPostRequestSaga(type) {
 
         let payload;
         if (
-          subscribeTierResponse.data?.subscriptionStatus === "NOT_SUBSCRIBED"
+          subscribeTierResponse.data?.subscriptionStatus === "NOT_SUBSCRIBED" 
+            // || action.payload.authorId !== currentPost?.post?.authorId
         ) {
           // 해당 작가를 구독중이지 않음
           payload.isLock = true;
@@ -367,10 +368,11 @@ function createCurrentPostRequestSaga(type) {
         });
 
         if (reactionResponse?.status === 200) {
-          payload.reactions = reactionResponse.data?.reactions || [];
-        } else {
-          payload.reactions = [];
-        }
+          payload.reactions = reactionResponse.data;
+        } 
+        // else {
+        //   payload.reactions = [];
+        // }
         yield put({
           type: `${type}_SUCCESS`,
           payload: payload,

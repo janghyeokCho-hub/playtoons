@@ -1,28 +1,26 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleChevronLeft,
-  faCircleChevronRight,
-  faCircleXmark,
-  faLock,
-} from "@fortawesome/pro-solid-svg-icons";
-import SwiperCore, { Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import moment from "moment";
-import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
+import { checkLoginExpired, getContentOfPost } from "@/common/common";
+import IconWithText from "@/components/dashboard/IconWithText";
+import Image from "@/components/dashboard/Image";
+import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
+import PostItems from "@/components/webtoon/PostItems";
 import useFilePath from "@/hook/useFilePath";
-import { setAuthorFollow } from "@API/authorService";
-import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
-import { insertReaction } from "@API/reactionService";
-import ReplyItems from "./ReplyItems";
 import { currentAuthorInit } from "@/modules/redux/ducks/author";
-import { getContentOfPost } from "@/common/common";
+import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
+import { setAuthorFollow } from "@API/authorService";
+import {
+  faLock
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
+import ReplyItems from "./ReplyItems";
+
+
 
 const Webtoon = () => {
-  SwiperCore.use([Navigation]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,37 +29,34 @@ const Webtoon = () => {
   const id = params?.id;
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
+  const userInfo = useSelector(({ login }) => login.userInfo);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
+  const [ stateIsAddComent, setStateIsAddComent ] = useState(false);
   const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } =
     useFilePath(currentPost?.author?.profileImage);
   const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
     useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
   const isLock = currentPost?.isLock;
-  const content = currentPost?.content;
-  const { filePath: contentURL, loading: contentLoading } =
-    useFilePath(content);
   // 로그인 한 사용자
-  const userInfo = useSelector(({ login }) => login.userInfo);
   const { filePath: myProfileImgURL, loading: myProfileImgLoading } =
-    useFilePath(userInfo?.profileImage);
-  // 이전회차 / 다음회차 버튼 Ref
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  // 이모티콘 Ref
-  const prevEmoticonRef = useRef(null);
-  const nextEmoticonRef = useRef(null);
-  // 댓글 이모티콘 창 활성 플래그
-  const [isEmoticonShow, setIsEmoticonShow] = useState(false);
-  // 이모티콘 선택
-  const [selectEmoticon, setSelectEmoticon] = useState(null);
-  const [replyLimit, setReplyLimit] = useState(
-    currentPost?.reactions?.length || 0
-  );
-  const [replyInput, setReplyInput] = useState("");
+    useFilePath(userInfo?.profileImage || reduxAuthors?.[0].profileImage);
 
   useEffect(() => {
-    dispatch(getCurrentPost({ id: id }));
+    if(checkLoginExpired( navigate, dispatch, '自動ログイン時間が過ぎました。', reduxLoginTime )){
+      dispatch(getCurrentPost({ id: id, authorId: reduxAuthors?.[0].id }));
+    }
   }, [dispatch, navigate, id, location.pathname]);
+
+  useEffect(() => {
+    
+    return () => {
+      setStateIsAddComent(false);
+    }
+  }, []);
+
+
 
   const handleFollow = useCallback(
     async (type) => {
@@ -86,52 +81,14 @@ const Webtoon = () => {
     [currentPost]
   );
 
-  const tempEmoticons = [
-    require("@IMAGES/icon0.png"),
-    require("@IMAGES/icon1.png"),
-    require("@IMAGES/icon2.png"),
-    require("@IMAGES/icon3.png"),
-    require("@IMAGES/icon4.png"),
-    require("@IMAGES/icon5.png"),
-    require("@IMAGES/icon6.png"),
-    require("@IMAGES/icon7.png"),
-    require("@IMAGES/icon8.png"),
-    require("@IMAGES/icon9.png"),
-    require("@IMAGES/icon10.png"),
-  ];
-
-  const handleReply = useCallback(async () => {
-    if (!replyInput) {
-      alert("댓글 내용 없음");
-      return;
-    }
-    const authorId = currentPost?.myAuthor?.id;
-    const params = {
-      content: replyInput,
-      iconImage: selectEmoticon,
-      type: "reply",
-      postId: id,
-      authorId: authorId,
-    };
-    const response = await insertReaction(params);
-    if (response?.status === 201) {
-      alert("댓글 작성 성공");
-      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
-      setReplyInput("");
-    } else {
-      alert(`댓글 작성 실패 : ${response.status}`);
-    }
-  }, [dispatch, selectEmoticon, id, replyLimit, currentPost, replyInput]);
-
-  useEffect(() => {
-    if (replyLimit > 0) {
-      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
-    }
-  }, [dispatch, id, replyLimit]);
-
   const handleCurrentAuthorInit = useCallback(() => {
     dispatch(currentAuthorInit());
   }, [dispatch]);
+
+  const getComent = (page, isAdd) => {
+    setStateIsAddComent(isAdd);
+    dispatch(getPostReaction({ postId: id, limit: 3, page: page }))
+  };
 
   return (
     <>
@@ -141,55 +98,56 @@ const Webtoon = () => {
             <div className="area_detail2">
               <h2 className="h1">{currentPost.title}</h2>
               <p className="d1">
-                {moment(currentPost.startAt).format("YYYY/MM/DD HH:mm")}
+                {currentPost.startAt ? moment(currentPost.startAt).format("YYYY/MM/DD HH:mm") : '日がいません。'}
               </p>
               <p className="t1 c-gray">{currentPost.outline}</p>
             </div>
 
             <div className="area_webtoon">
-              {!contentLoading && (
-                getContentOfPost( currentPost?.content || require("@IMAGES/sampleImage.png") )
-              )}
-
-              {/* 잠금 시작 */}
-              {isLock && (
-                <div className="area_lock">
-                  <div>
-                    <p>
-                      <FontAwesomeIcon icon={faLock} />
-                    </p>
-                    <p>500PC /月</p>
-                    <p>クリエイターを支援してコンテンツ解禁！</p>
-                    <Link
-                      to={`/author/post/${currentPost?.author?.id}`}
-                      state={{ tab: "PLAN" }}
-                      className="btn-pk s blue bdrs"
-                      onClick={handleCurrentAuthorInit}
-                    >
-                      <span>支援する</span>
-                    </Link>
-                  </div>
-                </div>
-              )}
-              {/* 잠금 끝 */}
+              { isLock ? (
+                  <>
+                    <Image hash={require("@IMAGES/sampleImage.png")} />
+                  
+                    <div className="area_lock">
+                      <div>
+                        <p>
+                          <FontAwesomeIcon icon={faLock} />
+                        </p>
+                        <p>500PC /月</p>
+                        <p>クリエイターを支援してコンテンツ解禁！</p>
+                        <Link
+                          to={`/author/post/${currentPost?.author?.id}`}
+                          state={{ tab: "PLAN" }}
+                          className="btn-pk s blue bdrs"
+                          onClick={handleCurrentAuthorInit}
+                        >
+                          <span>支援する</span>
+                        </Link>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  getContentOfPost( currentPost?.content )
+                )
+              }
             </div>
 
-            <div className="area_detail2">
+            {/* <div className="area_detail2">
               <p className="t1 c-gray">
                 リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だということが伝わってきた。
               </p>
-            </div>
+            </div> */}
 
             <div className="area_detail3">
               <div className="box_profile">
                 {!backgroundImgLoading && (
-                  <ImgTmpProfileBgDiv bgImg={backgroundImgURL} />
+                  <ImgTmpProfileBgDiv bgImg={backgroundImgURL} className={`${backgroundImgURL ? '' : 'empty'}`} />
                 )}
 
                 <div className="pf_txt">
                   <div className="icon">
                     {!authorProfileImgLoading && (
-                      <img src={authorProfileImgURL} alt="profile" />
+                      <img src={authorProfileImgURL} className={`${authorProfileImgURL ? '' : 'empty'}`}  />
                     )}
                   </div>
                   <p className="h1">{currentPost?.author?.nickname}</p>
@@ -224,219 +182,30 @@ const Webtoon = () => {
                   <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
                 )}
               </div>
-              <div className="conts">
-                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
-                  {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-
-                  <textarea
-                    className="textarea1"
-                    placeholder="ログインして投稿する"
-                    onChange={(e) => setReplyInput(e.target.value)}
-                  ></textarea>
-
-                  {/*<!-- 삽입된 이모티콘 -->*/}
-                  {selectEmoticon && (
-                    <div className="ico_emo">
-                      <span>
-                        <img src={selectEmoticon} alt="" />
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setSelectEmoticon(null)}
-                      >
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="btns">
-                  <button
-                    type="button"
-                    className="btn-pk s blue2"
-                    onClick={() => setIsEmoticonShow(!isEmoticonShow)}
-                  >
-                    <span>アイコン</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-pk s blue"
-                    onClick={() => handleReply()}
-                  >
-                    <span>登録</span>
-                  </button>
-                </div>
-
-                {/*<!-- 이모티콘 창 활성화시 -->*/}
-                {isEmoticonShow && (
-                  <div className="box_emoji" style={{ display: "block" }}>
-                    <div className="tit_emo">
-                      <Swiper
-                        className="swiper-container myEmoji1"
-                        slidesPerView="auto"
-                        spaceBetween={10}
-                        observer={true}
-                        observeParents={true}
-                        touchRatio={0}
-                        navigation={{
-                          nextEl: prevEmoticonRef?.current,
-                          prevEl: nextEmoticonRef?.current,
-                        }}
-                      >
-                        <div className="swiper-wrapper">
-                          <SwiperSlide className="swiper-slide">
-                            <img src={require("@IMAGES/icon0.png")} alt="" />
-                          </SwiperSlide>
-                        </div>
-                      </Swiper>
-                      <button
-                        ref={prevEmoticonRef}
-                        type="button"
-                        className="swiper-button-prev myem"
-                      >
-                        <FontAwesomeIcon
-                          className="fa-regular fa-angle-left"
-                          icon={faAngleLeft}
-                        />
-                      </button>
-                      <button
-                        ref={nextEmoticonRef}
-                        type="button"
-                        className="swiper-button-next myem"
-                      >
-                        <FontAwesomeIcon
-                          className="fa-regular fa-angle-right"
-                          icon={faAngleRight}
-                        />
-                      </button>
-                    </div>
-                    <div className="cont_emo scrollY">
-                      <ul>
-                        {tempEmoticons.map((item, index) => (
-                          <li
-                            key={`emoticon_${index}`}
-                            onClick={() => setSelectEmoticon(item)}
-                          >
-                            <span>
-                              <img src={item} alt="" />
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <IconWithText
+                postInfo={currentPost}
+                text={{
+                  icon: "アイコン",
+                  sing_in_to_post: "リアクションする",
+                  register: "登録",
+                }}
+                callback={() => dispatch(getPostReaction({ postId: id, limit: 3 }))}
+              />
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              <ReplyItems currentPost={currentPost} />
-              <div
-                className="botm"
-                onClick={() => setReplyLimit(replyLimit + 3)}
-              >
-                <Link to="">コメントをもっと見る</Link>
-              </div>
+              <ReplyItems isAdd={stateIsAddComent} />
+              
+              <SeeMoreComent 
+                text={{see_more_coment: 'コメントをもっと見る'}}
+                meta={currentPost?.reactions?.meta}
+                callback={(page) => getComent(page, true)}
+                />
             </div>
           </div>
 
           <div className="detail_botm_slider">
-            <div className="slider">
-              <Swiper
-                className="swiper-container mySwiper1"
-                slidesPerView={2}
-                spaceBetween={10}
-                observer={true}
-                observeParents={true}
-                touchRatio={0}
-                navigation={{
-                  nextEl: nextRef.current,
-                  prevEl: prevRef.current,
-                }}
-                onUpdate={() => {
-                  nextRef?.current?.classList?.add("slide_st");
-                  prevRef?.current?.classList?.add("slide_st");
-                }}
-              >
-                <SwiperSlide
-                  className="box_vslide swiper-slide"
-                  style={{
-                    width: "316.5px",
-                    marginRight: "27px",
-                  }}
-                >
-                  <a href="#">
-                    <ImgComicDiv
-                      className="thumb"
-                      bgImg={require("@IMAGES/tmp_comic3.png")}
-                    ></ImgComicDiv>
-                    <div className="txt">
-                      <p className="h1">シェルターアーク</p>
-                      <p className="t1">1話</p>
-                      <p className="t2">
-                        小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                      </p>
-                    </div>
-                  </a>
-                </SwiperSlide>
-                <SwiperSlide
-                  className="box_vslide swiper-slide"
-                  style={{
-                    width: "316.5px",
-                    marginRight: "27px",
-                  }}
-                >
-                  <a href="#">
-                    <ImgComicDiv
-                      className="thumb"
-                      bgImg={require("@IMAGES/tmp_comic3.png")}
-                    ></ImgComicDiv>
-                    <div className="txt">
-                      <p className="h1">シェルターアーク</p>
-                      <p className="t1">1話</p>
-                      <p className="t2">
-                        小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                      </p>
-                    </div>
-                  </a>
-                </SwiperSlide>
-                <SwiperSlide
-                  className="box_vslide swiper-slide"
-                  style={{
-                    width: "316.5px",
-                    marginRight: "27px",
-                  }}
-                >
-                  <a href="#">
-                    <ImgComicDiv
-                      className="thumb"
-                      bgImg={require("@IMAGES/tmp_comic3.png")}
-                    ></ImgComicDiv>
-                    <div className="txt">
-                      <p className="h1">シェルターアーク</p>
-                      <p className="t1">1話</p>
-                      <p className="t2">
-                        小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                      </p>
-                    </div>
-                  </a>
-                </SwiperSlide>
-              </Swiper>
-              <button
-                ref={prevRef}
-                type="button"
-                className="swiper-button-prev my1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                ref={nextRef}
-                type="button"
-                className="swiper-button-next my1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
-            </div>
+            <PostItems seriesId={currentPost?.seriesId} />
           </div>
         </>
       )}
@@ -444,20 +213,11 @@ const Webtoon = () => {
   );
 };
 
-const InputReply = styled.div`
-  &:empty:before {
-    content: attr(placeholder);
-    color: #909dab !important;
-  }
-`;
 
 const ImgProfileSpan = styled.span`
   background-image: url(${(props) => props.bgImg});
 `;
 
-const ImgComicDiv = styled.div`
-  background-image: url(${(props) => props.bgImg});
-`;
 
 const ImgTmpProfileBgDiv = styled.div`
   background-image: url(${(props) => props.bgImg});

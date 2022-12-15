@@ -49,7 +49,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 * @return
 */
 export default function SwiperContainer(props) {
-  const { className, slidesPerView, breakpoints, buttonClassName, iconLeft, iconRight, list } = props;
+  const { className, slidesPerView, breakpoints, touchRatio, buttonClassName, iconLeft, iconRight, list } = props;
   SwiperCore.use([Navigation]);
 
   const prevRef = useRef(null);
@@ -60,28 +60,23 @@ export default function SwiperContainer(props) {
       <Swiper
         className={`swiper-container ${className}`}
         slidesPerView={slidesPerView}
+        touchRatio={touchRatio}
+        breakpoints={breakpoints}
         spaceBetween={10}
         observer={true}
         observeParents={true}
-        preloadImages={false}
+        // preloadImages={false}
         lazy={true}
         navigation={{
           nextEl: nextRef.current,
           prevEl: prevRef.current,
         }}
-        breakpoints={breakpoints}
         onSlideChange={() => {}}
         onInit={(swiper) => {}}
-        onSwiper={(swiper) => {
-        }}
+        onSwiper={(swiper) => {}}
         onUpdate={(swiper) => {
           nextRef?.current?.classList?.add("slide_st");
           prevRef?.current?.classList?.add("slide_st");
-
-          if (buttonClassName !== undefined) {
-            nextRef?.current?.classList?.add(buttonClassName);
-            prevRef?.current?.classList?.add(buttonClassName);
-          }
         }}
       >
         {list}
@@ -91,14 +86,14 @@ export default function SwiperContainer(props) {
       <button
         ref={prevRef}
         type="button"
-        className={`swiper-button-prev my1 hide-m ${buttonClassName}`}
+        className={`swiper-button-prev ${buttonClassName}`}
       >
         <FontAwesomeIcon icon={iconLeft === undefined ? faCircleChevronLeft : iconLeft} />
       </button>
       <button
         ref={nextRef}
         type="button"
-        className={`swiper-button-next my1 hide-m ${buttonClassName}`}
+        className={`swiper-button-next ${buttonClassName}`}
       >
         <FontAwesomeIcon icon={iconRight === undefined ? faCircleChevronRight : iconRight} />
       </button>

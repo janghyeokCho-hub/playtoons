@@ -1,27 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 
-//TODO  test icon
-import tempTop2 from "@IMAGES/icon0.png";
-import tempTop1 from "@IMAGES/icon1.png";
-import temp1 from "@IMAGES/icon2.png";
-import temp2 from "@IMAGES/icon3.png";
-import temp3 from "@IMAGES/icon4.png";
-import temp4 from "@IMAGES/icon5.png";
-import temp5 from "@IMAGES/icon6.png";
-import temp6 from "@IMAGES/icon7.png";
-import temp7 from "@IMAGES/icon8.png";
-import temp8 from "@IMAGES/icon9.png";
-
 import { setPostReactionToServer } from "@/services/postService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 import Button from "./Button";
 import ErrorMessage from "./ErrorMessage";
+import Image from "./Image";
 import SwiperContainer from "./SwiperContainer";
-import { useMemo } from "react";
 
 /**
 *
@@ -83,7 +72,7 @@ export default function IconWithText(props, ref) {
     let params = {
       content: refTextArea.current.value,
       iconImage:
-        stateSelectedIcons.length === 0 ? "" : stateSelectedIcons[0].src,
+        stateSelectedIcons.length === 0 ? "" : stateSelectedIcons[0].image,
       type: "reply",
       postId: postInfo.id,
       authorId: isAuthors() ? reduxAuthors[0].id : null,
@@ -96,7 +85,7 @@ export default function IconWithText(props, ref) {
       initStatus();
       // showOneButtonPopup(dispatch, text.register_coment);
     } else {
-      setStateError(String(status + data));
+      setStateError( data );
       refButton.current.setStatus(undefined);
     }
   };
@@ -105,7 +94,7 @@ export default function IconWithText(props, ref) {
   //  event
   //==============================================================================
 
-  const handleClickItemDelete = (selectedItem) => {
+  const handleItemDelete = (selectedItem) => {
     setStateSelectedIcons(
       stateSelectedIcons.filter((item) => item.code !== selectedItem.code)
     );
@@ -113,17 +102,17 @@ export default function IconWithText(props, ref) {
     return false;
   };
 
-  const handleClickItemTopIcon = (index) => {
+  const handleTopIcon = (index) => {
     setStateTopSelected(index);
   };
 
-  const handleClickItemIcon = (index) => {
+  const handleItemIcon = (index) => {
     const item = stateIconData?.topIcons[stateTopSelected]?.icons[index];
     // setStateSelectedIcons([...stateSelectedIcons, item]);
     setStateSelectedIcons([item]);
   };
 
-  const handleClickRegister = (event) => {
+  const handleRegister = (event) => {
     if (!refTextArea.current.value) {
       setStateError(text.please_input_coment);
       refButton.current.setStatus(undefined);
@@ -142,14 +131,13 @@ export default function IconWithText(props, ref) {
       return (
         <div className="ico_emo" key={index}>
           <span>
-            <img src={item.image} alt="" />
+            <Image hash={item.image}  />
           </span>
           <button type="button">
             <FontAwesomeIcon
               className="fa-solid fa-circle-xmark"
               icon={faCircleXmark}
-              data-id={index}
-              onClick={() => handleClickItemDelete(item)}
+              onClick={() => handleItemDelete(item)}
             />
           </button>
         </div>
@@ -160,12 +148,10 @@ export default function IconWithText(props, ref) {
   const renderTopIconElement = useMemo(() => {
     return stateIconData?.topIcons?.map((item, index) => {
       return (
-        <SwiperSlide className="cx  swiper-slide" key={index}>
-          <img
-            src={item.image}
-            data-id={index}
-            onClick={() => handleClickItemTopIcon(index)}
-            alt=""
+        <SwiperSlide className="cx swiper-slide" key={index}>
+          <Image
+            hash={item.image}
+            onClick={() => handleTopIcon(index)}
           />
         </SwiperSlide>
       );
@@ -178,11 +164,9 @@ export default function IconWithText(props, ref) {
         return (
           <li key={index}>
             <span>
-              <img
-                src={item.image}
-                alt="icon"
-                data-id={index}
-                onClick={() => handleClickItemIcon(index)}
+              <Image
+                hash={item.image}
+                onClick={() => handleItemIcon(index)}
               />
             </span>
           </li>
@@ -227,7 +211,7 @@ export default function IconWithText(props, ref) {
             ref={refButton}
             text={text.register}
             className="btn-pk s blue"
-            onClick={handleClickRegister}
+            onClick={handleRegister}
           >
           </Button>
         </div>
@@ -242,7 +226,7 @@ export default function IconWithText(props, ref) {
             <div className="tit_emo">
               <SwiperContainer
                 className={"myEmoji1"}
-                buttonClassName={"myem"}
+                buttonClassName={"my1 hide-m myem"}
                 iconLeft={faAngleLeft}
                 iconRight={faAngleRight}
                 slidesPerView={8}
@@ -278,112 +262,88 @@ export default function IconWithText(props, ref) {
 const tempData = {
   topIcons: [
     {
-      image: tempTop1,
+      image: 'src/assets/images/icon10.png',
       icons: [
         {
           code: "icon1",
-          image: temp1,
-          src: "src/assets/images/icon2.png",
+          image: "src/assets/images/icon2.png",
         },
         {
           code: "icon2",
-          image: temp2,
-          src: "src/assets/images/icon3.png",
+          image: "src/assets/images/icon3.png",
         },
         {
           code: "icon3",
-          image: temp3,
-          src: "src/assets/images/icon4.png",
+          image: "src/assets/images/icon4.png",
         },
         {
           code: "icon4",
-          image: temp4,
-          src: "src/assets/images/icon5.png",
+          image: "src/assets/images/icon5.png",
         },
         {
           code: "icon5",
-          image: temp5,
-          src: "src/assets/images/icon6.png",
+          image: "src/assets/images/icon6.png",
         },
         {
           code: "icon6",
-          image: temp6,
-          src: "src/assets/images/icon7.png",
+          image: "src/assets/images/icon7.png",
         },
         {
           code: "icon7",
-          image: temp7,
-          src: "src/assets/images/icon8.png",
+          image: "src/assets/images/icon8.png",
         },
         {
           code: "icon8",
-          image: temp8,
-          src: "src/assets/images/icon9.png",
+          image: "src/assets/images/icon9.png",
         },
       ],
     },
     {
-      image: tempTop2,
+      image: 'src/assets/images/icon0.png',
       icons: [
         {
           code: "icon11",
-          image: temp8,
-          src: "src/assets/images/icon9.png",
+          image: "src/assets/images/icon9.png",
         },
         {
           code: "icon21",
-          image: temp7,
-          src: "src/assets/images/icon8.png",
+          image: "src/assets/images/icon8.png",
         },
         {
           code: "icon31",
-          image: temp6,
-          src: "src/assets/images/icon7.png",
+          image: "src/assets/images/icon7.png",
         },
         {
           code: "icon41",
-          image: temp5,
-          src: "src/assets/images/icon6.png",
+          image: "src/assets/images/icon6.png",
         },
         {
           code: "icon51",
-          image: temp4,
-          src: "src/assets/images/icon5.png",
+          image: "src/assets/images/icon5.png",
         },
         {
           code: "icon61",
-          image: temp3,
-          src: "src/assets/images/icon4.png",
+          image: "src/assets/images/icon4.png",
         },
         {
           code: "icon71",
-          image: temp2,
-          src: "src/assets/images/icon3.png",
+          image: "src/assets/images/icon3.png",
         },
         {
           code: "icon81",
-          image: temp1,
-          src: "src/assets/images/icon2.png",
-        },
-        {
-          code: "icon91",
-          image: temp1,
-          src: "src/assets/images/icon2.png",
+          image: "src/assets/images/icon2.png",
         },
         {
           code: "icon101",
-          image: temp2,
-          src: "src/assets/images/icon3.png",
+          image: "src/assets/images/icon3.png",
         },
         {
           code: "icon111",
-          image: temp3,
-          src: "src/assets/images/icon4.png",
+          image: "src/assets/images/icon4.png",
         },
         {
           code: "icon121",
-          image: temp4,
-          src: "src/assets/images/icon5.png",
+          image: "src/assets/images/icon5.png",
         },
       ],
     },

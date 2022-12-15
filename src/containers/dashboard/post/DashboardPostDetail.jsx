@@ -150,7 +150,7 @@ export default function DashboardPostDetail() {
     const formData = new FormData();
     formData.append("postId", params.id);
     formData.append("pinned", true);
-
+ 
     const { status, data } = await getReactionFromServer(formData);
 
     if (status === 200) {
@@ -190,7 +190,7 @@ export default function DashboardPostDetail() {
             <p className="t1">{item.content}</p>
             {(item.iconImage !== "" && item.iconImage !== null) && (
               <p className="icon_image">
-                <img src={"/temp/" + item.iconImage} alt="icon" />
+                <Image hash={item.iconImage}/>
               </p>
             )}
             <div className="btns">
@@ -256,15 +256,15 @@ export default function DashboardPostDetail() {
             <div className="icon">
               <span>
                 <FontAwesomeIcon className="mr8" icon={faEye} />
-                {stateData?.viewCount}
+                {` ${stateData?.viewCount}`}
               </span>
               <span>
                 <FontAwesomeIcon className="mr8" icon={faHeart} />
-                {stateData?.likeCount}
+                {` ${stateData?.likeCount}`}
               </span>
               <span>
                 <FontAwesomeIcon className="mr8" icon={faCommentQuote} />
-                {stateData?.reactionCount}
+                {` ${stateData?.reactionCount}`}
               </span>
             </div>
 

@@ -39,13 +39,13 @@ const ReplyControlBox = ({
             <li onClick={() => setIsEdit(true)}>
               <Link to="">
                 <FontAwesomeIcon icon={faPenToSquare} />
-                修正
+                {` 修正`}
               </Link>
             </li>
             <li onClick={() => setIsDeletePopupShow(true)}>
               <Link to="">
                 <FontAwesomeIcon icon={faTrash} />
-                削除
+                {` 削除`}
               </Link>
             </li>
           </>
@@ -53,7 +53,7 @@ const ReplyControlBox = ({
           <li onClick={() => setIsReportPopupShow(true)}>
             <Link to="">
               <FontAwesomeIcon icon={faFlag} />
-              通報
+              {` 通報`}
             </Link>
           </li>
         )}
