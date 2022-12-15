@@ -142,7 +142,7 @@ export const getFileUrlFromServer = async (hash, params) => {
 */
 export const getPostListFromServer = async (params) => {
   try {
-    return await apiServer("get", "/post" + getGetMethodUrl(params));
+    return await apiServer("get", `/post${getGetMethodUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,

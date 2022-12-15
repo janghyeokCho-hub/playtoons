@@ -440,6 +440,7 @@ export default function DashboardMain() {
             <div className="lst_comic1">
               <SwiperContainer
                 className={"mySwiper1"}
+                buttonClassName={"my1 hide-m"}
                 slidesPerView={4}
                 breakpoints={{
                   0: {
@@ -530,6 +531,7 @@ export default function DashboardMain() {
               {
                 <SwiperContainer
                   className={"mySwiper2"}
+                  buttonClassName={"my1 hide-m"}
                   slidesPerView={6}
                   breakpoints={{
                     0: {

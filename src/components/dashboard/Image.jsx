@@ -17,7 +17,7 @@ import { useLayoutEffect, useState } from "react";
 * @return
 */
 export default function Image(props) {
-  const { alt, hash, className, title, params } = props;
+  const { alt, hash, className, title, onClick, params } = props;
   const [stateImage, setStateImage] = useState(undefined);
 
   const getImage = async (hash) => {
@@ -40,13 +40,13 @@ export default function Image(props) {
 
   useLayoutEffect(() => {
     if( hash ){
-      if ( hash?.startsWith("/static/media/") || hash?.startsWith("data:image") ) {
-        setStateImage(hash);
+      if ( hash?.startsWith("/static/media/") || hash?.startsWith("data:image") || hash?.startsWith("src/assets") ) {
+        setStateImage(`${hash?.startsWith("src/assets") ? '/temp/' : '' }${hash}`);
       } else {
         getImage(hash);
       }
     }
   }, [hash]);
 
-  return <img className={className} src={stateImage} alt={alt} title={title} loading="lazy" />;
+  return <img className={className} src={stateImage} alt={alt} title={title} onClick={onClick} loading="lazy" />;
 }

@@ -835,8 +835,15 @@
 }
 
 .ico_arr_link .fa-solid > * {
-    margin-left: 6px;
-    font-size: 16px;
+  margin-left: 6px;
+  font-size: 16px;
+}
+/* ============================================================================== */
+/* post detail  */
+/* ============================================================================== */
+.mpost .box_profile .empty,
+.mpost .box_profile .pf_txt .icon .empty{
+  background-color: #c3cad2;
 }
 
 /* ============================================================================== */
@@ -874,6 +881,9 @@
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .detail_botm_slider .slide_st.my1 svg{
+    transform: translateY(-7px);
+  }
 
   .lst_banner .swiper.home{
     height: 160px;

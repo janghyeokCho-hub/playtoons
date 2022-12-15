@@ -13,6 +13,17 @@ import {
   insertLikeReaction,
   deleteLikeReaction,
 } from "@API/reactionService";
+import Image from "@/components/dashboard/Image";
+import { getReactionDate } from "@/common/common";
+
+const TEXT = {
+  before_year: '年前',
+  before_month: '月前',
+  before_day: '日前',
+  before_hour: '時間前',
+  before_minute: '分前',
+  before_second: '秒前',
+}
 
 const Reply = ({ item }) => {
   const currentPost = useSelector(({ post }) => post.currentPost);
@@ -87,7 +98,7 @@ const Reply = ({ item }) => {
             <p className="h1">{item?.name}</p>
             <p className="d1">
               {/*<span>3日前</span>*/}
-              <span>{item?.createdAt}</span>
+              <span>{getReactionDate(item?.createdAt, TEXT)}</span>
               <span>コメント</span>
             </p>
             {/* 삭제시 className 에 c-gray 추가 */}
@@ -98,7 +109,7 @@ const Reply = ({ item }) => {
                 <p className="t1">{item?.content}</p>
                 {item?.iconImage && (
                   <p className="icon_image">
-                    <img src={"/temp/" + item?.iconImage} alt="icon" />
+                    <Image hash={item?.iconImage}  />
                   </p>
                 )}
               </>

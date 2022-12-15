@@ -16,7 +16,7 @@ const BannerItems = ({ curationNum }) => {
   const items = useSelector(({ home }) => home.banners);
 
   const renderItems = useMemo(() => {
-    return items.map((item, index) => {
+    return items?.map((item, index) => {
       return (
         <SwiperSlide key={index} className="item swiper-slide">
           <Banner item={item?.banner} />

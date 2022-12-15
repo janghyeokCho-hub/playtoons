@@ -175,7 +175,7 @@ export default function DashboardPlan(props) {
             ) : (
               <SwiperContainer
                 className={"mySwiper1"}
-                buttonClassName={"wh_i"}
+                buttonClassName={"my1 hide-m wh_i"}
                 slidesPerView={4}
                 breakpoints={{
                   0: {

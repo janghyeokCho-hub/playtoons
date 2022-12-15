@@ -350,6 +350,7 @@ export default function DashboardSeriesDetail(props) {
             <div className="lst_comic2">
               <SwiperContainer
                 className={"mySwiper2"}
+                buttonClassName={"my1 hide-m"}
                 slidesPerView={4}
                 breakpoints={{
                   0: {
