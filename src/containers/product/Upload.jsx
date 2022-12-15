@@ -38,7 +38,7 @@ const Upload = () => {
       name: "フォロワー",
     },
     {
-      code: "individual",
+      code: "indivisual",
       name: "個人",
     },
   ];
@@ -163,7 +163,6 @@ const Upload = () => {
   }, []);
 
   const handleUpload = useCallback(async () => {
-    console.log("thumbnailImage.file : ", thumbnailImage.file?.value);
     const authorId = authorMine.authors?.[0].id;
     const thumbnailFD = new FormData();
     thumbnailFD.append("authorId", authorId);
@@ -199,13 +198,12 @@ const Upload = () => {
         typeId: selectType.id,
         categoryId: category.id,
         status: "enabled",
-        /*
+        target: selectTarget,
         startAt: calendarStartRef.current.getDate(),
         endAt: calendarEndRef.current.getDate(),
         saleStartAt: saleStartRef.current.getDate(),
         saleEndAt: saleEndRef.current.getDate(),
         saleRatio: saleRatio / 100,
-        */
         rating: rating,
         mediaHashes: mediaHashes,
       };
@@ -234,6 +232,7 @@ const Upload = () => {
     thumbnailImage,
     productFiles,
     authorMine,
+    selectTarget,
     calendarStartRef,
     calendarEndRef,
     saleStartRef,
@@ -527,8 +526,9 @@ const Upload = () => {
                     ref={calendarStartRef}
                     name={"start"}
                     className={""}
-                    type={"1month"}
                     callback={handleClickCalendar}
+                    type="now"
+                    isMaxDate={false}
                   />
                 </div>
                 <div>
@@ -537,8 +537,9 @@ const Upload = () => {
                     ref={calendarEndRef}
                     name={"end"}
                     className={""}
-                    type={"none"}
                     callback={handleClickCalendar}
+                    type="now"
+                    isMaxDate={false}
                   />
                 </div>
               </div>
@@ -570,8 +571,9 @@ const Upload = () => {
                     ref={saleStartRef}
                     name={"start"}
                     className={""}
-                    type={"1month"}
                     callback={handleSaleDate}
+                    type="now"
+                    isMaxDate={false}
                   />
                 </div>
                 <div>
@@ -580,8 +582,9 @@ const Upload = () => {
                     ref={saleEndRef}
                     name={"end"}
                     className={""}
-                    type={"none"}
                     callback={handleSaleDate}
+                    type="now"
+                    isMaxDate={false}
                   />
                 </div>
               </div>
