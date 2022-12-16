@@ -151,11 +151,11 @@ const Upload = () => {
   };
 
   const handleSaleRatio = useCallback((value) => {
-    if (value <= 100 && value >= 0) {
+    if (value < 100 && value >= 0) {
       setSaleRatio(value);
     } else {
-      if (value > 100) {
-        setSaleRatio(100);
+      if (value >= 100) {
+        setSaleRatio(99);
       } else if (value < 0) {
         setSaleRatio(0);
       }
@@ -330,6 +330,7 @@ const Upload = () => {
                 }}
                 onDrop={(files) => {
                   const reader = new FileReader();
+                  console.log("files[0] : ", files[0]);
                   if (files[0]) {
                     reader.readAsDataURL(files[0]);
                   }
@@ -337,9 +338,8 @@ const Upload = () => {
                   reader.onload = () => {
                     setThumbnailImage({
                       ...files[0],
-                      file: files[0],
+                      file: reader.result,
                       preview: reader.result,
-                      value: reader.result,
                     });
                   };
                 }}
@@ -527,7 +527,7 @@ const Upload = () => {
                     name={"start"}
                     className={""}
                     callback={handleClickCalendar}
-                    type="now"
+                    type=""
                     isMaxDate={false}
                   />
                 </div>
@@ -538,7 +538,7 @@ const Upload = () => {
                     name={"end"}
                     className={""}
                     callback={handleClickCalendar}
-                    type="now"
+                    type=""
                     isMaxDate={false}
                   />
                 </div>
@@ -572,7 +572,7 @@ const Upload = () => {
                     name={"start"}
                     className={""}
                     callback={handleSaleDate}
-                    type="now"
+                    type=""
                     isMaxDate={false}
                   />
                 </div>
@@ -583,7 +583,7 @@ const Upload = () => {
                     name={"end"}
                     className={""}
                     callback={handleSaleDate}
-                    type="now"
+                    type=""
                     isMaxDate={false}
                   />
                 </div>

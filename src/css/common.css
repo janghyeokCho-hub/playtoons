@@ -44,7 +44,6 @@
   float: right;
 }
 .d-ib {
-  /* 2022.11.03 추가 */
   display: inline-block;
 }
 .blind {
@@ -1442,9 +1441,8 @@ body {
 .pagination li a {
   display: inline-block;
   width: 38px; /* 2022.10.05 lhk- pagination css 추가 */
-  color: rgba(144, 157, 171, 1);
-  font-size: 24px;
-  font-weight: 350;
+  border: 1px solid #d5dce0;
+  background-color: #f9f9f9;
   line-height: 32px;
   vertical-align: middle;
 }
@@ -2248,10 +2246,12 @@ body {
   -webkit-border-radius: 50px;
   -moz-border-radius: 50px;
   border-radius: 50px;
-  color: #fff ;
+  color: #fff;
   background-color: #272d33;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
 }
+/*
+
 .swiper-button-prev {
   left: 0;
   transform: translate(-50%, 0);
@@ -2259,6 +2259,13 @@ body {
 .swiper-button-next {
   right: 0;
   transform: translate(50%, 0);
+}
+*/
+.swiper-button-prev {
+  left: -25px;
+}
+.swiper-button-next {
+  right: -25px;
 }
 .slide_st.swiper-button-prev,
 .slide_st.swiper-button-next {
@@ -6301,6 +6308,8 @@ body {
   /* 2022-11-08 제거 */
   /* background-image: url('@IMAGES/ico_calendar_next.svg'); */
 }
+/*
+
 .ui-datepicker-title select {
   position: relative;
   padding: 0;
@@ -6308,7 +6317,7 @@ body {
   line-height: 30px;
   padding-right: 10px;
   color: #fff;
-  /*background: url("@IMAGES/ico_select_on.png") 95% center no-repeat;*/
+  // background: url("@IMAGES/ico_select_on.png") 95% center no-repeat;
   background-size: 5px auto;
 }
 .ui-datepicker-title select:first-child {
@@ -6318,6 +6327,7 @@ body {
   padding: 0 5px;
   color: #000;
 }
+*/
 .ui-datepicker-trigger {
   position: absolute;
   width: 26px;
@@ -7186,6 +7196,7 @@ body {
   margin-bottom: 30px;
   font-weight: 700;
   font-size: 64px;
+  font-size: 3.5vw;
   color: #394bc2;
   text-align: center;
 }
@@ -7609,6 +7620,21 @@ body {
   }
   .main_visual .thumb img {
     right: 40px;
+  }
+  .cont_payment {
+    padding-right: 0;
+  }
+  .area_payment.total {
+    position: static;
+    width: auto;
+  }
+  .lft_purch {
+    float: none;
+    width: auto;
+  }
+  .rgh_purch {
+    margin-left: 0;
+    width: 50%;
   }
 }
 @media (max-width: 1280px) {
