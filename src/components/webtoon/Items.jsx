@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 import {
-  faMagnifyingGlass,
-  faAngleLeft,
-  faAngleRight,
+  faMagnifyingGlass
 } from "@fortawesome/pro-light-svg-icons";
+import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
+import { setReduxOfWebtoon } from "@/common/common";
 import { getPostList as getPostListAPI } from "@API/postService";
 import { getTags as getTagsAPI } from "@API/webtoonService";
-import Item from "./Item";
 import SearchPopup from "@COMPONENTS/SearchPopup";
+import { useDispatch, useSelector } from "react-redux";
+import Dropdown from "../dashboard/Dropdown";
+import MyPagination from "../dashboard/MyPagination";
+import Item from "./Item";
+import EmptyDiv from "../dashboard/EmptyDiv";
 
 const Items = ({ tab, typeId }) => {
   const orderByMenus = [
@@ -31,11 +34,11 @@ const Items = ({ tab, typeId }) => {
       name: "評価順",
     },
   ];
+  const reduxWebtoon = useSelector( ({post}) => post.webtoon );
   const [items, setItems] = useState([]);
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
   const [isAllCategory, setIsAllCategory] = useState(true);
   const [selectTags, setSelectTags] = useState([]);
-  const [isOrderByShow, setIsOrderByShow] = useState(false);
   const [selectOrderBy, setSelectOrderBy] = useState(orderByMenus[0]);
   const [renderItems, setRenderItems] = useState([]);
   const [tags, setTags] = useState([]);
@@ -43,6 +46,12 @@ const Items = ({ tab, typeId }) => {
   const [meta, setMeta] = useState(null);
   const [searchText, setSearchText] = useState(null);
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const setOrderBy = (item) => {
+    setSelectOrderBy(item);
+    setReduxOfWebtoon(dispatch, reduxWebtoon?.type, 1, item?.code);
+  };
 
   const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
     setLoading(true);
@@ -116,6 +125,13 @@ const Items = ({ tab, typeId }) => {
     handleURLQueryChange("keyword", searchText);
   }, [searchText]);
 
+  useEffect(() => {
+    if( reduxWebtoon ){
+      setSelectOrderBy({code: reduxWebtoon?.orderBy});
+      handleURLQueryChange("page", reduxWebtoon?.page);
+    }
+  }, [reduxWebtoon]);
+
   /**
    * 검색 쿼리 String
    */
@@ -137,8 +153,7 @@ const Items = ({ tab, typeId }) => {
     [urlQueryParams]
   );
 
-  const handleSelectTagChange = useCallback(
-    (item) => {
+  const handleSelectTagChange = useCallback((item) => {
       // 검색으로 변경
       const selected = selectTags.findIndex((tag) => tag.id === item.id) > -1;
       if (selected) {
@@ -148,83 +163,12 @@ const Items = ({ tab, typeId }) => {
         const newTags = [...selectTags, item];
         setSelectTags(newTags);
       }
-    },
-    [selectTags]
-  );
+    }, [selectTags]);
 
   const handleSearch = (searchText) => {
     setSearchText(searchText);
   };
 
-  const pagination = useMemo(() => {
-    if (meta) {
-      const { currentPage, totalPages, itemCount } = meta;
-      let pageList = [];
-      for (let i = 1; i <= totalPages; i++) {
-        pageList.push(i);
-      }
-
-      const prev = currentPage - 1;
-      const prevPage = prev - 1;
-      const next = currentPage + 1;
-      const nextPage = next + 1;
-
-      let showPages;
-      if (currentPage === 1) {
-        if (totalPages === 0) {
-          showPages = [1];
-        } else {
-          showPages = pageList.splice(prev, 3);
-        }
-      } else if (currentPage === totalPages) {
-        if (totalPages < 3) {
-          showPages = pageList;
-        } else {
-          showPages = pageList.splice(currentPage - 3, 3);
-        }
-      } else {
-        showPages = pageList.splice(currentPage - 2, 3);
-      }
-
-      return (
-        <>
-          {prevPage > 0 && (
-            <li
-              className="prev"
-              onClick={() => handleURLQueryChange("page", prevPage)}
-            >
-              <a href="#">
-                <FontAwesomeIcon icon={faAngleLeft} />
-              </a>
-            </li>
-          )}
-          {showPages &&
-            showPages.map((page, index) => (
-              <li
-                key={`page_${index}`}
-                className={`${page === currentPage ? "on" : ""}`}
-                onClick={() => handleURLQueryChange("page", page)}
-              >
-                <a href="#">{page}</a>
-              </li>
-            ))}
-
-          {itemCount > 0 && totalPages - nextPage > 0 && (
-            <li
-              className="next"
-              onClick={() => handleURLQueryChange("page", nextPage)}
-            >
-              <a href="#">
-                <FontAwesomeIcon icon={faAngleRight} />
-              </a>
-            </li>
-          )}
-        </>
-      );
-    } else {
-      return <></>;
-    }
-  }, [meta]);
 
   return (
     <>
@@ -277,46 +221,38 @@ const Items = ({ tab, typeId }) => {
                 })}
             </div>
             <div className="rgh">
-              <div className="btn_select1">
-                <button
-                  type="button"
-                  className="select_tit"
-                  onClick={() => setIsOrderByShow(!isOrderByShow)}
-                >
-                  {selectOrderBy.name}
-                </button>
-                <div
-                  className="select_list"
-                  style={{ display: isOrderByShow ? "" : "none" }}
-                >
-                  <ul>
-                    {orderByMenus.map((menu, index) => (
-                      <li
-                        key={`orderby_${index}`}
-                        onClick={() => {
-                          setSelectOrderBy(menu);
-                          setIsOrderByShow(!isOrderByShow);
-                        }}
-                      >
-                        <a href="#">{menu.name}</a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <Dropdown
+                className={'wt'}
+                dataList={orderByMenus} 
+                selected={selectOrderBy?.code}  // TODO redux 값 초기화로 받아야함. 
+                handleItemClick={setOrderBy}/>
             </div>
           </div>
           <div className="lst_main_comic">
             <ul>
-              {renderItems &&
-                renderItems.map((item, index) => (
-                  <Item key={`item_${index}`} item={item} />
-                ))}
+              {renderItems && renderItems?.length > 0 ? (
+                  renderItems.map((item, index) => (
+                    <Item key={`item_${index}`} item={item} />
+                  ))
+                ) : (
+                  <EmptyDiv
+                    className={"relative empty"}
+                    text={'ウェブトゥーンがいません。'}
+                    />
+                )
+              }
             </ul>
           </div>
-          <div className="pagenation">
-            <ul>{pagination}</ul>
-          </div>
+
+          <MyPagination
+              className={""}
+              meta={meta}
+              callback={(page) => {
+                handleURLQueryChange("page", page);
+                setReduxOfWebtoon(dispatch, reduxWebtoon?.type, page, reduxWebtoon?.orderBy);
+              }}
+            />
+
           {isSearchPopupShow && (
             <SearchPopup
               handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}

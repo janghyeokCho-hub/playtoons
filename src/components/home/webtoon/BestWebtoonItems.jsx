@@ -21,6 +21,11 @@ const BestWebtoonItems = ({ curationNum }) => {
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
 
+  /**
+     default background color
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
   const getBackgroundColor = (index) => {
     const num = index % 3;
     if( num === 0 ){

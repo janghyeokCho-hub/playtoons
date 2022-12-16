@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useCallback } from "react";
-import SwiperCore, { Navigation, Pagination } from "swiper";
-import { getPostTypes as getPostTypesAPI } from "@API/postService";
-import { getCategorys as getCategorysAPI } from "@API/postService";
-import Items from "@COMPONENTS/webtoon/Items";
-import CurationItems from "@COMPONENTS/webtoon/CurationItems";
-import { Link } from "react-router-dom";
+import { setReduxOfWebtoon } from "@/common/common";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { useDispatch } from "react-redux";
+import { getCategorys as getCategorysAPI, getPostTypes as getPostTypesAPI } from "@API/postService";
+import CurationItems from "@COMPONENTS/webtoon/CurationItems";
+import Items from "@COMPONENTS/webtoon/Items";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const Webtoon = () => {
   SwiperCore.use([Navigation, Pagination]);
   const dispatch = useDispatch();
   const [selectTab, setSelectTab] = useState("EVERY");
+  const reduxWebtoon = useSelector( ({post}) => post.webtoon );
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
@@ -56,6 +57,7 @@ const Webtoon = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
+    setReduxOfWebtoon(dispatch, tab, 1, 'recent');
   };
 
   const handleContainer = useCallback(() => {
@@ -77,6 +79,16 @@ const Webtoon = () => {
     handleContainer();
   }, []);
 
+  useEffect(() => {
+    if( reduxWebtoon ){
+      if( 'complete' === reduxWebtoon?.type  ){
+        setSelectTab('COMPLETED');
+      } else if ( 'progress' === reduxWebtoon?.type  ){
+        setSelectTab('SERIES');
+      }
+    }
+  }, [reduxWebtoon]);
+
   return (
     <>
       <div className="contents">
@@ -94,16 +106,16 @@ const Webtoon = () => {
                 </Link>
               </li>
               <li
-                className={selectTab === "COMPLETED" ? "on" : ""}
-                onClick={() => handleSelectTab("COMPLETED")}
+                className={selectTab === "SERIES" ? "on" : ""}
+                onClick={() => handleSelectTab("SERIES")}
               >
                 <Link to="">
                   <span>連載</span>
                 </Link>
               </li>
               <li
-                className={selectTab === "SERIES" ? "on" : ""}
-                onClick={() => handleSelectTab("SERIES")}
+                className={selectTab === "COMPLETED" ? "on" : ""}
+                onClick={() => handleSelectTab("COMPLETED")}
               >
                 <Link to="">
                   <span>完結</span>

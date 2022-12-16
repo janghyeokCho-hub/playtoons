@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { useWindowSize } from "@/hook/useWindowSize";
 import { getCurationList as getCurationListAPI } from "@/services/curationService";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleChevronLeft,
-  faCircleChevronRight,
+  faCircleChevronRight
 } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import Curation from "./Curation";
 
 const CurationItems = ({ curationNum }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
+  const windowSize = useWindowSize();
+  const [stateIsMobile, setStateIsMobile] = useState(windowSize.width < 961);
 
   const getCurationList = async (curationNum) => {
     const response = await getCurationListAPI(curationNum);
@@ -25,6 +28,12 @@ const CurationItems = ({ curationNum }) => {
       getCurationList(curationNum);
     }
   }, [items, curationNum]);
+
+  useEffect(() => {
+    if (windowSize.width < 961) {
+      setStateIsMobile(true);
+    }
+  }, [windowSize]);
 
   const renderItems = useMemo(() => {
     return items.map((item, index) => {
@@ -45,12 +54,13 @@ const CurationItems = ({ curationNum }) => {
         <Swiper
           className="swiper-container mySwiper1"
           slidesPerView={3}
-          slidesPerGroup={1}
+          // slidesPerGroup={1}
           spaceBetween={12}
           loop={true}
           observer={true}
           observeParents={true}
           touchRatio={0}
+          centeredSlides={stateIsMobile}
           pagination={{
             el: ".swiper-pagination",
             clickable: true,

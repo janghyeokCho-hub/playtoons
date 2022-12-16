@@ -25,6 +25,8 @@ export const [
 ] = createRequestActionTypes("post/GET_POST_REACTION");
 const [SET_SERIES, INIT_SERIES] = createRequestActionTypes("post/SET_SERIES");
 const [CURRENT_POST_INIT] = createRequestActionTypes("post/CURRENT_POST_INIT");
+const [SET_WEBTOON, INIT_WEBTOON] = createRequestActionTypes("post/SET_WEBTOON");
+const [SET_NOVEL, INIT_NOVEL] = createRequestActionTypes("post/SET_NOVEL");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
@@ -37,6 +39,10 @@ export const getCurrentPost = createAction(GET_CURRENT_POST);
 export const getPostReaction = createAction(GET_POST_REACTION);
 export const setSeriesAction = createAction(SET_SERIES);
 export const initSeriesAction = createAction(INIT_SERIES);
+export const setWebtoonAction = createAction(SET_WEBTOON);
+export const initWebtoonAction = createAction(INIT_WEBTOON);
+export const setNovelAction = createAction(SET_NOVEL);
+export const initNovelAction = createAction(INIT_NOVEL);
 
 const initialState = {
   post: null,
@@ -46,10 +52,38 @@ const initialState = {
   currentPost: null,
   series: null,
   postUpload: null,
+  webtoon: null,
+  novel: null,
 };
 
 const post = handleActions(
   {
+    [SET_NOVEL]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.novel = action.payload; //{type: 'all, complete, progress', page: [number], orderBy: 'recent, recommend, rank'}
+      });
+    },
+    [INIT_NOVEL]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          novel: null,
+        };
+      });
+    },
+    [SET_WEBTOON]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.webtoon = action.payload; //{type: 'all, complete, progress', page: [number], orderBy: 'recent, recommend, rank'}
+      });
+    },
+    [INIT_WEBTOON]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          webtoon: null,
+        };
+      });
+    },
     [UPLOAD_POST_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.postUpload = action.payload;

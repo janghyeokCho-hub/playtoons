@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
-import tempChracter from '@IMAGES/tmp_landing_log1_1.png';
+import tempChracter from '@IMAGES/main_visual_img.png';    //sample image
 
 const BestWebtoon = ({ item, color }) => {
   const { filePath, loading } = useFilePath(item?.characterImage);

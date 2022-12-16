@@ -7,6 +7,7 @@ import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
 import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
+import { setWebtoonAction } from "@/modules/redux/ducks/post";
 /**
  * Email validation
  * @param {string} text
@@ -345,9 +346,19 @@ export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
 };
 
 /**
-*
   lottie 적용된 button 상태 초기화
-*
+* @version 1.0.0
+* @author 2hyunkook
+* @param type     menu type 'all, complete, progress'
+* @param page     page number
+* @param orderBy  order by  'recent, recommend, rank'
+*/
+export const setReduxOfWebtoon = (dispatch, type, page, orderBy) => {
+  dispatch( setWebtoonAction({type: type, page: page, orderBy: orderBy}) );
+};
+
+/**
+  lottie 적용된 button 상태 초기화
 * @version 1.0.0
 * @author 2hyunkook
 */

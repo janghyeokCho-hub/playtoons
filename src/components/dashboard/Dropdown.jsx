@@ -40,7 +40,7 @@ export default forwardRef(function Dropdown(props, ref) {
 
     if( id !== undefined ){
       for( const item of dataList ){
-        if( item.id === id ){
+        if( item?.id === id || item?.code === id ){
           selectedItem = item;
           break;
         }
@@ -64,7 +64,7 @@ export default forwardRef(function Dropdown(props, ref) {
   };
 
   const handleOptionClicked = (item) => () => {
-    if( stateSelectedItem?.id !== item.id ){
+    if( stateSelectedItem?.id !== item.id || stateSelectedItem?.code !== item.code ){
       setSelectedItem(item);
       handleItemClick?.(item);
     }
@@ -111,7 +111,7 @@ export default forwardRef(function Dropdown(props, ref) {
           className={`btn_select_drop ${className} ${disabled && 'dis'}`}
           onClick={handleToggle} 
           >
-          {stateSelectedItem?.name || stateSelectedItem?.title}
+          {stateSelectedItem?.name || stateSelectedItem?.title || stateSelectedItem}
 
           <FontAwesomeIcon className={`fa-solid ${disabled && 'dis'}`} icon={faChevronDown} />
           <div

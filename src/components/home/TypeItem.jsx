@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { setReduxOfWebtoon } from "@/common/common";
 import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 const TypeItem = ({ item }) => {
   const { filePath: thumbImage, loading } = useFilePath(item?.iconImage);
+  const dispatch = useDispatch();
   const windowSize = useWindowSize();
 
   const getMarginBottom = (item) => {
@@ -56,9 +58,15 @@ const TypeItem = ({ item }) => {
     }
   };
 
+  const handleClick = (item) => {
+    if( 'webtoon' === item?.code ){
+      setReduxOfWebtoon(dispatch, 'all', 1, 'recent');
+    }
+  };
+
   return (
     <div className={`col${getMarginBottom(item) ? ' mb' : ''}`}>
-      <Link to={`/${item?.code}`}>
+      <Link to={`/${item?.code}`} onClick={() => handleClick(item)}>
         <div className="thumb wid1">
           {!loading && <img src={thumbImage} alt="" />}
         </div>

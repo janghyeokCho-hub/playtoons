@@ -163,7 +163,7 @@ export default forwardRef( function Type(props, ref) {
     else{
       dispatch( getTypeAction() );
     }
-  }, [selected]);
+  }, [selected, reduxType]);
 
 
   return (
