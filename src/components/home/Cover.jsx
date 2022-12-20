@@ -1,4 +1,4 @@
-import { setReduxOfWebtoon } from "@/common/common";
+import { setReduxOfNovel, setReduxOfWebtoon } from "@/common/common";
 import { faAngleRight } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback } from "react";
@@ -20,7 +20,7 @@ const Cover = ({ curation }) => {
     }
   };
 
-  const handleLink = useCallback((id) => {
+  const handleLinkOfSeeAll = useCallback((id) => {
     switch(id){
       default : 
         //webtoon
@@ -28,6 +28,7 @@ const Cover = ({ curation }) => {
         return ;
       case '44':  
         //novel
+        setReduxOfNovel(dispatch, {type: 'EVERY'});
         return ;
       case '45':  
         //photo
@@ -52,7 +53,7 @@ const Cover = ({ curation }) => {
           {
             //recently 41, webtoon 42, novel 44, photo 45, complete webtoon 47, webtoon in progress 48
             curation?.id !== '41' && (
-              <Link to={`${getLink(curation?.id)}`} className="rgh btn-pk n blue2" onClick={() => handleLink(curation?.id)}><span className="ico_arr_link">すべてみる <FontAwesomeIcon icon={faAngleRight} className="fa-solid" /></span></Link>
+              <Link to={`${getLink(curation?.id)}`} className="rgh btn-pk n blue2" onClick={() => handleLinkOfSeeAll(curation?.id)}><span className="ico_arr_link">すべてみる <FontAwesomeIcon icon={faAngleRight} className="fa-solid" /></span></Link>
             )
           }
         </div>

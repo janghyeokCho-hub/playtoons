@@ -36,13 +36,10 @@ const orderByMenus = [
 
 const Items = ({ tab, typeId }) => {
   const reduxWebtoon = useSelector( ({post}) => post.webtoon );
-  const [items, setItems] = useState([]);
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
-  const [isAllCategory, setIsAllCategory] = useState(true);
   const [renderItems, setRenderItems] = useState([]);
   const [tags, setTags] = useState([]);
   const [meta, setMeta] = useState(null);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const setOrderBy = (item) => {
@@ -50,9 +47,6 @@ const Items = ({ tab, typeId }) => {
   };
 
   const getPostList = async (params, tags) => {
-    setLoading(true);
-    setItems([]);
-    
     delete params["completed"];
     delete params["series"];
     delete params["short"];
@@ -76,15 +70,10 @@ const Items = ({ tab, typeId }) => {
 
     const response = await getPostListAPI(params, tags);
     if (response.status === 200) {
-      setItems(response.data.posts);
+      setRenderItems(response.data.posts);
       setMeta(response.data.meta);
     }
-    setLoading(false);
   };
-
-  useEffect(() => {
-    setRenderItems(items);
-  }, [items]);
 
   useEffect(() => {
     async function getTags() {
@@ -98,13 +87,6 @@ const Items = ({ tab, typeId }) => {
     }
   }, [tags]);
 
-  useEffect(() => {
-    if (!reduxWebtoon?.tags?.length) {
-      setIsAllCategory(true);
-    } else {
-      setIsAllCategory(false);
-    }
-  }, [reduxWebtoon?.tags]);
 
   useEffect(() => {
     if( typeId && reduxWebtoon ){
@@ -133,93 +115,89 @@ const Items = ({ tab, typeId }) => {
 
   return (
     <>
-      {!loading && (
-        <>
-          <div className="main_sch">
-            <div className="lft">
-              <Link
-                to="#"
-                className={`btn-pk n bdrs ${isAllCategory ? "blue" : "blue2"}`}
-                onClick={() => {
-                  setReduxOfWebtoon(dispatch, tab, 1, reduxWebtoon?.orderKey, [], reduxWebtoon?.keyword);
-                }}
-              >
-                すべて
-              </Link>
-              <button
-                type="button"
-                className="btn_sch_input"
-                onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
-              >
-                <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
-                {reduxWebtoon?.keyword || "ハッシュタグ検索"}
-              </button>
-              {tags &&
-                tags.map((tag, index) => {
-                  const selected =
-                    reduxWebtoon?.tags?.findIndex((sTag) => sTag.id === tag.id) > -1;
-                  return (
-                    <Link
-                      key={`tag_${index}`}
-                      to="#"
-                      className={`btn-pk n bdrs blue2 ${selected ? "on" : ""}`}
-                      onClick={() => {
-                        handleSelectTagChange(tag);
-                      }}
+      <div className="main_sch">
+        <div className="lft">
+          <Link
+            to="#"
+            className={`btn-pk n bdrs ${!reduxWebtoon?.tags?.length ? "blue" : "blue2"}`}
+            onClick={() => {
+              setReduxOfWebtoon(dispatch, tab, 1, reduxWebtoon?.orderKey, [], reduxWebtoon?.keyword);
+            }}
+          >
+            すべて
+          </Link>
+          <button
+            type="button"
+            className="btn_sch_input"
+            onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
+          >
+            <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
+            {reduxWebtoon?.keyword || "ハッシュタグ検索"}
+          </button>
+          {tags &&
+            tags.map((tag, index) => {
+              const selected =
+                reduxWebtoon?.tags?.findIndex((sTag) => sTag.id === tag.id) > -1;
+              return (
+                <Link
+                  key={`tag_${index}`}
+                  to="#"
+                  className={`btn-pk n bdrs blue2 ${selected ? "on" : ""}`}
+                  onClick={() => {
+                    handleSelectTagChange(tag);
+                  }}
+                >
+                  #{tag.name}
+                  {selected && (
+                    <button
+                      type="button"
+                      className="btn_sch_del"
+                      onClick={() => handleSelectTagChange(tag)}
                     >
-                      #{tag.name}
-                      {selected && (
-                        <button
-                          type="button"
-                          className="btn_sch_del"
-                          onClick={() => handleSelectTagChange(tag)}
-                        >
-                          <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                      )}
-                    </Link>
-                  );
-                })}
-            </div>
-            <div className="rgh">
-              <Dropdown
-                className={'wt'}
-                dataList={orderByMenus} 
-                selected={reduxWebtoon?.orderKey?.code}
-                handleItemClick={setOrderBy}/>
-            </div>
-          </div>
-          <div className="lst_main_comic">
-            <ul>
-              {renderItems && renderItems?.length > 0 ? (
-                  renderItems.map((item, index) => (
-                    <Item key={`item_${index}`} item={item} />
-                  ))
-                ) : (
-                  <EmptyDiv
-                    className={"relative empty"}
-                    text={'ウェブトゥーンがいません。'}
-                    />
-                )
-              }
-            </ul>
-          </div>
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                  )}
+                </Link>
+              );
+            })}
+        </div>
+        <div className="rgh">
+          <Dropdown
+            className={'wt'}
+            dataList={orderByMenus} 
+            selected={reduxWebtoon?.orderKey?.code}
+            handleItemClick={setOrderBy}/>
+        </div>
+      </div>
+      <div className="lst_main_comic">
+        <ul>
+          {renderItems && renderItems?.length > 0 ? (
+              renderItems.map((item, index) => (
+                <Item key={`item_${index}`} item={item} />
+              ))
+            ) : (
+              <EmptyDiv
+                className={"relative empty"}
+                text={'ウェブトゥーンがいません。'}
+                />
+            )
+          }
+        </ul>
+      </div>
 
-          <MyPagination
-              className={""}
-              meta={meta}
-              callback={(page) => {
-                setReduxOfWebtoon(dispatch, tab, page, reduxWebtoon?.orderKey, reduxWebtoon?.tags, reduxWebtoon?.keyword);
-              }}
-            />
+      <MyPagination
+          className={""}
+          meta={meta}
+          callback={(page) => {
+            setReduxOfWebtoon(dispatch, tab, page, reduxWebtoon?.orderKey, reduxWebtoon?.tags, reduxWebtoon?.keyword);
+          }}
+        />
 
-          {isSearchPopupShow && (
-            <SearchPopup
-              handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}
-              onSearch={handleSearch}
-            />
-          )}
-        </>
+      {isSearchPopupShow && (
+        <SearchPopup
+          handleClose={() => setIsSearchPopupShow(!isSearchPopupShow)}
+          onSearch={handleSearch}
+        />
       )}
     </>
   );

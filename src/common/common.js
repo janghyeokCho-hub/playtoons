@@ -7,7 +7,7 @@ import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
 import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
-import { setWebtoonAction } from "@/modules/redux/ducks/post";
+import { setNovelAction, setWebtoonAction } from "@/modules/redux/ducks/post";
 /**
  * Email validation
  * @param {string} text
@@ -346,10 +346,10 @@ export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
 };
 
 /**
-  webtoon page 검색 조건을 기억
+  webtoon page 검색 조건을 저장
 * @version 1.0.0
 * @author 2hyunkook
-* @param type     menu type 'all, complete, progress'
+* @param type     menu type 'EVERY, SERIES, COMPLETED, SHORT'
 * @param page     page number
 * @param orderBy  order by  'recent, recommend, rank'
 * @param tags     search tags
@@ -357,6 +357,26 @@ export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
 */
 export const setReduxOfWebtoon = (dispatch, type, page, orderBy, tags, search) => {
   dispatch( setWebtoonAction({type: type, page: page, orderKey: orderBy, tags: tags, keyword: search }) );
+};
+
+/**
+  novel page 검색 조건을 저장
+* @version 1.0.0
+* @author 2hyunkook
+* @param type     menu type 'EVERY, SERIES, COMPLETED, SHORT'
+* @param page     page number
+* @param orderBy  order by  'recent, recommend, rank'
+* @param tags     search tags
+* @param search   search text
+*/
+export const setReduxOfNovel = (dispatch, params) => {
+  dispatch( setNovelAction({
+    type: params?.type || 'EVERY', 
+    page: params?.page || 1, 
+    orderKey: params?.orderKey || 'recent', 
+    tags: params?.tags || [], 
+    keyword: params?.keyword || '' 
+  }) );
 };
 
 /**

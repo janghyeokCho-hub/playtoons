@@ -1,4 +1,4 @@
-import { setReduxOfWebtoon } from "@/common/common";
+import { setReduxOfNovel, setReduxOfWebtoon } from "@/common/common";
 import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { useDispatch } from "react-redux";
@@ -61,7 +61,9 @@ const TypeItem = ({ item }) => {
   const handleClick = (item) => {
     if( 'webtoon' === item?.code ){
       setReduxOfWebtoon(dispatch, 'EVERY', 1, 'recent');
-    }
+    } else if( 'novel' === item?.code ){
+      setReduxOfNovel(dispatch, {});
+    } 
   };
 
   return (

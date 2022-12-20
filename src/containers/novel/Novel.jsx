@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
@@ -7,11 +7,13 @@ import SwiperCore, { Navigation, Pagination } from "swiper";
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
 import { setContainer } from "@/modules/redux/ducks/container";
+import { setReduxOfNovel } from "@/common/common";
 
 const Novel = () => {
   const dispatch = useDispatch();
   SwiperCore.use([Navigation, Pagination]);
   const [selectTab, setSelectTab] = useState("EVERY");
+  const reduxNovel = useSelector( ({post}) => post.novel );
 
   /** ===== Post type API Start ===== */
   const [postType, setPostType] = useState([]);
@@ -55,6 +57,16 @@ const Novel = () => {
 
   const handleSelectTab = (tab) => {
     setSelectTab(tab);
+    setReduxOfNovel(
+      dispatch, 
+      {
+        type: tab, 
+        page: 1, 
+        orderKey: {code: 'recent'}, 
+        tags: [], 
+        keyword: ''
+      }
+    );
   };
 
   const handleContainer = useCallback(() => {
@@ -74,6 +86,10 @@ const Novel = () => {
 
   useEffect(() => {
     handleContainer();
+
+    if( reduxNovel?.type ){
+      setSelectTab(reduxNovel?.type);
+    }
   }, []);
 
   return (
@@ -93,16 +109,16 @@ const Novel = () => {
                 </Link>
               </li>
               <li
-                className={selectTab === "COMPLETED" ? "on" : ""}
-                onClick={() => handleSelectTab("COMPLETED")}
-              >
+                className={selectTab === "SERIES" ? "on" : ""}
+                onClick={() => handleSelectTab("SERIES")}
+                >
                 <Link to="">
                   <span>連載</span>
                 </Link>
               </li>
               <li
-                className={selectTab === "SERIES" ? "on" : ""}
-                onClick={() => handleSelectTab("SERIES")}
+                className={selectTab === "COMPLETED" ? "on" : ""}
+                onClick={() => handleSelectTab("COMPLETED")}
               >
                 <Link to="">
                   <span>完結</span>

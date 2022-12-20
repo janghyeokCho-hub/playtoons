@@ -77,9 +77,7 @@ const Webtoon = () => {
 
   useEffect(() => {
     handleContainer();
-  }, []);
 
-  useEffect(() => {
     if( reduxWebtoon?.type ){
       setSelectTab(reduxWebtoon?.type);
     }
