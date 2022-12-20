@@ -1,5 +1,9 @@
 import { takeLatest, call, put } from "redux-saga/effects";
-import { GET_AUTHOR_LIST, SET_AUTHOR, SET_CURRENT_AUTHOR } from "@REDUX/ducks/author";
+import {
+  GET_AUTHOR_LIST,
+  SET_AUTHOR,
+  SET_CURRENT_AUTHOR,
+} from "@REDUX/ducks/author";
 import { startLoading, finishLoading } from "@REDUX/ducks/loading";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as authorApi from "@API/authorService";
@@ -95,13 +99,14 @@ function createSetCurrentAuthorRequestSaga(type) {
           }
 
           /** 해당 작가의 스토어 목록 */
-          const storeResponse = yield call(authorApi.getProduct, {
-            authorId: payload?.id || action.payload,
-          });
+          const storeResponse = yield call(
+            authorApi.getProduct,
+            payload?.id || action.payload
+          );
           if (storeResponse?.status === 200) {
             payload.products = storeResponse?.data?.products || [];
           } else {
-            payload.subscribeTiers = [];
+            payload.products = [];
           }
 
           yield put({
@@ -137,57 +142,55 @@ function createSetAuthorRequestSaga(type) {
   return function* (action) {
     try {
       yield put(startLoading(type));
-      
+
       let params = {
-        ...action.payload
+        ...action.payload,
       };
       // profile upload
-      if( action.payload.fileInfoProfile !== undefined ){
+      if (action.payload.fileInfoProfile !== undefined) {
         const formData = new FormData();
         formData.append("type", "image"); //image, video, binary
         formData.append("usage", "profile"); //profile, background, cover, logo, post, product, thumbnail, attachment
         formData.append("loginRequired", false); //언제 체크해서 보내는건지?
         formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-        formData.append("rating", 'G'); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("rating", "G"); //G, PG-13, R-15, R-17, R-18, R-18G
         formData.append("file", action.payload.fileInfoProfile);
         const reponse = yield call(setFileToServer, formData);
         if (reponse?.status === 201) {
           params.profileImage = reponse?.data?.hash;
-        }
-        else{
+        } else {
           yield put(finishLoading(type));
           yield put({
             type: FAILURE,
             payload: {
               ...reponse,
-              type: 'profile'
-            }
+              type: "profile",
+            },
           });
           return;
         }
       }
 
       // background cover upload
-      if( action.payload.fileInfoBackground !== undefined ){
+      if (action.payload.fileInfoBackground !== undefined) {
         const formData = new FormData();
         formData.append("type", "image"); //image, video, binary
         formData.append("usage", "background"); //profile, background, cover, logo, post, product, thumbnail, attachment
         formData.append("loginRequired", false); //언제 체크해서 보내는건지?
         formData.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-        formData.append("rating", 'G'); //G, PG-13, R-15, R-17, R-18, R-18G
+        formData.append("rating", "G"); //G, PG-13, R-15, R-17, R-18, R-18G
         formData.append("file", action.payload.fileInfoBackground);
         const response = yield call(setFileToServer, formData);
         if (response?.status === 201) {
           params.backgroundImage = response?.data?.hash;
-        }
-        else{
+        } else {
           yield put(finishLoading(type));
           yield put({
             type: FAILURE,
             payload: {
               ...response,
-              type: 'background'
-            }
+              type: "background",
+            },
           });
           return;
         }
@@ -197,21 +200,20 @@ function createSetAuthorRequestSaga(type) {
       delete params["rating"];
       delete params["fileInfoProfile"];
       delete params["fileInfoBackground"];
-      
+
       const response = yield call(authorApi.setAuthorToServer, params);
       if (response?.status === 201) {
         yield put({
           type: SUCCESS,
           payload: response,
         });
-      }
-      else{
+      } else {
         yield put({
           type: FAILURE,
           payload: {
             ...response,
-            type: 'set'
-          }
+            type: "set",
+          },
         });
       }
 
@@ -223,8 +225,8 @@ function createSetAuthorRequestSaga(type) {
         type: FAILURE,
         payload: {
           ...e,
-          type: 'set'
-        }
+          type: "set",
+        },
       });
     } finally {
       yield put(finishLoading(type));

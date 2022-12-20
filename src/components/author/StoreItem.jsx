@@ -10,8 +10,10 @@ const StoreItem = ({ item }) => {
   const { filePath: thumbnailImgURL, loding: thumbnailImgLoading } =
     useFilePath(item?.coverImage);
   const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
-    item?.profileImage
+    item?.author?.profileImage
   );
+  console.log(profileImgURL);
+
   return (
     <div className="cx">
       <a href="#">
@@ -25,14 +27,13 @@ const StoreItem = ({ item }) => {
           </p>
         </div>
         <div className="cx_txt">
-          <p className="h1">{item?.title}</p>
+          <p className="h1">{item?.name}</p>
           <div className="btm">
             <div className="t_profile">
-              {!profileImgLoading && (
-                <ImgBgSpan bgImg={profileImgURL}></ImgBgSpan>
-              )}
-
-              <span>{item?.name}</span>
+              <ImgBgSpan bgImg={profileImgURL} />
+              <span style={{ height: "40px", lineHeight: "40px" }}>
+                {item?.author?.nickname}
+              </span>
             </div>
             <p className="c1">
               <strong>{item?.price}</strong>
@@ -45,6 +46,10 @@ const StoreItem = ({ item }) => {
 };
 
 const ImgBgSpan = styled.span`
+  width: 40px;
+  height: 40px;
+  display: block;
+  background-size: cover;
   background-image: url(${(props) => props.bgImg});
 `;
 
