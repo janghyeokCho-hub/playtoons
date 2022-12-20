@@ -1,15 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DatePicker from "react-datepicker";
-import { ko, ja, es } from "date-fns/esm/locale";
-import "react-datepicker/dist/react-datepicker.css";
-import {
-  faAngleRight,
-  faShare,
-  faStar,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faAngleRight, faShare } from "@fortawesome/pro-solid-svg-icons";
 
-const Inquiry = () => {
+const Inquiry = ({ item }) => {
   return (
     <>
       <tr className="tr_q">

@@ -17,7 +17,10 @@ function createSetProductRequestSaga(type) {
         type: SET_PRODUCT_TYPES,
       });
       // productTypes
-      const response = yield call(storeApi.getProductDetail, action.payload);
+      const response = yield call(
+        storeApi.getProductDetailMine,
+        action.payload
+      );
       if (response?.status === 200) {
         const product = response.data?.product;
         yield put({

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -7,9 +7,18 @@ import {
   faCircleChevronRight,
   faHeart,
 } from "@fortawesome/pro-solid-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const All = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.text) {
+      // location?.state?.text 검색키워드
+    }
+  }, [location.state.text]);
+
   return (
     <>
       <div className="area_schmain inr-c">

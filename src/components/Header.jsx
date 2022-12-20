@@ -42,7 +42,7 @@ const SearchComponent = ({ isMobile }) => {
 
   const handleEnter = useCallback(() => {
     console.log(searchRef?.current?.value);
-    navigate("/search");
+    navigate("/search/all", { state: { text: searchRef?.current?.value } });
   }, [navigate, searchRef]);
 
   const handleSearchTextClear = useCallback(() => {
@@ -163,7 +163,9 @@ const Header = ({ className, onSideMenu }) => {
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
-  const { filePath, loading } = useFilePath(userInfo?.profileImage || reduxAuthors?.[0]?.profileImage);
+  const { filePath, loading } = useFilePath(
+    userInfo?.profileImage || reduxAuthors?.[0]?.profileImage
+  );
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -379,7 +381,9 @@ const Header = ({ className, onSideMenu }) => {
                               </Link>
                             </li>
                             <li onClick={() => setIsProfileShow(false)}>
-                              <a className="pointer" onClick={handleDashboard}>ダッシュボード</a>
+                              <a className="pointer" onClick={handleDashboard}>
+                                ダッシュボード
+                              </a>
                             </li>
                           </ul>
                           <ul>

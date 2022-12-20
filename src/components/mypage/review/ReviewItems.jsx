@@ -1,18 +1,44 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import DatePicker from "react-datepicker";
-import { ko, ja, es } from "date-fns/esm/locale";
-import "react-datepicker/dist/react-datepicker.css";
-import {
-  faAngleRight,
-  faShare,
-  faStar,
-} from "@fortawesome/pro-solid-svg-icons";
+import React, { useRef, useState, useCallback, useEffect } from "react";
 import Review from "./Review";
+import Calendar from "@COMPONENTS/dashboard/Calendar";
+import { useDispatch } from "react-redux";
+import { showOneButtonPopup } from "@/common/common";
+import { getReviewMine } from "@API/storeService";
 
 const ReviewItems = () => {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const dispatch = useDispatch();
+  const startRef = useRef(null);
+  const endRef = useRef(null);
+  const [items, setItems] = useState([]);
+
+  const handleClickCalendar = (name, date) => {
+    const startDate = name === "start" ? date : startRef.current.getDate();
+    const endDate = name === "end" ? date : endRef.current.getDate();
+
+    if (endDate === undefined) {
+      return true;
+    }
+
+    if (startDate.getTime() >= endDate.getTime()) {
+      showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return false;
+    }
+
+    return true;
+  };
+
+  const getReviewItems = useCallback(async () => {
+    const params = {};
+    const response = await getReviewMine(params);
+    if (response?.status === 200) {
+      setItems(response?.data?.reviews);
+    }
+  }, []);
+
+  useEffect(() => {
+    getReviewItems();
+  }, []);
+
   return (
     <div className="inr-c">
       <div className="hd_titbox2">
@@ -23,22 +49,24 @@ const ReviewItems = () => {
         <div className="inp_cal">
           <div>
             <label htmlFor="calendar_first1">開始日</label>
-            <DatePicker
-              locale={ko}
-              className="inp_txt calendar datepicker_first"
-              selected={startDate}
-              onChange={(date) => setStartDate(date)}
-              dateFormat="yyyy-MM-dd"
+            <Calendar
+              ref={startRef}
+              name={"start"}
+              className={""}
+              callback={handleClickCalendar}
+              type="1month"
+              isMaxDate={false}
             />
           </div>
           <div>
             <label htmlFor="calendar_last1">終了日</label>
-            <DatePicker
-              locale={ko}
-              className="inp_txt calendar datepicker_last"
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              dateFormat="yyyy-MM-dd"
+            <Calendar
+              ref={endRef}
+              name={"start"}
+              className={""}
+              callback={handleClickCalendar}
+              type="now"
+              isMaxDate={false}
             />
           </div>
         </div>
@@ -68,6 +96,9 @@ const ReviewItems = () => {
             </tr>
           </thead>
           <tbody>
+            {items?.map((item, index) => (
+              <Review key={`review_${index}`} item={item} />
+            ))}
             <Review />
           </tbody>
         </table>

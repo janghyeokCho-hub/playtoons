@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
 import Comments from "./Comments";
+import { getProductDetail } from "@API/storeService";
 
 const Store = () => {
   const params = useParams();
-  console.log("params : ", params);
+
+  const getProduct = useCallback(async (id) => {
+    const response = await getProductDetail(id);
+    console.log(response);
+  }, []);
+
+  useEffect(() => {
+    getProduct(params.id);
+  }, [params.id]);
+
   return (
     <div className="contents">
       <div className="wrap_store_detail">
