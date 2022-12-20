@@ -24,7 +24,7 @@ const Cover = ({ curation }) => {
     switch(id){
       default : 
         //webtoon
-        setReduxOfWebtoon(dispatch, 'all', 1, 'recent');
+        setReduxOfWebtoon(dispatch, 'EVERY', 1, 'recent');
         return ;
       case '44':  
         //novel
@@ -34,11 +34,11 @@ const Cover = ({ curation }) => {
         return ;
       case '47':  
         //complete webtoon
-        setReduxOfWebtoon(dispatch, 'complete', 1, 'recent');
+        setReduxOfWebtoon(dispatch, 'COMPLETED', 1, 'recent');
         return ;
       case '48':
         //progress webtoon
-        setReduxOfWebtoon(dispatch, 'progress', 1, 'recent');
+        setReduxOfWebtoon(dispatch, 'SERIES', 1, 'recent');
         return ;
     }
   }, [curation]);
@@ -52,7 +52,7 @@ const Cover = ({ curation }) => {
           {
             //recently 41, webtoon 42, novel 44, photo 45, complete webtoon 47, webtoon in progress 48
             curation?.id !== '41' && (
-              <Link to={`${getLink(curation?.id)}`} class="rgh btn-pk n blue2" onClick={() => handleLink(curation?.id)}><span class="ico_arr_link">すべてみる <FontAwesomeIcon icon={faAngleRight} className="fa-solid" /></span></Link>
+              <Link to={`${getLink(curation?.id)}`} className="rgh btn-pk n blue2" onClick={() => handleLink(curation?.id)}><span className="ico_arr_link">すべてみる <FontAwesomeIcon icon={faAngleRight} className="fa-solid" /></span></Link>
             )
           }
         </div>

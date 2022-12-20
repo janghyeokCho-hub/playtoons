@@ -16,52 +16,49 @@ import MyPagination from "../dashboard/MyPagination";
 import Item from "./Item";
 import EmptyDiv from "../dashboard/EmptyDiv";
 
+const orderByMenus = [
+  {
+    // 신작순
+    code: "recent",
+    name: "新着順",
+  },
+  {
+    // 추천순
+    code: "recommend",
+    name: "おすすめ順",
+  },
+  {
+    // 평가순
+    code: "rank",
+    name: "評価順",
+  },
+];
+
 const Items = ({ tab, typeId }) => {
-  const orderByMenus = [
-    {
-      // 신작순
-      code: "recent",
-      name: "新着順",
-    },
-    {
-      // 추천순
-      code: "recommend",
-      name: "おすすめ順",
-    },
-    {
-      // 평가순
-      code: "rank",
-      name: "評価順",
-    },
-  ];
   const reduxWebtoon = useSelector( ({post}) => post.webtoon );
   const [items, setItems] = useState([]);
   const [isSearchPopupShow, setIsSearchPopupShow] = useState(false);
   const [isAllCategory, setIsAllCategory] = useState(true);
-  const [selectTags, setSelectTags] = useState([]);
-  const [selectOrderBy, setSelectOrderBy] = useState(orderByMenus[0]);
   const [renderItems, setRenderItems] = useState([]);
   const [tags, setTags] = useState([]);
-  const [urlQueryParams, setUrlQueryParams] = useState({ type: typeId });
   const [meta, setMeta] = useState(null);
-  const [searchText, setSearchText] = useState(null);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const setOrderBy = (item) => {
-    setSelectOrderBy(item);
-    setReduxOfWebtoon(dispatch, reduxWebtoon?.type, 1, item?.code);
+    setReduxOfWebtoon(dispatch, tab, 1, item, reduxWebtoon?.tags, reduxWebtoon?.keyword);
   };
 
-  const getPostList = async (tab, params, tags, typeId, selectOrderBy) => {
+  const getPostList = async (params, tags) => {
     setLoading(true);
     setItems([]);
+    
     delete params["completed"];
     delete params["series"];
     delete params["short"];
 
     params.typeId = typeId;
-    params.orderKey = selectOrderBy.code;
+    params.orderKey = reduxWebtoon?.orderKey.code || 'recent';
     params.order = "DESC";
     params.limit = 16;
 
@@ -86,18 +83,6 @@ const Items = ({ tab, typeId }) => {
   };
 
   useEffect(() => {
-    // 연재중 탭이 바뀔때마다
-    handleURLQueryChange("page", 1);
-  }, [tab]);
-
-  useEffect(() => {
-    if (typeId !== undefined) {
-      //typeId가 준비되지 않은 상태에서도 api 날아가는걸 방지
-      getPostList(tab, urlQueryParams, selectTags, typeId, selectOrderBy);
-    }
-  }, [tab, urlQueryParams, selectTags, typeId, selectOrderBy]);
-
-  useEffect(() => {
     setRenderItems(items);
   }, [items]);
 
@@ -114,59 +99,35 @@ const Items = ({ tab, typeId }) => {
   }, [tags]);
 
   useEffect(() => {
-    if (!selectTags?.length) {
+    if (!reduxWebtoon?.tags?.length) {
       setIsAllCategory(true);
     } else {
       setIsAllCategory(false);
     }
-  }, [selectTags]);
+  }, [reduxWebtoon?.tags]);
 
   useEffect(() => {
-    handleURLQueryChange("keyword", searchText);
-  }, [searchText]);
-
-  useEffect(() => {
-    if( reduxWebtoon ){
-      setSelectOrderBy({code: reduxWebtoon?.orderBy});
-      handleURLQueryChange("page", reduxWebtoon?.page);
+    if( typeId && reduxWebtoon ){
+      getPostList({keyword: reduxWebtoon?.keyword || '', page: reduxWebtoon?.page}, reduxWebtoon?.tags);
     }
-  }, [reduxWebtoon]);
-
-  /**
-   * 검색 쿼리 String
-   */
-  const handleURLQueryChange = useCallback(
-    (key, value) => {
-      let params = { ...urlQueryParams, page: 1 };
-      if (key) {
-        if (key !== "page") {
-          delete params["page"];
-        }
-        if (!value) {
-          delete params[key];
-        } else {
-          params[key] = value;
-        }
-      }
-      setUrlQueryParams(params);
-    },
-    [urlQueryParams]
-  );
+  }, [typeId, reduxWebtoon]);
 
   const handleSelectTagChange = useCallback((item) => {
       // 검색으로 변경
-      const selected = selectTags.findIndex((tag) => tag.id === item.id) > -1;
+      let list = Array.from(reduxWebtoon?.tags || []);
+      const selected = list?.findIndex((tag) => tag.id === item.id) > -1;
+      let newTags = undefined;
       if (selected) {
-        const newTags = selectTags.filter((tag) => tag.id !== item.id);
-        setSelectTags(newTags);
+        newTags = list?.filter((tag) => tag.id !== item.id);
       } else {
-        const newTags = [...selectTags, item];
-        setSelectTags(newTags);
+        newTags = [...list, item];
       }
-    }, [selectTags]);
+
+      setReduxOfWebtoon(dispatch, tab, 1, reduxWebtoon?.orderKey, newTags, reduxWebtoon?.keyword);
+    }, [reduxWebtoon?.tags]);
 
   const handleSearch = (searchText) => {
-    setSearchText(searchText);
+    setReduxOfWebtoon(dispatch, tab, 1, reduxWebtoon?.orderKey, reduxWebtoon?.tags, searchText || '');
   };
 
 
@@ -180,7 +141,7 @@ const Items = ({ tab, typeId }) => {
                 to="#"
                 className={`btn-pk n bdrs ${isAllCategory ? "blue" : "blue2"}`}
                 onClick={() => {
-                  setSelectTags([]);
+                  setReduxOfWebtoon(dispatch, tab, 1, reduxWebtoon?.orderKey, [], reduxWebtoon?.keyword);
                 }}
               >
                 すべて
@@ -191,12 +152,12 @@ const Items = ({ tab, typeId }) => {
                 onClick={() => setIsSearchPopupShow(!isSearchPopupShow)}
               >
                 <FontAwesomeIcon icon={faMagnifyingGlass} />{" "}
-                {searchText || "ハッシュタグ検索"}
+                {reduxWebtoon?.keyword || "ハッシュタグ検索"}
               </button>
               {tags &&
                 tags.map((tag, index) => {
                   const selected =
-                    selectTags.findIndex((sTag) => sTag.id === tag.id) > -1;
+                    reduxWebtoon?.tags?.findIndex((sTag) => sTag.id === tag.id) > -1;
                   return (
                     <Link
                       key={`tag_${index}`}
@@ -224,7 +185,7 @@ const Items = ({ tab, typeId }) => {
               <Dropdown
                 className={'wt'}
                 dataList={orderByMenus} 
-                selected={selectOrderBy?.code}  // TODO redux 값 초기화로 받아야함. 
+                selected={reduxWebtoon?.orderKey?.code}
                 handleItemClick={setOrderBy}/>
             </div>
           </div>
@@ -248,8 +209,7 @@ const Items = ({ tab, typeId }) => {
               className={""}
               meta={meta}
               callback={(page) => {
-                handleURLQueryChange("page", page);
-                setReduxOfWebtoon(dispatch, reduxWebtoon?.type, page, reduxWebtoon?.orderBy);
+                setReduxOfWebtoon(dispatch, tab, page, reduxWebtoon?.orderKey, reduxWebtoon?.tags, reduxWebtoon?.keyword);
               }}
             />
 

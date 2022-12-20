@@ -48,7 +48,6 @@ const CurationItems = ({ curationNum }) => {
           loop={true}
           observer={true}
           observeParents={true}
-          touchRatio={0}
           pagination={{
             el: ".swiper-pagination",
             clickable: true,

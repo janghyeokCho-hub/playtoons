@@ -860,6 +860,20 @@
 .mpost .box_profile .pf_txt .icon .empty{
   background-color: #c3cad2;
 }
+/* ============================================================================== */
+/* novel  */
+/* ============================================================================== */
+.webtoon .lst_banner.long .swiper{
+  height: 256px;
+}
+.webtoon .lst_banner.long .swiper-slide.cx{
+  text-align: center;
+}
+.webtoon .lst_banner.long .swiper-slide .top{
+  width: 100%;
+  transform: translateY(-10%);
+  /* height: 100%; */
+}
 
 /* ============================================================================== */
 /* header back button tablet & mobile css  */

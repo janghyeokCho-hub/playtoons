@@ -346,15 +346,17 @@ export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
 };
 
 /**
-  lottie 적용된 button 상태 초기화
+  webtoon page 검색 조건을 기억
 * @version 1.0.0
 * @author 2hyunkook
 * @param type     menu type 'all, complete, progress'
 * @param page     page number
 * @param orderBy  order by  'recent, recommend, rank'
+* @param tags     search tags
+* @param search   search text
 */
-export const setReduxOfWebtoon = (dispatch, type, page, orderBy) => {
-  dispatch( setWebtoonAction({type: type, page: page, orderBy: orderBy}) );
+export const setReduxOfWebtoon = (dispatch, type, page, orderBy, tags, search) => {
+  dispatch( setWebtoonAction({type: type, page: page, orderKey: orderBy, tags: tags, keyword: search }) );
 };
 
 /**

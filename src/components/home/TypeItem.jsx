@@ -60,7 +60,7 @@ const TypeItem = ({ item }) => {
 
   const handleClick = (item) => {
     if( 'webtoon' === item?.code ){
-      setReduxOfWebtoon(dispatch, 'all', 1, 'recent');
+      setReduxOfWebtoon(dispatch, 'EVERY', 1, 'recent');
     }
   };
 

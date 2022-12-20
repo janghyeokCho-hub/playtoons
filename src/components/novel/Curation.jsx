@@ -13,7 +13,7 @@ const Curation = ({ item }) => {
   }, [dispatch]);
   return (
     <Link to={`/post/detail/novel/${item.id}`} onClick={handleCurrentPostInit}>
-      {!loading && <img src={filePath} alt="이미지" />}
+      {!loading && <img src={filePath} className='top' />}
     </Link>
   );
 };

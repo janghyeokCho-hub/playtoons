@@ -4061,6 +4061,7 @@ body {
   left: 0 !important;
   background-color: #d8d8d8;
   opacity: 1;
+  transition: .2s transform,.2s left;
 }
 .lst_banner
   .swiper-pagination-bullets-dynamic

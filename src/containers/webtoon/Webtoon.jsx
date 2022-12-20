@@ -80,14 +80,10 @@ const Webtoon = () => {
   }, []);
 
   useEffect(() => {
-    if( reduxWebtoon ){
-      if( 'complete' === reduxWebtoon?.type  ){
-        setSelectTab('COMPLETED');
-      } else if ( 'progress' === reduxWebtoon?.type  ){
-        setSelectTab('SERIES');
-      }
+    if( reduxWebtoon?.type ){
+      setSelectTab(reduxWebtoon?.type);
     }
-  }, [reduxWebtoon]);
+  }, []);
 
   return (
     <>

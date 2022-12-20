@@ -20,7 +20,7 @@ const Item = ({ item }) => {
           onClick={handleCurrentPostInit}
         >
           <div className="cx_thumb">
-            <span>{!loading && <img src={filePath} alt="사진" />}</span>
+            <span>{!loading && <img src={filePath} alt="" />}</span>
             <p className="t_like">
               <FontAwesomeIcon icon={faHeart} />
               <span>{item.likeCount}</span>
@@ -29,7 +29,7 @@ const Item = ({ item }) => {
           <div className="cx_txt">
             <p className="h1">{item.title}</p>
             <p className="t1">{item.author?.name}</p>
-            <p className="t1 c-gray">{item.number || "null"}話</p>
+            <p className="t1 c-gray">{`${item.number || "null"} `}話</p>
             <div className="lst_tag">
               {item.tags?.map((tag, index) => (
                 <div key={`tag_${index}`} className="i_tag">

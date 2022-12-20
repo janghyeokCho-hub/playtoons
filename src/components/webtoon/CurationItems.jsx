@@ -12,8 +12,8 @@ import Curation from "./Curation";
 const CurationItems = ({ curationNum }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  const [items, setItems] = useState([]);
   const windowSize = useWindowSize();
+  const [items, setItems] = useState([]);
   const [stateIsMobile, setStateIsMobile] = useState(windowSize.width < 961);
 
   const getCurationList = async (curationNum) => {
@@ -53,16 +53,16 @@ const CurationItems = ({ curationNum }) => {
       <div className="lst_banner">
         <Swiper
           className="swiper-container mySwiper1"
+          // initialSlide={1}
           slidesPerView={3}
-          // slidesPerGroup={1}
           spaceBetween={12}
           loop={true}
           observer={true}
           observeParents={true}
-          touchRatio={0}
           centeredSlides={stateIsMobile}
           pagination={{
             el: ".swiper-pagination",
+            dynamicBullets: true,
             clickable: true,
           }}
           navigation={{
