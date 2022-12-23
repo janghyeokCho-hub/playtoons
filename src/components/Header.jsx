@@ -29,8 +29,10 @@ import { setDim } from "@/modules/redux/ducks/dim";
 import { setMenuShow } from "@/modules/redux/ducks/container";
 import { showOneButtonPopup } from "@/common/common";
 import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import { useTranslation } from "react-i18next";
 
 const SearchComponent = ({ isMobile }) => {
+  const {t} = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const searchRef = useRef(null);
@@ -70,7 +72,7 @@ const SearchComponent = ({ isMobile }) => {
                 ref={searchRef}
                 type="text"
                 className="inp_txt"
-                placeholder="検索キーワードを入力"
+                placeholder={t(`header.searchPlaceholder`)}
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
                     handleEnter();
@@ -101,7 +103,7 @@ const SearchComponent = ({ isMobile }) => {
             ref={searchRef}
             type="text"
             className="inp_txt"
-            placeholder="検索キーワードを入力"
+            placeholder={t(`header.searchPlaceholder`)}
             onKeyUp={(e) => {
               if (e.key === "Enter") {
                 handleEnter();
@@ -142,6 +144,7 @@ const SearchComponent = ({ isMobile }) => {
 };
 
 const Header = ({ className, onSideMenu }) => {
+  const {t, i18n} = useTranslation();
   /** 헤더 통합하면서 추가됨 */
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -179,6 +182,7 @@ const Header = ({ className, onSideMenu }) => {
   const homeURL = isLogined ? "/home" : "/";
 
   useEffect(() => {
+    console.log('first', i18n);
     if (isMenuShow === undefined) {
       dispatch(setMenuShow(true));
     }
@@ -227,7 +231,7 @@ const Header = ({ className, onSideMenu }) => {
     } else {
       showOneButtonPopup(
         dispatch,
-        "クリエイターとして登録しなければ、投稿できません。",
+        t(`popup.doNotRegisterCreatorCanNotPost`),
         () => navigate("/author/register")
       );
     }
@@ -239,7 +243,7 @@ const Header = ({ className, onSideMenu }) => {
     } else {
       showOneButtonPopup(
         dispatch,
-        "クリエイターとして登録しなければ、ダッシュボードを利用できません。",
+        t(`popup.doNotRegisterCreatorCanNotEnterDashboard`),
         () => navigate("/author/register")
       );
     }
@@ -260,6 +264,10 @@ const Header = ({ className, onSideMenu }) => {
     setRenderType(tempType);
   }, [isLogined, type]);
 
+  const handleLanguage = (id) => {
+    i18n.changeLanguage(id);
+  };
+
   return (
     <div className="open">
       <header id="header" className={headerClass}>
@@ -275,7 +283,7 @@ const Header = ({ className, onSideMenu }) => {
                     <button
                       type="button"
                       className="btn_gnb"
-                      title="메뉴"
+                      title=""
                       onClick={() => onSideMenu?.()}
                     >
                       <span>
@@ -285,7 +293,7 @@ const Header = ({ className, onSideMenu }) => {
                   )}
                   <h1 className="logo">
                     <Link to={homeURL}>
-                      <span className="ico_logo">PlayToons</span>
+                      <span className="ico_logo">{t(`header.logo`)}</span>
                     </Link>
                   </h1>
 
@@ -309,7 +317,7 @@ const Header = ({ className, onSideMenu }) => {
                         type="button"
                         className="btn_tugo btn-pk n blue bdrs"
                       >
-                        <span>投稿</span>
+                        <span>{t(`header.post`)}</span>
                         <FontAwesomeIcon
                           icon={faSquarePlus}
                           className="view-m"
@@ -321,13 +329,13 @@ const Header = ({ className, onSideMenu }) => {
                             <li>
                               <a className="pointer" onClick={handleUploadPost}>
                                 <FontAwesomeIcon icon={faSquarePen} />
-                                投稿する
+                                {t(`header.doPost`)}
                               </a>
                             </li>
                             <li>
                               <Link to="/product/upload">
                                 <FontAwesomeIcon icon={faCartCirclePlus} />
-                                マケットに登録
+                                {t(`header.registerMarket`)}
                               </Link>
                             </li>
                           </ul>
@@ -359,61 +367,61 @@ const Header = ({ className, onSideMenu }) => {
                               onClick={() => setIsProfileShow(false)}
                             >
                               <FontAwesomeIcon icon={faXmarkLarge} />{" "}
-                              プロフィール
+                              {t(`header.profile`)}
                             </button>
                           </div>
                           <div className="bt">
                             <p className="t2">
                               {userInfo?.name || userInfo?.email}
                             </p>
-                            <p className="t1">保有ポイント</p>
+                            <p className="t1">{t(`header.vaildatePoint`)}</p>
                             <p className="c1">
                               <span className="c-blue">100,324,394</span>
                               <a href="#" className="btn-pk s blue bdrs">
-                                チャージ
+                              {t(`header.charge`)}
                               </a>
                             </p>
                           </div>
                           <ul>
                             <li onClick={() => setIsProfileShow(false)}>
                               <Link to="/author/register">
-                                クリエイター登録
+                              {t(`header.registerCreator`)}
                               </Link>
                             </li>
                             <li onClick={() => setIsProfileShow(false)}>
                               <a className="pointer" onClick={handleDashboard}>
-                                ダッシュボード
+                              {t(`header.dashboard`)}
                               </a>
                             </li>
                           </ul>
                           <ul>
                             <li>
-                              <a href="#">支援中のクリエイター</a>
+                              <a href="#">{t(`header.supporingCreator`)}</a>
                             </li>
                             <li>
-                              <a href="#">フォロー中のクリエイター</a>
+                              <a href="#">{t(`header.followingCreator`)}</a>
                             </li>
                           </ul>
                           <ul>
                             <li onClick={() => navigate("/mypage/purchase")}>
                               {/* 구매 목록 */}
-                              <Link to="">購入一覧</Link>
+                              <Link to="">{t(`header.purchaseList`)}</Link>
                             </li>
                             <li onClick={() => navigate("/mypage/review")}>
                               {/* 리뷰 목록 */}
-                              <Link to="">レビューリスト</Link>
+                              <Link to="">{t(`header.reviewList`)}</Link>
                             </li>
                             <li onClick={() => navigate("/mypage/inquiry")}>
                               {/* 문의 목록 */}
-                              <Link to="">お問合せ一覧</Link>
+                              <Link to="">{t(`header.contactList`)}</Link>
                             </li>
                           </ul>
                           <ul>
                             <li>
-                              <a href="#">設定</a>
+                              <a href="#">{t(`header.setting`)}</a>
                             </li>
                             <li onClick={() => handleLogout()}>
-                              <Link to={homeURL}>ログアウト</Link>
+                              <Link to={homeURL}>{t(`header.logout`)}</Link>
                             </li>
                           </ul>
                           <div>
@@ -423,7 +431,7 @@ const Header = ({ className, onSideMenu }) => {
                               onClick={() => setIsLanguageShow(true)}
                             >
                               <FontAwesomeIcon icon={faGlobe} />
-                              日本語
+                              {t(`header.${i18n.language}`)}
                             </button>
                           </div>
                         </div>
@@ -448,7 +456,7 @@ const Header = ({ className, onSideMenu }) => {
                   )}
                   <h1 className="logo">
                     <Link to={homeURL}>
-                      <span className="ico_logo">PlayToons</span>
+                      <span className="ico_logo">{t(`header.logo`)}</span>
                     </Link>
                   </h1>
 
@@ -456,7 +464,7 @@ const Header = ({ className, onSideMenu }) => {
                     <SearchComponent />
 
                     <Link to="/account" className="btn_log btn-pk n blue bdrs">
-                      <span>ログイン</span>
+                      <span>{t(`header.login`)}</span>
                     </Link>
                   </div>
                 </div>
@@ -473,26 +481,26 @@ const Header = ({ className, onSideMenu }) => {
                   <li
                     className={location.pathname.includes("/home") ? "on" : ""}
                   >
-                    <Link to="/home">ホーム</Link>
+                    <Link to="/home">{t(`sidebar.home`)}</Link>
                   </li>
                   <li
                     className={
                       location.pathname.includes("/timeline") ? "on" : ""
                     }
                   >
-                    <Link to="/timeline">タイムライン</Link>
+                    <Link to="/timeline">{t(`sidebar.timeline`)}</Link>
                   </li>
                   <li
                     className={
                       location.pathname.includes("/author/") ? "on" : ""
                     }
                   >
-                    <Link to="/author/list">クリエイター</Link>
+                    <Link to="/author/list">{t(`sidebar.creator`)}</Link>
                   </li>
                   <li
                     className={location.pathname.includes("/store") ? "on" : ""}
                   >
-                    <Link to="/store">マケット</Link>
+                    <Link to="/store">{t(`sidebar.market`)}</Link>
                   </li>
                 </ul>
               </nav>
@@ -591,7 +599,7 @@ const Header = ({ className, onSideMenu }) => {
             <div id="popGlobal" className="layerPopup pop_global">
               <div className="popup">
                 <div className="pop_head">
-                  <h2 className="title">言語</h2>
+                  <h2 className="title">{t(`header.language`)}</h2>
                   <button
                     type="button"
                     className="btn_pop_close b-close"
@@ -603,13 +611,13 @@ const Header = ({ className, onSideMenu }) => {
                 <div className="pop_cont">
                   <ul>
                     <li className="on">
-                      <a href="#">日本語</a>
+                      <a onClick={() => handleLanguage('ja-JP')} >{t(`header.ja-JP`)}</a>
                     </li>
                     <li>
-                      <a href="#">한국어</a>
+                      <a onClick={() => handleLanguage('ko-KR')}>{t(`header.ko-KR`)}</a>
                     </li>
                     <li>
-                      <a href="#">ENGLISH</a>
+                      <a onClick={() => handleLanguage('en-US')}>{t(`header.en-US`)}</a>
                     </li>
                   </ul>
                 </div>
