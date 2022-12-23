@@ -1,5 +1,6 @@
-import PostItems from "@/components/webtoon/PostItems";
 import IconWithText from "@/components/dashboard/IconWithText";
+import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
+import PostItems from "@/components/webtoon/PostItems";
 import useFilePath from "@/hook/useFilePath";
 import { currentAuthorInit } from "@/modules/redux/ducks/author";
 import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
@@ -7,12 +8,13 @@ import { setAuthorFollow } from "@API/authorService";
 import { faLock } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SwiperCore, { Navigation } from "swiper";
 import ReplyItems from "./ReplyItems";
+import {getHtmlElementFromHtmlString,} from '@COMMON/common';
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -25,6 +27,7 @@ const Novel = () => {
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const [ stateIsAddComent, setStateIsAddComent ] = useState(false);
   const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } = useFilePath(currentPost?.author?.profileImage);
   const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
     useFilePath(currentPost?.author?.backgroundImage);
@@ -37,20 +40,6 @@ const Novel = () => {
   const userInfo = useSelector(({ login }) => login.userInfo);
   const { filePath: myProfileImgURL, loading: myProfileLoading } = useFilePath(
     userInfo?.profileImage || reduxAuthors?.[0].profileImage);
-  // 이전회차 / 다음회차 버튼 Ref
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  // 이모티콘 Ref
-  const prevEmoticonRef = useRef(null);
-  const nextEmoticonRef = useRef(null);
-  // 댓글 이모티콘 창 활성 플래그
-  const [isEmoticonShow, setIsEmoticonShow] = useState(false);
-  // 이모티콘 선택
-  const [selectEmoticon, setSelectEmoticon] = useState(null);
-  const [replyLimit, setReplyLimit] = useState(
-    currentPost?.reactions?.length || 0
-  );
-  const [replyInput, setReplyInput] = useState("");
 
   useEffect(() => {
     dispatch(getCurrentPost({ id: id }));
@@ -78,15 +67,15 @@ const Novel = () => {
     [currentPost]
   );
 
-  useEffect(() => {
-    if (replyLimit > 0) {
-      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
-    }
-  }, [dispatch, id, replyLimit]);
 
   const handleCurrentAuthorInit = useCallback(() => {
     dispatch(currentAuthorInit());
   }, [dispatch]);
+
+  const getComent = (page, isAdd) => {
+    setStateIsAddComent(isAdd);
+    dispatch(getPostReaction({ postId: id, limit: 3, page: page }))
+  };
 
   return (
     <>
@@ -103,7 +92,9 @@ const Novel = () => {
 
             <div className="area_novel">
               {(content && (
-                <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                <div className="editor_p ws_pre">
+                  {getHtmlElementFromHtmlString(content)}
+                </div>
               )) || <img src={require("@IMAGES/sampleImage.png")} alt="" />}
 
               {isLock && (
@@ -182,14 +173,13 @@ const Novel = () => {
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
-              <ReplyItems />
+              <ReplyItems isAdd={stateIsAddComent} />
               
-              <div
-                className="botm"
-                onClick={() => setReplyLimit(replyLimit + 3)}
-              >
-                <Link to="">コメントをもっと見る</Link>
-              </div>
+              <SeeMoreComent 
+                text={{see_more_coment: 'コメントをもっと見る'}}
+                meta={currentPost?.reactions?.meta}
+                callback={(page) => getComent(page, true)}
+                />
             </div>
           </div>
 

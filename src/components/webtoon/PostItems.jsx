@@ -38,7 +38,7 @@ export default function PostItems(props) {
               }}
               key={index}
             >
-              <Link to={`/post/detail/webtoon/${item.id}`}>
+              <Link to={`/post/detail/${item?.type?.code}/${item.id}`}>
                 <Image className="thumb" hash={item.thumbnailImage} params={{w:100}} />
                 <div className="txt">
                   <p className="h1">{item.title}</p>

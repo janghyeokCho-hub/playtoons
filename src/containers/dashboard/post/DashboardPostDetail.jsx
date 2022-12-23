@@ -5,9 +5,7 @@ import {
   getHtmlElementFromHtmlString,
   getReactionDate,
   getShowEditor,
-  getStatusText,
-  isArrayFromPostContent,
-  showOneButtonPopup
+  getStatusText, showOneButtonPopup
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
@@ -125,7 +123,7 @@ export default function DashboardPostDetail() {
     const formData = new FormData();
     formData.append("postId", params.id);
     formData.append("page", page);
-    formData.append("limit", 5);
+    formData.append("limit", 3);
 
     const { status, data } = await getReactionFromServer(formData);
 
