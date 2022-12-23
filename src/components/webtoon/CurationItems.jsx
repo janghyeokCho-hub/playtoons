@@ -7,9 +7,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 import Curation from "./Curation";
 
 const CurationItems = ({ curationNum }) => {
+  SwiperCore.use([Navigation, Pagination]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const windowSize = useWindowSize();
@@ -53,7 +55,7 @@ const CurationItems = ({ curationNum }) => {
       <div className="lst_banner">
         <Swiper
           className="swiper-container mySwiper1"
-          // initialSlide={1}
+          // initialSlide={0}
           slidesPerView={3}
           spaceBetween={12}
           loop={true}
@@ -61,7 +63,7 @@ const CurationItems = ({ curationNum }) => {
           observeParents={true}
           centeredSlides={stateIsMobile}
           pagination={{
-            el: ".swiper-pagination",
+            el: ".swiper-pagination.my1",
             dynamicBullets: true,
             clickable: true,
           }}

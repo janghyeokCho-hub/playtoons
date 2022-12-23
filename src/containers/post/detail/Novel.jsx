@@ -7,6 +7,7 @@ import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
 import { setAuthorFollow } from "@API/authorService";
 import { faLock } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { sanitize } from "dompurify";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,6 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import SwiperCore, { Navigation } from "swiper";
 import ReplyItems from "./ReplyItems";
-import {getHtmlElementFromHtmlString,} from '@COMMON/common';
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -92,9 +92,10 @@ const Novel = () => {
 
             <div className="area_novel">
               {(content && (
-                <div className="editor_p ws_pre">
-                  {getHtmlElementFromHtmlString(content)}
-                </div>
+                // <div className="editor_p ws_pre">
+                //   {getHtmlElementFromHtmlString(content)}
+                // </div>
+                <div className="editor_p ws_pre" dangerouslySetInnerHTML={{ __html : sanitize(content) }} />
               )) || <img src={require("@IMAGES/sampleImage.png")} alt="" />}
 
               {isLock && (
