@@ -1,24 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleChevronLeft,
-  faCircleChevronRight,
-  faCircleXmark,
-  faLock,
-} from "@fortawesome/pro-solid-svg-icons";
-import SwiperCore, { Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import moment from "moment";
-import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
+import PostItems from "@/components/webtoon/PostItems";
+import IconWithText from "@/components/dashboard/IconWithText";
 import useFilePath from "@/hook/useFilePath";
-import { setAuthorFollow } from "@API/authorService";
-import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
-import { insertReaction } from "@API/reactionService";
-import ReplyItems from "./ReplyItems";
 import { currentAuthorInit } from "@/modules/redux/ducks/author";
+import { getCurrentPost, getPostReaction } from "@/modules/redux/ducks/post";
+import { setAuthorFollow } from "@API/authorService";
+import { faLock } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
+import SwiperCore, { Navigation } from "swiper";
+import ReplyItems from "./ReplyItems";
 
 const Novel = () => {
   SwiperCore.use([Navigation]);
@@ -30,8 +24,8 @@ const Novel = () => {
   const id = params?.id;
   // 현재 게시물 상세 정보
   const currentPost = useSelector(({ post }) => post.currentPost);
-  const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } =
-    useFilePath(currentPost?.author?.profileImage);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } = useFilePath(currentPost?.author?.profileImage);
   const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
     useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
@@ -42,8 +36,7 @@ const Novel = () => {
   // 로그인 한 사용자
   const userInfo = useSelector(({ login }) => login.userInfo);
   const { filePath: myProfileImgURL, loading: myProfileLoading } = useFilePath(
-    userInfo?.profileImage
-  );
+    userInfo?.profileImage || reduxAuthors?.[0].profileImage);
   // 이전회차 / 다음회차 버튼 Ref
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -84,43 +77,6 @@ const Novel = () => {
     },
     [currentPost]
   );
-
-  const tempEmoticons = [
-    require("@IMAGES/icon0.png"),
-    require("@IMAGES/icon1.png"),
-    require("@IMAGES/icon2.png"),
-    require("@IMAGES/icon3.png"),
-    require("@IMAGES/icon4.png"),
-    require("@IMAGES/icon5.png"),
-    require("@IMAGES/icon6.png"),
-    require("@IMAGES/icon7.png"),
-    require("@IMAGES/icon8.png"),
-    require("@IMAGES/icon9.png"),
-    require("@IMAGES/icon10.png"),
-  ];
-
-  const handleReply = useCallback(async () => {
-    if (!replyInput) {
-      alert("댓글 내용 없음");
-      return;
-    }
-    const authorId = currentPost?.myAuthor?.id;
-    const params = {
-      content: replyInput,
-      iconImage: selectEmoticon,
-      type: "reply",
-      postId: id,
-      authorId: authorId,
-    };
-    const response = await insertReaction(params);
-    if (response?.status === 201) {
-      alert("댓글 작성 성공");
-      dispatch(getPostReaction({ postId: id, limit: replyLimit }));
-      setReplyInput("");
-    } else {
-      alert(`댓글 작성 실패 : ${response.status}`);
-    }
-  }, [dispatch, selectEmoticon, id, replyLimit, currentPost, replyInput]);
 
   useEffect(() => {
     if (replyLimit > 0) {
@@ -214,118 +170,20 @@ const Novel = () => {
                   <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
                 )}
               </div>
-              <div className="conts">
-                <div className={`textarea1 ${selectEmoticon ? "emo" : ""}`}>
-                  {/*<!-- 이모티콘 삽입시 텍스트 박스 길어짐 : emo 추가 -->*/}
-
-                  <textarea
-                    className="textarea1"
-                    placeholder="ログインして投稿する"
-                    onChange={(e) => setReplyInput(e.target.value)}
-                  ></textarea>
-
-                  {/*<!-- 삽입된 이모티콘 -->*/}
-                  {selectEmoticon && (
-                    <div className="ico_emo">
-                      <span>
-                        <img src={selectEmoticon} alt="" />
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setSelectEmoticon(null)}
-                      >
-                        <FontAwesomeIcon icon={faCircleXmark} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="btns">
-                  <button
-                    type="button"
-                    className="btn-pk s blue2"
-                    onClick={() => setIsEmoticonShow(!isEmoticonShow)}
-                  >
-                    <span>アイコン</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="btn-pk s blue"
-                    onClick={() => handleReply()}
-                  >
-                    <span>登録</span>
-                  </button>
-                </div>
-
-                {/*<!-- 이모티콘 창 활성화시 -->*/}
-                {isEmoticonShow && (
-                  <div className="box_emoji" style={{ display: "block" }}>
-                    <div className="tit_emo">
-                      <Swiper
-                        className="swiper-container myEmoji1"
-                        slidesPerView="auto"
-                        spaceBetween={10}
-                        observer={true}
-                        observeParents={true}
-                        touchRatio={0}
-                        navigation={{
-                          prevEl: prevEmoticonRef?.current,
-                          nextEl: nextEmoticonRef?.current,
-                        }}
-                        onSlideChange={() => {}}
-                        onInit={(swiper) => {}}
-                        onSwiper={(swiper) => {
-                          // console.log('swiper', swiper);
-                        }}
-                      >
-                        <div className="swiper-wrapper">
-                          <SwiperSlide className="swiper-slide">
-                            <img src={require("@IMAGES/icon0.png")} alt="" />
-                          </SwiperSlide>
-                        </div>
-                      </Swiper>
-                      <button
-                        ref={prevEmoticonRef}
-                        type="button"
-                        className="swiper-button-prev myem"
-                      >
-                        <FontAwesomeIcon
-                          className="fa-regular fa-angle-left"
-                          icon={faAngleLeft}
-                        />
-                      </button>
-                      <button
-                        ref={nextEmoticonRef}
-                        type="button"
-                        className="swiper-button-next myem"
-                      >
-                        <FontAwesomeIcon
-                          className="fa-regular fa-angle-right"
-                          icon={faAngleRight}
-                        />
-                      </button>
-                    </div>
-                    <div className="cont_emo scrollY">
-                      <ul>
-                        {tempEmoticons.map((item, index) => (
-                          <li
-                            key={`emoticon_${index}`}
-                            onClick={() => setSelectEmoticon(item)}
-                          >
-                            <span>
-                              <img src={item} alt="" />
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <IconWithText
+                postInfo={currentPost}
+                text={{
+                  icon: "アイコン",
+                  sing_in_to_post: "リアクションする",
+                  register: "登録",
+                }}
+                callback={() => dispatch(getPostReaction({ postId: id, limit: 3 }))}
+              />
             </div>
             {/* 댓글 목록 */}
             <div className="lst_comm">
               <ReplyItems />
+              
               <div
                 className="botm"
                 onClick={() => setReplyLimit(replyLimit + 3)}
@@ -336,104 +194,7 @@ const Novel = () => {
           </div>
 
           <div className="detail_botm_slider">
-            <div className="slider">
-              <div className="swiper-container mySwiper1">
-                <Swiper
-                  className="swiper-container mySwiper1"
-                  slidesPerView={2}
-                  spaceBetween={10}
-                  observer={true}
-                  observeParents={true}
-                  touchRatio={0}
-                  navigation={{
-                    nextEl: nextRef.current,
-                    prevEl: prevRef.current,
-                  }}
-                  onUpdate={() => {
-                    nextRef?.current?.classList?.add("slide_st");
-                    prevRef?.current?.classList?.add("slide_st");
-                  }}
-                >
-                  <SwiperSlide
-                    className="box_vslide swiper-slide"
-                    style={{
-                      width: "316.5px",
-                      marginRight: "27px",
-                    }}
-                  >
-                    <a href="#">
-                      <ImgComicDiv
-                        className="thumb"
-                        bgImg={require("@IMAGES/tmp_comic3.png")}
-                      ></ImgComicDiv>
-                      <div className="txt">
-                        <p className="h1">シェルターアーク</p>
-                        <p className="t1">1話</p>
-                        <p className="t2">
-                          小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                        </p>
-                      </div>
-                    </a>
-                  </SwiperSlide>
-                  <SwiperSlide
-                    className="box_vslide swiper-slide"
-                    style={{
-                      width: "316.5px",
-                      marginRight: "27px",
-                    }}
-                  >
-                    <a href="#">
-                      <ImgComicDiv
-                        className="thumb"
-                        bgImg={require("@IMAGES/tmp_comic3.png")}
-                      ></ImgComicDiv>
-                      <div className="txt">
-                        <p className="h1">シェルターアーク</p>
-                        <p className="t1">1話</p>
-                        <p className="t2">
-                          小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                        </p>
-                      </div>
-                    </a>
-                  </SwiperSlide>
-                  <SwiperSlide
-                    className="box_vslide swiper-slide"
-                    style={{
-                      width: "316.5px",
-                      marginRight: "27px",
-                    }}
-                  >
-                    <a href="#">
-                      <ImgComicDiv
-                        className="thumb"
-                        bgImg={require("@IMAGES/tmp_comic3.png")}
-                      ></ImgComicDiv>
-                      <div className="txt">
-                        <p className="h1">シェルターアーク</p>
-                        <p className="t1">1話</p>
-                        <p className="t2">
-                          小ページで気軽に漫画描きたくて、描いたやつFANBOXにアップする名目で
-                        </p>
-                      </div>
-                    </a>
-                  </SwiperSlide>
-                </Swiper>
-              </div>
-              <button
-                ref={prevRef}
-                type="button"
-                className="swiper-button-prev my1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronLeft} />
-              </button>
-              <button
-                ref={nextRef}
-                type="button"
-                className="swiper-button-next my1"
-              >
-                <FontAwesomeIcon icon={faCircleChevronRight} />
-              </button>
-            </div>
+            <PostItems seriesId={currentPost?.seriesId} />
           </div>
         </>
       )}
@@ -441,18 +202,7 @@ const Novel = () => {
   );
 };
 
-const InputReply = styled.div`
-  &:empty:before {
-    content: attr(placeholder);
-    color: #909dab !important;
-  }
-`;
-
 const ImgProfileSpan = styled.span`
-  background-image: url(${(props) => props.bgImg});
-`;
-
-const ImgComicDiv = styled.div`
   background-image: url(${(props) => props.bgImg});
 `;
 
