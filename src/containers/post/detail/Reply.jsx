@@ -17,13 +17,13 @@ import Image from "@/components/dashboard/Image";
 import { getReactionDate } from "@/common/common";
 
 const TEXT = {
-  before_year: '年前',
-  before_month: '月前',
-  before_day: '日前',
-  before_hour: '時間前',
-  before_minute: '分前',
-  before_second: '秒前',
-}
+  before_year: "年前",
+  before_month: "月前",
+  before_day: "日前",
+  before_hour: "時間前",
+  before_minute: "分前",
+  before_second: "秒前",
+};
 
 const Reply = ({ item }) => {
   const currentPost = useSelector(({ post }) => post.currentPost);
@@ -109,7 +109,7 @@ const Reply = ({ item }) => {
                 <p className="t1">{item?.content}</p>
                 {item?.iconImage && (
                   <p className="icon_image">
-                    <Image hash={item?.iconImage}  />
+                    <Image hash={item?.iconImage} />
                   </p>
                 )}
               </>
@@ -216,7 +216,8 @@ const Reply = ({ item }) => {
         {isReportPopupShow && (
           <ReportPopup
             onClose={() => setIsReportPopupShow(false)}
-            postId={currentPost?.id}
+            postId={item?.id}
+            content={currentPost?.content}
           />
         )}
       </div>

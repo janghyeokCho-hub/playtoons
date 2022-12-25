@@ -1,4 +1,8 @@
-import { getFromDataJson, getRatingToChecked, showOneButtonPopup } from "@/common/common";
+import {
+  getFromDataJson,
+  getRatingToChecked,
+  showOneButtonPopup,
+} from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
@@ -6,7 +10,10 @@ import Tag from "@/components/dashboard/Tag";
 import Textarea from "@/components/dashboard/Textarea";
 import ToolTip from "@/components/dashboard/ToolTip";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { editProfileAction, initProfileAction } from "@/modules/redux/ducks/dashboard";
+import {
+  editProfileAction,
+  initProfileAction,
+} from "@/modules/redux/ducks/dashboard";
 import { getAuthorMineAction } from "@/modules/redux/ducks/post";
 import { useCallback, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,15 +29,16 @@ const text = {
   register_cover_image: "カバー写真登録",
   setting_age: "年齢設定",
   setting_tag: "タグ設定",
-  setting_tag_message: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
+  setting_tag_message:
+    "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   tag_name: "タグ名",
   description_policy:
     "当サイトでは、直近５年間の長崎県公報の全文を掲載しています。",
   register: "登録する",
   drag_n_drop: "ドラッグ＆ドロップ",
   r_19: "R-19",
-  not_creator: 'クリエーターじゃないんです。',
-  done_modify: 'プロフィルを変更しました。',
+  not_creator: "クリエーターじゃないんです。",
+  done_modify: "プロフィルを変更しました。",
 };
 
 export default function DashboardUploadProfile(props) {
@@ -66,7 +74,6 @@ export default function DashboardUploadProfile(props) {
     };
     dispatch(setContainer(container));
   }, [dispatch]);
-
 
   //==============================================================================
   // function
@@ -117,19 +124,19 @@ export default function DashboardUploadProfile(props) {
     //==============================================================================
     // redux test
     //==============================================================================
-    refButton.current.setStatus('loading');
+    refButton.current.setStatus("loading");
     let json = getFromDataJson(refForm);
 
     json = {
       ...json,
-      rating: getRatingToChecked(refR19),  
+      rating: getRatingToChecked(refR19),
       tagIds: refTags.current.getTagsJsonObject(),
       authorId: reduxAuthors[0].id,
       fileInfoProfile: refProfile.current.getImageFile(),
       fileInfoBackground: refBackground.current.getImageFile(),
     };
 
-    dispatch( editProfileAction(json) );
+    dispatch(editProfileAction(json));
   };
 
   //==============================================================================
@@ -140,32 +147,33 @@ export default function DashboardUploadProfile(props) {
     handleContainer();
 
     //chekc author
-    if ( reduxAuthors && reduxAuthors?.length > 0 ) {
+    if (reduxAuthors && reduxAuthors?.length > 0) {
       //get accounts info
       getAuthorProfile();
     } else {
-      showOneButtonPopup(dispatch, text.not_creator, () => navigate('/author/register') );
+      showOneButtonPopup(dispatch, text.not_creator, () =>
+        navigate("/author/register")
+      );
     }
   }, []);
 
   useLayoutEffect(() => {
-    if( reduxProfile ){
-      if( reduxProfile?.status === 200 ){
+    if (reduxProfile) {
+      if (reduxProfile?.status === 200) {
         getAuthorProfile();
         showOneButtonPopup(dispatch, text.done_modify);
-      }
-      else{
+      } else {
         //error 처리
-        if( reduxProfile?.type === 'profile' ){
-          refProfile.current.setError( String(reduxProfile?.data) );
-        } else if( reduxProfile?.type === 'background' ){
-          refBackground.current.setError( String(reduxProfile?.data) );
+        if (reduxProfile?.type === "profile") {
+          refProfile.current.setError(String(reduxProfile?.data));
+        } else if (reduxProfile?.type === "background") {
+          refBackground.current.setError(String(reduxProfile?.data));
         } else {
-          showOneButtonPopup(dispatch,  String(reduxProfile?.data) );
+          showOneButtonPopup(dispatch, String(reduxProfile?.data));
         }
       }
       refButton.current.setStatus(undefined);
-    } 
+    }
 
     return () => dispatch(initProfileAction());
   }, [reduxProfile]);
@@ -199,7 +207,7 @@ export default function DashboardUploadProfile(props) {
               <div className="col">
                 <h3 className="tit1">{text.nickname}</h3>
                 <Input
-                ref={refNickname}
+                  ref={refNickname}
                   type="text"
                   name="nickname"
                   className="inp_txt w100p"
@@ -296,7 +304,11 @@ export default function DashboardUploadProfile(props) {
           </form>
 
           <div className="bbs_write_botm">
-            <Button ref={refButton} onClick={handleClickRegister} className="btn-pk n blue">
+            <Button
+              ref={refButton}
+              onClick={handleClickRegister}
+              className="btn-pk n blue"
+            >
               <span>{text.register}</span>
             </Button>
           </div>

@@ -1,5 +1,12 @@
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { SwiperSlide } from "swiper/react";
@@ -17,7 +24,7 @@ import {
   getFromDataJson,
   getShowEditor,
   initButtonInStatus,
-  showOneButtonPopup
+  showOneButtonPopup,
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import Image from "@/components/dashboard/Image";
@@ -34,7 +41,8 @@ import PreviewPost from "@/components/dashboard/PreviewPost";
 import moment from "moment";
 
 const text = {
-  must_register_creator: 'クリエイターとして登録しなければ、ダッシュボードを利用できません。',
+  must_register_creator:
+    "クリエイターとして登録しなければ、ダッシュボードを利用できません。",
   post_edit: "投稿を修正",
   series: "シリーズ",
   type: "タイプ",
@@ -45,7 +53,8 @@ const text = {
   contents: "コンテンツ",
   contents_tooltip: "投稿するコンテンツです。",
   tag: "タグ",
-  tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
+  tag_tooltip:
+    "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   support_user: "閲覧範囲（支援者）",
   timeline: "タイムラインのサムネイル",
   timeline_tooltip: "投稿のサムネイルです。",
@@ -67,8 +76,8 @@ const text = {
   please_input_number: "話を入力してください。",
   please_input_outline: "あらすじを入力してください。",
   error_title: "お知らせ",
-  login_expired: '自動ログイン時間が過ぎました。',
-  dont_edit: '投稿を修正しました。',
+  login_expired: "自動ログイン時間が過ぎました。",
+  dont_edit: "投稿を修正しました。",
 };
 
 const supportorList = [
@@ -89,13 +98,12 @@ const supportorList = [
   },
 ];
 
-
 export default function PostEdit(props) {
   const [stateData, setStateData] = useState(undefined);
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateTimeline, setStateTimeline] = useState(undefined);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
-  const reduxLoginTime = useSelector(({login}) => login.loginSuccessTime);
+  const reduxLoginTime = useSelector(({ login }) => login.loginSuccessTime);
   const reduxPostUpload = useSelector(({ post }) => post.postUpload);
   const dispatch = useDispatch();
   const params = useParams();
@@ -109,7 +117,7 @@ export default function PostEdit(props) {
   const refThumbnailTimeline = useRef();
   const refTag = useRef();
   const refRegister = useRef();
-  
+
   //==============================================================================
   // header
   //==============================================================================
@@ -146,9 +154,9 @@ export default function PostEdit(props) {
       return;
     }
 
-    if( getShowEditor(stateData.type) ){
+    if (getShowEditor(stateData.type)) {
       //type -> novel
-      if( refEditor.current.isEmpty() ){
+      if (refEditor.current.isEmpty()) {
         initButtonInStatus(refRegister);
         refEditor.current.setError(text.please_input_content);
         return;
@@ -156,10 +164,9 @@ export default function PostEdit(props) {
         json = {
           ...json,
           content: refEditor.current.getContent(),
-        }
+        };
       }
-    }
-    else{
+    } else {
       //type -> webtoon, illust, blog, photo, music
       if (refContents.current.checkToEmpty()) {
         initButtonInStatus(refRegister);
@@ -167,16 +174,16 @@ export default function PostEdit(props) {
         return;
       } else {
         //upload 할 이미지가 있는지 확인
-        if( refContents.current.getImageFile() === undefined ){
+        if (refContents.current.getImageFile() === undefined) {
           json = {
             ...json,
             content: stateData.content,
-          }
+          };
         } else {
           json = {
             ...json,
             fileInfoContent: refContents.current.getImageFile(),
-          }
+          };
         }
       }
     }
@@ -186,19 +193,21 @@ export default function PostEdit(props) {
       refThumbnailTimeline.current.setError(text.please_input_thumbnail);
       return;
     } else {
-      //upload 할 이미지가 있는지 확인 
-      if(refThumbnailTimeline.current.getImageFile() === undefined){
-        //thumbail에서 선택했는지 확인 
+      //upload 할 이미지가 있는지 확인
+      if (refThumbnailTimeline.current.getImageFile() === undefined) {
+        //thumbail에서 선택했는지 확인
         json = {
           ...json,
-          thumbnailImage: refThumbnailTimeline.current.getImageInfo().value === undefined ? 
-                            stateData.thumbnailImage : refThumbnailTimeline.current.getImageInfo().value,
-        }
+          thumbnailImage:
+            refThumbnailTimeline.current.getImageInfo().value === undefined
+              ? stateData.thumbnailImage
+              : refThumbnailTimeline.current.getImageInfo().value,
+        };
       } else {
         json = {
           ...json,
           fileInfoThumbnailImage: refThumbnailTimeline.current.getImageFile(),
-        }
+        };
       }
     }
 
@@ -207,12 +216,13 @@ export default function PostEdit(props) {
       postId: params.id,
       typeId: stateData?.type?.id,
       tagIds: refTag.current.getTagsJsonObject(),
-      categoryId: json.categoryId === "" ? stateData?.category?.id : json.categoryId,
+      categoryId:
+        json.categoryId === "" ? stateData?.category?.id : json.categoryId,
       rating: stateData?.rating,
       // subscribeTierId: '',
     };
 
-    dispatch( setPostEditAction(json) );
+    dispatch(setPostEditAction(json));
   };
 
   //==============================================================================
@@ -230,8 +240,8 @@ export default function PostEdit(props) {
 
   const getTimeline = async () => {
     const params = new FormData();
-    params.append('authorId', reduxAuthors[0].id);
-    params.append('reduced', true);
+    params.append("authorId", reduxAuthors[0].id);
+    params.append("reduced", true);
 
     const { status, data } = await getTimelineFromServer(params);
 
@@ -246,25 +256,25 @@ export default function PostEdit(props) {
   //==============================================================================
 
   const handleClickItemTimeline = (item) => {
-    
     refThumbnailTimeline.current.setThumbnailImage(item?.thumbnailImage);
   };
 
   const handleClickPreview = (event) => {
     const data = {
       title: stateData?.title,
-      startAt: moment(stateData?.startAt).format('YYYY/MM/DD HH:mm'),
+      startAt: moment(stateData?.startAt).format("YYYY/MM/DD HH:mm"),
       outline: stateData?.outline,
       isEditor: getShowEditor(stateData?.type),
-      content: getShowEditor(stateData?.type) ? stateData?.content : stateData?.content.split(','),
+      content: getShowEditor(stateData?.type)
+        ? stateData?.content
+        : stateData?.content.split(","),
       author: {
         profileImage: stateData?.author?.profileImage,
         backgroundImage: stateData?.author?.backgroundImage,
         nickname: stateData?.author?.nickname,
-      }
+      },
     };
 
-    
     dispatch(
       showModal({
         title: text.preview,
@@ -293,7 +303,7 @@ export default function PostEdit(props) {
             <div className="cx_thumb">
               {item !== undefined && (
                 <span>
-                  <Image hash={item.thumbnailImage}  />
+                  <Image hash={item.thumbnailImage} />
                 </span>
               )}
             </div>
@@ -307,25 +317,28 @@ export default function PostEdit(props) {
     handleContainer();
 
     //check login expire time
-    if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
+    if (
+      checkLoginExpired(navigate, dispatch, text.login_expired, reduxLoginTime)
+    ) {
       //check author
-      if( reduxAuthors && reduxAuthors?.length > 0 ){
+      if (reduxAuthors && reduxAuthors?.length > 0) {
         getPostDetail();
         getTimeline();
-    
+
         //temp
         setStateSupportorList(supportorList);
-      }
-      else{
-        showOneButtonPopup( dispatch, text.must_register_creator, () => navigate('/author/register') );
+      } else {
+        showOneButtonPopup(dispatch, text.must_register_creator, () =>
+          navigate("/author/register")
+        );
       }
     }
   }, []);
 
   useEffect(() => {
-    if( stateData ){
-      if( refEditor !== undefined && getShowEditor(stateData?.type) ){
-        refEditor.current.setContent( stateData?.content );
+    if (stateData) {
+      if (refEditor !== undefined && getShowEditor(stateData?.type)) {
+        refEditor.current.setContent(stateData?.content);
       }
     }
   }, [stateData]);
@@ -333,24 +346,28 @@ export default function PostEdit(props) {
   useEffect(() => {
     if (reduxPostUpload) {
       initButtonInStatus(refRegister);
-      if( reduxPostUpload?.status === 200 ){
+      if (reduxPostUpload?.status === 200) {
         //success
-        showOneButtonPopup(dispatch, text.dont_edit, () => navigate(`/dashboard/post/detail/${params.id}`));
-      }
-      else{
+        showOneButtonPopup(dispatch, text.dont_edit, () =>
+          navigate(`/dashboard/post/detail/${params.id}`)
+        );
+      } else {
         //error 처리
-        if( reduxPostUpload?.type === 'content' ){
-          if( getShowEditor(stateData?.type) ){  refEditor.current.setError(text.please_input_content); }
-          else {  refContents.current.setError(String(reduxPostUpload?.data));  }
-        } else if( reduxPostUpload?.type === 'thumbnail' ){
+        if (reduxPostUpload?.type === "content") {
+          if (getShowEditor(stateData?.type)) {
+            refEditor.current.setError(text.please_input_content);
+          } else {
+            refContents.current.setError(String(reduxPostUpload?.data));
+          }
+        } else if (reduxPostUpload?.type === "thumbnail") {
           refThumbnailTimeline.current.setError(String(reduxPostUpload?.data));
         } else {
-          showOneButtonPopup(dispatch,  String(reduxPostUpload?.data)  );
+          showOneButtonPopup(dispatch, String(reduxPostUpload?.data));
         }
       }
     }
 
-    return () => dispatch( initPostAction() );
+    return () => dispatch(initPostAction());
   }, [reduxPostUpload]);
 
   return (
@@ -421,12 +438,12 @@ export default function PostEdit(props) {
             <div className="col">
               <h3 className="tit1">{text.outline}</h3>
               <Textarea
-                  ref={refOutline}
-                  name="outline"
-                  id="outline"
-                  className="textarea1"
-                  defaultValue={stateData?.outline}
-                ></Textarea>
+                ref={refOutline}
+                name="outline"
+                id="outline"
+                className="textarea1"
+                defaultValue={stateData?.outline}
+              ></Textarea>
             </div>
 
             <div className="col">
@@ -436,21 +453,23 @@ export default function PostEdit(props) {
                   <ToolTip title={text.contents} text={text.contents_tooltip} />
                 </button>
               </h3>
-              {
-                ( getShowEditor(stateData?.type) ) ? (
-                  <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content} />
-                ) : (
-                  <ImageUpload
-                    ref={refContents}
-                    id={"filebox2"}
-                    className={"box_drag"}
-                    name={"content"}
-                    text={text.drag_drop}
-                    previewHash={stateData?.content}
-                    multiple={true}
-                  />
-                )
-              }
+              {getShowEditor(stateData?.type) ? (
+                <DraftEditor
+                  ref={refEditor}
+                  className="draft_editor_container"
+                  placeholder={text.please_input_content}
+                />
+              ) : (
+                <ImageUpload
+                  ref={refContents}
+                  id={"filebox2"}
+                  className={"box_drag"}
+                  name={"content"}
+                  text={text.drag_drop}
+                  previewHash={stateData?.content}
+                  multiple={true}
+                />
+              )}
             </div>
 
             <div className="col">
@@ -489,8 +508,8 @@ export default function PostEdit(props) {
                 ref={refThumbnailTimeline}
                 id={"filebox1"}
                 name={"thumbnailImage"}
-                className={'box_drag'}
-                renderType={'thumbnail'}
+                className={"box_drag"}
+                renderType={"thumbnail"}
                 previewHash={stateData?.thumbnailImage}
                 text={text.drag_drop}
                 textEdit={text.edit}

@@ -162,11 +162,13 @@ export const getParamsToQuery = (params, tags) => {
 * @return 에러메세지
 */
 export const getErrorMessageFromResultCode = (data) => {
-  let returnMessage = `Error${data?.message ? ' : '+data?.message : ''}`;
+  let returnMessage = `Error${data?.message ? " : " + data?.message : ""}`;
 
   for (let i = 0; i < RESULT_CODE_LIST.length; i++) {
     if (RESULT_CODE_LIST[i].code === data?.result) {
-      returnMessage = `${RESULT_CODE_LIST[i].name}${data?.message ? ' : '+data?.message : ''}`;
+      returnMessage = `${RESULT_CODE_LIST[i].name}${
+        data?.message ? " : " + data?.message : ""
+      }`;
       break;
     }
   }
@@ -222,7 +224,7 @@ export const getFileDataUrl = async (file) => {
     fileReader.onerror = reject;
     fileReader.readAsDataURL(file);
   });
-}
+};
 
 /**
    convet file object list to binay list
@@ -230,17 +232,19 @@ export const getFileDataUrl = async (file) => {
 * @author 2hyunkook
 */
 export const getFileDataUrlList = async (files) => {
-  return await Promise.all(files.map(async (file) => {
-    return await getFileDataUrl(file);
-  }));
+  return await Promise.all(
+    files.map(async (file) => {
+      return await getFileDataUrl(file);
+    })
+  );
 };
 /**
    convet file object list to binay list
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const isArrayFromPostContent =  (content) => {
-  return content.includes(',');
+export const isArrayFromPostContent = (content) => {
+  return content.includes(",");
 };
 
 /**
@@ -250,11 +254,10 @@ export const isArrayFromPostContent =  (content) => {
 * @return image 객체
 */
 export const getContentOfPost = (content) => {
-  if( isArrayFromPostContent(content) ){
-    return content.split(',').map((item, index) => {
+  if (isArrayFromPostContent(content)) {
+    return content.split(",").map((item, index) => {
       return <Image hash={item} alt="" key={index} />;
     });
-
   } else {
     return <Image hash={content} alt="" />;
   }
@@ -266,11 +269,13 @@ export const getContentOfPost = (content) => {
 * @author 2hyunkook
 */
 export const getStatusText = (status, text) => {
-  switch(status){ //enabled, disabled, pending, suspended(사용자가 설정 못함)
+  switch (
+    status //enabled, disabled, pending, suspended(사용자가 설정 못함)
+  ) {
     default:
-      return '連載中';
-      // return text.enabled;
-    case 'disabled':
+      return "連載中";
+    // return text.enabled;
+    case "disabled":
       return text.disabled;
   }
 };
@@ -290,19 +295,15 @@ export const getReactionDate = (date, text) => {
   const minute = moment.duration(now.diff(createdAt)).asMinutes();
   const second = moment.duration(now.diff(createdAt)).asSeconds();
 
-  if( year > 1 ){
+  if (year > 1) {
     return parseInt(year) + text.before_year;
-  }
-  else if( month > 1 ){
+  } else if (month > 1) {
     return parseInt(month) + text.before_month;
-  }
-  else if( day > 1 ){
+  } else if (day > 1) {
     return parseInt(day) + text.before_day;
-  }
-  else if( hour > 1 ){
+  } else if (hour > 1) {
     return parseInt(hour) + text.before_hour;
-  }
-  else if( minute > 1 ){
+  } else if (minute > 1) {
     return parseInt(minute) + text.before_minute;
   }
 
@@ -315,7 +316,14 @@ export const getReactionDate = (date, text) => {
 * @author 2hyunkook
 */
 export const getShowEditor = (type) => {
-  return type?.code === undefined || type?.code === 'novel' || type?.code === 'illust' || type?.code === 'blog' || type?.code === 'photo' || type?.code === 'music';
+  return (
+    type?.code === undefined ||
+    type?.code === "novel" ||
+    type?.code === "illust" ||
+    type?.code === "blog" ||
+    type?.code === "photo" ||
+    type?.code === "music"
+  );
 };
 
 /**
@@ -324,23 +332,21 @@ export const getShowEditor = (type) => {
 * @author 2hyunkook
 */
 export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
-  if( loginTime !== undefined && loginTime !== null ){
+  if (loginTime !== undefined && loginTime !== null) {
     //1일이 지나면 token 이 expired
     const loginMoment = moment(loginTime);
-    const afterTime = loginMoment.clone().add(1, 'days');
+    const afterTime = loginMoment.clone().add(1, "days");
     const nowTime = moment();
 
-    if( nowTime.isAfter(afterTime) ){
+    if (nowTime.isAfter(afterTime)) {
       clearUserData();
-      dispatch( logoutRequest() );
-      showOneButtonPopup(dispatch, text, () => navigate('/account'));
+      dispatch(logoutRequest());
+      showOneButtonPopup(dispatch, text, () => navigate("/account"));
       return false;
-    }
-    else{
+    } else {
       return true;
     }
-  }
-  else{
+  } else {
     return false;
   }
 };
@@ -355,8 +361,23 @@ export const checkLoginExpired = (navigate, dispatch, text, loginTime) => {
 * @param tags     search tags
 * @param search   search text
 */
-export const setReduxOfWebtoon = (dispatch, type, page, orderBy, tags, search) => {
-  dispatch( setWebtoonAction({type: type, page: page, orderKey: orderBy, tags: tags, keyword: search }) );
+export const setReduxOfWebtoon = (
+  dispatch,
+  type,
+  page,
+  orderBy,
+  tags,
+  search
+) => {
+  dispatch(
+    setWebtoonAction({
+      type: type,
+      page: page,
+      orderKey: orderBy,
+      tags: tags,
+      keyword: search,
+    })
+  );
 };
 
 /**
@@ -370,13 +391,15 @@ export const setReduxOfWebtoon = (dispatch, type, page, orderBy, tags, search) =
 * @param search   search text
 */
 export const setReduxOfNovel = (dispatch, params) => {
-  dispatch( setNovelAction({
-    type: params?.type || 'EVERY', 
-    page: params?.page || 1, 
-    orderKey: params?.orderKey || 'recent', 
-    tags: params?.tags || [], 
-    keyword: params?.keyword || '' 
-  }) );
+  dispatch(
+    setNovelAction({
+      type: params?.type || "EVERY",
+      page: params?.page || 1,
+      orderKey: params?.orderKey || "recent",
+      tags: params?.tags || [],
+      keyword: params?.keyword || "",
+    })
+  );
 };
 
 /**
@@ -411,7 +434,7 @@ export const showOneButtonPopup = (dispatch, message, callback) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export  const handleClickStopPropagation = (e, onClick) => {
+export const handleClickStopPropagation = (e, onClick) => {
   e.stopPropagation();
   onClick?.(e);
 };
@@ -457,12 +480,12 @@ export const convertMoneyStyleString = (number) => {
 };
 
 /**
- * 축약
- * @version 1.0.0
- * @author 조장혁
- * @param {number} num
+ * Convert a number to its contraction form (e.g. 1000 -> 1k).
+ *
+ * @param {number} num - The number to convert.
+ * @returns {string|number} The contraction form of the number, or the original number if it is not greater than 1000.
  */
-export const convertContraction = (num) => {
+export function convertContraction(num) {
   if (num > 1000) {
     let tempNum = 0;
     let unit = "";
@@ -487,4 +510,4 @@ export const convertContraction = (num) => {
   } else {
     return num;
   }
-};
+}

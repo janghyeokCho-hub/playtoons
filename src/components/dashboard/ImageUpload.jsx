@@ -61,6 +61,7 @@ export default forwardRef(function ImageUpload(props, ref) {
     previewHash,
     renderType,
     multiple = false,
+    isProduct = false,
   } = props;
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {
@@ -88,7 +89,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   * @param {*} file
   */
   const setPreviewImage = async (files) => {
-    if (multiple) {
+    if (multiple || isProduct) {
       const results = await Promise.all(
         files.map(async (file) => {
           return await getFileDataUrl(file);
@@ -316,78 +317,133 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   return (
     <>
-      <div
-        className={`${className}${isMultiple() ? "_multi" : ""}`}
-        onClick={(e) => e.preventDefault()}
-      >
-        {/* upload에 쓰일 값  저장 */}
-        <input
-          type={"text"}
-          name={name}
-          defaultValue={stateImage?.value}
-          style={{ display: "none" }}
-        />
-        {/* file input tag */}
-        <input {...InputProps} id={id} />
-        {stateImage?.preview === undefined ||
-        stateImage?.preview.length === 0 ? (
-          // input
-          <label htmlFor={id} className="filetxt">
-            <div {...RootProps} className={`wh100`}>
-              {text === undefined ? (
-                <div className="ico fa-solid">
-                  <FontAwesomeIcon icon={faCirclePlus} />
-                </div>
-              ) : (
-                <div className="txt">
+      {(isProduct && (
+        <>
+          <div className={`${className}`} onClick={(e) => e.preventDefault()}>
+            {/* upload에 쓰일 값  저장 */}
+            <input
+              type={"text"}
+              name={name}
+              defaultValue={stateImage?.value}
+              style={{ display: "none" }}
+            />
+            {/* file input tag */}
+            <input {...InputProps} id={id} />
+            <label htmlFor={id} className="filetxt">
+              <div {...RootProps} className={`wh100`}>
+                {text === undefined ? (
                   <div className="ico fa-solid">
                     <FontAwesomeIcon icon={faCirclePlus} />
                   </div>
-                  <p className="t">{text}</p>
-                </div>
-              )}
+                ) : (
+                  <div className="txt">
+                    <div className="ico fa-solid">
+                      <FontAwesomeIcon icon={faCirclePlus} />
+                    </div>
+                    <p className="t">{text}</p>
+                  </div>
+                )}
+              </div>
+            </label>
+          </div>
+          {stateImage?.preview?.length > 0 && (
+            <div className="box_multy">
+              {stateImage?.preview?.map((item, index) => {
+                return (
+                  <div key={`preview_${index}`} className="fileview">
+                    <div>
+                      <img src={item} alt="" />
+                    </div>
+                    <button
+                      type="button"
+                      className="btn_del"
+                      title="削除"
+                      onClick={() => handlePreviewClose(index)}
+                    >
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
-          </label>
-        ) : (
-          <>
-            {/* render preview  */}
-            {/* //==============================================================================
+          )}
+        </>
+      )) || (
+        <>
+          <div
+            className={`${className}${isMultiple() ? "_multi" : ""}`}
+            onClick={(e) => e.preventDefault()}
+          >
+            {/* upload에 쓰일 값  저장 */}
+            <input
+              type={"text"}
+              name={name}
+              defaultValue={stateImage?.value}
+              style={{ display: "none" }}
+            />
+            {/* file input tag */}
+            <input {...InputProps} id={id} />
+            {stateImage?.preview === undefined ||
+            stateImage?.preview.length === 0 ? (
+              // input
+              <label htmlFor={id} className="filetxt">
+                <div {...RootProps} className={`wh100`}>
+                  {text === undefined ? (
+                    <div className="ico fa-solid">
+                      <FontAwesomeIcon icon={faCirclePlus} />
+                    </div>
+                  ) : (
+                    <div className="txt">
+                      <div className="ico fa-solid">
+                        <FontAwesomeIcon icon={faCirclePlus} />
+                      </div>
+                      <p className="t">{text}</p>
+                    </div>
+                  )}
+                </div>
+              </label>
+            ) : (
+              <>
+                {/* render preview  */}
+                {/* //==============================================================================
                   // normal style
                   //============================================================================== */}
-            {renderType === undefined && renderPreview()}
+                {renderType === undefined && renderPreview()}
 
-            {/* //==============================================================================
+                {/* //==============================================================================
                   // thumbnail timeline style
                   //============================================================================== */}
-            {renderType === "thumbnail" && (
-              <div className={"fileview2"}>
-                <div>
-                  <Image hash={stateImage?.preview} alt="" />
-                </div>
-                <span className="f_tx">
-                  {stateImage?.filename}
-                  <em>{stateImage?.fileLenth}</em>
-                </span>
-                <button type="button" className="btn_del" title="削除">
-                  <FontAwesomeIcon
-                    icon={faTrashXmark}
-                    onClick={handlePreviewClose}
-                  />
-                </button>
-                <button
-                  type="button"
-                  className="btn-pk n blue"
-                  onClick={handleClickEdit}
-                >
-                  <span>{textEdit}</span>
-                </button>
-              </div>
+                {renderType === "thumbnail" && (
+                  <div className={"fileview2"}>
+                    <div>
+                      <Image hash={stateImage?.preview} alt="" />
+                    </div>
+                    <span className="f_tx">
+                      {stateImage?.filename}
+                      <em>{stateImage?.fileLenth}</em>
+                    </span>
+                    <button type="button" className="btn_del" title="削除">
+                      <FontAwesomeIcon
+                        icon={faTrashXmark}
+                        onClick={handlePreviewClose}
+                      />
+                    </button>
+                    <button
+                      type="button"
+                      className="btn-pk n blue"
+                      onClick={handleClickEdit}
+                    >
+                      <span>{textEdit}</span>
+                    </button>
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
-      </div>
+          </div>
 
-      <ErrorMessage error={stateError} />
+          <ErrorMessage error={stateError} />
+        </>
+      )}
     </>
   );
 });

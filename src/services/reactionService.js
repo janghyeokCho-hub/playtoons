@@ -53,9 +53,9 @@ export const deleteReaction = async (id) => {
  * @version 1.0.0
  * @author 조장혁
  */
-export const reportReaction = async (params) => {
+export const reportReaction = async ({ id, params }) => {
   try {
-    return await apiServer("post", `/reaction/${params.id}/report`, params);
+    return await apiServer("post", `/reaction/${id}/report`, params);
   } catch (e) {
     return { status: e.response.status, data: e.message };
   }

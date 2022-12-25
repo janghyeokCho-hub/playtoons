@@ -3,22 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { reportReaction } from "@API/reactionService";
 
-const ReportPopup = ({ onClose, postId }) => {
+const ReportPopup = ({ onClose, content, postId }) => {
   const handleReport = useCallback(async () => {
     const params = {
       type: "sexual",
-      refId: "string",
-      content: "string",
-      id: postId,
+      content: content,
     };
 
-    const response = await reportReaction(params);
-    if (response.status === 200) {
+    const response = await reportReaction({ id: postId, params });
+    if (response.status === 201) {
       alert("신고 완료");
+      onClose();
     } else {
       alert("신고 실패");
     }
-  }, [postId]);
+  }, [content, postId, onClose]);
 
   return (
     <div className="popup_dim">

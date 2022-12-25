@@ -4,25 +4,63 @@ import produce from "immer";
 import { LOGOUT_REQUEST_SUCCESS } from "./login";
 
 /* --- Action Types --- */
-export const [GET_DASHBOARD_PLAN, GET_DASHBOARD_PLAN_SUCCESS, GET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("dashboard/plan/GET");
-export const [INIT_GET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_GET_dashboardPlan");
-export const [SET_DASHBOARD_PLAN, SET_DASHBOARD_PLAN_SUCCESS, SET_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("POST_subscribeTier");
-export const [EDIT_DASHBOARD_PLAN, EDIT_DASHBOARD_PLAN_SUCCESS, EDIT_DASHBOARD_PLAN_FAILURE] = createRequestActionTypes("PATCH_subscribeTier");
-export const [INIT_SET_DASHBOARD_PLAN] = createRequestActionTypes("INIT_POST_subscribeTier");
-export const [GET_DASHBOARD_TYPE, GET_DASHBOARD_TYPE_SUCCESS, GET_DASHBOARD_TYPE_FAILURE] = createRequestActionTypes("GET_dashboardType");
-export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] = createRequestActionTypes("SET/dashboard/sales");
-export const [SET_DASHBOARD_SERIES, SET_DASHBOARD_SERIES_SUCCESS, SET_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("POST_postSeries");
-export const [INIT_SET_DASHBOARD_SERIES] = createRequestActionTypes("INIT_POST_postSeries");
-export const [EDIT_DASHBOARD_SERIES, EDIT_DASHBOARD_SERIES_SUCCESS, EDIT_DASHBOARD_SERIES_FAILURE] = createRequestActionTypes("PATCH_postSeries");
-export const [EDIT_DASHBOARD_PROFILE, EDIT_DASHBOARD_PROFILE_SUCCESS, EDIT_DASHBOARD_PROFILE_FAILURE] = createRequestActionTypes("PATCH_author");
-export const [INIT_EDIT_DASHBOARD_PROFILE] = createRequestActionTypes("INIT_PATCH_author");
+export const [
+  GET_DASHBOARD_PLAN,
+  GET_DASHBOARD_PLAN_SUCCESS,
+  GET_DASHBOARD_PLAN_FAILURE,
+] = createRequestActionTypes("dashboard/plan/GET");
+export const [INIT_GET_DASHBOARD_PLAN] = createRequestActionTypes(
+  "INIT_GET_dashboardPlan"
+);
+export const [
+  SET_DASHBOARD_PLAN,
+  SET_DASHBOARD_PLAN_SUCCESS,
+  SET_DASHBOARD_PLAN_FAILURE,
+] = createRequestActionTypes("POST_subscribeTier");
+export const [
+  EDIT_DASHBOARD_PLAN,
+  EDIT_DASHBOARD_PLAN_SUCCESS,
+  EDIT_DASHBOARD_PLAN_FAILURE,
+] = createRequestActionTypes("PATCH_subscribeTier");
+export const [INIT_SET_DASHBOARD_PLAN] = createRequestActionTypes(
+  "INIT_POST_subscribeTier"
+);
+export const [
+  GET_DASHBOARD_TYPE,
+  GET_DASHBOARD_TYPE_SUCCESS,
+  GET_DASHBOARD_TYPE_FAILURE,
+] = createRequestActionTypes("GET_dashboardType");
+export const [SET_DASHBOARD_SALES, INIT_DASHBOARD_SALES] =
+  createRequestActionTypes("SET/dashboard/sales");
+export const [
+  SET_DASHBOARD_SERIES,
+  SET_DASHBOARD_SERIES_SUCCESS,
+  SET_DASHBOARD_SERIES_FAILURE,
+] = createRequestActionTypes("POST_postSeries");
+export const [INIT_SET_DASHBOARD_SERIES] = createRequestActionTypes(
+  "INIT_POST_postSeries"
+);
+export const [
+  EDIT_DASHBOARD_SERIES,
+  EDIT_DASHBOARD_SERIES_SUCCESS,
+  EDIT_DASHBOARD_SERIES_FAILURE,
+] = createRequestActionTypes("PATCH_postSeries");
+export const [
+  EDIT_DASHBOARD_PROFILE,
+  EDIT_DASHBOARD_PROFILE_SUCCESS,
+  EDIT_DASHBOARD_PROFILE_FAILURE,
+] = createRequestActionTypes("PATCH_author");
+export const [INIT_EDIT_DASHBOARD_PROFILE] =
+  createRequestActionTypes("INIT_PATCH_author");
 
 /* --- Actions --- */
 export const getSubscribeTierAction = createAction(GET_DASHBOARD_PLAN);
 export const initSubscribeTierAction = createAction(INIT_GET_DASHBOARD_PLAN);
 export const setSubscribeTierAction = createAction(SET_DASHBOARD_PLAN);
 export const editSubscribeTierAction = createAction(EDIT_DASHBOARD_PLAN);
-export const initSubscribeTierUploadAction = createAction(INIT_SET_DASHBOARD_PLAN);
+export const initSubscribeTierUploadAction = createAction(
+  INIT_SET_DASHBOARD_PLAN
+);
 export const setSalesIdAction = createAction(SET_DASHBOARD_SALES);
 export const initSalesIdAction = createAction(INIT_DASHBOARD_SALES);
 export const getTypeAction = createAction(GET_DASHBOARD_TYPE);
@@ -61,7 +99,7 @@ const post = handleActions(
       return produce(state, (_) => {
         return {
           ...state,
-          profile: null,          
+          profile: null,
         };
       });
     },
@@ -89,7 +127,7 @@ const post = handleActions(
       return produce(state, (_) => {
         return {
           ...state,
-          seriesUpload: null,          
+          seriesUpload: null,
         };
       });
     },
@@ -150,11 +188,12 @@ const post = handleActions(
       return produce(state, (_) => {
         return {
           ...state,
-          salesId: null,          
+          salesId: null,
         };
       });
     },
-    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {   //2022.11.01 lhk- logout 시 author 정보도 초기화
+    [LOGOUT_REQUEST_SUCCESS]: (state, _) => {
+      //2022.11.01 lhk- logout 시 author 정보도 초기화
       return produce(state, (_) => {
         return {
           ...initialState,

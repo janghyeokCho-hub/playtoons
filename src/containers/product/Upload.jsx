@@ -2,24 +2,22 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
-  faCirclePlus,
-  faCircleXmark,
   faPlus,
   faXmark,
 } from "@fortawesome/pro-solid-svg-icons";
-import Dropzone from "react-dropzone";
 import {
   getProductType as getProductTypeAPI,
   getProductCategory as getProductCategoryAPI,
   insertProduct,
 } from "@API/storeService";
 import Calendar from "@COMPONENTS/dashboard/Calendar";
-import { getFileDataUrl, showOneButtonPopup } from "@/common/common";
+import { showOneButtonPopup } from "@/common/common";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
 import { updateFileInfo } from "@API/fileService";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 
 const Upload = () => {
   const navigate = useNavigate();
@@ -52,7 +50,6 @@ const Upload = () => {
     },
     [products]
   );
-  const [thumbnailImage, setThumbnailImage] = useState(null);
 
   const getProductType = useCallback(async () => {
     const response = await getProductTypeAPI();
@@ -108,6 +105,8 @@ const Upload = () => {
   const calendarEndRef = useRef(null);
   const saleStartRef = useRef(null);
   const saleEndRef = useRef(null);
+  const thumbnailRef = useRef(null);
+  const productsRef = useRef(null);
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -166,22 +165,22 @@ const Upload = () => {
     const authorId = authorMine.authors?.[0].id;
     const thumbnailFD = new FormData();
     thumbnailFD.append("authorId", authorId);
-    thumbnailFD.append("type", "any"); //image, video, binary, any
+    thumbnailFD.append("type", "image"); //image, video, binary, any
     thumbnailFD.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
     thumbnailFD.append("loginRequired", false); //언제 체크해서 보내는건지?
     thumbnailFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
     thumbnailFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
-    thumbnailFD.append("file", thumbnailImage.file);
+    thumbnailFD.append("file", thumbnailRef.current.getImageFile());
     const thumbnailResp = await setFileToServer(thumbnailFD);
 
     const productFD = new FormData();
     productFD.append("authorId", authorId);
-    productFD.append("type", "any"); //image, video, binary, any
+    productFD.append("type", "image"); //image, video, binary, any
     productFD.append("usage", "product"); //profile, background, cover, logo, post, product, thumbnail, attachment
     productFD.append("loginRequired", false); //언제 체크해서 보내는건지?
     productFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
     productFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
-    Object.values(productFiles).forEach((file) => {
+    Object.values(productsRef?.current?.getImageFile()).forEach((file) => {
       productFD.append("files[]", file);
     });
     const productResp = await setFileMultiToServer(productFD);
@@ -217,7 +216,6 @@ const Upload = () => {
         for await (const hash of mediaHashes) {
           await updateFileInfo(hash, params);
         }
-        alert("123");
         navigate("/dashboard/product");
       }
     }
@@ -229,32 +227,16 @@ const Upload = () => {
     price,
     rating,
     saleRatio,
-    thumbnailImage,
-    productFiles,
     authorMine,
     selectTarget,
     calendarStartRef,
     calendarEndRef,
     saleStartRef,
     saleEndRef,
+    thumbnailRef,
+    productsRef,
     navigate,
   ]);
-
-  const handleMediaFiles = useCallback(async (acceptedFiles) => {
-    if (acceptedFiles?.length) {
-      console.log("Promise Start -- ");
-      const results = await Promise.all(
-        acceptedFiles.map(async (file) => {
-          return await getFileDataUrl(file);
-        })
-      );
-      acceptedFiles.forEach((file, index) => {
-        file.file = results[index];
-        file.value = results[index];
-      });
-      setProductFiles(acceptedFiles);
-    }
-  }, []);
 
   return (
     <div className="inr-c">
@@ -322,60 +304,13 @@ const Upload = () => {
                 </button>
               </h3>
 
-              <Dropzone
-                accept={{
-                  "image/jpeg": [],
-                  "image/png": [],
-                  "image/jpg": [],
-                }}
-                onDrop={(files) => {
-                  const reader = new FileReader();
-                  console.log("files[0] : ", files[0]);
-                  if (files[0]) {
-                    reader.readAsDataURL(files[0]);
-                  }
-
-                  reader.onload = () => {
-                    setThumbnailImage({
-                      ...files[0],
-                      file: reader.result,
-                      preview: reader.result,
-                    });
-                  };
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <div className="box_drag" {...getRootProps()}>
-                    {(thumbnailImage && (
-                      <div className="fileview">
-                        <div>
-                          <img src={thumbnailImage?.preview} alt="" />
-                        </div>
-                        <button
-                          type="button"
-                          className="btn_del"
-                          title="削除"
-                          onClick={() => setThumbnailImage(null)}
-                        >
-                          <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                      </div>
-                    )) || (
-                      <>
-                        <input type="file" id="filebox2" {...getInputProps()} />
-                        <label htmlFor="filebox2" className="filetxt">
-                          <div className="txt">
-                            <div className="ico">
-                              <FontAwesomeIcon icon={faCirclePlus} />
-                            </div>
-                            <p className="t">ドラッグ＆ドロップ</p>
-                          </div>
-                        </label>
-                      </>
-                    )}
-                  </div>
-                )}
-              </Dropzone>
+              <ImageUpload
+                ref={thumbnailRef}
+                className={"box_drag"}
+                id={"filebox1"}
+                name={"thumbnailImage"}
+                text="ドラッグ＆ドロップ"
+              />
             </div>
 
             <div className="col">
@@ -415,6 +350,8 @@ const Upload = () => {
                 商品アップロード <span className="i_emp">*</span>
               </h3>
 
+              {/*
+                  
               <Dropzone
                 accept={{
                   "image/jpeg": [],
@@ -450,27 +387,17 @@ const Upload = () => {
                   </div>
                 )}
               </Dropzone>
-              {products?.length > 0 && (
-                <div className="box_multy">
-                  {products.map((item, index) => {
-                    return (
-                      <div key={`preview_${index}`} className="fileview">
-                        <div>
-                          <img src={item?.preview} alt="" />
-                        </div>
-                        <button
-                          type="button"
-                          className="btn_del"
-                          title="削除"
-                          onClick={() => handlePreviewDelete(item?.id)}
-                        >
-                          <FontAwesomeIcon icon={faXmark} />
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+                  */}
+
+              <ImageUpload
+                ref={productsRef}
+                id={"filebox2"}
+                className={"box_drag"}
+                name={"content"}
+                text="ドラッグ＆ドロップ"
+                multiple={true}
+                isProduct={true}
+              />
             </div>
 
             <div className="col">

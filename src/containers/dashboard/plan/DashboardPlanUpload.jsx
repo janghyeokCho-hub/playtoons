@@ -2,7 +2,7 @@ import {
   getFromDataJson,
   getRatingToChecked,
   initButtonInStatus,
-  showOneButtonPopup
+  showOneButtonPopup,
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import ImageUpload from "@/components/dashboard/ImageUpload";
@@ -10,7 +10,11 @@ import Input from "@/components/dashboard/Input";
 import Price from "@/components/dashboard/Price";
 import Textarea from "@/components/dashboard/Textarea";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { initSubscribeTierAction, initSubscribeTierUploadAction, setSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
+import {
+  initSubscribeTierAction,
+  initSubscribeTierUploadAction,
+  setSubscribeTierAction,
+} from "@/modules/redux/ducks/dashboard";
 import { useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,12 +34,14 @@ const text = {
   please_input_description: "説明を入力してください。",
   please_input_price: "価格を入力してください。",
   error_title: "お知らせ",
-  done_upload_plan: '支援を追加しました。',
+  done_upload_plan: "支援を追加しました。",
 };
 
 export default function DashboardPlanUpload(props) {
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
-  const reduxPlanUpload = useSelector(({ dashboard }) => dashboard.subscribeTiersUpload);
+  const reduxPlanUpload = useSelector(
+    ({ dashboard }) => dashboard.subscribeTiersUpload
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const refForm = useRef();
@@ -119,7 +125,7 @@ export default function DashboardPlanUpload(props) {
       // rating: getRatingToChecked(refRating),
     };
 
-    dispatch( setSubscribeTierAction(json) );
+    dispatch(setSubscribeTierAction(json));
   }, []);
 
   //==============================================================================
@@ -128,27 +134,28 @@ export default function DashboardPlanUpload(props) {
   useEffect(() => {
     handleContainer();
 
-    return () => dispatch( initSubscribeTierAction() );
+    return () => dispatch(initSubscribeTierAction());
   }, []);
 
   useEffect(() => {
-    if( reduxPlanUpload ){
+    if (reduxPlanUpload) {
       initButtonInStatus(refRegister);
-      if( reduxPlanUpload?.status === 201 ){
+      if (reduxPlanUpload?.status === 201) {
         //success
-        showOneButtonPopup(dispatch, text.done_upload_plan, () => navigate("/dashboard/plan"));
-      }
-      else{
+        showOneButtonPopup(dispatch, text.done_upload_plan, () =>
+          navigate("/dashboard/plan")
+        );
+      } else {
         //error 처리
-        if( reduxPlanUpload?.type === 'image' ){
+        if (reduxPlanUpload?.type === "image") {
           refThumbnailImage.current.setError(String(reduxPlanUpload?.data));
         } else {
-          showOneButtonPopup(dispatch,  String(reduxPlanUpload?.data)  );
+          showOneButtonPopup(dispatch, String(reduxPlanUpload?.data));
         }
       }
     }
 
-    return () => dispatch( initSubscribeTierUploadAction() );
+    return () => dispatch(initSubscribeTierUploadAction());
   }, [reduxPlanUpload]);
 
   return (
