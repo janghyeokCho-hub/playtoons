@@ -15,6 +15,7 @@ import Dropzone from "react-dropzone";
 import useFilePath from "@/hook/useFilePath";
 import Calendar from "@COMPONENTS/dashboard/Calendar";
 import { getFileDataUrl, showOneButtonPopup } from "@/common/common";
+import ImageUpload from "@/components/dashboard/ImageUpload";
 
 const Edit = () => {
   const dispatch = useDispatch();
@@ -31,17 +32,19 @@ const Edit = () => {
   const [saleRatio, setSaleRatio] = useState(currentProduct?.saleRatio * 100);
   const [selectType, setSelectType] = useState(null);
   const [category, setCategory] = useState(null);
-  const [thumbnailImage, setThumbnailImage] = useState(null);
   const { filePath: thumbnailPreview } = useFilePath(
     currentProduct?.thumbnailImage
   );
   const [selectTarget, setSelectTarget] = useState(currentProduct?.target);
+  const [previewProducts, setPreviewProducts] = useState(null);
   const [selectAge, setSelectAge] = useState(false);
   const [rating, setRating] = useState(null);
   const calendarStartRef = useRef(null);
   const calendarEndRef = useRef(null);
   const saleStartRef = useRef(null);
   const saleEndRef = useRef(null);
+  const thumbnailRef = useRef(null);
+  const productsRef = useRef(null);
 
   const targetList = [
     {
@@ -85,6 +88,11 @@ const Edit = () => {
       setRating("G");
     }
   }, [selectAge]);
+
+  useEffect(() => {
+    const hashs = currentProduct?.images.map((item) => item.hash);
+    setPreviewProducts(hashs?.join(","));
+  }, [currentProduct.images]);
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -209,69 +217,14 @@ const Edit = () => {
                     </button>
                   </h3>
 
-                  {(!thumbnailImage && thumbnailPreview && (
-                    <div className="box_drag">
-                      <div className="fileview">
-                        <div>
-                          <img src={thumbnailPreview} alt="" />
-                        </div>
-                        <button
-                          type="button"
-                          className="btn_del"
-                          title="削除"
-                          onClick={() => setThumbnailImage(null)}
-                        >
-                          <FontAwesomeIcon icon={faCircleXmark} />
-                        </button>
-                      </div>
-                    </div>
-                  )) || (
-                    <Dropzone
-                      onDrop={(acceptedFiles) => {
-                        setThumbnailImage({
-                          ...acceptedFiles[0],
-                          file: acceptedFiles[0],
-                          preview: URL.createObjectURL(acceptedFiles[0]),
-                        });
-                      }}
-                    >
-                      {({ getRootProps, getInputProps }) => (
-                        <div className="box_drag" {...getRootProps()}>
-                          {(thumbnailPreview && (
-                            <div className="fileview">
-                              <div>
-                                <img src={thumbnailPreview} alt="" />
-                              </div>
-                              <button
-                                type="button"
-                                className="btn_del"
-                                title="削除"
-                                onClick={() => setThumbnailImage(null)}
-                              >
-                                <FontAwesomeIcon icon={faCircleXmark} />
-                              </button>
-                            </div>
-                          )) || (
-                            <>
-                              <input
-                                type="file"
-                                id="filebox2"
-                                {...getInputProps()}
-                              />
-                              <label htmlFor="filebox2" className="filetxt">
-                                <div className="txt">
-                                  <div className="ico">
-                                    <FontAwesomeIcon icon={faCirclePlus} />
-                                  </div>
-                                  <p className="t">ドラッグ＆ドロップ</p>
-                                </div>
-                              </label>
-                            </>
-                          )}
-                        </div>
-                      )}
-                    </Dropzone>
-                  )}
+                  <ImageUpload
+                    ref={thumbnailRef}
+                    previewHash={currentProduct?.thumbnailImage}
+                    className={"box_drag"}
+                    id={"filebox1"}
+                    name={"thumbnailImage"}
+                    text="ドラッグ＆ドロップ"
+                  />
                 </div>
 
                 <div className="col">
@@ -467,17 +420,17 @@ const Edit = () => {
                   <h3 className="tit1">
                     商品アップロード <span className="i_emp">*</span>
                   </h3>
-                  <div className="box_drag">
-                    <input type="file" id="filebox1" />
-                    <label htmlFor="filebox1" className="filetxt">
-                      <div className="txt">
-                        <div className="ico">
-                          <FontAwesomeIcon icon={faCirclePlus} />
-                        </div>
-                        <p className="t">ドラッグ＆ドロップ</p>
-                      </div>
-                    </label>
-                  </div>
+
+                  <ImageUpload
+                    ref={productsRef}
+                    id={"filebox2"}
+                    className={"box_drag"}
+                    name={"content"}
+                    text="ドラッグ＆ドロップ"
+                    multiple={true}
+                    isProduct={true}
+                    previewHash={previewProducts}
+                  />
                 </div>
 
                 <div className="col">

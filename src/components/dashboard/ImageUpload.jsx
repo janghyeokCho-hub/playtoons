@@ -12,7 +12,6 @@ import {
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
-  useMemo,
   useState,
 } from "react";
 import { useDropzone } from "react-dropzone";
@@ -172,6 +171,7 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   const handlePreviewClose = (index) => {
     if (multiple) {
+      console.log(stateImage);
       const files = stateImage.file.filter((item, i) => index !== i);
       const previews = stateImage.preview.filter((item, i) => index !== i);
 
@@ -349,10 +349,11 @@ export default forwardRef(function ImageUpload(props, ref) {
           {stateImage?.preview?.length > 0 && (
             <div className="box_multy">
               {stateImage?.preview?.map((item, index) => {
+                console.log("item : ", item);
                 return (
                   <div key={`preview_${index}`} className="fileview">
                     <div>
-                      <img src={item} alt="" />
+                      <Image hash={item} alt="" />
                     </div>
                     <button
                       type="button"
