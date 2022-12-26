@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getPostMineFromServer, getReactionMineAuthorIdFromServer } from "@/services/dashboardService";
+import { getPostMineFromServer, getReactionMineAuthorIdFromServer, getShopInquiryAuthorFromServer, getShopReviewAuthorFromServer } from "@/services/dashboardService";
 
 import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
@@ -50,6 +50,8 @@ const text = {
 };
 
 export default function DashboardMain() {
+  const [stateReview, setStateReview] = useState(undefined);
+  const [stateQuestion, setStateQuestion] = useState(undefined);
   const [stateSeries, setStateSeries] = useState({id: '', thumbnailImage: ''});
   const [statePosts, setStatePosts] = useState(undefined);
   const [stateReactions, setStateReactions] = useState(undefined);
@@ -83,6 +85,46 @@ export default function DashboardMain() {
   //==============================================================================
   // api
   //==============================================================================
+  /**
+    최근의 문의사항
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getQuestionList = async () => {
+    const formData = new FormData();
+    formData.append('authorId', reduxAuthors[0].id);
+    formData.append('limit', 4);
+    
+    const {status, data} = await getShopInquiryAuthorFromServer(formData);
+    console.log('getSalesInquiryList', status, data);
+    
+    if( status === 200 ){
+      setStateQuestion(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+  /**
+    최근의 리뷰 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  const getReviewList = async () => {
+    const formData = new FormData();
+    formData.append('authorId', reduxAuthors[0].id);
+    formData.append('limit', 4);
+    
+    const {status, data} = await getShopReviewAuthorFromServer(formData);
+    console.log('getSalesReview', status, data);
+    
+    if( status === 200 ){
+      setStateReview(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
   /**
     연재중의 시리즈 
   * @version 1.0.0
@@ -184,7 +226,7 @@ export default function DashboardMain() {
   }, [tempData]);
 
   const renderQuestionList = () => {
-    if( tempData?.question_list?.length === 0 ){
+    if( stateQuestion?.inquiries?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
@@ -193,7 +235,7 @@ export default function DashboardMain() {
       );
     }
 
-    return tempData?.question_list?.map((item, index) => {
+    return stateQuestion?.inquiries?.map((item, index) => {
       return (
         <li key={index}>
           <p className="t1">
@@ -208,7 +250,7 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
-      if( tempData?.review_list?.length === 0 ){
+      if( stateReview?.reviews?.length === 0 ){
         return (
           <EmptyDiv
             className={"relative empty"}
@@ -217,7 +259,7 @@ export default function DashboardMain() {
         );
       }
 
-    return tempData?.review_list?.map((item, index) => {
+    return stateReview?.reviews?.map((item, index) => {
       return (
         <li key={index}>
           <div>
@@ -389,6 +431,8 @@ export default function DashboardMain() {
     if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
       //check author
       if( reduxAuthors && reduxAuthors?.length > 0 ){
+        getQuestionList();
+        getReviewList();
         getSeriesList();
         getPostList();
         getReactionList();
