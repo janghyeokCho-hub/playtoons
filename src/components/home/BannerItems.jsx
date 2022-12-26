@@ -5,7 +5,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
-import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Banner from "./Banner";
 

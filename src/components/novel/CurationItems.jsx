@@ -7,8 +7,10 @@ import {
   faCircleChevronRight,
 } from "@fortawesome/pro-solid-svg-icons";
 import Curation from "./Curation";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const CurationItems = ({ curationNum }) => {
+  SwiperCore.use([Navigation, Pagination]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
@@ -49,7 +51,7 @@ const CurationItems = ({ curationNum }) => {
           observer={true}
           observeParents={true}
           pagination={{
-            el: ".swiper-pagination",
+            el: ".swiper-pagination.my1",
             clickable: true,
           }}
           navigation={{

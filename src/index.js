@@ -12,6 +12,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import configureStore, { sagaMiddleware } from "@REDUX/store";
 import rootSaga from "@REDUX/saga";
+import "@/config/lang/i18n";
 
 export const store = configureStore();
 sagaMiddleware.run(rootSaga);

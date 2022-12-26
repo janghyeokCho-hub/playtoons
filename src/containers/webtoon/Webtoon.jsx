@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const Webtoon = () => {
-  SwiperCore.use([Navigation, Pagination]);
+  
   const dispatch = useDispatch();
   const [selectTab, setSelectTab] = useState("EVERY");
   const reduxWebtoon = useSelector( ({post}) => post.webtoon );

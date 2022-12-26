@@ -28,7 +28,7 @@ const Item = ({ item }) => {
           </div>
           <div className="cx_txt">
             <p className="h1">{item.title}</p>
-            <p className="t1">{item.author?.name}</p>
+            <p className="t1">{item.author?.nickname}</p>
             <p className="t1 c-gray">{item.number || "null"}話</p>
             <div className="lst_tag">
               {item.tags?.map((tag, index) => (

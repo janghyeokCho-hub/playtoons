@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getPostTypes as getPostTypesAPI } from "@API/postService";
 import { getCategorys as getCategorysAPI } from "@API/postService";
-import SwiperCore, { Navigation, Pagination } from "swiper";
+
 import CurationItems from "@COMPONENTS/novel/CurationItems";
 import Items from "@COMPONENTS/novel/Items";
 import { setContainer } from "@/modules/redux/ducks/container";
@@ -11,7 +11,7 @@ import { setReduxOfNovel } from "@/common/common";
 
 const Novel = () => {
   const dispatch = useDispatch();
-  SwiperCore.use([Navigation, Pagination]);
+  
   const [selectTab, setSelectTab] = useState("EVERY");
   const reduxNovel = useSelector( ({post}) => post.novel );
 

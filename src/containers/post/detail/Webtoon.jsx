@@ -1,4 +1,4 @@
-import { checkLoginExpired, getContentOfPost } from "@/common/common";
+import { getContentOfPost } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
 import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
@@ -31,7 +31,6 @@ const Webtoon = () => {
   const currentPost = useSelector(({ post }) => post.currentPost);
   const userInfo = useSelector(({ login }) => login.userInfo);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
-  const reduxLoginTime = useSelector(({login}) => login?.loginSuccessTime);
   const [ stateIsAddComent, setStateIsAddComent ] = useState(false);
   const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } =
     useFilePath(currentPost?.author?.profileImage);
@@ -44,8 +43,8 @@ const Webtoon = () => {
     useFilePath(userInfo?.profileImage || reduxAuthors?.[0].profileImage);
 
   useEffect(() => {
-    if(checkLoginExpired( navigate, dispatch, '自動ログイン時間が過ぎました。', reduxLoginTime )){
-      dispatch(getCurrentPost({ id: id, authorId: reduxAuthors?.[0].id }));
+    if( id ){
+      dispatch(getCurrentPost({ id: id }));
     }
   }, [dispatch, navigate, id, location.pathname]);
 

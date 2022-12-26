@@ -1,13 +1,9 @@
 import {
   checkLoginExpired,
   getContentOfPost,
-  getDateYYYYMMDD,
-  getHtmlElementFromHtmlString,
-  getReactionDate,
+  getDateYYYYMMDD, getReactionDate,
   getShowEditor,
-  getStatusText,
-  isArrayFromPostContent,
-  showOneButtonPopup
+  getStatusText, showOneButtonPopup
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
@@ -23,6 +19,7 @@ import {
   faHeart
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { sanitize } from "dompurify";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -125,7 +122,7 @@ export default function DashboardPostDetail() {
     const formData = new FormData();
     formData.append("postId", params.id);
     formData.append("page", page);
-    formData.append("limit", 5);
+    formData.append("limit", 3);
 
     const { status, data } = await getReactionFromServer(formData);
 
@@ -290,9 +287,10 @@ export default function DashboardPostDetail() {
           </div>
 
           {getShowEditor(stateData?.type) ? (
-            <div className="editor_p ws_pre">
-              {getHtmlElementFromHtmlString(stateData?.content)}
-            </div>
+            // <div className="editor_p ws_pre">
+            //   {getHtmlElementFromHtmlString(stateData?.content)}
+            // </div>
+            <div className="editor_p ws_pre" dangerouslySetInnerHTML={{ __html : sanitize(stateData?.content) }} />
           ) : (
             <div className="ta_center">
               {getContentOfPost(stateData?.content)}
