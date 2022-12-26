@@ -182,7 +182,6 @@ const Header = ({ className, onSideMenu }) => {
   const homeURL = isLogined ? "/home" : "/";
 
   useEffect(() => {
-    console.log('first', i18n);
     if (isMenuShow === undefined) {
       dispatch(setMenuShow(true));
     }
@@ -329,13 +328,13 @@ const Header = ({ className, onSideMenu }) => {
                             <li>
                               <a className="pointer" onClick={handleUploadPost}>
                                 <FontAwesomeIcon icon={faSquarePen} />
-                                {t(`header.doPost`)}
+                                {` ${t(`header.doPost`)}`}
                               </a>
                             </li>
                             <li>
                               <Link to="/product/upload">
                                 <FontAwesomeIcon icon={faCartCirclePlus} />
-                                {t(`header.registerMarket`)}
+                                {` ${t(`header.registerMarket`)}`}
                               </Link>
                             </li>
                           </ul>
@@ -367,7 +366,7 @@ const Header = ({ className, onSideMenu }) => {
                               onClick={() => setIsProfileShow(false)}
                             >
                               <FontAwesomeIcon icon={faXmarkLarge} />{" "}
-                              {t(`header.profile`)}
+                              {/* {t(`header.profile`)} */}
                             </button>
                           </div>
                           <div className="bt">
@@ -431,7 +430,7 @@ const Header = ({ className, onSideMenu }) => {
                               onClick={() => setIsLanguageShow(true)}
                             >
                               <FontAwesomeIcon icon={faGlobe} />
-                              {t(`header.${i18n.language}`)}
+                              {` ${t(`header.${i18n.language}`)}`}
                             </button>
                           </div>
                         </div>
@@ -610,13 +609,13 @@ const Header = ({ className, onSideMenu }) => {
                 </div>
                 <div className="pop_cont">
                   <ul>
-                    <li className="on">
+                    <li className={`${i18n.language === 'ja-JP' ? 'on' : ''}`}>
                       <a onClick={() => handleLanguage('ja-JP')} >{t(`header.ja-JP`)}</a>
                     </li>
-                    <li>
+                    <li className={`${i18n.language === 'ko-KR' ? 'on' : ''}`}>
                       <a onClick={() => handleLanguage('ko-KR')}>{t(`header.ko-KR`)}</a>
                     </li>
-                    <li>
+                    <li className={`${i18n.language === 'en-US' ? 'on' : ''}`}>
                       <a onClick={() => handleLanguage('en-US')}>{t(`header.en-US`)}</a>
                     </li>
                   </ul>

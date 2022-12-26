@@ -17,6 +17,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Image from "@/components/dashboard/Image";
 import { showModal } from "@/modules/redux/ducks/modal";
 import InquiryPopup from "@/components/dashboard/InquiryPopup";
+import ReportButton from "@/components/dashboard/ReportButton";
+import EmptyTr from "@/components/dashboard/EmptyTr";
 
 const text = {
   number : "番号",
@@ -36,6 +38,7 @@ const text = {
   label_content: '内容',
   content_placeHolder: '詳細(任意)',
   confirm: '確認',
+  empty_message: '商品のレビュ一はございません。',
 };
 
 const tempData ={
@@ -151,8 +154,8 @@ export default function DashboardSalesReview(props) {
     console.log('getSalesReview', status, data);
     
     if( status === 200 ){
-      // setStateData(data);
-      setStateData(tempData);
+      setStateData(data);
+      // setStateData(tempData);
     }
     else{
       showOneButtonPopup(dispatch, data);
@@ -186,10 +189,10 @@ export default function DashboardSalesReview(props) {
     setSelectedItem(item?.productId);
   };
 
-  const setReport = async (item) => {
+  const setReport = async (item, type, content) => {
     let json = {
-      type: "sexual",
-      content: item.content
+      type: type,
+      content: content
     };
     const {status, data} = await setShopReviewReportToServer(item.productId, json);
     console.log('setReport', status, data);
@@ -229,10 +232,9 @@ export default function DashboardSalesReview(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const handleItemClickReport = (item, index) => {
+  const handleItemClickReport = (item, index, type, content) => {
     console.log('handleItemClickReport', item);
-
-    showTwoButtonPopup(dispatch, <><div>"{item?.product?.name}"</div><div>{text.report_messgae}</div></>, () => setReport(item));
+    setReport(item, type, content);
   };
 
   /**
@@ -257,6 +259,10 @@ export default function DashboardSalesReview(props) {
   //==============================================================================
 
   const renderSalesInquiryList = () => {
+    if (stateData?.reviews?.length === 0) {
+      return <EmptyTr text={text.empty_message} />;
+    }
+
     return stateData?.reviews?.map((item, index) => {
       return (
         <Fragment  key={index}>
@@ -278,7 +284,7 @@ export default function DashboardSalesReview(props) {
             <td className="td_btns2 ta-r et_botm1">
               <div className="d-ib">
                 <div className="btn-pk s blue2" onClick={() => handleItemClickAnswer(item, index)}>{text.answer}</div>
-                <div className="btn-pk s blue2" onClick={() => handleItemClickReport(item, index)}>{text.report}</div>
+                <ReportButton onClick={(type, content) => handleItemClickReport(item, index, type, content)} text={text.report}></ReportButton>
               </div>
             </td>
             <td className="hide-m ta-c">

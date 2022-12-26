@@ -412,6 +412,22 @@ export const initButtonInStatus = (refButton) => {
 };
 
 /**
+  show  popup 
+* @version 1.0.0
+* @author 2hyunkook
+* @param dispatch useDispatch 객체
+* @param title title string
+* @param contents 
+*/
+export const showPopup = (dispatch, title, contents) => {
+  dispatch(
+    showModal({
+      title: title,
+      contents: contents,
+    })
+  );
+};
+/**
   show error popup 
 * @version 1.0.0
 * @author 2hyunkook

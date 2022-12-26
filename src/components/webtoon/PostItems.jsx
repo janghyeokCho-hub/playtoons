@@ -3,7 +3,6 @@ import { getPostListFromServer } from '@/services/dashboardService';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import { SwiperSlide } from "swiper/react";
 import Image from '../dashboard/Image';
 import SwiperContainer from '../dashboard/SwiperContainer';
@@ -39,7 +38,7 @@ export default function PostItems(props) {
               key={index}
             >
               <Link to={`/post/detail/${item?.type?.code}/${item.id}`}>
-                <Image className="thumb" hash={item.thumbnailImage} params={{w:100}} />
+                <Image className="thumb" hash={item.thumbnailImage} />
                 <div className="txt">
                   <p className="h1">{item.title}</p>
                   <p className="t1">{item.number || 'null'} 話</p>
@@ -52,7 +51,7 @@ export default function PostItems(props) {
 
   useEffect(() => {
     getPosts();
-  }, []);
+  }, [seriesId]);
 
   return (
     <>
@@ -70,7 +69,3 @@ export default function PostItems(props) {
     </>
   )
 }
-
-const ImgComicDiv = styled.div`
-  background-image: url(${(props) => props.bgImg});
-`;

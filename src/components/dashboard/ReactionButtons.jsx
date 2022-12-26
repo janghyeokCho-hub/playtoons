@@ -1,4 +1,4 @@
-import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { showOneButtonPopup, showPopup, showTwoButtonPopup } from "@/common/common";
 import { hideModal } from "@/modules/redux/ducks/modal";
 import {
   deleteReactionIdToServer,
@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import ReportPopup from "./ReportPopup";
 
 export default function ReactionButtons(props) {
   const { type, text, item, callback } = props;
@@ -51,7 +52,9 @@ export default function ReactionButtons(props) {
   };
 
   const checkReport = (id) => {
-    showTwoButtonPopup(dispatch, <><div>{id}</div><div>{text.do_u_report}</div></>, () => setReport() );
+    showPopup(dispatch, '通報', <ReportPopup callback={(type, content) => setReport(type, content)} /> );
+
+    // showTwoButtonPopup(dispatch, <><div>{id}</div><div>{text.do_u_report}</div></>, () => setReport() );
   };
 
   //==============================================================================
@@ -75,10 +78,10 @@ export default function ReactionButtons(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const setReport = async () => {
+  const setReport = async (type, content) => {
     let params = {
-      type: "sexual",
-      content: item.content,
+      type: type,
+      content: content,
       // refId: item.postId,
     };
 

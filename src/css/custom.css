@@ -825,6 +825,23 @@
   text-align: center;
   line-height: 16px;
 }
+
+.popup_dim .layerPopup .pop_report .inp_radio{
+  text-align: left;
+}
+
+.popup_dim .layerPopup .pop_report .inp_radio.mb40{
+  margin-bottom: 40px;
+}
+.popup_dim .layerPopup .pop_report .inp_radio.mb16{
+  margin-bottom: 16px;
+}
+.popup_dim .layerPopup .pop_report .textarea1{
+  margin-bottom: 40px;
+}
+.popup_dim .layerPopup .pop_report .textarea1.show{
+  display: inline-block;
+}
 /* ============================================================================== */
 /* markdown  */
 /* ============================================================================== */

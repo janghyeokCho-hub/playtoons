@@ -15,6 +15,7 @@ import { getShopInquiryAuthorFromServer, editShopInquiryAuthorToServer as setSho
 import { useDispatch, useSelector } from "react-redux";
 import { showModal } from "@/modules/redux/ducks/modal";
 import InquiryPopup from "@/components/dashboard/InquiryPopup";
+import ReportButton from "@/components/dashboard/ReportButton";
 
 const text = {
   number : "番号",
@@ -81,8 +82,8 @@ export default function DashboardSalesInquiry(props) {
     console.log('getSalesInquiryList', status, data);
     
     if( status === 200 ){
-      // setStateData(data);
-      setStateData(tempData);
+      setStateData(data);
+      // setStateData(tempData);
     }
     else{
       showOneButtonPopup(dispatch, data);
@@ -119,10 +120,10 @@ export default function DashboardSalesInquiry(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  const setShopInquiryReport = async (item) => {
+  const setShopInquiryReport = async (item, type, content) => {
     let json = {
-      type: 'sexual',
-      content: item.content,
+      type: type,
+      content: content,
     };
     const {status, data} = await setShopInquiryReportToServer(item.id, json);
     console.log('setShopInquiryReport', status, data);
@@ -162,10 +163,9 @@ export default function DashboardSalesInquiry(props) {
    * @version 1.0.0
    * @author 2hyunkook
    */
-  const handleItemClickReport = useCallback((item, index) => {
+  const handleItemClickReport = useCallback((item, index, type, content) => {
     console.log('handleItemClickReport', item, index);
-
-    showTwoButtonPopup(dispatch, <><div>"{item?.product?.name}"</div><div>{text.report_messgae}</div></>, () => setShopInquiryReport(item));
+    setShopInquiryReport(item, type, content);
   }, []);
 
   /**
@@ -208,7 +208,7 @@ export default function DashboardSalesInquiry(props) {
             <td className="td_btns2 ta-r et_botm1">
               <div className="d-ib">
                 <div className="btn-pk s blue2" onClick={() => handleItemClickAnswer(item, index)}>{text.answer}</div>
-                <div className="btn-pk s blue2" onClick={() => handleItemClickReport(item, index)}>{text.report}</div>
+                <ReportButton onClick={(type, content) => handleItemClickReport(item, index, type, content)} text={text.report}></ReportButton>
               </div>
             </td>
             <td className="hide-m ta-c">
