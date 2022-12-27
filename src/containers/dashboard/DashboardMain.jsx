@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SwiperSlide } from "swiper/react";
 
@@ -23,9 +23,8 @@ import tempImageSeries03 from "@IMAGES/temp_series_03.png";
 import tempImageSeries04 from "@IMAGES/temp_series_04.png";
 import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useMemo } from "react";
 
 const text = {
   today_sales: "当日の売上",
