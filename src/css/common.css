@@ -3801,7 +3801,7 @@ body {
   position: absolute;
   right: 10px;
   top: 10px;
-  font-size: 24px;
+  /* font-size: 24px; */
   color: #a3ace4;
 }
 .main_visual {
