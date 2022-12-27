@@ -851,6 +851,19 @@
 }
 
 /* ============================================================================== */
+/* webtoon  */
+/* ============================================================================== */
+.contents .lst_banner{
+  min-height: 300px;
+}
+
+/* ============================================================================== */
+/* landing page  */
+/* ============================================================================== */
+.main_notice .btn_del .fa-circle-xmark{
+  font-size: 24px;
+}
+/* ============================================================================== */
 /* home  */
 /* ============================================================================== */
 .lst_banner .swiper.home{
@@ -931,6 +944,21 @@
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .novel .lst_banner.long .swiper-slide .top{
+    width: auto;
+    height: 100%;
+    transform: translateY(0%);
+  }
+  .lst_banner.long{
+    margin-bottom: 16px;
+  }
+  .contents .lst_banner{
+    min-height: 220px;
+  }
+  .main_notice .btn_del .fa-circle-xmark{
+    font-size: 16px;
+  }
+
   .detail_botm_slider .slide_st.my1 svg{
     transform: translateY(-7px);
   }

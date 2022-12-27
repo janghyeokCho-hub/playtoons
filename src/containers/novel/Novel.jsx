@@ -94,7 +94,7 @@ const Novel = () => {
 
   return (
     <>
-      <div className="contents">
+      <div className="contents novel">
         <div className="inr-c">
           <CurationItems curationNum={5} />
 

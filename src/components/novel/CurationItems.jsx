@@ -8,12 +8,14 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import Curation from "./Curation";
 import SwiperCore, { Navigation, Pagination } from "swiper";
+import { useWindowSize } from "@/hook/useWindowSize";
 
 const CurationItems = ({ curationNum }) => {
   SwiperCore.use([Navigation, Pagination]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [items, setItems] = useState([]);
+  const windowSize = useWindowSize();
 
   const getCurationList = async (curationNum) => {
     const response = await getCurationListAPI(curationNum);
@@ -65,8 +67,12 @@ const CurationItems = ({ curationNum }) => {
         >
           {renderItems}
         </Swiper>
-
-        <div className="swiper-pagination my1"></div>
+        
+        { 
+          windowSize.width > 960 && (
+            <div className="swiper-pagination my1"></div>
+          ) 
+        }
 
         <button
           ref={prevRef}
