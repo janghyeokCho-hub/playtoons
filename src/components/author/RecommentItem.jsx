@@ -76,7 +76,7 @@ const RecommentItem = ({ item }) => {
           <div className="pf_txt">
             <div className="icon">
               {/* 이미지 default 값 필요 */}
-              {!profileImgLoading && <img src={profileImgURL} alt="profile" />}
+              {!profileImgLoading && <img src={profileImgURL} />}
             </div>
             <p className="h1">{item?.nickname}</p>
             <p className="t1">{item?.description}</p>

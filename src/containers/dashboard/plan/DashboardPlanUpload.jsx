@@ -84,7 +84,7 @@ export default function DashboardPlanUpload(props) {
   // event
   //==============================================================================
 
-  const handleClickRegister = useCallback((event) => {
+  const handleClickRegister = (event) => {
     let json = getFromDataJson(refForm);
     //필드 확인
     if (refProductName.current.isEmpty()) {
@@ -126,7 +126,7 @@ export default function DashboardPlanUpload(props) {
     };
 
     dispatch(setSubscribeTierAction(json));
-  }, []);
+  };
 
   //==============================================================================
   // render & hook

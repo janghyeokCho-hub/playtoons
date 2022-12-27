@@ -851,6 +851,17 @@
 }
 
 /* ============================================================================== */
+/* author  */
+/* ============================================================================== */
+.author .slider_profile .box_profile .pf_thumb,
+.author .box_profile._longs .pf_thumb{
+  background-color: #dde1e5;
+}
+.author .box_profile .pf_txt .icon img{
+  background-color: #c3cad2;
+}
+
+/* ============================================================================== */
 /* webtoon  */
 /* ============================================================================== */
 .contents .lst_banner{
@@ -879,8 +890,12 @@
   margin-bottom: 80px;
 }
 
-.lst_banner.long{
+.landing .lst_banner.long{
   margin-bottom: 80px;
+}
+
+.landing .lst_banner .swiper-pagination{
+  margin: 16px 0px;
 }
 
 .ico_arr_link .fa-solid > * {
@@ -944,13 +959,19 @@
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .novel .lst_banner.long .swiper-pagination.none{
+    display: none;
+  }
   .novel .lst_banner.long .swiper-slide .top{
     width: auto;
     height: 100%;
     transform: translateY(0%);
   }
-  .lst_banner.long{
+  .novel .lst_banner.long{
     margin-bottom: 16px;
+  }
+  .landing .contents .lst_banner{
+    min-height: 100px;
   }
   .contents .lst_banner{
     min-height: 220px;

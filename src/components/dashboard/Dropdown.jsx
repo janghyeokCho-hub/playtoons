@@ -39,7 +39,8 @@ export default forwardRef(function Dropdown(props, ref) {
     let selectedItem = dataList?.[0];
 
     if( id !== undefined ){
-      for( const item of dataList ){
+      for( let i = 0; i < dataList?.length; i++ ){
+        const item = dataList?.[i];
         if( item?.id === id || item?.code === id ){
           selectedItem = item;
           break;
@@ -78,10 +79,10 @@ export default forwardRef(function Dropdown(props, ref) {
       return (
         <li 
           key={index} 
-          value={item.id}
+          value={item?.id}
           onClick={handleOptionClicked(item)} >
             <a >
-              { item.name || item.title || '' }
+              { item?.name || item?.title || '' }
             </a>
         </li>
       );
@@ -111,7 +112,7 @@ export default forwardRef(function Dropdown(props, ref) {
           className={`btn_select_drop ${className} ${disabled && 'dis'}`}
           onClick={handleToggle} 
           >
-          {stateSelectedItem?.name || stateSelectedItem?.title || stateSelectedItem}
+          {stateSelectedItem?.name || stateSelectedItem?.title }
 
           <FontAwesomeIcon className={`fa-solid ${disabled && 'dis'}`} icon={faChevronDown} />
           <div

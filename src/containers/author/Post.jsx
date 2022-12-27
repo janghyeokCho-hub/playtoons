@@ -1,18 +1,17 @@
-import React, { useState, useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useParams } from "react-router-dom";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShare } from "@fortawesome/pro-solid-svg-icons";
-import Plan from "./Plan";
+import useFilePath from "@/hook/useFilePath";
+import { setCurrentAuthor } from "@/modules/redux/ducks/author";
+import { setAuthorFollow } from "@API/authorService";
+import SharePopup from "@COMPONENTS/author/detail/SharePopup";
+import PostItems from "@COMPONENTS/author/PostItems";
 import SeriesItems from "@COMPONENTS/author/SeriesItems";
 import StoreItems from "@COMPONENTS/author/StoreItems";
-import { Link } from "react-router-dom";
-import useFilePath from "@/hook/useFilePath";
-import PostItems from "@COMPONENTS/author/PostItems";
-import { setAuthorFollow } from "@API/authorService";
-import { setCurrentAuthor } from "@/modules/redux/ducks/author";
-import SharePopup from "@COMPONENTS/author/detail/SharePopup";
+import { faShare } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useParams } from "react-router-dom";
+import styled from "styled-components";
+import Plan from "./Plan";
 
 const Post = () => {
   const dispatch = useDispatch();
@@ -73,7 +72,7 @@ const Post = () => {
               <div className="icon">
                 {/* 이미지 default 값 필요 */}
                 {!profileImgLoading && (
-                  <img src={profileImgURL} alt="profile" />
+                  <img src={profileImgURL} alt="" />
                 )}
               </div>
               <p className="h1">{currentAuthor?.nickname}</p>

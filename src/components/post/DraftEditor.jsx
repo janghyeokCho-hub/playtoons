@@ -171,7 +171,7 @@ export default forwardRef(function DraftEditor(props, ref) {
                 // locale: 'ja',
             }}
             // 초기값 설정
-            editorState={stateEditor}
+            editorState={stateEditor || ''}
             // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
             onEditorStateChange={onEditorStateChange}
             onBlur={() => setStateIsFocus(false)}

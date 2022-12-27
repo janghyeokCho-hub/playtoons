@@ -316,9 +316,9 @@ export default function UploadPost(props) {
 
 
 
-  const handleClickRegister = useCallback((event) => {
+  const handleClickRegister = (event) => {
     setPost();
-  }, []);
+  };
 
   //==============================================================================
   // Hook && render
@@ -380,7 +380,7 @@ export default function UploadPost(props) {
 
             <div className="col series">
               <h3 className="tit1">{text.series}</h3>
-              {reduxAuthors !== undefined && (
+              {reduxAuthors && (
                 <Series
                   name={"seriesId"}
                   className={"select1 w100"}

@@ -68,11 +68,7 @@ const CurationItems = ({ curationNum }) => {
           {renderItems}
         </Swiper>
         
-        { 
-          windowSize.width > 960 && (
-            <div className="swiper-pagination my1"></div>
-          ) 
-        }
+        <div className={`swiper-pagination my1 ${windowSize.width < 961 ? 'none' : ''}`}></div>
 
         <button
           ref={prevRef}

@@ -32,11 +32,9 @@ export default function Image(props) {
 
     if (status === 200) {
       setStateImage(data?.url);
-    } 
-    // else {
-    //   console.log( String(result) );
-    //   setStateImage(errorImage);
-    // }
+    } else {
+      setStateError(true);
+    }
   };
 
   useLayoutEffect(() => {
