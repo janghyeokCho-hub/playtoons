@@ -1,40 +1,37 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "@/modules/redux/ducks/product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
-  faCirclePlus,
-  faCircleXmark,
   faMinus,
   faPlus,
   faTrashXmark,
 } from "@fortawesome/pro-solid-svg-icons";
-import Dropzone from "react-dropzone";
-import useFilePath from "@/hook/useFilePath";
 import Calendar from "@COMPONENTS/dashboard/Calendar";
-import { getFileDataUrl, showOneButtonPopup } from "@/common/common";
+import { showOneButtonPopup } from "@/common/common";
 import ImageUpload from "@/components/dashboard/ImageUpload";
+import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
+import { updateProduct } from "@API/storeService";
+import { updateFileInfo } from "@API/fileService";
 
 const Edit = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
+  const { authors } = useSelector(({ post }) => post.authorMine);
   const currentProduct = useSelector(({ product }) => product.currentProduct);
   const productTypes = useSelector(({ product }) => product.productTypes);
   const productCategories = useSelector(
     ({ product }) => product.productCategories
   );
-
-  const [title, setTitle] = useState(currentProduct?.name);
+  const [name, setName] = useState(currentProduct?.name);
   const [description, setDescription] = useState(currentProduct?.description);
   const [price, setPrice] = useState(currentProduct?.price);
   const [saleRatio, setSaleRatio] = useState(currentProduct?.saleRatio * 100);
   const [selectType, setSelectType] = useState(null);
   const [category, setCategory] = useState(null);
-  const { filePath: thumbnailPreview } = useFilePath(
-    currentProduct?.thumbnailImage
-  );
   const [selectTarget, setSelectTarget] = useState(currentProduct?.target);
   const [previewProducts, setPreviewProducts] = useState(null);
   const [selectAge, setSelectAge] = useState(false);
@@ -149,6 +146,136 @@ const Edit = () => {
     }
   }, []);
 
+  const handleUpload = useCallback(async () => {
+    // Validate form inputs
+    if (!name) {
+      console.error("Name is required");
+      return;
+    }
+    if (!category) {
+      console.error("Category is required");
+      return;
+    }
+    if (!selectType) {
+      console.error("Type is required");
+      return;
+    }
+    if (!description) {
+      console.error("Description is required");
+      return;
+    }
+    if (!price) {
+      console.error("Price is required");
+      return;
+    }
+    if (!rating) {
+      console.error("Rating is required");
+      return;
+    }
+    if (!selectTarget) {
+      console.error("Target is required");
+      return;
+    }
+
+    // Check if there is a thumbnail image
+    if (!thumbnailRef.current.getImageFile()) {
+      console.error("Thumbnail image is required");
+      return;
+    }
+
+    // Check if there is at least one product image
+    if (!productsRef.current.getImageFile()) {
+      console.error("Product image(s) are required");
+      return;
+    }
+
+    const authorId = authors?.[0]?.id;
+    if (!authorId) {
+      console.error("Author id not found");
+      return;
+    }
+
+    try {
+      // Create form data for thumbnail
+      const thumbnailFD = new FormData();
+      thumbnailFD.append("authorId", authorId);
+      thumbnailFD.append("type", "image");
+      thumbnailFD.append("usage", "thumbnail");
+      thumbnailFD.append("loginRequired", false);
+      thumbnailFD.append("licenseRequired", false);
+      thumbnailFD.append("rating", rating);
+      thumbnailFD.append("file", thumbnailRef.current.getImageFile());
+
+      // Create form data for products
+      const productFD = new FormData();
+      productFD.append("authorId", authorId);
+      productFD.append("type", "image");
+      productFD.append("usage", "product");
+      productFD.append("loginRequired", false);
+      productFD.append("licenseRequired", false);
+      productFD.append("rating", rating);
+      const productFiles = productsRef?.current?.getImageFile();
+      productFD.append("files", Object.values(productFiles));
+
+      // Upload thumbnail and product images
+      const [thumbnailResp, productResp] = await Promise.all([
+        setFileToServer(thumbnailFD),
+        setFileMultiToServer(productFD),
+      ]);
+
+      if (thumbnailResp?.status === 201 && productResp?.status === 201) {
+        const thumbnailHash = thumbnailResp?.data?.hash;
+        const mediaHashes = productResp?.data?.hashses;
+        const insertProductParams = {
+          name,
+          thumbnailImage: thumbnailHash,
+          description,
+          price: Number(price),
+          authorId,
+          typeId: selectType.id,
+          categoryId: category.id,
+          status: "enabled",
+          target: selectTarget,
+          startAt: calendarStartRef.current.getDate(),
+          endAt: calendarEndRef.current.getDate(),
+          saleStartAt: saleStartRef.current.getDate(),
+          saleEndAt: saleEndRef.current.getDate(),
+          saleRatio: saleRatio / 100,
+          rating,
+          mediaHashes,
+        };
+        const response = await updateProduct(insertProductParams);
+        if (response?.status === 201) {
+          const productId = response.data?.id;
+          await updateFileInfo(thumbnailHash, { productId });
+          for await (const hash of mediaHashes) {
+            await updateFileInfo(hash, { productId });
+          }
+          navigate("/dashboard/product");
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, [
+    name,
+    category,
+    selectType,
+    description,
+    price,
+    rating,
+    saleRatio,
+    authors,
+    selectTarget,
+    calendarStartRef,
+    calendarEndRef,
+    saleStartRef,
+    saleEndRef,
+    thumbnailRef,
+    productsRef,
+    navigate,
+  ]);
+
   return (
     <>
       {currentProduct && (
@@ -204,8 +331,8 @@ const Edit = () => {
                   <input
                     type="text"
                     className="inp_txt w100p"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                   />
                 </div>
 
