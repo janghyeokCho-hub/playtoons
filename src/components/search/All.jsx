@@ -17,7 +17,7 @@ const All = () => {
     if (location?.state?.text) {
       // location?.state?.text 검색키워드
     }
-  }, [location.state.text]);
+  }, [location?.state?.text]);
 
   return (
     <>

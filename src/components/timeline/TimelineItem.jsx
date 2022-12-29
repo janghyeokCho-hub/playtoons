@@ -23,7 +23,7 @@ const TimelineItem = ({ item, isActive }) => {
     <div className={`col ${isActive ? "active" : ""}`}>
       <div className="bt_bar">
         <div className="bar">
-          <span style={{ width: "20%" }}></span>
+          <span style={{ width: "30%" }}></span>
         </div>
       </div>
       <div className="thumb">
