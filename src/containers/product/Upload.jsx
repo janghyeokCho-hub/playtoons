@@ -1,10 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleInfo,
-  faPlus,
-  faXmark,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faCircleInfo, faPlus } from "@fortawesome/pro-solid-svg-icons";
 import {
   getProductType as getProductTypeAPI,
   getProductCategory as getProductCategoryAPI,
@@ -22,7 +18,7 @@ import ImageUpload from "@/components/dashboard/ImageUpload";
 const Upload = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const authorMine = useSelector(({ post }) => post.authorMine);
+  const { authors } = useSelector(({ post }) => post.authorMine);
   const [typeList, setTypeList] = useState([]);
   const [categoryList, setCategoryList] = useState([]);
   const [selectType, setSelectType] = useState(null);
@@ -162,62 +158,124 @@ const Upload = () => {
   }, []);
 
   const handleUpload = useCallback(async () => {
-    const authorId = authorMine.authors?.[0].id;
-    const thumbnailFD = new FormData();
-    thumbnailFD.append("authorId", authorId);
-    thumbnailFD.append("type", "image"); //image, video, binary, any
-    thumbnailFD.append("usage", "thumbnail"); //profile, background, cover, logo, post, product, thumbnail, attachment
-    thumbnailFD.append("loginRequired", false); //언제 체크해서 보내는건지?
-    thumbnailFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    thumbnailFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
-    thumbnailFD.append("file", thumbnailRef.current.getImageFile());
-    const thumbnailResp = await setFileToServer(thumbnailFD);
+    // Validate form inputs
+    if (!name) {
+      console.error("Name is required");
+      return;
+    }
+    if (!category) {
+      console.error("Category is required");
+      return;
+    }
+    if (!selectType) {
+      console.error("Type is required");
+      return;
+    }
+    if (!description) {
+      console.error("Description is required");
+      return;
+    }
+    if (!price) {
+      console.error("Price is required");
+      return;
+    }
+    if (!rating) {
+      console.error("Rating is required");
+      return;
+    }
+    if (!selectTarget) {
+      console.error("Target is required");
+      return;
+    }
 
-    const productFD = new FormData();
-    productFD.append("authorId", authorId);
-    productFD.append("type", "image"); //image, video, binary, any
-    productFD.append("usage", "product"); //profile, background, cover, logo, post, product, thumbnail, attachment
-    productFD.append("loginRequired", false); //언제 체크해서 보내는건지?
-    productFD.append("licenseRequired", false); //product 에 관련된 항목 추후 확인 필요
-    productFD.append("rating", rating); //G, PG-13, R-15, R-17, R-18, R-18G
-    Object.values(productsRef?.current?.getImageFile()).forEach((file) => {
-      productFD.append("files[]", file);
-    });
-    const productResp = await setFileMultiToServer(productFD);
+    // Check if there is a thumbnail image
+    if (!thumbnailRef.current.getImageFile()) {
+      console.error("Thumbnail image is required");
+      return;
+    }
 
-    if (thumbnailResp?.status === 201 && productResp?.status === 201) {
-      const thumbnailHash = thumbnailResp?.data?.hash;
-      const mediaHashes = productResp?.data?.hashses;
-      const insertProductParams = {
-        name,
-        thumbnailImage: thumbnailHash,
-        description,
-        price: Number(price),
-        authorId: authorId,
-        typeId: selectType.id,
-        categoryId: category.id,
-        status: "enabled",
-        target: selectTarget,
-        startAt: calendarStartRef.current.getDate(),
-        endAt: calendarEndRef.current.getDate(),
-        saleStartAt: saleStartRef.current.getDate(),
-        saleEndAt: saleEndRef.current.getDate(),
-        saleRatio: saleRatio / 100,
-        rating: rating,
-        mediaHashes: mediaHashes,
-      };
-      const response = await insertProduct(insertProductParams);
-      if (response?.status === 201) {
-        const productId = response.data?.id;
-        const params = {
-          productId: productId,
+    // Check if there is at least one product image
+    if (!productsRef.current.getImageFile()) {
+      console.error("Product image(s) are required");
+      return;
+    }
+
+    const authorId = authors?.[0]?.id;
+    if (!authorId) {
+      console.error("Author id not found");
+      return;
+    }
+
+    try {
+      // Create form data for thumbnail
+      const thumbnailFD = new FormData();
+      thumbnailFD.append("authorId", authorId);
+      thumbnailFD.append("type", "image");
+      thumbnailFD.append("usage", "thumbnail");
+      thumbnailFD.append("loginRequired", false);
+      thumbnailFD.append("licenseRequired", false);
+      thumbnailFD.append("rating", rating);
+      thumbnailFD.append("file", thumbnailRef.current.getImageFile());
+
+      // Create form data for products
+      const productFD = new FormData();
+      productFD.append("authorId", authorId);
+      productFD.append("type", "image");
+      productFD.append("usage", "product");
+      productFD.append("loginRequired", false);
+      productFD.append("licenseRequired", false);
+      productFD.append("rating", rating);
+      const productFiles = productsRef?.current?.getImageFile();
+      Object.values(productFiles).forEach((file) => {
+        productFD.append("files[]", file);
+      });
+
+      // Upload thumbnail and product images
+      const [thumbnailResp, productResp] = await Promise.all([
+        setFileToServer(thumbnailFD),
+        setFileMultiToServer(productFD),
+      ]);
+
+      if (thumbnailResp?.status === 201 && productResp?.status === 201) {
+        // Extract thumbnail and product hashes
+        const thumbnailHash = thumbnailResp?.data?.hash;
+        const mediaHashes = productResp?.data?.hashses;
+
+        // Create params for inserting product
+        const insertProductParams = {
+          name,
+          thumbnailImage: thumbnailHash,
+          description,
+          price: Number(price),
+          authorId,
+          typeId: selectType?.id,
+          categoryId: category?.id,
+          status: "enabled",
+          target: selectTarget,
+          startAt: calendarStartRef.current.getDate(),
+          endAt: calendarEndRef.current.getDate(),
+          saleStartAt: saleStartRef.current.getDate(),
+          saleEndAt: saleEndRef.current.getDate(),
+          saleRatio: saleRatio / 100,
+          rating,
+          mediaHashes,
         };
-        await updateFileInfo(thumbnailHash, params);
-        for await (const hash of mediaHashes) {
-          await updateFileInfo(hash, params);
+
+        // Insert product
+        const response = await insertProduct(insertProductParams);
+        if (response?.status === 201) {
+          const productId = response.data?.id;
+
+          // Update file info for thumbnail and products
+          await Promise.all([
+            updateFileInfo(thumbnailHash, { productId }),
+            ...mediaHashes.map((hash) => updateFileInfo(hash, { productId })),
+          ]);
+          navigate("/dashboard/product");
         }
-        navigate("/dashboard/product");
       }
+    } catch (e) {
+      console.error(e);
     }
   }, [
     name,
@@ -227,7 +285,7 @@ const Upload = () => {
     price,
     rating,
     saleRatio,
-    authorMine,
+    authors,
     selectTarget,
     calendarStartRef,
     calendarEndRef,

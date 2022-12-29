@@ -23,6 +23,14 @@ export const insertProduct = async (params) => {
   }
 };
 
+export const updateProduct = async (params) => {
+  try {
+    return await apiServer("patch", "/shop/product", params);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
+
 /**
  * Get Product detail
  * @version 1.0.0
