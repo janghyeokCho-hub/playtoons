@@ -855,6 +855,20 @@
 /* ============================================================================== */
 .timeline .swiper-container-vertical{
   height: calc(100vh - (100px + 80px*2));  /* header 100px + wrap_timline padding 80px*2 */
+  overflow-y: hidden;
+}
+.timeline .wrap_timeline{
+  max-width: 670px;
+}
+.timeline .t_profile span.im{
+  background-color: #F7F8F9;
+}
+.timeline .bar .transition{
+  -webkit-transition: all 10ms ease-in-out;
+  -moz-transition: all 10ms ease-in-out;
+  -ms-transition: all 10ms ease-in-out;
+  -o-transition: all 10ms ease-in-out;
+  transition: all 10ms ease-in-out;
 }
 
 /* ============================================================================== */
@@ -967,7 +981,8 @@
 
 @media (max-width: 960px)  {
   .timeline .swiper-container-vertical{
-    height: auto;
+    height: 100vh;
+    overflow-y: auto;
   }
 
   .novel .lst_banner.long .swiper-pagination.none{

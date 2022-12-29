@@ -11,6 +11,8 @@ export const DATE_FORMAT = "YYYY/MM/DD";
 
 export const FILE_MAX_SIZE = 2000000;
 
+export const TIMELINE_DELAY = 5000; // 5 seconds
+
 /**
  * result code message list
  */

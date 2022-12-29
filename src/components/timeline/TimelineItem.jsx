@@ -1,15 +1,17 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { TIMELINE_DELAY } from "@/common/constant";
+import useFilePath from "@/hook/useFilePath";
+import { faPenToSquare, faTrash } from "@fortawesome/pro-light-svg-icons";
+import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
 import {
   faChevronLeft,
   faCommentQuote,
   faHeart,
-  faShare,
+  faShare
 } from "@fortawesome/pro-solid-svg-icons";
-import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
-import { faPenToSquare, faTrash } from "@fortawesome/pro-light-svg-icons";
-import useFilePath from "@/hook/useFilePath";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { useSwiper } from "swiper/react";
 
 const TimelineItem = ({ item, isActive }) => {
   const [isControlShow, setIsControlShow] = useState(false);
@@ -18,12 +20,45 @@ const TimelineItem = ({ item, isActive }) => {
   const { filePath: profileImage, loading: profileImgLoading } = useFilePath(
     item?.author?.profileImage
   );
+  const [stateTime, setStateTime] = useState(0);
+  const [stateIsRunning, setStateRunning] = useState(false);
+  const swiper = useSwiper();
+  const UPDATE_TIME = 50;
+
+  const handleControlPopup = () => {
+    setStateRunning(isControlShow === true);
+    setIsControlShow(!isControlShow);
+  };
+  
+  useEffect(() => {
+    setStateRunning(isActive);
+  }, [isActive]);
+
+  useEffect(() => {
+    if(stateIsRunning){
+      if( stateTime >= TIMELINE_DELAY ){
+        setStateRunning(false);
+        swiper.slideNext();
+      }
+
+      const interval = setInterval(() => {
+        setStateTime((stateTime + UPDATE_TIME));
+      }, UPDATE_TIME);
+
+      return () => {
+        clearInterval(interval);
+      }
+    } else {
+      clearInterval();
+      setStateTime(0);
+    }
+  }, [stateTime, stateIsRunning]);
 
   return (
     <div className={`col ${isActive ? "active" : ""}`}>
       <div className="bt_bar">
         <div className="bar">
-          <span style={{ width: "30%" }}></span>
+          <span className="" style={{ width: `${(stateTime / TIMELINE_DELAY) * 100}%` }}></span>
         </div>
       </div>
       <div className="thumb">
@@ -53,31 +88,33 @@ const TimelineItem = ({ item, isActive }) => {
         <button
           type="button"
           className="btn01"
-          onClick={() => setIsControlShow(!isControlShow)}
+          onClick={() => handleControlPopup()}
         >
           <span className="i">
             <FontAwesomeIcon icon={faEllipsisVertical} />
           </span>
         </button>
-        {isControlShow && (
-          <div className="box_drop">
-            <ul>
-              <li>
-                <a href="#" onclick="showComm(this); return false;">
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                  修正
-                </a>
-              </li>
-              <li>
-                <a href="#" onclick="showDrop('popDelete'); return false;">
-                  <FontAwesomeIcon icon={faTrash} />
-                  削除
-                </a>
-              </li>
-              {/*<!-- <li><a href="#" onclick="showDrop('popReport'); return false;"><i className="fa-light fa-flag"></i>通報</a></li> -->*/}
-            </ul>
-          </div>
-        )}
+        {
+          isControlShow && 
+            <div className="box_drop">
+              <ul>
+                <li>
+                  <a href="#" >
+                    <FontAwesomeIcon icon={faPenToSquare} />
+                    修正
+                  </a>
+                </li>
+                <li>
+                  <a href="#" >
+                    <FontAwesomeIcon icon={faTrash} />
+                    削除
+                  </a>
+                </li>
+                {/*<!-- <li><a href="#" onclick="showDrop('popReport'); return false;"><i className="fa-light fa-flag"></i>通報</a></li> -->*/}
+              </ul>
+            </div>
+        }
+
       </div>
       <div className="bt_botm">
         <button type="button" className="btn01">

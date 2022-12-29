@@ -2,11 +2,12 @@ import React, { useRef, useMemo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/pro-solid-svg-icons";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper";
+import SwiperCore, { Navigation, Autoplay } from "swiper";
 import TimelineItem from "./TimelineItem";
+import { TIMELINE_DELAY } from "@/common/constant";
 
 const TimelineItems = ({ items }) => {
-  SwiperCore.use([Navigation]);
+  SwiperCore.use([Navigation, Autoplay]);
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -34,8 +35,13 @@ const TimelineItems = ({ items }) => {
     <Swiper
       className="swiper-container-vertical"
       spaceBetween={50}
-      slidesPerView={2}
+      slidesPerView={1}
+      loop={true}
       direction="vertical"
+      // autoplay={{
+      //   delay: TIMELINE_DELAY,
+      //   disableOnInteraction: false,
+      // }}
       navigation={{
         prevEl: prevRef?.current,
         nextEl: nextRef?.current,
