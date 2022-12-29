@@ -1,13 +1,13 @@
-import React, { useRef, useMemo } from "react";
+import RecentItem from "@COMPONENTS/author/RecentItem";
+import {
+  faCircleChevronLeft,
+  faCircleChevronRight
+} from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import SwiperCore, { Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleChevronLeft,
-  faCircleChevronRight,
-} from "@fortawesome/pro-solid-svg-icons";
-import RecentItem from "@COMPONENTS/author/RecentItem";
 
 const RecentItems = () => {
   SwiperCore.use([Navigation]);
@@ -27,7 +27,7 @@ const RecentItems = () => {
   }, [recents]);
 
   return (
-    <div className="slider_profile">
+    <div className="slider_profile"> 
       <Swiper
         className="swiper-container mySwiper1"
         slidesPerView={5}

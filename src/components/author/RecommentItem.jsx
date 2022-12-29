@@ -20,7 +20,7 @@ const SeriesImgComponent = ({ item }) => {
   }
 };
 
-const RecommentItem = ({ item }) => {
+const RecommentItem = ({ item, index }) => {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
@@ -56,7 +56,7 @@ const RecommentItem = ({ item }) => {
   }, [item]);
 
   return (
-    <div className="item">
+    <div className={`item${index%3 === 0 ? ' i3' : ''}`}>
       <div className="box_profile _half">
         <Link
           to={{

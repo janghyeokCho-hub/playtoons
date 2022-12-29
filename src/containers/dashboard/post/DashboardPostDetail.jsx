@@ -253,15 +253,15 @@ export default function DashboardPostDetail() {
             <div className="icon">
               <span>
                 <FontAwesomeIcon className="mr8" icon={faEye} />
-                {` ${stateData?.viewCount}`}
+                {` ${stateData?.viewCount || ' '}`}
               </span>
               <span>
                 <FontAwesomeIcon className="mr8" icon={faHeart} />
-                {` ${stateData?.likeCount}`}
+                {` ${stateData?.likeCount || ' '}`}
               </span>
               <span>
                 <FontAwesomeIcon className="mr8" icon={faCommentQuote} />
-                {` ${stateData?.reactionCount}`}
+                {` ${stateData?.reactionCount || ' '}`}
               </span>
             </div>
 

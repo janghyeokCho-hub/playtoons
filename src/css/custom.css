@@ -881,6 +881,9 @@
 .author .box_profile .pf_txt .icon img{
   background-color: #c3cad2;
 }
+.author .lst_author_profile .item.i3 {
+  margin-left: 0;
+}
 
 /* ============================================================================== */
 /* webtoon  */

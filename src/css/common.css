@@ -5531,7 +5531,7 @@ body {
   margin-bottom: 40px;
 }
 .slider_profile .swiper-wrapper {
-  overflow: hidden;
+  /* overflow: hidden;  */  /* 2022.12.29 recently author 영역 바깥에 있는 item이 사라지므로 주석처리 */
 }
 .slider_profile .swiper-button-prev,
 .slider_profile .swiper-button-next {
