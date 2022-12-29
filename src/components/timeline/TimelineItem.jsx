@@ -23,10 +23,10 @@ const TimelineItem = ({ item, isActive }) => {
   const [stateTime, setStateTime] = useState(0);
   const [stateIsRunning, setStateRunning] = useState(false);
   const swiper = useSwiper();
-  const UPDATE_TIME = 50;
+  const UPDATE_TIME = 10;
 
   const handleControlPopup = () => {
-    setStateRunning(isControlShow === true);
+    setStateRunning(isControlShow ? true : false);
     setIsControlShow(!isControlShow);
   };
   
@@ -35,23 +35,24 @@ const TimelineItem = ({ item, isActive }) => {
   }, [isActive]);
 
   useEffect(() => {
+    let interval = undefined;
     if(stateIsRunning){
       if( stateTime >= TIMELINE_DELAY ){
         setStateRunning(false);
         swiper.slideNext();
       }
 
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         setStateTime((stateTime + UPDATE_TIME));
       }, UPDATE_TIME);
-
-      return () => {
+    } else {
+      if( interval ){
         clearInterval(interval);
       }
-    } else {
-      clearInterval();
       setStateTime(0);
     }
+
+    return () => {  clearInterval(interval);  }
   }, [stateTime, stateIsRunning]);
 
   return (
