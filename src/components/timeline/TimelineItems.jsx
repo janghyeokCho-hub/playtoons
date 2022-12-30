@@ -38,6 +38,8 @@ const TimelineItems = ({ items }) => {
       slidesPerView={1}
       loop={true}
       direction="vertical"
+      effect="fade"
+      freeMode={true}
       // autoplay={{
       //   delay: TIMELINE_DELAY,
       //   disableOnInteraction: false,

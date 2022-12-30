@@ -17,6 +17,8 @@ import "@/config/lang/i18n";
 export const store = configureStore();
 sagaMiddleware.run(rootSaga);
 
+//for mobile css 
+document.documentElement.style.setProperty('--vh', `${window.innerHeight*0.01}px`);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
