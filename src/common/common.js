@@ -418,12 +418,14 @@ export const initButtonInStatus = (refButton) => {
 * @param dispatch useDispatch 객체
 * @param title title string
 * @param contents 
+* @param callback popup이 사라질때 callback
 */
-export const showPopup = (dispatch, title, contents) => {
+export const showPopup = (dispatch, title, contents, callback) => {
   dispatch(
     showModal({
       title: title,
       contents: contents,
+      callback: callback,
     })
   );
 };

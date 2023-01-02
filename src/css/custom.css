@@ -860,15 +860,11 @@
 .timeline .wrap_timeline{
   max-width: 670px;
 }
-.timeline .t_profile span.im{
-  background-color: #F7F8F9;
+.timeline .wrap_timeline .cont .t_profile{
+  width: auto;
 }
-.timeline .bar .transition{
-  -webkit-transition: all 10ms ease-in-out;
-  -moz-transition: all 10ms ease-in-out;
-  -ms-transition: all 10ms ease-in-out;
-  -o-transition: all 10ms ease-in-out;
-  transition: all 10ms ease-in-out;
+.timeline .t_profile span.im{
+  background-color: rgb(247 248 249 / 50%);
 }
 
 /* ============================================================================== */

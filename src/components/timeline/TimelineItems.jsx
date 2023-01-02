@@ -1,10 +1,9 @@
-import React, { useRef, useMemo } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef } from "react";
+import SwiperCore, { Autoplay, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation, Autoplay } from "swiper";
 import TimelineItem from "./TimelineItem";
-import { TIMELINE_DELAY } from "@/common/constant";
 
 const TimelineItems = ({ items }) => {
   SwiperCore.use([Navigation, Autoplay]);
@@ -38,8 +37,6 @@ const TimelineItems = ({ items }) => {
       slidesPerView={1}
       loop={true}
       direction="vertical"
-      effect="fade"
-      freeMode={true}
       // autoplay={{
       //   delay: TIMELINE_DELAY,
       //   disableOnInteraction: false,

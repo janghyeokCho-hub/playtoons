@@ -10,8 +10,11 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useSwiper } from "swiper/react";
+import FollowButton from "./FollowButton";
+import ShareButton from "./ShareButton";
 
 const TimelineItem = ({ item, isActive }) => {
   const [isControlShow, setIsControlShow] = useState(false);
@@ -23,6 +26,7 @@ const TimelineItem = ({ item, isActive }) => {
   const [stateTime, setStateTime] = useState(0);
   const [stateIsRunning, setStateRunning] = useState(false);
   const swiper = useSwiper();
+  const navigate = useNavigate();
   const UPDATE_TIME = 10;
 
   const handleControlPopup = () => {
@@ -74,13 +78,11 @@ const TimelineItem = ({ item, isActive }) => {
 
           <p>{item?.nickname}</p>
         </div>
-        <button type="button" className="btn-pk n blue">
-          フォロー
-        </button>
+        <FollowButton author={item?.author} onClick={(status) => setStateRunning(status === 'init')} />
       </div>
 
       <div className="bt_top">
-        <button type="button" className="btn01 view-m">
+        <button type="button" className="btn01 view-m" onClick={() =>  navigate('/home')}>
           <span className="i">
             <FontAwesomeIcon icon={faChevronLeft} />
           </span>
@@ -130,12 +132,11 @@ const TimelineItem = ({ item, isActive }) => {
           </span>
           <span>{item?.viewCount}</span>
         </button>
-        <button type="button" className="btn01">
-          <span className="i">
-            <FontAwesomeIcon icon={faShare} />
-          </span>
-          <span className="hidden">share</span>
-        </button>
+        <ShareButton 
+          className={"btn01"}
+          icon={faShare}
+          onClick={(status) => setStateRunning(status === 'init')}>
+        </ShareButton>
       </div>
     </div>
   );
