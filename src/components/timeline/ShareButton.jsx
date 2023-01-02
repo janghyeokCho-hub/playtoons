@@ -7,13 +7,13 @@ import { useDispatch } from 'react-redux';
 import SharePopup from './SharePopup';
 
 export default function ShareButton(props) {
-  const { className, icon, children, onClick } = props;
+  const { className, icon, item, children, onClick } = props;
   const dispatch = useDispatch();
 
   const handleClick = () => {
     
     onClick?.('loading');
-    showPopup(dispatch, '', <SharePopup />, () => onClick?.('init') );
+    showPopup(dispatch, 'シェアーする', <SharePopup item={item} />, () => onClick?.('init'), 'pop_share' );
   };
   
 

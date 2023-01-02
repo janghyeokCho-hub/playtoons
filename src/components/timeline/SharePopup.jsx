@@ -1,14 +1,14 @@
+import { useEffect } from "react";
 import { useCallback, useState } from "react";
 
-import { useLocation } from "react-router-dom";
-import Toast from "../dashboard/Toast";
+import Toast from "./Toast";
 
 
 
 const SharePopup = (props) => {
+  const { item } = props;
   const [ stateToast, setStateToast ] = useState({type: undefined, message: undefined, show: false});
-  const loaction = useLocation();
-  const url = window.location.href;
+  const url = `${window.location.origin}/post/detail/${item?.type?.code}/${item?.id}`;
 
   const handleCopy = useCallback(() => {
     navigator.clipboard
@@ -21,21 +21,36 @@ const SharePopup = (props) => {
         });
       })
       .catch((e) => {
-        console.log("error : ", e);
+        setStateToast({
+          type: "error",
+          message: "コピーに失敗しました。 もう一度コピーしてください。",
+          show: true
+        });
       });
   }, [url]);
+
+  useEffect(() => {
+    if( stateToast.show ){
+      setTimeout(() => {
+        setStateToast({
+          ...stateToast,
+          show: false,
+        });
+      }, 1500);
+    }
+  }, [stateToast.show]);
 
   return (
     <>
       <ul>
-        <li className="ico1">
-          <a href="#">animate</a>
+        <li className="ico1 pointer">
+          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${item.title}&url=${url}`}>animate</a>
         </li>
-        <li className="ico2">
-          <a href="#">twitter</a>
+        <li className="ico2 pointer">
+          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${item.title}&url=${url}`}>twitter</a>
         </li>
-        <li className="ico3">
-          <a href="#">facebook</a>
+        <li className="ico3 pointer">
+          <a target="_blank" rel="noopener noreferrer" href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}>facebook</a>
         </li>
       </ul>
       <div className="inp_btn">
@@ -45,7 +60,7 @@ const SharePopup = (props) => {
           className="btn-pk n blue2"
           onClick={() => handleCopy()}
         >
-          コピー
+          {`コピー`}
         </button>
       </div>
 

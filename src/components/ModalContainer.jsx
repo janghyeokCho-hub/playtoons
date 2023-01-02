@@ -13,6 +13,7 @@ export default function ModalContainer() {
             show={alertModal.show}
             title={alertModal.title} 
             contents={alertModal.contents} 
+            className={alertModal.className} 
             /> 
       }
     </>

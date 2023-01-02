@@ -18,6 +18,7 @@ export const hideModal = createAction(POPUP_HIDE);
   title: null,
   contents : <></>,
   callback : null,
+  className : '',
 }
 
 const popup = handleActions(
@@ -28,6 +29,7 @@ const popup = handleActions(
         draft.title = action.payload.title;
         draft.contents = action.payload.contents;
         draft.callback = action.payload.callback;
+        draft.className = action.payload.className;
       });
     },
     [POPUP_HIDE]: (state, action) => {

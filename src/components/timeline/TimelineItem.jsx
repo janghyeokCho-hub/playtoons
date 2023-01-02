@@ -98,6 +98,7 @@ const TimelineItem = ({ item, isActive }) => {
           </span>
         </button>
         {
+          //author Id 확인 필요 
           isControlShow && 
             <div className="box_drop">
               <ul>
@@ -135,6 +136,7 @@ const TimelineItem = ({ item, isActive }) => {
         <ShareButton 
           className={"btn01"}
           icon={faShare}
+          item={item}
           onClick={(status) => setStateRunning(status === 'init')}>
         </ShareButton>
       </div>

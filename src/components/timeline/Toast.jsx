@@ -1,16 +1,10 @@
-import React from 'react';
-import { useState } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faCircleCheck,
-  faCircleXmark,
-  faCircleInfo,
+  faCircleCheck, faCircleInfo, faCircleXmark
 } from "@fortawesome/pro-solid-svg-icons";
-import { useEffect } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Toast(props) {
   const { type, message, show } = props;
-  const [ stateIsShow, setStateShow ] = useState(show);
   const active = {
     opacity: "1",
     transition: "opacity 500ms",
@@ -31,19 +25,12 @@ export default function Toast(props) {
     }
   };
   
-  useEffect(() => {
-    setStateShow(show);
-    setTimeout(() => {
-      setStateShow(false);
-    }, 1500);
-  }, [show]);
 
   return (
     <>
       <div
         className={`toast_msg ${type}`}
-        style={stateIsShow ? active : hidden}
-        onClick={() => setStateShow(false)}
+        style={show ? active : hidden}
       >
         <FontAwesomeIcon icon={getIcon()} />
         <span>{message}</span>

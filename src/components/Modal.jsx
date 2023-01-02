@@ -1,13 +1,11 @@
-import React, { useEffect, useRef} from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 
 import useOutSideClick from '@/common/useOutSideClick';
-import { useImperativeHandle, forwardRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmarkLarge } from '@fortawesome/pro-regular-svg-icons';
-import { useState } from 'react';
 import { hideModal } from '@/modules/redux/ducks/modal';
-import { useNavigate } from 'react-router-dom';
+import { faXmarkLarge } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 
 
 /**
@@ -31,7 +29,7 @@ import { useNavigate } from 'react-router-dom';
 * @author 이현국
 */
 export default forwardRef( function Modal(props, ref) {    
-  const { show, title, contents } = props;
+  const { show, title, contents, className } = props;
   const [ stateIsShow, setStateIsShow ] = useState(false);
   const [ stateTitle, setStateTitle ] = useState(undefined);
   const [ stateContent, setStateContent ] = useState(undefined);
@@ -105,7 +103,7 @@ export default forwardRef( function Modal(props, ref) {
         stateIsShow && 
           <div className="popup_dim" >
             {/* popTerms */}
-            <div ref={refPopup}  id="popTerms" className="layerPopup modal">
+            <div ref={refPopup}  id="popTerms" className={`layerPopup modal ${className}`}>
               <div className="popup">
                 <div className="pop_head">
                   <h2 className="title">{stateTitle}</h2>
