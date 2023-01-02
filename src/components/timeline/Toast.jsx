@@ -33,7 +33,7 @@ export default function Toast(props) {
         style={show ? active : hidden}
       >
         <FontAwesomeIcon icon={getIcon()} />
-        <span>{message}</span>
+        <span>{` ${message}`}</span>
       </div>
     </>
   )

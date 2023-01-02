@@ -5,7 +5,7 @@ import Toast from "./Toast";
 
 
 
-const SharePopup = (props) => {
+export default function SharePopup(props){
   const { item } = props;
   const [ stateToast, setStateToast ] = useState({type: undefined, message: undefined, show: false});
   const url = `${window.location.origin}/post/detail/${item?.type?.code}/${item?.id}`;
@@ -68,5 +68,3 @@ const SharePopup = (props) => {
     </>
   );
 };
-
-export default SharePopup;

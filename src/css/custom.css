@@ -867,6 +867,15 @@
 .timeline .t_profile span.im{
   background-color: rgb(247 248 249 / 50%);
 }
+.popup_dim .modal.comment{
+  width: 37vw;
+  height: 80vh;
+  top: 105px;
+  transform: translateX(-50%);
+}
+.popup_dim .pop_share .toast_msg{
+  top: 0;
+}
 
 /* ============================================================================== */
 /* author  */
