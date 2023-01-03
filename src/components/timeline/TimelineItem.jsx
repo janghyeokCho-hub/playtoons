@@ -61,7 +61,7 @@ const TimelineItem = ({ item, isActive }) => {
           <span className="" style={{ width: `${(stateTime / TIMELINE_DELAY) * 100}%` }}></span>
         </div>
       </div>
-      <div className="thumb">
+      <div className="thumb" onClick={() => navigate(`/post/detail/${item?.type?.code}/${item?.id}`)}>
         <ImageSpan imagePath={item?.thumbnailImage} />
       </div>
       <div className="cont">

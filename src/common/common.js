@@ -8,6 +8,7 @@ import { RESULT_CODE_LIST } from "./constant";
 import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
 import { setNovelAction, setWebtoonAction } from "@/modules/redux/ducks/post";
+import { useTranslation } from "react-i18next";
 /**
  * Email validation
  * @param {string} text
@@ -285,7 +286,7 @@ export const getStatusText = (status, text) => {
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getReactionDate = (date, text) => {
+export const getReactionDate = (date, t) => {
   const now = moment();
   const createdAt = moment(date);
   const year = moment.duration(now.diff(createdAt)).asYears();
@@ -294,20 +295,20 @@ export const getReactionDate = (date, text) => {
   const hour = moment.duration(now.diff(createdAt)).asHours();
   const minute = moment.duration(now.diff(createdAt)).asMinutes();
   const second = moment.duration(now.diff(createdAt)).asSeconds();
-
+  
   if (year > 1) {
-    return parseInt(year) + text.before_year;
+    return parseInt(year) + t(`before_year`);
   } else if (month > 1) {
-    return parseInt(month) + text.before_month;
+    return parseInt(month) + t(`before_month`);
   } else if (day > 1) {
-    return parseInt(day) + text.before_day;
+    return parseInt(day) + t(`before_day`);
   } else if (hour > 1) {
-    return parseInt(hour) + text.before_hour;
+    return parseInt(hour) + t(`before_hour`);
   } else if (minute > 1) {
-    return parseInt(minute) + text.before_minute;
+    return parseInt(minute) + t(`before_minute`);
   }
 
-  return parseInt(second) + text.before_second;
+  return parseInt(second) + t(`before_second`);
 };
 
 /**

@@ -29,7 +29,7 @@ export default function CommentButton(props) {
         <span className="i">
           <FontAwesomeIcon icon={icon} />
         </span>
-        <span>{item?.viewCount}</span>
+        <span>{item?.reactionCount}</span>
       </button>
     </>
   );

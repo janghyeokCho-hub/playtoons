@@ -876,6 +876,67 @@
 .popup_dim .pop_share .toast_msg{
   top: 0;
 }
+.popup_dim .modal.comment .wrap_comment .top_comm{
+  padding: 0;
+  margin-bottom: 48px;
+}
+.popup_dim .modal.comment .btn_pop_close{
+  top: 32px;
+  right: 32px;
+}
+.popup_dim .modal.comment .col.top{
+  text-align: left;
+  position: absolute;
+  top: 32px;
+  left: 32px;
+}
+.popup_dim .modal.comment .title{
+  color: rgba(19,22,26,1);
+  /* font-family: "NotoSansJP-Bold"; */
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 20px;
+}
+.popup_dim .modal.comment .comm_num{
+  margin-left: 8px;
+  color: rgba(144,157,171,1);
+  /* font-family: "NotoSansJP-Medium"; */
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: 20px;
+}
+.popup_dim .modal.comment .wrap_comment .imgs span{
+  background-color: #c3cad2;
+}
+.popup_dim .modal.comment .wrap_comment .lst_comm{
+  padding: 0;
+}
+.popup_dim .modal.comment .wrap_comment .lst_comm .col:first-child{
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #cacaca;
+}
+.popup_dim .modal.comment .box_drop.comment{
+  left: auto;
+  right: 0;
+  transform: none;
+}
+.popup_dim .modal.comment .box_drop.box_favorit{
+  padding: 8px 0px;
+  min-width: 120px;
+  margin-left: 0;
+  margin-top: 0;
+  left: 6px;
+  top: calc(-200% - 10px - 8px);
+}
+.popup_dim .modal.comment .box_drop.box_favorit li:nth-child(2) button {
+  background-image: url(@IMAGES/emoji5.jpg);
+}
+.popup_dim .modal.comment .wrap_comment .lst_comm p{
+  text-align: left;
+}
 
 /* ============================================================================== */
 /* author  */
@@ -939,6 +1000,7 @@
 .mpost .box_profile .pf_txt .icon .empty{
   background-color: #c3cad2;
 }
+
 /* ============================================================================== */
 /* novel  */
 /* ============================================================================== */

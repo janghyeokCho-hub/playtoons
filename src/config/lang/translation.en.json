@@ -32,5 +32,15 @@
   "popup":{
     "doNotRegisterCreatorCanNotPost": "If you don't register as a creator, you can't post.",
     "doNotRegisterCreatorCanNotEnterDashboard": "If you don't register as a creator, you won't be able to use the dashboard."
-  }
+  },
+  "pleaseInputComment": "Please, Input comment.",
+  "doReaction": "to do reaction",
+  "icon": "icon",
+  "register": "register",
+  "before_year": "年前",
+  "before_month": "月前",
+  "before_day": "日前",
+  "before_hour": "時間前",
+  "before_minute": "分前",
+  "before_second": "秒前"
 }

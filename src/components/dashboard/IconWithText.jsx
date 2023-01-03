@@ -11,6 +11,7 @@ import Button from "./Button";
 import ErrorMessage from "./ErrorMessage";
 import Image from "./Image";
 import SwiperContainer from "./SwiperContainer";
+import { useTranslation } from "react-i18next";
 
 /**
 *
@@ -30,9 +31,10 @@ import SwiperContainer from "./SwiperContainer";
 * @return
 */
 export default function IconWithText(props, ref) {
-  const { text, postInfo, callback } = props;
+  const { postInfo, callback } = props;
   const [stateIconData, setStateIconData] = useState(undefined);
   const [stateTopSelected, setStateTopSelected] = useState(0);
+  const [stateIsFocus, setStateFocus] = useState(false);
   const [stateShowIcon, setStateShowIcon] = useState(false);
   const [stateSelectedIcons, setStateSelectedIcons] = useState([]);
   const [stateError, setStateError] = useState(undefined);
@@ -41,6 +43,7 @@ export default function IconWithText(props, ref) {
   const refContaienr = useRef();
   const refTextArea = useRef();
   const refButton = useRef();
+  const { t } = useTranslation();
 
   //==============================================================================
   //  function
@@ -71,13 +74,17 @@ export default function IconWithText(props, ref) {
   const setReaction = async () => {
     let params = {
       content: refTextArea.current.value,
-      iconImage:
-        stateSelectedIcons.length === 0 ? "" : stateSelectedIcons[0].image,
       type: "reply",
       postId: postInfo.id,
       authorId: isAuthors() ? reduxAuthors[0].id : null,
       // reactionId: "string"
     };
+    
+    if( stateSelectedIcons.length > 0 ){
+      params.iconImage = stateSelectedIcons[0].image;
+    } else {
+      delete params.iconImage;
+    }
 
     const { status, data } = await setPostReactionToServer(params);
     if (status === 201) {
@@ -114,7 +121,7 @@ export default function IconWithText(props, ref) {
 
   const handleRegister = (event) => {
     if (!refTextArea.current.value) {
-      setStateError(text.please_input_coment);
+      setStateError(t(`pleaseInputComment`));
       refButton.current.setStatus(undefined);
       return false;
     }
@@ -183,14 +190,18 @@ export default function IconWithText(props, ref) {
   return (
     <>
       <div className="conts">
-        <div className={`textarea1 ${stateSelectedIcons.length > 0 && "emo"}`}>
+        <div className={`textarea1 ${stateSelectedIcons.length > 0 && "emo"} ${stateIsFocus ? 'input_focus' : ''}`}>
           <textarea
             ref={refTextArea}
             name="content"
             className="textarea1"
-            placeholder={text.sing_in_to_post}
+            placeholder={t(`doReaction`)}
             onChange={() => setStateError(undefined)}
-            onFocus={() => setStateShowIcon(false)}
+            onFocus={() => {
+              setStateShowIcon(false);
+              setStateFocus(true);
+            }}
+            onBlur={() => setStateFocus(false)}
           />
 
           {/* <!-- 삽입된 이모티콘 --> */}
@@ -204,12 +215,12 @@ export default function IconWithText(props, ref) {
             className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
             onClick={() => setStateShowIcon(!stateShowIcon)}
           >
-            <span>{text.icon}</span>
+            <span>{t(`icon`)}</span>
           </button>
           <Button
             type="button"
             ref={refButton}
-            text={text.register}
+            text={t(`register`)}
             className="btn-pk s blue"
             onClick={handleRegister}
           >

@@ -32,7 +32,7 @@ const ReplyControlBox = ({
   });
 
   return (
-    <div className="box_drop" ref={ref}>
+    <div className="box_drop comment" ref={ref}>
       <ul>
         {(item.userId === userInfo.id && (
           <>

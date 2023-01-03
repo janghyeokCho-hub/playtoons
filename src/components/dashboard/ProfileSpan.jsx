@@ -24,10 +24,10 @@ export default function ProfileSpan(props) {
 
   const getImage = async (hash) => {
     const params = new FormData();
-    const { status, data: result } = await getFileUrlFromServer(hash, params);
+    const { status, data } = await getFileUrlFromServer(hash, params);
 
     if (status === 200) {
-      setStateImage(result?.url);
+      setStateImage(data?.url);
     }
   };
 

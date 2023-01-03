@@ -32,5 +32,15 @@
   "popup":{
     "doNotRegisterCreatorCanNotPost": "クリエイターとして登録しなければ、投稿できません。",
     "doNotRegisterCreatorCanNotEnterDashboard": "クリエイターとして登録しなければ、ダッシュボードを利用できません。"
-  }
+  },
+  "pleaseInputComment": "コメントを入力してください。",
+  "doReaction": "メッセージを入力してください。",
+  "icon": "アイコン",
+  "register": "登録する",
+  "before_year": "年前",
+  "before_month": "月前",
+  "before_day": "日前",
+  "before_hour": "時間前",
+  "before_minute": "分前",
+  "before_second": "秒前"
 }
