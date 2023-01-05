@@ -349,7 +349,6 @@ export default forwardRef(function ImageUpload(props, ref) {
           {stateImage?.preview?.length > 0 && (
             <div className="box_multy">
               {stateImage?.preview?.map((item, index) => {
-                console.log("item : ", item);
                 return (
                   <div key={`preview_${index}`} className="fileview">
                     <div>

@@ -177,18 +177,6 @@ const Edit = () => {
       return;
     }
 
-    // Check if there is a thumbnail image
-    if (!thumbnailRef.current.getImageFile()) {
-      console.error("Thumbnail image is required");
-      return;
-    }
-
-    // Check if there is at least one product image
-    if (!productsRef.current.getImageFile()) {
-      console.error("Product image(s) are required");
-      return;
-    }
-
     const authorId = authors?.[0]?.id;
     if (!authorId) {
       console.error("Author id not found");
@@ -196,63 +184,88 @@ const Edit = () => {
     }
 
     try {
-      // Create form data for thumbnail
-      const thumbnailFD = new FormData();
-      thumbnailFD.append("authorId", authorId);
-      thumbnailFD.append("type", "image");
-      thumbnailFD.append("usage", "thumbnail");
-      thumbnailFD.append("loginRequired", false);
-      thumbnailFD.append("licenseRequired", false);
-      thumbnailFD.append("rating", rating);
-      thumbnailFD.append("file", thumbnailRef.current.getImageFile());
+      const uploadPromise = [];
 
-      // Create form data for products
-      const productFD = new FormData();
-      productFD.append("authorId", authorId);
-      productFD.append("type", "image");
-      productFD.append("usage", "product");
-      productFD.append("loginRequired", false);
-      productFD.append("licenseRequired", false);
-      productFD.append("rating", rating);
-      const productFiles = productsRef?.current?.getImageFile();
-      productFD.append("files", Object.values(productFiles));
+      if (thumbnailRef.current.getImageFile()) {
+        const thumbnailFD = new FormData();
+        thumbnailFD.append("authorId", authorId);
+        thumbnailFD.append("type", "image");
+        thumbnailFD.append("usage", "thumbnail");
+        thumbnailFD.append("loginRequired", false);
+        thumbnailFD.append("licenseRequired", false);
+        thumbnailFD.append("rating", rating);
+        thumbnailFD.append("file", thumbnailRef.current.getImageFile());
+        uploadPromise.push(setFileToServer(thumbnailFD));
+      }
 
-      // Upload thumbnail and product images
-      const [thumbnailResp, productResp] = await Promise.all([
-        setFileToServer(thumbnailFD),
-        setFileMultiToServer(productFD),
-      ]);
+      if (productsRef.current.getImageFile()) {
+        const productFD = new FormData();
+        productFD.append("authorId", authorId);
+        productFD.append("type", "image");
+        productFD.append("usage", "product");
+        productFD.append("loginRequired", false);
+        productFD.append("licenseRequired", false);
+        productFD.append("rating", rating);
+        const productFiles = productsRef?.current?.getImageFile();
+        productFD.append("files", Object.values(productFiles));
+        uploadPromise.push(setFileMultiToServer(productFD));
+      }
 
-      if (thumbnailResp?.status === 201 && productResp?.status === 201) {
-        const thumbnailHash = thumbnailResp?.data?.hash;
-        const mediaHashes = productResp?.data?.hashses;
-        const insertProductParams = {
-          name,
-          thumbnailImage: thumbnailHash,
-          description,
-          price: Number(price),
-          authorId,
-          typeId: selectType.id,
-          categoryId: category.id,
-          status: "enabled",
-          target: selectTarget,
-          startAt: calendarStartRef.current.getDate(),
-          endAt: calendarEndRef.current.getDate(),
-          saleStartAt: saleStartRef.current.getDate(),
-          saleEndAt: saleEndRef.current.getDate(),
-          saleRatio: saleRatio / 100,
-          rating,
-          mediaHashes,
-        };
-        const response = await updateProduct(insertProductParams);
-        if (response?.status === 201) {
-          const productId = response.data?.id;
-          await updateFileInfo(thumbnailHash, { productId });
-          for await (const hash of mediaHashes) {
-            await updateFileInfo(hash, { productId });
-          }
-          navigate("/dashboard/product");
+      const insertProductParams = {
+        name,
+        description,
+        price: Number(price),
+        authorId,
+        typeId: selectType.id,
+        categoryId: category.id,
+        status: "enabled",
+        target: selectTarget,
+        rating,
+      };
+
+      let thumbnailHash;
+      let mediaHashes;
+      if (uploadPromise?.length > 0) {
+        const [thumbnailResp, productResp] = await Promise.all(uploadPromise);
+        if (thumbnailResp?.status === 201) {
+          thumbnailHash = thumbnailResp?.data?.hash;
+          insertProductParams.thumbnailImage = thumbnailHash;
         }
+
+        if (productResp?.status === 201) {
+          mediaHashes = productResp?.data?.hashses;
+          insertProductParams.mediaHashes = mediaHashes;
+        }
+      }
+
+      if (calendarStartRef.current?.getDate()) {
+        insertProductParams.startAt = calendarStartRef.current.getDate();
+      }
+
+      if (calendarEndRef.current?.getDate()) {
+        insertProductParams.endAt = calendarEndRef.current.getDate();
+      }
+
+      if (saleStartRef.current?.getDate()) {
+        insertProductParams.saleStartAt = saleStartRef.current.getDate();
+      }
+
+      if (saleEndRef.current?.getDate()) {
+        insertProductParams.saleEndAt = saleEndRef.current.getDate();
+      }
+
+      if (saleRatio > 0) {
+        insertProductParams.saleRatio = saleRatio / 100;
+      }
+
+      const response = await updateProduct(insertProductParams);
+      if (response?.status === 201) {
+        const productId = response.data?.id;
+        await updateFileInfo(thumbnailHash, { productId });
+        for await (const hash of mediaHashes) {
+          await updateFileInfo(hash, { productId });
+        }
+        navigate("/dashboard/product");
       }
     } catch (e) {
       console.log(e);
@@ -605,8 +618,12 @@ const Edit = () => {
                         ref={calendarStartRef}
                         name={"start"}
                         callback={handleClickCalendar}
-                        type="none"
-                        value={new Date(currentProduct?.startAt) || null}
+                        type=""
+                        value={
+                          currentProduct?.startAt
+                            ? new Date(currentProduct?.startAt)
+                            : undefined
+                        }
                       />
                     </div>
                     <div>
@@ -615,8 +632,12 @@ const Edit = () => {
                         ref={calendarEndRef}
                         name={"end"}
                         callback={handleClickCalendar}
-                        type="none"
-                        value={new Date(currentProduct?.endAt) || null}
+                        type=""
+                        value={
+                          currentProduct?.endAt
+                            ? new Date(currentProduct?.endAt)
+                            : undefined
+                        }
                       />
                     </div>
                   </div>
@@ -641,8 +662,12 @@ const Edit = () => {
                         ref={saleStartRef}
                         name={"start"}
                         callback={handleSaleDate}
-                        type="none"
-                        value={new Date(currentProduct?.saleStartAt) || null}
+                        type=""
+                        value={
+                          currentProduct?.saleStartAt
+                            ? new Date(currentProduct?.saleStartAt)
+                            : undefined
+                        }
                       />
                     </div>
                     <div>
@@ -651,8 +676,12 @@ const Edit = () => {
                         ref={saleEndRef}
                         name={"end"}
                         callback={handleSaleDate}
-                        type="none"
-                        value={new Date(currentProduct?.saleEndAt) || null}
+                        type=""
+                        value={
+                          currentProduct?.saleEndAt
+                            ? new Date(currentProduct?.saleEndAt)
+                            : undefined
+                        }
                       />
                     </div>
                   </div>

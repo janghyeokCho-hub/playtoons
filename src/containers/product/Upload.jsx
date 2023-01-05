@@ -252,14 +252,29 @@ const Upload = () => {
           categoryId: category?.id,
           status: "enabled",
           target: selectTarget,
-          startAt: calendarStartRef.current.getDate(),
-          endAt: calendarEndRef.current.getDate(),
-          saleStartAt: saleStartRef.current.getDate(),
-          saleEndAt: saleEndRef.current.getDate(),
-          saleRatio: saleRatio / 100,
           rating,
           mediaHashes,
         };
+
+        if (calendarStartRef.current?.getDate()) {
+          insertProductParams.startAt = calendarStartRef.current.getDate();
+        }
+
+        if (calendarEndRef.current?.getDate()) {
+          insertProductParams.endAt = calendarEndRef.current.getDate();
+        }
+
+        if (saleStartRef.current?.getDate()) {
+          insertProductParams.saleStartAt = saleStartRef.current.getDate();
+        }
+
+        if (saleEndRef.current?.getDate()) {
+          insertProductParams.saleEndAt = saleEndRef.current.getDate();
+        }
+
+        if (saleRatio > 0) {
+          insertProductParams.saleRatio = saleRatio / 100;
+        }
 
         // Insert product
         const response = await insertProduct(insertProductParams);
