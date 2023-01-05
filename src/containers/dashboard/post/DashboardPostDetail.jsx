@@ -21,6 +21,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { sanitize } from "dompurify";
 import { useCallback, useLayoutEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -74,6 +75,7 @@ export default function DashboardPostDetail() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams("");
+  const { t } = useTranslation();
 
   //==============================================================================
   // header
@@ -177,10 +179,10 @@ export default function DashboardPostDetail() {
             <ProfileSpan hash={item?.author?.profileImage} />
           </div>{" "}
           <div className="conts">
-            <p className="h1">{item?.name}</p>{" "}
+            <p className="h1">{item?.name || item?.author?.nickname}</p>{" "}
             <p className="d1">
               {/* date 항목 없음 */}
-              <span>{getReactionDate(item.createdAt, text)}</span>
+              <span>{getReactionDate(item.createdAt, t)}</span>
               {/* comment 항목 없음 */}
               <span>コメント</span>
             </p>{" "}

@@ -15,15 +15,8 @@ import {
 } from "@API/reactionService";
 import Image from "@/components/dashboard/Image";
 import { getReactionDate } from "@/common/common";
+import { useTranslation } from "react-i18next";
 
-const TEXT = {
-  before_year: "年前",
-  before_month: "月前",
-  before_day: "日前",
-  before_hour: "時間前",
-  before_minute: "分前",
-  before_second: "秒前",
-};
 
 const Reply = ({ item }) => {
   const currentPost = useSelector(({ post }) => post.currentPost);
@@ -39,6 +32,7 @@ const Reply = ({ item }) => {
   );
   // 댓글 제어 모달 Flag
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
+  const { t } = useTranslation();
 
   const handleUpdate = useCallback(async () => {
     if (!content) {
@@ -92,13 +86,13 @@ const Reply = ({ item }) => {
               {currentPost?.author?.id === item?.accountId && (
                 <span className="i-writer">作成者</span>
               )}
-              {item?.account?.nickname}
+              {item?.account?.nickname || item?.author?.nickname}
             </p>
 
             <p className="h1">{item?.name}</p>
             <p className="d1">
               {/*<span>3日前</span>*/}
-              <span>{getReactionDate(item?.createdAt, TEXT)}</span>
+              <span>{getReactionDate(item?.createdAt, t)}</span>
               <span>コメント</span>
             </p>
             {/* 삭제시 className 에 c-gray 추가 */}

@@ -32,5 +32,15 @@
   "popup":{
     "doNotRegisterCreatorCanNotPost": "크리에이터로 등록해야 투고할 수 있습니다.",
     "doNotRegisterCreatorCanNotEnterDashboard": "크리에이터로 등록해야 대시보드에 들어갈 수 있습니다."
-  }
+  },
+  "pleaseInputComment": "코멘트를 입력해주세요.",
+  "doReaction": "리액션 등록",
+  "icon": "아이콘",
+  "register": "등록",
+  "before_year": "년전",
+  "before_month": "월전",
+  "before_day": "일전",
+  "before_hour": "시간전",
+  "before_minute": "분전",
+  "before_second": "초전"
 }
