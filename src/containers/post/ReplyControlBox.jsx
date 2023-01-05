@@ -37,14 +37,17 @@ const ReplyControlBox = ({
         {
           item.accountId === userInfo.id ? (
             <>
-              <li onClick={() => setIsEdit(true)}>
-                <a>
+              <li onClick={() => {
+                setIsEdit(true);
+                setIsReplyControlShow(false);
+                }}>
+                <a className="pointer">
                   <FontAwesomeIcon icon={faPenToSquare} />
                   {` 修正`}
                 </a>
               </li>
               <li onClick={() => setIsDeletePopupShow(true)}>
-                <a>
+                <a className="pointer">
                   <FontAwesomeIcon icon={faTrash} />
                   {` 削除`}
                 </a>
@@ -52,7 +55,7 @@ const ReplyControlBox = ({
             </>
           ) : (
             <li onClick={() => setIsReportPopupShow(true)}>
-              <a>
+              <a className="pointer">
                 <FontAwesomeIcon icon={faFlag} />
                 {` 通報`}
               </a>

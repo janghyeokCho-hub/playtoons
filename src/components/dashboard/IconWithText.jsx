@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { setPostReactionToServer } from "@/services/postService";
+import { updateReaction } from "@/services/reactionService";
 import { faAngleLeft, faAngleRight } from "@fortawesome/pro-regular-svg-icons";
 import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,12 +18,9 @@ import { useTranslation } from "react-i18next";
 *
   아이콘 댓글 등록창
    <IconWithText 
-    text={{
-      sing_in_to_post: text.sing_in_to_post,    //placeholder
-      icon: text.icon,                          //icon button text
-      register: text.register                   //register button text
-    }}
+    type={'edit'} //  normal, edit
     callback={handler}
+    cancelCallback={handler}
     />
 *
 * @version 1.0.0
@@ -31,17 +29,18 @@ import { useTranslation } from "react-i18next";
 * @return
 */
 export default function IconWithText(props, ref) {
-  const { postInfo, callback } = props;
+  const { postInfo, callback, type, cancelCallback, reactionItem } = props;
   const [stateIconData, setStateIconData] = useState(undefined);
   const [stateTopSelected, setStateTopSelected] = useState(0);
   const [stateIsFocus, setStateFocus] = useState(false);
   const [stateShowIcon, setStateShowIcon] = useState(false);
   const [stateSelectedIcons, setStateSelectedIcons] = useState([]);
   const [stateError, setStateError] = useState(undefined);
+  const [stateComment, setStateComment] = useState(reactionItem?.content || '');
   const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const refContaienr = useRef();
-  const refTextArea = useRef();
+  // const refTextArea = useRef();
   const refButton = useRef();
   const { t } = useTranslation();
 
@@ -54,7 +53,8 @@ export default function IconWithText(props, ref) {
     setStateShowIcon(false);
     setStateSelectedIcons([]);
     setStateError(undefined);
-    refTextArea.current.value = "";
+    setStateComment('');
+    // refTextArea.current.value = "";
     refButton.current.setStatus(undefined);
   };
 
@@ -73,7 +73,8 @@ export default function IconWithText(props, ref) {
    */
   const setReaction = async () => {
     let params = {
-      content: refTextArea.current.value,
+      // content: refTextArea.current.value,
+      content: stateComment,
       type: "reply",
       postId: postInfo.id,
       authorId: isAuthors() ? reduxAuthors[0].id : null,
@@ -82,15 +83,37 @@ export default function IconWithText(props, ref) {
     
     if( stateSelectedIcons.length > 0 ){
       params.iconImage = stateSelectedIcons[0].image;
-    } else {
-      delete params.iconImage;
-    }
+    } 
 
     const { status, data } = await setPostReactionToServer(params);
     if (status === 201) {
       callback?.();
       initStatus();
-      // showOneButtonPopup(dispatch, text.register_coment);
+    } else {
+      setStateError( data );
+      refButton.current.setStatus(undefined);
+    }
+  };
+
+  /**
+   * 리액션 수정
+   * @version 1.0.0
+   * @author 2hyunkook
+   */
+  const updateReactionOnComponent = async () => {
+    let params = {
+      content: stateComment,
+      id: reactionItem?.id,
+    };
+    
+    if( stateSelectedIcons.length > 0 ){
+      params.iconImage = stateSelectedIcons[0].image;
+    } 
+
+    const { status, data } = await updateReaction(params);
+    if (status === 200) {
+      callback?.();
+      initStatus();
     } else {
       setStateError( data );
       refButton.current.setStatus(undefined);
@@ -120,13 +143,23 @@ export default function IconWithText(props, ref) {
   };
 
   const handleRegister = (event) => {
-    if (!refTextArea.current.value) {
+    if (stateComment === '') {
       setStateError(t(`pleaseInputComment`));
       refButton.current.setStatus(undefined);
       return false;
     }
 
     setReaction();
+  };
+
+  const handleUpdate = (event) => {
+    if (stateComment === '') {
+      setStateError(t(`pleaseInputComment`));
+      refButton.current.setStatus(undefined);
+      return false;
+    }
+
+    updateReactionOnComponent();
   };
 
   //==============================================================================
@@ -187,16 +220,24 @@ export default function IconWithText(props, ref) {
     setStateIconData(tempData);
   }, []);
 
+  // useEffect(() => {
+  //   setStateComment(reactionItem?.content);
+  // }, [reactionItem]);
+
   return (
     <>
-      <div className="conts">
+      <div className={`${type === 'edit' ? 'comm' : 'conts'}`}>
         <div className={`textarea1 ${stateSelectedIcons.length > 0 && "emo"} ${stateIsFocus ? 'input_focus' : ''}`}>
           <textarea
-            ref={refTextArea}
+            // ref={refTextArea}
             name="content"
-            className="textarea1"
+            className={`${type === 'edit' ? 'textarea1 edit' : 'textarea1'}`}
             placeholder={t(`doReaction`)}
-            onChange={() => setStateError(undefined)}
+            value={stateComment}
+            onChange={(event) => {
+              setStateError(undefined);
+              setStateComment(event.target.value);
+            }}
             onFocus={() => {
               setStateShowIcon(false);
               setStateFocus(true);
@@ -204,30 +245,68 @@ export default function IconWithText(props, ref) {
             onBlur={() => setStateFocus(false)}
           />
 
-          {/* <!-- 삽입된 이모티콘 --> */}
-          {stateSelectedIcons.length > 0 && renderSelectedIconsElement()}
+          {/*삽입된 이모티콘*/}
+          {
+            stateSelectedIcons.length > 0 && 
+              <div className="l"> 
+                {renderSelectedIconsElement()}
+              </div>
+          }
         </div>
 
         {/* button */}
-        <div className="btns">
-          <button
-            type="button"
-            className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
-            onClick={() => setStateShowIcon(!stateShowIcon)}
-          >
-            <span>{t(`icon`)}</span>
-          </button>
-          <Button
-            type="button"
-            ref={refButton}
-            text={t(`register`)}
-            className="btn-pk s blue"
-            onClick={handleRegister}
-          >
-          </Button>
-        </div>
+        {
+          type === 'edit' ? (
+            <div className="btns">
+              <div className="l">
+                <button 
+                  type="button" 
+                  className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
+                  onClick={() => setStateShowIcon(!stateShowIcon)}
+                >
+                  <span>{t(`icon`)}</span>
+                </button>
+              </div>
+              <div className="r">
+                <button
+                  type="button"
+                  className="btn-pk s tran"
+                  onClick={() => cancelCallback?.()}
+                >
+                  <span>取り消し</span>
+                </button>
+                <Button
+                  type="button"
+                  ref={refButton}
+                  text={t(`register`)}
+                  className="btn-pk s blue"
+                  onClick={handleUpdate}
+                >
+                </Button>
+              </div>
+            </div>
+          ) : ( 
+            <div className="btns">
+              <button
+                type="button"
+                className={`btn-pk s ${stateShowIcon ? "blue2" : "gray"}`}
+                onClick={() => setStateShowIcon(!stateShowIcon)}
+              >
+                <span>{t(`icon`)}</span>
+              </button>
+              <Button
+                type="button"
+                ref={refButton}
+                text={t(`register`)}
+                className="btn-pk s blue"
+                onClick={handleRegister}
+              >
+              </Button>
+            </div>
+          )
+        }
 
-        {/* <!-- 이모티콘 삽입 --> */}
+        {/* 이모티콘 삽입 */}
         {stateShowIcon && (
           <div
             className="box_emoji"

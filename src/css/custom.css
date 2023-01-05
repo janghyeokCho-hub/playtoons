@@ -513,10 +513,12 @@
 /* ============================================================================== */
 /* icon with text */
 /* ============================================================================== */
-
-
 .icon_image{
   width: 70px;
+}
+.textarea1.emo .l,
+.box_emoji .cont_emo{
+  text-align: left;
 }
 
 /* ============================================================================== */
@@ -936,6 +938,18 @@
 }
 .popup_dim .modal.comment .wrap_comment .lst_comm p{
   text-align: left;
+}
+.popup_dim .modal.comment .wrap_comment .comm{
+  margin-left: 0;
+  display: block;
+}
+.popup_dim .modal.comment .wrap_comment .comm .textarea1.edit{
+  height: auto;
+  border-width: 0;
+  padding: 0;
+}
+.popup_dim .modal.comment .wrap_comment .comm .textarea1.edit{
+
 }
 
 /* ============================================================================== */

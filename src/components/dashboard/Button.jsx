@@ -54,7 +54,7 @@ export default forwardRef( function Button(props, ref) {
   
 
   return (
-    <div className={className} onClick={handleClick}>
+    <button className={className} onClick={handleClick}>
       <div className="pull_width relative" >
         <span className={`${stateStatus === undefined ? '' : 'c_transparent'}`}>{text || children}</span>
         {
@@ -68,6 +68,6 @@ export default forwardRef( function Button(props, ref) {
               </span>
         }
       </div>
-    </div>
+    </button>
   )
 })

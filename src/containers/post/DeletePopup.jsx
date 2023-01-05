@@ -3,16 +3,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { deleteReaction } from "@API/reactionService";
 
-const DeletePopup = ({ onClose, postId }) => {
+const DeletePopup = ({ onClose, postId, callback }) => {
   const handleDelete = useCallback(async () => {
     const response = await deleteReaction(postId);
     console.log(response);
     if (response.status === 200) {
-      alert("삭제 완료");
+      //refresh
+      callback?.();
+      onClose?.();
     } else {
-      alert("삭제 실패");
+      //toast
     }
   }, [postId]);
+
   return (
     <div className="popup_dim">
       <div className="layerPopup pop_delete">

@@ -1,94 +1,114 @@
-import { getReactionDate } from "@/common/common";
+import { getReactionDate, showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import DeletePopup from "@/containers/post/DeletePopup";
 import ReplyControlBox from "@/containers/post/ReplyControlBox";
-import post from "@/modules/redux/ducks/dashboard";
 import {
-  deleteLikeReaction, insertLikeReaction
+  getReactionIdFromServer
 } from "@API/reactionService";
 import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
-import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import IconWithText from "../dashboard/IconWithText";
 import ProfileSpan from "../dashboard/ProfileSpan";
 import ReportPopup from "../dashboard/ReportPopup";
 import LikeButton from "./LikeButton";
 
 
 export default function ReactionItem(props){
-  const { item, postInfo } = props;
-  const [isLikeShow, setIsLikeShow] = useState(false);
+  const { item, postInfo, callback } = props;
+  const [stateItem, setStateItem] = useState(item);
+  const [stateIsEdit, setStateEdit] = useState(false);
   const [isDeletePopupShow, setIsDeletePopupShow] = useState(false);
   const [isReportPopupShow, setIsReportPopupShow] = useState(false);
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
 
-  const handleLike = useCallback(async () => {
-    const reactionId = 0;
-    if (isLikeShow) {
-      const response = await deleteLikeReaction(reactionId);
-      if (response?.status === 200) {
-        alert("좋아요 성공");
-        setIsLikeShow(true);
-      } else {
-        alert("좋아요 실패");
-        setIsLikeShow(false);
-      }
-    } else {
-      const response = await insertLikeReaction(reactionId);
-      if (response?.status === 200) {
-        alert("좋아요 삭제 성공");
-        setIsLikeShow(false);
-      } else {
-        alert("좋아요 삭제 실패");
-        setIsLikeShow(true);
-      }
+  const getReaction = async () => {
+    const {status, data} = await getReactionIdFromServer(stateItem?.id);
+    console.log('getReaction', status, data);
+    
+    if( status === 200 ){
+      setStateItem(data?.reaction);
     }
-  }, [isLikeShow]);
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+
+
+  const handleUpdate = async () => {
+    getReaction();
+    setStateEdit(false);
+  };
+
+  useEffect(() => {
+    setStateItem(item);
+  }, [item]);
+  
+
 
   return (
     <>
-      <div className={`col ${item?.level > 1 ? "col_re" : ""}`}>
+      <div className={`col ${stateItem?.level > 1 ? "col_re" : ""}`}>
         <div className="imgs">
-          <ProfileSpan hash={item?.profileImage} />
+          <ProfileSpan hash={stateItem?.profileImage} />
         </div>
         <div className="conts">
           {/* 댓글 내용 */}
 
           <p className="h1">
             {
-              item?.authorId === postInfo?.authorId && (
+              stateItem?.authorId === postInfo?.authorId && (
                 <span className="i-writer">作成者</span>
               )
             }
-            {item?.account?.name || item?.author?.nickname}
+            { stateItem?.account?.name || stateItem?.author?.nickname }
           </p>
 
-          <p className="h1">{item?.name}</p>
+          <p className="h1">{stateItem?.name}</p>
           <p className="d1">
-            <span>{getReactionDate(item?.createdAt, t)}</span>
+            <span>{getReactionDate(stateItem?.createdAt, t)}</span>
             <span>コメント</span>
           </p>
           {
-            item?.deleted ? (
+            stateItem?.deleted ? (
+              //deleted
               <p className="t1 c-gray">削除されたコメントです。</p>
             ) : (
-              <>
-                <p className="t1">{item?.content}</p>
-                {item?.iconImage && (
-                  <p className="icon_image">
-                    <Image hash={item?.iconImage} />
-                  </p>
-                )}
-              </>
+              stateIsEdit ? ( 
+                //edit
+                <>
+                  <IconWithText 
+                    type={'edit'}
+                    reactionItem={stateItem}
+                    callback={handleUpdate}
+                    cancelCallback={() => setStateEdit(false)}
+                    />
+                </>
+              ) : ( 
+                // normal
+                <>
+                  <p className="t1">{stateItem?.content}</p>
+                  {
+                    stateItem?.iconImage && 
+                      <p className="icon_image">
+                        <Image hash={stateItem?.iconImage} />
+                      </p>
+                  }
+                </>
+              )
             )
           }
           <div className="rgh">
-            <LikeButton item={item} />
+            <LikeButton 
+              item={stateItem} 
+              callback={() => getReaction()}
+              />
 
             <button
               type="button"
@@ -100,7 +120,8 @@ export default function ReactionItem(props){
             {
               isReplyControlShow && (
                 <ReplyControlBox
-                  item={item}
+                  item={stateItem}
+                  setIsEdit={setStateEdit}
                   setIsDeletePopupShow={setIsDeletePopupShow}
                   setIsReportPopupShow={setIsReportPopupShow}
                   setIsReplyControlShow={setIsReplyControlShow}
@@ -112,14 +133,15 @@ export default function ReactionItem(props){
         {isDeletePopupShow && (
           <DeletePopup
             onClose={() => setIsDeletePopupShow(false)}
-            postId={item?.id}
+            callback={() => callback?.()}
+            postId={stateItem?.id}
           />
         )}
         {isReportPopupShow && (
           <ReportPopup
             onClose={() => setIsReportPopupShow(false)}
-            postId={item?.id}
-            content={item?.content}
+            postId={stateItem?.id}
+            content={stateItem?.content}
           />
         )}
       </div>

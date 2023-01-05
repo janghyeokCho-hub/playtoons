@@ -1,4 +1,5 @@
 import { showOneButtonPopup } from '@/common/common';
+import { setRefreshAction } from '@/modules/redux/ducks/post';
 import { getReactionFromServer } from '@/services/dashboardService';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -6,10 +7,8 @@ import IconWithText from '../dashboard/IconWithText';
 import ProfileSpan from '../dashboard/ProfileSpan';
 import SeeMoreComent from '../dashboard/SeeMoreComent';
 import ReactionItem from './ReactionItem';
-import ReactionItems from './ReactionItems';
 
 export default function Comment(props) {
-  //TODO comment 공통화 작업
   const { item } = props; 
   const [ statePinnedReactions, setStatePinnedReactions ] = useState(undefined);
   const [ stateReactions, setStateReactions ] = useState(undefined);
@@ -18,6 +17,11 @@ export default function Comment(props) {
   //==============================================================================
   // function
   //==============================================================================
+  const refreshReactionList = async() => {
+    getPinnedReactions();
+    getReactions(1, false);
+    dispatch( setRefreshAction({type : 'timeline'}) );
+  };
   //==============================================================================
   // api
   //==============================================================================
@@ -42,9 +46,20 @@ export default function Comment(props) {
     formData.append("limit", 3);
  
     const { status, data } = await getReactionFromServer(formData);
+    console.log('getReactions', data);
 
     if (status === 200) {
-      setStateReactions(data);
+      if( isAdd ){
+        let list = stateReactions.reactions;
+        list.push.apply(list, data.reactions);
+        setStateReactions({
+          meta: data.meta,
+          reactions: list
+        });
+      }
+      else{
+        setStateReactions(data);
+      }
     } else {
       showOneButtonPopup(dispatch, data);
     }
@@ -53,9 +68,8 @@ export default function Comment(props) {
   // handler
   //==============================================================================
   
-  const handleCommentRegister = (event) => {
-    console.log('CommentRegister', event);
-    getReactions(1, false);
+  const handleCommentRegister = () => {
+    refreshReactionList();
   };
   //==============================================================================
   // hook & render
@@ -63,7 +77,7 @@ export default function Comment(props) {
   const renderPinnedReactions = () => {
     return statePinnedReactions?.reactions?.map((reactionItem, index) => {
       return (
-        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item}/>
+        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item} callback={() => refreshReactionList()} />
       );
     });
   };
@@ -71,7 +85,7 @@ export default function Comment(props) {
   const renderReactions = () => {
     return stateReactions?.reactions?.map((reactionItem, index) => {
       return (
-        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item} />
+        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item} callback={() => refreshReactionList()}/>
       );
     });
   };
@@ -102,7 +116,7 @@ export default function Comment(props) {
         {renderReactions()}
         
         <SeeMoreComent 
-          text={{}}
+          text={{see_more_coment: 'コメントをもっと見る'}}
           meta={stateReactions?.meta}
           callback={(page) => getReactions(page, true)}
           />
