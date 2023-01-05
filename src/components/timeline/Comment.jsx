@@ -55,23 +55,23 @@ export default function Comment(props) {
   
   const handleCommentRegister = (event) => {
     console.log('CommentRegister', event);
-    
+    getReactions(1, false);
   };
   //==============================================================================
   // hook & render
   //==============================================================================
   const renderPinnedReactions = () => {
-    return statePinnedReactions?.reactions?.map((item, index) => {
+    return statePinnedReactions?.reactions?.map((reactionItem, index) => {
       return (
-        <ReactionItem key={`reply_${index}`} item={item} />
+        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item}/>
       );
     });
   };
 
   const renderReactions = () => {
-    return stateReactions?.reactions?.map((item, index) => {
+    return stateReactions?.reactions?.map((reactionItem, index) => {
       return (
-        <ReactionItem key={`reply_${index}`} item={item} />
+        <ReactionItem key={`reply_${index}`} item={reactionItem} postInfo={item} />
       );
     });
   };

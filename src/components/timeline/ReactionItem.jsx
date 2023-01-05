@@ -2,6 +2,7 @@ import { getReactionDate } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import DeletePopup from "@/containers/post/DeletePopup";
 import ReplyControlBox from "@/containers/post/ReplyControlBox";
+import post from "@/modules/redux/ducks/dashboard";
 import {
   deleteLikeReaction, insertLikeReaction
 } from "@API/reactionService";
@@ -10,17 +11,19 @@ import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 import ProfileSpan from "../dashboard/ProfileSpan";
 import ReportPopup from "../dashboard/ReportPopup";
 import LikeButton from "./LikeButton";
 
 
 export default function ReactionItem(props){
-  const { item } = props;
+  const { item, postInfo } = props;
   const [isLikeShow, setIsLikeShow] = useState(false);
   const [isDeletePopupShow, setIsDeletePopupShow] = useState(false);
   const [isReportPopupShow, setIsReportPopupShow] = useState(false);
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
+  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const { t } = useTranslation();
 
 
@@ -57,10 +60,12 @@ export default function ReactionItem(props){
           {/* 댓글 내용 */}
 
           <p className="h1">
-            {item?.author?.id === item?.accountId && (
-              <span className="i-writer">作成者</span>
-            )}
-            {item?.account?.nickname || item?.author?.nickname}
+            {
+              item?.authorId === postInfo?.authorId && (
+                <span className="i-writer">作成者</span>
+              )
+            }
+            {item?.account?.name || item?.author?.nickname}
           </p>
 
           <p className="h1">{item?.name}</p>
@@ -68,19 +73,20 @@ export default function ReactionItem(props){
             <span>{getReactionDate(item?.createdAt, t)}</span>
             <span>コメント</span>
           </p>
-          {/* 삭제시 className 에 c-gray 추가 */}
-          {item?.deleted ? (
-            <p className="t1 c-gray">削除されたコメントです。</p>
-          ) : (
-            <>
-              <p className="t1">{item?.content}</p>
-              {item?.iconImage && (
-                <p className="icon_image">
-                  <Image hash={item?.iconImage} />
-                </p>
-              )}
-            </>
-          )}
+          {
+            item?.deleted ? (
+              <p className="t1 c-gray">削除されたコメントです。</p>
+            ) : (
+              <>
+                <p className="t1">{item?.content}</p>
+                {item?.iconImage && (
+                  <p className="icon_image">
+                    <Image hash={item?.iconImage} />
+                  </p>
+                )}
+              </>
+            )
+          }
           <div className="rgh">
             <LikeButton item={item} />
 
@@ -91,14 +97,16 @@ export default function ReactionItem(props){
             >
               <FontAwesomeIcon icon={faEllipsisVertical} />
             </button>
-            {isReplyControlShow && (
-              <ReplyControlBox
-                item={item}
-                setIsDeletePopupShow={setIsDeletePopupShow}
-                setIsReportPopupShow={setIsReportPopupShow}
-                setIsReplyControlShow={setIsReplyControlShow}
-              />
-            )}
+            {
+              isReplyControlShow && (
+                <ReplyControlBox
+                  item={item}
+                  setIsDeletePopupShow={setIsDeletePopupShow}
+                  setIsReportPopupShow={setIsReportPopupShow}
+                  setIsReplyControlShow={setIsReplyControlShow}
+                />
+              )
+            }
           </div>
         </div>
         {isDeletePopupShow && (

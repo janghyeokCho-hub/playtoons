@@ -34,29 +34,31 @@ const ReplyControlBox = ({
   return (
     <div className="box_drop comment" ref={ref}>
       <ul>
-        {(item.userId === userInfo.id && (
-          <>
-            <li onClick={() => setIsEdit(true)}>
-              <Link to="">
-                <FontAwesomeIcon icon={faPenToSquare} />
-                {` 修正`}
-              </Link>
+        {
+          item.accountId === userInfo.id ? (
+            <>
+              <li onClick={() => setIsEdit(true)}>
+                <a>
+                  <FontAwesomeIcon icon={faPenToSquare} />
+                  {` 修正`}
+                </a>
+              </li>
+              <li onClick={() => setIsDeletePopupShow(true)}>
+                <a>
+                  <FontAwesomeIcon icon={faTrash} />
+                  {` 削除`}
+                </a>
+              </li>
+            </>
+          ) : (
+            <li onClick={() => setIsReportPopupShow(true)}>
+              <a>
+                <FontAwesomeIcon icon={faFlag} />
+                {` 通報`}
+              </a>
             </li>
-            <li onClick={() => setIsDeletePopupShow(true)}>
-              <Link to="">
-                <FontAwesomeIcon icon={faTrash} />
-                {` 削除`}
-              </Link>
-            </li>
-          </>
-        )) || (
-          <li onClick={() => setIsReportPopupShow(true)}>
-            <Link to="">
-              <FontAwesomeIcon icon={faFlag} />
-              {` 通報`}
-            </Link>
-          </li>
-        )}
+          )
+        }
       </ul>
     </div>
   );
