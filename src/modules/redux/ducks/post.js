@@ -27,6 +27,7 @@ const [SET_SERIES, INIT_SERIES] = createRequestActionTypes("post/SET_SERIES");
 const [CURRENT_POST_INIT] = createRequestActionTypes("post/CURRENT_POST_INIT");
 const [SET_WEBTOON, INIT_WEBTOON] = createRequestActionTypes("post/SET_WEBTOON");
 const [SET_NOVEL, INIT_NOVEL] = createRequestActionTypes("post/SET_NOVEL");
+const [SET_REFRESH, INIT_REFRESH] = createRequestActionTypes("post/SET_REFRESH");
 
 /* --- Actions --- */
 export const setPostEditAction = createAction(EDIT_POST);
@@ -43,6 +44,8 @@ export const setWebtoonAction = createAction(SET_WEBTOON);
 export const initWebtoonAction = createAction(INIT_WEBTOON);
 export const setNovelAction = createAction(SET_NOVEL);
 export const initNovelAction = createAction(INIT_NOVEL);
+export const setRefreshAction = createAction(SET_REFRESH);
+export const initRefreshAction = createAction(INIT_REFRESH);
 
 const initialState = {
   post: null,
@@ -54,10 +57,24 @@ const initialState = {
   postUpload: null,
   webtoon: null,
   novel: null,
+  refresh: null,
 };
 
 const post = handleActions(
   {
+    [SET_NOVEL]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.refresh = action.payload; //{type: 'id', }
+      });
+    },
+    [INIT_REFRESH]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          refresh: null,
+        };
+      });
+    },
     [SET_NOVEL]: (state, action) => {
       return produce(state, (draft) => {
         draft.novel = action.payload; //{type: 'all, complete, progress', page: [number], orderBy: 'recent, recommend, rank'}
