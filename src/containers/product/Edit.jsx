@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "@/modules/redux/ducks/product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ import ImageUpload from "@/components/dashboard/ImageUpload";
 import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
 import { updateProduct } from "@API/storeService";
 import { updateFileInfo } from "@API/fileService";
+import moment from "moment";
 
 const Edit = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Edit = () => {
   const [price, setPrice] = useState(currentProduct?.price);
   const [saleRatio, setSaleRatio] = useState(currentProduct?.saleRatio * 100);
   const [selectType, setSelectType] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [category, setCategory] = useState(currentProduct?.category);
   const [selectTarget, setSelectTarget] = useState(currentProduct?.target);
   const [previewProducts, setPreviewProducts] = useState(null);
   const [selectAge, setSelectAge] = useState(false);
@@ -152,10 +153,12 @@ const Edit = () => {
       console.error("Name is required");
       return;
     }
+
     if (!category) {
       console.error("Category is required");
       return;
     }
+
     if (!selectType) {
       console.error("Type is required");
       return;
@@ -177,6 +180,12 @@ const Edit = () => {
       return;
     }
 
+    console.log(thumbnailRef.current?.getImageFile());
+    // if (thumbnailRef.current?.getImageFile()) {
+    //   console.error("Target is required");
+    //   return;
+    // }
+
     const authorId = authors?.[0]?.id;
     if (!authorId) {
       console.error("Author id not found");
@@ -185,8 +194,11 @@ const Edit = () => {
 
     try {
       const uploadPromise = [];
+      let thumFlag = false;
+      let productFlag = false;
 
       if (thumbnailRef.current.getImageFile()) {
+        thumFlag = true;
         const thumbnailFD = new FormData();
         thumbnailFD.append("authorId", authorId);
         thumbnailFD.append("type", "image");
@@ -199,6 +211,7 @@ const Edit = () => {
       }
 
       if (productsRef.current.getImageFile()) {
+        productFlag = true;
         const productFD = new FormData();
         productFD.append("authorId", authorId);
         productFD.append("type", "image");
@@ -212,10 +225,10 @@ const Edit = () => {
       }
 
       const insertProductParams = {
+        productId: currentProduct?.id,
         name,
         description,
         price: Number(price),
-        authorId,
         typeId: selectType.id,
         categoryId: category.id,
         status: "enabled",
@@ -239,7 +252,12 @@ const Edit = () => {
       }
 
       if (calendarStartRef.current?.getDate()) {
-        insertProductParams.startAt = calendarStartRef.current.getDate();
+        const today = moment();
+        const startAt = moment(calendarStartRef.current?.getDate());
+        if (startAt.isAfter(today, "day")) {
+          // startAt is the same day as today or after today
+          insertProductParams.startAt = calendarStartRef.current.getDate();
+        }
       }
 
       if (calendarEndRef.current?.getDate()) {
@@ -247,7 +265,12 @@ const Edit = () => {
       }
 
       if (saleStartRef.current?.getDate()) {
-        insertProductParams.saleStartAt = saleStartRef.current.getDate();
+        const today = moment();
+        const startAt = moment(saleStartRef.current?.getDate());
+        if (startAt.isAfter(today, "day")) {
+          // startAt is the same day as today or after today
+          insertProductParams.saleStartAt = saleStartRef.current.getDate();
+        }
       }
 
       if (saleEndRef.current?.getDate()) {
@@ -259,11 +282,16 @@ const Edit = () => {
       }
 
       const response = await updateProduct(insertProductParams);
-      if (response?.status === 201) {
+      if (response?.status === 200) {
         const productId = response.data?.id;
-        await updateFileInfo(thumbnailHash, { productId });
-        for await (const hash of mediaHashes) {
-          await updateFileInfo(hash, { productId });
+        if (thumFlag) {
+          await updateFileInfo(thumbnailHash, { productId });
+        }
+
+        if (productFlag) {
+          for await (const hash of mediaHashes) {
+            await updateFileInfo(hash, { productId });
+          }
         }
         navigate("/dashboard/product");
       }
@@ -271,6 +299,7 @@ const Edit = () => {
       console.log(e);
     }
   }, [
+    currentProduct,
     name,
     category,
     selectType,
@@ -328,6 +357,7 @@ const Edit = () => {
                   <select
                     className="select1 wid1"
                     onChange={(e) => handleCategoryChange(e.target.value)}
+                    value={category?.code}
                   >
                     {productCategories?.map((item, index) => (
                       <option key={`category_${index}`} value={item?.code}>
@@ -619,6 +649,7 @@ const Edit = () => {
                         name={"start"}
                         callback={handleClickCalendar}
                         type=""
+                        isMaxDate={false}
                         value={
                           currentProduct?.startAt
                             ? new Date(currentProduct?.startAt)
@@ -633,6 +664,7 @@ const Edit = () => {
                         name={"end"}
                         callback={handleClickCalendar}
                         type=""
+                        isMaxDate={false}
                         value={
                           currentProduct?.endAt
                             ? new Date(currentProduct?.endAt)
@@ -663,6 +695,7 @@ const Edit = () => {
                         name={"start"}
                         callback={handleSaleDate}
                         type=""
+                        isMaxDate={false}
                         value={
                           currentProduct?.saleStartAt
                             ? new Date(currentProduct?.saleStartAt)
@@ -677,6 +710,7 @@ const Edit = () => {
                         name={"end"}
                         callback={handleSaleDate}
                         type=""
+                        isMaxDate={false}
                         value={
                           currentProduct?.saleEndAt
                             ? new Date(currentProduct?.saleEndAt)
@@ -697,9 +731,13 @@ const Edit = () => {
                   </p>
                 </div>
 
-                <a href="#" className="btn-pk n blue">
+                <Link
+                  to=""
+                  className="btn-pk n blue"
+                  onClick={() => handleUpload()}
+                >
                   <span>登録する</span>
-                </a>
+                </Link>
               </div>
             </form>
           </div>

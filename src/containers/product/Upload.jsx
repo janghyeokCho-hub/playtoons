@@ -14,6 +14,7 @@ import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
 import { updateFileInfo } from "@API/fileService";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "@/components/dashboard/ImageUpload";
+import moment from "moment";
 
 const Upload = () => {
   const navigate = useNavigate();
@@ -257,7 +258,12 @@ const Upload = () => {
         };
 
         if (calendarStartRef.current?.getDate()) {
-          insertProductParams.startAt = calendarStartRef.current.getDate();
+          const today = moment();
+          const startAt = moment(calendarStartRef.current?.getDate());
+          if (startAt.isAfter(today, "day")) {
+            // startAt is the same day as today or after today
+            insertProductParams.startAt = calendarStartRef.current.getDate();
+          }
         }
 
         if (calendarEndRef.current?.getDate()) {
@@ -265,7 +271,12 @@ const Upload = () => {
         }
 
         if (saleStartRef.current?.getDate()) {
-          insertProductParams.saleStartAt = saleStartRef.current.getDate();
+          const today = moment();
+          const startAt = moment(saleStartRef.current?.getDate());
+          if (startAt.isAfter(today, "day")) {
+            // startAt is the same day as today or after today
+            insertProductParams.saleStartAt = saleStartRef.current.getDate();
+          }
         }
 
         if (saleEndRef.current?.getDate()) {
