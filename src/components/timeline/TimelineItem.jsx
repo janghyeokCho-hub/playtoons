@@ -1,72 +1,118 @@
 import { showOneButtonPopup } from "@/common/common";
 import { TIMELINE_DELAY } from "@/common/constant";
-import { faPenToSquare, faTrash } from "@fortawesome/pro-light-svg-icons";
-import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
+import { setTimelineAction } from "@/modules/redux/ducks/timeline";
+import { getPostDetailFromServer, setPostLike } from '@API/postService';
 import {
   faChevronLeft,
   faCommentQuote,
   faHeart,
-  faShare,
+  faShare
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useSwiper } from "swiper/react";
-import { getPostDetailFromServer } from '@API/postService'
 import CommentButton from "./CommentButton";
+import EllipsisButton from "./EllipsisButton";
 import FollowButton from "./FollowButton";
 import ImageSpan from "./ImageSpan";
 import ShareButton from "./ShareButton";
-import { useDispatch, useSelector } from "react-redux";
 
 
-const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout }) => {
+const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout, size }) => {
   const [stateItem, setStateItem] = useState(item);
-  const [isControlShow, setIsControlShow] = useState(false);
   const [stateTime, setStateTime] = useState(0);
   const [stateIsRunning, setStateRunning] = useState(isActive);
-  const reduxRefresh = useSelector(({post}) => post.refresh);
+  const reduxRefresh = useSelector(({timeline}) => timeline.refresh);
   const swiper = useSwiper();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const UPDATE_TIME = 10;
 
-  const getPost = async () => {
-    const { status, data } = await getPostDetailFromServer(item?.id);
+  //==============================================================================
+  // function 
+  //==============================================================================
+  //하위 컴포넌트에 정보 공유를 위한 redux 설정
+  const setTimelineInfoToRedux = (timelineInfo) => {
+    dispatch( setTimelineAction(timelineInfo) );
+  };
+  //==============================================================================
+  // api 
+  //==============================================================================
+  const getPost = async (id) => {
+    const { status, data } = await getPostDetailFromServer({id: id});
     console.log("getPost", status, data);
 
     if (status === 200) {
       setStateItem(data?.post);
+      setTimelineInfoToRedux(data?.post);
     } else {
       showOneButtonPopup(dispatch, data);
     }
   };
 
-  const handleControlPopup = () => {
-    setStateRunning(isControlShow ? true : false);
-    setIsControlShow(!isControlShow);
+  const setPostLikeToServer = async (method, id) => {
+    const {status, data} = await setPostLike(method, id);
+    console.log('setPostLikeToServer', status, data);
+    
+    if( status === 201 ){
+      //refresh
+      getPost(id);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+  //==============================================================================
+  // event 
+  //==============================================================================
+  const handleEllipsis = (isShow) => {
+    setStateRunning(isShow ? true : false);
   };
 
+  const handleClickLike = () => {
+    console.log('ClickLike',);
+    setPostLikeToServer('post', stateItem.id);
+  };
+
+  
+  //==============================================================================
+  // hook 
+  //==============================================================================
+  //timeline 정보 변경( 팔로워나 댓글 )
   useEffect(() => {
-    console.log('reduxRefresh', reduxRefresh);
-    if( reduxRefresh?.type === 'timeline' ){
-      getPost();
+    if( reduxRefresh && stateItem ){
+      if( reduxRefresh?.id === stateItem.id && reduxRefresh?.type === 'timeline' ){
+        console.log('reduxRefresh', reduxRefresh, stateItem);
+        getPost(reduxRefresh?.id);
+      }
     }
   }, [reduxRefresh]);
 
+  //변경된 정보를 refresh하기 위해서 state에 저장
   useEffect(() => {
     setStateItem(item);
   }, [item]);
 
+  //자동 넘기기를 위한 플래그
   useEffect(() => {
     setStateRunning(isActive);
+    if( isActive ){
+      setTimelineInfoToRedux(stateItem);
+    }
   }, [isActive]);
 
+  //자동 loop 및 bar 로직
   useEffect(() => {
     if (stateIsRunning) {
       if (stateTime >= TIMELINE_DELAY) {
         setStateRunning(false);
-        swiper.slideNext();
+        if( swiper.realIndex === size - 1 ){
+          swiper.slideTo(0);
+        } else {
+          swiper.slideNext();
+        }
       }
 
       setStateTimeout(
@@ -83,6 +129,9 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout }) => {
       clearTimeout(stateTimeout);
     };
   }, [stateTime, stateIsRunning]);
+  //==============================================================================
+  // render 
+  //==============================================================================
 
   return (
     <div className={`col ${isActive ? "active" : ""}`}>
@@ -109,10 +158,10 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout }) => {
             className="im"
             imagePath={stateItem?.author?.profileImage}
           />
-          <p>{stateItem?.nickname}</p>
+          <p>{stateItem?.author?.nickname}</p>
         </div>
         <FollowButton
-          author={stateItem?.author}
+          item={stateItem}
           onClick={(status) => setStateRunning(status === "init")}
         />
       </div>
@@ -128,40 +177,12 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout }) => {
           </span>
           <span className="hidden">prev</span>
         </button>
-        <button
-          type="button"
-          className="btn01"
-          onClick={() => handleControlPopup()}
-        >
-          <span className="i">
-            <FontAwesomeIcon icon={faEllipsisVertical} />
-          </span>
-        </button>
-        {
-          //author Id 확인 필요
-          isControlShow && (
-            <div className="box_drop">
-              <ul>
-                <li>
-                  <a href="#">
-                    <FontAwesomeIcon icon={faPenToSquare} />
-                    修正
-                  </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <FontAwesomeIcon icon={faTrash} />
-                    通報
-                  </a>
-                </li>
-                {/*<!-- <li><a href="#" onclick="showDrop('popReport'); return false;"><i className="fa-light fa-flag"></i>通報</a></li> -->*/}
-              </ul>
-            </div>
-          )
-        }
+        <EllipsisButton 
+          onClick={(isShow) => handleEllipsis(isShow)}
+        ></EllipsisButton>
       </div>
       <div className="bt_botm">
-        <button type="button" className="btn01">
+        <button type="button" className="btn01" onClick={() => handleClickLike()}>
           <span className="i">
             <FontAwesomeIcon icon={faHeart} />
           </span>
@@ -170,7 +191,6 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout }) => {
         <CommentButton
           className={"btn01"}
           icon={faCommentQuote}
-          item={stateItem}
           onClick={(status) => setStateRunning(status === "init")}
         ></CommentButton>
         <ShareButton

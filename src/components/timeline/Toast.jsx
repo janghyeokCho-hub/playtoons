@@ -4,7 +4,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Toast(props) {
-  const { type, message, show } = props;
+  const { type = '', message = '', show } = props;
   const active = {
     opacity: "1",
     transition: "opacity 500ms",

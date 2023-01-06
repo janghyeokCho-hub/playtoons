@@ -14,6 +14,7 @@ import dashboard from "./dashboard";
 import dim from "./dim";
 import container from "./container";
 import product from "./product";
+import timeline from "./timeline";
 
 const persistConfig = {
   key: "root",
@@ -33,6 +34,7 @@ const appReducer = combineReducers({
   dim,
   container,
   product,
+  timeline,
 });
 
 const rootReducer = (state, action) => {

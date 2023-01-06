@@ -3,7 +3,7 @@ import { useState } from 'react';
 export default function ReportPopup(props) {
   //sexual, violence, terror, spam, hateful, harmful, rating, child_abuse, abuse, copyright, other
   const { callback} = props; 
-  const [stateValue, setStateValue] = useState(undefined);
+  const [stateValue, setStateValue] = useState('spam');
   const [stateContent, setStateContent] = useState('');
 
   const handleChange = (e) => {

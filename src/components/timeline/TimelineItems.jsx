@@ -14,6 +14,8 @@ export default function TimelineItems({ items }) {
   
 
   const renderItems = (items) => {
+    const size = items.length;
+
     return (
       <div className="swiper-wrapper">
         {items?.map((item, index) => {
@@ -24,7 +26,7 @@ export default function TimelineItems({ items }) {
               virtualIndex={index}
             >
               {({ isActive }) => (
-                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setStateTimeout} />
+                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setStateTimeout} size={size} />
               )}
             </SwiperSlide>
           );
@@ -39,7 +41,7 @@ export default function TimelineItems({ items }) {
       spaceBetween={50}
       slidesPerView={1}
       initialSlide={3}
-      loop={true}
+      // loop={true}
       direction="vertical"
       navigation={{
         prevEl: prevRef?.current,

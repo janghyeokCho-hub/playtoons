@@ -1,19 +1,20 @@
+import { convertMoneyStyleString } from '@/common/common';
+import { useSelector } from 'react-redux';
 import Comment from "./Comment";
-import {convertMoneyStyleString} from '@/common/common';
 
 
 
 export default function CommentPopup(props){
-  const { item } = props;
+  const reduxTimeline = useSelector(({timeline}) => timeline.timeline);
 
   return (
     <>
       <div className="col top">
         <h3 className="title">
-          {'コメント'}<span className="comm_num">{convertMoneyStyleString(item?.reactionCount)}</span>
+          {'コメント'}<span className="comm_num">{convertMoneyStyleString(reduxTimeline?.reactionCount)}</span>
         </h3>
       </div>
-      <Comment className={'popup'} item={item} />
+      <Comment className={'popup'} item={reduxTimeline} />
     
     </>
   );

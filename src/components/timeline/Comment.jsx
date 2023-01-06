@@ -1,5 +1,5 @@
 import { showOneButtonPopup } from '@/common/common';
-import { setRefreshAction } from '@/modules/redux/ducks/post';
+import { setRefreshAction } from '@/modules/redux/ducks/timeline';
 import { getReactionFromServer } from '@/services/dashboardService';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -20,7 +20,7 @@ export default function Comment(props) {
   const refreshReactionList = async() => {
     getPinnedReactions();
     getReactions(1, false);
-    dispatch( setRefreshAction({type : 'timeline'}) );
+    dispatch( setRefreshAction({type : 'timeline', id: item?.id}) );
   };
   //==============================================================================
   // api
@@ -43,7 +43,7 @@ export default function Comment(props) {
     const formData = new FormData();
     formData.append("postId", item?.id);
     formData.append("page", page);
-    formData.append("limit", 3);
+    formData.append("limit", 5);
  
     const { status, data } = await getReactionFromServer(formData);
     console.log('getReactions', data);
