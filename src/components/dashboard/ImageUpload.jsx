@@ -65,7 +65,7 @@ export default forwardRef(function ImageUpload(props, ref) {
   // file : 컴퓨터에서 선택된 file, preview : preview로 보여질 이미지(file url, data url), hash : 파일 업로드 후 받아온 hash
   const initImageObject = {
     file: undefined,
-    preview: undefined,
+    preview: [],
     value: undefined,
     filename: "",
     fileLenth: "",
@@ -87,14 +87,52 @@ export default forwardRef(function ImageUpload(props, ref) {
   * @author 2hyunkook
   * @param {*} file
   */
-  const setPreviewImage = async (files) => {
+  const setPreviewImage = useCallback(
+    async (files) => {
+      if (multiple || isProduct) {
+        const results = await Promise.all(
+          files.map(async (file) => {
+            return await getFileDataUrl(file);
+          })
+        );
+
+        console.log("stateImage.preview : ", stateImage.preview);
+        console.log(
+          "stateImage.preview.concat(results) : ",
+          stateImage.preview.concat(results)
+        );
+        setStateImage({
+          ...stateImage,
+          file: files,
+          preview: stateImage.preview.concat(results),
+        });
+      } else {
+        const reader = new FileReader();
+        if (files[0]) {
+          reader.readAsDataURL(files[0]);
+        }
+
+        reader.onload = () => {
+          setStateImage({
+            ...stateImage,
+            file: files[0],
+            preview: reader.result,
+          });
+        };
+      }
+    },
+    [isProduct, multiple, stateImage]
+  );
+  /*
+   async (files) => {
+    console.log("setPreviewImage : 1");
     if (multiple || isProduct) {
       const results = await Promise.all(
         files.map(async (file) => {
           return await getFileDataUrl(file);
         })
       );
-
+      console.log("setPreviewImage : ", stateImage);
       setStateImage({
         ...stateImage,
         file: files,
@@ -107,6 +145,7 @@ export default forwardRef(function ImageUpload(props, ref) {
       }
 
       reader.onload = () => {
+        console.log("setPreviewImage : 3");
         setStateImage({
           ...stateImage,
           file: files[0],
@@ -115,6 +154,7 @@ export default forwardRef(function ImageUpload(props, ref) {
       };
     }
   };
+  */
 
   //==============================================================================
   // api
@@ -123,9 +163,37 @@ export default forwardRef(function ImageUpload(props, ref) {
   //==============================================================================
   // file drag n drop 설정
   //==============================================================================
-  const onDrop = useCallback(async (acceptedFiles) => {
-    setPreviewImage(acceptedFiles);
-  }, []);
+  const onDrop = useCallback(
+    async (files) => {
+      if (multiple || isProduct) {
+        const results = await Promise.all(
+          files.map(async (file) => {
+            return await getFileDataUrl(file);
+          })
+        );
+
+        setStateImage({
+          ...stateImage,
+          file: files,
+          preview: stateImage.preview.concat(results),
+        });
+      } else {
+        const reader = new FileReader();
+        if (files[0]) {
+          reader.readAsDataURL(files[0]);
+        }
+
+        reader.onload = () => {
+          setStateImage({
+            ...stateImage,
+            file: files[0],
+            preview: reader.result,
+          });
+        };
+      }
+    },
+    [isProduct, multiple, stateImage]
+  );
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
@@ -171,9 +239,8 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   const handlePreviewClose = (index) => {
     if (multiple) {
-      console.log(stateImage);
-      const files = stateImage.file.filter((item, i) => index !== i);
-      const previews = stateImage.preview.filter((item, i) => index !== i);
+      const files = stateImage.file?.filter((item, i) => index !== i);
+      const previews = stateImage.preview?.filter((item, i) => index !== i);
 
       if (previews.length === 0) {
         setStateImage(initImageObject);
@@ -249,7 +316,11 @@ export default forwardRef(function ImageUpload(props, ref) {
       setStateImage({ ...stateImage, value: hash });
     },
     setImage: (fileUrl, hash) => {
-      setStateImage({ ...stateImage, preview: fileUrl, value: hash });
+      setStateImage({
+        ...stateImage,
+        preview: stateImage.preview?.concat(fileUrl),
+        value: hash,
+      });
     },
     getImageFile: () => {
       return stateImage.file;
@@ -289,9 +360,13 @@ export default forwardRef(function ImageUpload(props, ref) {
   useLayoutEffect(() => {
     if (previewHash) {
       if (isArrayFromPostContent(previewHash)) {
+        console.log(
+          "Load!!!! : ",
+          stateImage.preview?.concat(previewHash.split(","))
+        );
         setStateImage({
           ...stateImage,
-          preview: previewHash.split(","),
+          preview: stateImage.preview?.concat(previewHash.split(",")),
         });
       } else {
         setStateImage({

@@ -34,3 +34,19 @@ export const updateFileInfo = async (hash, params) => {
     return { status: e.response.status, data: e };
   }
 };
+
+/**
+ * 파일 정보 삭제
+ * @version 1.0.0
+ * @author 조장혁
+ * @param {string} hash
+ * @param {json} params
+ * @return 파일경로
+ */
+export const deleteFileInfo = async (hash) => {
+  try {
+    return await apiServer("delete", `/file/${hash}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

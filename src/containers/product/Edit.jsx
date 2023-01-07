@@ -14,7 +14,7 @@ import { showOneButtonPopup } from "@/common/common";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
 import { updateProduct } from "@API/storeService";
-import { updateFileInfo } from "@API/fileService";
+import { updateFileInfo, deleteFileInfo } from "@API/fileService";
 import moment from "moment";
 
 const Edit = () => {
@@ -67,17 +67,17 @@ const Edit = () => {
 
   useEffect(() => {
     if (currentProduct) {
-      setSelectType(currentProduct.type);
+      setSelectType(currentProduct?.type);
     }
   }, [currentProduct]);
 
   useEffect(() => {
-    if (currentProduct.rating === "R-18") {
+    if (currentProduct?.rating === "R-18") {
       setSelectAge(true);
     } else {
       setSelectAge(false);
     }
-  }, [currentProduct.rating]);
+  }, [currentProduct]);
 
   useEffect(() => {
     if (selectAge) {
@@ -88,9 +88,10 @@ const Edit = () => {
   }, [selectAge]);
 
   useEffect(() => {
+    console.log(currentProduct?.images);
     const hashs = currentProduct?.images.map((item) => item.hash);
     setPreviewProducts(hashs?.join(","));
-  }, [currentProduct.images]);
+  }, [currentProduct]);
 
   const handleCategoryChange = useCallback(
     (code) => {
@@ -180,12 +181,6 @@ const Edit = () => {
       return;
     }
 
-    console.log(thumbnailRef.current?.getImageFile());
-    // if (thumbnailRef.current?.getImageFile()) {
-    //   console.error("Target is required");
-    //   return;
-    // }
-
     const authorId = authors?.[0]?.id;
     if (!authorId) {
       console.error("Author id not found");
@@ -193,39 +188,22 @@ const Edit = () => {
     }
 
     try {
-      const uploadPromise = [];
-      let thumFlag = false;
-      let productFlag = false;
+      const productId = currentProduct?.id;
+      const previews = productsRef.current?.getImageInfo().preview;
+      const originFiles = previewProducts?.split(",");
 
-      if (thumbnailRef.current.getImageFile()) {
-        thumFlag = true;
-        const thumbnailFD = new FormData();
-        thumbnailFD.append("authorId", authorId);
-        thumbnailFD.append("type", "image");
-        thumbnailFD.append("usage", "thumbnail");
-        thumbnailFD.append("loginRequired", false);
-        thumbnailFD.append("licenseRequired", false);
-        thumbnailFD.append("rating", rating);
-        thumbnailFD.append("file", thumbnailRef.current.getImageFile());
-        uploadPromise.push(setFileToServer(thumbnailFD));
-      }
-
-      if (productsRef.current.getImageFile()) {
-        productFlag = true;
-        const productFD = new FormData();
-        productFD.append("authorId", authorId);
-        productFD.append("type", "image");
-        productFD.append("usage", "product");
-        productFD.append("loginRequired", false);
-        productFD.append("licenseRequired", false);
-        productFD.append("rating", rating);
-        const productFiles = productsRef?.current?.getImageFile();
-        productFD.append("files", Object.values(productFiles));
-        uploadPromise.push(setFileMultiToServer(productFD));
+      const diff = originFiles.filter((x) => !previews.includes(x));
+      if (diff?.length) {
+        for await (const hash of diff) {
+          console.log("DELETE hash : ", hash);
+          if (hash) {
+            await deleteFileInfo(hash);
+          }
+        }
       }
 
       const insertProductParams = {
-        productId: currentProduct?.id,
+        productId: productId,
         name,
         description,
         price: Number(price),
@@ -234,20 +212,43 @@ const Edit = () => {
         status: "enabled",
         target: selectTarget,
         rating,
+        mediaHashes: originFiles,
       };
 
-      let thumbnailHash;
-      let mediaHashes;
-      if (uploadPromise?.length > 0) {
-        const [thumbnailResp, productResp] = await Promise.all(uploadPromise);
+      if (thumbnailRef.current.getImageFile()) {
+        const thumbnailFD = new FormData();
+        thumbnailFD.append("productId", productId);
+        thumbnailFD.append("authorId", authorId);
+        thumbnailFD.append("type", "image");
+        thumbnailFD.append("usage", "thumbnail");
+        thumbnailFD.append("loginRequired", false);
+        thumbnailFD.append("licenseRequired", false);
+        thumbnailFD.append("rating", rating);
+        thumbnailFD.append("file", thumbnailRef.current.getImageFile());
+        const thumbnailResp = await setFileToServer(thumbnailFD);
         if (thumbnailResp?.status === 201) {
-          thumbnailHash = thumbnailResp?.data?.hash;
-          insertProductParams.thumbnailImage = thumbnailHash;
+          insertProductParams.thumbnailImage = thumbnailResp?.data?.hash;
         }
+      }
+
+      if (productsRef.current.getImageFile()) {
+        const productFD = new FormData();
+        productFD.append("productId", productId);
+        productFD.append("authorId", authorId);
+        productFD.append("type", "image");
+        productFD.append("usage", "product");
+        productFD.append("loginRequired", false);
+        productFD.append("licenseRequired", false);
+        productFD.append("rating", rating);
+        const productFiles = productsRef?.current?.getImageFile();
+        Object.values(productFiles).forEach((file) => {
+          productFD.append("files[]", file);
+        });
+        const productResp = await setFileMultiToServer(productFD);
 
         if (productResp?.status === 201) {
-          mediaHashes = productResp?.data?.hashses;
-          insertProductParams.mediaHashes = mediaHashes;
+          insertProductParams.mediaHashes =
+            insertProductParams.mediaHashes.concat(productResp?.data?.hashses);
         }
       }
 
@@ -283,16 +284,6 @@ const Edit = () => {
 
       const response = await updateProduct(insertProductParams);
       if (response?.status === 200) {
-        const productId = response.data?.id;
-        if (thumFlag) {
-          await updateFileInfo(thumbnailHash, { productId });
-        }
-
-        if (productFlag) {
-          for await (const hash of mediaHashes) {
-            await updateFileInfo(hash, { productId });
-          }
-        }
         navigate("/dashboard/product");
       }
     } catch (e) {
@@ -315,6 +306,7 @@ const Edit = () => {
     saleEndRef,
     thumbnailRef,
     productsRef,
+    previewProducts,
     navigate,
   ]);
 

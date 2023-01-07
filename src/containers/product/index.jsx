@@ -21,6 +21,7 @@ const App = () => {
       isFooterShow: false,
     };
     dispatch(setContainer(container));
+    dispatch({ type: "product/SET_PRODUCT_SUCCESS", payload: null });
   }, [dispatch]);
 
   useEffect(() => {

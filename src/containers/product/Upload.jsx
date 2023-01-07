@@ -39,14 +39,6 @@ const Upload = () => {
   ];
   const [selectTarget, setSelectTarget] = useState("all");
   const [selectAge, setSelectAge] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [productFiles, setProductFiles] = useState([]);
-  const handlePreviewDelete = useCallback(
-    (id) => {
-      setProducts(products.filter((item) => item?.id !== id));
-    },
-    [products]
-  );
 
   const getProductType = useCallback(async () => {
     const response = await getProductTypeAPI();
