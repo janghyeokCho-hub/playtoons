@@ -25,34 +25,36 @@ import Dropdown from "../dashboard/Dropdown";
 * @return
 */
 export default function Series(props) {
-  const {name, className, callback, selected, disabled, disabledText} = props;
+  const { name, className, callback, selected, disabled, disabledText } = props;
   const [stateList, setStateList] = useState(undefined);
   const [stateError, setStateError] = useState(undefined);
-  const reduxAuthors = useSelector( ({post}) => post?.authorMine?.authors );
+  const reduxAuthors = useSelector(({ post }) => post?.authorMine?.authors);
   const refSelect = useRef();
-
 
   const getSeries = async () => {
     const form = new FormData();
-    form.append( 'authorId', reduxAuthors[0].id );
-    form.append( 'limit', 50 );
+    form.append("authorId", reduxAuthors[0].id);
+    form.append("limit", 50);
 
-    const {status, data} = await getPostSeriesMineFromServer(form);
-    if( status === 200 ){
+    const { status, data } = await getPostSeriesMineFromServer(form);
+    if (status === 200) {
       // setStateList( data?.series );
-      //2022.10.28 lhk- series  공란 추가 
+      //2022.10.28 lhk- series  공란 추가
       const list = data?.series;
-      list.unshift({id: undefined, name: undefined, type: undefined, category: undefined});
-      setStateList( list );
+      list.unshift({
+        id: undefined,
+        name: undefined,
+        type: undefined,
+        category: undefined,
+      });
+      setStateList(list);
       callback?.(data.series[0]);
-    }
-    else{
-      setStateError( data );
+    } else {
+      setStateError(data);
     }
   };
 
   const handleClickItem = (item) => {
-    console.log('item', item);
     callback?.(item);
   };
 
@@ -61,7 +63,7 @@ export default function Series(props) {
   }, [stateList]);
 
   useEffect(() => {
-    if( reduxAuthors && reduxAuthors?.length > 0 ){
+    if (reduxAuthors && reduxAuthors?.length > 0) {
       getSeries();
     }
   }, []);
@@ -72,10 +74,11 @@ export default function Series(props) {
         ref={refSelect}
         name={name}
         className={`fw400 ${className}`}
-        dataList={stateList} 
+        dataList={stateList}
         disabled={disabled}
         disabledText={disabledText}
-        handleItemClick={handleClickItem}/>
+        handleItemClick={handleClickItem}
+      />
       <ErrorMessage error={stateError} />
     </>
   );
