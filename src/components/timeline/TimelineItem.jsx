@@ -20,7 +20,8 @@ import ImageSpan from "./ImageSpan";
 import ShareButton from "./ShareButton";
 
 
-const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout, size }) => {
+export default function TimelineItem(props){
+  const { item, isActive, stateTimeout, setStateTimeout, size } = props;
   const [stateItem, setStateItem] = useState(item);
   const [stateTime, setStateTime] = useState(0);
   const [stateIsRunning, setStateRunning] = useState(isActive);
@@ -95,17 +96,20 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout, size }) =
     setStateItem(item);
   }, [item]);
 
-  //자동 넘기기를 위한 플래그
+  //자동 넘기기를 위한 플래그 설정 및 초기화
   useEffect(() => {
     setStateRunning(isActive);
     if( isActive ){
+      setStateTime(0);
       setTimelineInfoToRedux(stateItem);
     }
   }, [isActive]);
 
   //자동 loop 및 bar 로직
   useEffect(() => {
+    // actvie 상태, 팝업이 열린 상태인지 확인
     if (stateIsRunning) {
+      // 시간이 지나면 다음 슬라이드
       if (stateTime >= TIMELINE_DELAY) {
         setStateRunning(false);
         if( swiper.realIndex === size - 1 ){
@@ -113,15 +117,17 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout, size }) =
         } else {
           swiper.slideNext();
         }
+
+        return;
       }
 
+      //시간 업데이트
       setStateTimeout(
         setTimeout(() => {
           setStateTime(stateTime + UPDATE_TIME);
         }, UPDATE_TIME)
       );
     } else {
-      clearTimeout(stateTimeout);
       setStateTime(0);
     }
 
@@ -204,4 +210,4 @@ const TimelineItem = ({ item, isActive, stateTimeout, setStateTimeout, size }) =
   );
 };
 
-export default TimelineItem;
+

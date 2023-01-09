@@ -28,9 +28,7 @@ export default function EllipsisButton(props) {
 
     if (status === 201) {
       showToast(dispatch, 'success', '通報しました。', true);
-      setTimeout(() => {
-        dispatch( hideModal() );
-      }, [TOAST_TIME/2]);
+      dispatch( hideModal() );
       onClick?.(stateIsShow);
       setStateShow(false);
     } else {

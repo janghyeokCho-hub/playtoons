@@ -16,6 +16,10 @@ export default function TimelineItems({ items }) {
   const [ stateIsMobile, setStateMobile ] = useState(false);
   const windowSize = useWindowSize();
 
+  const setTimeoutToState = (stateTimeout) => {
+    setStateTimeout(stateTimeout);
+  };
+
   useEffect(() => {
     setStateMobile( windowSize.width <= MOBILE_WIDTH );
   }, [windowSize.width]);
@@ -33,7 +37,7 @@ export default function TimelineItems({ items }) {
               virtualIndex={index}
             >
               {({ isActive }) => (
-                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setStateTimeout} size={size} />
+                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setTimeoutToState} size={size} />
               )}
             </SwiperSlide>
           );
@@ -45,9 +49,8 @@ export default function TimelineItems({ items }) {
   return (
     <Swiper
       className="swiper-container-vertical"
-      spaceBetween={50}
-      slidesPerView={1}
-      initialSlide={3}
+      spaceBetween={24}
+      slidesPerView={stateIsMobile ? 1 : 1.1}
       touchRatio={stateIsMobile ? 1 : 0}
       direction="vertical"
       navigation={{
@@ -56,12 +59,12 @@ export default function TimelineItems({ items }) {
       }}
     >
       <div className="rgh">
-        <button ref={prevRef} type="button" className="btn01 slide_st">
+        <button ref={prevRef} type="button" className="btn01 slide_st" >
           <span className="i">
             <FontAwesomeIcon icon={faChevronUp} />
           </span>
         </button>
-        <button ref={nextRef} type="button" className="btn01 slide_st">
+        <button ref={nextRef} type="button" className="btn01 slide_st" >
           <span className="i">
             <FontAwesomeIcon icon={faChevronDown} />
           </span>

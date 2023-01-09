@@ -1,3 +1,4 @@
+import { TOAST_TIME } from '@/common/constant';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
@@ -11,7 +12,7 @@ import Toast from './timeline/Toast';
 * @author 2hyunkook
 */
 export default function ToastContainer(){
-  const reduxToast = useSelector(({alertModal}) => alertModal.toast);
+  const reduxToast = useSelector(({toast}) => toast.toast);
   const [ stateIsShow, setStateShow ] = useState(false);
 
   useEffect(() => {
@@ -19,7 +20,7 @@ export default function ToastContainer(){
       setStateShow(true);
       setTimeout(() => {
         setStateShow(false);
-      }, [1500]);
+      }, [TOAST_TIME]);
     } else {
       setStateShow(false);
     }

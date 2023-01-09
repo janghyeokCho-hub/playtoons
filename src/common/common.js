@@ -1,7 +1,7 @@
 import ConfirmPopup from "@/components/dashboard/ConfirmPopup";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { logoutRequest } from "@/modules/redux/ducks/login";
-import { showModal, showToastAction } from "@/modules/redux/ducks/modal";
+import { showModal } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
@@ -9,6 +9,7 @@ import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
 import { setNovelAction, setWebtoonAction } from "@/modules/redux/ducks/post";
 import { useTranslation } from "react-i18next";
+import { showToastAction } from "@/modules/redux/ducks/toast";
 /**
  * Email validation
  * @param {string} text

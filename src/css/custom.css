@@ -856,12 +856,19 @@
 /* ============================================================================== */
 /* timeline  */
 /* ============================================================================== */
-.timeline .swiper-container-vertical{
-  height: calc(100vh - (100px + 80px*2));  /* header 100px + wrap_timline padding 80px*2 */
-  overflow-y: hidden;
-}
 .timeline .wrap_timeline{
   max-width: 670px;
+  padding: 80px 0 0 0;
+}
+.timeline .swiper-container-vertical{
+  height: calc(100vh - (100px + 80px));  /* header 100px + wrap_timline padding top 80px */
+  overflow-y: hidden;
+}
+.timeline .wrap_timeline .col{
+  height: calc(100vh - (100px + 80px + 10vh)); /* header 100px + wrap_timline padding top 80px + next slide 10% */
+}
+.timeline .wrap_timeline .thumb{
+  padding-bottom: calc(100vh - (100px + 80px + 10vh)); /* header 100px + wrap_timline padding 80px + next slide 10% */
 }
 .timeline .wrap_timeline .cont .t_profile{
   width: auto;
@@ -1066,9 +1073,14 @@
 
 @media (max-width: 960px)  {
   .popup_dim .modal{
-    min-width: calc(100vw - 20px);;
+    min-width: calc(100vw - 20px);
   }
-
+  .timeline .wrap_timeline{
+    padding: 0;
+  }
+  .timeline .wrap_timeline .thumb{
+    padding-bottom: 0;
+  }
   .timeline .swiper-container-vertical{
     height: calc(var(--vh, 1vh) * 100);
     overflow-y: auto;
