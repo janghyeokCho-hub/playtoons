@@ -8,7 +8,6 @@ export default function ModalContainer() {
   return (
     <>
       {
-        alertModal.show && 
         <Modal  
             show={alertModal.show}
             title={alertModal.title} 

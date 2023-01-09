@@ -2,9 +2,13 @@ import {
   faCircleCheck, faCircleInfo, faCircleXmark
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
+import {hideToastAction} from '@/modules/redux/ducks/toast';
+import { useDispatch } from "react-redux";
 
 export default function Toast(props) {
   const { type = '', message = '', show } = props;
+  const dispatch = useDispatch();
   const active = {
     opacity: "1",
     transition: "opacity 500ms",
@@ -24,6 +28,14 @@ export default function Toast(props) {
       return faCircleInfo;
     }
   };
+
+  useEffect(() => {
+    if( show === false ){
+      setTimeout(() => {
+        dispatch( hideToastAction() );
+      }, [500]);
+    }
+  }, [show]);
   
 
   return (

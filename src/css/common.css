@@ -3458,7 +3458,7 @@ body {
 }
 .box_emoji .tit_emo .swiper-button-prev,
 .box_emoji .tit_emo .swiper-button-next {
-  opacity: 1 !important;
+  opacity: 1 ;
 }
 .box_emoji .tit_emo .swiper-button-lock {
   display: block;
@@ -3468,9 +3468,9 @@ body {
   width: 30px;
   height: 48px;
   background: none;
-  box-shadow: none !important;
-  color: #909dab !important;
-  background-color: transparent !important;
+  box-shadow: none ;
+  color: #909dab ;
+  background-color: transparent ;
   transform: none;
   top: 4px;
   margin-top: 0px;

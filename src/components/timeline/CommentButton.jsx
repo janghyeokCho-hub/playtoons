@@ -15,7 +15,7 @@ export default function CommentButton(props) {
       "",
       <CommentPopup />,
       () => onClick?.("init"),
-      "comment"
+      "timeline comment"
     );
   };
 

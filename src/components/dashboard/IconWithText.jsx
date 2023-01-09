@@ -135,6 +135,14 @@ export default function IconWithText(props, ref) {
   const handleTopIcon = (index) => {
     setStateTopSelected(index);
   };
+  const handleTopPrev = () => {
+    const size = stateIconData?.topIcons?.length;
+    setStateTopSelected(stateTopSelected === 0 ? size-1 : stateTopSelected-1);
+  };
+  const handleTopNext = () => {
+    const size = stateIconData?.topIcons?.length;
+    setStateTopSelected(stateTopSelected === size-1 ? 0 : stateTopSelected+1);
+  };
 
   const handleItemIcon = (index) => {
     const item = stateIconData?.topIcons[stateTopSelected]?.icons[index];
@@ -188,15 +196,18 @@ export default function IconWithText(props, ref) {
   const renderTopIconElement = useMemo(() => {
     return stateIconData?.topIcons?.map((item, index) => {
       return (
-        <SwiperSlide className="cx swiper-slide" key={index}>
-          <Image
-            hash={item.image}
-            onClick={() => handleTopIcon(index)}
-          />
+        <SwiperSlide key={index} className={`top_box ${stateTopSelected === index ? 'active' : ''}`}>
+          {/* <span className={`top_box ${stateTopSelected === index ? 'select' : ''}`}> */}
+            <Image
+              className={`icon`}
+              hash={item.image}
+              onClick={() => handleTopIcon(index)}
+            />
+          {/* </span> */}
         </SwiperSlide>
       );
     });
-  }, [stateIconData]);
+  }, [stateIconData, stateTopSelected]);
 
   const renderIconElement = () => {
     return stateIconData?.topIcons[stateTopSelected]?.icons?.map(
@@ -307,41 +318,60 @@ export default function IconWithText(props, ref) {
         }
 
         {/* 이모티콘 삽입 */}
-        {stateShowIcon && (
-          <div
-            className="box_emoji"
-            style={{ display: "block" }}
-            ref={refContaienr}
-          >
-            <div className="tit_emo">
-              <SwiperContainer
-                className={"myEmoji1"}
-                buttonClassName={"my1 hide-m myem"}
-                iconLeft={faAngleLeft}
-                iconRight={faAngleRight}
-                slidesPerView={8}
-                breakpoints={{
-                  0: {
-                    slidesPerView: 4,
-                    spaceBetween: 12,
-                  },
-                  960: {
-                    slidesPerView: 6,
-                    spaceBetween: 12,
-                  },
-                  1400: {
-                    slidesPerView: 8,
-                    spaceBetween: 16,
-                  },
-                }}
-                list={renderTopIconElement}
-              />
-            </div>
-            <div className="cont_emo scrollY">
-              <ul>{renderIconElement()}</ul>
-            </div>
+        <div
+          className="box_emoji transition"
+          style={{ display: `${stateShowIcon ? 'block' : 'none'}`}}
+          ref={refContaienr}
+        >
+          <div className="tit_emo">
+            <SwiperContainer
+              className={"myEmoji1"}
+              buttonClassName={"my1 hide-m myem"}
+              iconLeft={faAngleLeft}
+              iconRight={faAngleRight}
+              slidesPerView={8}
+              breakpoints={{
+                0: {
+                  slidesPerView: 6.2,
+                  spaceBetween: 2,
+                },
+                960: {
+                  slidesPerView: 7,
+                  spaceBetween: 4,
+                },
+                1400: {
+                  slidesPerView: 8,
+                  spaceBetween: 4,
+                },
+              }}
+              list={renderTopIconElement}
+            />
           </div>
-        )}
+          {/* <div className="tit_emo">
+            <div className="horizontal">
+              {renderTopIconElement()}
+              <button type="button"
+                className="left">
+                <FontAwesomeIcon
+                  className="fa-solid left"
+                  icon={faAngleLeft}
+                  onClick={() => handleTopPrev()}
+                />
+              </button>
+              <button type="button"
+                className="right">
+                <FontAwesomeIcon
+                  className="fa-solid right"
+                  icon={faAngleRight}
+                  onClick={() => handleTopNext()}
+                />
+              </button>
+            </div>
+          </div> */}
+          <div className="cont_emo scrollY">
+            <ul>{renderIconElement()}</ul>
+          </div>
+        </div>
 
         <ErrorMessage error={stateError} />
       </div>
@@ -389,7 +419,70 @@ const tempData = {
       ],
     },
     {
-      image: 'src/assets/images/icon0.png',
+      image: 'src/assets/images/icon1.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon2.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon3.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon4.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon5.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon10.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon6.png',
+      icons: [
+        {
+          code: "icon1",
+          image: "src/assets/images/icon2.png",
+        },
+      ],
+    },
+    {
+      image: 'src/assets/images/icon1.png',
       icons: [
         {
           code: "icon11",

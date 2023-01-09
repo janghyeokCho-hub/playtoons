@@ -2,8 +2,9 @@ import { TOAST_TIME } from '@/common/constant';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Toast from './timeline/Toast';
+
 
 /**
    ToastContainer Component
@@ -14,6 +15,7 @@ import Toast from './timeline/Toast';
 export default function ToastContainer(){
   const reduxToast = useSelector(({toast}) => toast.toast);
   const [ stateIsShow, setStateShow ] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if( reduxToast ){
@@ -21,9 +23,7 @@ export default function ToastContainer(){
       setTimeout(() => {
         setStateShow(false);
       }, [TOAST_TIME]);
-    } else {
-      setStateShow(false);
-    }
+    } 
   }, [reduxToast]);
 
   return (

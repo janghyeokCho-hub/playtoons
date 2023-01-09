@@ -28,17 +28,15 @@ import { forwardRef, useImperativeHandle, useState } from 'react';
 * @version 1.0.0
 * @author 이현국
 */
-export default forwardRef( function Modal(props, ref) {    
+export default forwardRef( function Modal(props) {    
   const { show, title, contents, className } = props;
-  const [ stateIsShow, setStateIsShow ] = useState(false);
-  const [ stateTitle, setStateTitle ] = useState(undefined);
-  const [ stateContent, setStateContent ] = useState(undefined);
+  const [ stateIsAnimation, setStateIsAnimation ] = useState(false);
   const dispatch = useDispatch();
   const refPopup = useRef();
   
 
   const handleClose = () => {
-    setStateIsShow(false);
+    document.body.style = `overflow: auto`
     dispatch(hideModal());
   }
 
@@ -48,40 +46,15 @@ export default forwardRef( function Modal(props, ref) {
     }
   };
 
-  
-  useImperativeHandle(ref, () => ({
-    setContent: (title, content) => {
-      setStateTitle(title);
-      setStateContent(content);
-      setStateIsShow(true);
-    },
-  }));
 
   useOutSideClick(refPopup, handleClose);
 
   useEffect(() => {
-    setStateIsShow(show);
-    
-    return () => {
-      setStateIsShow(false);
-    }
+    setTimeout(() => {
+      setStateIsAnimation(show);
+    }, [1]);
   }, [show]);
   
-  useEffect(() => {
-    setStateContent(contents);
-    
-    return () => {
-      setStateContent(undefined);
-    }
-  }, [contents]);
-
-  useEffect(() => {
-    setStateTitle(title);
-    
-    return () => {
-      setStateTitle(undefined);
-    }
-  }, [title]);
 
   useEffect(() => {
     document.body.style= `overflow: hidden`;
@@ -90,7 +63,6 @@ export default forwardRef( function Modal(props, ref) {
     
     return () => {
       handleClose();
-      document.body.style = `overflow: auto`
       window.removeEventListener("beforeunload", (e) => handleClose());
       window.removeEventListener("keydown", (e) => handleKeydown(e));
     }
@@ -100,13 +72,13 @@ export default forwardRef( function Modal(props, ref) {
   return (
     <>
       {
-        stateIsShow && 
+        show && 
           <div className="popup_dim" >
             {/* popTerms */}
-            <div ref={refPopup}  id="popTerms" className={`layerPopup modal ${className}`}>
+            <div ref={refPopup}  id="popTerms" className={`layerPopup transition ${stateIsAnimation ? 'open' : 'close'} modal ${className}`}>
               <div className="popup">
                 <div className="pop_head">
-                  <h2 className="title">{stateTitle}</h2>
+                  <h2 className="title">{title}</h2>
                   <div className='btn_pop_close'>
                     <FontAwesomeIcon
                       icon={faXmarkLarge}
@@ -116,7 +88,7 @@ export default forwardRef( function Modal(props, ref) {
                   </div>
                 </div>
                 <div className="pop_cont ta_center">
-                  {stateContent || ''}
+                  {contents || ''}
                 </div>
               </div>
             </div>

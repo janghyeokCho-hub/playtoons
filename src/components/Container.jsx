@@ -1,27 +1,30 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import useSideMenu from "@/hook/useSideMenu";
+import { MOBILE_WIDTH } from "@/common/constant";
 import { useWindowSize } from "@/hook/useWindowSize";
+import { setHeaderShow } from "@/modules/redux/ducks/container";
 import { setDim } from "@/modules/redux/ducks/dim";
 import Header from "@COMPONENTS/Header";
 import SideBar from "@COMPONENTS/SideBar";
-import { setHeaderShow } from "@/modules/redux/ducks/container";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Footer from "./Footer";
 
 const Container = ({ children }) => {
-  const dispatch = useDispatch();
   const isHeaderShow = useSelector(({ container }) => container.isHeaderShow);
   const isMenuShow = useSelector(({ container }) => container.isMenuShow);
   const isFooterShow = useSelector(({ container }) => container.isFooterShow);
-  const containerClass = useSelector(
-    ({ container }) => container.containerClass
-  );
+  const containerClass = useSelector(({ container }) => container.containerClass);
   const { dimType, isShow } = useSelector(({ dim }) => dim);
-
+  
   const [isMobile, setIsMobile] = useState(false);
-  const { isSideMenuShow, handleChange } = useSideMenu();
+  const [isSideMenuShow, setSideMenuShow] = useState(false);
+  // const { isSideMenuShow, handleChange } = ();
+  const dispatch = useDispatch();
   const windowSize = useWindowSize();
 
+  //==============================================================================
+  // hook
+  //==============================================================================
+  
   useEffect(() => {
     if (isHeaderShow === undefined) {
       dispatch(setHeaderShow(true));
@@ -33,12 +36,29 @@ const Container = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    setIsMobile(windowSize.width < 961);
-  }, [windowSize]);
+  }, [isSideMenuShow]);
 
+  useEffect(() => {
+    setIsMobile(windowSize.width <= MOBILE_WIDTH);
+    if (windowSize?.width <= MOBILE_WIDTH) {
+      setSideMenuShow(false);
+    }
+  }, [windowSize.width]);
+  
+  //==============================================================================
+  // handler
+  //==============================================================================
   const handleDimClose = useCallback(() => {
     dispatch(setDim({ dimType: null, isShow: false }));
   }, [dispatch]);
+  
+  const handleChange = useCallback(() => {
+    setSideMenuShow(!isSideMenuShow);
+  }, [isSideMenuShow]);
+
+  //==============================================================================
+  // render
+  //==============================================================================
 
   return (
     <>
