@@ -1,6 +1,8 @@
+import { MOBILE_WIDTH } from "@/common/constant";
+import { useWindowSize } from "@/hook/useWindowSize";
 import { faChevronDown, faChevronUp } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,7 +13,12 @@ export default function TimelineItems({ items }) {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const [ stateTimeout, setStateTimeout ] = useState(undefined);
-  
+  const [ stateIsMobile, setStateMobile ] = useState(false);
+  const windowSize = useWindowSize();
+
+  useEffect(() => {
+    setStateMobile( windowSize.width <= MOBILE_WIDTH );
+  }, [windowSize.width]);
 
   const renderItems = (items) => {
     const size = items.length;
@@ -41,7 +48,7 @@ export default function TimelineItems({ items }) {
       spaceBetween={50}
       slidesPerView={1}
       initialSlide={3}
-      // loop={true}
+      touchRatio={stateIsMobile ? 1 : 0}
       direction="vertical"
       navigation={{
         prevEl: prevRef?.current,
