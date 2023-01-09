@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 export default function SeeMoreComent(props) {
   const { text, meta, callback } = props;
-  const [ stateShow, setStateShow ] = useState(true);
+  const [ stateShow, setStateShow ] = useState(false);
 
   const getMoreComent = useCallback(() => {
     if( meta ){

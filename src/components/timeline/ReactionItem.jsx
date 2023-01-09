@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import IconWithText from "../dashboard/IconWithText";
 import ProfileSpan from "../dashboard/ProfileSpan";
-import ReportPopup from "../dashboard/ReportPopup";
+import ReportPopup from "@/containers/post/ReportPopup";
 import LikeButton from "./LikeButton";
 
 

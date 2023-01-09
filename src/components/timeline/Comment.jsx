@@ -2,7 +2,7 @@ import { showOneButtonPopup } from '@/common/common';
 import { setRefreshAction } from '@/modules/redux/ducks/timeline';
 import { getReactionFromServer } from '@/services/dashboardService';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import IconWithText from '../dashboard/IconWithText';
 import ProfileSpan from '../dashboard/ProfileSpan';
 import SeeMoreComent from '../dashboard/SeeMoreComent';
@@ -12,6 +12,8 @@ export default function Comment(props) {
   const { item } = props; 
   const [ statePinnedReactions, setStatePinnedReactions ] = useState(undefined);
   const [ stateReactions, setStateReactions ] = useState(undefined);
+  const reduxUserInfo = useSelector(({login}) => login.userInfo);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const dispatch = useDispatch();
 
   //==============================================================================
@@ -103,7 +105,7 @@ export default function Comment(props) {
     <div className="wrap_comment">
       <div className="top_comm">
         <div className="imgs">
-          <ProfileSpan hash={item?.author?.profileImage} />
+          <ProfileSpan hash={reduxUserInfo.profileImage || reduxAuthors?.[0].profileImage} />
         </div>
         <IconWithText
           postInfo={item}

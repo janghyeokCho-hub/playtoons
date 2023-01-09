@@ -2,22 +2,34 @@ import React, { useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { reportReaction } from "@API/reactionService";
+import { showToast } from "@/common/common";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 
-const ReportPopup = ({ onClose, content, postId }) => {
-  const handleReport = useCallback(async () => {
+export default function ReportPopup({ onClose, content, postId }) {
+  const [stateValue, setStateValue] = useState("spam");
+  const [stateContent, setStateContent] = useState("");
+  const dispatch = useDispatch();
+
+  const handleChange = (event) => {
+    setStateValue(event.target.value);
+  };
+
+  const handleReport = async () => {
+    //sexual, violence, terror, spam, hateful, harmful, rating, child_abuse, abuse, copyright, other
     const params = {
-      type: "sexual",
-      content: content,
+      type: stateValue,
+      content: stateContent,
     };
 
     const response = await reportReaction({ id: postId, params });
     if (response.status === 201) {
-      alert("신고 완료");
+      showToast(dispatch, "success", "通報しました。", true);
       onClose();
     } else {
-      alert("신고 실패");
+      showToast(dispatch, "error", response.data, true);
     }
-  }, [content, postId, onClose]);
+  };
 
   return (
     <div className="popup_dim">
@@ -36,23 +48,29 @@ const ReportPopup = ({ onClose, content, postId }) => {
           <div className="pop_cont">
             <p className="ta-c">通報する理由を選択してください。</p>
 
-            <label className="inp_radio">
-              <input type="radio" name="radio" value="1" />
-              <span>スパム</span>
-            </label>
-            <label className="inp_radio">
-              <input type="radio" name="radio" value="2" />
-              <span>迷惑行為</span>
-            </label>
-            <label className="inp_radio">
-              <input type="radio" name="radio" value="3" />
-              <span>出会い目的</span>
-            </label>
-            <label className="inp_radio">
-              <input type="radio" name="radio" value="4" />
-              <span>その他</span>
-            </label>
-            <textarea className="textarea1" placeholder="詳細(任意)"></textarea>
+            <fieldset onChange={(e) => handleChange(e)}>
+              <label className="inp_radio">
+                <input type="radio" name="radio" value="spam" defaultChecked />
+                <span>スパム</span>
+              </label>
+              <label className="inp_radio">
+                <input type="radio" name="radio" value="hateful" />
+                <span>迷惑行為</span>
+              </label>
+              <label className="inp_radio">
+                <input type="radio" name="radio" value="harmful" />
+                <span>出会い目的</span>
+              </label>
+              <label className="inp_radio">
+                <input type="radio" name="radio" value="other" />
+                <span>その他</span>
+              </label>
+            </fieldset>
+            <textarea
+              className={`textarea1${stateValue === 'other' ? ' show' : ''}`}
+              placeholder="詳細(任意)"
+              onChange={(e) => setStateContent(e.target.value)}
+            ></textarea>
           </div>
           <div className="pop_botm">
             <button
@@ -67,6 +85,4 @@ const ReportPopup = ({ onClose, content, postId }) => {
       </div>
     </div>
   );
-};
-
-export default ReportPopup;
+}
