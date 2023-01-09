@@ -1,7 +1,7 @@
 import ConfirmPopup from "@/components/dashboard/ConfirmPopup";
 import ErrorPopup from "@/components/dashboard/ErrorPopup";
 import { logoutRequest } from "@/modules/redux/ducks/login";
-import { showModal } from "@/modules/redux/ducks/modal";
+import { showModal, showToastAction } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
 import { RESULT_CODE_LIST } from "./constant";
@@ -412,6 +412,23 @@ export const initButtonInStatus = (refButton) => {
   refButton.current.setStatus(undefined);
 };
 
+/**
+  show  toast 
+* @version 1.0.0
+* @author 2hyunkook
+* @param type success, error, info
+* @param message 
+* @param isShow show flag
+*/
+export const showToast = (dispatch, type, message, isShow) => {
+  dispatch(
+    showToastAction({
+      type: type,
+      message: message,
+      show: isShow,
+    })
+  );
+};
 /**
   show  popup 
 * @version 1.0.0

@@ -17,6 +17,7 @@ import Store from "@CONTAINERS/store";
 import Timeline from "@CONTAINERS/timeline";
 import Webtoon from "@CONTAINERS/webtoon/Webtoon";
 import { Route, Routes } from "react-router-dom";
+import ToastContainer from "./components/ToastContainer";
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         </Routes>
       </Container>
       <ModalContainer />
+      <ToastContainer />
     </>
   );
 }

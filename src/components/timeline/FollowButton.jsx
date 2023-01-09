@@ -1,13 +1,11 @@
 import { showOneButtonPopup, showTwoButtonPopup } from '@/common/common';
 import { setAuthorFollow } from '@/services/authorService';
-import React from 'react';
-import { useState } from 'react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button from '../dashboard/Button';
 
 export default function FollowButton(props) {
-  const { className, author, onClick } = props;
+  const { className, item, onClick } = props;
   const [ stateText, setStateText ] = useState('フォロー');
   const dispatch = useDispatch();
   const refButton = useRef();
@@ -30,12 +28,12 @@ export default function FollowButton(props) {
   // api
   //==============================================================================
   const setFollowAuthor = async (method) => {
-    const {status, data} = await setAuthorFollow(method, author?.id);
+    const {status, data} = await setAuthorFollow(method, item?.authorId);
     
     if( status === 201 || status === 200 ){
       setStateText( method === 'post' ? 'フォロー中' : 'フォロー' );
     } else if( status === 409 ){
-      showTwoButtonPopup(dispatch, 'unfollow', setFollowAuthor());
+      showTwoButtonPopup(dispatch, 'unfollow', () => setFollowAuthor('delete'));
     } else {
       showOneButtonPopup(dispatch, data);
     }

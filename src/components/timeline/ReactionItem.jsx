@@ -9,7 +9,7 @@ import { faEllipsisVertical } from "@fortawesome/pro-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import IconWithText from "../dashboard/IconWithText";
 import ProfileSpan from "../dashboard/ProfileSpan";
 import ReportPopup from "../dashboard/ReportPopup";
@@ -23,7 +23,6 @@ export default function ReactionItem(props){
   const [isDeletePopupShow, setIsDeletePopupShow] = useState(false);
   const [isReportPopupShow, setIsReportPopupShow] = useState(false);
   const [isReplyControlShow, setIsReplyControlShow] = useState(false);
-  const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -133,7 +132,7 @@ export default function ReactionItem(props){
         {isDeletePopupShow && (
           <DeletePopup
             onClose={() => setIsDeletePopupShow(false)}
-            callback={() => callback?.()}
+            callback={callback}
             postId={stateItem?.id}
           />
         )}

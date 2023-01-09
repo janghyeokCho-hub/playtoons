@@ -1,19 +1,19 @@
 import { showPopup } from '@/common/common';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CommentPopup from './CommentPopup';
 
 export default function CommentButton(props) {
-  const { className, icon, item, onClick } = props;
+  const { className, icon, onClick } = props;
   const dispatch = useDispatch();
+  const reduxTimeline = useSelector(({timeline}) => timeline.timeline);
 
   const handleClick = () => {
     onClick?.("loading");
     showPopup(
       dispatch,
       "",
-      <CommentPopup item={item} />,
+      <CommentPopup />,
       () => onClick?.("init"),
       "comment"
     );
@@ -29,7 +29,7 @@ export default function CommentButton(props) {
         <span className="i">
           <FontAwesomeIcon icon={icon} />
         </span>
-        <span>{item?.reactionCount}</span>
+        <span>{reduxTimeline?.reactionCount}</span>
       </button>
     </>
   );

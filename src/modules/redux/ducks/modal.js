@@ -4,10 +4,13 @@ import produce from "immer";
 
 /* --- Action Types --- */
 export const [POPUP, POPUP_SHOW, POPUP_HIDE] = createRequestActionTypes("popup");
+export const [SHOW_TOAST, HIDE_TOAST] = createRequestActionTypes("toast");
 
 /* --- Actions --- */
 export const showModal = createAction(POPUP_SHOW);
 export const hideModal = createAction(POPUP_HIDE);
+export const showToastAction = createAction(SHOW_TOAST);
+export const hideToastAction = createAction(HIDE_TOAST);
 
 
 /**
@@ -19,6 +22,7 @@ export const hideModal = createAction(POPUP_HIDE);
   contents : <></>,
   callback : null,
   className : '',
+  toast: null,
 }
 
 const popup = handleActions(
@@ -35,6 +39,17 @@ const popup = handleActions(
     [POPUP_HIDE]: (state, action) => {
       state.callback?.();
       return initialState;
+    },
+    [SHOW_TOAST]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.toast = action.payload;
+      });
+    },
+    [HIDE_TOAST]: (state, _) => {
+      return {
+        ...state,
+        toast: null
+      };
     },
   },
   initialState
