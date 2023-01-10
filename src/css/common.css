@@ -2803,6 +2803,7 @@ body {
   clip: rect(0, 0, 0, 0);
   border: 0;
 }
+.box_drag_multi .filetxt, 
 .box_drag .filetxt {
   display: block;
   position: absolute;
@@ -2909,11 +2910,13 @@ body {
   right: 10px;
   bottom: 10px;
 }
+.box_drag_multi .ico,
 .box_drag .ico {
   margin-bottom: 15px;
   text-align: center;
   font-size: 24px;
 }
+.box_drag_multi .txt,
 .box_drag .txt {
   position: absolute;
   left: 0;
@@ -3717,12 +3720,12 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.top_profile .bg_file {
+.top_profile .bg_file_multi {
   position: relative;
   height: 300px;
   background-color: #c3cad2;
 }
-.top_profile .profile_file {
+.top_profile .profile_file_multi {
   position: absolute;
   left: 50%;
   bottom: -51px;
@@ -3737,14 +3740,14 @@ body {
   border-style: solid;
   border-color: #fff;
 }
-.top_profile .profile_file .fileview > div {
+.top_profile .profile_file_multi .fileview > div {
   background-size: cover;
   -webkit-border-radius: 100px;
   -moz-border-radius: 100px;
   border-radius: 100px;
   overflow: hidden; /* 2022.09.25 추가 profile 동그랗게 유지하기 위해서 */
 }
-.top_profile .profile_file .fileview .btn_del {
+.top_profile .profile_file_multi .fileview .btn_del {
   right: 0px;
   top: 0px;
   padding: 1px;

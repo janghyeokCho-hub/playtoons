@@ -18,7 +18,7 @@ const TEXT = {
   see_review : 'レビュ一覧',
 };
 
-const tabMenu = [
+const TAB_MENU = [
   {
     name: TEXT.see_product,
     path: "/dashboard/product",
@@ -69,7 +69,7 @@ export default function DashboardProduct() {
   return (
     <div className='contents'>
 
-      <MenuTabs tabMenu={tabMenu} />
+      <MenuTabs tabMenu={TAB_MENU} />
 
       <Routes>    
         <Route 

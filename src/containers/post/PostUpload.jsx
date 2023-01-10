@@ -1,12 +1,16 @@
 import {
-  useCallback, useEffect, useLayoutEffect, useRef, useState
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from "react";
 
 import {
   getFromDataJson,
   getShowEditor,
   initButtonInStatus,
-  showOneButtonPopup
+  showOneButtonPopup,
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import Category from "@/components/dashboard/Category";
@@ -18,7 +22,13 @@ import ToolTip from "@/components/dashboard/ToolTip";
 import Series from "@/components/post/Series";
 import Type from "@/components/post/Type";
 import { setContainer } from "@/modules/redux/ducks/container";
-import { getAuthorMineAction, initPostAction, initSeriesAction, setPostAction, setSeriesAction } from "@/modules/redux/ducks/post";
+import {
+  getAuthorMineAction,
+  initPostAction,
+  initSeriesAction,
+  setPostAction,
+  setSeriesAction,
+} from "@/modules/redux/ducks/post";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -42,7 +52,8 @@ const text = {
   contents: "コンテンツ",
   contents_tooltip: "投稿するコンテンツです。",
   tag: "タグ",
-  tag_tooltip: "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
+  tag_tooltip:
+    "タグ入力は、老眼鏡アイコンクリックまたはエンタをご利用ください。",
   support_user: "閲覧範囲（支援者）",
   timeline: "タイムラインのサムネイル",
   timeline_tooltip: "投稿のサムネイルです。",
@@ -85,40 +96,52 @@ export default function UploadPost(props) {
   const refThumbnail = useRef();
   const refTags = useRef();
   const refRegister = useRef();
+  const refTempSave = useRef();
 
   //==============================================================================
   // header
   //==============================================================================
   const handleContainer = useCallback(() => {
-    const container = {
-      headerClass: "header ty1",
-      containerClass: "container sub post",
-      isHeaderShow: true,
-      isMenuShow: false,
-      headerType: "postUpload",
-      menuType: null,
-      isDetailView: true,
-      isFooterShow: false,
-    };
-    dispatch(setContainer(container));
+    dispatch(
+      setContainer({
+        headerClass: "header ty1",
+        containerClass: "container sub post",
+        isHeaderShow: true,
+        isMenuShow: false,
+        headerType: "postUpload",
+        menuType: null,
+        isDetailView: true,
+        isFooterShow: false,
+      })
+    );
   }, [dispatch]);
 
   //==============================================================================
   // function
   //==============================================================================
+  const initAnimationInButton = () => {
+    console.log('initAnimationInButton');
+    initButtonInStatus(refRegister);
+    initButtonInStatus(refTempSave);
+  };
+
   const getContent = useMemo(() => {
-    return ( getShowEditor(stateType) ) ? (
-              <DraftEditor ref={refEditor} className="draft_editor_container" placeholder={text.please_input_content}  />
-            ) : (
-              <ImageUpload
-                  ref={refContents}
-                  id={"filebox2"}
-                  className={"box_drag"}
-                  name={"content"}
-                  text={text.drag_drop}
-                  multiple={true}     
-                  />
-            )
+    return getShowEditor(stateType) ? (
+      <DraftEditor
+        ref={refEditor}
+        className="draft_editor_container"
+        placeholder={text.please_input_content}
+      />
+    ) : (
+      <ImageUpload
+        ref={refContents}
+        id={"filebox2"}
+        className={"box_drag"}
+        name={"content"}
+        text={text.drag_drop}
+        multiple={true}
+      />
+    );
   }, [stateType]);
 
   const initType = () => {
@@ -134,53 +157,54 @@ export default function UploadPost(props) {
       setStateType(reduxSeries.type);
     }
   };
-  
+
   const getRatingFromSeriesInfo = () => {
     return reduxSeries?.id === undefined ? "G" : reduxSeries?.rating;
   };
 
   const getTypeId = () => {
-    return reduxSeries?.type === undefined ? stateType?.id : reduxSeries?.type.id;
+    return reduxSeries?.type === undefined
+      ? stateType?.id
+      : reduxSeries?.type.id;
   };
 
   const getCategoryId = (json) => {
     return json.categoryId === "" ? reduxSeries?.category.id : json.categoryId;
   };
 
-  const setPost = () => {
+  const setPost = (status) => {
     let json = getFromDataJson(refForm);
-    
+
     //필드 확인
     if (refTitle.current.isEmpty()) {
-      initButtonInStatus(refRegister);
+      initAnimationInButton();
       refTitle.current.setError(text.please_input_title);
-      return;
+      // return;
     }
 
-    if( json.categoryId === '' && reduxSeries?.category === undefined ){
-      initButtonInStatus(refRegister);
-      showOneButtonPopup( dispatch, text.please_input_category );
+    if (json.categoryId === "" && reduxSeries?.category === undefined) {
+      initAnimationInButton();
+      showOneButtonPopup(dispatch, text.please_input_category);
       return;
     }
 
     if (refOutline.current.isEmpty()) {
-      initButtonInStatus(refRegister);
+      initAnimationInButton();
       refOutline.current.setError(text.please_input_outline);
       return;
     }
 
-    if( getShowEditor(stateType) ){
+    if (getShowEditor(stateType)) {
       //undefined(일회성 post), novel, blog, illust, photo, music  타입
-      if( refEditor.current.isEmpty() ){
-        initButtonInStatus(refRegister);
+      if (refEditor.current.isEmpty()) {
+        initAnimationInButton();
         refEditor.current.setError(text.please_input_content);
         return;
       }
-    }
-    else{
+    } else {
       //webtoon, 타입
       if (refContents.current.getImageFile() === undefined) {
-        initButtonInStatus(refRegister);
+        initAnimationInButton();
         refContents.current.setError(text.please_input_content);
         return;
       } else {
@@ -192,7 +216,7 @@ export default function UploadPost(props) {
     }
 
     if (refThumbnail.current.getImageFile() === undefined) {
-      initButtonInStatus(refRegister);
+      initAnimationInButton();
       refThumbnail.current.setError(text.please_input_thumbnail);
       return;
     } else {
@@ -206,34 +230,35 @@ export default function UploadPost(props) {
       ...json,
       authorId: reduxAuthors[0].id,
       rating: getRatingFromSeriesInfo(),
-      status: 'enabled',
+      status: status || "enabled",
       typeId: getTypeId(),
       tagIds: refTags.current.getTagsJsonObject(),
       categoryId: getCategoryId(json),
-      content: getShowEditor(stateType) ? refEditor.current.getContent() : json.content,
+      content: getShowEditor(stateType)
+        ? refEditor.current.getContent()
+        : json.content,
       subscribeTierId: stateSubscribeTier?.id,
     };
 
-    console.log('request', json);
-     dispatch( setPostAction(json) );
+    console.log("request", json);
+    dispatch(setPostAction(json));
   };
-  
+
   //==============================================================================
   // api
   //==============================================================================
   const getSubscribeTier = async () => {
     let json = {
-      authorId: reduxAuthors[0].id
-    }
-    const {status, data} = await getSubscribeTierAuthorIdFromServer(json);
-    console.log('getSubscribeTier', status, data);
-    
-    if( status === 200 ){
+      authorId: reduxAuthors[0].id,
+    };
+    const { status, data } = await getSubscribeTierAuthorIdFromServer(json);
+    console.log("getSubscribeTier", status, data);
+
+    if (status === 200) {
       const list = Array.from(data?.subscribeTiers);
-      list.unshift({id: '', name: text.support_user });
+      list.unshift({ id: "", name: text.support_user });
       setStateSupportorList(list);
-    }
-    else{
+    } else {
       showOneButtonPopup(dispatch, data);
     }
   };
@@ -242,13 +267,13 @@ export default function UploadPost(props) {
   // event
   //==============================================================================
   const handleSeries = useCallback((series) => {
-    //series api response 후 
-    dispatch( setSeriesAction(series) );
+    //series api response 후
+    dispatch(setSeriesAction(series));
   }, []);
 
   const handleType = (type) => {
-    //type api response 후 
-    setStateType( reduxSeries?.type === undefined ? type : reduxSeries?.type );
+    //type api response 후
+    setStateType(reduxSeries?.type === undefined ? type : reduxSeries?.type);
   };
 
   const handleClickType = useCallback((type) => {
@@ -259,62 +284,11 @@ export default function UploadPost(props) {
   const handleClickItemSubscribeTier = useCallback((item) => {
     //閲覧範囲（支援者） item click event
     setStateSubscribeTier(item);
-  }, []);
-  
-  const handleClickPreview = useCallback((event) => {
-     //필드 확인
-     if (refTitle.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refTitle.current.setError(text.please_input_title);
-      return;
-    }
+  }, [stateSupportorList]);
 
-    if (refOutline.current.isEmpty()) {
-      initButtonInStatus(refRegister);
-      refOutline.current.setError(text.please_input_outline);
-      return;
-    }
-
-    if( getShowEditor(stateType) ){
-      //undefined(일회성 post), novel, blog, illust, photo, music  타입
-      if( refEditor.current.isEmpty() ){
-        initButtonInStatus(refRegister);
-        refEditor.current.setError(text.please_input_content);
-        return;
-      }
-    }
-    else{
-      //webtoon, 타입
-      if (refContents.current.getImageFile() === undefined) {
-        initButtonInStatus(refRegister);
-        refContents.current.setError(text.please_input_content);
-        return;
-      } 
-    }
-
-    const data = {
-      title: refTitle.current.getValue(),
-      startAt: moment().format('YYYY/MM/DD HH:mm'),
-      outline: refOutline.current.getValue(),
-      isEditor: getShowEditor(stateType),
-      content: getShowEditor(stateType) ? refEditor.current.getContent() : refContents.current.getImageInfo()?.preview,
-      author: {
-        profileImage: reduxAuthors?.[0]?.profileImage,
-        backgroundImage: reduxAuthors?.[0]?.backgroundImage,
-        nickname: reduxAuthors?.[0]?.nickname,
-      }
-    };
-
-    
-    dispatch(
-      showModal({
-        title: text.preview,
-        contents: <PreviewPost data={data} text={text} />,
-      })
-    );
-  }, []);
-
-
+  const handleClickTempSave = (event) => {
+    setPost('draft');
+  };
 
   const handleClickRegister = (event) => {
     setPost();
@@ -326,15 +300,15 @@ export default function UploadPost(props) {
   useLayoutEffect(() => {
     handleContainer();
 
-    if ( !reduxAuthors || reduxAuthors?.length === 0 ) {
-      dispatch( getAuthorMineAction() );
+    if (!reduxAuthors || reduxAuthors?.length === 0) {
+      dispatch(getAuthorMineAction());
     }
 
-    return () =>  dispatch( initSeriesAction() );
+    return () => dispatch(initSeriesAction());
   }, []);
 
   useEffect(() => {
-    if( reduxAuthors ){
+    if (reduxAuthors) {
       getSubscribeTier();
     }
   }, [reduxAuthors]);
@@ -348,24 +322,28 @@ export default function UploadPost(props) {
   useEffect(() => {
     if (reduxPostUpload) {
       initButtonInStatus(refRegister);
-      if( reduxPostUpload?.status === 201 ){
+      if (reduxPostUpload?.status === 201) {
         //success
-        showOneButtonPopup(dispatch, text.done_upload, () => navigate("/dashboard/post"));
-      }
-      else{
+        showOneButtonPopup(dispatch, text.done_upload, () =>
+          navigate("/dashboard/post")
+        );
+      } else {
         //error 처리
-        if( reduxPostUpload?.type === 'content' ){
-          if( getShowEditor(stateType) ){ refEditor.current.setError(text.please_input_content); }
-          else {   refContents.current.setError(String(reduxPostUpload?.data));  }
-        } else if( reduxPostUpload?.type === 'thumbnail' ){
+        if (reduxPostUpload?.type === "content") {
+          if (getShowEditor(stateType)) {
+            refEditor.current.setError(text.please_input_content);
+          } else {
+            refContents.current.setError(String(reduxPostUpload?.data));
+          }
+        } else if (reduxPostUpload?.type === "thumbnail") {
           refThumbnail.current.setError(String(reduxPostUpload?.data));
         } else {
-          showOneButtonPopup(dispatch,  String(reduxPostUpload?.data)  );
+          showOneButtonPopup(dispatch, String(reduxPostUpload?.data));
         }
       }
     }
 
-    return () => dispatch( initPostAction() );
+    return () => dispatch(initPostAction());
   }, [reduxPostUpload]);
 
   return (
@@ -376,7 +354,6 @@ export default function UploadPost(props) {
             <div className="hd_titbox">
               <h2 className="h_tit1">{text.upload_post}</h2>
             </div>
-              
 
             <div className="col series">
               <h3 className="tit1">{text.series}</h3>
@@ -436,11 +413,11 @@ export default function UploadPost(props) {
             <div className="col">
               <h3 className="tit1">{text.outline}</h3>
               <Textarea
-                  ref={refOutline}
-                  name="outline"
-                  id="outline"
-                  className="textarea1"
-                ></Textarea>
+                ref={refOutline}
+                name="outline"
+                id="outline"
+                className="textarea1"
+              ></Textarea>
             </div>
 
             <div className="col">
@@ -474,7 +451,8 @@ export default function UploadPost(props) {
                 name={"subscribeTierId"}
                 className={"fw400"}
                 dataList={stateSupportorList}
-                handleItemClick={handleClickItemSubscribeTier}/>
+                handleItemClick={handleClickItemSubscribeTier}
+              />
             </div>
 
             <div className="col">
@@ -492,14 +470,16 @@ export default function UploadPost(props) {
                 text={text.drag_drop}
               />
             </div>
-
-
           </section>
 
           <div className="bbs_write_botm">
-            <div className="btn-pk n blue2" onClick={handleClickPreview}>
+            <Button
+              ref={refTempSave}
+              className="btn-pk n blue2"
+              onClick={handleClickTempSave}
+            >
               <span>{text.preview}</span>
-            </div>
+            </Button>
             <Button
               ref={refRegister}
               className={"btn-pk n blue"}

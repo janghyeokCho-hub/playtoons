@@ -5,8 +5,8 @@ import useOutSideClick from '@/common/useOutSideClick';
 import { hideModal } from '@/modules/redux/ducks/modal';
 import { faXmarkLarge } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { forwardRef, useImperativeHandle, useState } from 'react';
-
+import { forwardRef, useState } from 'react';
+import PropTypes from 'prop-types';
 
 /**
 * Common Modal 
@@ -33,6 +33,13 @@ export default forwardRef( function Modal(props) {
   const [ stateIsAnimation, setStateIsAnimation ] = useState(false);
   const dispatch = useDispatch();
   const refPopup = useRef();
+
+  Modal.propTypes = {
+    show: PropTypes.bool,
+    title: PropTypes.string,
+    className: PropTypes.string,
+    contents: PropTypes.object,
+  };
   
 
   const handleClose = () => {
@@ -90,7 +97,7 @@ export default forwardRef( function Modal(props) {
                   </div>
                 </div>
                 <div className="pop_cont ta_center">
-                  {contents || ''}
+                  {contents || <></>}
                 </div>
               </div>
             </div>
@@ -98,5 +105,5 @@ export default forwardRef( function Modal(props) {
       }
     </>
   )
-})
+});
 

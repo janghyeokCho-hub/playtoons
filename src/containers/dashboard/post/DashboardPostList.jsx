@@ -4,7 +4,6 @@ import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
 import Pagination from "@/components/dashboard/MyPagination";
 import { useWindowSize } from "@/hook/useWindowSize";
-import { setContainer } from "@/modules/redux/ducks/container";
 import { getTypeAction } from "@/modules/redux/ducks/dashboard";
 import { getPostListFromServer } from "@/services/dashboardService";
 import {
@@ -12,7 +11,7 @@ import {
   faHeart, faPlus
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -44,27 +43,6 @@ export default function DashboardPostList(props) {
   const windows = useWindowSize();
   const params = useParams("page");
 
-  //==============================================================================
-  // header
-  //==============================================================================
-  const handleContainer = useCallback(() => {
-    const container = {
-      headerClass: "header",
-      containerClass: "container post",
-      isHeaderShow: true,
-      isMenuShow: true,
-      headerType: null,
-      menuType: "DASHBOARD",
-      isDetailView: false,
-      activeMenu: "post",
-      isFooterShow: false,
-    };
-    dispatch(setContainer(container));
-  }, [dispatch]);
-
-  useEffect(() => {
-    handleContainer();
-  }, []);
   //==============================================================================
   // function
   //==============================================================================
@@ -188,62 +166,60 @@ export default function DashboardPostList(props) {
 
   //header back callback 현재 로케이션 보내느걸로
   return (
-    <div className="contents">
-      <div className="inr-c">
-        <div className="hd_titbox hd_mst1">
-          <h2 className="h_tit0">
-            <span>{TEXT.post_list}</span>
-          </h2>
-          <div className="rgh">
-            <div onClick={handleClickPost} className="btn-pk n blue2">
-              <span><FontAwesomeIcon icon={faPlus} /> {TEXT.post}</span>
-            </div>
+    <div className="inr-c">
+      <div className="hd_titbox hd_mst1">
+        <h2 className="h_tit0">
+          <span>{TEXT.post_list}</span>
+        </h2>
+        <div className="rgh">
+          <div onClick={handleClickPost} className="btn-pk n blue2">
+            <span><FontAwesomeIcon icon={faPlus} /> {TEXT.post}</span>
           </div>
         </div>
-        <div className="hd_titbox2">
-          <Dropdown
-            name={"typeId"}
-            className={''}
-            dataList={stateTypes} 
-            selected={params.search} 
-            handleItemClick={handleItemClickSearch}/>
-        </div>
-
-        <div className="tbl_basic mtbl_ty1">
-          <table className="list">
-            <caption>list</caption>
-            <colgroup>
-              <col className="num" />
-              <col className="imgs" />
-              <col className="wid3" />
-              <col className="wid2" />
-              <col className="wid1" />
-              <col className="wid1" />
-              <col className="wid1" />
-              <col className="wid1" />
-            </colgroup>
-            <thead>
-              <tr>
-                <th className="hide-m">{TEXT.number}</th>
-                <th>{TEXT.cover_image}</th>
-                <th>{TEXT.title}</th>
-                <th>{TEXT.access_count}</th>
-                <th>{TEXT.good}</th>
-                <th>{TEXT.date}</th>
-                <th>{TEXT.status}</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>{renderPostListElements()}</tbody>
-          </table>
-        </div>
-
-        <Pagination
-          className={""}
-          meta={stateData?.meta}
-          callback={(page) => navigate(`/dashboard/post/${page}${params.search === undefined ? '' : '&'+params.search}`)}
-        />
       </div>
+      <div className="hd_titbox2">
+        <Dropdown
+          name={"typeId"}
+          className={''}
+          dataList={stateTypes} 
+          selected={params.search} 
+          handleItemClick={handleItemClickSearch}/>
+      </div>
+
+      <div className="tbl_basic mtbl_ty1">
+        <table className="list">
+          <caption>list</caption>
+          <colgroup>
+            <col className="num" />
+            <col className="imgs" />
+            <col className="wid3" />
+            <col className="wid2" />
+            <col className="wid1" />
+            <col className="wid1" />
+            <col className="wid1" />
+            <col className="wid1" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th className="hide-m">{TEXT.number}</th>
+              <th>{TEXT.cover_image}</th>
+              <th>{TEXT.title}</th>
+              <th>{TEXT.access_count}</th>
+              <th>{TEXT.good}</th>
+              <th>{TEXT.date}</th>
+              <th>{TEXT.status}</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>{renderPostListElements()}</tbody>
+        </table>
+      </div>
+
+      <Pagination
+        className={""}
+        meta={stateData?.meta}
+        callback={(page) => navigate(`/dashboard/post/${page}${params.search === undefined ? '' : '&'+params.search}`)}
+      />
     </div>
   );
 }

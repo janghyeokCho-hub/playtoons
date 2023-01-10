@@ -190,13 +190,13 @@ export default function DashboardUploadProfile(props) {
 
           <div className="top_profile">
             <ImageUpload
-              className={"bg_file"}
+              className={"bg_file_multi bg_file"}
               previewHash={reduxAuthors?.[0]?.backgroundImage}
               id={"filebox1"}
             />
 
             <ImageUpload
-              className={"profile_file"}
+              className={"profile_file_multi profile_file"}
               previewHash={reduxAuthors?.[0]?.profileImage}
               id={"filebox2"}
             />

@@ -60,6 +60,15 @@ export const setFooterShow = createAction(SET_FOOTER_SHOW);
 const dashMainMenu = {
   ダッシュボード: [
     {
+      code: "home",
+      name: "ホームに戻る",
+      icon: {
+        on: faHouseChimneyWindowON,
+        off: faHouseChimneyWindowOFF,
+      },
+      link: "/home",
+    },
+    {
       code: "dashboard",
       name: "ダッシュボード",
       icon: {
@@ -102,7 +111,7 @@ const dashMainMenu = {
         on: faSquarePenON,
         off: faSquarePenOFF,
       },
-      link: "/dashboard/post",
+      link: "/dashboard/post/1",
     },
     {
       code: "plan",

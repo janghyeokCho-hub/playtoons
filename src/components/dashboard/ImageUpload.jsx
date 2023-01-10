@@ -81,6 +81,10 @@ export default forwardRef(function ImageUpload(props, ref) {
     return Array.isArray(stateImage?.preview);
   };
 
+  const isInputMode = () => {
+    return stateImage?.preview === undefined || stateImage?.preview.length === 0;
+  };
+
   /**
      업로드 전 preview 생성
   * @version 1.0.0
@@ -445,8 +449,9 @@ export default forwardRef(function ImageUpload(props, ref) {
         </>
       )) || (
         <>
+          {/*  */}
           <div
-            className={`${className}${isMultiple() ? "_multi" : ""}`}
+            className={`${className}${(isInputMode()) ? "" : "_multi"}`}
             onClick={(e) => e.preventDefault()}
           >
             {/* upload에 쓰일 값  저장 */}
@@ -458,36 +463,34 @@ export default forwardRef(function ImageUpload(props, ref) {
             />
             {/* file input tag */}
             <input {...InputProps} id={id} />
-            {stateImage?.preview === undefined ||
-            stateImage?.preview.length === 0 ? (
-              // input
-              <label htmlFor={id} className="filetxt">
-                <div {...RootProps} className={`wh100`}>
-                  {text === undefined ? (
-                    <div className="ico fa-solid">
-                      <FontAwesomeIcon icon={faCirclePlus} />
+            {
+              isInputMode() ? (
+                  // input
+                  <label htmlFor={id} className="filetxt">
+                    <div {...RootProps} className={`wh100`}>
+                      {
+                        text === undefined ? (
+                          <div className="ico fa-solid txt">
+                            <FontAwesomeIcon icon={faCirclePlus} />
+                          </div>
+                        ) : (
+                          <div className="txt ">
+                            <div className="ico fa-solid">
+                              <FontAwesomeIcon icon={faCirclePlus} />
+                            </div>
+                            <p className="t">{text}</p>
+                          </div>
+                        )
+                      }
                     </div>
-                  ) : (
-                    <div className="txt">
-                      <div className="ico fa-solid">
-                        <FontAwesomeIcon icon={faCirclePlus} />
-                      </div>
-                      <p className="t">{text}</p>
-                    </div>
-                  )}
-                </div>
-              </label>
+                  </label>
             ) : (
               <>
                 {/* render preview  */}
-                {/* //==============================================================================
-                  // normal style
-                  //============================================================================== */}
+                {/* === normal style === */}
                 {renderType === undefined && renderPreview()}
 
-                {/* //==============================================================================
-                  // thumbnail timeline style
-                  //============================================================================== */}
+                {/* === timeline style === */}
                 {renderType === "thumbnail" && (
                   <div className={"fileview2"}>
                     <div>

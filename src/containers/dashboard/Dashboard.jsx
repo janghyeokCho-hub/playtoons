@@ -10,10 +10,7 @@ import SeriesEdit from "@/containers/dashboard/series/DashboardSeriesEdit";
 import Series from "@/containers/dashboard/series/DashboardSeriesList";
 import SeriesUpload from "@/containers/dashboard/series/DashboardSeriesUpload";
 import Main from "@CONTAINERS/dashboard/DashboardMain";
-import PostDetail from "@CONTAINERS/dashboard/post/DashboardPostDetail";
-import PostEdit from "@CONTAINERS/dashboard/post/DashboardPostEdit";
-import PostList from "@CONTAINERS/dashboard/post/DashboardPostList";
-import PostUpload from "@CONTAINERS/dashboard/post/DashboardPostUpload";
+import PostMain from "@CONTAINERS/dashboard/post/DashboardPostMain";
 import ReactionList from "@CONTAINERS/dashboard/reaction/DashboardReactionList";
 import SeriesDetail from "@CONTAINERS/dashboard/series/DashboardSeriesDetail";
 import { Route, Routes } from "react-router-dom";
@@ -84,28 +81,8 @@ export default function Dashboard() {
           element={<SeriesEdit />}
         />
         <Route 
-          path="/post" 
-          element={<PostList />} 
-        />
-        <Route 
-          path="/post/:page" 
-          element={<PostList />} 
-        />
-        <Route 
-          path="/post/:page&:search" 
-          element={<PostList />} 
-        />
-        <Route
-          path="/post/detail/:id"
-          element={<PostDetail />}
-        />
-        <Route
-          path="/post/edit/:id"
-          element={<PostEdit />}
-        />
-        <Route
-          path="/post/upload"
-          element={<PostUpload />}
+          path="/post/*" 
+          element={<PostMain />} 
         />
         <Route 
           path="/reaction" 

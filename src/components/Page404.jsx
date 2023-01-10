@@ -1,10 +1,33 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import { setContainer } from "@/modules/redux/ducks/container";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Page404 = () => {
   const isLogined = useSelector(({ login }) => login.isLogined);
+  const dispatch = useDispatch();
   const homeURL = isLogined ? "/home" : "/";
+
+  const handleContainer = useCallback(() => {
+    dispatch(
+      setContainer({
+        headerClass: "header",
+        containerClass: "container post",
+        isHeaderShow: false,
+        isMenuShow: false,
+        headerType: null,
+        menuType: null,
+        isDetailView: true,
+        isFooterShow: false,
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    handleContainer();
+  }, []);
+
+
   return (
     <div className="contents page404">
       <div className="wrap_404">

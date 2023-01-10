@@ -6,9 +6,8 @@ import Pagination from "@/components/dashboard/MyPagination";
 import Search from "@/components/dashboard/Search";
 import {
   editShopProductToServer,
-  getProductListFromServer,
+  getProductListFromServer
 } from "@/services/dashboardService";
-import tempImg1 from "@IMAGES/temp_seller_image.png";
 import { cloneDeep } from "lodash";
 import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,47 +37,6 @@ const text = {
   status_not_for_sale: "販売不可",
 };
 
-const tempData = {
-  meta: {
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 3,
-  },
-  products: [
-    {
-      id: 23,
-      thumbnailImage: tempImg1,
-      name: "大学のリンゴ一個の重さで10メートルの素材",
-      price: "1200000CP",
-      startAt: "2022/06/11",
-      status: "enabled",
-    },
-    {
-      id: 1,
-      thumbnailImage: tempImg1,
-      name: "大学のリンゴ一個の重さで10メートルの素材",
-      price: "1200000CP",
-      startAt: "2022/06/11",
-      status: "enabled",
-    },
-    {
-      id: 3,
-      thumbnailImage: tempImg1,
-      name: "大学のリンゴ一個の重さで10メートルの素材",
-      price: "1200000CP",
-      startAt: "2022/06/11",
-      status: "pending",
-    },
-    {
-      id: 4,
-      thumbnailImage: tempImg1,
-      name: "大学のリンゴ一個の重さで10メートルの素材",
-      price: "1200000CP",
-      startAt: "2022/06/11",
-      status: "suspended",
-    },
-  ],
-};
 
 export default function DashboardProductList(props) {
   const [stateData, setStateData] = useState(undefined);
