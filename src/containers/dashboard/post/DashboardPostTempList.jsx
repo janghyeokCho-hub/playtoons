@@ -1,13 +1,15 @@
-import { getDateYYYYMMDD, getStatusText } from '@/common/common';
+import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from '@/common/common';
 import EmptyTr from '@/components/dashboard/EmptyTr';
 import Image from '@/components/dashboard/Image';
 import MyPagination from '@/components/dashboard/MyPagination';
+import { getPostMineFromServer } from '@/services/dashboardService';
 import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const TEMP_DATA = {
   meta: {
@@ -39,7 +41,10 @@ const TEMP_DATA = {
 */
 export default function DashboardPostTempList(props){
   const [ stateData, setStateData] = useState(undefined);
+  const reduxAuthors = useSelector(({post}) => post.authorMine?.authors);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
 
   //==============================================================================
   // handler
@@ -50,10 +55,38 @@ export default function DashboardPostTempList(props){
     
   };
   //==============================================================================
+  // api
+  //==============================================================================
+  const getTempList = async () => {
+    const formData = new FormData();
+    formData.append("authorId", reduxAuthors[0].id);
+    formData.append("page", params.page === undefined ? 1 : params.page);
+    formData.append("draft", true);
+    // params.append("typeId", "");
+    // params.append("categoryId", "");
+    // params.append("seriesId", "");
+    // params.append("issueId", "");
+    // params.append("subscribeTierId", "");
+    // params.append("keyword", "");
+    // params.append("orderKey", "");
+    // params.append("order", "");
+    // params.append("limit", "");
+
+    const { status, data: result } = await getPostMineFromServer(formData);
+
+    if (status === 200) {
+      setStateData(result);
+    } else {
+      //error 처리
+      showOneButtonPopup(dispatch, result);
+    }
+  };
+  //==============================================================================
   // hook
   //==============================================================================
   useEffect(() => {
-    setStateData(TEMP_DATA);
+    // setStateData(TEMP_DATA);
+    getTempList();
   }, []);
   //==============================================================================
   // render

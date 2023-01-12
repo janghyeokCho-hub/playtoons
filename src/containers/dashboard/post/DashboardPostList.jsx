@@ -41,7 +41,7 @@ export default function DashboardPostList(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const windows = useWindowSize();
-  const params = useParams("page");
+  const params = useParams();
 
   //==============================================================================
   // function

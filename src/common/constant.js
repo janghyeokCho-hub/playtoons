@@ -7,9 +7,18 @@ export const TOAST_TYPE = {
   error : 3,
 };
 
+//draft, pending, enabled, disabled, suspended
+export const POST_STATUS = {
+  draft : 'draft',
+  pending: 'pending',
+  enabled : 'enabled',
+  disabled : 'disabled',
+  suspended : 'suspended',
+};
+
 export const DATE_FORMAT = "YYYY/MM/DD";
 
-export const FILE_MAX_SIZE = 2000000;
+export const FILE_MAX_SIZE = 2000000; // 2 MB
 
 export const TIMELINE_DELAY = 5000; // 5 seconds
 export const TOAST_TIME = 1500; // 1.5 seconds

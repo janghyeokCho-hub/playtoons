@@ -40,6 +40,11 @@ export default forwardRef( function Modal(props) {
     className: PropTypes.string,
     contents: PropTypes.object,
   };
+
+
+  const isVaildatedContents = () => {
+    return contents?.$$typeof;
+  };
   
 
   const handleClose = () => {
@@ -57,11 +62,16 @@ export default forwardRef( function Modal(props) {
   useOutSideClick(refPopup, handleClose);
 
   useEffect(() => {
-    setTimeout(() => {
-      setStateIsAnimation(show);
-    }, [1]);
+    if( isVaildatedContents() ){
+      setTimeout(() => {
+        setStateIsAnimation(show);
+      }, [1]);
+    } else {
+      handleClose();
+      window.removeEventListener("beforeunload", (e) => handleClose());
+      window.removeEventListener("keydown", (e) => handleKeydown(e));
+    }
   }, [show]);
-  
 
   useEffect(() => {
     if( show ){
@@ -97,7 +107,8 @@ export default forwardRef( function Modal(props) {
                   </div>
                 </div>
                 <div className="pop_cont ta_center">
-                  {contents || <></>}
+                  {/* contents react component 인지 확인 */}
+                  { isVaildatedContents() ? contents : <></>}
                 </div>
               </div>
             </div>

@@ -3803,7 +3803,8 @@ body {
 .main_notice .btn_del {
   position: absolute;
   right: 10px;
-  top: 10px;
+  top: 50%;                     /* 2023.01.12 lhk- 버튼 가운데로 */
+  transform: translateY(-50%);
   /* font-size: 24px; */
   color: #a3ace4;
 }

@@ -508,7 +508,7 @@ export default function PostEdit(props) {
                 ref={refThumbnailTimeline}
                 id={"filebox1"}
                 name={"thumbnailImage"}
-                className={"box_drag"}
+                className={"box_drag box_drag"}
                 renderType={"thumbnail"}
                 previewHash={stateData?.thumbnailImage}
                 text={text.drag_drop}

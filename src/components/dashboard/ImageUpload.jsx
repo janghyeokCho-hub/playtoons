@@ -100,11 +100,6 @@ export default forwardRef(function ImageUpload(props, ref) {
           })
         );
 
-        console.log("stateImage.preview : ", stateImage.preview);
-        console.log(
-          "stateImage.preview.concat(results) : ",
-          stateImage.preview.concat(results)
-        );
         setStateImage({
           ...stateImage,
           file: files,
@@ -363,21 +358,25 @@ export default forwardRef(function ImageUpload(props, ref) {
 
   useLayoutEffect(() => {
     if (previewHash) {
-      if (isArrayFromPostContent(previewHash)) {
-        console.log(
-          "Load!!!! : ",
-          stateImage.preview?.concat(previewHash.split(","))
-        );
-        setStateImage({
-          ...stateImage,
-          preview: stateImage.preview?.concat(previewHash.split(",")),
-        });
+      if( multiple ){
+        //multi upload
+        if (isArrayFromPostContent(previewHash)) {
+          setStateImage({
+            ...stateImage,
+            preview: stateImage.preview?.concat(previewHash.split(",")),
+          });
+        } else {
+          setStateImage({
+            ...stateImage,
+            preview: [previewHash],
+          });
+        }
       } else {
+        //sigle upload
         setStateImage({
           ...stateImage,
           preview: previewHash,
         });
-        // getImageUrl(previewHash);
       }
     }
   }, [previewHash]);

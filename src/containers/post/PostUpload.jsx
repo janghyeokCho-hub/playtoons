@@ -3,21 +3,20 @@ import {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
+  useState
 } from "react";
 
 import {
   getFromDataJson,
   getShowEditor,
   initButtonInStatus,
-  showOneButtonPopup,
+  showOneButtonPopup
 } from "@/common/common";
 import Button from "@/components/dashboard/Button";
 import Category from "@/components/dashboard/Category";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import Input from "@/components/dashboard/Input";
 import Tag from "@/components/dashboard/Tag";
-import PreviewPost from "@/components/dashboard/PreviewPost";
 import ToolTip from "@/components/dashboard/ToolTip";
 import Series from "@/components/post/Series";
 import Type from "@/components/post/Type";
@@ -27,7 +26,7 @@ import {
   initPostAction,
   initSeriesAction,
   setPostAction,
-  setSeriesAction,
+  setSeriesAction
 } from "@/modules/redux/ducks/post";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -36,9 +35,8 @@ import Dropdown from "@/components/dashboard/Dropdown";
 import Textarea from "@/components/dashboard/Textarea";
 import DraftEditor from "@/components/post/DraftEditor";
 import { getSubscribeTierAuthorIdFromServer } from "@/services/dashboardService";
-import moment from "moment/moment";
-import { showModal } from "@/modules/redux/ducks/modal";
 import { useMemo } from "react";
+import { POST_STATUS } from "@/common/constant";
 
 const text = {
   upload_post: "投稿する",
@@ -58,7 +56,7 @@ const text = {
   timeline: "タイムラインのサムネイル",
   timeline_tooltip: "投稿のサムネイルです。",
   drag_drop: "ドラッグ＆ドロップ",
-  preview: "プレビュー",
+  preview: "一時保存",
   register: "登録する",
 
   tag_name: "タグ名",
@@ -77,10 +75,11 @@ const text = {
   done_upload: "投稿登録しました。",
 };
 
-export default function UploadPost(props) {
+export default function UploadPost() {
   const [stateSupportorList, setStateSupportorList] = useState(undefined);
   const [stateType, setStateType] = useState(undefined);
   const [stateSubscribeTier, setStateSubscribeTier] = useState(undefined);
+  const [stateStatus, setStateStatus] = useState(POST_STATUS.enabled);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const reduxSeries = useSelector(({ post }) => post.series);
   const reduxPostUpload = useSelector(({ post }) => post.postUpload);
@@ -174,12 +173,14 @@ export default function UploadPost(props) {
 
   const setPost = (status) => {
     let json = getFromDataJson(refForm);
+    setStateStatus(status);
+    const isEnabled = POST_STATUS.enabled === status;   //임시저장을 위한 변수
 
     //필드 확인
-    if (refTitle.current.isEmpty()) {
+    if ( refTitle.current.isEmpty() && isEnabled ) {
       initAnimationInButton();
       refTitle.current.setError(text.please_input_title);
-      // return;
+      return;
     }
 
     if (json.categoryId === "" && reduxSeries?.category === undefined) {
@@ -188,7 +189,7 @@ export default function UploadPost(props) {
       return;
     }
 
-    if (refOutline.current.isEmpty()) {
+    if ( refOutline.current.isEmpty() && isEnabled ) {
       initAnimationInButton();
       refOutline.current.setError(text.please_input_outline);
       return;
@@ -218,7 +219,6 @@ export default function UploadPost(props) {
     if (refThumbnail.current.getImageFile() === undefined) {
       initAnimationInButton();
       refThumbnail.current.setError(text.please_input_thumbnail);
-      return;
     } else {
       json = {
         ...json,
@@ -230,7 +230,7 @@ export default function UploadPost(props) {
       ...json,
       authorId: reduxAuthors[0].id,
       rating: getRatingFromSeriesInfo(),
-      status: status || "enabled",
+      status: status || POST_STATUS.enabled,
       typeId: getTypeId(),
       tagIds: refTags.current.getTagsJsonObject(),
       categoryId: getCategoryId(json),
@@ -279,7 +279,7 @@ export default function UploadPost(props) {
   const handleClickType = useCallback((type) => {
     //type item click event
     setStateType(type);
-  }, []);
+  }, [stateType]);
 
   const handleClickItemSubscribeTier = useCallback((item) => {
     //閲覧範囲（支援者） item click event
@@ -287,7 +287,7 @@ export default function UploadPost(props) {
   }, [stateSupportorList]);
 
   const handleClickTempSave = (event) => {
-    setPost('draft');
+    setPost(POST_STATUS.draft);
   };
 
   const handleClickRegister = (event) => {
@@ -325,7 +325,7 @@ export default function UploadPost(props) {
       if (reduxPostUpload?.status === 201) {
         //success
         showOneButtonPopup(dispatch, text.done_upload, () =>
-          navigate("/dashboard/post")
+          navigate(stateStatus === POST_STATUS.enabled ? "/dashboard/post/1" : "/dashboard/post/temp/1")
         );
       } else {
         //error 처리
