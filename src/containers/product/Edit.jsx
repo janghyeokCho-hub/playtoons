@@ -14,7 +14,7 @@ import { showOneButtonPopup } from "@/common/common";
 import ImageUpload from "@/components/dashboard/ImageUpload";
 import { setFileMultiToServer, setFileToServer } from "@API/dashboardService";
 import { updateProduct } from "@API/storeService";
-import { updateFileInfo, deleteFileInfo } from "@API/fileService";
+import { deleteFileInfo } from "@API/fileService";
 import moment from "moment";
 
 const Edit = () => {
