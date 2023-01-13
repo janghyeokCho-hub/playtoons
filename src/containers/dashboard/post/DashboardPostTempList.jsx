@@ -1,37 +1,14 @@
-import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from '@/common/common';
+import { getDateYYYYMMDD, showOneButtonPopup } from '@/common/common';
 import EmptyTr from '@/components/dashboard/EmptyTr';
 import Image from '@/components/dashboard/Image';
 import MyPagination from '@/components/dashboard/MyPagination';
 import { getPostMineFromServer } from '@/services/dashboardService';
 import { faPlus } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-const TEMP_DATA = {
-  meta: {
-    currentPage: 1,
-    itemsPerPage: 10,
-    totalItems: 3,
-  },
-  posts : [
-    {
-      id: "1",
-      thumbnaimImage: null,
-      title: "大学のリンゴ一個ののの大学のリンゴ一個の",
-      startAt: "2022/06/11",
-    },
-    {
-      id: "2",
-      thumbnaimImage: null,
-      title: "大学のリンゴ一個ののの大学のリンゴ一個の",
-      startAt: "2022/06/11",
-    },
-  ]
-};
 
 /**
    DashboardPostTempList Component
@@ -137,7 +114,7 @@ export default function DashboardPostTempList(props){
         </div>
       </div>
       <div className="hd_titbox">
-        {`312の一時保存があります。`} 
+        {`${stateData?.meta?.totalItems || 0}の一時保存があります。`} 
       </div>
 
       <div className="tbl_basic mtbl_ty1">
@@ -166,7 +143,7 @@ export default function DashboardPostTempList(props){
       <MyPagination
         className={""}
         meta={stateData?.meta}
-        callback={(page) => navigate(`/dashboard/post/${page}`)}
+        callback={(page) => navigate(`/dashboard/post/temp/${page}`)}
       />
     </div>
   );

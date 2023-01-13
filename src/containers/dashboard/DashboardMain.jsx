@@ -229,7 +229,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`お問い合わせがいません。`}
         />
       );
     }
@@ -253,7 +253,7 @@ export default function DashboardMain() {
         return (
           <EmptyDiv
             className={"relative empty"}
-            text={text.empty_data}
+            text={`レビューがいません。`}
           />
         );
       }
@@ -288,7 +288,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`シリーズがいません。`}
         />
       );
     }
@@ -321,7 +321,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`投稿がいません。`}
         />
       );
     }
@@ -343,7 +343,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`リアクションがいません。`}
         />
       );
     }
@@ -367,7 +367,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`売り上げがいません。`}
         />
       );
     }
@@ -397,7 +397,7 @@ export default function DashboardMain() {
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={`振込履歴がいません。`}
         />
       );
     }

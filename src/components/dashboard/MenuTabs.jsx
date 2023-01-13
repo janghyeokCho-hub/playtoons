@@ -4,10 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 export default function MenuTabs(props) {
-  const PC_TOP = 94;
-  const MOBILE_TOP = 38;
-  
-  const { tabMenu } = props;
+  const { tabMenu, pcTop = 94, mobileTop = 38 } = props;
   const [ stateSelected, setStateSelected ] = useState(undefined);
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,7 +56,7 @@ export default function MenuTabs(props) {
   
       refBar.current.style.width = `${clientRect.width}px`;
       refBar.current.style.left = `${clientRect.left}px`;
-      refBar.current.style.top = `${ window.innerWidth < 960 ? MOBILE_TOP : PC_TOP }px`;
+      refBar.current.style.top = `${ window.innerWidth < 960 ? mobileTop : pcTop }px`;
     }
   };
 
@@ -84,9 +81,37 @@ export default function MenuTabs(props) {
   };
 
   //==============================================================================
-  // hook & render
+  // hook 
   //==============================================================================
 
+  /**
+     엘리먼트 변화 감지 listener 등록 및 해제 
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  useLayoutEffect(() => {
+    getSelected();
+    resizeObserver.observe(refContainer.current);
+    
+    return () => {
+      resizeObserver.unobserve(refContainer.current);
+    }
+  }, [location]);
+
+  /**
+     클릭 이벤트로 입력된 index로 위치 설정
+  * @version 1.0.0
+  * @author 2hyunkook
+  */
+  useEffect(() => {
+    if( stateSelected !== undefined ){
+      setPosition(refMenus.current[stateSelected]);
+    }
+  }, [stateSelected]);
+
+  //==============================================================================
+  // render 
+  //==============================================================================
   const renderTabMenuElement = () => {
     return tabMenu.map((item, index) => {
       return (
@@ -106,32 +131,6 @@ export default function MenuTabs(props) {
     });
   };
 
-
-
-  /**
-     엘리먼트 변화 감지 listener 등록 및 해제 
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  useLayoutEffect(() => {
-    getSelected();
-    resizeObserver.observe(refContainer.current);
-    
-    return () => {
-      resizeObserver.unobserve(refContainer.current);
-    }
-  }, []);
-
-  /**
-     클릭 이벤트로 입력된 index로 위치 설정
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
-  useEffect(() => {
-    if( stateSelected !== undefined ){
-      setPosition(refMenus.current[stateSelected]);
-    }
-  }, [stateSelected]);
 
   return (
     <div className="hd_tabbox" >
