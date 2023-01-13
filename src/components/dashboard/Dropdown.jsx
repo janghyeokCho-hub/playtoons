@@ -38,7 +38,7 @@ export default forwardRef(function Dropdown(props, ref) {
 
     let selectedItem = dataList?.[0];
 
-    if( id !== undefined ){
+    if( id ){
       for( let i = 0; i < dataList?.length; i++ ){
         const item = dataList?.[i];
         if( item?.id === id || item?.code === id ){

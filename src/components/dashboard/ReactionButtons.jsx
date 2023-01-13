@@ -28,7 +28,7 @@ export default function ReactionButtons(props) {
   //==============================================================================
   const checkBeforeToDeleteReaction = (id) => {
     if (reduxAuthors[0].id === item.authorId) {
-      showTwoButtonPopup(dispatch, <><div>{id}</div><div>{text.do_you_delete}</div></>, checkPinnedToDeleteReaction);
+      showTwoButtonPopup(dispatch, <>{text.do_you_delete}</>, checkPinnedToDeleteReaction);
     } else {
       showOneButtonPopup(dispatch, text.can_do_myself);
     }
@@ -67,7 +67,7 @@ export default function ReactionButtons(props) {
     if (status === 200) {
       callback?.();
       dispatch(hideModal());
-      showOneButtonPopup(dispatch, text.do_delete);
+      // showOneButtonPopup(dispatch, text.do_delete);
     } else {
       showOneButtonPopup(dispatch, data);
     }

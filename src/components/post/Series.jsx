@@ -59,7 +59,9 @@ export default function Series(props) {
   };
 
   useEffect(() => {
-    refSelect.current.setSelected(selected);
+    if( stateList ){
+      refSelect.current.setSelected(selected);
+    }
   }, [stateList]);
 
   useEffect(() => {

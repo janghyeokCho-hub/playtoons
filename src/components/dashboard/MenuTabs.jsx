@@ -1,8 +1,26 @@
+import { MOBILE_WIDTH } from "@/common/constant";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 
-
+/**
+   MenuTabs Component
+   const TAB_MENU = [
+      {
+        name: "投稿リスト",
+        path: "/dashboard/post/1",
+      },
+      {
+        name: "一時保存",
+        path: "/dashboard/post/temp/1",
+      },
+    ];
+    .....
+    <MenuTabs tabMenu={TAB_MENU} />
+* @date 2022.12.30 11:00
+* @version 1.0.0
+* @author 2hyunkook
+*/
 export default function MenuTabs(props) {
   const { tabMenu, pcTop = 94, mobileTop = 38 } = props;
   const [ stateSelected, setStateSelected ] = useState(undefined);
@@ -23,7 +41,7 @@ export default function MenuTabs(props) {
   * @author 2hyunkook
   */
   const resizeObserver = new ResizeObserver((entries) => {
-    setPosition(  refMenus.current[entries[0].target.getAttribute('data-index')]  );
+    setPosition(  refMenus.current[entries[0].target.getAttribute('menu-tab-index')]  );
   });
 
   const isMenuPath = (path, menuPath) => {
@@ -56,7 +74,7 @@ export default function MenuTabs(props) {
   
       refBar.current.style.width = `${clientRect.width}px`;
       refBar.current.style.left = `${clientRect.left}px`;
-      refBar.current.style.top = `${ window.innerWidth < 960 ? mobileTop : pcTop }px`;
+      refBar.current.style.top = `${ window.innerWidth <= MOBILE_WIDTH ? mobileTop : pcTop }px`;
     }
   };
 
@@ -89,9 +107,11 @@ export default function MenuTabs(props) {
   * @version 1.0.0
   * @author 2hyunkook
   */
-  useLayoutEffect(() => {
-    getSelected();
-    resizeObserver.observe(refContainer.current);
+  useEffect(() => {
+    if( location ){
+      getSelected();
+      resizeObserver.observe(refContainer.current);
+    }
     
     return () => {
       resizeObserver.unobserve(refContainer.current);
@@ -99,15 +119,24 @@ export default function MenuTabs(props) {
   }, [location]);
 
   /**
-     클릭 이벤트로 입력된 index로 위치 설정
+    index로 위치 설정
   * @version 1.0.0
   * @author 2hyunkook
   */
   useEffect(() => {
-    if( stateSelected !== undefined ){
+    if( stateSelected ){
       setPosition(refMenus.current[stateSelected]);
     }
   }, [stateSelected]);
+
+  useEffect(() => {
+    document.fonts.onloadingdone = () => {
+      console.log('load font');
+      const menuElements = document.getElementsByClassName('menuTabs li');
+      const index = document.querySelector('[menu-tab-index]').getAttribute('menu-tab-index');
+      setPosition(menuElements[index]);
+    }
+  }, []);
 
   //==============================================================================
   // render 
@@ -118,7 +147,7 @@ export default function MenuTabs(props) {
         <li
           ref={(el) => (refMenus.current[index] = el)}
           key={index}
-          className={`${isMenuPath(location.pathname, item.path) ? 'blue' : ''}`}
+          className={`menuTabs li ${isMenuPath(location.pathname, item.path) ? 'blue' : ''}`}
         >
           <a
             className="pointer"
@@ -134,7 +163,7 @@ export default function MenuTabs(props) {
 
   return (
     <div className="hd_tabbox" >
-      <div className="tabs ty1" ref={refContainer} data-index={stateSelected} onScroll={handleScroll}>
+      <div className="tabs ty1" ref={refContainer} menu-tab-index={stateSelected} onScroll={handleScroll}>
         <ul className="">{renderTabMenuElement()}</ul>
 
         <div ref={refBar} className={"product_bar transition"}></div>
