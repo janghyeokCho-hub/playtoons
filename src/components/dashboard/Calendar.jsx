@@ -4,7 +4,7 @@ import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 import moment from "moment";
 import { useEffect } from "react";
 import DatePicker from "react-datepicker";
-import { ko, ja, es } from "date-fns/esm/locale";
+import { ko, ja, enUS } from "date-fns/esm/locale";
 import { DATE_FORMAT } from "@/common/constant";
 
 /**
@@ -79,7 +79,7 @@ export default forwardRef(function Calendar(props, ref) {
   };
 
   //==============================================================================
-  // hook & render
+  // hook
   //==============================================================================
   useImperativeHandle(ref, () => ({
     getDate: () => {
@@ -89,10 +89,13 @@ export default forwardRef(function Calendar(props, ref) {
       return getStateDateFormated();
     },
   }));
-
+  
   useEffect(() => {
     setStateDate(value || getInitDate());
   }, [value]);
+  //==============================================================================
+  // render
+  //==============================================================================
 
   return (
     <div className={`inp_cal`}>

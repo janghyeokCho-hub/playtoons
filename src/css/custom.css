@@ -279,13 +279,16 @@
 /* ============================================================================== */
 
 .hd_tabbox .tabs.ty1 li.blue a {
-  color: #394bc2;
+  color: #394bc2 !important;
 }
 
 .product_bar{
   position: absolute;
   height: 3px;
   background-color: #394bc2;
+}
+.product_bar.mypage{
+  height: 7px;
 }
 
 
@@ -1350,5 +1353,7 @@
   .plan .lst_mainplan .col.swiper-slide{
     margin-bottom: 0;
   }
- 
+  .product_bar.mypage{
+    height: 2px;
+  }
 }

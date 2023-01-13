@@ -5,24 +5,24 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 /**
    MenuTabs Component
-   const TAB_MENU = [
-      {
-        name: "投稿リスト",
-        path: "/dashboard/post/1",
-      },
-      {
-        name: "一時保存",
-        path: "/dashboard/post/temp/1",
-      },
-    ];
-    .....
-    <MenuTabs tabMenu={TAB_MENU} />
+    <MenuTabs 
+      tabMenu={[
+        {
+          name: "投稿リスト",
+          path: "/dashboard/post/1",
+        },
+        {
+          name: "一時保存",
+          path: "/dashboard/post/temp/1",
+        },
+      ]} 
+    />
 * @date 2022.12.30 11:00
 * @version 1.0.0
 * @author 2hyunkook
 */
 export default function MenuTabs(props) {
-  const { tabMenu, pcTop = 94, mobileTop = 38 } = props;
+  const { tabMenu, pcTop = 94, mobileTop = 38, className = "", ulClassName = "", barClassName = "product_bar" } = props;
   const [ stateSelected, setStateSelected ] = useState(undefined);
   const location = useLocation();
   const navigate = useNavigate();
@@ -101,40 +101,45 @@ export default function MenuTabs(props) {
   //==============================================================================
   // hook 
   //==============================================================================
-
-  /**
-     엘리먼트 변화 감지 listener 등록 및 해제 
-  * @version 1.0.0
-  * @author 2hyunkook
-  */
+  
   useEffect(() => {
-    if( location ){
-      getSelected();
-      resizeObserver.observe(refContainer.current);
-    }
-    
-    return () => {
-      resizeObserver.unobserve(refContainer.current);
-    }
+    getSelected();
   }, [location]);
-
+  
   /**
-    index로 위치 설정
+   index로 위치 설정
   * @version 1.0.0
-  * @author 2hyunkook
-  */
+   * @author 2hyunkook
+   */
   useEffect(() => {
-    if( stateSelected ){
+    if( stateSelected !== undefined ){
       setPosition(refMenus.current[stateSelected]);
     }
   }, [stateSelected]);
-
-  useEffect(() => {
-    document.fonts.onloadingdone = () => {
-      console.log('load font');
-      const menuElements = document.getElementsByClassName('menuTabs li');
-      const index = document.querySelector('[menu-tab-index]').getAttribute('menu-tab-index');
-      setPosition(menuElements[index]);
+  
+  /**
+     엘리먼트 변화 감지 listener, font load listener 등록
+     * @version 1.0.0
+     * @author 2hyunkook
+     */
+    useEffect(() => {
+      //font load 후 위치가 바뀌어서 추가
+      document.fonts.onloadingdone = () => {
+        const menuElements = document.getElementsByClassName('menuTabs li');
+        const index = document.querySelector('[menu-tab-index]').getAttribute('menu-tab-index');
+        setPosition(menuElements[index]);
+      }
+      
+      resizeObserver.observe(refContainer.current);
+    }, []);
+    
+  /**
+   엘리먼트 변화 감지 listener, font load listener 해제
+  */
+  useLayoutEffect(() => {
+    return () => {
+      resizeObserver.unobserve(document.querySelector('[menu-tab-index]'));
+      document.fonts.onloadingdone = undefined;
     }
   }, []);
 
@@ -162,11 +167,11 @@ export default function MenuTabs(props) {
 
 
   return (
-    <div className="hd_tabbox" >
+    <div className={`hd_tabbox ${className}`} >
       <div className="tabs ty1" ref={refContainer} menu-tab-index={stateSelected} onScroll={handleScroll}>
-        <ul className="">{renderTabMenuElement()}</ul>
+        <ul className={`${ulClassName}`}>{renderTabMenuElement()}</ul>
 
-        <div ref={refBar} className={"product_bar transition"}></div>
+        <div ref={refBar} className={`${barClassName} transition`}></div>
       </div>
     </div>
   );

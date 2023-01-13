@@ -3498,6 +3498,7 @@ body {
 .box_emoji .cont_emo {
   height: 244px;
   overflow: hidden;
+  overflow-y: auto;
 }
 .box_emoji .cont_emo ul {
   font-size: 0;

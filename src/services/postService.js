@@ -311,3 +311,37 @@ export const getSubscribeTierCheck = async (authorId) => {
     };
   }
 };
+
+/**
+   아이콘 목록 
+* @version 1.0.0
+* @author 2hyunkook
+* @param params
+*/
+export const getIconFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/icon`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};
+
+/**
+   아이콘 상세  
+* @version 1.0.0
+* @author 2hyunkook
+* @param params
+*/
+export const getIconIdFromServer = async (id, params) => {
+  try {
+    return await apiServer("get", `/icon/${id}`, params);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};

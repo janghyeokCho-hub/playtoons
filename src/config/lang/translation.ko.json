@@ -2,8 +2,8 @@
   "header": {
     "searchPlaceholder": "검색키워드 입력",
     "logo": "PlayToons",
-    "post": "투고",
-    "doPost": "투고하다",
+    "post": "게시글",
+    "doPost": "게시글 업로드",
     "registerMarket": "마켓에 등록",
     "profile": "프로파일",
     "vaildatePoint": "유효포인트",
