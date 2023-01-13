@@ -43,7 +43,6 @@ const Edit = () => {
   const saleEndRef = useRef(null);
   const thumbnailRef = useRef(null);
   const productsRef = useRef(null);
-
   const targetList = [
     {
       code: "all",
@@ -94,10 +93,8 @@ const Edit = () => {
   }, [currentProduct]);
 
   const handleCategoryChange = useCallback(
-    (code) => {
-      const selectCategory = productCategories.find(
-        (item) => item.code === code
-      );
+    (id) => {
+      const selectCategory = productCategories.find((item) => item.id === id);
       setCategory(selectCategory);
     },
     [productCategories]
@@ -349,10 +346,10 @@ const Edit = () => {
                   <select
                     className="select1 wid1"
                     onChange={(e) => handleCategoryChange(e.target.value)}
-                    value={category?.code}
+                    value={category?.id}
                   >
                     {productCategories?.map((item, index) => (
-                      <option key={`category_${index}`} value={item?.code}>
+                      <option key={`category_${index}`} value={item?.id}>
                         {item?.name}
                       </option>
                     ))}
@@ -413,10 +410,11 @@ const Edit = () => {
                   </div>
                 </div>
 
+                {/*
+                
                 <div className="col">
                   <h3 className="tit1">有料オプション追加</h3>
 
-                  {/*<!-- 리스트 -->*/}
                   <ul className="lst_option_wrap1">
                     <li>
                       <div className="lst_option1">
@@ -577,6 +575,7 @@ const Edit = () => {
                     </span>
                   </button>
                 </div>
+                */}
 
                 <div className="col">
                   <h3 className="tit1">
