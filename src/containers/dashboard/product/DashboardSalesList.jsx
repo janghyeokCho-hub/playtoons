@@ -112,10 +112,6 @@ export default function DashboardSalesList(props) {
   const handleClickCalendar = (name, date) => {
     const startDate = name === 'start' ? date : refCalendarStart.current.getDate();
     const endDate = name === 'end' ? date : refCalendarEnd.current.getDate();
-    
-    if( endDate === undefined ){
-      return true;
-    }
 
     if( startDate.getTime() >= endDate.getTime() ){
       showOneButtonPopup(dispatch, '開始日は終了日より大きくできません。');

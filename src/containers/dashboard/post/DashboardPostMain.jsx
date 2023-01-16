@@ -58,6 +58,7 @@ export default function DashboardPostMain(props) {
 
   useEffect(() => {
     if( location ){
+      //post detail 화면 sidebar, header 스타일 구분
       if( location.pathname.startsWith('/dashboard/post/detail/') ){
         setStateShowMenu(false);
       } else {
@@ -66,7 +67,6 @@ export default function DashboardPostMain(props) {
       }
     } 
   }, [location]);
-
   //==============================================================================
   // render
   //==============================================================================

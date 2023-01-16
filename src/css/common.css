@@ -841,6 +841,9 @@ textarea:focus {
 .mr5 {
   margin-right: 5px !important;
 }
+.mr8 {
+  margin-right: 8px !important;
+}
 .mr10 {
   margin-right: 10px !important;
 }
@@ -3495,6 +3498,7 @@ body {
 .box_emoji .cont_emo {
   height: 244px;
   overflow: hidden;
+  overflow-y: auto;
 }
 .box_emoji .cont_emo ul {
   font-size: 0;
