@@ -6,7 +6,8 @@ import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
 import Comments from "./Comments";
 import { getProductDetail } from "@API/storeService";
 import useFilePath from "@/hook/useFilePath";
-import useTimer from "@/hook/useTimer";
+import StoreImages from "./StoreImages";
+import Timer from "./Timer";
 
 const Store = () => {
   const params = useParams();
@@ -16,13 +17,11 @@ const Store = () => {
     productItem?.author?.backgroundImage
   );
 
-  const { timer } = useTimer(productItem?.endAt);
-
   const getProduct = async (id) => {
     try {
-      const response = await getProductDetail(id);
-      if (response?.status === 200) {
-        setProductItem(response.data?.product);
+      const prodResp = await getProductDetail(id);
+      if (prodResp?.status === 200) {
+        setProductItem(prodResp.data?.product);
       }
     } catch (e) {
       console.log(e);
@@ -54,9 +53,7 @@ const Store = () => {
           <div className="tit_sd">
             <div className="box_timesale view-m">
               {/*<!-- 모바일에서 위치 변경 : 모바일 -->*/}
-              <p>
-                セール終了まで <strong className="c-green">{timer}</strong>
-              </p>
+              <Timer endAt={productItem?.endAt} />
             </div>
 
             <h2 className="h1">{productItem?.name}</h2>
@@ -69,9 +66,10 @@ const Store = () => {
             </div>
           </div>
 
-          <div className="cont_sd">
-            <img src={require("@IMAGES/tmp_comic3.png")} alt="" />
-          </div>
+          {productItem?.images?.length > 0 && (
+            <StoreImages images={productItem?.images} />
+          )}
+
           <button type="button" className="btn-pk n gray w100p view-m">
             もっとみる
           </button>
@@ -80,9 +78,7 @@ const Store = () => {
         <div className="store_dcost">
           <div className="box_timesale hide-m">
             {/*<!-- 모바일에서 위치 변경 : 모바일 -->*/}
-            <p>
-              セール終了まで <strong className="c-green">{timer}</strong>
-            </p>
+            <Timer endAt={productItem?.endAt} />
           </div>
 
           <div className="box_profile">
@@ -135,17 +131,26 @@ const Store = () => {
           </div>
 
           <div className="btn-bot">
-            <div className="cost">
-              <p>参考価格</p>
-              <p className="sale">
-                <em>30%</em>
-                <span>123,456,879PC</span>
-              </p>
-            </div>
+            {productItem?.saleRatio && (
+              <div className="cost">
+                <p>参考価格</p>
+                <p className="sale">
+                  <em>{Number(productItem?.saleRatio) * 100}%</em>
+                  <span>{Number(productItem?.price)}PC</span>
+                </p>
+              </div>
+            )}
             <div className="cost">
               <p>合計金額</p>
               <p className="c-blue">
-                <strong>934,010PC</strong>
+                <strong>
+                  {Number(productItem?.saleRatio) > 0
+                    ? Number(productItem?.price) -
+                      Number(productItem?.price) *
+                        Number(productItem?.saleRatio)
+                    : productItem?.price}
+                  PC
+                </strong>
               </p>
             </div>
             <button type="button" className="btn-pk b blue w100p">
@@ -154,7 +159,7 @@ const Store = () => {
           </div>
         </div>
 
-        <Comments />
+        <Comments id={params.id} />
       </div>
     </div>
   );

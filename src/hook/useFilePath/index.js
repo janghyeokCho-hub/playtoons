@@ -13,11 +13,17 @@ export default function useFilePath(hash, params) {
 
   async function getFilePath(hash, params) {
     setLoading(true);
-    const response = await getFileUrlFromServer(hash, params);
-    if (response.status === 200) {
-      setFilePath(response?.data?.url);
+    try {
+      const response = await getFileUrlFromServer(hash, params);
+      console.log("response : ", response);
+      if (response.status === 200) {
+        setFilePath(response?.data?.url);
+      }
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   useEffect(() => {

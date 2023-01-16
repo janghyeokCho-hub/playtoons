@@ -2,7 +2,12 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock, faReply } from "@fortawesome/pro-solid-svg-icons";
 
-const InquiryItems = () => {
+const InquiryItems = ({ inquiries, meta }) => {
+  console.log("inquiries : ", inquiries);
+
+  if (!inquiries?.length) {
+    return <></>;
+  }
   return (
     <>
       <div className="lst_comm2 ty1">
@@ -73,10 +78,11 @@ const InquiryItems = () => {
             </p>
           </div>
         </div>
-
-        <div className="botm">
-          <a href="#">お問い合わせをもっと見る</a>
-        </div>
+        {meta.totalPages > 0 && meta.totalPages > meta.currentPage && (
+          <div className="botm">
+            <a href="#">お問い合わせをもっと見る</a>
+          </div>
+        )}
       </div>
     </>
   );

@@ -109,3 +109,19 @@ export const getProductDetail = async (id) => {
     return { status: e.response.status, data: e };
   }
 };
+
+export const getProductReviewList = async (id) => {
+  try {
+    return await apiServer("get", `/shop/review?productId=${id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
+
+export const getProductInquiryList = async (id) => {
+  try {
+    return await apiServer("get", `/shop/inquiry?productId=${id}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};
