@@ -208,10 +208,10 @@ export default function DashboardMain() {
     return tempData?.sales_product_list?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
-          <Link to={`/dashboard/product/detail/${item.id}`}>
+          <Link to={`/product/${item.id}`}>
             <div className="cx_thumb">
               <span>
-                <img src={item.image} alt="사진" />
+                <img src={item.image} alt="" />
               </span>
             </div>
             <div className="cx_txt">

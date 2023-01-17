@@ -6,14 +6,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 /**
    MenuTabs Component
     <MenuTabs 
+      ulClassName={"inr-c"}
+      barClassName={"product_bar mypage"}
+      pcTop={86}
+      mobileTop={39}
       tabMenu={[
         {
-          name: "投稿リスト",
-          path: "/dashboard/post/1",
+          name: "購入一覧",
+          path: "/mypage/purchase",
         },
         {
-          name: "一時保存",
-          path: "/dashboard/post/temp/1",
+          name: "レビューリスト",
+          path: "/mypage/review",
+        },
+        {
+          name: "お問合せ一覧",
+          path: "/mypage/inquiry",
         },
       ]} 
     />
@@ -45,7 +53,8 @@ export default function MenuTabs(props) {
   });
 
   const isMenuPath = (path, menuPath) => {
-    const regex = /(\/\d+|\/\d+\/)$/g;
+    // const regex = /(\/\d+|\/\d+\/)$/g;
+    const regex = /\/\d+|\/\d+\/$/g;
     return path.replace(regex, '') === menuPath.replace(regex, '');
   };
 
@@ -112,33 +121,36 @@ export default function MenuTabs(props) {
    * @author 2hyunkook
    */
   useEffect(() => {
-    if( stateSelected !== undefined ){
+    if( stateSelected ){
       setPosition(refMenus.current[stateSelected]);
     }
   }, [stateSelected]);
   
   /**
-     엘리먼트 변화 감지 listener, font load listener 등록
-     * @version 1.0.0
-     * @author 2hyunkook
-     */
-    useEffect(() => {
-      //font load 후 위치가 바뀌어서 추가
-      document.fonts.onloadingdone = () => {
-        const menuElements = document.getElementsByClassName('menuTabs li');
-        const index = document.querySelector('[menu-tab-index]').getAttribute('menu-tab-index');
-        setPosition(menuElements[index]);
-      }
-      
-      resizeObserver.observe(refContainer.current);
-    }, []);
+   엘리먼트 변화 감지 listener, font load listener 등록
+    * @version 1.0.0
+    * @author 2hyunkook
+    */
+  useEffect(() => {
+    //font load 후 위치가 바뀌어서 추가
+    document.fonts.onloadingdone = () => {
+      const menuElements = document.getElementsByClassName('menuTabs li');
+      const index = document.querySelector('[menu-tab-index]').getAttribute('menu-tab-index');
+      setPosition(menuElements[index]);
+    }
+    
+    resizeObserver.observe(refContainer.current);
+  }, []);
     
   /**
    엘리먼트 변화 감지 listener, font load listener 해제
   */
   useLayoutEffect(() => {
     return () => {
-      resizeObserver.unobserve(document.querySelector('[menu-tab-index]'));
+      const elements = document.querySelector('[menu-tab-index]');
+      if( elements ){
+        resizeObserver.unobserve(elements);
+      }
       document.fonts.onloadingdone = undefined;
     }
   }, []);
@@ -147,7 +159,7 @@ export default function MenuTabs(props) {
   // render 
   //==============================================================================
   const renderTabMenuElement = () => {
-    return tabMenu.map((item, index) => {
+    return tabMenu?.map((item, index) => {
       return (
         <li
           ref={(el) => (refMenus.current[index] = el)}

@@ -193,6 +193,30 @@ export const getDateYYYYMMDD = (date, separator) => {
 };
 
 /**
+   date format
+* @version 1.0.0
+* @author 2hyunkook
+* @param date date 객체
+* @param format date format
+*/
+export const getDateFormat = (date, format) => {
+  if( date ){
+    return format.replace(/(yyyy|yy|MM|dd|HH|mm|ss)/gi, function($1) {
+      switch ($1) {
+          case "yyyy": return date.getFullYear();
+          case "yy": return String(date.getFullYear() % 1000).padStart(2, '0');
+          case "MM": return String(date.getMonth() + 1).padStart(2, '0');
+          case "dd": return String(date.getDate()).padStart(2, '0');
+          case "HH": return String(date.getHours()).padStart(2, '0');
+          case "mm": return String(date.getMinutes()).padStart(2, '0');
+          case "ss": return String(date.getSeconds()).padStart(2, '0');
+          default: return $1;
+      }
+    });
+  }
+};
+
+/**
    html string 을 html 태그로 변환
 * @version 1.0.0
 * @author 2hyunkook

@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import { useDispatch } from "react-redux";
+import MenuTabs from "@/components/dashboard/MenuTabs";
 import { setContainer } from "@/modules/redux/ducks/container";
+import InquiryItems from "@COMPONENTS/mypage/inquiry/InquiryItems";
 import PurchaseItems from "@COMPONENTS/mypage/purchase/PurchaseItems";
 import ReviewItems from "@COMPONENTS/mypage/review/ReviewItems";
-import InquiryItems from "@COMPONENTS/mypage/inquiry/InquiryItems";
 import Page404 from "@COMPONENTS/Page404";
-import MenuTabs from "@/components/dashboard/MenuTabs";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  Route,
+  Routes
+} from "react-router-dom";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -56,10 +53,13 @@ const App = () => {
       <Routes>
         <Route path="purchase" element={<PurchaseItems />} />
         <Route path="purchase/:page" element={<PurchaseItems />} />
+        <Route path="purchase/:startAt/:endAt/:page" element={<PurchaseItems />} />
         <Route path="review" element={<ReviewItems />} />
         <Route path="review/:page" element={<ReviewItems />} />
+        <Route path="review/:startAt/:endAt/:page" element={<ReviewItems />} />
         <Route path="inquiry" element={<InquiryItems />} />
         <Route path="inquiry/:page" element={<InquiryItems />} />
+        <Route path="inquiry/:startAt/:endAt/:page" element={<InquiryItems />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </>

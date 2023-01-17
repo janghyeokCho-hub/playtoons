@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from "react";
+import React, { useState, useImperativeHandle, forwardRef, useLayoutEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 import moment from "moment";
@@ -31,6 +31,7 @@ export default forwardRef(function Calendar(props, ref) {
     popupClassName,
     value,
     isMaxDate = true,
+    onLoadState,
   } = props;
   const [stateDate, setStateDate] = useState(undefined);
   const [stateOpen, setStateOpen] = useState(false);
@@ -90,9 +91,13 @@ export default forwardRef(function Calendar(props, ref) {
     },
   }));
   
-  useEffect(() => {
+  useLayoutEffect(() => {
     setStateDate(value || getInitDate());
   }, [value]);
+
+  useEffect(() => {
+    onLoadState?.(name, stateDate);
+  }, [stateDate]);
   //==============================================================================
   // render
   //==============================================================================
@@ -112,7 +117,7 @@ export default forwardRef(function Calendar(props, ref) {
           onCalendarOpen={() => setStateOpen(true)}
           onCalendarClose={() => setStateOpen(false)}
           onChange={(date) => handleClickDate(date)}
-          dateFormat="yyyy-MM-dd"
+          dateFormat={DATE_FORMAT}
         />
       </div>
     </div>

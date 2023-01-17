@@ -1,3 +1,4 @@
+import { getDateYYYYMMDD } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import React from "react";
 
@@ -10,14 +11,14 @@ export default function Purchase(props){
       <td className="td_imgs2">
         <div className="cx_thumb">
           <span>
-            <Image hash={item?.image} />
+            <Image hash={item?.thumbnailImage} />
           </span>
         </div>
       </td>
-      <td className="td_subject">{item?.title}</td>
+      <td className="td_subject">{item?.name}</td>
       <td className="td_number3">{item?.price}</td>
       <td className="td_txt1">
-        <span className="view-m">販売開始日：</span>{item?.date}
+        <span className="view-m">販売開始日：</span>{getDateYYYYMMDD(item.startAt, "/")}
       </td>
       <td className="td_btns2 et_botm1">
         <div className="d-ib">

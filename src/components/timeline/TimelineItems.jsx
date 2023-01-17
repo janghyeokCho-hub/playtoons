@@ -2,22 +2,42 @@ import { MOBILE_WIDTH } from "@/common/constant";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { faChevronDown, faChevronUp } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import SwiperCore, { Autoplay, Navigation } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import TimelineItem from "./TimelineItem";
 
 export default function TimelineItems({ items }) {
   SwiperCore.use([Navigation, Autoplay]);
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
   const [ stateTimeout, setStateTimeout ] = useState(undefined);
   const [ stateIsMobile, setStateMobile ] = useState(false);
   const windowSize = useWindowSize();
+  const prevRef = useRef(null);
+  const nextRef = useRef(null);
+  const itemSize = items.length;
 
   const setTimeoutToState = (stateTimeout) => {
     setStateTimeout(stateTimeout);
+  };
+
+  //TODO get swiper object
+  const handlePrev = (event) => {
+    const index = document.getElementsByClassName('swiper-slide-active')[0].getAttribute('data-swiper-slide-index');
+    if( index === 0 ){
+
+    }
+    
+  };
+  
+  const handleNext = (event) => {
+    const index = document.getElementsByClassName('swiper-slide-active')[0].getAttribute('data-swiper-slide-index');
+    if( index === (itemSize - 1) ){
+  
+    }
+    
+    
   };
 
   useEffect(() => {
@@ -25,8 +45,6 @@ export default function TimelineItems({ items }) {
   }, [windowSize.width]);
 
   const renderItems = (items) => {
-    const size = items.length;
-
     return (
       <div className="swiper-wrapper">
         {items?.map((item, index) => {
@@ -37,7 +55,7 @@ export default function TimelineItems({ items }) {
               virtualIndex={index}
             >
               {({ isActive }) => (
-                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setTimeoutToState} size={size} />
+                <TimelineItem item={item} isActive={isActive} stateTimeout={stateTimeout} setStateTimeout={setTimeoutToState} size={itemSize} />
               )}
             </SwiperSlide>
           );
@@ -59,12 +77,12 @@ export default function TimelineItems({ items }) {
       }}
     >
       <div className="rgh">
-        <button ref={prevRef} type="button" className="btn01 slide_st" >
+        <button ref={prevRef} type="button" className="btn01 slide_st" onClick={handlePrev} >
           <span className="i">
             <FontAwesomeIcon icon={faChevronUp} />
           </span>
         </button>
-        <button ref={nextRef} type="button" className="btn01 slide_st" >
+        <button ref={nextRef} type="button" className="btn01 slide_st" onClick={handleNext}>
           <span className="i">
             <FontAwesomeIcon icon={faChevronDown} />
           </span>

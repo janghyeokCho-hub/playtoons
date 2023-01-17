@@ -1,12 +1,3 @@
-/**
- * Toast.jsx type
- */
-export const TOAST_TYPE = {
-  info : 1,
-  success: 2,
-  error : 3,
-};
-
 //draft, pending, enabled, disabled, suspended
 export const POST_STATUS = {
   draft : 'draft',
@@ -16,13 +7,11 @@ export const POST_STATUS = {
   suspended : 'suspended',
 };
 
-export const DATE_FORMAT = "YYYY/MM/DD";
-
+export const DATE_FORMAT = "yyyy/MM/dd";
 export const FILE_MAX_SIZE = 2000000; // 2 MB
-
 export const TIMELINE_DELAY = 5000; // 5 seconds
 export const TOAST_TIME = 1500; // 1.5 seconds
-export const MOBILE_WIDTH = 960; 
+export const MOBILE_WIDTH = 960; //960 pixels
 
 /**
  * result code message list
