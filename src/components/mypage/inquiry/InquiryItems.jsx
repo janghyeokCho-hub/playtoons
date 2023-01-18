@@ -5,7 +5,7 @@ import { showOneButtonPopup } from "@/common/common";
 import Inquiry from "./Inquiry";
 import { getInquiryMine } from "@API/storeService";
 
-const InquiryItems = () => {
+export default function InquiryItems(){
   const dispatch = useDispatch();
   const startRef = useRef(null);
   const endRef = useRef(null);
@@ -107,4 +107,3 @@ const InquiryItems = () => {
   );
 };
 
-export default InquiryItems;

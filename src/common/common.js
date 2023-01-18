@@ -4,7 +4,7 @@ import { logoutRequest } from "@/modules/redux/ducks/login";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
-import { RESULT_CODE_LIST } from "./constant";
+import { MOMENT_DATE_FORMAT, MOMENT_DATE_TIME_FORMAT, RESULT_CODE_LIST } from "./constant";
 import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
 import { setNovelAction, setWebtoonAction } from "@/modules/redux/ducks/post";
@@ -75,7 +75,7 @@ export const isJSONStr = (str) => {
 * @param formData formData 객체
 * @return url get method에서 사용할 url
 */
-export const getGetMethodUrl = (formData) => {
+export const getStringForUrl = (formData) => {
   let url = "?";
 
   if (formData !== undefined) {
@@ -185,11 +185,24 @@ export const getErrorMessageFromResultCode = (data) => {
 * @param date date 정보
 * @param separator 구분자
 */
-export const getDateYYYYMMDD = (date, separator) => {
+export const getDateYYYYMMDD = (date) => {
   if (date === undefined || date === null) {
     return "";
   }
-  return moment(date).format(["YYYY", "MM", "DD"].join(separator));
+  return moment(date).format(MOMENT_DATE_FORMAT);
+};
+/**
+   date format
+* @version 1.0.0
+* @author 2hyunkook
+* @param date date 정보
+* @param separator 구분자
+*/
+export const getDateYYYYMMDDHHmm = (date) => {
+  if (date === undefined || date === null) {
+    return "";
+  }
+  return moment(date).format(MOMENT_DATE_TIME_FORMAT);
 };
 
 /**
@@ -550,15 +563,17 @@ export const showTwoButtonPopup = (
   dispatch,
   message,
   confirmCallback,
-  callback
+  callback,
+  title = "お知らせ", 
+  buttonText = "確認",
 ) => {
   dispatch(
     showModal({
-      title: "お知らせ",
+      title: title,
       contents: (
         <ConfirmPopup
           message={message}
-          buttonTitle={"確認"}
+          buttonTitle={buttonText}
           callback={confirmCallback}
         />
       ),

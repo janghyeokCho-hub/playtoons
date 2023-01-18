@@ -156,7 +156,6 @@ export default function PurchaseItems() {
       <MyPagination
           meta={stateData?.meta}
           callback={(page) => navigate(`/mypage/purchase/${getDateFromCalendar(stateStartAt)}/${getDateFromCalendar(stateEndAt)}/${page}`) }
-          // callback={(page) => getPruchaseList(page) }
           />
     </div>
   );

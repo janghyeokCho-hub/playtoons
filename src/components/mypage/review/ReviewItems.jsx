@@ -1,43 +1,109 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import Review from "./Review";
-import Calendar from "@COMPONENTS/dashboard/Calendar";
+import { getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
+import { DATE_FORMAT_ON_URL } from "@/common/constant";
+import CalendarView from "@/components/dashboard/CalendarView";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import MyPagination from "@/components/dashboard/MyPagination";
+import { getShopReviewMineFromServer } from "@/services/mypageService";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { showOneButtonPopup } from "@/common/common";
-import { getReviewMine } from "@API/storeService";
+import { useNavigate, useParams } from "react-router-dom";
+import Review from "./Review";
 
-const ReviewItems = () => {
+export default function ReviewItems(){
+  const [ stateData, setStateData ] = useState(undefined);
+  const [ stateStartAt, setStateStartAt ] = useState(undefined);
+  const [ stateEndAt, setStateEndAt ] = useState(undefined);
   const dispatch = useDispatch();
-  const startRef = useRef(null);
-  const endRef = useRef(null);
-  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+  const params = useParams();
+
+  //==============================================================================
+  // function
+  //==============================================================================
+  const getDateFromCalendar = (date) => {
+    return getFormattedDateForUrl(date, DATE_FORMAT_ON_URL);
+  };
+
+  //==============================================================================
+  // api
+  //==============================================================================
+  const getReviewList = useCallback(async (page) => {
+    const formData = new FormData();//get url 
+    if( stateStartAt ){
+      formData.append("startAt", stateStartAt);
+    }
+    if( stateEndAt ){
+      formData.append("endAt", stateEndAt);
+    }
+    if( params.id ){
+      formData.append("id", params.id);
+    }
+    formData.append("page", page === undefined ? 1 : page);
+    
+    const {status, data} = await getShopReviewMineFromServer(formData);
+    
+    if( status === 200 ){
+      setStateData(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  }, [params]);
+
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleClickCalendar = (name, date) => {
-    const startDate = name === "start" ? date : startRef.current.getDate();
-    const endDate = name === "end" ? date : endRef.current.getDate();
-
-    if (endDate === undefined) {
-      return true;
-    }
+    const startDate = name === "start" ? date : stateStartAt;
+    const endDate = name === "end" ? date : stateEndAt;
 
     if (startDate.getTime() >= endDate.getTime()) {
       showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
-      return false;
+      return;
     }
 
-    return true;
+    if( name === "start" ){
+      setStateStartAt( date );
+    } else if( name === "end" ){
+      setStateEndAt( date );
+    } 
   };
 
-  const getReviewItems = useCallback(async () => {
-    const params = {};
-    const response = await getReviewMine(params);
-    if (response?.status === 200) {
-      setItems(response?.data?.reviews);
-    }
-  }, []);
+  const handleDeleteItem = (item) => {
+    console.log('DeleteItem', item);
+    getReviewList(params.page);
+  };
 
-  useEffect(() => {
-    getReviewItems();
-  }, []);
+  //==============================================================================
+  // hook
+  //==============================================================================
+  useLayoutEffect(() => {
+    if( stateStartAt && stateEndAt ){
+      getReviewList(params.page);
+    } else {
+      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : params.startAt );
+      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : params.endAt );
+    }
+  }, [stateStartAt, stateEndAt, params]);
+  
+  //==============================================================================
+  // render
+  //==============================================================================
+
+  const renderReviewList = () => {
+    if( stateData === undefined || stateData?.reviews?.length === 0 ){
+      return <EmptyTr text={`レビューがいません。`} />;
+    }
+
+    
+    return stateData?.reviews?.map((item, index) => {
+      return (
+        <Review key={`review_${index}`} item={item} callback={handleDeleteItem} />
+      );
+    });
+  };
 
   return (
     <div className="inr-c">
@@ -49,25 +115,19 @@ const ReviewItems = () => {
         <div className="inp_cal">
           <div>
             <label htmlFor="calendar_first1">開始日</label>
-            <Calendar
-              ref={startRef}
+            <CalendarView 
               name={"start"}
-              className={""}
-              callback={handleClickCalendar}
-              type="1month"
-              isMaxDate={false}
-            />
+              className={""} 
+              value={stateStartAt} 
+              onChange={handleClickCalendar} />
           </div>
           <div>
             <label htmlFor="calendar_last1">終了日</label>
-            <Calendar
-              ref={endRef}
-              name={"start"}
-              className={""}
-              callback={handleClickCalendar}
-              type="now"
-              isMaxDate={false}
-            />
+            <CalendarView 
+              name={"end"}
+              className={""} 
+              value={stateEndAt} 
+              onChange={handleClickCalendar} />
           </div>
         </div>
       </div>
@@ -96,15 +156,18 @@ const ReviewItems = () => {
             </tr>
           </thead>
           <tbody>
-            {items?.map((item, index) => (
-              <Review key={`review_${index}`} item={item} />
-            ))}
-            <Review />
+            {
+              renderReviewList()
+            }
           </tbody>
         </table>
       </div>
+
+      <MyPagination
+          meta={stateData?.meta}
+          callback={(page) => navigate(`/mypage/review/${params.id ? `${params.id}/` : '' }${getDateFromCalendar(stateStartAt)}/${getDateFromCalendar(stateEndAt)}/${page}`) }
+          />
     </div>
   );
 };
 
-export default ReviewItems;

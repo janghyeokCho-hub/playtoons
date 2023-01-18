@@ -1,7 +1,7 @@
 import { apiServer } from "./api";
 import {
   getErrorMessageFromResultCode,
-  getGetMethodUrl,
+  getStringForUrl,
   getParamsToQuery,
 } from "@/common/common";
 
@@ -86,7 +86,7 @@ export const getPostSeriesMine = async (params) => {
   try {
     return await apiServer(
       "get",
-      `/post/series/mine${getGetMethodUrl(params)}`
+      `/post/series/mine${getStringForUrl(params)}`
     );
   } catch (e) {
     return {

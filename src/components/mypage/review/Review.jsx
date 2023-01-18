@@ -1,31 +1,70 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "react-datepicker/dist/react-datepicker.css";
+import { getDateYYYYMMDD, getDateYYYYMMDDHHmm as getDateYYYYMMDDhhmm, showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import ArrowRightView from "@/components/dashboard/ArrowRightView";
+import Image from "@/components/dashboard/Image";
+import { hideModal } from "@/modules/redux/ducks/modal";
+import { deleteShopReviewIdToServer } from "@/services/mypageService";
 import {
-  faAngleRight,
   faShare,
-  faStar,
+  faStar
 } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch } from "react-redux";
 
-const Review = () => {
+export default function Review(props){
+  const { item, callback } = props;
+  const [ stateRoate, setStateRotate ] = useState(false);
+  const dispatch = useDispatch();
+
+  const deleteReview = async () => {
+    const {status, data} = await deleteShopReviewIdToServer(item.id);
+    console.log('deleteReview', status, data);
+    
+    dispatch( hideModal() );
+    if( status === 200 ){
+      callback?.(item);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  };
+
+  const handleArrow = (event) => {
+    setStateRotate(!stateRoate);
+  };
+
+  const handleDelete = (event) => {
+    showTwoButtonPopup(dispatch, `${item.id}のレビューを削除しますか？`, () => deleteReview(), null, "削除");
+  };
+
+
+
   return (
     <>
       <tr className="tr_q">
-        <td className="hide-m">1</td>
+        <td className="hide-m">{item.id}</td>
         <td className="td_imgs2">
           <div className="cx_thumb">
             <span>
-              <img src={require("@IMAGES/tmp_comic1.jpg")} alt="사진" />
+              <Image hash={item.product.thumbnailImage} />
             </span>
           </div>
         </td>
-        <td className="td_subject">大学のリンゴ一個の重さで10メートルの素材</td>
-        <td className="td_txt0">
-          <span className="view-m">販売開始日：</span>2022/06/01
+        <td className="td_subject">
+          <span className="">
+            {
+              item.authorResponse && 
+              <></>
+                // <span className="btn-pk s blue2">回答</span>
+            }
+            {` ${item.product.name || '大学のリンゴ一個の重さで10メートルの'}`}
+          </span>
         </td>
         <td className="td_star">
           <div className="t_star">
-            <span className="s4">
+            <span className={`s${item.reviewScore || 0}`}>
               <FontAwesomeIcon icon={faStar} />
               <FontAwesomeIcon icon={faStar} />
               <FontAwesomeIcon icon={faStar} />
@@ -34,42 +73,46 @@ const Review = () => {
             </span>
           </div>
         </td>
+        <td className="td_txt0">
+          <span className="view-m">販売開始日：</span>{getDateYYYYMMDD(item.startAt)}
+        </td>
         <td className="td_btns2 ta-r et_botm1">
           <div className="d-ib">
-            <a href="#" className="btn-pk s blue2 mw100p">
+            <div className="btn-pk s blue2 mw100p" onClick={handleDelete}>
               <span>削除</span>
-            </a>
+            </div>
           </div>
         </td>
         <td className="hide-m ta-c">
-          <button type="button" className="arr" onclick="tblQR1(this);">
-            <FontAwesomeIcon icon={faAngleRight} />
+          <button type="button" className="arr" onClick={handleArrow}>
+            <ArrowRightView rotate={stateRoate}  />
           </button>
         </td>
       </tr>
-      <tr className="tr_a">
+      {/* 작가 응답 */}
+      <tr className="tr_a" style={{display: `${stateRoate ? 'table-row' : 'none'}`}}>
         <td className="hide-m"></td>
         <td colSpan="5" className="ta-l">
-          <div className="tx_a1">
+          <div className="tx_a1" style={{borderBottomStyle: `${item.authorResponse ? 'solid' : 'none'}`}}>
             <button
               type="button"
               className="arr view-m"
-              onclick="tblQR2(this);"
+              onClick={handleArrow}
             ></button>
             <p className="t1">
-              ラフ公開や制作工程の紹介、他にも何かやれそうな事があったら公開できればと思います。ご支援いただいた分は作業環境・技術向上に使わせていただきます。よろしくお願いいたします。
+              {item.content}
             </p>
           </div>
-          <div className="tx_a2">
+          <div className="tx_a2" style={{display: `${item.authorResponse && stateRoate ? 'block' : 'none'}`}}>
             <span className="re view-m">
               <FontAwesomeIcon icon={faShare} />
             </span>
             <p className="t2">
               <span className="i-txt">販売者</span>
-              <span>2022/05/11 23:21時</span>
+              <span>{getDateYYYYMMDDhhmm(item.respondedAt)}時</span>
             </p>
             <p className="t1">
-              リヒターさん噂はかねがね、って感じだったけど本当に面白い人だった。ドナースマルク映画のイメージが強いからだいぶ引っ張られてはいたけど、トム・シリングより多弁な人だというこ
+            {item.authorResponse}
             </p>
           </div>
         </td>
@@ -79,4 +122,3 @@ const Review = () => {
   );
 };
 
-export default Review;

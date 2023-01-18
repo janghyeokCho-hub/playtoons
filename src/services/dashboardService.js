@@ -1,6 +1,6 @@
 import {
   getErrorMessageFromResultCode,
-  getGetMethodUrl,
+  getStringForUrl,
 } from "@/common/common";
 import { apiServer } from "./api";
 
@@ -15,7 +15,7 @@ export const getSeriesStoryList = async (params) => {
   try {
     return await apiServer(
       "get",
-      "/post/series/mine" + getGetMethodUrl(params)
+      "/post/series/mine" + getStringForUrl(params)
     );
   } catch (e) {
     return {
@@ -123,7 +123,7 @@ export const setFileMultiToServer = async (params) => {
 export const getFileUrlFromServer = async (hash, params) => {
   let parameters = "";
   if (params) {
-    parameters = `${getGetMethodUrl(params)}`;
+    parameters = `${getStringForUrl(params)}`;
   }
   
   try {
@@ -142,7 +142,7 @@ export const getFileUrlFromServer = async (hash, params) => {
 */
 export const getPostListFromServer = async (params) => {
   try {
-    return await apiServer("get", `/post${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/post${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -160,7 +160,7 @@ export const getPostListFromServer = async (params) => {
 */
 export const getTagFromServer = async (query, params) => {
   try {
-    return await apiServer("get", `/tag/${query}${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/tag/${query}${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -354,7 +354,7 @@ export const editPostSeriesToServer = async (params) => {
 */
 export const getReactionMineAuthorIdFromServer = async (params) => {
   try {
-    return await apiServer("get", `/reaction/mine/${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/reaction/mine/${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -408,7 +408,7 @@ export const deleteReactionReactionIdPinFromServer = async (params) => {
 */
 export const getReactionFromServer = async (params) => {
   try {
-    return await apiServer("get", `/reaction${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/reaction${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -496,7 +496,7 @@ export const deleteReactionIdToServer = async (id) => {
 */
 export const getTimelineFromServer = async (params) => {
   try {
-    return await apiServer("get", `/post${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/post${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -512,7 +512,7 @@ export const getTimelineFromServer = async (params) => {
 */
 export const getPostMineFromServer = async (params) => {
   try {
-    return await apiServer("get", `/post/mine${getGetMethodUrl(params)}`);
+    return await apiServer("get", `/post/mine${getStringForUrl(params)}`);
   } catch (e) {
     return {
       status: e.response.status,
@@ -530,7 +530,7 @@ export const getSubscribeTierInPlanFromServer = async (authorId, params) => {
   try {
     return await apiServer(
       "get",
-      `/subscribeTier/${authorId}/subscribers${getGetMethodUrl(params)}`
+      `/subscribeTier/${authorId}/subscribers${getStringForUrl(params)}`
     );
   } catch (e) {
     return {
@@ -550,7 +550,7 @@ export const getProductListFromServer = async (params) => {
   try {
     return await apiServer(
       "get",
-      `/shop/product/mine${getGetMethodUrl(params)}`
+      `/shop/product/mine${getStringForUrl(params)}`
     );
   } catch (e) {
     return {
@@ -587,7 +587,7 @@ export const getShopInquiryAuthorFromServer = async (params) => {
   try {
     return await apiServer(
       "get",
-      `/shop/inquiry/author${getGetMethodUrl(params)}`
+      `/shop/inquiry/author${getStringForUrl(params)}`
     );
   } catch (e) {
     return {
@@ -641,7 +641,7 @@ export const getShopReviewAuthorFromServer = async (params) => {
   try {
     return await apiServer(
       "get",
-      `/shop/review/author${getGetMethodUrl(params)}`
+      `/shop/review/author${getStringForUrl(params)}`
     );
   } catch (e) {
     return {

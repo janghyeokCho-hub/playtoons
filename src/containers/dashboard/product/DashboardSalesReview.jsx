@@ -4,21 +4,21 @@ import { useNavigate, useParams } from "react-router-dom";
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
-import { showOneButtonPopup, showTwoButtonPopup } from "@/common/common";
+import { showOneButtonPopup } from "@/common/common";
 import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import Image from "@/components/dashboard/Image";
+import InquiryPopup from "@/components/dashboard/InquiryPopup";
 import Pagination from "@/components/dashboard/MyPagination";
+import ReportButton from "@/components/dashboard/ReportButton";
 import { initSalesIdAction } from "@/modules/redux/ducks/dashboard";
+import { showModal } from "@/modules/redux/ducks/modal";
 import { editShopReviewAuthorToServer, getShopReviewAuthorFromServer, setShopReviewReportToServer } from "@/services/dashboardService";
 import { faStar } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Image from "@/components/dashboard/Image";
-import { showModal } from "@/modules/redux/ducks/modal";
-import InquiryPopup from "@/components/dashboard/InquiryPopup";
-import ReportButton from "@/components/dashboard/ReportButton";
-import EmptyTr from "@/components/dashboard/EmptyTr";
 
 const text = {
   number : "番号",
