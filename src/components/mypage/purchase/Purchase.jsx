@@ -1,6 +1,7 @@
 import { getDateYYYYMMDD } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Purchase(props){
   const { item } = props;
@@ -22,12 +23,12 @@ export default function Purchase(props){
       </td>
       <td className="td_btns2 et_botm1">
         <div className="d-ib">
-          <a href="#" className="btn-pk s blue2">
+          <Link to={`/mypage/review/${item.id}`} className="btn-pk s blue2">
             <span>レビュー</span>
-          </a>
-          <a href="#" className="btn-pk s blue">
+          </Link>
+          <Link to={`/mypage/inquiry/${item.id}`} className="btn-pk s blue">
             <span>お問合せ</span>
-          </a>
+          </Link>
         </div>
       </td>
     </tr>

@@ -52,14 +52,13 @@ const App = () => {
 
       <Routes>
         <Route path="purchase" element={<PurchaseItems />} />
-        <Route path="purchase/:page" element={<PurchaseItems />} />
         <Route path="purchase/:startAt/:endAt/:page" element={<PurchaseItems />} />
         <Route path="review" element={<ReviewItems />} />
-        <Route path="review/:page" element={<ReviewItems />} />
-        <Route path="review/:startAt/:endAt/:page" element={<ReviewItems />} />
+        <Route path="review/:id" element={<ReviewItems />} />
+        <Route path="review/:id/:startAt/:endAt/:page" element={<ReviewItems />} />
         <Route path="inquiry" element={<InquiryItems />} />
-        <Route path="inquiry/:page" element={<InquiryItems />} />
-        <Route path="inquiry/:startAt/:endAt/:page" element={<InquiryItems />} />
+        <Route path="inquiry/:id" element={<InquiryItems />} />
+        <Route path="inquiry/:id/:startAt/:endAt/:page" element={<InquiryItems />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </>

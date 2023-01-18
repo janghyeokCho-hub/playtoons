@@ -1,11 +1,9 @@
-import React, { useState, useImperativeHandle, forwardRef, useLayoutEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarDay } from "@fortawesome/pro-duotone-svg-icons";
 import moment from "moment";
-import { useEffect } from "react";
-import DatePicker from "react-datepicker";
-import { ko, ja, enUS } from "date-fns/esm/locale";
+import { forwardRef, useEffect, useImperativeHandle, useLayoutEffect, useState } from "react";
+
 import { DATE_FORMAT } from "@/common/constant";
+import CalendarView from "./CalendarView";
+import { getInitDateObject } from "@/common/common";
 
 /**
 *
@@ -27,37 +25,16 @@ export default forwardRef(function Calendar(props, ref) {
     type,
     name,
     callback,
-    className,
-    popupClassName,
+    className = "",
     value,
     isMaxDate = true,
     onLoadState,
   } = props;
   const [stateDate, setStateDate] = useState(undefined);
-  const [stateOpen, setStateOpen] = useState(false);
 
   //==============================================================================
   // function
   //==============================================================================
-
-  const getInitDate = () => {
-    const now = new Date();
-    if (type === "now") {
-      return now;
-    } else if (type === "3month") {
-      return new Date(now.setMonth(now.getMonth() - 3));
-    } else if (type === "1month") {
-      return new Date(now.setMonth(now.getMonth() - 1));
-    } else if (type === "1week") {
-      return new Date(now.setDate(now.getDate() - 7));
-    } else if (type === "1day") {
-      return new Date(now.setDate(now.getDate() - 1));
-    }
-
-    //none
-    return undefined;
-  };
-
   const getStateDateFormated = () => {
     if (stateDate === undefined) {
       return "";
@@ -69,7 +46,7 @@ export default forwardRef(function Calendar(props, ref) {
   //==============================================================================
   // event
   //==============================================================================
-  const handleClickDate = (date) => {
+  const handleClickDate = (name, date) => {
     if (callback === undefined) {
       setStateDate(date);
     } else {
@@ -92,7 +69,7 @@ export default forwardRef(function Calendar(props, ref) {
   }));
   
   useLayoutEffect(() => {
-    setStateDate(value || getInitDate());
+    setStateDate(value || getInitDateObject(type));
   }, [value]);
 
   useEffect(() => {
@@ -103,23 +80,12 @@ export default forwardRef(function Calendar(props, ref) {
   //==============================================================================
 
   return (
-    <div className={`inp_cal`}>
-      <div className="relative">
-        <FontAwesomeIcon
-          className={`cal_ico ${stateOpen ? "cal_blue" : ""}`}
-          icon={faCalendarDay}
-        />
-        <DatePicker
-          locale={ja}
-          className="inp_txt calendar datepicker_last"
-          selected={stateDate}
-          maxDate={isMaxDate ? new Date() : undefined}
-          onCalendarOpen={() => setStateOpen(true)}
-          onCalendarClose={() => setStateOpen(false)}
-          onChange={(date) => handleClickDate(date)}
-          dateFormat={DATE_FORMAT}
-        />
-      </div>
-    </div>
+    <CalendarView
+      name={name}
+      className={className}
+      value={stateDate}
+      isMaxDate={isMaxDate}
+      onChange={handleClickDate}
+      />
   );
 });

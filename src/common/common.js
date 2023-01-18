@@ -197,9 +197,9 @@ export const getDateYYYYMMDD = (date, separator) => {
 * @version 1.0.0
 * @author 2hyunkook
 * @param date date 객체
-* @param format date format
+* @param format date format string
 */
-export const getDateFormat = (date, format) => {
+export const getFormattedDateForUrl = (date, format) => {
   if( date ){
     return format.replace(/(yyyy|yy|MM|dd|HH|mm|ss)/gi, function($1) {
       switch ($1) {
@@ -214,6 +214,42 @@ export const getDateFormat = (date, format) => {
       }
     });
   }
+};
+
+/**
+   date 객체 생성을 위한 formatted 된 string 구하기
+* @version 1.0.0
+* @author 2hyunkook
+* @param date date string
+* @return
+*/
+export const getFormattedDateForDateObject = (date) => {
+  return date.replace(/(\d{4})(\d{2})(\d{2})$/, `$1/$2/$3`);
+};
+
+/**
+   date picker에서 사용되는 초기 date 객체를 구해온다. 
+* @version 1.0.0
+* @author 2hyunkook
+* @param type now, 3month, 1month, 1week, 1day
+* @return
+*/
+export const getInitDateObject = (type) => {
+  const now = new Date();
+  if (type === "now") {
+    return now;
+  } else if (type === "3month") {
+    return new Date(now.setMonth(now.getMonth() - 3));
+  } else if (type === "1month") {
+    return new Date(now.setMonth(now.getMonth() - 1));
+  } else if (type === "1week") {
+    return new Date(now.setDate(now.getDate() - 7));
+  } else if (type === "1day") {
+    return new Date(now.setDate(now.getDate() - 1));
+  }
+
+  //none
+  return undefined;
 };
 
 /**

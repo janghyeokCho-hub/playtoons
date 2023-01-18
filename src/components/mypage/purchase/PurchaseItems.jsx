@@ -1,37 +1,31 @@
-import { getDateFormat, showOneButtonPopup } from "@/common/common";
+import { getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
 import MyPagination from "@/components/dashboard/MyPagination";
-import Calendar from "@COMPONENTS/dashboard/Calendar";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import Purchase from "./Purchase";
 
+import { DATE_FORMAT_ON_URL } from "@/common/constant";
+import CalendarView from "@/components/dashboard/CalendarView";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import { getShopProductFromServer } from "@/services/mypageService";
+import { useLayoutEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRef } from "react";
 
 
 export default function PurchaseItems() {
   const [ stateData, setStateData ] = useState(undefined);
-  const [ stateIsload, setStateload ] = useState(false);
+  const [ stateStartAt, setStateStartAt ] = useState(undefined);
+  const [ stateEndAt, setStateEndAt ] = useState(undefined);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const params = useParams();
-  const refStart = useRef();
-  const refEnd = useRef();
 
   //==============================================================================
   // function
   //==============================================================================
-  const onLoadCalendar = (name, date) => {
-    // console.log(`${name} : ${date}`);
-    console.log(`onLoadCalendar`);
-    setStateload(true);
-  };
-
-  const getDateFromCalendar = (ref) => {
-    return getDateFormat(ref.current.getDate(), "yyyyMMdd");
+  const getDateFromCalendar = (date) => {
+    return getFormattedDateForUrl(date, DATE_FORMAT_ON_URL);
   };
 
   //==============================================================================
@@ -39,14 +33,13 @@ export default function PurchaseItems() {
   //==============================================================================
   const getPruchaseList = async (page) => {
     const formData = new FormData();//get url 
-    formData.append("startAt", refStart.current.getDate());
-    if( refEnd.current.getDate() ){
-      formData.append("endAt", refEnd.current.getDate());
+    formData.append("startAt", stateStartAt);
+    if( stateEndAt ){
+      formData.append("endAt", stateEndAt);
     }
     formData.append("page", page === undefined ? 1 : page);
     
     const {status, data} = await getShopProductFromServer(formData);
-    console.log('getPruchaseList', status, data);
     
     if( status === 200 ){
       setStateData(data);
@@ -62,28 +55,32 @@ export default function PurchaseItems() {
   //==============================================================================
 
   const handleClickCalendar = (name, date) => {
-    const startDate = name === "start" ? date : refStart.current.getDate();
-    const endDate = name === "end" ? date : refEnd.current.getDate();
+    const startDate = name === "start" ? date : stateStartAt;
+    const endDate = name === "end" ? date : stateEndAt;
 
     if (startDate.getTime() >= endDate.getTime()) {
       showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
-      return false;
+      return;
     }
 
-    return true;
+    if( name === "start" ){
+      setStateStartAt( date );
+    } else if( name === "end" ){
+      setStateEndAt( date );
+    } 
   };
 
   //==============================================================================
   // hook
   //==============================================================================
-  useEffect(() => {
-    const startAt = refStart.current.getDate();
-    const endAt = refEnd.current.getDate();
-
-    if(startAt && endAt){
+  useLayoutEffect(() => {
+    if( stateStartAt && stateEndAt ){
       getPruchaseList(params.page);
+    } else {
+      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : params.startAt );
+      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : params.endAt );
     }
-  }, [stateIsload, params]);
+  }, [stateStartAt, stateEndAt, params]);
   
   //==============================================================================
   // render
@@ -110,28 +107,19 @@ export default function PurchaseItems() {
         <div className="inp_cal">
           <div>
             <label htmlFor="calendar_first1">開始日</label>
-            <Calendar
-              ref={refStart}
+            <CalendarView 
               name={"start"}
-              className={""}
-              value={new Date('2022/12/01')}
-              onLoadState={onLoadCalendar}
-              callback={handleClickCalendar}
-              type="1month"
-              isMaxDate={false}
-              />
+              className={""} 
+              value={stateStartAt} 
+              onChange={handleClickCalendar} />
           </div>
           <div>
             <label htmlFor="calendar_last1">終了日</label>
-            <Calendar
-              ref={refEnd}
+            <CalendarView 
               name={"end"}
-              className={""}
-              // onLoadState={onLoadCalendar}
-              callback={handleClickCalendar}
-              type="now"
-              isMaxDate={true}
-            />
+              className={""} 
+              value={stateEndAt} 
+              onChange={handleClickCalendar} />
           </div>
         </div>
       </div>
@@ -167,7 +155,7 @@ export default function PurchaseItems() {
 
       <MyPagination
           meta={stateData?.meta}
-          callback={(page) => navigate(`/mypage/purchase/${getDateFromCalendar(refStart)}/${getDateFromCalendar(refEnd)}/${page}`) }
+          callback={(page) => navigate(`/mypage/purchase/${getDateFromCalendar(stateStartAt)}/${getDateFromCalendar(stateEndAt)}/${page}`) }
           // callback={(page) => getPruchaseList(page) }
           />
     </div>
