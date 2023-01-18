@@ -39,3 +39,16 @@ export const deleteShopReviewIdToServer = async (id) => {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data), };
   }
 };
+
+/**
+   mypage inquiry list -> delete inquiry
+* @version 1.0.0
+* @author 2hyunkook
+*/
+export const deleteShopInquiryIdToServer = async (id) => {
+  try {
+    return await apiServer("delete", `/shop/inquiry/${id}`);
+  } catch (e) {
+    return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data), };
+  }
+};

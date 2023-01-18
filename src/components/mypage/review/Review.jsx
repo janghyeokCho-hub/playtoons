@@ -39,8 +39,6 @@ export default function Review(props){
     showTwoButtonPopup(dispatch, `${item.id}のレビューを削除しますか？`, () => deleteReview(), null, "削除");
   };
 
-
-
   return (
     <>
       <tr className="tr_q">

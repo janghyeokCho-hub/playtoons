@@ -1,43 +1,108 @@
-import React, { useRef, useState, useCallback, useEffect } from "react";
-import Calendar from "@COMPONENTS/dashboard/Calendar";
-import { useDispatch } from "react-redux";
-import { showOneButtonPopup } from "@/common/common";
-import Inquiry from "./Inquiry";
+import { getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
+import { DATE_FORMAT_ON_URL } from "@/common/constant";
+import CalendarView from "@/components/dashboard/CalendarView";
+import EmptyTr from "@/components/dashboard/EmptyTr";
+import MyPagination from "@/components/dashboard/MyPagination";
 import { getInquiryMine } from "@API/storeService";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import Inquiry from "./Inquiry";
 
 export default function InquiryItems(){
+  const [ stateData, setStateData ] = useState(undefined);
+  const [ stateStartAt, setStateStartAt ] = useState(undefined);
+  const [ stateEndAt, setStateEndAt ] = useState(undefined);
   const dispatch = useDispatch();
-  const startRef = useRef(null);
-  const endRef = useRef(null);
-  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+  const params = useParams();
+
+  //==============================================================================
+  // function
+  //==============================================================================
+  const getDateFromCalendar = (date) => {
+    return getFormattedDateForUrl(date, DATE_FORMAT_ON_URL);
+  };
+
+  //==============================================================================
+  // api
+  //==============================================================================
+  const getInquiryList = useCallback(async (page) => {
+    let json = {};
+    if( stateStartAt ){
+      json["startAt"] = stateStartAt;
+    }
+    if( stateEndAt ){
+      json["endAt"] = stateEndAt;
+    }
+    if( params.id ){
+      json["id"] =  params.id;
+    }
+    json["page"] =  page === undefined ? 1 : page;
+    
+    const {status, data} = await getInquiryMine(json);
+    
+    if( status === 200 ){
+      setStateData(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  }, [params]);
+
+  //==============================================================================
+  // event
+  //==============================================================================
 
   const handleClickCalendar = (name, date) => {
-    const startDate = name === "start" ? date : startRef.current.getDate();
-    const endDate = name === "end" ? date : endRef.current.getDate();
-
-    if (endDate === undefined) {
-      return true;
-    }
+    const startDate = name === "start" ? date : stateStartAt;
+    const endDate = name === "end" ? date : stateEndAt;
 
     if (startDate.getTime() >= endDate.getTime()) {
       showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
-      return false;
+      return;
     }
 
-    return true;
+    if( name === "start" ){
+      setStateStartAt( date );
+    } else if( name === "end" ){
+      setStateEndAt( date );
+    } 
   };
 
-  const getInquiryItems = useCallback(async () => {
-    const params = {};
-    const response = await getInquiryMine(params);
-    if (response?.status === 200) {
-      setItems(response?.data?.inquiries);
-    }
-  }, []);
+  const handleDeleteItem = (item) => {
+    console.log('DeleteItem', item);
+    getInquiryList(params.page);
+  };
 
-  useEffect(() => {
-    getInquiryItems();
-  }, []);
+  //==============================================================================
+  // hook
+  //==============================================================================
+  useLayoutEffect(() => {
+    if( stateStartAt && stateEndAt ){
+      getInquiryList(params.page);
+    } else {
+      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : params.startAt );
+      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : params.endAt );
+    }
+  }, [stateStartAt, stateEndAt, params]);
+  
+  //==============================================================================
+  // render
+  //==============================================================================
+
+  const renderReviewList = () => {
+    if( stateData === undefined || stateData?.inquiries?.length === 0 ){
+      return <EmptyTr text={`お問合せがいません。`} />;
+    }
+
+    return stateData?.inquiries?.map((item, index) => {
+      return (
+        <Inquiry key={`review_${index}`} item={item} callback={handleDeleteItem} />
+      );
+    });
+  };
 
   return (
     <div className="inr-c">
@@ -49,25 +114,19 @@ export default function InquiryItems(){
         <div className="inp_cal">
           <div>
             <label htmlFor="calendar_first1">開始日</label>
-            <Calendar
-              ref={startRef}
+            <CalendarView 
               name={"start"}
-              className={""}
-              callback={handleClickCalendar}
-              type="1month"
-              isMaxDate={false}
-            />
+              className={""} 
+              value={stateStartAt} 
+              onChange={handleClickCalendar} />
           </div>
           <div>
             <label htmlFor="calendar_last1">終了日</label>
-            <Calendar
-              ref={endRef}
-              name={"start"}
-              className={""}
-              callback={handleClickCalendar}
-              type="now"
-              isMaxDate={false}
-            />
+            <CalendarView 
+              name={"end"}
+              className={""} 
+              value={stateEndAt} 
+              onChange={handleClickCalendar} />
           </div>
         </div>
       </div>
@@ -96,13 +155,17 @@ export default function InquiryItems(){
             </tr>
           </thead>
           <tbody>
-            {items.map((item, index) => (
-              <Inquiry key={`inquiry_${index}`} item={item} />
-            ))}
-            <Inquiry />
+            {
+              renderReviewList()
+            }
           </tbody>
         </table>
       </div>
+
+      <MyPagination
+          meta={stateData?.meta}
+          callback={(page) => navigate(`/mypage/inquiry/${params.id ? `${params.id}/` : '' }${getDateFromCalendar(stateStartAt)}/${getDateFromCalendar(stateEndAt)}/${page}`) }
+          />
     </div>
   );
 };
