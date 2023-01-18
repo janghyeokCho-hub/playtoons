@@ -121,7 +121,7 @@ export default function MenuTabs(props) {
    * @author 2hyunkook
    */
   useEffect(() => {
-    if( stateSelected ){
+    if( stateSelected !== undefined ){
       setPosition(refMenus.current[stateSelected]);
     }
   }, [stateSelected]);
