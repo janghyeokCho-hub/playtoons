@@ -1,25 +1,18 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getStringOfPrice } from "@/common/common";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
-import useFilePath from "@/hook/useFilePath";
-import { getPostSeriesCount as getPostSeriesCountAPI } from "@API/postService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+import Image from "../dashboard/Image";
+import ProfileSpan from "../dashboard/ProfileSpan";
 
 const StoreItem = ({ item }) => {
-  const { filePath: thumbnailImgURL, loding: thumbnailImgLoading } =
-    useFilePath(item?.coverImage);
-  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
-    item?.author?.profileImage
-  );
-  console.log(profileImgURL);
 
   return (
     <div className="cx">
-      <a href="#">
+      <Link to={`/store/detail/${item.id}`}>
         <div className="cx_thumb">
           <span>
-            {!thumbnailImgLoading && <img src={thumbnailImgURL} alt="사진" />}
+            <Image hash={item?.thumbnailImage} />
           </span>
           <p className="t_like">
             <FontAwesomeIcon icon={faHeart} />
@@ -30,27 +23,19 @@ const StoreItem = ({ item }) => {
           <p className="h1">{item?.name}</p>
           <div className="btm">
             <div className="t_profile">
-              <ImgBgSpan bgImg={profileImgURL} />
-              <span style={{ height: "40px", lineHeight: "40px" }}>
-                {item?.author?.nickname}
+              <ProfileSpan hash={item?.author?.profileImage} className={"img"} />
+              <span className="nickname">
+                {`${item?.author?.nickname}`}
               </span>
             </div>
             <p className="c1">
-              <strong>{item?.price}</strong>
+              <strong>{getStringOfPrice(item?.price)}</strong>
             </p>
           </div>
         </div>
-      </a>
+      </Link>
     </div>
   );
 };
-
-const ImgBgSpan = styled.span`
-  width: 40px;
-  height: 40px;
-  display: block;
-  background-size: cover;
-  background-image: url(${(props) => props.bgImg});
-`;
 
 export default StoreItem;
