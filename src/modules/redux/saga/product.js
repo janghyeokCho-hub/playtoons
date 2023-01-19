@@ -49,6 +49,35 @@ function createSetProductRequestSaga(type) {
 const setProductSaga = createSetProductRequestSaga(SET_PRODUCT);
 
 // Product Types
+function createSetProductTypesRequestSaga(type) {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+
+  return function* (action) {
+    try {
+      const response = yield call(storeApi.getProductType);
+      if (response?.status === 200) {
+        yield put({
+          type: SUCCESS,
+          payload: response.data?.productTypes,
+        });
+      }
+    } catch (e) {
+      console.dir(e);
+      yield call(exceptionHandler, { e: e, redirectError: false });
+
+      yield put({
+        type: FAILURE,
+        payload: action.payload,
+        error: true,
+      });
+    }
+  };
+}
+
+const setProductTypesSaga = createSetProductTypesRequestSaga(SET_PRODUCT_TYPES);
+
+// Product Types
 function createSetProductCategoriesRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
@@ -81,5 +110,6 @@ const setProductCategoriesSaga = createSetProductCategoriesRequestSaga(
 
 export default function* productSaga() {
   yield takeLatest(SET_PRODUCT, setProductSaga);
+  yield takeLatest(SET_PRODUCT_TYPES, setProductTypesSaga);
   yield takeLatest(SET_PRODUCT_CATEGORIES, setProductCategoriesSaga);
 }

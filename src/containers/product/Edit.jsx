@@ -3,12 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "@/modules/redux/ducks/product";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCircleInfo,
-  faMinus,
-  faPlus,
-  faTrashXmark,
-} from "@fortawesome/pro-solid-svg-icons";
+import { faCircleInfo } from "@fortawesome/pro-solid-svg-icons";
 import Calendar from "@COMPONENTS/dashboard/Calendar";
 import { showOneButtonPopup } from "@/common/common";
 import ImageUpload from "@/components/dashboard/ImageUpload";
@@ -321,7 +316,7 @@ const Edit = () => {
                 <div className="col">
                   <h3 className="tit1">タイプ</h3>
                   <div className="lst_txchk">
-                    {productTypes.map((item, index) => {
+                    {productTypes?.map((item, index) => {
                       return (
                         <label
                           className="inp_txchk"
