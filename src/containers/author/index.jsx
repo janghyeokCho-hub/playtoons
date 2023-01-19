@@ -39,12 +39,14 @@ const App = () => {
   useEffect(() => {
     handleContainer();
   }, []);
+  
   return (
     <Routes>
       <Route path="store" element={<Store />} />
       <Route path="list" element={<List />} />
+      <Route path="/:id/:tab/:page" element={<Post />} />
       <Route path="post/:id" element={<Post />} />
-      <Route path="/:id" element={<Post />} />
+      {/* <Route path="/:id" element={<Post />} /> */}
       <Route path="register" element={<Register />} />
       <Route path="register/form" element={<RegisterForm />} />
       <Route path="detail/:type/:id" element={<Detail />} />

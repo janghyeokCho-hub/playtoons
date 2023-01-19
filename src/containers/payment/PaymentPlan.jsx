@@ -1,9 +1,108 @@
-import React from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { PAYMENT_METHOD } from "@/common/constant";
+import ImageBackgroundSpan from "@/components/dashboard/ImageBackgroundSpan";
+import PaymentMethod from "@/components/payment/PaymentMethod";
+import { getAuthorBalanceFromServer, setPaymentSubscribeToServer } from "@/services/paymentService";
 import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLayoutEffect } from "react";
+import { useState } from "react";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-const PaymentPlan = () => {
+export default  function PaymentPlan(){
+  const [ stateMethod, setStateMethod ] = useState(PAYMENT_METHOD.point);
+  const [ stateIsMonthly, setStateIsMonthly ] = useState(false);
+  const [ stateDate, setStateDate ] = useState(new Date());
+  const [ stateBalance, setStateBalance ] = useState(undefined);
+  const reduxItem = useSelector(({payment}) =>  payment.planItem);
+  const reduxAuthors = useSelector(({post}) =>  post.authorMine?.authors);
+  const dispatch = useDispatch();
+
+  //==============================================================================
+  // function
+  //==============================================================================
+  const getTotalPrice = () => {
+    //쿠폰
+    const tempCoupon = "0";
+    if( Number.isNaN(reduxItem.plan.price) && Number.isNaN(tempCoupon)  ){
+      console.error('Price must be type of number');
+    } else {
+      return parseInt(reduxItem.plan.price) - parseInt(tempCoupon);
+    }
+  };
+
+  const getPaymentAtNext = () => {
+    const tempDate = new Date(stateDate);
+    return getDateYYYYMMDD( tempDate.setMonth(stateDate.getMonth() + (stateIsMonthly ? 12 : 1)) );
+  };
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  const getAuthorBalance = async () => {
+    const {status, data} = await getAuthorBalanceFromServer(reduxAuthors[0].id);
+    console.log('getAuthorBalance', status, data);
+    
+    if( status === 200 ){
+      setStateBalance(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  };
+
+  const setPaymentSubscribe = async (id) => {
+    const json = {
+      subscribeTierId: id,
+      type: "none"
+    };
+    const {status, data} = await setPaymentSubscribeToServer(json);
+    console.log('getAuthorBalance', status, data);
+    
+    if( status === 200 ){
+      
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
+  };
+
+  //==============================================================================
+  // handler
+  //==============================================================================
+
+  const handleChangeCheck = () => {
+    setStateIsMonthly(!stateIsMonthly);
+  };
+
+  const handleChangeCharge = (method) => {
+    setStateMethod(method);
+  };
+
+  const handleClickCharge = useCallback((e) => {
+    console.log('charge', stateMethod);
+    
+  }, [reduxItem, stateMethod]);
+
+  const handleClickPayment = useCallback(() => {
+    setPaymentSubscribe(reduxItem.plan.id);
+  }, [reduxItem, stateMethod]);
+
+  //==============================================================================
+  // hook
+  //==============================================================================
+  useLayoutEffect(() => {
+    getAuthorBalance();
+  }, []);
+
+  //==============================================================================
+  // render
+  //==============================================================================
+
+
   return (
     <div className="contents">
       <div className="inr-c">
@@ -35,26 +134,24 @@ const PaymentPlan = () => {
 
             <div className="box_thumb">
               <div className="thumb">
-                <ImgSpan
-                  bgImg={require("@IMAGES/img_mainplan1.jpg")}
-                  style={{ backgroundSize: "auto 150%" }}
-                ></ImgSpan>
+                <ImageBackgroundSpan hash={reduxItem.plan.thumbnailImage} />
               </div>
               <div className="txt">
-                <p className="h1">ダイヤモンドプラン</p>
+                <p className="h1">{reduxItem.plan.name}</p>
                 <div className="t_profile">
-                  <ImgSpan
+                  <ImageBackgroundSpan
                     className="im"
-                    bgImg={require("@IMAGES/img_profile.png")}
-                  ></ImgSpan>
-                  <p>七語つきみ@TFO7</p>
+                    hash={reduxItem.author.profileImage}
+                  />
+                  <p>{reduxItem.author.name || reduxItem.author.nickname}</p>
                 </div>
-                <p className="c1">1,200PC</p>
+                <p className="c1">{getStringOfPrice(reduxItem.plan.price)}</p>
               </div>
             </div>
           </div>
 
-          <div className="area_payment">
+          {/* 2023.01.19 현재 쿠폰 비표시 */}
+          {/* <div className="area_payment">
             <h2 className="tit1">クーポン使用</h2>
             <div className="col">
               <h3 className="tit2">クーポン選択</h3>
@@ -75,112 +172,65 @@ const PaymentPlan = () => {
                 </button>
               </div>
             </div>
-          </div>
+          </div> */}
+
+          <PaymentMethod 
+            className={"pay"}
+            item={reduxItem}
+            method={stateMethod}
+            balance={stateBalance}
+            onClick={handleClickCharge}
+            onChange={handleChangeCharge}
+            />
 
           <div className="area_payment total">
             <h2 className="tit1 view-m">お支払い金額</h2>
             <ul className="col list2">
               <li>
                 <span>支援期限</span>
-                <span>2022/08/10 ~ 2022/09/12</span>
+                <span>{getDateYYYYMMDD(stateDate)} ~ {getDateYYYYMMDD(getPaymentAtNext())}</span>
               </li>
               <li>
                 <span>次回のお支払い</span>
-                <span>2022/09/12</span>
+                <span>{getDateYYYYMMDD(getPaymentAtNext())}</span>
               </li>
             </ul>
             <ul className="col list1">
               <li>
                 <span>金額</span>
-                <span>1,057,466PC</span>
+                <span>{getStringOfPrice(reduxItem.plan.price)}</span>
               </li>
-              <li>
+              {/* 쿠폰 사용시 오픈 */}
+              {/* <li>
                 <span>クーポン割引</span>
                 <span>-123,456PC</span>
-              </li>
+              </li> */}
             </ul>
             <div className="col ta-c">
               <p className="tit2 hide-m">次の金額をお支払いします。</p>
               <p className="c1">
                 <span className="view-m">合計金額</span>
-                <span>934,010PC</span>
+                <span>{ getStringOfPrice(getTotalPrice()) }</span>
               </p>
 
               {/*<!-- 1. 모바일에서 안보임 -->*/}
               <label className="inp_checkbox hide-m">
-                <input type="checkbox" />
+                <input type="checkbox" defaultChecked={stateIsMonthly} onChange={() => handleChangeCheck()} />
                 <span>毎月のお支払いに同意します。</span>
               </label>
-              <button type="button" className="btn-pk n blue w100p hide-m">
+              <button type="button" className="btn-pk n blue w100p hide-m" onClick={handleClickPayment}>
                 <span>お支払い</span>
               </button>
-            </div>
-          </div>
-
-          <div className="area_payment pay">
-            <h2 className="tit1">お支払い方法</h2>
-            <div className="col lst_radio">
-              <div className="on">
-                <label className="inp_radio">
-                  <input
-                    type="radio"
-                    name="radio01"
-                    data-name="radio_con1"
-                    checked
-                    onclick="radioChk(this);"
-                  />
-                  <span>ポイント</span>
-                </label>
-                <div id="radio_con1" className="col_view">
-                  <p className="tit2">保有Playcoin</p>
-                  <div className="inp_btn">
-                    <p className="c1">2,144,003,102PC</p>
-                    <button type="button" className="btn-pk n blue">
-                      チャージ
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <label className="inp_radio">
-                  <input
-                    type="radio"
-                    name="radio01"
-                    onclick="radioChk(this);"
-                  />
-                  <span>クレジットカード</span>
-                </label>
-              </div>
-              <div>
-                <label className="inp_radio">
-                  <input
-                    type="radio"
-                    name="radio01"
-                    onclick="radioChk(this);"
-                  />
-                  <span>銀行振込</span>
-                </label>
-              </div>
-              <div>
-                <label className="inp_radio">
-                  <input
-                    type="radio"
-                    name="radio01"
-                    onclick="radioChk(this);"
-                  />
-                  <span>コンビニ払い</span>
-                </label>
-              </div>
             </div>
           </div>
 
           <div className="btn-bot view-m">
             {/*<!-- 1. 모바일에서 위치변경 -->*/}
             <label className="inp_checkbox">
-              <input type="checkbox" />
+              <input type="checkbox" defaultChecked={stateIsMonthly} onChange={() => handleChangeCheck()} />
               <span>毎月のお支払いに同意します。</span>
             </label>
-            <button type="button" className="btn-pk n blue w100p">
+            <button type="button" className="btn-pk n blue w100p" onClick={handleClickPayment}>
               <span>お支払い</span>
             </button>
           </div>
@@ -190,8 +240,3 @@ const PaymentPlan = () => {
   );
 };
 
-const ImgSpan = styled.span`
-  background-image: url(${(props) => props.bgImg});
-`;
-
-export default PaymentPlan;

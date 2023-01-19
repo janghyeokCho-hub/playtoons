@@ -5,22 +5,21 @@ import { useState } from "react";
 
 /**
 *
-  hash값으로 이미지 url을 가져와서 img 태그에 뿌려줌.
-   <Image 
+  hash값으로 이미지 url을 가져와서 span 태그에 뿌려줌.
+   <ImageBackgroundSpan 
     className={"series_image"}
     hash={item.coverImage} 
-    alt={"cover iamge"} />
+    />
 *
 * @version 1.0.0
 * @author 2hyunkook
 * @param className class name
 * @param hash server에서 얻어온 hash
-* @param alt img 태그에 들어갈 alt attribute
-* @return
 */
-export default function ProfileSpan(props) {
-  const { hash, className } = props;
+export default function ImageBackgroundSpan(props) {
+  const { hash, className = "" } = props;
   const [stateImage, setStateImage] = useState(undefined);
+  const [stateError, setStateError] = useState("");
 
   const getImage = async (hash) => {
     const params = new FormData();
@@ -28,14 +27,20 @@ export default function ProfileSpan(props) {
 
     if (status === 200) {
       setStateImage(data?.url);
+    } else {
+      setStateError(" error");
     }
   };
 
   useEffect(() => {
     if( hash ){
-      getImage(hash);
+      if ( hash?.startsWith("/static/media/") || hash?.startsWith("data:image")) {
+        setStateImage(hash);
+      } else {
+        getImage(hash);
+      }
     }
   }, [hash]);
 
-  return <span className={className} style={{backgroundImage: `url(${stateImage})`}}></span>
+  return <span className={`${className}${stateError}`} style={{backgroundImage: `url(${stateImage})`}}></span>
 }

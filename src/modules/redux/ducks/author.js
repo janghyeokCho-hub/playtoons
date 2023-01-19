@@ -22,6 +22,7 @@ export const [
   SET_CURRENT_AUTHOR_FAILURE,
 ] = createRequestActionTypes("author/SET_CURRENT_AUTHOR");
 const CURRENT_AUTHOR_INIT = "author/CURRENT_AUTHOR_INIT";
+const INIT_AUTHOR_LIST = "author/INIT_AUTHOR_LIST";
 
 /* --- Actions --- */
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
@@ -29,6 +30,7 @@ export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
 export const currentAuthorInit = createAction(CURRENT_AUTHOR_INIT);
 export const setAuthorAction = createAction(SET_AUTHOR);
 export const initAuthorAction = createAction(INIT_AUTHOR);
+export const initAuthorListAction = createAction(INIT_AUTHOR_LIST);
 
 /**
  * login reducer 초기값
@@ -78,6 +80,17 @@ const author = handleActions(
         return {
           ...state,
           authorUpload: null,
+        }
+      });
+    },
+    [INIT_AUTHOR_LIST]: (state, _) => {
+      return produce(state, (_) => {
+        return {
+          ...state,
+          authors: [],
+          authorsMeta: null,
+          recents: [],
+          recentsMeta: null,
         }
       });
     },

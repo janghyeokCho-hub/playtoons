@@ -7,6 +7,13 @@ export const POST_STATUS = {
   suspended : 'suspended',
 };
 
+//point, stripe
+export const PAYMENT_METHOD = {
+  point : 'playcoin',
+  stripe: 'stripe',
+  none: 'none',
+};
+
 export const DATE_FORMAT = "yyyy/MM/dd";
 export const MOMENT_DATE_FORMAT = "YYYY/MM/DD";
 export const MOMENT_DATE_TIME_FORMAT = "YYYY/MM/DD hh:mm";

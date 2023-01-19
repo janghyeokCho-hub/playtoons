@@ -16,6 +16,7 @@ import container from "./container";
 import product from "./product";
 import timeline from "./timeline";
 import toast from "./toast";
+import payment from "./payment";
 
 const persistConfig = {
   key: "root",
@@ -37,6 +38,7 @@ const appReducer = combineReducers({
   product,
   timeline,
   toast,
+  payment,
 });
 
 const rootReducer = (state, action) => {

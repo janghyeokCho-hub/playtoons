@@ -1,11 +1,18 @@
 import { getStringOfPrice } from '@/common/common';
 import Image from '@/components/dashboard/Image';
-import React from 'react'
+import { setPaymentPlanItemAction } from '@/modules/redux/ducks/payment';
+import React, { useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function PlanItem(props) {
   const { item } = props;
-  
+  const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+  const dispatch = useDispatch();
+
+  const handleClickLink = useCallback(() => {
+    dispatch( setPaymentPlanItemAction({plan: item, author: currentAuthor}) );
+  }, [item]);
 
   return (
     <div className="col" style={{ marginBottom: "2.33%" }}>
@@ -22,7 +29,7 @@ export default function PlanItem(props) {
           {/* <p>・差分が見れます</p>
           <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p> */}
         </div>
-        <Link to={`/payment/plan/${item.id}`} className="btn-pk b blue w100p">
+        <Link to={`/payment/plan/${item.id}`} className="btn-pk b blue w100p" onClick={handleClickLink}>
           <span>応援する</span>
         </Link>
       </div>

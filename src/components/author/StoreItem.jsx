@@ -3,9 +3,10 @@ import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import Image from "../dashboard/Image";
-import ProfileSpan from "../dashboard/ProfileSpan";
+import ImageBackgroundSpan from "../dashboard/ImageBackgroundSpan";
 
-const StoreItem = ({ item }) => {
+export default function StoreItem ({ item }){
+  
 
   return (
     <div className="cx">
@@ -23,7 +24,7 @@ const StoreItem = ({ item }) => {
           <p className="h1">{item?.name}</p>
           <div className="btm">
             <div className="t_profile">
-              <ProfileSpan hash={item?.author?.profileImage} className={"img"} />
+              <ImageBackgroundSpan hash={item?.author?.profileImage} className={"img"} />
               <span className="nickname">
                 {`${item?.author?.nickname}`}
               </span>
@@ -38,4 +39,3 @@ const StoreItem = ({ item }) => {
   );
 };
 
-export default StoreItem;
