@@ -15,11 +15,12 @@ import {
 import { useDispatch } from "react-redux";
 import { currentPostInit } from "@/modules/redux/ducks/post";
 
-const PostItem = ({ item }) => {
-  const dispatch = useDispatch();
+export default function PostItem (props)  {
+  const { item } = props;
   const [post, setPost] = useState(null);
   const [isLock, setIsLock] = useState(true);
   const { filePath, loading } = useFilePath(item?.thumbnailImage);
+  const dispatch = useDispatch();
 
   const getPost = useCallback(async () => {
     const params = {
@@ -98,4 +99,3 @@ const PostItem = ({ item }) => {
   );
 };
 
-export default PostItem;

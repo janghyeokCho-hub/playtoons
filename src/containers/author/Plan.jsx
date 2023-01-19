@@ -1,35 +1,16 @@
-import React from "react";
+import PlanItem from "@/components/author/detail/PlanItem";
 import { useSelector } from "react-redux";
-import useFilePath from "@/hook/useFilePath";
 
-const PlanItem = ({ plan }) => {
-  const { filePath, loading } = useFilePath(plan.thumbnailImage);
-
-  return (
-    <div className="col" style={{ marginBottom: "2.33%" }}>
-      <div className="icon">
-        {!loading && <img src={filePath} alt="plan" />}
-      </div>
-      <div className="cont">
-        <h3 className="h1">{plan?.name}</h3>
-        <p className="t1">
-          <span className="c-blue">{plan?.price}PC</span> /月
-        </p>
-        <p className="t2">{plan?.description}</p>
-        <div className="t_dot1">
-          <p>・差分が見れます</p>
-          <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p>
-        </div>
-        <a href="#" className="btn-pk b blue w100p">
-          <span>編集する</span>
-        </a>
-      </div>
-    </div>
-  );
-};
-
-const Plan = ({ item }) => {
+export default function Plan ({ item }){
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+
+  const renderSubscribTiers = () => {
+    return currentAuthor?.subscribeTiers?.map((item, index) => {
+      return (
+        <PlanItem key={`plan_${index}`} item={item} />
+      );
+    });
+  };
 
   return (
     <>
@@ -45,13 +26,11 @@ const Plan = ({ item }) => {
       </header>
 
       <div className="lst_mainplan">
-        {currentAuthor?.subscribeTiers &&
-          currentAuthor?.subscribeTiers?.map((plan, index) => (
-            <PlanItem key={`plan_${index}`} plan={plan} />
-          ))}
+        {
+          renderSubscribTiers()
+        }
       </div>
     </>
   );
 };
 
-export default Plan;

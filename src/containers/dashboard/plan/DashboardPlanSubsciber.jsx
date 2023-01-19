@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useCallback, useLayoutEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import tempProfile from "@IMAGES/img_profile.png";
-import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
-import Pagination from "@/components/dashboard/MyPagination";
-import { useDispatch, useSelector } from "react-redux";
-import { setContainer } from "@/modules/redux/ducks/container";
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
-import { getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import Input from "@/components/dashboard/Input";
+import Pagination from "@/components/dashboard/MyPagination";
+import ProfileSpan from "@/components/dashboard/ProfileSpan";
 import Search from "@/components/dashboard/Search";
+import { setContainer } from "@/modules/redux/ducks/container";
+import { getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 
 const text = {
@@ -103,13 +100,13 @@ export default function DashboardPlanSubsciber(props) {
           <td className="hide-m">{i}</td>
           <td className="td_profile1">
             <p className="t_profile">
-              <span
+              <ProfileSpan
                 className="im mr0"
-                style={{ backgroundImage: `url(${item?.account?.profileImage})` }}
-              ></span>
+                hash={item?.account?.profileImage}
+              ></ProfileSpan>
             </p>
           </td>
-          <td className="td_profile2">{item?.account?.id || item?.account?.name}</td>
+          <td className="td_profile2">{item?.account?.name || item?.account?.id}</td>
           <td className="td_type1">{item?.subscribeTier?.name}</td>
           <td className="td_day1">{ getDateYYYYMMDD(item.createdAt, '/') }</td>
         </tr>

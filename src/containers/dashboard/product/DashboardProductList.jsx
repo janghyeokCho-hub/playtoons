@@ -177,7 +177,7 @@ export default function DashboardProductList(props) {
           <td className="td_btns2 ty1">
             <Link
               className="btn-pk s blue2"
-              to={`/dashboard/product/detail/${item.id}`}
+              to={`/store/detail/${item.id}`}
             >
               {text.detail}
             </Link>
