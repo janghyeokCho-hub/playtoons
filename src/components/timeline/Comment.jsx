@@ -4,7 +4,7 @@ import { getReactionFromServer } from '@/services/dashboardService';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import IconWithText from '../dashboard/IconWithText';
-import ImageBackgroundSpan from '../dashboard/ImageBackgroundSpan';
+import ImageBackground from '../dashboard/ImageBackground';
 import SeeMoreComent from '../dashboard/SeeMoreComent';
 import ReactionItem from './ReactionItem';
 
@@ -105,7 +105,7 @@ export default function Comment(props) {
     <div className="wrap_comment">
       <div className="top_comm">
         <div className="imgs">
-          <ImageBackgroundSpan hash={reduxUserInfo.profileImage || reduxAuthors?.[0].profileImage} />
+          <ImageBackground hash={reduxUserInfo.profileImage || reduxAuthors?.[0].profileImage} />
         </div>
         <IconWithText
           postInfo={item}

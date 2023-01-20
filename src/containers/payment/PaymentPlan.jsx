@@ -1,6 +1,6 @@
 import { getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
 import { PAYMENT_METHOD } from "@/common/constant";
-import ImageBackgroundSpan from "@/components/dashboard/ImageBackgroundSpan";
+import ImageBackground from "@/components/dashboard/ImageBackground";
 import PaymentMethod from "@/components/payment/PaymentMethod";
 import { getAuthorBalanceFromServer, setPaymentSubscribeToServer } from "@/services/paymentService";
 import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
@@ -134,12 +134,12 @@ export default  function PaymentPlan(){
 
             <div className="box_thumb">
               <div className="thumb">
-                <ImageBackgroundSpan hash={reduxItem.plan.thumbnailImage} />
+                <ImageBackground className="plan" hash={reduxItem.plan.thumbnailImage} />
               </div>
               <div className="txt">
                 <p className="h1">{reduxItem.plan.name}</p>
                 <div className="t_profile">
-                  <ImageBackgroundSpan
+                  <ImageBackground
                     className="im"
                     hash={reduxItem.author.profileImage}
                   />

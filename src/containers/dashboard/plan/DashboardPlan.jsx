@@ -1,7 +1,7 @@
 import { checkLoginExpired, getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
-import ImageBackgroundSpan from "@/components/dashboard/ImageBackgroundSpan";
+import ImageBackground from "@/components/dashboard/ImageBackground";
 import SwiperContainer from "@/components/dashboard/SwiperContainer";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getSubscribeTierAction } from "@/modules/redux/ducks/dashboard";
@@ -124,10 +124,10 @@ export default function DashboardPlan(props) {
         <li key={i}>
           <div>
             <p className="t_profile">
-              <ImageBackgroundSpan
+              <ImageBackground
                 className="im"
                 hash={item.account.profileImage}
-              ></ImageBackgroundSpan>
+              ></ImageBackground>
               <span>{item.account.name}</span>
             </p>
             <p className="t2">{getDateYYYYMMDD(item.updatedAt, "/")}</p>

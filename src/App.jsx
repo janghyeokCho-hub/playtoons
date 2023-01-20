@@ -16,8 +16,9 @@ import Search from "@CONTAINERS/search";
 import Store from "@CONTAINERS/store";
 import Timeline from "@CONTAINERS/timeline";
 import Webtoon from "@CONTAINERS/webtoon/Webtoon";
-import { Route, Routes } from "react-router-dom";
+import Purchase from "@CONTAINERS/purchase/index";
 import ToastContainer from "./components/ToastContainer";
+import { Route, Routes } from "react-router-dom";
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
           <Route path="/search/*" element={<Search />} />
           <Route path="/timeline/*" element={<Timeline />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
+          <Route path="/purchase/*" element={<Purchase />} />
         </Routes>
       </Container>
       <ModalContainer />

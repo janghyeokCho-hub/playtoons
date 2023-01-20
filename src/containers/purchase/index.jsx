@@ -1,14 +1,15 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import List from "./List";
 import Detail from "./Detail";
+import Page404 from "@COMPONENTS/Page404";
+
 
 const App = () => {
   return (
     <>
       <Routes>
-        <Route path={"list"} element={<List />} />
-        <Route path={"Detail"} element={<Detail />} />
+        <Route path={"/detail/:id"} element={<Detail />} />
+        <Route path="/*" element={<Page404 />} />
       </Routes>
     </>
   );

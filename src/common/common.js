@@ -234,10 +234,10 @@ export const getFormattedDateForUrl = (date, format) => {
 * @version 1.0.0
 * @author 2hyunkook
 * @param date date string
-* @return
+* @return date object
 */
 export const getFormattedDateForDateObject = (date) => {
-  return date.replace(/(\d{4})(\d{2})(\d{2})$/, `$1/$2/$3`);
+  return new Date( date.replace(/(\d{4})(\d{2})(\d{2})$/, `$1/$2/$3`) );
 };
 
 /**

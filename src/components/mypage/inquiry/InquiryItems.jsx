@@ -1,4 +1,4 @@
-import { getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
+import { getFormattedDateForDateObject, getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
 import { DATE_FORMAT_ON_URL } from "@/common/constant";
 import CalendarView from "@/components/dashboard/CalendarView";
 import EmptyTr from "@/components/dashboard/EmptyTr";
@@ -83,8 +83,8 @@ export default function InquiryItems(){
     if( stateStartAt && stateEndAt ){
       getInquiryList(params.page);
     } else {
-      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : params.startAt );
-      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : params.endAt );
+      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : getFormattedDateForDateObject(params.startAt) );
+      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : getFormattedDateForDateObject(params.endAt) );
     }
   }, [stateStartAt, stateEndAt, params]);
   

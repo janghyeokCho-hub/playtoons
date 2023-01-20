@@ -1,4 +1,4 @@
-import { getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
+import { getFormattedDateForDateObject, getFormattedDateForUrl, getInitDateObject, showOneButtonPopup } from "@/common/common";
 import MyPagination from "@/components/dashboard/MyPagination";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -77,8 +77,8 @@ export default function PurchaseItems() {
     if( stateStartAt && stateEndAt ){
       getPruchaseList(params.page);
     } else {
-      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : params.startAt );
-      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : params.endAt );
+      setStateStartAt( params.startAt === undefined ? getInitDateObject('3month') : getFormattedDateForDateObject(params.startAt) );
+      setStateEndAt( params.endAt === undefined ? getInitDateObject('now') : getFormattedDateForDateObject(params.endAt) );
     }
   }, [stateStartAt, stateEndAt, params]);
   

@@ -6,7 +6,7 @@ import { useState } from "react";
 /**
 *
   hash값으로 이미지 url을 가져와서 span 태그에 뿌려줌.
-   <ImageBackgroundDiv 
+   <ImageBackgroundSpan 
     className={"series_image"}
     hash={item.coverImage} 
     />
@@ -16,10 +16,14 @@ import { useState } from "react";
 * @param className class name
 * @param hash server에서 얻어온 hash
 */
-export default function ImageBackgroundDiv(props) {
-  const { hash, className = "" } = props;
+export default function ImageBackground(props) {
+  const { hash, className = "", type } = props;
   const [stateImage, setStateImage] = useState(undefined);
   const [stateError, setStateError] = useState("");
+
+  const getStyle = () => {
+    return stateImage === undefined ? {} : {backgroundImage: `url(${stateImage})`};
+  };
 
   const getImage = async (hash) => {
     const params = new FormData();
@@ -43,15 +47,10 @@ export default function ImageBackgroundDiv(props) {
   }, [hash]);
 
   return (
-    <>
-      {
-        stateImage === undefined ? (
-          <div className={`${className}${stateError}`} ></div>
-        ) : (
-          <div className={`${className}${stateError}`} style={{backgroundImage: `url(${stateImage})`}}></div>
-        )
-      }
-    
-    </>
+    type === undefined || type === "span" ? (
+      <span className={`${className}${stateError}`} style={getStyle()}></span>
+      ) : (
+      <div className={`${className}${stateError}`} style={getStyle()}></div>
+    )
   );
 }

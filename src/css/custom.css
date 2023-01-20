@@ -1122,10 +1122,17 @@
 }
 
 .payment .area_payment .box_thumb .thumb span{
-  background-size: auto;
+  background-size: contain;
 }
 .payment .area_payment .tit2.mb0{
   margin-bottom: 0;
+}
+
+.purchase.payment .area_payment .lst_exe .ico:first-child{
+  margin-left: 0;
+}
+.purchase.payment .area_payment .lst_exe .ico{
+  margin-left: 4px;
 }
 
 /* ============================================================================== */

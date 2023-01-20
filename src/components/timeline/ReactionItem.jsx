@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import IconWithText from "../dashboard/IconWithText";
-import ImageBackgroundSpan from "../dashboard/ImageBackgroundSpan";
+import ImageBackground from "../dashboard/ImageBackground";
 import ReportPopup from "@/containers/post/ReportPopup";
 import LikeButton from "./LikeButton";
 
@@ -55,7 +55,7 @@ export default function ReactionItem(props){
     <>
       <div className={`col ${stateItem?.level > 1 ? "col_re" : ""}`}>
         <div className="imgs">
-          <ImageBackgroundSpan hash={stateItem?.profileImage} />
+          <ImageBackground hash={stateItem?.profileImage} />
         </div>
         <div className="conts">
           {/* 댓글 내용 */}

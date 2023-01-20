@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
+import { MOBILE_WIDTH } from "@/common/constant";
 
 const text = {
   timeline_thumb: "タイムラインのサムネイル",
@@ -181,7 +182,7 @@ export default function DashboardSeriesDetail(props) {
   }, []);
 
   const handleMoveToDetailPage = (item) => {
-    if (windows.width > 960) {
+    if (windows.width > MOBILE_WIDTH) {
       navigate(`/dashboard/post/detail/${item.id}`);
     }
   };

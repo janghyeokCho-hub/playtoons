@@ -1,4 +1,5 @@
 import { getDateYYYYMMDD, getStatusText, showOneButtonPopup } from "@/common/common";
+import { MOBILE_WIDTH } from "@/common/constant";
 import Dropdown from "@/components/dashboard/Dropdown";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Image from "@/components/dashboard/Image";
@@ -86,7 +87,7 @@ export default function DashboardPostList(props) {
   };
 
   const handleMoveToDetailPage = (item) => {
-    if (windows.width > 960) {
+    if (windows.width > MOBILE_WIDTH) {
       navigate(`/dashboard/post/detail/${item.id}`);
     }
   };

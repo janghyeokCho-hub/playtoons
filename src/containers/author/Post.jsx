@@ -1,6 +1,6 @@
 import { showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
-import ImageBackgroundDiv from "@/components/dashboard/ImageBackgroundDiv";
+import ImageBackground from "@/components/dashboard/ImageBackground";
 import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import { setAuthorFollow } from "@API/authorService";
 import SharePopup from "@COMPONENTS/author/detail/SharePopup";
@@ -60,7 +60,8 @@ const Post = () => {
       <div className="wrap_author_detail">
         <div className="box_profile _longs">
           {/* 이미지 default 값 필요 */}
-          <ImageBackgroundDiv
+          <ImageBackground
+            type={"div"}
             className="pf_thumb"
             hash={currentAuthor?.backgroundImage}/>
           {currentAuthor && (
