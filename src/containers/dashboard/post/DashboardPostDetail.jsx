@@ -7,7 +7,7 @@ import {
 } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
-import ProfileSpan from "@/components/dashboard/ProfileSpan";
+import ImageBackgroundSpan from "@/components/dashboard/ImageBackgroundSpan";
 import ReactionButtons from "@/components/dashboard/ReactionButtons";
 import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import { setContainer } from "@/modules/redux/ducks/container";
@@ -175,7 +175,7 @@ export default function DashboardPostDetail() {
       return (
         <div className="col" key={index}>
           <div className="imgs">
-            <ProfileSpan hash={item?.author?.profileImage} />
+            <ImageBackgroundSpan hash={item?.author?.profileImage} />
           </div>{" "}
           <div className="conts">
             <p className="h1">{item?.name || item?.author?.nickname}</p>{" "}
@@ -301,7 +301,7 @@ export default function DashboardPostDetail() {
       <div className="wrap_comment">
         <div className="top_comm">
           <div className="imgs">
-            <ProfileSpan hash={stateData?.author?.profileImage} />
+            <ImageBackgroundSpan hash={stateData?.author?.profileImage} />
           </div>
           <IconWithText
             postInfo={stateData}

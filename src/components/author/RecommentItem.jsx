@@ -60,7 +60,7 @@ const RecommentItem = ({ item, index }) => {
       <div className="box_profile _half">
         <Link
           to={{
-            pathname: `/author/post/${item?.id}`,
+            pathname: `/author/${item?.id}/post/1`,
           }}
           state={{ item: item }}
           onClick={handleCurrentAuthor}

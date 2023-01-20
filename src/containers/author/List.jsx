@@ -2,13 +2,15 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import RecentItems from "@COMPONENTS/author/RecentItems";
 import RecommentItems from "@COMPONENTS/author/RecommentItems";
-import { getAuthorList } from "@/modules/redux/ducks/author";
+import { getAuthorList, initAuthorListAction } from "@/modules/redux/ducks/author";
 
 const List = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAuthorList());
+
+    return () => dispatch(initAuthorListAction());
   }, [dispatch]);
 
   return (

@@ -4,7 +4,7 @@ import { logoutRequest } from "@/modules/redux/ducks/login";
 import { showModal } from "@/modules/redux/ducks/modal";
 import { clearUserData } from "@/utils/localStorageUtil";
 import moment from "moment";
-import { MOMENT_DATE_FORMAT, MOMENT_DATE_TIME_FORMAT, RESULT_CODE_LIST } from "./constant";
+import { MOMENT_DATE_FORMAT, MOMENT_DATE_TIME_FORMAT, RESULT_CODE_LIST, UNIT_EMONEY } from "./constant";
 import parse from "html-react-parser";
 import Image from "@/components/dashboard/Image";
 import { setNovelAction, setWebtoonAction } from "@/modules/redux/ducks/post";
@@ -590,6 +590,20 @@ export const showTwoButtonPopup = (
 */
 export const convertMoneyStyleString = (number) => {
   return String(number).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+
+/**
+  천마다 콤마
+* @version 1.0.0
+* @author 2hyunkook
+* @param price 
+*/
+export const getStringOfPrice = (price) => {
+  if( Number.isNaN(Number(price)) ){
+    return price;
+  }
+  
+  return `${convertMoneyStyleString( Number.parseInt(price) )}${UNIT_EMONEY}`;
 };
 
 /**

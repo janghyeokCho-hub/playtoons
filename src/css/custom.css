@@ -1104,6 +1104,31 @@
 }
 
 /* ============================================================================== */
+/* add 2023.01.19 ~  */
+/* ============================================================================== */
+.author .lst_store1 .cx_txt .t_profile .img{
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+  display: block;
+  background-size: cover;
+}
+.author .lst_store1 .cx_txt .t_profile .nickname{
+  height: 40px; 
+  line-height: 40px;
+}
+.author .lst_store1 .cx_thumb img.error{
+  width: 0;
+}
+
+.payment .area_payment .box_thumb .thumb span{
+  background-size: auto;
+}
+.payment .area_payment .tit2.mb0{
+  margin-bottom: 0;
+}
+
+/* ============================================================================== */
 /* header back button tablet & mobile css  */
 /* ============================================================================== */
 

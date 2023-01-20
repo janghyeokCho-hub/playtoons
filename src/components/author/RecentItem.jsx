@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import useFilePath from "@/hook/useFilePath";
 import { currentAuthorInit } from "@/modules/redux/ducks/author";
+import ImageBackgroundDiv from "../dashboard/ImageBackgroundDiv";
 
 const RecentItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -21,15 +22,16 @@ const RecentItem = ({ item }) => {
     <div className="box_profile">
       <Link
         to={{
-          pathname: `/author/post/${item?.id}`,
+          pathname: `/author/${item?.id}/post/1`,
         }}
         state={{ item: item }}
         onClick={handleCurrentAuthorInit}
       >
         {/* 이미지 default 값 필요 */}
-        {!backgroundImgLoading && (
+        {/* {!backgroundImgLoading && (
           <ImgTmpProfileBgDiv className="pf_thumb" bgImg={backgroundImgURL} />
-        )}
+        )} */}
+        <ImageBackgroundDiv className="pf_thumb" hash={item?.backgroundImage} />
         <div className="pf_txt">
           <div className="icon">
             {/* 이미지 default 값 필요 */}

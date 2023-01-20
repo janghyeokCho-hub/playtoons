@@ -7,6 +7,13 @@ export const POST_STATUS = {
   suspended : 'suspended',
 };
 
+//point, stripe
+export const PAYMENT_METHOD = {
+  point : 'playcoin',
+  stripe: 'stripe',
+  none: 'none',
+};
+
 export const DATE_FORMAT = "yyyy/MM/dd";
 export const MOMENT_DATE_FORMAT = "YYYY/MM/DD";
 export const MOMENT_DATE_TIME_FORMAT = "YYYY/MM/DD hh:mm";
@@ -15,6 +22,7 @@ export const FILE_MAX_SIZE = 2000000; // 2 MB
 export const TIMELINE_DELAY = 5000; // 5 seconds
 export const TOAST_TIME = 1500; // 1.5 seconds
 export const MOBILE_WIDTH = 960; //960 pixels
+export const UNIT_EMONEY = "PC"; //use the unit of payment in playToons
 
 /**
  * result code message list

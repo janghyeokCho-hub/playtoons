@@ -1,4 +1,6 @@
-import useFilePath from "@/hook/useFilePath";
+import { showOneButtonPopup } from "@/common/common";
+import Image from "@/components/dashboard/Image";
+import ImageBackgroundDiv from "@/components/dashboard/ImageBackgroundDiv";
 import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import { setAuthorFollow } from "@API/authorService";
 import SharePopup from "@COMPONENTS/author/detail/SharePopup";
@@ -9,30 +11,27 @@ import { faShare } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
-import styled from "styled-components";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Plan from "./Plan";
 
 const Post = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const id = params?.id;
-
-  const location = useLocation();
-  const tab = location?.state?.tab;
-
+  const tab = params?.tab;
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
-  const [selectTab, setSelectTab] = useState(tab ? tab : "POST");
+  const [selectTab, setSelectTab] = useState(tab ? tab : "post");
   const [isSharePopupShow, setIsSharePopupShow] = useState(false);
-  const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
-    useFilePath(currentAuthor?.backgroundImage);
-  const { filePath: profileImgURL, loading: profileImgLoading } = useFilePath(
-    currentAuthor?.profileImage
-  );
 
   useEffect(() => {
     dispatch(setCurrentAuthor(id));
   }, [dispatch, id]);
+
+  useEffect(() => {
+    console.log('tab', tab);
+    setSelectTab(tab);
+  }, [tab]);
 
   const handleFollow = useCallback(
     async (type) => {
@@ -40,15 +39,15 @@ const Post = () => {
         const response = await setAuthorFollow(type, currentAuthor.id);
         if (type === "post") {
           if (response?.status === 201) {
-            alert("SUCCESS");
+            showOneButtonPopup(dispatch, 'フォローしました。');
           } else {
-            alert(response?.data?.message);
+            showOneButtonPopup(dispatch, response?.data?.message);
           }
         } else {
           if (response?.status === 200) {
-            alert("DELETE SUCCESS");
+            showOneButtonPopup(dispatch, 'アンフォローしました。');
           } else {
-            alert(response?.data?.message);
+            showOneButtonPopup(dispatch, response?.data?.message);
           }
         }
       }
@@ -61,19 +60,14 @@ const Post = () => {
       <div className="wrap_author_detail">
         <div className="box_profile _longs">
           {/* 이미지 default 값 필요 */}
-          {!backgroundImgLoading && (
-            <ImgTmpProfileBgDiv
-              className="pf_thumb"
-              bgImg={backgroundImgURL}
-            ></ImgTmpProfileBgDiv>
-          )}
+          <ImageBackgroundDiv
+            className="pf_thumb"
+            hash={currentAuthor?.backgroundImage}/>
           {currentAuthor && (
             <div className="pf_txt">
               <div className="icon">
                 {/* 이미지 default 값 필요 */}
-                {!profileImgLoading && (
-                  <img src={profileImgURL} alt="" />
-                )}
+                <Image hash={currentAuthor?.profileImage} />
               </div>
               <p className="h1">{currentAuthor?.nickname}</p>
               <p className="t1">{currentAuthor?.description}</p>
@@ -109,32 +103,32 @@ const Post = () => {
           <div className="tabs ty2">
             <ul>
               <li
-                className={selectTab === "POST" ? "on" : ""}
-                onClick={() => setSelectTab("POST")}
+                className={selectTab === "post" ? "on" : ""}
+                onClick={() => navigate(`/author/${id}/post/1`)}
               >
                 <Link to="">
                   <span>投稿</span>
                 </Link>
               </li>
               <li
-                className={selectTab === "SERIES" ? "on" : ""}
-                onClick={() => setSelectTab("SERIES")}
+                className={selectTab === "series" ? "on" : ""}
+                onClick={() => navigate(`/author/${id}/series/1`)}
               >
                 <Link to="">
                   <span>シリーズ</span>
                 </Link>
               </li>
               <li
-                className={selectTab === "PLAN" ? "on" : ""}
-                onClick={() => setSelectTab("PLAN")}
+                className={selectTab === "plan" ? "on" : ""}
+                onClick={() => navigate(`/author/${id}/plan/1`)}
               >
                 <Link to="">
                   <span>プラン</span>
                 </Link>
               </li>
               <li
-                className={selectTab === "STORE" ? "on" : ""}
-                onClick={() => setSelectTab("STORE")}
+                className={selectTab === "store" ? "on" : ""}
+                onClick={() => navigate(`/author/${id}/store/1`)}
               >
                 <Link to="">
                   <span>ストア</span>
@@ -142,10 +136,10 @@ const Post = () => {
               </li>
             </ul>
           </div>
-          {selectTab === "POST" && <PostItems />}
-          {selectTab === "SERIES" && <SeriesItems />}
-          {selectTab === "PLAN" && <Plan />}
-          {selectTab === "STORE" && <StoreItems />}
+          {selectTab === "post" && <PostItems />}
+          {selectTab === "series" && <SeriesItems />}
+          {selectTab === "plan" && <Plan />}
+          {selectTab === "store" && <StoreItems />}
         </div>
       </div>
 
@@ -156,12 +150,5 @@ const Post = () => {
   );
 };
 
-const ImgTmpProfileBgDiv = styled.div`
-  background-image: url(${(props) => props.bgImg});
-  height: 80px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
 
 export default Post;

@@ -1,4 +1,4 @@
-import { getContentOfPost } from "@/common/common";
+import { getContentOfPost, showOneButtonPopup } from "@/common/common";
 import IconWithText from "@/components/dashboard/IconWithText";
 import Image from "@/components/dashboard/Image";
 import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
@@ -64,15 +64,15 @@ const Webtoon = () => {
 
         if (type === "post") {
           if (response?.status === 201) {
-            alert("SUCCESS");
+            showOneButtonPopup(dispatch, "フォローしました。");
           } else {
-            alert(response?.data?.message);
+            showOneButtonPopup(dispatch, response?.data?.message);
           }
         } else {
           if (response?.status === 200) {
-            alert("DELETE SUCCESS");
+            showOneButtonPopup(dispatch, "アンフォローしました。");
           } else {
-            alert(response?.data?.message);
+            showOneButtonPopup(dispatch, response?.data?.message);
           }
         }
       }
@@ -165,9 +165,9 @@ const Webtoon = () => {
                     >
                       <span>フォロー</span>
                     </Link>
-                    <a href="#" className="btn-pk n blue2">
+                    <Link to="#" className="btn-pk n blue2">
                       <span>支援する</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

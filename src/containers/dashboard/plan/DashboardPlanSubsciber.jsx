@@ -1,7 +1,7 @@
 import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import EmptyTr from "@/components/dashboard/EmptyTr";
 import Pagination from "@/components/dashboard/MyPagination";
-import ProfileSpan from "@/components/dashboard/ProfileSpan";
+import ImageBackgroundSpan from "@/components/dashboard/ImageBackgroundSpan";
 import Search from "@/components/dashboard/Search";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getSubscribeTierInPlanFromServer } from "@/services/dashboardService";
@@ -100,10 +100,10 @@ export default function DashboardPlanSubsciber(props) {
           <td className="hide-m">{i}</td>
           <td className="td_profile1">
             <p className="t_profile">
-              <ProfileSpan
+              <ImageBackgroundSpan
                 className="im mr0"
                 hash={item?.account?.profileImage}
-              ></ProfileSpan>
+              ></ImageBackgroundSpan>
             </p>
           </td>
           <td className="td_profile2">{item?.account?.name || item?.account?.id}</td>

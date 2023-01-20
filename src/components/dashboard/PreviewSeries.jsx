@@ -2,7 +2,7 @@ import { faCircleCheck, faCommentQuote, faHeart, faShare } from '@fortawesome/pr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import Image from './Image';
-import ProfileSpan from './ProfileSpan';
+import ImageBackgroundSpan from './ImageBackgroundSpan';
 
 export default function PreviewSeries(props) {
   const { data, text, } = props;
@@ -48,7 +48,7 @@ export default function PreviewSeries(props) {
       <div className="ar_name">
         <div>
           <div className="icon">
-            <ProfileSpan hash={data?.author?.profileImage}></ProfileSpan>
+            <ImageBackgroundSpan hash={data?.author?.profileImage}></ImageBackgroundSpan>
           </div>
           <p>{data?.author?.name}</p>
         </div>

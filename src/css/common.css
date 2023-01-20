@@ -5743,8 +5743,10 @@ body {
   position: absolute;
   left: 0;
   top: 0;
+  transform: translateY(-20%);
   width: 100%;
-  height: 100%;
+  /* transform: translateX(-50%); */
+  /* height: 100%; */
 }
 .lst_store1 .cx_thumb:after {
   content: "";
