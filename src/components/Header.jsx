@@ -533,6 +533,7 @@ const Header = ({ className, onSideMenu }) => {
                 {isLikeShow && (
                   <div className="box_drop box_favorit">
                     <ul>
+                      {/* TODO post 좋아요 api */}
                       {/* <!-- 이미 누른것엔 on 추가 --> */}
                       <li className="on">
                         <button type="button">
