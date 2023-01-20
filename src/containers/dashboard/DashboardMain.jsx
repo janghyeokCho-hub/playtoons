@@ -263,7 +263,7 @@ export default function DashboardMain() {
         <li key={index}>
           <div>
             <div className="t_star">
-              <span className={`s${item.review_count}`}>
+              <span className={`s${item.reviewScore}`}>
                 <FontAwesomeIcon icon={faStar} />
                 <FontAwesomeIcon icon={faStar} />
                 <FontAwesomeIcon icon={faStar} />
@@ -273,11 +273,11 @@ export default function DashboardMain() {
             </div>
             <p className="t1">
               <span className="pointer" onClick={() => handleClickReview(item)}>
-                {item.title}
+                {item.content}
               </span>
             </p>
           </div>
-          <p className="t2">{item.date}</p>
+          <p className="t2">{getDateYYYYMMDD(item.respondedAt)}</p>
         </li>
       );
     });

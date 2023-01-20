@@ -21,12 +21,19 @@ export const [
   SET_CURRENT_AUTHOR_SUCCESS,
   SET_CURRENT_AUTHOR_FAILURE,
 ] = createRequestActionTypes("author/SET_CURRENT_AUTHOR");
+
+export const [
+  GET_AUTHOR_POST_LIST,
+  GET_AUTHOR_POST_LIST_SUCCESS,
+  GET_AUTHOR_POST_LIST_FAILURE,
+] = createRequestActionTypes("author/GET_AUTHOR_POST_LIST");
 const CURRENT_AUTHOR_INIT = "author/CURRENT_AUTHOR_INIT";
 const INIT_AUTHOR_LIST = "author/INIT_AUTHOR_LIST";
 
 /* --- Actions --- */
 export const getAuthorList = createAction(GET_AUTHOR_LIST);
 export const setCurrentAuthor = createAction(SET_CURRENT_AUTHOR);
+export const getAuthorPostListAction = createAction(GET_AUTHOR_POST_LIST);
 export const currentAuthorInit = createAction(CURRENT_AUTHOR_INIT);
 export const setAuthorAction = createAction(SET_AUTHOR);
 export const initAuthorAction = createAction(INIT_AUTHOR);
@@ -58,6 +65,11 @@ const author = handleActions(
     [SET_CURRENT_AUTHOR_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         draft.currentAuthor = action.payload;
+      });
+    },
+    [GET_AUTHOR_POST_LIST_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.currentAuthor.posts = action.payload;
       });
     },
     [CURRENT_AUTHOR_INIT]: (state, action) => {

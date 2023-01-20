@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 //temp data
 import tempImg1 from "@IMAGES/temp_seller_image.png";
 
-import { showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
 import AnswerTr from "@/components/dashboard/AnswerTr";
 import ArrowRight from "@/components/dashboard/ArrowRight";
 import EmptyTr from "@/components/dashboard/EmptyTr";
@@ -267,12 +267,12 @@ export default function DashboardSalesReview(props) {
       return (
         <Fragment  key={index}>
           <tr className="tr-q">
-            <td className="hide-m">{item.productId}</td>
+            <td className="hide-m">{item.id}</td>
             <td className="td_imgs2">
               <div className="cx_thumb"><span><Image hash={item?.product?.thumbnailImage} alt={""} /></span></div>
             </td>
-            <td className="td_subject">{item?.product?.name}</td>
-            <td className="td_txt0"><span className="view-m">{text.startAt}：</span>{item.date}</td>
+            <td className="td_subject">{item?.product.name}</td>
+            <td className="td_txt0"><span className="view-m">{text.startAt}：</span>{getDateYYYYMMDD(item.respondedAt)}</td>
             <td className="td_txt0"><span className="view-m">{text.creator}：</span>{item?.account?.name || item?.account?.email}</td>
             <td className="td_star">
               <div className="t_star">

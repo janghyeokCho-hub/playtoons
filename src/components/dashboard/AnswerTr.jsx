@@ -1,3 +1,4 @@
+import { getDateYYYYMMDD, getDateYYYYMMDDHHmm } from '@/common/common';
 import { faShare } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
@@ -26,7 +27,7 @@ export default forwardRef(function AnswerTr(props, ref) {
 
   return (
     <>
-      {/* sales inquirt */}
+      {/* sales inquiry */}
       {
         type === undefined && 
           <tr ref={refContainer} className={`tr_a ${stateShow ? 'on d_tr' : ''}`} >
@@ -38,7 +39,7 @@ export default forwardRef(function AnswerTr(props, ref) {
               </div>
               <div className="tx_a2">
                 <span className="re view-m"><FontAwesomeIcon icon={faShare} /></span>
-                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item?.respondedAt}時</span></p>
+                <p className="t2"><span className="i-txt">{text.saler}</span><span>{getDateYYYYMMDDHHmm(item?.respondedAt)}時</span></p>
                 <p className="t1">{item?.authorResponse}</p>
               </div>
             </td>
@@ -58,7 +59,7 @@ export default forwardRef(function AnswerTr(props, ref) {
               </div>
               <div className="tx_a2">
                 <span className="re view-m"><FontAwesomeIcon icon={faShare} /></span>
-                <p className="t2"><span className="i-txt">{text.saler}</span><span>{item?.respondedAt}時</span></p>
+                <p className="t2"><span className="i-txt">{text.saler}</span><span>{getDateYYYYMMDDHHmm(item?.respondedAt)}時</span></p>
                 <p className="t1">{item?.authorResponse}</p>
               </div>
             </td>

@@ -1,40 +1,38 @@
-import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/pro-light-svg-icons";
+import { getAuthorPostListAction } from "@/modules/redux/ducks/author";
+import { useLayoutEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import MyPagination from "../dashboard/MyPagination";
 import PostItem from "./PostItem";
-import { useSelector } from "react-redux";
 
 const PostItems = () => {
   const currentAuthor = useSelector(({ author }) => author.currentAuthor);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const params = useParams();
+
+  useLayoutEffect(() => {
+    if( params ){
+      dispatch( getAuthorPostListAction({authorId: params.id, page: params.page}) );
+    }
+  }, [params]);
 
   return (
     <>
       <div className="lst_detail">
         <ul>
-          {currentAuthor?.posts &&
-            currentAuthor?.posts?.map((post, index) => (
-              <PostItem key={`post_${index}`} item={post} />
-            ))}
+            {
+              currentAuthor?.posts?.posts?.map((post, index) => (
+                <PostItem key={`post_${index}`} item={post} />
+              ))
+            }
         </ul>
       </div>
 
-      <div className="pagenation">
-        <ul>
-          <li className="prev">
-            <a href="#">
-              <FontAwesomeIcon icon={faAngleLeft} />
-            </a>
-          </li>
-          <li className="on">
-            <a href="#">1</a>
-          </li>
-          <li className="next">
-            <a href="#">
-              <FontAwesomeIcon icon={faAngleRight} />
-            </a>
-          </li>
-        </ul>
-      </div>
+      <MyPagination
+          meta={currentAuthor?.posts?.meta}
+          callback={(page) => navigate(`/author/${params.id}/post/${page}`) }
+          />
     </>
   );
 };

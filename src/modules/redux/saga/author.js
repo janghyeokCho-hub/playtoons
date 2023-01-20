@@ -1,6 +1,7 @@
 import { takeLatest, call, put } from "redux-saga/effects";
 import {
   GET_AUTHOR_LIST,
+  GET_AUTHOR_POST_LIST,
   SET_AUTHOR,
   SET_CURRENT_AUTHOR,
 } from "@REDUX/ducks/author";
@@ -73,9 +74,9 @@ function createSetCurrentAuthorRequestSaga(type) {
           });
 
           if (postResponse?.status === 200) {
-            payload.posts = postResponse?.data?.posts || [];
+            payload.posts = postResponse?.data;
           } else {
-            payload.posts = [];
+            payload.posts = undefined;
           }
 
           /** 해당 작가의 시리즈 목록 */
@@ -134,6 +135,47 @@ function createSetCurrentAuthorRequestSaga(type) {
 }
 const setCurrentAuthorSaga =
   createSetCurrentAuthorRequestSaga(SET_CURRENT_AUTHOR);
+
+function createGetAuthorPostListRequestSaga(type) {
+  const SUCCESS = `${type}_SUCCESS`;
+  const FAILURE = `${type}_FAILURE`;
+
+  return function* (action) {
+    try {
+      yield put(startLoading(type));
+      
+      /** 해당 작가의 게시물 목록 */
+      const response = yield call(
+        postApi.getPosts, 
+        {
+          authorId: action.payload?.authorId, 
+          page: action.payload?.page
+        }
+      );
+
+      if (response?.status === 200) {
+        yield put({
+          type: SUCCESS,
+          payload: response.data,
+        });
+      } 
+
+      yield put(finishLoading(type));
+    } catch (e) {
+      yield call(exceptionHandler, { e: e, redirectError: true });
+
+      yield put({
+        type: FAILURE,
+        payload: action.payload,
+        error: true,
+        errStatus: e.response.status,
+        errMessage: e.response.data.message,
+      });
+    } finally {
+      yield put(finishLoading(type));
+    }
+  };
+}
 
 function createSetAuthorRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
@@ -238,4 +280,5 @@ export default function* authorSaga() {
   yield takeLatest(GET_AUTHOR_LIST, getAuthorListSaga);
   yield takeLatest(SET_CURRENT_AUTHOR, setCurrentAuthorSaga);
   yield takeLatest(SET_AUTHOR, createSetAuthorRequestSaga(SET_AUTHOR));
+  yield takeLatest(GET_AUTHOR_POST_LIST, createGetAuthorPostListRequestSaga(GET_AUTHOR_POST_LIST));
 }
