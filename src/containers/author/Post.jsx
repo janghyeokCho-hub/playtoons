@@ -29,7 +29,6 @@ const Post = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    console.log('tab', tab);
     setSelectTab(tab);
   }, [tab]);
 

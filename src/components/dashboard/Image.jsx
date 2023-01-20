@@ -45,7 +45,9 @@ export default function Image(props) {
         getImage(hash);
       }
     }
+
+    return () => setStateImage(undefined);
   }, [hash]);
 
-  return <img className={`${className}${stateError ? ' error' : ''}`} src={stateImage} alt={alt} title={title} onClick={onClick} loading="lazy" onError={() => setStateError(true)} />;
+  return <img className={`${className}${stateError ? ' error' : ''}`} src={stateImage} alt={alt} title={title} onClick={onClick} onError={() => setStateError(true)} />;
 }

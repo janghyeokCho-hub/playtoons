@@ -1120,7 +1120,20 @@
 .author .lst_store1 .cx_thumb img.error{
   width: 0;
 }
+.author .lst_detail .item.ap{
+  min-height: 196px;
+}
+.lst_detail .thumb.center img{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
+
+.payment .area_payment .box_thumb .thumb span.plan{
+  background-size: auto;
+}
 .payment .area_payment .box_thumb .thumb span{
   background-size: contain;
 }
@@ -1134,6 +1147,7 @@
 .purchase.payment .area_payment .lst_exe .ico{
   margin-left: 4px;
 }
+
 
 /* ============================================================================== */
 /* header back button tablet & mobile css  */
@@ -1170,6 +1184,9 @@
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .author .lst_detail .item.ap{
+    min-height: auto;
+  }
   .layerPopup .pop_cont .btn-pk{
     font-size: 10px;
   }

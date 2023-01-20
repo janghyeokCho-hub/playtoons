@@ -69,15 +69,15 @@ function createSetCurrentAuthorRequestSaga(type) {
         if (response.status === 200) {
           const payload = response?.data?.author;
           /** 해당 작가의 게시물 목록 */
-          const postResponse = yield call(postApi.getPosts, {
-            authorId: payload?.id || action.payload,
-          });
+          // const postResponse = yield call(postApi.getPosts, {
+          //   authorId: payload?.id || action.payload,
+          // });
 
-          if (postResponse?.status === 200) {
-            payload.posts = postResponse?.data;
-          } else {
-            payload.posts = undefined;
-          }
+          // if (postResponse?.status === 200) {
+          //   payload.posts = postResponse?.data;
+          // } else {
+          //   payload.posts = undefined;
+          // }
 
           /** 해당 작가의 시리즈 목록 */
           const seriesResponse = yield call(postApi.getPostSeries, {

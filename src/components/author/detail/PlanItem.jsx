@@ -30,7 +30,7 @@ export default function PlanItem(props) {
           <p>・ダイヤモンドプランの内容＋psdファイルを公開しています。</p> */}
         </div>
         <Link to={`/payment/plan/${item.id}`} className="btn-pk b blue w100p" onClick={handleClickLink}>
-          <span>応援する</span>
+          <span>支援する</span>
         </Link>
       </div>
     </div>

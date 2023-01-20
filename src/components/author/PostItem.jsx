@@ -14,12 +14,13 @@ import {
 } from "@/services/postService";
 import { useDispatch } from "react-redux";
 import { currentPostInit } from "@/modules/redux/ducks/post";
+import Image from "../dashboard/Image";
+import { getDateYYYYMMDDHHmm } from "@/common/common";
 
 export default function PostItem (props)  {
   const { item } = props;
   const [post, setPost] = useState(null);
   const [isLock, setIsLock] = useState(true);
-  const { filePath, loading } = useFilePath(item?.thumbnailImage);
   const dispatch = useDispatch();
 
   const getPost = useCallback(async () => {
@@ -41,25 +42,32 @@ export default function PostItem (props)  {
     }
   }, [item]);
 
-  useEffect(() => {
-    getPost();
-    getPostContent();
-  }, []);
-
   const handleCurrentPostInit = useCallback(() => {
     dispatch(currentPostInit());
   }, [dispatch]);
 
+  useEffect(() => {
+    getPost();
+    getPostContent();
+
+    return () => {
+      setPost(null);
+      setIsLock(true);
+    }
+  }, [item]);
+
+
   return (
-    <li className="item">
+    <li className="item ap">
       {post && (
         <Link
           to={`/post/detail/${post.type.code}/${post?.id}`}
           state={{ item: post }}
           onClick={handleCurrentPostInit}
         >
-          <div className="thumb">
-            {!loading && <img src={filePath} alt="" />}
+          <div className="thumb center">
+            {/* {!loading && <img src={filePath} alt="" />} */}
+            <Image hash={item?.thumbnailImage} />
 
             {/* 잠금 시작 */}
             {isLock && (
@@ -79,7 +87,7 @@ export default function PostItem (props)  {
           </div>
           <div className="botm">
             <p className="d1">
-              {moment(post?.startAt).format("YYYY/MM/DD HH:mm")}
+              {getDateYYYYMMDDHHmm(post?.startAt)}
             </p>
             <button type="button" className="btn01">
               <FontAwesomeIcon icon={faHeart} style={{ marginRight: "7px" }} />

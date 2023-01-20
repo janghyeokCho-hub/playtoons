@@ -249,14 +249,14 @@ export default function DashboardMain() {
   };
 
   const renderReviewList = () => {
-      if( stateReview?.reviews?.length === 0 ){
-        return (
-          <EmptyDiv
-            className={"relative empty"}
-            text={`レビューがいません。`}
-          />
-        );
-      }
+    if( stateReview?.reviews?.length === 0 ){
+      return (
+        <EmptyDiv
+          className={"relative empty"}
+          text={`レビューがいません。`}
+        />
+      );
+    }
 
     return stateReview?.reviews?.map((item, index) => {
       return (
