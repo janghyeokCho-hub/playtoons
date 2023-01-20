@@ -20,7 +20,7 @@ const Author = ({ item }) => {
   return (
     <div className="box_profile">
       <Link
-        to={`/author/post/${item.id}`}
+        to={`/author/${item.id}/post/1`}
         state={{ item: item }}
         onClick={handleCurrentAuthorInit}
       >

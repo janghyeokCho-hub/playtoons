@@ -19,7 +19,7 @@ import { useLayoutEffect, useState } from "react";
 export default function Image(props) {
   const { alt, hash, className='', title, onClick, params } = props;
   const [stateImage, setStateImage] = useState(undefined);
-  const [stateError, setStateError] = useState(false);
+  const [stateError, setStateError] = useState("");
 
   const getImage = async (hash) => {
     const formData = new FormData();
@@ -33,7 +33,7 @@ export default function Image(props) {
     if (status === 200) {
       setStateImage(data?.url);
     } else {
-      setStateError(true);
+      setStateError(" error empty");
     }
   };
 
@@ -44,10 +44,10 @@ export default function Image(props) {
       } else {
         getImage(hash);
       }
+    } else {
+      setStateError(" error empty");
     }
-
-    return () => setStateImage(undefined);
   }, [hash]);
 
-  return <img className={`${className}${stateError ? ' error' : ''}`} src={stateImage} alt={alt} title={title} onClick={onClick} onError={() => setStateError(true)} />;
+  return <img className={`${className}${stateError}`} src={stateImage} alt={alt} title={title} onClick={onClick} onError={() => setStateError(true)} />;
 }

@@ -8,6 +8,7 @@ import { useState } from "react";
   hash값으로 이미지 url을 가져와서 span 태그에 뿌려줌.
    <ImageBackgroundSpan 
     className={"series_image"}
+    type={"span"}   //span, div
     hash={item.coverImage} 
     />
 *
@@ -32,7 +33,7 @@ export default function ImageBackground(props) {
     if (status === 200) {
       setStateImage(data?.url);
     } else {
-      setStateError(" error");
+      setStateError(" error empty");
     }
   };
 
@@ -43,6 +44,8 @@ export default function ImageBackground(props) {
       } else {
         getImage(hash);
       }
+    } else {
+      setStateError(" error empty");
     }
   }, [hash]);
 

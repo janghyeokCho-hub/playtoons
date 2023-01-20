@@ -1,4 +1,6 @@
 import IconWithText from "@/components/dashboard/IconWithText";
+import Image from "@/components/dashboard/Image";
+import ImageBackground from "@/components/dashboard/ImageBackground";
 import SeeMoreComent from "@/components/dashboard/SeeMoreComent";
 import PostItems from "@/components/webtoon/PostItems";
 import useFilePath from "@/hook/useFilePath";
@@ -12,7 +14,6 @@ import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
 import SwiperCore, { Navigation } from "swiper";
 import ReplyItems from "./ReplyItems";
 
@@ -28,18 +29,11 @@ const Novel = () => {
   const currentPost = useSelector(({ post }) => post.currentPost);
   const reduxAuthors = useSelector(({ post }) => post.authorMine?.authors);
   const [ stateIsAddComent, setStateIsAddComent ] = useState(false);
-  const { filePath: authorProfileImgURL, loading: authorProfileImgLoading } = useFilePath(currentPost?.author?.profileImage);
-  const { filePath: backgroundImgURL, loading: backgroundImgLoading } =
-    useFilePath(currentPost?.author?.backgroundImage);
   // content 접근 여부로 Lock 판단
   const isLock = currentPost?.isLock;
   const content = currentPost?.content;
-  const { filePath: contentURL, loading: contentLoading } =
-    useFilePath(content);
   // 로그인 한 사용자
   const userInfo = useSelector(({ login }) => login.userInfo);
-  const { filePath: myProfileImgURL, loading: myProfileLoading } = useFilePath(
-    userInfo?.profileImage || reduxAuthors?.[0].profileImage);
 
   useEffect(() => {
     dispatch(getCurrentPost({ id: id }));
@@ -107,7 +101,7 @@ const Novel = () => {
                     <p>500PC /月</p>
                     <p>クリエイターを支援してコンテンツ解禁！</p>
                     <Link
-                      to={`/author/post/${currentPost?.author?.id}`}
+                      to={`/author/${currentPost?.author?.id}/plan/1`}
                       state={{ tab: "PLAN" }}
                       className="btn-pk s blue bdrs"
                       onClick={handleCurrentAuthorInit}
@@ -121,14 +115,14 @@ const Novel = () => {
 
             <div className="area_detail3">
               <div className="box_profile">
-                {!backgroundImgLoading && (
-                  <ImgTmpProfileBgDiv bgImg={backgroundImgURL} />
-                )}
+                <ImageBackground 
+                  className={"bg"}
+                  type={"div"}
+                  hash={currentPost?.author?.backgroundImage}
+                  />
                 <div className="pf_txt">
                   <div className="icon">
-                    {!authorProfileImgLoading && (
-                      <img src={authorProfileImgURL} alt="profile" />
-                    )}
+                    <Image hash={currentPost?.author?.backgroundImage}  />
                   </div>
                   <p className="h1">{currentPost?.author?.nickname}</p>
                   <div className="btns">
@@ -146,9 +140,9 @@ const Novel = () => {
                     >
                       <span>フォロー</span>
                     </Link>
-                    <a href="#" className="btn-pk n blue2">
+                    <Link to={`/author/${currentPost?.author?.id}/plan/1`} className="btn-pk n blue2">
                       <span>支援する</span>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -158,9 +152,9 @@ const Novel = () => {
           <div className="wrap_comment">
             <div className="top_comm">
               <div className="imgs">
-                {!myProfileLoading && (
-                  <ImgProfileSpan bgImg={myProfileImgURL}></ImgProfileSpan>
-                )}
+                <ImageBackground 
+                  hash={userInfo?.profileImage || reduxAuthors?.[0].profileImage}
+                  />
               </div>
               <IconWithText
                 postInfo={currentPost}
@@ -192,17 +186,5 @@ const Novel = () => {
     </>
   );
 };
-
-const ImgProfileSpan = styled.span`
-  background-image: url(${(props) => props.bgImg});
-`;
-
-const ImgTmpProfileBgDiv = styled.div`
-  background-image: url(${(props) => props.bgImg});
-  height: 80px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-`;
 
 export default Novel;
