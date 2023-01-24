@@ -13,12 +13,16 @@ export const setSearch = createAction(SET_SEARCH);
  * login reducer 초기값
  */
 const initialState = {
+  keyword: null,
+  totalItems: 0,
   posts: [],
   postsMeta: null,
   series: [],
   seriesMeta: null,
   authors: [],
   authorsMeta: null,
+  tags: [],
+  tagsMeta: null,
 };
 
 const search = handleActions(
@@ -26,12 +30,20 @@ const search = handleActions(
     [SET_SEARCH_SUCCESS]: (state, action) => {
       return produce(state, (draft) => {
         /** SUCCESS 처리 */
+        draft.keyword = action.payload?.keyword;
         draft.posts = action.payload?.posts;
         draft.postsMeta = action.payload?.postsMeta;
         draft.series = action.payload?.series;
         draft.seriesMeta = action.payload?.seriesMeta;
         draft.authors = action.payload?.authors;
         draft.authorsMeta = action.payload?.authorsMeta;
+        draft.tags = action.payload?.tags;
+        draft.tagsMeta = action.payload?.tagsMeta;
+        draft.totalItems =
+          action.payload?.postsMeta?.totalItems +
+          action.payload?.seriesMeta?.totalItems +
+          action.payload?.authorsMeta?.totalItems +
+          action.payload?.tagsMeta?.totalItems;
       });
     },
   },

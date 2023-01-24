@@ -9,7 +9,7 @@ const SeriesItems = () => {
       <ul>
         {series?.length > 0 &&
           series?.map((item, index) => (
-            <SeriesItem key={`series_${index}`} item={item} />
+            <SeriesItem key={`series_${index}_${item.id}`} item={item} />
           ))}
       </ul>
     </div>

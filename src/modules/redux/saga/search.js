@@ -9,7 +9,9 @@ function createSetSearchRequestSaga(type) {
 
   return function* (action) {
     try {
-      const payload = {};
+      const payload = {
+        keyword: action.payload,
+      };
       const params = {
         keyword: action.payload,
         orderKey: "rank",
@@ -36,6 +38,14 @@ function createSetSearchRequestSaga(type) {
       if (authorResp?.status === 200) {
         payload.authors = authorResp?.data?.authors;
         payload.authorsMeta = authorResp?.data?.meta;
+      }
+
+      const tagsResp = yield call(searchApi.getSearchTags, {
+        post: { keyword: action.payload },
+      });
+      if (tagsResp?.status === 200) {
+        payload.tags = tagsResp?.data?.tags;
+        payload.tagsMeta = tagsResp?.data?.meta;
       }
 
       yield put({

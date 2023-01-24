@@ -25,3 +25,11 @@ export const getSearchAuthor = async (params) => {
     return { status: e.response.status, data: e };
   }
 };
+
+export const getSearchTags = async (params) => {
+  try {
+    return await apiServer("get", `/tag${getParamsToQuery(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

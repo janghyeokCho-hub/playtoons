@@ -7,6 +7,8 @@ import Author from "./Author";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
 import { faCircleXmark, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const Search = () => {
   const orderTypes = [
@@ -23,17 +25,27 @@ const Search = () => {
   const [isOrderOpen, setIsOrderOpen] = useState(false);
   const [selectOrder, setSelectOrder] = useState(orderTypes[0]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const keyword = useSelector(({ search }) => search.keyword);
+  const totalItems = useSelector(({ search }) => search.totalItems);
+  const tags = useSelector(({ search }) => search.tags);
+  const [selectTag, setSelectTag] = useState(null);
 
   const handleOrderChange = useCallback((item) => {
     setSelectOrder(item);
     setIsOrderOpen(false);
   }, []);
 
+  useEffect(() => {
+    if (tags?.length > 0 && !selectTag) {
+      setSelectTag(tags[0]);
+    }
+  }, [tags, selectTag]);
+
   return (
     <>
       <div className="top_search inr-c">
         <h2 className="m_tit1">
-          <span className="c-blue">“エヴァンゲリオン”</span>の検索結果 4112件
+          <span className="c-blue">“{keyword}”</span>の検索結果 {totalItems}件
         </h2>
         <div className="in ty1">
           <div className="lft">
@@ -68,9 +80,6 @@ const Search = () => {
           </div>
           {selectTab === "HASHTAG" && (
             <div className="main_sch">
-              <Link to="" className="btn-pk n blue bdrs">
-                すべて
-              </Link>
               <button
                 type="button"
                 className="btn_sch_input"
@@ -79,54 +88,22 @@ const Search = () => {
                 <FontAwesomeIcon icon={faMagnifyingGlass} /> ハッシュタグ検索
               </button>
 
-              <Link to="" className="btn-pk n blue2 bdrs">
-                異世界
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                SF
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                恋愛
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                アクション
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                日常
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                その他
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                日常
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
-              <Link to="" className="btn-pk n blue2 bdrs">
-                その他
-                <button type="button" className="btn_sch_del">
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              </Link>
+              {tags?.map((tag, index) => {
+                const selected = selectTag?.id === tag.id;
+                return (
+                  <Link
+                    key={`tag_${index}`}
+                    to=""
+                    className={`btn-pk n bdrs ${selected ? "blue" : "blue2"}`}
+                    onClick={() => setSelectTag(tag)}
+                  >
+                    {tag.name}
+                    <button type="button" className="btn_sch_del">
+                      <FontAwesomeIcon icon={faCircleXmark} />
+                    </button>
+                  </Link>
+                );
+              })}
             </div>
           )}
           {isPopupOpen && (
@@ -192,7 +169,9 @@ const Search = () => {
       </div>
       {selectTab === "ALL" && <All orderType={selectOrder} />}
       {selectTab === "SERIES" && <Series orderType={selectOrder} />}
-      {selectTab === "HASHTAG" && <Hashtag orderType={selectOrder} />}
+      {selectTab === "HASHTAG" && (
+        <Hashtag orderType={selectOrder} selectTag={selectTag} />
+      )}
       {selectTab === "AUTHOR" && <Author orderType={selectOrder} />}
     </>
   );
