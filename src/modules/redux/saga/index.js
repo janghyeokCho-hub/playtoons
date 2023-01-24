@@ -7,6 +7,7 @@ import homeSaga from "./home";
 import landingSaga from "./landing";
 import dashboardSaga from "./dashboard";
 import productSaga from "./product";
+import searchSaga from "./search";
 
 function* rootSaga() {
   // all 함수는 여러 사가를 합쳐 주는 역할을 함.
@@ -19,6 +20,7 @@ function* rootSaga() {
     landingSaga(),
     dashboardSaga(),
     productSaga(),
+    searchSaga(),
   ]);
 }
 export default rootSaga;

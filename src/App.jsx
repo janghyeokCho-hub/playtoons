@@ -20,7 +20,6 @@ import Purchase from "@CONTAINERS/purchase/index";
 import ToastContainer from "./components/ToastContainer";
 import { Route, Routes } from "react-router-dom";
 
-
 function App() {
   return (
     <>
@@ -39,7 +38,7 @@ function App() {
           <Route path="/payment/*" element={<Payment />} />
           <Route path="/product/*" element={<Product />} />
           <Route path="/mypage/*" element={<Mypage />} />
-          <Route path="/search/*" element={<Search />} />
+          <Route path="/search/:keyword" element={<Search />} />
           <Route path="/timeline/*" element={<Timeline />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/purchase/*" element={<Purchase />} />

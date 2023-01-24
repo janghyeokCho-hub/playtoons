@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getFileUrlFromServer } from "@API/fileService";
 
 /**
@@ -15,7 +15,6 @@ export default function useFilePath(hash, params) {
     setLoading(true);
     try {
       const response = await getFileUrlFromServer(hash, params);
-      console.log("response : ", response);
       if (response.status === 200) {
         setFilePath(response?.data?.url);
       }

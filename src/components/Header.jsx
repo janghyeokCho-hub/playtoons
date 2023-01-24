@@ -22,7 +22,6 @@ import { getAccount } from "@API/accountService";
 import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
 import { logoutRequest } from "@/modules/redux/ducks/login";
 import { clearUserData } from "@/utils/localStorageUtil";
-import { setPostLike } from "@API/postService";
 import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setDim } from "@/modules/redux/ducks/dim";
@@ -32,7 +31,7 @@ import { getAuthorMineAction } from "@/modules/redux/ducks/post";
 import { useTranslation } from "react-i18next";
 
 const SearchComponent = ({ isMobile }) => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const searchRef = useRef(null);
@@ -43,8 +42,7 @@ const SearchComponent = ({ isMobile }) => {
   }, [dispatch, isShow]);
 
   const handleEnter = useCallback(() => {
-    console.log(searchRef?.current?.value);
-    navigate("/search/all", { state: { text: searchRef?.current?.value } });
+    navigate(`/search/${searchRef?.current?.value}`);
   }, [navigate, searchRef]);
 
   const handleSearchTextClear = useCallback(() => {
@@ -144,7 +142,7 @@ const SearchComponent = ({ isMobile }) => {
 };
 
 const Header = ({ className, onSideMenu }) => {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   /** 헤더 통합하면서 추가됨 */
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -377,19 +375,19 @@ const Header = ({ className, onSideMenu }) => {
                             <p className="c1">
                               <span className="c-blue">100,324,394</span>
                               <a href="#" className="btn-pk s blue bdrs">
-                              {t(`header.charge`)}
+                                {t(`header.charge`)}
                               </a>
                             </p>
                           </div>
                           <ul>
                             <li onClick={() => setIsProfileShow(false)}>
                               <Link to="/author/register">
-                              {t(`header.registerCreator`)}
+                                {t(`header.registerCreator`)}
                               </Link>
                             </li>
                             <li onClick={() => setIsProfileShow(false)}>
                               <a className="pointer" onClick={handleDashboard}>
-                              {t(`header.dashboard`)}
+                                {t(`header.dashboard`)}
                               </a>
                             </li>
                           </ul>
@@ -610,14 +608,20 @@ const Header = ({ className, onSideMenu }) => {
                 </div>
                 <div className="pop_cont">
                   <ul>
-                    <li className={`${i18n.language === 'ja-JP' ? 'on' : ''}`}>
-                      <a onClick={() => handleLanguage('ja-JP')} >{t(`header.ja-JP`)}</a>
+                    <li className={`${i18n.language === "ja-JP" ? "on" : ""}`}>
+                      <a onClick={() => handleLanguage("ja-JP")}>
+                        {t(`header.ja-JP`)}
+                      </a>
                     </li>
-                    <li className={`${i18n.language === 'ko-KR' ? 'on' : ''}`}>
-                      <a onClick={() => handleLanguage('ko-KR')}>{t(`header.ko-KR`)}</a>
+                    <li className={`${i18n.language === "ko-KR" ? "on" : ""}`}>
+                      <a onClick={() => handleLanguage("ko-KR")}>
+                        {t(`header.ko-KR`)}
+                      </a>
                     </li>
-                    <li className={`${i18n.language === 'en-US' ? 'on' : ''}`}>
-                      <a onClick={() => handleLanguage('en-US')}>{t(`header.en-US`)}</a>
+                    <li className={`${i18n.language === "en-US" ? "on" : ""}`}>
+                      <a onClick={() => handleLanguage("en-US")}>
+                        {t(`header.en-US`)}
+                      </a>
                     </li>
                   </ul>
                 </div>

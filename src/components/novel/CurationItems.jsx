@@ -65,10 +65,14 @@ const CurationItems = ({ curationNum }) => {
             prevRef?.current?.classList?.add("slide_st");
           }}
         >
-          {renderItems}
+          <div className="swiper-wrapper">{renderItems}</div>
         </Swiper>
-        
-        <div className={`swiper-pagination my1 ${windowSize.width < 961 ? 'none' : ''}`}></div>
+
+        <div
+          className={`swiper-pagination my1 ${
+            windowSize.width < 961 ? "none" : ""
+          }`}
+        ></div>
 
         <button
           ref={prevRef}

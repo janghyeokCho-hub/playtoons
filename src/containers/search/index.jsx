@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { setContainer } from "@/modules/redux/ducks/container";
 import Search from "@COMPONENTS/search/Search";
 import Store from "@COMPONENTS/search/Store";
+import { setSearch } from "@/modules/redux/ducks/search";
 
 const App = () => {
   const dispatch = useDispatch();
+  const params = useParams();
   const [selectTab, setSelectTab] = useState("SEARCH");
 
   const handleContainer = useCallback(() => {
@@ -27,6 +29,12 @@ const App = () => {
   useEffect(() => {
     handleContainer();
   }, []);
+
+  useEffect(() => {
+    if (params?.keyword) {
+      dispatch(setSearch(params?.keyword));
+    }
+  }, [dispatch, params.keyword]);
   return (
     <>
       <div className="hd_tabbox">

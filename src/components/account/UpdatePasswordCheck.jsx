@@ -38,7 +38,6 @@ const UpdatePasswordCheck = () => {
     }
 
     const response = await loginPasswordCheck({ password });
-    console.log("response : ", response);
     const { status } = response;
     if (status === 200) {
       navigate("../update-password-confirm");

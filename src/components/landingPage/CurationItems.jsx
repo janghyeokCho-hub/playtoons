@@ -16,7 +16,6 @@ const CurationItems = ({ curationNum }) => {
 
   const prevRef = useRef(null);
   const nextRef = useRef(null);
-  console.log("curationNum : ", curationNum);
   const curations = useSelector(({ landing }) => landing?.curations);
 
   const [items, setItems] = useState([]);
