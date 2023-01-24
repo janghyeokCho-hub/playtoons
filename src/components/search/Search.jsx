@@ -28,6 +28,7 @@ const Search = () => {
   const keyword = useSelector(({ search }) => search.keyword);
   const totalItems = useSelector(({ search }) => search.totalItems);
   const tags = useSelector(({ search }) => search.tags);
+  const authors = useSelector(({ search }) => search.authors);
   const [selectTag, setSelectTag] = useState(null);
 
   const handleOrderChange = useCallback((item) => {
@@ -172,7 +173,19 @@ const Search = () => {
       {selectTab === "HASHTAG" && (
         <Hashtag orderType={selectOrder} selectTag={selectTag} />
       )}
-      {selectTab === "AUTHOR" && <Author orderType={selectOrder} />}
+      {selectTab === "AUTHOR" && (
+        <div className="area_schmain2 inr-c">
+          <div className="lst_sch_profile">
+            {authors?.map((author, index) => (
+              <Author
+                key={`author_${index}`}
+                item={author}
+                orderType={selectOrder}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 };
