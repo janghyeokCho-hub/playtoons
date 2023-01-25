@@ -50,6 +50,7 @@ function createSetSearchRequestSaga(type) {
 
       const productResp = yield call(searchApi.getSearchProducts, {
         keyword: action.payload,
+        limit: 100,
       });
 
       if (productResp?.status === 200) {

@@ -39,7 +39,7 @@ const Store = () => {
   }, []);
 
   const getSearchProducts = useCallback(async () => {
-    const params = { keyword: keyword };
+    const params = { keyword: keyword, limit: 100 };
     if (selectCategory !== null) {
       params.categoryId = selectCategory;
     }
