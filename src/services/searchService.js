@@ -33,3 +33,11 @@ export const getSearchTags = async (params) => {
     return { status: e.response.status, data: e };
   }
 };
+
+export const getSearchProducts = async (params) => {
+  try {
+    return await apiServer("get", `/shop/product${getParamsToQuery(params)}`);
+  } catch (e) {
+    return { status: e.response.status, data: e };
+  }
+};

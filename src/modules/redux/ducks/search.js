@@ -23,6 +23,8 @@ const initialState = {
   authorsMeta: null,
   tags: [],
   tagsMeta: null,
+  totalProductItems: 0,
+  productCategories: [],
 };
 
 const search = handleActions(
@@ -39,6 +41,9 @@ const search = handleActions(
         draft.authorsMeta = action.payload?.authorsMeta;
         draft.tags = action.payload?.tags;
         draft.tagsMeta = action.payload?.tagsMeta;
+        draft.productCategories = action.payload?.productCategories;
+        draft.totalProductItems = action.payload?.totalProductItems;
+        // totalItems에 productsMeta.totalItems는 미포함
         draft.totalItems =
           action.payload?.postsMeta?.totalItems +
           action.payload?.seriesMeta?.totalItems +

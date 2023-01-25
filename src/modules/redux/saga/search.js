@@ -2,7 +2,7 @@ import { takeLatest, call, put } from "redux-saga/effects";
 import { SET_SEARCH } from "@REDUX/ducks/search";
 import { exceptionHandler } from "@REDUX/saga/createRequestSaga";
 import * as searchApi from "@API/searchService";
-
+import { getProductCategory } from "@API/storeService";
 function createSetSearchRequestSaga(type) {
   const SUCCESS = `${type}_SUCCESS`;
   const FAILURE = `${type}_FAILURE`;
@@ -46,6 +46,20 @@ function createSetSearchRequestSaga(type) {
       if (tagsResp?.status === 200) {
         payload.tags = tagsResp?.data?.tags;
         payload.tagsMeta = tagsResp?.data?.meta;
+      }
+
+      const productResp = yield call(searchApi.getSearchProducts, {
+        keyword: action.payload,
+      });
+
+      if (productResp?.status === 200) {
+        payload.totalProductItems = productResp?.data?.meta?.totalItems;
+      }
+
+      const productCategoryResp = yield call(getProductCategory, 1);
+      if (productCategoryResp?.status === 200) {
+        payload.productCategories =
+          productCategoryResp?.data?.productCategories;
       }
 
       yield put({
