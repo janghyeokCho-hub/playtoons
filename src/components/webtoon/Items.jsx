@@ -18,14 +18,14 @@ import EmptyDiv from "../dashboard/EmptyDiv";
 
 const orderByMenus = [
   {
-    // 신작순
-    code: "recent",
-    name: "新着順",
-  },
-  {
     // 추천순
     code: "recommend",
     name: "おすすめ順",
+  },
+  {
+    // 신작순
+    code: "recent",
+    name: "新着順",
   },
   {
     // 평가순
@@ -52,7 +52,7 @@ const Items = ({ tab, typeId }) => {
     delete params["short"];
 
     params.typeId = typeId;
-    params.orderKey = reduxWebtoon?.orderKey.code || 'recent';
+    params.orderKey = reduxWebtoon?.orderKey.code || 'recommend';
     params.order = "DESC";
     params.limit = 16;
 
