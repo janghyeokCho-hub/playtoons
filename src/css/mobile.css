@@ -4583,4 +4583,122 @@
     height: 32px;
     line-height: 30px;
   }
+
+
+  /*202301 추가-3차*/
+  .et_top1 {border-top: 1px solid #DDE1E5;}
+  .et_top1 .mw100p {width: 100% !important; margin-right: 0;}
+
+  /*subscribe*/
+  .slider_profile.subscribe {padding-top: 16px;}
+  .slider_profile.subscribe .box_profile .pf_thumb {height: 70px;}
+
+  .line_subscribe .s0 .i-txt {padding: 4px 8px;}
+  .line_subscribe .s1 {font-size: 14px;}
+
+
+  /*follow_list*/
+  .t_total {font-size: 12px;}
+
+  #container.follow .hd_titbox2 {padding-left: 16px; margin-bottom: 24px;}
+  #container.follow .t_total {margin-bottom: 18px;}
+  #container.follow .m_tit1 {color: #13161A;}
+
+
+  .lst_follow {padding: 0 16px;}
+  .lst_follow li {width: 100%; margin-left: 0; margin-bottom: 16px;}
+  .lst_follow li:last-child {margin-bottom: 0;}
+  .lst_follow li a {padding: 16px 16px 16px 64px;}
+  .lst_follow .f_thumb {left: 16px; top: 16px; width: 40px; height: 40px;}
+  .lst_follow .f_tit {margin-bottom: 5px; font-size: 12px;}
+  .lst_follow .f_txt {padding-right: 76px; font-size: 12px; line-height: 1.5;}
+  .lst_follow .btn-pk.n {padding: 0 8px; font-size: 10px; line-height: 20px;}
+
+
+
+  .lst_radiotx {}
+  .lst_radiotx .inp_radio {margin-top: 8px;}
+  .lst_radiotx .inp_radio input + span {padding: 12px 16px 12px 64px; font-size: 14px;}
+
+  .lst_radiotx .inp_radio input:checked + span {border-color: #394BC2;}
+  .lst_radiotx .inp_radio input:checked + span .l {color: #394BC2;}
+
+  .lst_radiotx .inp_radio input + span::after, 
+  .lst_radiotx .inp_radio input + span:after {width: 22px; height: 22px;}
+  .lst_radiotx .inp_radio input:checked + span::before, 
+  .lst_radiotx .inp_radio input:checked + span:before {width: 14px; height: 14px;}
+
+
+  .box_radio {padding: 12px 16px 12px 12px; background-color: #fff;}
+  .box_radio div {width: 67px; margin-right: 5px;}
+  .box_radio p {font-size: 14px;}
+
+
+  /*payment*/
+  .box_paycomp1 {display: block; min-height:calc(100vh - 400px);}
+  .box_paycomp1.ty1 {min-height:calc(100vh - 350px);}
+
+  .box_paycomp1 .lft {position: relative; padding-bottom: 20px; margin-top: -10px;}
+  .box_paycomp1 .lft:after {
+    content:""; position: absolute; left: -16px; bottom: 0;
+    width: calc(100% + 32px); height: 3px; background-color: #F7F8F9;
+  }
+  .box_paycomp1 .c1 {margin-bottom: 5px; font-size: 28px; }
+  .box_paycomp1 .c2 {font-size: 14px; line-height: 1.4;}
+
+  .b_line {border: 1px solid #C3CAD2; border-radius: 4px;}
+  .minh_ty1 {min-height:calc(100vh - 415px);}
+
+  .area_payment .box_thumb .thumb {min-width:auto;}
+
+
+
+  /*purchase*/
+  .box_purchase {padding: 0 16px; border-radius: 0; border: 0;}
+  .box_purchase .col {display: block; padding: 24px 0; border-bottom: 1px solid #C3CAD2; font-size: 14px;}
+  .box_purchase .col.line {padding-bottom: 24px;  margin-bottom: 0;}
+  .box_purchase .col:last-child {border-bottom: 0;}
+  .box_purchase .col .lft {width: auto; }
+  .box_purchase .h1 {margin-bottom: 15px; font-size: 16px;}
+  .box_purchase .t2 {margin-top: 5px;}
+  .box_purchase .icon > span {width: 100px;}
+
+  .fz_m1 {font-size: 28px !important; font-weight: 700;}
+
+
+  .rgh_purch.typ1 {position: relative; left: 0; border-width: 3px; padding-top: 16px; margin-top: 16px;}
+  .rgh_purch.typ1:after {
+    content:""; 
+    position: absolute; left: -16px; top: -3px; width: calc(100% + 32px);
+    height: 3px; background-color: #F7F8F9;
+  }
+  .btn-pk.gray_purchase {line-height: 32px; font-size: 12px;}
+
+  .inr-mc1 {margin-left: 16px; margin-right: 16px;}
+
+  .box_message {padding: 16px; font-size: 14px;}
+  .box_message .t1 {margin-bottom: 8px;}
+
+
+  /*202301 3차-수정사항*/
+  .header .pos_profile .box_drop > div, .header .pos_profile .box_drop > ul {margin: 0;}
+
+  .ico_write {padding-left: 26px;}
+  .ico_write:after {margin-top: -10px; width: 20px; height: 20px;}
+
+
+  .box_profile .bat {margin-top: 8px; margin-bottom: 24px; font-size: 12px; font-weight: 400;}
+  .box_profile .bat > span {padding: 4px 8px; }
+
+
+  .lst_comic1.long .cx_txt {padding: 10px 12px;}
+  .lst_comic1.long .cx_txt .h1 {margin: 4px 0;}
+  .lst_comic1.long .cx_txt .t2 {font-size: 11px;}
+  .lst_comic1.long .cx_txt .t_like {margin-top: 4px; font-size: 12px;}
+  .lst_comic1.long .cx_txt .t_like .i {margin-right: 4px;}
+
+  .box_area .b_cont .lst_comic1.long .swiper-container {padding: 7px 16px; margin-left: 0; width: 100%; }
+
+  .main_area .lst_comic1.long .mySwiper1 {height: calc(93.5vw + 250px); }
+  .main_area .lst_comic1.long .mySwiper1 .swiper-slide {height: calc((100% - 30px) / 2) !important;}
 }

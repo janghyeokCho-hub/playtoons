@@ -18,14 +18,14 @@ import Item from "./Item";
 
 const orderByMenus = [
   {
-    // 신작순
-    code: "recent",
-    name: "新着順",
-  },
-  {
     // 추천순
     code: "recommend",
     name: "おすすめ順",
+  },
+  {
+    // 신작순
+    code: "recent",
+    name: "新着順",
   },
   {
     // 평가순
@@ -49,7 +49,7 @@ const Items = ({ tab, typeId }) => {
     let params = {
       keyword: reduxNovel?.keyword || '', 
       page: reduxNovel?.page || 1,
-      orderKey: reduxNovel?.orderKey?.code || 'recent',
+      orderKey: reduxNovel?.orderKey?.code || 'recommend',
       typeId: typeId,
       order: "DESC",
       limit: 16,

@@ -1,4 +1,4 @@
-import { showOneButtonPopup } from "@/common/common";
+import { convertMoneyStyleString, getStringOfPrice, showOneButtonPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import ImageBackground from "@/components/dashboard/ImageBackground";
 import { setCurrentAuthor } from "@/modules/redux/ducks/author";
@@ -71,6 +71,7 @@ const Post = () => {
               </div>
               <p className="h1">{currentAuthor?.nickname}</p>
               <p className="t1">{currentAuthor?.description}</p>
+              <div class="bat"><span><strong class="c-blue">{convertMoneyStyleString(currentAuthor?.followCount)}</strong> フォロー中</span></div>
               <div className="btns">
                 <Link
                   to=""
@@ -136,6 +137,7 @@ const Post = () => {
               </li>
             </ul>
           </div>
+
           {selectTab === "post" && <PostItems />}
           {selectTab === "series" && <SeriesItems />}
           {selectTab === "plan" && <Plan />}

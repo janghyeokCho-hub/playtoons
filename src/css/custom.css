@@ -1078,7 +1078,7 @@
 /* ============================================================================== */
 .mpost .box_profile .empty,
 .mpost .box_profile .pf_txt .icon .empty{
-  background-color: #c3cad2;
+  /* background-color: #c3cad2; */
 }
 
 .post .db .wrap_detail{
@@ -1152,6 +1152,15 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+div.error.empty{
+  /* display: none; */
+  background-color: #dde1e5;
+}
+img.error.empty{
+  /* display: none; */
+  background-color: #c3cad2;
 }
 
 

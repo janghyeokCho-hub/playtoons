@@ -6,7 +6,6 @@ import Items from "@COMPONENTS/webtoon/Items";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import SwiperCore, { Navigation, Pagination } from "swiper";
 
 const Webtoon = () => {
   

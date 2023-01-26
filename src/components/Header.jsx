@@ -1,145 +1,28 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  useLayoutEffect,
-} from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { showOneButtonPopup } from "@/common/common";
+import { MOBILE_WIDTH } from "@/common/constant";
+import { useWindowSize } from "@/hook/useWindowSize";
+import { setMenuShow } from "@/modules/redux/ducks/container";
+import { getTempTokenRequest, logoutRequest, setUserInfo } from "@/modules/redux/ducks/login";
+import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import { clearUserData } from "@/utils/localStorageUtil";
+import { getAccount } from "@API/accountService";
 import {
-  faMagnifyingGlass,
-  faCircleXmark,
   faSquarePen,
-  faSquarePlus,
+  faSquarePlus
 } from "@fortawesome/pro-light-svg-icons";
 import { faCartCirclePlus } from "@fortawesome/pro-regular-svg-icons";
-import { faXmarkLarge, faGlobe } from "@fortawesome/pro-solid-svg-icons";
-import { faAngleLeft, faBars, faHeart } from "@fortawesome/pro-solid-svg-icons";
-import { getAccount } from "@API/accountService";
-import { setUserInfo, getTempTokenRequest } from "@/modules/redux/ducks/login";
-import { logoutRequest } from "@/modules/redux/ducks/login";
-import { clearUserData } from "@/utils/localStorageUtil";
-import useFilePath from "@/hook/useFilePath";
-import { useWindowSize } from "@/hook/useWindowSize";
-import { setDim } from "@/modules/redux/ducks/dim";
-import { setMenuShow } from "@/modules/redux/ducks/container";
-import { showOneButtonPopup } from "@/common/common";
-import { getAuthorMineAction } from "@/modules/redux/ducks/post";
+import { faAngleLeft, faBars, faHeart, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  useCallback, useEffect, useLayoutEffect, useState
+} from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import ImageBackground from "./dashboard/ImageBackground";
+import HeaderProfile from "./HeaderProfile";
+import HeaderSearchComponent from "./HeaderSearchComponent";
 
-const SearchComponent = ({ isMobile }) => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const searchRef = useRef(null);
-  const { isShow } = useSelector(({ dim }) => dim);
-
-  const handleChange = useCallback(() => {
-    dispatch(setDim({ dimType: "SEARCH", isShow: !isShow }));
-  }, [dispatch, isShow]);
-
-  const handleEnter = useCallback(() => {
-    navigate(`/search/${searchRef?.current?.value}`);
-  }, [navigate, searchRef]);
-
-  const handleSearchTextClear = useCallback(() => {
-    if (searchRef?.current) {
-      searchRef.current.value = "";
-      handleSearchTextFocus();
-    }
-  }, [searchRef]);
-
-  const handleSearchTextFocus = useCallback(() => {
-    if (searchRef?.current) {
-      searchRef.current.focus();
-    }
-  }, [searchRef]);
-
-  useEffect(() => {}, [searchRef]);
-
-  return (
-    <>
-      {(isMobile && (
-        <>
-          {isShow && (
-            <div className={`box_hd_sch ${isShow ? "open" : ""}`}>
-              <input
-                ref={searchRef}
-                type="text"
-                className="inp_txt"
-                placeholder={t(`header.searchPlaceholder`)}
-                onKeyUp={(e) => {
-                  if (e.key === "Enter") {
-                    handleEnter();
-                  }
-                }}
-              />
-              <button
-                type="button"
-                className="btn_hd_del"
-                onClick={handleSearchTextClear}
-              >
-                <span>
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </span>
-              </button>
-              {/*<!-- 삭제버튼 추가 -->*/}
-              <button type="button" className="btns" onClick={handleChange}>
-                <span>
-                  <FontAwesomeIcon icon={faMagnifyingGlass} />
-                </span>
-              </button>
-            </div>
-          )}
-        </>
-      )) || (
-        <div className="box_hd_sch">
-          <input
-            ref={searchRef}
-            type="text"
-            className="inp_txt"
-            placeholder={t(`header.searchPlaceholder`)}
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                handleEnter();
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="btn_hd_del"
-            onClick={handleSearchTextClear}
-          >
-            <span>
-              <FontAwesomeIcon icon={faCircleXmark} />
-            </span>
-          </button>
-          {/*<!-- 삭제버튼 추가 -->*/}
-          <button
-            type="button"
-            className="btns"
-            onClick={handleSearchTextFocus}
-          >
-            <span>
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </span>
-          </button>
-        </div>
-      )}
-
-      <button
-        type="button"
-        className="mo_btns view-m"
-        onClick={() => handleChange()}
-      >
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-      </button>
-    </>
-  );
-};
 
 const Header = ({ className, onSideMenu }) => {
   const { t, i18n } = useTranslation();
@@ -164,9 +47,6 @@ const Header = ({ className, onSideMenu }) => {
   const [isProfileShow, setIsProfileShow] = useState(false);
   const [isUserBoxShow, setIsUserBoxShow] = useState(false);
   const [isLanguageShow, setIsLanguageShow] = useState(false);
-  const { filePath, loading } = useFilePath(
-    userInfo?.profileImage || reduxAuthors?.[0]?.profileImage
-  );
   const windowSize = useWindowSize();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -179,6 +59,10 @@ const Header = ({ className, onSideMenu }) => {
   const code = searchParams.get("code");
   const homeURL = isLogined ? "/home" : "/";
 
+  //==============================================================================
+  // hook
+  //==============================================================================
+
   useEffect(() => {
     if (isMenuShow === undefined) {
       dispatch(setMenuShow(true));
@@ -186,7 +70,7 @@ const Header = ({ className, onSideMenu }) => {
   }, [dispatch, isMenuShow]);
 
   useEffect(() => {
-    setIsMobile(windowSize.width < 961);
+    setIsMobile(windowSize.width <= MOBILE_WIDTH);
   }, [windowSize]);
 
   useEffect(() => {
@@ -214,6 +98,25 @@ const Header = ({ className, onSideMenu }) => {
       setRenderType(null);
     };
   }, [type]);
+
+  useLayoutEffect(() => {
+    if (userInfo && !reduxAuthors) {
+      //accessToken 이 없는 상태로 api 호출을 하는 경우가 있으니 userInfo 필요
+      dispatch(getAuthorMineAction());
+    }
+  }, [userInfo, reduxAuthors]);
+
+  useEffect(() => {
+    let tempType = type;
+    if (type !== "post") {
+      tempType = isLogined ? type : "logout";
+    }
+    setRenderType(tempType);
+  }, [isLogined, type]);
+
+  //==============================================================================
+  // function
+  //==============================================================================
 
   const handleLogout = useCallback(() => {
     clearUserData();
@@ -246,30 +149,18 @@ const Header = ({ className, onSideMenu }) => {
     }
   }, [reduxAuthors]);
 
-  useLayoutEffect(() => {
-    if (userInfo && !reduxAuthors) {
-      //accessToken 이 없는 상태로 api 호출을 하는 경우가 있으니 userInfo 필요
-      dispatch(getAuthorMineAction());
-    }
-  }, [userInfo, reduxAuthors]);
-
-  useEffect(() => {
-    let tempType = type;
-    if (type !== "post") {
-      tempType = isLogined ? type : "logout";
-    }
-    setRenderType(tempType);
-  }, [isLogined, type]);
-
   const handleLanguage = (id) => {
     i18n.changeLanguage(id);
   };
+
+  //==============================================================================
+  // render
+  //==============================================================================
 
   return (
     <div className="open">
       <header id="header" className={headerClass}>
         {/* logout, login, author, webtoon, novel */}
-
         <>
           {((isMobile && isDetailView && renderType === "post") ||
             !isDetailView) && (
@@ -295,7 +186,7 @@ const Header = ({ className, onSideMenu }) => {
                   </h1>
 
                   <div className="rgh">
-                    <SearchComponent
+                    <HeaderSearchComponent
                       isMobile={isMobile}
                       windowSize={windowSize}
                     />
@@ -350,88 +241,19 @@ const Header = ({ className, onSideMenu }) => {
                       }}
                     >
                       <button type="button" className="btn_profile">
-                        {!loading && (
-                          <ImgProfileSpan bgImg={filePath}></ImgProfileSpan>
-                        )}
+                        <ImageBackground type={"span"} hash={userInfo?.profileImage || reduxAuthors?.[0]?.profileImage} />
                       </button>
 
                       {isProfileShow && (
-                        <div className="box_drop">
-                          <div className="top">
-                            <button
-                              type="button"
-                              className="btn_box_close"
-                              onClick={() => setIsProfileShow(false)}
-                            >
-                              <FontAwesomeIcon icon={faXmarkLarge} />{" "}
-                              {/* {t(`header.profile`)} */}
-                            </button>
-                          </div>
-                          <div className="bt">
-                            <p className="t2">
-                              {userInfo?.name || userInfo?.email}
-                            </p>
-                            <p className="t1">{t(`header.vaildatePoint`)}</p>
-                            <p className="c1">
-                              <span className="c-blue">100,324,394</span>
-                              <a href="#" className="btn-pk s blue bdrs">
-                                {t(`header.charge`)}
-                              </a>
-                            </p>
-                          </div>
-                          <ul>
-                            <li onClick={() => setIsProfileShow(false)}>
-                              <Link to="/author/register">
-                                {t(`header.registerCreator`)}
-                              </Link>
-                            </li>
-                            <li onClick={() => setIsProfileShow(false)}>
-                              <a className="pointer" onClick={handleDashboard}>
-                                {t(`header.dashboard`)}
-                              </a>
-                            </li>
-                          </ul>
-                          <ul>
-                            <li>
-                              <a href="#">{t(`header.supporingCreator`)}</a>
-                            </li>
-                            <li>
-                              <a href="#">{t(`header.followingCreator`)}</a>
-                            </li>
-                          </ul>
-                          <ul>
-                            <li onClick={() => navigate("/mypage/purchase")}>
-                              {/* 구매 목록 */}
-                              <Link to="">{t(`header.purchaseList`)}</Link>
-                            </li>
-                            <li onClick={() => navigate("/mypage/review")}>
-                              {/* 리뷰 목록 */}
-                              <Link to="">{t(`header.reviewList`)}</Link>
-                            </li>
-                            <li onClick={() => navigate("/mypage/inquiry")}>
-                              {/* 문의 목록 */}
-                              <Link to="">{t(`header.contactList`)}</Link>
-                            </li>
-                          </ul>
-                          <ul>
-                            <li>
-                              <a href="#">{t(`header.setting`)}</a>
-                            </li>
-                            <li onClick={() => handleLogout()}>
-                              <Link to={homeURL}>{t(`header.logout`)}</Link>
-                            </li>
-                          </ul>
-                          <div>
-                            <button
-                              type="button"
-                              className="btn-pk n gray bdrs"
-                              onClick={() => setIsLanguageShow(true)}
-                            >
-                              <FontAwesomeIcon icon={faGlobe} />
-                              {` ${t(`header.${i18n.language}`)}`}
-                            </button>
-                          </div>
-                        </div>
+                        <HeaderProfile 
+                          userInfo={userInfo} 
+                          author={reduxAuthors}
+                          homeURL={homeURL} 
+                          onClickShowProfile={(flag) => setIsProfileShow(flag)} 
+                          onClickDashboard={() => handleDashboard()} 
+                          onClickLogout={() => handleLogout()} 
+                          onClickLanguage={(flag) => setIsLanguageShow(flag)}
+                          />
                       )}
                     </div>
                   </div>
@@ -458,7 +280,7 @@ const Header = ({ className, onSideMenu }) => {
                   </h1>
 
                   <div className="rgh">
-                    <SearchComponent />
+                    <HeaderSearchComponent isMobile={isMobile} />
 
                     <Link to="/account" className="btn_log btn-pk n blue bdrs">
                       <span>{t(`header.login`)}</span>
@@ -504,6 +326,7 @@ const Header = ({ className, onSideMenu }) => {
             </div>
           </>
         )}
+
         {isDetailView && (renderType === "post" || renderType === "product") && (
           <div className="inr-c">
             <button
@@ -651,9 +474,5 @@ const Header = ({ className, onSideMenu }) => {
     </div>
   );
 };
-
-const ImgProfileSpan = styled.span`
-  background-image: url(${(props) => props.bgImg});
-`;
 
 export default Header;

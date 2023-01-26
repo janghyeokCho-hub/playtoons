@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
-import CurationItems from "@COMPONENTS/landingPage/CurationItems";
-import AuthorItems from "@COMPONENTS/landingPage/AuthorItems";
-import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
-import { Link } from "react-router-dom";
-import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
 import { setLanding } from "@/modules/redux/ducks/landing";
+import AuthorItems from "@COMPONENTS/landingPage/AuthorItems";
+import CurationItems from "@COMPONENTS/landingPage/CurationItems";
+import PostTypeItems from "@COMPONENTS/landingPage/PostTypeItems";
+import { faCircleXmark } from "@fortawesome/pro-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const LandingPage = (props) => {
   const dispatch = useDispatch();
