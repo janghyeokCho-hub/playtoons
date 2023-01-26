@@ -390,8 +390,6 @@ select.w100p {
 .ui-datepicker-title span {font-weight:700; font-size:16px; line-height:30px; color:#000;}
 .ui-datepicker-prev,
 .ui-datepicker-next {position:absolute; top:0; text-indent:-9999px; width:30px; height:30px; background-repeat:no-repeat; background-position:center center; cursor:pointer;}
-.ui-datepicker-prev {left:0; background-image:url('../images/common/ico_calendar_prev.png');}
-.ui-datepicker-next {right:0; background-image:url('../images/common/ico_calendar_next.png');}
 
 
 .ui-datepicker-trigger {position:absolute; width: 15px; margin-left:-20px; margin-top:14px; vertical-align: top;}
