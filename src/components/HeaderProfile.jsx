@@ -1,10 +1,18 @@
 import { faGlobe, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function HeaderProfile(props) {
-  const { userInfo, homeURL, onClickShowProfile, onClickDashboard, onClickLogout, onClickLanguage } = props;
+  const {
+    userInfo,
+    author,
+    homeURL,
+    onClickShowProfile,
+    onClickDashboard,
+    onClickLogout,
+    onClickLanguage,
+  } = props;
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -16,14 +24,12 @@ export default function HeaderProfile(props) {
           className="btn_box_close"
           onClick={() => onClickShowProfile?.(false)}
         >
-          <FontAwesomeIcon icon={faXmarkLarge} />{" "}
-          {/* {t(`header.profile`)} */}
+          <FontAwesomeIcon icon={faXmarkLarge} />{`  ${t(`header.profile`)}`}
         </button>
       </div>
+
       <div className="bt">
-        <p className="t2">
-          {userInfo?.name || userInfo?.email}
-        </p>
+        <p className="t2">{userInfo?.name || userInfo?.email || t(`header.userNickname`)}</p>
         <p className="t1">{t(`header.vaildatePoint`)}</p>
         <p className="c1">
           <span className="c-blue">100,324,394</span>
@@ -32,18 +38,7 @@ export default function HeaderProfile(props) {
           </a>
         </p>
       </div>
-      <ul>
-        <li onClick={() => onClickShowProfile?.(false)}>
-          <Link to="/author/register">
-            {t(`header.registerCreator`)}
-          </Link>
-        </li>
-        <li onClick={() => onClickShowProfile?.(false)}>
-          <a className="pointer" onClick={onClickDashboard}>
-            {t(`header.dashboard`)}
-          </a>
-        </li>
-      </ul>
+
       <ul>
         <li>
           <a href="#">{t(`header.supporingCreator`)}</a>
@@ -52,6 +47,7 @@ export default function HeaderProfile(props) {
           <a href="#">{t(`header.followingCreator`)}</a>
         </li>
       </ul>
+
       <ul>
         <li onClick={() => navigate("/mypage/purchase")}>
           {/* 구매 목록 */}
@@ -66,6 +62,34 @@ export default function HeaderProfile(props) {
           <Link to="">{t(`header.contactList`)}</Link>
         </li>
       </ul>
+
+      {
+        author && author?.length > 0 ? (
+          //작가회원
+          <ul>
+            <li>
+              <a>
+                <strong className="c-black">{author?.[0].nickname}</strong>
+              </a>
+            </li>
+            <li>
+              <a className="pointer" onClick={onClickDashboard}>
+                {t(`header.dashboard`)}
+              </a>
+            </li>
+          </ul>
+        ) : (
+          // 일반회원 
+          <ul>
+            <li onClick={() => onClickShowProfile?.(false)}>
+              <Link to="/author/register">
+                <span className="ico_write">{t(`header.registerCreator`)}</span>
+              </Link>
+            </li>
+          </ul>
+        )
+      }
+
       <ul>
         <li>
           <a href="#">{t(`header.setting`)}</a>
@@ -74,6 +98,7 @@ export default function HeaderProfile(props) {
           <Link to={homeURL}>{t(`header.logout`)}</Link>
         </li>
       </ul>
+
       <div>
         <button
           type="button"
@@ -85,5 +110,5 @@ export default function HeaderProfile(props) {
         </button>
       </div>
     </div>
-  )
+  );
 }

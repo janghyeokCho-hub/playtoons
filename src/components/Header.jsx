@@ -1,4 +1,5 @@
 import { showOneButtonPopup } from "@/common/common";
+import { MOBILE_WIDTH } from "@/common/constant";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { setMenuShow } from "@/modules/redux/ducks/container";
 import { getTempTokenRequest, logoutRequest, setUserInfo } from "@/modules/redux/ducks/login";
@@ -10,7 +11,7 @@ import {
   faSquarePlus
 } from "@fortawesome/pro-light-svg-icons";
 import { faCartCirclePlus } from "@fortawesome/pro-regular-svg-icons";
-import { faAngleLeft, faBars, faGlobe, faHeart, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
+import { faAngleLeft, faBars, faHeart, faXmarkLarge } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   useCallback, useEffect, useLayoutEffect, useState
@@ -69,7 +70,7 @@ const Header = ({ className, onSideMenu }) => {
   }, [dispatch, isMenuShow]);
 
   useEffect(() => {
-    setIsMobile(windowSize.width < 961);
+    setIsMobile(windowSize.width <= MOBILE_WIDTH);
   }, [windowSize]);
 
   useEffect(() => {
@@ -147,7 +148,6 @@ const Header = ({ className, onSideMenu }) => {
       );
     }
   }, [reduxAuthors]);
-  
 
   const handleLanguage = (id) => {
     i18n.changeLanguage(id);
@@ -161,7 +161,6 @@ const Header = ({ className, onSideMenu }) => {
     <div className="open">
       <header id="header" className={headerClass}>
         {/* logout, login, author, webtoon, novel */}
-
         <>
           {((isMobile && isDetailView && renderType === "post") ||
             !isDetailView) && (
@@ -247,12 +246,13 @@ const Header = ({ className, onSideMenu }) => {
 
                       {isProfileShow && (
                         <HeaderProfile 
-                        userInfo={userInfo} 
-                        homeURL={homeURL} 
-                        onClickShowProfile={(flag) => setIsProfileShow(flag)} 
-                        onClickDashboard={() => handleDashboard()} 
-                        onClickLogout={() => handleLogout()} 
-                        onClickLanguage={(flag) => setIsLanguageShow(flag)}
+                          userInfo={userInfo} 
+                          author={reduxAuthors}
+                          homeURL={homeURL} 
+                          onClickShowProfile={(flag) => setIsProfileShow(flag)} 
+                          onClickDashboard={() => handleDashboard()} 
+                          onClickLogout={() => handleLogout()} 
+                          onClickLanguage={(flag) => setIsLanguageShow(flag)}
                           />
                       )}
                     </div>
@@ -326,6 +326,7 @@ const Header = ({ className, onSideMenu }) => {
             </div>
           </>
         )}
+
         {isDetailView && (renderType === "post" || renderType === "product") && (
           <div className="inr-c">
             <button
