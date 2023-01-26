@@ -6,9 +6,8 @@ import Toast from "./Toast";
 
 
 export default function SharePopup(props){
-  const { item } = props;
+  const { title, url } = props;
   const [ stateToast, setStateToast ] = useState({type: undefined, message: undefined, show: false});
-  const url = `${window.location.origin}/post/detail/${item?.type?.code}/${item?.id}`;
 
   const handleCopy = useCallback(() => {
     navigator.clipboard
@@ -44,10 +43,10 @@ export default function SharePopup(props){
     <>
       <ul>
         <li className="ico1 pointer">
-          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${item.title}&url=${url}`}>animate</a>
+          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${title}&url=${url}`}>animate</a>
         </li>
         <li className="ico2 pointer">
-          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${item.title}&url=${url}`}>twitter</a>
+          <a target="_blank" rel="noopener noreferrer" href={`http://twitter.com/share?text=${title}&url=${url}`}>twitter</a>
         </li>
         <li className="ico3 pointer">
           <a target="_blank" rel="noopener noreferrer" href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}>facebook</a>

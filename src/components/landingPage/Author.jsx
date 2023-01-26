@@ -3,6 +3,7 @@ import { currentAuthorInit } from "@/modules/redux/ducks/author";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import Image from "../dashboard/Image";
 import ImageBackground from "../dashboard/ImageBackground";
 
 const Author = ({ item }) => {
@@ -33,7 +34,8 @@ const Author = ({ item }) => {
         )}
         <div className="pf_txt">
           <div className="icon">
-            {!profileImgLoading && <img src={profileImgURL} alt="" />}
+            <Image hash={item?.profileImage} />
+            {/* {!profileImgLoading && <img src={profileImgURL} alt="" />} */}
           </div>
           <p className="h1">{item.nickname}</p>
           <p className="t1">{item.description}</p>

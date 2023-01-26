@@ -79,7 +79,7 @@ const Account = () => {
               />
             </Routes>
           </div>
-          <div class="t_desc hide-m"><span>阿修羅ゲート・PARAM</span></div>
+          <div className="t_desc hide-m"><span>阿修羅ゲート・PARAM</span></div>
         </div>
       </section>
     </div>

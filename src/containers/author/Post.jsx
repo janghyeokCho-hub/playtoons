@@ -1,9 +1,9 @@
-import { convertMoneyStyleString, getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { convertMoneyStyleString, showOneButtonPopup, showPopup } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import ImageBackground from "@/components/dashboard/ImageBackground";
+import SharePopup from "@/components/timeline/SharePopup";
 import { setCurrentAuthor } from "@/modules/redux/ducks/author";
 import { setAuthorFollow } from "@API/authorService";
-import SharePopup from "@COMPONENTS/author/detail/SharePopup";
 import PostItems from "@COMPONENTS/author/PostItems";
 import SeriesItems from "@COMPONENTS/author/SeriesItems";
 import StoreItems from "@COMPONENTS/author/StoreItems";
@@ -11,7 +11,7 @@ import { faShare } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Plan from "./Plan";
 
 const Post = () => {
@@ -32,19 +32,33 @@ const Post = () => {
     setSelectTab(tab);
   }, [tab]);
 
+  useEffect(() => {
+    if( isSharePopupShow ){
+      showPopup(
+        dispatch,
+        "シェアーする",
+        <SharePopup title={`[${currentAuthor?.nickname}] ${currentAuthor?.description}`} url={`${window.location}`} />,
+        () => setIsSharePopupShow(false),
+        "pop_share"
+      );
+    }
+  }, [isSharePopupShow]);
+
   const handleFollow = useCallback(
     async (type) => {
       if (currentAuthor?.id) {
         const response = await setAuthorFollow(type, currentAuthor.id);
         if (type === "post") {
           if (response?.status === 201) {
-            showOneButtonPopup(dispatch, 'フォローしました。');
+            // showOneButtonPopup(dispatch, 'フォローしました。');
+            dispatch(setCurrentAuthor(id));
           } else {
             showOneButtonPopup(dispatch, response?.data?.message);
           }
         } else {
           if (response?.status === 200) {
-            showOneButtonPopup(dispatch, 'アンフォローしました。');
+            // showOneButtonPopup(dispatch, 'アンフォローしました。');
+            dispatch(setCurrentAuthor(id));
           } else {
             showOneButtonPopup(dispatch, response?.data?.message);
           }
@@ -71,7 +85,7 @@ const Post = () => {
               </div>
               <p className="h1">{currentAuthor?.nickname}</p>
               <p className="t1">{currentAuthor?.description}</p>
-              <div class="bat"><span><strong class="c-blue">{convertMoneyStyleString(currentAuthor?.followCount)}</strong> フォロー中</span></div>
+              <div className="bat"><span><strong className="c-blue">{convertMoneyStyleString(currentAuthor?.followCount)}</strong> フォロー中</span></div>
               <div className="btns">
                 <Link
                   to=""
@@ -138,16 +152,13 @@ const Post = () => {
             </ul>
           </div>
 
-          {selectTab === "post" && <PostItems />}
+          {selectTab === "post" && <PostItems  />}
           {selectTab === "series" && <SeriesItems />}
           {selectTab === "plan" && <Plan />}
           {selectTab === "store" && <StoreItems />}
         </div>
       </div>
 
-      {isSharePopupShow && (
-        <SharePopup onClose={() => setIsSharePopupShow(false)} />
-      )}
     </div>
   );
 };

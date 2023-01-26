@@ -12,7 +12,7 @@ export default function ShareButton(props) {
     showPopup(
       dispatch,
       "シェアーする",
-      <SharePopup item={item} />,
+      <SharePopup title={`[${item.title}] ${item.outline}`} url={`${window.location.origin}/post/detail/${item?.type?.code}/${item?.id}`} />,
       () => onClick?.("init"),
       "pop_share"
     );

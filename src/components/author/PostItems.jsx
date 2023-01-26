@@ -1,6 +1,6 @@
 import { showOneButtonPopup } from "@/common/common";
 import { getPosts } from "@/services/postService";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import EmptyDiv from "../dashboard/EmptyDiv";
@@ -12,6 +12,8 @@ const PostItems = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
+  const id = params?.id;
+  const page = params?.page;
 
   const getPostList = async () => {
     const json = {
@@ -30,11 +32,11 @@ const PostItems = () => {
     
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if( params ){
       getPostList();
     }
-  }, [params]);
+  }, [id, page]);
 
   const renderPostList = () => {
     if( stateData?.meta?.totalItems === 0 ){
