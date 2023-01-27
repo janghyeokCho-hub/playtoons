@@ -1,6 +1,94 @@
-import { ReactComponent as StripeLogo } from '@IMAGES/stripe_logo.svg'
+import { convertMoneyStyleString, getStringOfPriceWithCurrency } from '@/common/common';
+import Button from '@/components/dashboard/Button';
+import Checkbox from '@/components/payment/Checkbox';
+import Coupon from '@/components/payment/Coupon';
+import PaymentPrice from '@/components/payment/PaymentPrice';
+import { setPaymentChargeAction } from '@/modules/redux/ducks/payment';
+import { ReactComponent as StripeLogo } from '@IMAGES/stripe_logo.svg';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 
 export default function Charge() {
+  const [ statePrice, setStatePrice ] = useState(undefined);
+  const [ stateBalance, setStateBalance ] = useState(53200);
+  const [ stateCoupon, setStateCoupon ] = useState(0);
+  const [ stateCheck, setStateCheck ] = useState(false);
+  const [ stateCheckError, setStateCheckError ] = useState(undefined);
+  const [ stateButtonStatus, setStateButtonStatus ] = useState(undefined);
+  const reduxUpload = useSelector(({payment}) => payment.chargeUpload);
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+
+  //==============================================================================
+  // function
+  //==============================================================================
+  /**
+     유효 PC
+  */
+  const getStringOfBalance = () => {
+    if( stateBalance === undefined ){
+      return 0;
+    }
+    
+    return convertMoneyStyleString(stateBalance);
+  };
+
+  /**
+     충전 PC
+  */
+  const getStringOfChargePC = () => {
+    if( statePrice === undefined ){
+      return 0;
+    }
+    
+    return convertMoneyStyleString(statePrice?.amount + statePrice?.bonusAmount);
+  };
+
+  /**
+     충전 후 유효 PC
+  */
+  const getStringOfTotalPC = () => {
+    if( stateBalance === undefined || statePrice === undefined  ){
+      return 0;
+    }
+    
+    return convertMoneyStyleString( stateBalance + (statePrice?.amount + statePrice?.bonusAmount) );
+  };
+
+  const handleCheck = (e) => {
+    if( e.target.checked === true ){
+      setStateCheckError(undefined);
+    }
+
+    setStateCheck(e.target.checked);
+  };
+
+  const handleCharge = (event, setStatus) => {
+    if( stateCheck === false ){
+      setStateCheckError("確認してください。");
+      setStatus(undefined);
+      return;
+    }
+
+    setStatus("loading");
+    dispatch( setPaymentChargeAction(statePrice) );
+  };
+  //==============================================================================
+  // api
+  //==============================================================================
+
+  //==============================================================================
+  // hook
+  //==============================================================================
+  useEffect(() => {
+    if(reduxUpload){
+      console.log('done', reduxUpload);
+    }
+  }, [reduxUpload]);
+  
+
   return (
     <div className="contents">
       <div className="inr-c">
@@ -14,55 +102,33 @@ export default function Charge() {
         </div>
 
         <div className="cont_payment">
-          <div className="area_payment">
-            <h2 className="tit1">チャージ金額を選択</h2>
-            <div className="lst_radiotx">
-              <label className="inp_radio"><input type="radio" name="radio10" checked/><span><span className="l">1,000PC</span><span className="r">1,000円</span></span></label>
-              <label className="inp_radio"><input type="radio" name="radio10"/><span><span className="l">3,000PC</span><span className="r">3,000円</span></span></label>
-              <label className="inp_radio"><input type="radio" name="radio10"/><span><span className="l">5,000PC</span><span className="r">5,000円</span></span></label>
-              <label className="inp_radio"><input type="radio" name="radio10"/><span><span className="l">10,000PC</span><span className="r">10,000円</span></span></label>
-              <label className="inp_radio"><input type="radio" name="radio10"/><span><span className="l">50,000PC</span><span className="r">50,000円</span></span></label>
-              <label className="inp_radio"><input type="radio" name="radio10"/><span><span className="l">100,000PC</span><span className="r">100,000円</span></span></label>
-            </div>
-          </div>
+          <PaymentPrice
+            onChange={(currency) => setStatePrice(currency)}
+          />
 
-          <div className="area_payment">
-            <h2 className="tit1">クーポン使用</h2>
-            <div className="col">
-              <h3 className="tit2">クーポン選択</h3>
-              <select name="" id="" className="select1 w100p">
-                <option value="">選択してください</option>
-              </select>
-            </div>
-            <div className="col">
-              <h3 className="tit2">クーポンコードを入力</h3>
-              <div className="inp_btn">
-                <input type="text" className="inp_txt w100p"/>
-                <button type="button" className="btn-pk n blue2">適用する</button>
-              </div>
-            </div>
-          </div>
+          <Coupon />
 
           
           <div className="area_payment total">
             <h2 className="tit1 view-m">お支払い金額</h2>
             <ul className="col list2">
-              <li className="c-black"><span>保有PC</span><span>531,200</span></li>
-              <li className="c-black"><span>チャージPC</span><span>5,000</span></li>
-              <li className="c-black"><span>チャージ後保有PC</span><span>536,200</span></li>
+              <li className="c-black"><span>保有PC</span><span>{getStringOfBalance()}</span></li>
+              <li className="c-black"><span>チャージPC</span><span>{getStringOfChargePC()}</span></li>
+              <li className="c-black"><span>チャージ後保有PC</span><span>{getStringOfTotalPC()}</span></li>
             </ul>
             <ul className="col list1">
-              <li><span>金額</span><span>10,000円</span></li>
-              <li><span>クーポン割引</span><span>500円</span></li>
+              <li><span>金額</span><span>{getStringOfPriceWithCurrency(statePrice?.price, t, i18n)}</span></li>
+              <li><span>クーポン割引</span><span>{getStringOfPriceWithCurrency(stateCoupon, t, i18n)}</span></li>
             </ul>
             <div className="col ta-c">
               <p className="tit2 hide-m">次の金額をお支払いします。</p>
-              <p className="c1"><span className="view-m">合計金額</span><span>9,500円</span></p>
+              <p className="c1"><span className="view-m">合計金額</span><span>{getStringOfPriceWithCurrency(statePrice?.price - stateCoupon, t, i18n)}</span></p>
 
               
-              {/* <!-- 1. 모바일에서 안보임 : 위치변경--> */}
-              <label className="inp_checkbox hide-m"><input type="checkbox"/><span>毎月のお支払いに同意します。</span></label>
-              <button type="button" className="btn-pk n blue w100p hide-m"><span>お支払い</span></button>
+              {/* <!-- PC --> */}
+              <Checkbox className={"inp_checkbox hide-m"} text={"注文内容と注意事項を確認しました。"} onChange={handleCheck} error={stateCheckError} />
+              <Button className={"btn-pk n blue w100p hide-m"} text={"お支払い"} status={stateButtonStatus} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
+              {/* <button type="button" className="btn-pk n blue w100p hide-m"><span>お支払い</span></button> */}
             </div>
           </div>
 
@@ -71,7 +137,7 @@ export default function Charge() {
             <h2 className="tit1">お支払い方法</h2>
             <div className="col lst_radio">
               <div className="on">
-                <label className="inp_radio"><input type="radio" name="radio01" checked/><span>Stripe決済</span></label>
+                <label className="inp_radio"><input type="radio" name="radio01" defaultChecked/><span>Stripe決済</span></label>
                 <div id="radio_con1" className="col_view">
                   <div className="box_radio">
                     <div><StripeLogo /></div>
@@ -82,10 +148,10 @@ export default function Charge() {
             </div>
           </div>
 
-          {/* <!-- 1. 모바일에서 위치변경 --> */}
+          {/* <!-- 모바일 --> */}
           <div className="btn-bot view-m">
-            <label className="inp_checkbox"><input type="checkbox"/><span>注文内容と注意事項を確認しました。</span></label>
-            <button type="button" className="btn-pk n blue w100p"><span>お支払い</span></button>
+            <Checkbox className={"inp_checkbox"} text={"注文内容と注意事項を確認しました。"} onChange={handleCheck} error={stateCheckError} />
+            <Button className={"btn-pk n blue w100p"} text={"お支払い"} status={stateButtonStatus} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
           </div>
         </div>
 

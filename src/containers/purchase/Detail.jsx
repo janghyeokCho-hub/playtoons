@@ -1,4 +1,4 @@
-import { getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { getStringOfPlaycoin, showOneButtonPopup } from "@/common/common";
 import ImageBackground from "@/components/dashboard/ImageBackground";
 import { setContainer } from "@/modules/redux/ducks/container";
 import { getShopProductIdFromServer } from "@/services/purchaseService";
@@ -87,7 +87,7 @@ export default function Detail() {
                   <div className="ico">.skb</div>
                   <div className="ico">.obj</div>
                 </div>
-                <p className="c1">{getStringOfPrice(stateData?.product.price)}</p>
+                <p className="c1">{getStringOfPlaycoin(stateData?.product.price)}</p>
                 <div className="btns">
                   <a className="btn-pk n blue mw100p" onClick={handleClickDownload}>
                     <span>ダウンロード</span>

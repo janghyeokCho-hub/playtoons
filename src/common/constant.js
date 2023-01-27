@@ -14,6 +14,38 @@ export const PAYMENT_METHOD = {
   none: 'none',
 };
 
+//currency: jpy, usd, krw, rmb, eur, hkd, twd
+export const CURRENCY_LIST = [
+  {
+    name: "ja-JP",    //Japan
+    code: "jpy"
+  },
+  {
+    name: "en-US",    //United States
+    code: "usd"
+  },
+  {
+    name: "ko-KR",    //Korea
+    code: "krw"
+  },
+  {
+    name: "zh-CN",    //China
+    code: "rmb"
+  },
+  {
+    name: "en-GB",    //United Kingdom
+    code: "eur"
+  },
+  {
+    name: "zh-HK",    //Hong kong
+    code: "hkd"
+  },
+  {
+    name: "zh-TW",    //Taiwan
+    code: "twd"
+  },
+];
+
 export const DATE_FORMAT = "yyyy/MM/dd";
 export const MOMENT_DATE_FORMAT = "YYYY/MM/DD";
 export const MOMENT_DATE_TIME_FORMAT = "YYYY/MM/DD hh:mm";

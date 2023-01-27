@@ -43,5 +43,6 @@
   "before_day": "日前",
   "before_hour": "時間前",
   "before_minute": "分前",
-  "before_second": "秒前"
+  "before_second": "秒前",
+  "currency": "円"
 }

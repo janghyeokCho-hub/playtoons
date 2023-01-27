@@ -1,4 +1,4 @@
-import { getStringOfPrice } from "@/common/common";
+import { getStringOfPlaycoin } from "@/common/common";
 import { faHeart } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
@@ -30,7 +30,7 @@ export default function StoreItem ({ item }){
               </span>
             </div>
             <p className="c1">
-              <strong>{getStringOfPrice(item?.price)}</strong>
+              <strong>{getStringOfPlaycoin(item?.price)}</strong>
             </p>
           </div>
         </div>

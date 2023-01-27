@@ -4,10 +4,12 @@ import produce from "immer";
 
 /* --- Action Types --- */
 export const [INIT_PAYMENT_PLAN_ITEM, SET_PAYMENT_PLAN_ITEM] = createRequestActionTypes("payment/PLAN_ITEM");
+export const [SET_PAYMENT_CHARGE, SET_PAYMENT_CHARGE_SUCCESS, SET_PAYMENT_CHARGE_FAILURE] = createRequestActionTypes("payment/POST_PAYMENT_CHARGE");
 
 /* --- Actions --- */
 export const initPaymentPlanItemAction = createAction(INIT_PAYMENT_PLAN_ITEM);
 export const setPaymentPlanItemAction = createAction(SET_PAYMENT_PLAN_ITEM);
+export const setPaymentChargeAction = createAction(SET_PAYMENT_CHARGE);
 
 
 /**
@@ -15,6 +17,7 @@ export const setPaymentPlanItemAction = createAction(SET_PAYMENT_PLAN_ITEM);
  */
  const initialState = {
   planItem: null,
+  chargeUpload: null,
 }
 
 const payment = handleActions(
@@ -28,6 +31,16 @@ const payment = handleActions(
     [SET_PAYMENT_PLAN_ITEM]: (state, action) => {
       return produce(state, (draft) => {
         draft.planItem = action.payload;
+      });
+    },
+    [SET_PAYMENT_CHARGE_SUCCESS]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.chargeUpload = action.payload;
+      });
+    },
+    [SET_PAYMENT_CHARGE_FAILURE]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.chargeUpload = action.payload;
       });
     },
   },

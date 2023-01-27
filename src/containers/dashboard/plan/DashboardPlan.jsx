@@ -1,4 +1,4 @@
-import { checkLoginExpired, getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, getStringOfPlaycoin, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
 import ImageBackground from "@/components/dashboard/ImageBackground";
@@ -94,7 +94,7 @@ export default function DashboardPlan(props) {
           <div className="cont" >
             <h3 className="h1">{item.name}</h3>
             <p className="t1">
-              <span className="c-blue">{getStringOfPrice(item.price)}</span> /
+              <span className="c-blue">{getStringOfPlaycoin(item.price)}</span> /
               {text.month}
             </p>
             <p className="t2">{item.description}</p>

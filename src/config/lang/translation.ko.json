@@ -43,5 +43,6 @@
   "before_day": "일전",
   "before_hour": "시간전",
   "before_minute": "분전",
-  "before_second": "초전"
+  "before_second": "초전",
+  "currency": "원"
 }

@@ -1,4 +1,4 @@
-import { getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { getDateYYYYMMDD, getStringOfPlaycoin, showOneButtonPopup } from "@/common/common";
 import { PAYMENT_METHOD } from "@/common/constant";
 import ImageBackground from "@/components/dashboard/ImageBackground";
 import PaymentMethod from "@/components/payment/PaymentMethod";
@@ -149,7 +149,7 @@ export default  function Plan(){
                   />
                   <p>{reduxItem.author.name || reduxItem.author.nickname}</p>
                 </div>
-                <p className="c1">{getStringOfPrice(reduxItem.plan.price)}</p>
+                <p className="c1">{getStringOfPlaycoin(reduxItem.plan.price)}</p>
               </div>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default  function Plan(){
             <ul className="col list1">
               <li>
                 <span>金額</span>
-                <span>{getStringOfPrice(reduxItem.plan.price)}</span>
+                <span>{getStringOfPlaycoin(reduxItem.plan.price)}</span>
               </li>
               {/* 쿠폰 사용시 오픈 */}
               {/* <li>
@@ -214,7 +214,7 @@ export default  function Plan(){
               <p className="tit2 hide-m">次の金額をお支払いします。</p>
               <p className="c1">
                 <span className="view-m">合計金額</span>
-                <span>{ getStringOfPrice(getTotalPrice()) }</span>
+                <span>{ getStringOfPlaycoin(getTotalPrice()) }</span>
               </p>
 
               {/*<!-- 1. 모바일에서 안보임 -->*/}

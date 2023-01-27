@@ -1,3 +1,5 @@
+import { faCircleXmark } from '@fortawesome/pro-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React from 'react'
 
 export default function Failed() {
@@ -6,7 +8,7 @@ export default function Failed() {
       <div className="inr-c">
         <div className="hd_titbox2">
           <h2 className="m_tit1">お支払いの確認</h2>
-          <p className="t_chk c-red"><i className="fa-regular fa-circle-xmark"></i>お支払いできませんでした。</p>
+          <p className="t_chk c-red"><FontAwesomeIcon className="fa-regular fa-circle-xmark" icon={faCircleXmark} />お支払いできませんでした。</p>
         </div>
 
         <div className="area_payment comp">

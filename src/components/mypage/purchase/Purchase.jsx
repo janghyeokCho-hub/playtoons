@@ -1,4 +1,4 @@
-import { getDateYYYYMMDD, getStringOfPrice, handleClickStopPropagation } from "@/common/common";
+import { getDateYYYYMMDD, getStringOfPlaycoin, handleClickStopPropagation } from "@/common/common";
 import Image from "@/components/dashboard/Image";
 import React from "react";
 import { useCallback } from "react";
@@ -24,7 +24,7 @@ export default function Purchase(props){
         </div>
       </td>
       <td className="td_subject">{item?.name}</td>
-      <td className="td_number3">{getStringOfPrice(item?.price)}</td>
+      <td className="td_number3">{getStringOfPlaycoin(item?.price)}</td>
       <td className="td_txt1">
         <span className="view-m">販売開始日：</span>{getDateYYYYMMDD(item.startAt, "/")}
       </td>

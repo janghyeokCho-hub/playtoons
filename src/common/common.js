@@ -593,17 +593,50 @@ export const convertMoneyStyleString = (number) => {
 };
 
 /**
-  천마다 콤마
+  숫자를 play coin 으로 변환
 * @version 1.0.0
 * @author 2hyunkook
 * @param price 
 */
-export const getStringOfPrice = (price) => {
+export const getStringOfPlaycoin = (price) => {
   if( Number.isNaN(Number(price)) || price === null || price === undefined ){
     return `0${UNIT_EMONEY}`;
   }
   
   return `${convertMoneyStyleString( Number.parseInt(price) )}${UNIT_EMONEY}`;
+};
+/**
+  currency 위치 
+* @version 1.0.0
+* @author 2hyunkook
+* @param i18n
+* @returns true 뒤  
+*/
+export const getCurrencyPosition = (i18n) => {
+  return i18n.language === "ja-JP" || i18n.language === "ko-KR"; // || i18n.language === "zh-CN";
+}
+/**
+  숫자를 play coin 으로 변환
+* @version 1.0.0
+* @author 2hyunkook
+* @param price 
+*/
+export const getStringOfPriceWithCurrency = (price, t, i18n) => {
+  const currency = t("currency");
+
+  if( Number.isNaN(Number(price)) || price === null || price === undefined ){
+    if( getCurrencyPosition(i18n) ){
+      return `0${currency}`;
+    } else {
+      return `${currency}0`;
+    }
+  }
+  
+  if( getCurrencyPosition(i18n) ){
+    return `${convertMoneyStyleString( Number.parseInt(price) )}${currency}`;
+  } else {
+    return `${currency}${convertMoneyStyleString(price)}`;
+  }
 };
 
 /**

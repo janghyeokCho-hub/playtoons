@@ -1,4 +1,4 @@
-import { getStringOfPrice } from '@/common/common';
+import { getStringOfPlaycoin } from '@/common/common';
 import Image from '@/components/dashboard/Image';
 import { setPaymentPlanItemAction } from '@/modules/redux/ducks/payment';
 import React, { useCallback } from 'react'
@@ -22,7 +22,7 @@ export default function PlanItem(props) {
       <div className="cont">
         <h3 className="h1">{item?.name}</h3>
         <p className="t1">
-          <span className="c-blue">{getStringOfPrice(item?.price)}</span> /月
+          <span className="c-blue">{getStringOfPlaycoin(item?.price)}</span> /月
         </p>
         <p className="t2">{item?.description}</p>
         <div className="t_dot1">

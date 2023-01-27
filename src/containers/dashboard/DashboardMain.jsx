@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { getPostMineFromServer, getReactionMineAuthorIdFromServer, getShopInquiryAuthorFromServer, getShopReviewAuthorFromServer } from "@/services/dashboardService";
 
-import { checkLoginExpired, getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, getStringOfPlaycoin, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
@@ -473,7 +473,7 @@ export default function DashboardMain() {
             </p>
             <div className="t1">
               <p>
-                <strong>{getStringOfPrice(stateBalance?.balance)}</strong>
+                <strong>{getStringOfPlaycoin(stateBalance?.balance)}</strong>
               </p>
               <Link
                 to="/dashboard/product/sales/list"
