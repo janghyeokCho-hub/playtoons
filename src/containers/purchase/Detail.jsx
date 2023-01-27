@@ -20,21 +20,7 @@ export default function Detail() {
   // function
   //==============================================================================
 
-  const handleContainer = useCallback(() => {
-    dispatch(
-      setContainer({
-        headerClass: "header",
-        containerClass: "container dashboard payment purchase",
-        isHeaderShow: true,
-        isMenuShow: true,
-        headerType: "post",
-        menuType: "MAIN",
-        isDetailView: false,
-        activeMenu: null,
-        isFooterShow: false,
-      })
-    );
-  }, [dispatch]);
+ 
 
   const getShopProduct = async () => {
     const {status, data} = await getShopProductIdFromServer(params.id);
@@ -64,7 +50,6 @@ export default function Detail() {
   //==============================================================================
 
   useEffect(() => {
-    handleContainer();
     getShopProduct();
   }, []);
 

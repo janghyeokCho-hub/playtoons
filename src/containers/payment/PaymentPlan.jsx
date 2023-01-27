@@ -9,6 +9,7 @@ import { useLayoutEffect } from "react";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default  function PaymentPlan(){
   const [ stateMethod, setStateMethod ] = useState(PAYMENT_METHOD.point);
@@ -18,6 +19,7 @@ export default  function PaymentPlan(){
   const reduxItem = useSelector(({payment}) =>  payment.planItem);
   const reduxAuthors = useSelector(({post}) =>  post.authorMine?.authors);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   //==============================================================================
   // function
@@ -84,6 +86,8 @@ export default  function PaymentPlan(){
 
   const handleClickCharge = useCallback((e) => {
     console.log('charge', stateMethod);
+
+    navigate(`/payment/charge`);
     
   }, [reduxItem, stateMethod]);
 

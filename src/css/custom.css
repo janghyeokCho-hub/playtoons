@@ -1137,6 +1137,12 @@
 .payment .area_payment .box_thumb .thumb span{
   background-size: contain;
 }
+.payment .area_payment .box_thumb .thumb span.bs100{
+  background-size: 100% 100%;
+}
+.payment .area_payment .box_thumb .thumb span.bs150{
+  background-size: auto 150%;
+}
 .payment .area_payment .tit2.mb0{
   margin-bottom: 0;
 }

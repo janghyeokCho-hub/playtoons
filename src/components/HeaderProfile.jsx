@@ -33,9 +33,9 @@ export default function HeaderProfile(props) {
         <p className="t1">{t(`header.vaildatePoint`)}</p>
         <p className="c1">
           <span className="c-blue">100,324,394</span>
-          <a href="#" className="btn-pk s blue bdrs">
+          <Link to="/payment/charge" className="btn-pk s blue bdrs">
             {t(`header.charge`)}
-          </a>
+          </Link>
         </p>
       </div>
 
