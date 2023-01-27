@@ -20,7 +20,7 @@ import Lottie from 'react-lottie';
 * @return
 */
 export default forwardRef( function Button(props, ref) {
-  const { className, text, children, onClick, status } = props;
+  const { className, text, children, onClick } = props;
   const [ stateStatus, setStateStatus ] = useState(undefined);
 
   const defaultOptions = {
@@ -51,13 +51,6 @@ export default forwardRef( function Button(props, ref) {
       setStateStatus(undefined);
     }
   }, []);
-
-  useEffect(() => {
-    if( status ){
-      setStateStatus(status);
-    }
-  }, [status]);
-  
 
   return (
     <button className={className} onClick={handleClick}>

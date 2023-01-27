@@ -3,9 +3,10 @@ import Button from '@/components/dashboard/Button';
 import Checkbox from '@/components/payment/Checkbox';
 import Coupon from '@/components/payment/Coupon';
 import PaymentPrice from '@/components/payment/PaymentPrice';
-import { setPaymentChargeAction } from '@/modules/redux/ducks/payment';
+import { initPaymentChargeAction, setPaymentChargeAction } from '@/modules/redux/ducks/payment';
 import { ReactComponent as StripeLogo } from '@IMAGES/stripe_logo.svg';
 import { useEffect } from 'react';
+import { useRef } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,14 +17,21 @@ export default function Charge() {
   const [ stateCoupon, setStateCoupon ] = useState(0);
   const [ stateCheck, setStateCheck ] = useState(false);
   const [ stateCheckError, setStateCheckError ] = useState(undefined);
-  const [ stateButtonStatus, setStateButtonStatus ] = useState(undefined);
   const reduxUpload = useSelector(({payment}) => payment.chargeUpload);
+  const refButtonPc = useRef();
+  const refButtonMobile = useRef();
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
 
   //==============================================================================
   // function
   //==============================================================================
+  const initStatus = () => {
+    refButtonPc.current.setStatus(undefined);
+    refButtonMobile.current.setStatus(undefined);
+    
+  };
+
   /**
      유효 PC
   */
@@ -84,8 +92,14 @@ export default function Charge() {
   //==============================================================================
   useEffect(() => {
     if(reduxUpload){
+      if( reduxUpload?.result === 0 ){
+        initStatus();
+        window.open(reduxUpload.url, "_blank");
+      }
       console.log('done', reduxUpload);
     }
+
+    return () => dispatch(initPaymentChargeAction());
   }, [reduxUpload]);
   
 
@@ -127,7 +141,7 @@ export default function Charge() {
               
               {/* <!-- PC --> */}
               <Checkbox className={"inp_checkbox hide-m"} text={"注文内容と注意事項を確認しました。"} onChange={handleCheck} error={stateCheckError} />
-              <Button className={"btn-pk n blue w100p hide-m"} text={"お支払い"} status={stateButtonStatus} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
+              <Button ref={refButtonPc} className={"btn-pk n blue w100p hide-m"} text={"お支払い"} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
               {/* <button type="button" className="btn-pk n blue w100p hide-m"><span>お支払い</span></button> */}
             </div>
           </div>
@@ -151,7 +165,7 @@ export default function Charge() {
           {/* <!-- 모바일 --> */}
           <div className="btn-bot view-m">
             <Checkbox className={"inp_checkbox"} text={"注文内容と注意事項を確認しました。"} onChange={handleCheck} error={stateCheckError} />
-            <Button className={"btn-pk n blue w100p"} text={"お支払い"} status={stateButtonStatus} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
+            <Button ref={refButtonMobile} className={"btn-pk n blue w100p"} text={"お支払い"} onClick={(e, setStatus) => handleCharge(e, setStatus)} />
           </div>
         </div>
 

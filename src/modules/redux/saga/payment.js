@@ -16,7 +16,7 @@ function createPaymentChargeRequestSaga(type) {
         priceId: action.payload.id,
       };
       const response = yield call(setPaymentChargeToServer, params);
-      if (response?.status === 200) {
+      if (response?.status === 201) {
         yield put({
           type: `${type}_SUCCESS`,
           payload: response.data,
