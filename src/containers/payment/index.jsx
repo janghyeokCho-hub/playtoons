@@ -1,26 +1,25 @@
-import React, { useCallback, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { setContainer } from "@/modules/redux/ducks/container";
 import Page404 from "@COMPONENTS/Page404";
-import Payment from "./Payment";
-import PaymentPlan from "./PaymentPlan";
-import PaymentComplete from "./PaymentComplete";
-import PaymentDetail from "./PaymentDetail";
-import CompletedCharge from "./CompletedCharge";
-import Checking from "./Checking";
-import Failed from "./Failed";
-import CompletedPlan from "./CompletedPlan";
+import { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Routes } from "react-router-dom";
 import Charge from "./Charge";
+import Checking from "./Checking";
+import CompletedCharge from "./CompletedCharge";
+import CompletedPlan from "./CompletedPlan";
+import CompletedProduct from "./CompletedProduct";
+import Failed from "./Failed";
+import Product from "./Product";
+import Plan from "./Plan";
+import ProductDetail from "./ProductDetail";
 
 const App = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const handleContainer = useCallback(() => {
     const container = {
       headerClass: "header",
-      containerClass: "container dashboard payment",
+      containerClass: "container dashboard payment bgw",
       isHeaderShow: true,
       isMenuShow: true,
       headerType: "post",
@@ -30,15 +29,6 @@ const App = () => {
       isFooterShow: false,
     };
 
-    if ( location.pathname.includes("/payment/completed/charge") 
-          ||  location.pathname.includes("/payment/checking") 
-          ||  location.pathname.includes("/payment/failed") 
-          ||  location.pathname.includes("/payment/completed/plan") 
-          ) {
-      container.containerClass = "container dashboard payment bgw";
-    }
-
-
     dispatch(setContainer(container));
   }, [dispatch]);
 
@@ -47,15 +37,15 @@ const App = () => {
   }, []);
   return (
     <Routes>
-      <Route index element={<Payment />} />
-      <Route path="/plan/:id" element={<PaymentPlan />} />
-      <Route path="/complete/:id" element={<PaymentComplete />} />
-      <Route path="/detail/:id" element={<PaymentDetail />} />
-      <Route path="/completed/charge/:id" element={<CompletedCharge />} />
+      <Route path="/product/:id"  element={<Product />} />
+      <Route path="/plan/:id" element={<Plan />} />
       <Route path="/checking/:id" element={<Checking />} />
       <Route path="/failed/:id" element={<Failed />} />
-      <Route path="/completed/plan/:id" element={<CompletedPlan />} />
       <Route path="/charge" element={<Charge />} />
+      <Route path="/completed/product/:id" element={<CompletedProduct />} />
+      <Route path="/completed/charge/:id" element={<CompletedCharge />} />
+      <Route path="/completed/plan/:id" element={<CompletedPlan />} />
+      <Route path="/product/detail/:id" element={<ProductDetail />} />
       <Route path="*" element={<Page404 />} />
     </Routes>
   );

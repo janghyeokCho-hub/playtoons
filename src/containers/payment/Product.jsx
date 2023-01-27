@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
 
-const Payment = () => {
+export default function Product(){
   return (
     <div className="contents">
       <div className="inr-c">
@@ -185,4 +185,3 @@ const ImgSpan = styled.span`
   background-image: url(${(props) => props.bgImg});
 `;
 
-export default Payment;

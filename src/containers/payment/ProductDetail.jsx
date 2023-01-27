@@ -7,7 +7,7 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/pro-solid-svg-icons";
 
-const PaymentDetail = () => {
+export default function ProductDetail() {
   return (
     <div className="contents">
       <div className="inr-c">
@@ -111,5 +111,3 @@ const PaymentDetail = () => {
 const ImgSpan = styled.span`
   background-image: url(${(props) => props.bgImg});
 `;
-
-export default PaymentDetail;

@@ -11,7 +11,7 @@ import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default  function PaymentPlan(){
+export default  function Plan(){
   const [ stateMethod, setStateMethod ] = useState(PAYMENT_METHOD.point);
   const [ stateIsMonthly, setStateIsMonthly ] = useState(false);
   const [ stateDate, setStateDate ] = useState(new Date());

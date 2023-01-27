@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faShare } from "@fortawesome/pro-solid-svg-icons";
 import { faCircleCheck } from "@fortawesome/pro-regular-svg-icons";
 
-const PaymentComplete = () => {
+export default function CompletedProduct() {
   return (
     <div className="contents">
       <div className="inr-c">
@@ -79,4 +79,3 @@ const ImgSpan = styled.span`
   background-image: url(${(props) => props.bgImg});
 `;
 
-export default PaymentComplete;
