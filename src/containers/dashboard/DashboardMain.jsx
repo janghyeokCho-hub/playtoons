@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { getPostMineFromServer, getReactionMineAuthorIdFromServer, getShopInquiryAuthorFromServer, getShopReviewAuthorFromServer } from "@/services/dashboardService";
 
-import { checkLoginExpired, getDateYYYYMMDD, showOneButtonPopup } from "@/common/common";
+import { checkLoginExpired, getDateYYYYMMDD, getStringOfPrice, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
 import Image from "@/components/dashboard/Image";
 import { setContainer } from "@/modules/redux/ducks/container";
@@ -25,6 +25,7 @@ import tempImageSeries05 from "@IMAGES/temp_series_05.png";
 import tempImageSeries06 from "@IMAGES/temp_series_06.png";
 import { useLayoutEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getAuthorBalanceFromServer } from "@/services/paymentService";
 
 const text = {
   today_sales: "当日の売上",
@@ -49,6 +50,7 @@ const text = {
 };
 
 export default function DashboardMain() {
+  const [stateBalance, setStateBalance] = useState(undefined);
   const [stateReview, setStateReview] = useState(undefined);
   const [stateQuestion, setStateQuestion] = useState(undefined);
   const [stateSeries, setStateSeries] = useState({id: '', thumbnailImage: ''});
@@ -84,6 +86,18 @@ export default function DashboardMain() {
   //==============================================================================
   // api
   //==============================================================================
+  const getBalance = async () => {
+    const {status, data} = await getAuthorBalanceFromServer(reduxAuthors?.[0].id);
+    console.log('getBalance', status, data);
+    
+    if( status === 200 ){
+      setStateBalance(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+  };
+
   /**
     최근의 문의사항
   * @version 1.0.0
@@ -430,6 +444,7 @@ export default function DashboardMain() {
     if( checkLoginExpired( navigate, dispatch, text.login_expired, reduxLoginTime )){
       //check author
       if( reduxAuthors && reduxAuthors?.length > 0 ){
+        getBalance();
         getQuestionList();
         getReviewList();
         getSeriesList();
@@ -458,7 +473,7 @@ export default function DashboardMain() {
             </p>
             <div className="t1">
               <p>
-                <strong>{tempData.pc_count}</strong>
+                <strong>{getStringOfPrice(stateBalance?.balance)}</strong>
               </p>
               <Link
                 to="/dashboard/product/sales/list"

@@ -599,8 +599,8 @@ export const convertMoneyStyleString = (number) => {
 * @param price 
 */
 export const getStringOfPrice = (price) => {
-  if( Number.isNaN(Number(price)) ){
-    return price;
+  if( Number.isNaN(Number(price)) || price === null || price === undefined ){
+    return `0${UNIT_EMONEY}`;
   }
   
   return `${convertMoneyStyleString( Number.parseInt(price) )}${UNIT_EMONEY}`;

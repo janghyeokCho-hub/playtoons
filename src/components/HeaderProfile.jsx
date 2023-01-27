@@ -41,10 +41,10 @@ export default function HeaderProfile(props) {
 
       <ul>
         <li>
-          <a href="#">{t(`header.supporingCreator`)}</a>
+          <Link to="/author/subscribe/list">{t(`header.supporingCreator`)}</Link>
         </li>
         <li>
-          <a href="#">{t(`header.followingCreator`)}</a>
+          <Link to="/author/follower/list">{t(`header.followingCreator`)}</Link>
         </li>
       </ul>
 
