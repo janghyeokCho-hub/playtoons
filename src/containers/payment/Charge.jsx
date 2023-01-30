@@ -94,7 +94,8 @@ export default function Charge() {
     if(reduxUpload){
       if( reduxUpload?.result === 0 ){
         initStatus();
-        window.open(reduxUpload.url, "_blank");
+        window.location.replace(reduxUpload.url);
+        // window.open(reduxUpload.url, "_blank");
       }
       console.log('done', reduxUpload);
     }

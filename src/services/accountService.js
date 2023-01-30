@@ -103,3 +103,11 @@ export const getAccount = async (token) => {
     return { status: e.response.status };
   }
 };
+
+export const updatAccountsToServer = async (params) => {
+  try {
+    return await apiServer("patch", "/accounts", params);
+  } catch (e) {
+    return { status: e.response.status };
+  }
+};

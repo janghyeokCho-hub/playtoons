@@ -18,6 +18,7 @@ import timeline from "./timeline";
 import toast from "./toast";
 import payment from "./payment";
 import search from "./search";
+import account from "./account";
 
 const persistConfig = {
   key: "root",
@@ -41,6 +42,7 @@ const appReducer = combineReducers({
   toast,
   payment,
   search,
+  account,
 });
 
 const rootReducer = (state, action) => {

@@ -94,6 +94,9 @@ export default function HeaderProfile(props) {
         <li>
           <a href="#">{t(`header.setting`)}</a>
         </li>
+        <li>
+          <Link to={`/profile`}>{t(`header.editProfile`)}</Link>
+        </li>
         <li onClick={() => onClickLogout?.()}>
           <Link to={homeURL}>{t(`header.logout`)}</Link>
         </li>

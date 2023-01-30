@@ -17,6 +17,7 @@ import Store from "@CONTAINERS/store";
 import Timeline from "@CONTAINERS/timeline";
 import Webtoon from "@CONTAINERS/webtoon/Webtoon";
 import Purchase from "@CONTAINERS/purchase/index";
+import Profile from "@CONTAINERS/profile/Edit";
 import ToastContainer from "./components/ToastContainer";
 import { Route, Routes } from "react-router-dom";
 
@@ -42,6 +43,7 @@ function App() {
           <Route path="/timeline/*" element={<Timeline />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/purchase/*" element={<Purchase />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Container>
       <ModalContainer />

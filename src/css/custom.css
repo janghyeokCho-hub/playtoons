@@ -1130,7 +1130,6 @@
   transform: translate(-50%, -50%);
 }
 
-
 .payment .area_payment .box_thumb .thumb span.plan{
   background-size: auto;
 }
@@ -1169,6 +1168,18 @@ img.error.empty{
   background-color: #c3cad2;
 }
 
+.e_profile .bbs_write{
+  padding-top: 48px;
+}
+.e_profile .col.last{
+  margin-bottom: 48px;
+}
+.e_profile .bbs_write .t_info{
+  padding-top: 48px;
+  border-top: #DDE1E5;
+  border-width: 1px;
+  border-top-style: solid;
+}
 
 /* ============================================================================== */
 /* header back button tablet & mobile css  */
@@ -1205,9 +1216,17 @@ img.error.empty{
 /* ============================================================================== */
 
 @media (max-width: 960px)  {
+  .e_profile .bbs_write{
+    padding-top: 0px;
+  }
+  .e_profile .bbs_write .t_info{
+    padding-top: 24px;
+  }
+
   .author .lst_detail .item.ap{
     min-height: auto;
   }
+  /* ============================================================================== */
   .layerPopup .pop_cont .btn-pk{
     font-size: 10px;
   }
