@@ -50,6 +50,7 @@ export const DATE_FORMAT = "yyyy/MM/dd";
 export const MOMENT_DATE_FORMAT = "YYYY/MM/DD";
 export const MOMENT_DATE_TIME_FORMAT = "YYYY/MM/DD hh:mm";
 export const DATE_FORMAT_ON_URL = "yyyyMMdd";
+export const MILLISECONDS_OF_1_YEAR = 31536000000; // 1년의 millisecods 
 export const FILE_MAX_SIZE = 2000000; // 2 MB
 export const TIMELINE_DELAY = 5000; // 5 seconds
 export const TOAST_TIME = 1500; // 1.5 seconds

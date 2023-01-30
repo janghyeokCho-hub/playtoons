@@ -19,14 +19,14 @@ export default function Purchase(props){
       <td className="td_imgs2">
         <div className="cx_thumb">
           <span>
-            <Image hash={item?.thumbnailImage} />
+            <Image hash={item?.product?.thumbnailImage} />
           </span>
         </div>
       </td>
-      <td className="td_subject">{item?.name}</td>
+      <td className="td_subject">{item?.product?.name}</td>
       <td className="td_number3">{getStringOfPlaycoin(item?.price)}</td>
       <td className="td_txt1">
-        <span className="view-m">販売開始日：</span>{getDateYYYYMMDD(item.startAt, "/")}
+        <span className="view-m">販売開始日：</span>{getDateYYYYMMDD(item.createdAt, "/")}
       </td>
       <td className="td_btns2 et_botm1">
         <div className="d-ib">

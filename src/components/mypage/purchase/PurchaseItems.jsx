@@ -5,10 +5,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useDispatch } from "react-redux";
 import Purchase from "./Purchase";
 
-import { DATE_FORMAT_ON_URL } from "@/common/constant";
+import { DATE_FORMAT_ON_URL, MILLISECONDS_OF_1_YEAR } from "@/common/constant";
 import CalendarView from "@/components/dashboard/CalendarView";
 import EmptyTr from "@/components/dashboard/EmptyTr";
-import { getShopProductFromServer } from "@/services/mypageService";
+import { getShopPurchaseFromServer } from "@/services/mypageService";
 import { useLayoutEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -39,7 +39,7 @@ export default function PurchaseItems() {
     }
     formData.append("page", page === undefined ? 1 : page);
     
-    const {status, data} = await getShopProductFromServer(formData);
+    const {status, data} = await getShopPurchaseFromServer(formData);
     
     if( status === 200 ){
       setStateData(data);
@@ -55,11 +55,17 @@ export default function PurchaseItems() {
   //==============================================================================
 
   const handleClickCalendar = (name, date) => {
-    const startDate = name === "start" ? date : stateStartAt;
-    const endDate = name === "end" ? date : stateEndAt;
+    const startDate = (name === "start" ? date : stateStartAt).getTime();
+    const endDate = (name === "end" ? date : stateEndAt).getTime();
 
-    if (startDate.getTime() >= endDate.getTime()) {
+    if (startDate >= endDate) {
       showOneButtonPopup(dispatch, "開始日は終了日より大きくできません。");
+      return;
+    }
+    
+    //최대 1년까지 검색 가능
+    if ( (endDate - startDate) > MILLISECONDS_OF_1_YEAR ) {
+      showOneButtonPopup(dispatch, "検索期間は1年です。");
       return;
     }
 
@@ -86,11 +92,11 @@ export default function PurchaseItems() {
   // render
   //==============================================================================
   const renderPurchaseList = () => {
-    if( stateData?.products?.length === 0 ){
+    if( stateData?.purchases?.length === 0 ){
       return <EmptyTr text={`購入一覧がいません。`} />;
     }
 
-    return stateData?.products?.map((item, index) => {
+    return stateData?.purchases?.map((item, index) => {
       return (
         <Purchase item={item} key={index} />
       );

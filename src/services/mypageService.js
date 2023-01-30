@@ -6,9 +6,9 @@ import { apiServer } from "./api";
 * @version 1.0.0
 * @author 2hyunkook
 */
-export const getShopProductFromServer = async (params) => {
+export const getShopPurchaseFromServer = async (params) => {
   try {
-    return await apiServer("get", `/shop/product${getStringForUrl(params)}`);
+    return await apiServer("get", `/shop/purchase${getStringForUrl(params)}`);
   } catch (e) {
     return { status: e.response.status, data: getErrorMessageFromResultCode(e.response.data), };
   }
