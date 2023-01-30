@@ -1,4 +1,5 @@
 import { setReduxOfNovel, setReduxOfWebtoon } from "@/common/common";
+import { MOBILE_WIDTH } from "@/common/constant";
 import useFilePath from "@/hook/useFilePath";
 import { useWindowSize } from "@/hook/useWindowSize";
 import { useDispatch } from "react-redux";
@@ -10,7 +11,7 @@ const TypeItem = ({ item }) => {
   const windowSize = useWindowSize();
 
   const getMarginBottom = (item) => {
-    if (windowSize.width < 961) {
+    if (windowSize.width <= MOBILE_WIDTH) {
       //mobile 1, 3 마진 추가
       if (item?.code === "webtoon" || item?.code === "illust") {
         return true;

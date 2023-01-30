@@ -1171,6 +1171,14 @@ img.error.empty{
 .e_profile .bbs_write{
   padding-top: 48px;
 }
+.e_profile .box_drag .fileview div{
+  border-width: 1px;
+}
+.e_profile .box_drag .fileview .btn_del{
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
 .e_profile .col.last{
   margin-bottom: 48px;
 }

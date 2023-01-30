@@ -684,3 +684,19 @@ export const setShopReviewReportToServer = async (id, params) => {
     };
   }
 };
+/**
+   main - product purchase list 구매내역 
+* @version 1.0.0
+* @author 2hyunkook
+* @param {jsonObject} params
+*/
+export const getShopPurchaseMineFromServer = async (params) => {
+  try {
+    return await apiServer("get", `/shop/purchase/mine${getStringForUrl(params)}`);
+  } catch (e) {
+    return {
+      status: e.response.status,
+      data: getErrorMessageFromResultCode(e.response.data),
+    };
+  }
+};

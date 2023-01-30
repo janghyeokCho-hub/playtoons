@@ -8,7 +8,7 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { getPostMineFromServer, getReactionMineAuthorIdFromServer, getShopInquiryAuthorFromServer, getShopReviewAuthorFromServer } from "@/services/dashboardService";
+import { getPostMineFromServer, getReactionMineAuthorIdFromServer, getShopInquiryAuthorFromServer, getShopPurchaseMineFromServer, getShopReviewAuthorFromServer } from "@/services/dashboardService";
 
 import { checkLoginExpired, getDateYYYYMMDD, getStringOfPlaycoin, showOneButtonPopup } from "@/common/common";
 import EmptyDiv from "@/components/dashboard/EmptyDiv";
@@ -51,6 +51,7 @@ const text = {
 
 export default function DashboardMain() {
   const [stateBalance, setStateBalance] = useState(undefined);
+  const [statePurchase, setStatePurchase] = useState(undefined);
   const [stateReview, setStateReview] = useState(undefined);
   const [stateQuestion, setStateQuestion] = useState(undefined);
   const [stateSeries, setStateSeries] = useState({id: '', thumbnailImage: ''});
@@ -96,6 +97,23 @@ export default function DashboardMain() {
     else{
       showOneButtonPopup(dispatch, data);
     }
+  };
+
+  const getProductPurchaseList = async () => {
+    const formData = new FormData();//get url 
+    formData.append('authorId', reduxAuthors[0].id);
+    formData.append('sale', true);
+    
+    const {status, data} = await getShopPurchaseMineFromServer(formData);
+    console.log('getProductPurchaseList', status, data);
+    
+    if( status === 200 ){
+      setStatePurchase(data);
+    }
+    else{
+      showOneButtonPopup(dispatch, data);
+    }
+    
   };
 
   /**
@@ -210,16 +228,16 @@ export default function DashboardMain() {
   //==============================================================================
 
   const renderSalesProductList = useMemo(() => {
-    if( tempData?.sales_product_list?.length === 0 ){
+    if( statePurchase?.purchases?.length === 0 ){
       return (
         <EmptyDiv
           className={"relative empty"}
-          text={text.empty_data}
+          text={"最近販売された商品がいません。"}
         />
       );
     }
 
-    return tempData?.sales_product_list?.map((item, i) => {
+    return tempData?.purchases?.map((item, i) => {
       return (
         <SwiperSlide key={i} className={"cx"}>
           <Link to={`/product/${item.id}`}>
@@ -445,6 +463,7 @@ export default function DashboardMain() {
       //check author
       if( reduxAuthors && reduxAuthors?.length > 0 ){
         getBalance();
+        getProductPurchaseList();
         getQuestionList();
         getReviewList();
         getSeriesList();
