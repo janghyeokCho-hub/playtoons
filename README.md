@@ -1,14 +1,24 @@
-# 로켓스탭
-## Play Toon 플렛폼
-1. v1.0
-    - 최초 개정
+# Project name
+Playtoons
 
-## 개발 환경
-1. Language : React 18.2.0
-2. DataBase : mariadb-10.0.x
-3. Charset  : UTF-8
 
-## 외부연동 참조
+# Description
+A service that provides webtoons and web novels
 
-## 기타 참조
+
+# Installation instructions
+* Node : 18.4.x
+```bash
+yarn dev
+```
+
+
+# URL
+http://playtoons.raonworks.co.kr/ <br />
+https://dev.playtoons.jp/
+
+
+## Work history
+![image](https://user-images.githubusercontent.com/81599757/223466530-b1ee395e-482d-4a8d-b804-3dd7cd7b89ac.png)
+
 
